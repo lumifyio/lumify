@@ -7,7 +7,6 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.term.extraction.TermExtractionResult;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -24,7 +23,7 @@ public class DocumentMappingGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        StreamingPropertyValue mappingJson = RawLumifyProperties.MAPPING_JSON.getPropertyValue(data.getElement());
+        StreamingPropertyValue mappingJson = LumifyProperties.MAPPING_JSON.getPropertyValue(data.getElement());
         String mappingJsonString = IOUtils.toString(mappingJson.getInputStream());
         DocumentMapping mapping = jsonMapper.readValue(mappingJsonString, DocumentMapping.class);
 
@@ -40,9 +39,9 @@ public class DocumentMappingGraphPropertyWorker extends GraphPropertyWorker {
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes()), String.class);
         Map<String, Object> textMetadata = data.createPropertyMetadata();
-        textMetadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
-        textMetadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text");
-        RawLumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
+        textMetadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
+        textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text");
+        LumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
         LumifyProperties.TITLE.addPropertyValue(m, MULTIVALUE_KEY, mapping.getSubject(), data.createPropertyMetadata(), data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, MULTIVALUE_KEY, getUser(), data.getVisibility());
@@ -65,12 +64,12 @@ public class DocumentMappingGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        StreamingPropertyValue mappingJson = RawLumifyProperties.MAPPING_JSON.getPropertyValue(element);
+        StreamingPropertyValue mappingJson = LumifyProperties.MAPPING_JSON.getPropertyValue(element);
         if (mappingJson == null) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 

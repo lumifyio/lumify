@@ -5,7 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -35,7 +35,7 @@ public class SphinxGraphPropertyWorker extends GraphPropertyWorker {
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         Map<String, Object> metadata = data.createPropertyMetadata();
-        metadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, "Audio Transcript");
+        metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Audio Transcript");
         addVideoTranscriptAsTextPropertiesToMutation(m, MULTI_VALUE_KEY, transcript, metadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, MULTI_VALUE_KEY, getUser(), data.getVisibility());
@@ -51,7 +51,7 @@ public class SphinxGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("audio"));
     }
 

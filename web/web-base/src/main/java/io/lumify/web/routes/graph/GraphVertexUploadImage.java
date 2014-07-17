@@ -8,11 +8,8 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.properties.EntityLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -130,7 +127,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactVertexBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
-        entityVertexMutation.setProperty(EntityLumifyProperties.IMAGE_VERTEX_ID.getPropertyName(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
+        entityVertexMutation.setProperty(LumifyProperties.IMAGE_VERTEX_ID.getPropertyName(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save(authorizations);
         graph.flush();
@@ -147,7 +144,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, null, user);
 
         graph.flush();
-        workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, RawLumifyProperties.RAW.getPropertyName(), workspaceId);
+        workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(), workspaceId);
 
         respondWithJson(response, JsonSerializer.toJson(entityVertex, workspaceId));
     }
@@ -186,13 +183,13 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility());
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
         LumifyProperties.TITLE.setProperty(vertexBuilder, title, metadata, lumifyVisibility.getVisibility());
-        RawLumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(), metadata, lumifyVisibility.getVisibility());
-        RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, fileName, metadata, lumifyVisibility.getVisibility());
-        RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), metadata, lumifyVisibility.getVisibility());
-        RawLumifyProperties.MIME_TYPE.setProperty(vertexBuilder, mimeType, metadata, lumifyVisibility.getVisibility());
-        RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, metadata, lumifyVisibility.getVisibility());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptIri, metadata, lumifyVisibility.getVisibility());
-        EntityLumifyProperties.SOURCE.setProperty(vertexBuilder, SOURCE_UPLOAD, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(), metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.FILE_NAME.setProperty(vertexBuilder, fileName, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.MIME_TYPE.setProperty(vertexBuilder, mimeType, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.RAW.setProperty(vertexBuilder, rawValue, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptIri, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.SOURCE.setProperty(vertexBuilder, SOURCE_UPLOAD, metadata, lumifyVisibility.getVisibility());
         LumifyProperties.PROCESS.setProperty(vertexBuilder, PROCESS, metadata, lumifyVisibility.getVisibility());
         return vertexBuilder;
     }

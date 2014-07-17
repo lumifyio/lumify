@@ -7,7 +7,6 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -155,7 +154,7 @@ public class WorkspaceHelper {
         graph.removeEdge(edge, authorizations);
 
         if (edge.getLabel().equals(imageRelationshipLabel)) {
-            Property entityHasImage = sourceVertex.getProperty(OntologyLumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+            Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
             sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
             this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
         }

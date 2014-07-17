@@ -3,7 +3,6 @@ package io.lumify.worldFactbook;
 import com.google.inject.Inject;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.ingest.FileImport;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.Relationship;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -140,7 +139,7 @@ public class ImportXml extends CommandLineBase {
         LumifyProperties.TITLE.addPropertyValue(flagVertex, MULTI_VALUE_KEY, flagTitle, flagImageMetadata, visibility, getAuthorizations());
 
         getGraph().addEdge(FLAG_EDGE_ID_PREFIX + countryId, countryVertex, flagVertex, entityHasImageIri, visibility, getAuthorizations());
-        OntologyLumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(countryVertex, MULTI_VALUE_KEY, flagVertex.getId().toString(), visibility, getAuthorizations());
+        LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(countryVertex, MULTI_VALUE_KEY, flagVertex.getId().toString(), visibility, getAuthorizations());
 
         return flagVertex;
     }
@@ -170,7 +169,7 @@ public class ImportXml extends CommandLineBase {
         LOGGER.debug("importing %s:%s", id, name);
 
         VertexBuilder vertex = getGraph().prepareVertex(COUNTRY_ID_PREFIX + id, visibility);
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertex, WorldFactbookOntology.CONCEPT_TYPE_COUNTRY, visibility);
+        LumifyProperties.CONCEPT_TYPE.setProperty(vertex, WorldFactbookOntology.CONCEPT_TYPE_COUNTRY, visibility);
         LumifyProperties.TITLE.addPropertyValue(vertex, MULTI_VALUE_KEY, name, visibility);
 
         NodeList fieldNodes = (NodeList) fieldsXPath.evaluate(countryNode, XPathConstants.NODESET);

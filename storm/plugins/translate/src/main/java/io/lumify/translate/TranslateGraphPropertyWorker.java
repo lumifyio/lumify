@@ -9,7 +9,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
@@ -54,7 +54,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         ExistingElementMutation m = data.getElement().prepareMutation()
-                .alterPropertyMetadata(data.getProperty(), RawLumifyProperties.META_DATA_LANGUAGE, language);
+                .alterPropertyMetadata(data.getProperty(), LumifyProperties.META_DATA_LANGUAGE, language);
 
         boolean translated = false;
         String translatedTextPropertyKey = data.getProperty().getKey() + "#en";
@@ -69,13 +69,13 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
                     translatedTextValue = translatedText;
                 }
                 Map<String, Object> metadata = data.createPropertyMetadata();
-                metadata.put(RawLumifyProperties.META_DATA_LANGUAGE, "en");
-                String description = (String) data.getProperty().getMetadata().get(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                metadata.put(LumifyProperties.META_DATA_LANGUAGE, "en");
+                String description = (String) data.getProperty().getMetadata().get(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
                 if (description == null || description.length() == 0) {
                     description = "Text";
                 }
-                metadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, description + " (en)");
-                metadata.put(RawLumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+                metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, description + " (en)");
+                metadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
                 m.addPropertyValue(translatedTextPropertyKey, data.getProperty().getName(), translatedTextValue, metadata, data.getProperty().getVisibility());
                 translated = true;
             }

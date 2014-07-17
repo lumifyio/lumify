@@ -4,7 +4,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
 import io.lumify.core.ingest.term.extraction.TermMention;
-import io.lumify.core.model.properties.EntityLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.Vertex;
 import org.securegraph.type.GeoPoint;
 import org.securegraph.util.ConvertingIterable;
@@ -97,7 +97,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                         .sign(sign)
                         .ontologyClassUri(zipCodeIri)
                         .addProperty(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint)
-                        .addProperty(MULTI_VALUE_PROPERTY_KEY, EntityLumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver")
+                        .addProperty(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver")
                         .process(getClass().getName())
                         .build();
             }

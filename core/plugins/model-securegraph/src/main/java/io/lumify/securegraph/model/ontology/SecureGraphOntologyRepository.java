@@ -28,9 +28,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
-import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
-import static io.lumify.core.model.properties.LumifyProperties.TITLE;
+import static io.lumify.core.model.properties.LumifyProperties.*;
 import static org.securegraph.util.IterableUtils.*;
 
 @Singleton
@@ -189,7 +187,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         return IterableUtils.toList(new ConvertingIterable<Vertex, String>(vertex.getVertices(Direction.OUT, LabelName.INVERSE_OF.toString(), getAuthorizations())) {
             @Override
             protected String convert(Vertex inverseOfVertex) {
-                return OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyValue(inverseOfVertex);
+                return LumifyProperties.ONTOLOGY_TITLE.getPropertyValue(inverseOfVertex);
             }
         });
     }
@@ -388,9 +386,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         ONTOLOGY_TITLE.setProperty(builder, conceptIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
         if (conceptIRI.equals(OntologyRepository.ENTITY_CONCEPT_IRI)) {
-            OntologyLumifyProperties.TITLE_FORMULA.setProperty(builder, "prop('http://lumify.io#title') || ''", VISIBILITY.getVisibility());
-            OntologyLumifyProperties.SUBTITLE_FORMULA.setProperty(builder, "prop('http://lumify.io#source') || ''", VISIBILITY.getVisibility());
-            OntologyLumifyProperties.TIME_FORMULA.setProperty(builder, "prop('http://lumify.io#publishedDate') || ''", VISIBILITY.getVisibility());
+            LumifyProperties.TITLE_FORMULA.setProperty(builder, "prop('http://lumify.io#title') || ''", VISIBILITY.getVisibility());
+            LumifyProperties.SUBTITLE_FORMULA.setProperty(builder, "prop('http://lumify.io#source') || ''", VISIBILITY.getVisibility());
+            LumifyProperties.TIME_FORMULA.setProperty(builder, "prop('http://lumify.io#publishedDate') || ''", VISIBILITY.getVisibility());
         }
         Vertex vertex = builder.save(getAuthorizations());
 

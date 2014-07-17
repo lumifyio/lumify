@@ -8,7 +8,6 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
@@ -92,8 +91,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String mimeType = (String) data.getProperty().getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
-        checkNotNull(mimeType, RawLumifyProperties.MIME_TYPE.getPropertyName() + " is a required metadata field");
+        String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        checkNotNull(mimeType, LumifyProperties.MIME_TYPE.getPropertyName() + " is a required metadata field");
 
         Metadata metadata = new Metadata();
         String text = extractText(in, mimeType, metadata);
@@ -107,13 +106,13 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
         String author = extractTextField(metadata, authorKeys);
         if (author != null && author.length() > 0) {
-            RawLumifyProperties.AUTHOR.addPropertyValue(m, MULTIVALUE_KEY, author, data.createPropertyMetadata(), data.getVisibility());
+            LumifyProperties.AUTHOR.addPropertyValue(m, MULTIVALUE_KEY, author, data.createPropertyMetadata(), data.getVisibility());
         }
 
         String customImageMetadata = extractTextField(metadata, customFlickrMetadataKeys);
         Map<String, Object> textMetadata = data.createPropertyMetadata();
-        textMetadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
-        textMetadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, "Extracted Text");
+        textMetadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
+        textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Extracted Text");
 
         if (customImageMetadata != null && !customImageMetadata.equals("")) {
             try {
@@ -122,11 +121,11 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
                 text = new JSONObject(customImageMetadataJson.get("description").toString()).get("_content") +
                         "\n" + customImageMetadataJson.get("tags").toString();
                 StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes()), String.class);
-                RawLumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
+                LumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
 
                 Date lastupdate = GenericDateExtractor
                         .extractSingleDate(customImageMetadataJson.get("lastupdate").toString());
-                RawLumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, lastupdate, data.createPropertyMetadata(), data.getVisibility());
+                LumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, lastupdate, data.createPropertyMetadata(), data.getVisibility());
 
                 // TODO set("retrievalTime", Long.parseLong(customImageMetadataJson.get("atc:retrieval-timestamp").toString()));
 
@@ -138,9 +137,9 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             }
         } else {
             StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes()), String.class);
-            RawLumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
+            LumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
 
-            RawLumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
+            LumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
             String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ");
             if (title != null && title.length() > 0) {
                 Map<String, Object> titleMetadata = data.createPropertyMetadata();
@@ -156,7 +155,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
 
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTIVALUE_KEY, RawLumifyProperties.TEXT.getPropertyName());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTIVALUE_KEY, LumifyProperties.TEXT.getPropertyName());
     }
 
     private String extractText(InputStream in, String mimeType, Metadata metadata) throws IOException, SAXException, TikaException, BoilerpipeProcessingException {
@@ -296,11 +295,11 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null) {
             return false;
         }
@@ -309,7 +308,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        StreamingPropertyValue mappingJson = RawLumifyProperties.MAPPING_JSON.getPropertyValue(element);
+        StreamingPropertyValue mappingJson = LumifyProperties.MAPPING_JSON.getPropertyValue(element);
         if (mappingJson != null) {
             return false;
         }

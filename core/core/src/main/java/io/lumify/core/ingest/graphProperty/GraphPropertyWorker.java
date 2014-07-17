@@ -12,11 +12,9 @@ import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
@@ -140,27 +138,27 @@ public abstract class GraphPropertyWorker {
             return false;
         }
 
-        if (property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 
     protected void addVideoTranscriptAsTextPropertiesToMutation(ExistingElementMutation<Vertex> mutation, String propertyKey, VideoTranscript videoTranscript, Map<String, Object> metadata, Visibility visibility) {
-        metadata.put(RawLumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+        metadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
         for (VideoTranscript.TimedText entry : videoTranscript.getEntries()) {
             String textPropertyKey = getVideoTranscriptTimedTextPropertyKey(propertyKey, entry);
             StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(entry.getText().getBytes()), String.class);
-            RawLumifyProperties.TEXT.addPropertyValue(mutation, textPropertyKey, value, metadata, visibility);
+            LumifyProperties.TEXT.addPropertyValue(mutation, textPropertyKey, value, metadata, visibility);
         }
     }
 
     protected void pushVideoTranscriptTextPropertiesOnWorkQueue(Element element, String propertyKey, VideoTranscript videoTranscript) {
         for (VideoTranscript.TimedText entry : videoTranscript.getEntries()) {
             String textPropertyKey = getVideoTranscriptTimedTextPropertyKey(propertyKey, entry);
-            getWorkQueueRepository().pushGraphPropertyQueue(element, textPropertyKey, RawLumifyProperties.TEXT.getPropertyName());
+            getWorkQueueRepository().pushGraphPropertyQueue(element, textPropertyKey, LumifyProperties.TEXT.getPropertyName());
         }
     }
 
@@ -283,7 +281,7 @@ public abstract class GraphPropertyWorker {
                 } else {
                     vertex = singleOrDefault(graph.query(getAuthorizations())
                             .has(LumifyProperties.TITLE.getPropertyName(), title)
-                            .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), concept.getTitle())
+                            .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), concept.getTitle())
                             .vertices(), null);
                 }
             }
@@ -300,7 +298,7 @@ public abstract class GraphPropertyWorker {
                     vertexElementMutation = graph.prepareVertex(termMention.getVisibility());
                 }
                 LumifyProperties.TITLE.setProperty(vertexElementMutation, title, metadata, termMention.getVisibility());
-                OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), metadata, termMention.getVisibility());
+                LumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), metadata, termMention.getVisibility());
             } else {
                 vertexElementMutation = vertex.prepareMutation();
             }

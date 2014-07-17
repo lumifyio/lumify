@@ -16,7 +16,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.*;
 import io.lumify.core.metrics.JmxMetricsManager;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -283,7 +283,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
     }
 
     private File copyToTempFile(InputStream in, GraphPropertyWorkData workData) throws IOException {
-        String fileExt = RawLumifyProperties.FILE_NAME_EXTENSION.getPropertyValue(workData.getElement());
+        String fileExt = LumifyProperties.FILE_NAME_EXTENSION.getPropertyValue(workData.getElement());
         if (fileExt == null) {
             fileExt = "data";
         }

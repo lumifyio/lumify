@@ -31,7 +31,7 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
 import static io.lumify.core.model.properties.LumifyProperties.TITLE;
 
 public class SecureGraphAuditRepository extends AuditRepository {

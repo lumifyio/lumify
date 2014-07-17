@@ -2,12 +2,9 @@ package io.lumify.friendster;
 
 import com.altamiracorp.bigtable.model.accumulo.AccumuloSession;
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
-import io.lumify.core.model.properties.EntityLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.SystemUser;
@@ -108,10 +105,10 @@ public class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Muta
     private Vertex createUserVertex(long userId) {
         String userVertexId = ImportMR.getUserVertexId(userId);
         VertexBuilder userVertexBuilder = prepareVertex(userVertexId, visibility);
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(userVertexBuilder, FriendsterOntology.CONCEPT_TYPE_USER, visibility);
+        LumifyProperties.CONCEPT_TYPE.setProperty(userVertexBuilder, FriendsterOntology.CONCEPT_TYPE_USER, visibility);
         Map<String, Object> titleMetadata = new HashMap<String, Object>();
         LumifyProperties.TITLE.addPropertyValue(userVertexBuilder, ImportMR.MULTI_VALUE_KEY, "Friendster User " + userId, titleMetadata, visibility);
-        EntityLumifyProperties.SOURCE.addPropertyValue(userVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.FRIENDSTER_SOURCE, visibility);
+        LumifyProperties.SOURCE.addPropertyValue(userVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.FRIENDSTER_SOURCE, visibility);
         return userVertexBuilder.save(authorizations);
     }
 

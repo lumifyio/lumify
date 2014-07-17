@@ -6,8 +6,8 @@ import com.google.inject.Inject;
 import io.lumify.core.EntityHighlighter;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.video.VideoTranscript;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -66,7 +66,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             return;
         }
 
-        StreamingPropertyValue textPropertyValue = RawLumifyProperties.TEXT.getPropertyValue(artifactVertex, propertyKey);
+        StreamingPropertyValue textPropertyValue = LumifyProperties.TEXT.getPropertyValue(artifactVertex, propertyKey);
         if (textPropertyValue != null) {
             LOGGER.debug("returning text for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
             String highlightedText;

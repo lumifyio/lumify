@@ -7,7 +7,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.term.extraction.TermMention;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.user.User;
 import org.apache.hadoop.fs.FileSystem;
 import org.junit.Before;
@@ -84,10 +84,10 @@ public class PhoneNumberGraphPropertyWorkerTest {
         InputStream in = asStream(PHONE_TEXT);
         VertexBuilder vertexBuilder = graph.prepareVertex("v1", visibility);
         StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(in, String.class);
-        RawLumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
+        LumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
+        Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         in = asStream(PHONE_TEXT);
         extractor.execute(in, workData);
@@ -109,10 +109,10 @@ public class PhoneNumberGraphPropertyWorkerTest {
         InputStream in = asStream(PHONE_NEW_LINES);
         VertexBuilder vertexBuilder = graph.prepareVertex("v1", visibility);
         StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(in, String.class);
-        RawLumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
+        LumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
+        Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         in = asStream(PHONE_NEW_LINES);
         extractor.execute(in, workData);
@@ -134,10 +134,10 @@ public class PhoneNumberGraphPropertyWorkerTest {
         InputStream in = asStream(PHONE_MISSING);
         VertexBuilder vertexBuilder = graph.prepareVertex("v1", visibility);
         StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(in, String.class);
-        RawLumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
+        LumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
+        Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         in = asStream(PHONE_MISSING);
         extractor.execute(in, workData);

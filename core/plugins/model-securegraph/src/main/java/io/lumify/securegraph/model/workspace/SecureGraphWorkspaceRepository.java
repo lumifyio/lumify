@@ -7,9 +7,9 @@ import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.Relationship;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.*;
@@ -127,7 +127,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         checkNotNull(userVertex, "Could not find user: " + user.getUserId());
 
         VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, VISIBILITY.getVisibility());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, VISIBILITY.getVisibility());
+        LumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, VISIBILITY.getVisibility());
         WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertexBuilder, title, VISIBILITY.getVisibility());
         Vertex workspaceVertex = workspaceVertexBuilder.save(authorizations);
 

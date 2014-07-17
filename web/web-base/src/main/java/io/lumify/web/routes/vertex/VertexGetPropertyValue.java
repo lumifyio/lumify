@@ -5,7 +5,6 @@ import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
@@ -123,7 +122,7 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
     }
 
     private String getFileName(Vertex vertex) {
-        String fileName = RawLumifyProperties.FILE_NAME.getPropertyValue(vertex);
+        String fileName = LumifyProperties.FILE_NAME.getPropertyValue(vertex);
         if (fileName == null) {
             fileName = LumifyProperties.TITLE.getPropertyValue(vertex);
         }
@@ -172,7 +171,7 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
     }
 
     private String getMimeType(Property property) {
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType != null) {
             return mimeType;
         }

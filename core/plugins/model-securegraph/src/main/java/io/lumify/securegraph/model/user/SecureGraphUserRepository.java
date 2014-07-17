@@ -8,8 +8,8 @@ import com.google.inject.Singleton;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.*;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
@@ -103,14 +103,14 @@ public class SecureGraphUserRepository extends UserRepository {
     public User findByUsername(String username) {
         return createFromVertex(singleOrDefault(graph.query(authorizations)
                 .has(UserLumifyProperties.USERNAME.getPropertyName(), username)
-                .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
                 .vertices(), null));
     }
 
     @Override
     public Iterable<User> findAll() {
         return new ConvertingIterable<Vertex, User>(graph.query(authorizations)
-                .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
                 .vertices()) {
             @Override
             protected User convert(Vertex vertex) {
@@ -143,7 +143,7 @@ public class SecureGraphUserRepository extends UserRepository {
         String id = "USER_" + graph.getIdGenerator().nextId().toString();
         VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility());
 
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
+        LumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         UserLumifyProperties.USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
         UserLumifyProperties.DISPLAY_NAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
         UserLumifyProperties.CREATE_DATE.setProperty(userBuilder, new Date(), VISIBILITY.getVisibility());

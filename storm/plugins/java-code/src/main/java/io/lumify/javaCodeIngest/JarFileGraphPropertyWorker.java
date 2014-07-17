@@ -2,9 +2,7 @@ package io.lumify.javaCodeIngest;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 
@@ -18,8 +16,8 @@ import static org.securegraph.util.IterableUtils.toList;
 public class JarFileGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), Ontology.CONCEPT_TYPE_JAR_FILE, data.getProperty().getVisibility(), getAuthorizations());
-        RawLumifyProperties.MIME_TYPE.setProperty(data.getElement(), "application/java-archive", data.getProperty().getVisibility(), getAuthorizations());
+        LumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), Ontology.CONCEPT_TYPE_JAR_FILE, data.getProperty().getVisibility(), getAuthorizations());
+        LumifyProperties.MIME_TYPE.setProperty(data.getElement(), "application/java-archive", data.getProperty().getVisibility(), getAuthorizations());
 
         List<Vertex> existingFileVerticies = toList(((Vertex) data.getElement()).getVertices(Direction.BOTH, Ontology.EDGE_LABEL_JAR_CONTAINS, getAuthorizations()));
 
@@ -43,13 +41,13 @@ public class JarFileGraphPropertyWorker extends GraphPropertyWorker {
 
             getGraph().flush();
 
-            getWorkQueueRepository().pushGraphPropertyQueue(jarEntryVertex, RawLumifyProperties.RAW.getProperty(jarEntryVertex));
+            getWorkQueueRepository().pushGraphPropertyQueue(jarEntryVertex, LumifyProperties.RAW.getProperty(jarEntryVertex));
         }
     }
 
     private boolean fileAlreadyExists(List<Vertex> existingFileVerticies, String fileName) {
         for (Vertex v : existingFileVerticies) {
-            String existingFileName = RawLumifyProperties.FILE_NAME.getPropertyValue(v);
+            String existingFileName = LumifyProperties.FILE_NAME.getPropertyValue(v);
             if (existingFileName == null) {
                 return false;
             }
@@ -68,10 +66,10 @@ public class JarFileGraphPropertyWorker extends GraphPropertyWorker {
     private Vertex createFileVertex(JarEntry jarEntry, StreamingPropertyValue rawValue, GraphPropertyWorkData data) {
         VertexBuilder jarEntryVertexBuilder = getGraph().prepareVertex(data.getProperty().getVisibility());
         LumifyProperties.TITLE.setProperty(jarEntryVertexBuilder, jarEntry.getName(), data.getProperty().getVisibility());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(jarEntryVertexBuilder, Ontology.CONCEPT_TYPE_CLASS_FILE, data.getProperty().getVisibility());
-        RawLumifyProperties.MIME_TYPE.setProperty(jarEntryVertexBuilder, "application/octet-stream", data.getProperty().getVisibility());
-        RawLumifyProperties.FILE_NAME.setProperty(jarEntryVertexBuilder, jarEntry.getName(), data.getProperty().getVisibility());
-        RawLumifyProperties.RAW.setProperty(jarEntryVertexBuilder, rawValue, data.getProperty().getVisibility());
+        LumifyProperties.CONCEPT_TYPE.setProperty(jarEntryVertexBuilder, Ontology.CONCEPT_TYPE_CLASS_FILE, data.getProperty().getVisibility());
+        LumifyProperties.MIME_TYPE.setProperty(jarEntryVertexBuilder, "application/octet-stream", data.getProperty().getVisibility());
+        LumifyProperties.FILE_NAME.setProperty(jarEntryVertexBuilder, jarEntry.getName(), data.getProperty().getVisibility());
+        LumifyProperties.RAW.setProperty(jarEntryVertexBuilder, rawValue, data.getProperty().getVisibility());
         return jarEntryVertexBuilder.save(getAuthorizations());
     }
 
@@ -81,11 +79,11 @@ public class JarFileGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String fileName = RawLumifyProperties.FILE_NAME.getPropertyValue(element);
+        String fileName = LumifyProperties.FILE_NAME.getPropertyValue(element);
         if (fileName == null || !fileName.endsWith(".jar")) {
             return false;
         }

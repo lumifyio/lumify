@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
@@ -44,7 +44,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String mimeType = (String) data.getProperty().getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         boolean isAudio = mimeType.startsWith("audio");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -93,11 +93,11 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !(mimeType.startsWith("video") || mimeType.startsWith("audio"))) {
             return false;
         }

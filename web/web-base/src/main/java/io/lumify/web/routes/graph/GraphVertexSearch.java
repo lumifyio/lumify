@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.*;
 
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
 
 public class GraphVertexSearch extends BaseRequestHandler {
     private final int DEFAULT_RESULT_COUNT = 100;

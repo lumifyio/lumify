@@ -13,7 +13,6 @@ import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.properties.EntityLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -244,7 +243,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Property property : vertex.getProperties()) {
             OntologyProperty ontologyProperty = ontologyRepository.getProperty(property.getName());
             checkNotNull(ontologyProperty, "Could not find property " + property.getName());
-            if (!ontologyProperty.getUserVisible() && !property.getName().equals(EntityLumifyProperties.IMAGE_VERTEX_ID.getPropertyName())) {
+            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.IMAGE_VERTEX_ID.getPropertyName())) {
                 publishProperty(vertexElementMutation, property, workspaceId, user);
             }
         }
@@ -373,7 +372,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Vertex entityVertex = hasImageEdge.getVertex(Direction.OUT, authorizations);
         checkNotNull(entityVertex, "Could not find has image source vertex " + hasImageEdge.getVertexId(Direction.OUT));
         ExistingElementMutation elementMutation = entityVertex.prepareMutation();
-        Iterable<Property> glyphIconProperties = entityVertex.getProperties(EntityLumifyProperties.IMAGE_VERTEX_ID.getPropertyName());
+        Iterable<Property> glyphIconProperties = entityVertex.getProperties(LumifyProperties.IMAGE_VERTEX_ID.getPropertyName());
         for (Property glyphIconProperty : glyphIconProperties) {
             if (publishProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
                 elementMutation.save(authorizations);

@@ -2,7 +2,6 @@ package io.lumify.securegraph.model.ontology;
 
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -28,12 +27,12 @@ public class SecureGraphConcept extends Concept {
 
     @Override
     public String getIRI() {
-        return OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
+        return LumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
     @Override
     public String getTitle() {
-        return OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
+        return LumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class SecureGraphConcept extends Concept {
 
     @Override
     public String getColor() {
-        return OntologyLumifyProperties.COLOR.getPropertyValue(vertex);
+        return LumifyProperties.COLOR.getPropertyValue(vertex);
     }
 
     @Override
@@ -54,27 +53,27 @@ public class SecureGraphConcept extends Concept {
 
     @Override
     public String getDisplayType() {
-        return OntologyLumifyProperties.DISPLAY_TYPE.getPropertyValue(vertex);
+        return LumifyProperties.DISPLAY_TYPE.getPropertyValue(vertex);
     }
 
     @Override
     public String getTitleFormula() {
-        return OntologyLumifyProperties.TITLE_FORMULA.getPropertyValue(vertex);
+        return LumifyProperties.TITLE_FORMULA.getPropertyValue(vertex);
     }
 
     @Override
     public String getSubtitleFormula() {
-        return OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyValue(vertex);
+        return LumifyProperties.SUBTITLE_FORMULA.getPropertyValue(vertex);
     }
 
     @Override
     public String getTimeFormula() {
-        return OntologyLumifyProperties.TIME_FORMULA.getPropertyValue(vertex);
+        return LumifyProperties.TIME_FORMULA.getPropertyValue(vertex);
     }
 
     @Override
     public boolean getUserVisible() {
-        return OntologyLumifyProperties.USER_VISIBLE.getPropertyValue(vertex, true);
+        return LumifyProperties.USER_VISIBLE.getPropertyValue(vertex, true);
     }
 
     @Override

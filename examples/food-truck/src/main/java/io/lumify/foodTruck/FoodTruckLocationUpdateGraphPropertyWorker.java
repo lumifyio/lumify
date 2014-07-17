@@ -3,7 +3,6 @@ package io.lumify.foodTruck;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.twitter.TwitterOntology;
 import org.securegraph.*;
 import org.securegraph.type.GeoPoint;
@@ -38,7 +37,7 @@ public class FoodTruckLocationUpdateGraphPropertyWorker extends GraphPropertyWor
         String keywordTitle = LumifyProperties.TITLE.getPropertyValue(keywordVertex);
         GeoPoint geoLocation = FoodTruckOntology.GEO_LOCATION.getPropertyValue(keywordVertex);
         if (geoLocation != null) {
-            Date geoLocationDate = RawLumifyProperties.PUBLISHED_DATE.getPropertyValue(tweetVertex);
+            Date geoLocationDate = LumifyProperties.PUBLISHED_DATE.getPropertyValue(tweetVertex);
             Date currentGetLocationDate = FoodTruckOntology.GEO_LOCATION_DATE.getPropertyValue(foodTruck);
             if (currentGetLocationDate == null || geoLocationDate.compareTo(currentGetLocationDate) > 0) {
                 Calendar geoLocationCalendar = Calendar.getInstance();

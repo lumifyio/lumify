@@ -5,13 +5,13 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
-import io.lumify.core.model.properties.EntityLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.securegraph.*;
+import org.securegraph.Element;
+import org.securegraph.Property;
+import org.securegraph.Vertex;
+import org.securegraph.VertexBuilder;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.InputStream;
@@ -58,15 +58,15 @@ public class TwitterProfileImageDownloadGraphPropertyWorker extends GraphPropert
 
             VertexBuilder v = getGraph().prepareVertex(profileImageId, data.getVisibility());
             LumifyProperties.TITLE.setProperty(v, "Profile Image of " + userTitle, data.getVisibility());
-            RawLumifyProperties.RAW.setProperty(v, imageValue, data.getVisibility());
-            OntologyLumifyProperties.CONCEPT_TYPE.setProperty(v, TwitterOntology.CONCEPT_TYPE_PROFILE_IMAGE, data.getVisibility());
+            LumifyProperties.RAW.setProperty(v, imageValue, data.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.setProperty(v, TwitterOntology.CONCEPT_TYPE_PROFILE_IMAGE, data.getVisibility());
             profileImageVertex = v.save(getAuthorizations());
             LOGGER.debug("created vertex: %s", profileImageVertex.getId());
 
             getGraph().addEdge((Vertex) data.getElement(), profileImageVertex, entityHasImageIri, data.getVisibility(), getAuthorizations());
-            EntityLumifyProperties.IMAGE_VERTEX_ID.setProperty(data.getElement(), profileImageVertex.getId().toString(), data.getVisibility(), getAuthorizations());
-
+            LumifyProperties.IMAGE_VERTEX_ID.setProperty(data.getElement(), profileImageVertex.getId().toString(), data.getVisibility(), getAuthorizations());
             getGraph().flush();
+
         } finally {
             imageData.close();
         }

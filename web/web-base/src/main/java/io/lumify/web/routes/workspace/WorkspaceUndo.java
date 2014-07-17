@@ -8,7 +8,6 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectRowKey;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -162,7 +161,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
             Edge edge = hasImageEdges.next();
             if (edge.getVertexId(Direction.IN).equals(vertex.getId())) {
                 Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
-                Property entityHasImage = outVertex.getProperty(OntologyLumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+                Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
                 outVertex.removeProperty(entityHasImage.getName(), authorizations);
                 this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage);
             }

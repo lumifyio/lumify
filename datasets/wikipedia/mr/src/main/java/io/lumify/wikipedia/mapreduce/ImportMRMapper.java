@@ -6,10 +6,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
-import io.lumify.core.model.properties.EntityLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.user.UserRepository;
@@ -167,23 +164,23 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
         StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(new ByteArrayInputStream(wikitext.getBytes()), String.class);
 
         VertexBuilder pageVertexBuilder = prepareVertex(wikipediaPageVertexId, visibility);
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
-        RawLumifyProperties.RAW.setProperty(pageVertexBuilder, rawPropertyValue, visibility);
+        LumifyProperties.CONCEPT_TYPE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
+        LumifyProperties.RAW.setProperty(pageVertexBuilder, rawPropertyValue, visibility);
 
         Map<String, Object> titleMetadata = new HashMap<String, Object>();
         LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4);
         LumifyProperties.TITLE.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, pageTitle, titleMetadata, visibility);
 
-        RawLumifyProperties.MIME_TYPE.setProperty(pageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
-        RawLumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
-        EntityLumifyProperties.SOURCE.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.WIKIPEDIA_SOURCE, visibility);
-        EntityLumifyProperties.SOURCE_URL.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, sourceUrl, visibility);
+        LumifyProperties.MIME_TYPE.setProperty(pageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
+        LumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
+        LumifyProperties.SOURCE.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.WIKIPEDIA_SOURCE, visibility);
+        LumifyProperties.SOURCE_URL.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, sourceUrl, visibility);
         if (revisionTimestamp != null) {
-            RawLumifyProperties.PUBLISHED_DATE.setProperty(pageVertexBuilder, revisionTimestamp, visibility);
+            LumifyProperties.PUBLISHED_DATE.setProperty(pageVertexBuilder, revisionTimestamp, visibility);
         }
         Map<String, Object> textMetadata = new HashMap<String, Object>();
-        textMetadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text");
-        RawLumifyProperties.TEXT.setProperty(pageVertexBuilder, textPropertyValue, textMetadata, visibility);
+        textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text");
+        LumifyProperties.TEXT.setProperty(pageVertexBuilder, textPropertyValue, textMetadata, visibility);
         Vertex pageVertex = pageVertexBuilder.save(authorizations);
 
         // audit vertex
@@ -199,15 +196,15 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
             String linkTarget = link.getLinkTargetWithoutHash();
             String linkVertexId = ImportMR.getWikipediaPageVertexId(linkTarget);
             VertexBuilder linkedPageVertexBuilder = prepareVertex(linkVertexId, visibility);
-            OntologyLumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
-            RawLumifyProperties.MIME_TYPE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
-            EntityLumifyProperties.SOURCE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.WIKIPEDIA_SOURCE, visibility);
+            LumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
+            LumifyProperties.MIME_TYPE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
+            LumifyProperties.SOURCE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.WIKIPEDIA_SOURCE, visibility);
 
             titleMetadata = new HashMap<String, Object>();
             LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1);
             String linkTargetHash = Base64.encodeBase64String(linkTarget.trim().toLowerCase().getBytes());
             LumifyProperties.TITLE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY + "#" + linkTargetHash, linkTarget, titleMetadata, visibility);
-            RawLumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
+            LumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
 
             Vertex linkedPageVertex = linkedPageVertexBuilder.save(authorizations);
             Edge edge = addEdge(ImportMR.getWikipediaPageToPageEdgeId(pageVertex, linkedPageVertex),

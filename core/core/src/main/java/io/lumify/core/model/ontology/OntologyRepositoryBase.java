@@ -81,7 +81,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             Concept concept = getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
             return concept != null; // todo should check for more
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().contains(OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyName())) {
+            if (e.getMessage() != null && e.getMessage().contains(LumifyProperties.ONTOLOGY_TITLE.getPropertyName())) {
                 return false;
             }
             throw new RuntimeException(e);
@@ -198,31 +198,31 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         String color = getColor(o, ontologyClass);
         if (color != null) {
-            result.setProperty(OntologyLumifyProperties.COLOR.getPropertyName(), color, authorizations);
+            result.setProperty(LumifyProperties.COLOR.getPropertyName(), color, authorizations);
         }
 
         String displayType = getDisplayType(o, ontologyClass);
         if (displayType != null) {
-            result.setProperty(OntologyLumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
+            result.setProperty(LumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
         }
 
         String titleFormula = getTitleFormula(o, ontologyClass);
         if (titleFormula != null) {
-            result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);
+            result.setProperty(LumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);
         }
 
         String subtitleFormula = getSubtitleFormula(o, ontologyClass);
         if (subtitleFormula != null) {
-            result.setProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName(), subtitleFormula, authorizations);
+            result.setProperty(LumifyProperties.SUBTITLE_FORMULA.getPropertyName(), subtitleFormula, authorizations);
         }
 
         String timeFormula = getTimeFormula(o, ontologyClass);
         if (timeFormula != null) {
-            result.setProperty(OntologyLumifyProperties.TIME_FORMULA.getPropertyName(), timeFormula, authorizations);
+            result.setProperty(LumifyProperties.TIME_FORMULA.getPropertyName(), timeFormula, authorizations);
         }
 
         boolean userVisible = getUserVisible(o, ontologyClass);
-        result.setProperty(OntologyLumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
+        result.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
         setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getPropertyName(), authorizations);
@@ -442,27 +442,27 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     protected String getColor(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.COLOR.getPropertyName());
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.COLOR.getPropertyName());
     }
 
     protected String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.DISPLAY_TYPE.getPropertyName());
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.DISPLAY_TYPE.getPropertyName());
     }
 
     protected String getTitleFormula(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TITLE_FORMULA.getPropertyName());
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.TITLE_FORMULA.getPropertyName());
     }
 
     protected String getSubtitleFormula(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName());
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.SUBTITLE_FORMULA.getPropertyName());
     }
 
     protected String getTimeFormula(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TIME_FORMULA.getPropertyName());
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.TIME_FORMULA.getPropertyName());
     }
 
     protected Boolean getDisplayTime(OWLOntology o, OWLEntity owlEntity) {
-        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.DISPLAY_TIME.getPropertyName());
+        String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.DISPLAY_TIME.getPropertyName());
         if (val == null) {
             return null;
         }
@@ -470,7 +470,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     protected Double getBoost(OWLOntology o, OWLEntity owlEntity) {
-        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.BOOST.getPropertyName());
+        String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.BOOST.getPropertyName());
         if (val == null) {
             return null;
         }
@@ -478,7 +478,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
-        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.USER_VISIBLE.getPropertyName());
+        String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.USER_VISIBLE.getPropertyName());
         return val == null || Boolean.parseBoolean(val);
     }
 
@@ -488,15 +488,15 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.GLYPH_ICON_FILE_NAME.getPropertyName());
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.GLYPH_ICON_FILE_NAME.getPropertyName());
     }
 
     protected String getMapGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName());
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName());
     }
 
     protected JSONObject getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
-        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getPropertyName());
+        String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.POSSIBLE_VALUES.getPropertyName());
         if (val == null || val.trim().length() == 0) {
             return null;
         }
@@ -504,7 +504,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     protected Collection<TextIndexHint> getTextIndexHints(OWLOntology o, OWLDataProperty owlEntity) {
-        return TextIndexHint.parse(getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TEXT_INDEX_HINTS.getPropertyName()));
+        return TextIndexHint.parse(getAnnotationValueByUri(o, owlEntity, LumifyProperties.TEXT_INDEX_HINTS.getPropertyName()));
     }
 
     protected String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {

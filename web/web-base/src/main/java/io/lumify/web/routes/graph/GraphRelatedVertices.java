@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
 
 public class GraphRelatedVertices extends BaseRequestHandler {
     private final Graph graph;

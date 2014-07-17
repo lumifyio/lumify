@@ -2,7 +2,7 @@ package io.lumify.core.ingest;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.util.GraphUtil;
 import org.apache.commons.io.IOUtils;
@@ -81,7 +81,7 @@ public class MetadataGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     public JSONObject getMetadataJson(GraphPropertyWorkData data) throws IOException {
-        StreamingPropertyValue metadataJsonValue = RawLumifyProperties.METADATA_JSON.getPropertyValue(data.getElement());
+        StreamingPropertyValue metadataJsonValue = LumifyProperties.METADATA_JSON.getPropertyValue(data.getElement());
         InputStream metadataJsonIn = metadataJsonValue.getInputStream();
         try {
             String metadataJsonString = IOUtils.toString(metadataJsonIn);
@@ -97,7 +97,7 @@ public class MetadataGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        StreamingPropertyValue mappingJson = RawLumifyProperties.METADATA_JSON.getPropertyValue(element);
+        StreamingPropertyValue mappingJson = LumifyProperties.METADATA_JSON.getPropertyValue(element);
         if (mappingJson == null) {
             return false;
         }

@@ -2,8 +2,6 @@ package io.lumify.flightTrack;
 
 import com.google.inject.Inject;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
-import io.lumify.core.model.properties.EntityLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
@@ -172,9 +170,9 @@ public class FlightRepository {
         Airport airport = airportCodeMap.get(airportCode.toLowerCase());
 
         VertexBuilder vb = graph.prepareVertex(airportId, visibility);
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vb, FlightTrackOntology.CONCEPT_TYPE_AIRPORT, visibility);
+        LumifyProperties.CONCEPT_TYPE.setProperty(vb, FlightTrackOntology.CONCEPT_TYPE_AIRPORT, visibility);
         FlightTrackOntology.AIRPORT_CODE.setProperty(vb, airportCode, visibility);
-        EntityLumifyProperties.SOURCE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, SOURCE_NAME, visibility);
+        LumifyProperties.SOURCE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, SOURCE_NAME, visibility);
         if (airport != null) {
             FlightTrackOntology.LOCATION.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, airport.getGeoPoint(), visibility);
             LumifyProperties.TITLE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, airport.getTitle(), visibility);
@@ -206,9 +204,9 @@ public class FlightRepository {
         LOGGER.info("new airplane %s", ident);
 
         VertexBuilder vb = graph.prepareVertex(airplaneId, visibility);
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vb, FlightTrackOntology.CONCEPT_TYPE_AIRPLANE, visibility);
+        LumifyProperties.CONCEPT_TYPE.setProperty(vb, FlightTrackOntology.CONCEPT_TYPE_AIRPLANE, visibility);
         FlightTrackOntology.IDENT.setProperty(vb, ident, visibility);
-        EntityLumifyProperties.SOURCE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, SOURCE_NAME, visibility);
+        LumifyProperties.SOURCE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, SOURCE_NAME, visibility);
         airplaneVertex = vb.save(authorizations);
         identToVertex.put(ident, airplaneVertex);
         graph.flush();
@@ -253,10 +251,10 @@ public class FlightRepository {
         LOGGER.info("new airline %s", airline.getTitle());
 
         VertexBuilder vb = graph.prepareVertex(airlineId, visibility);
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vb, FlightTrackOntology.CONCEPT_TYPE_AIRLINE, visibility);
+        LumifyProperties.CONCEPT_TYPE.setProperty(vb, FlightTrackOntology.CONCEPT_TYPE_AIRLINE, visibility);
         LumifyProperties.TITLE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, airline.getTitle(), visibility);
         FlightTrackOntology.AIRLINE_PREFIX.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, airline.getIdentPrefix(), visibility);
-        EntityLumifyProperties.SOURCE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, SOURCE_NAME, visibility);
+        LumifyProperties.SOURCE.addPropertyValue(vb, MULTI_VALUE_PROPERTY_KEY, SOURCE_NAME, visibility);
         v = vb.save(authorizations);
         airlinePrefixToVertex.put(airline.getIdentPrefix(), v);
 

@@ -5,7 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.term.extraction.TermMention;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.opennlpDictionary.model.DictionaryEntry;
@@ -112,11 +112,11 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
             return false;
         }
 
-        if (property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 

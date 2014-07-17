@@ -1,7 +1,7 @@
 package io.lumify.core.ingest.video;
 
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.RowKeyHelper;
 import org.securegraph.Property;
 
@@ -13,7 +13,7 @@ public class VideoPropertyHelper {
     private static final Pattern START_TIME_ONLY_PATTERN = Pattern.compile("^(.*)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)");
 
     public static VideoFrameInfo getVideoFrameInfoFromProperty(Property property) {
-        Object mimeType = property.getMetadata().get(RawLumifyProperties.META_DATA_MIME_TYPE);
+        Object mimeType = property.getMetadata().get(LumifyProperties.META_DATA_MIME_TYPE);
         if (mimeType == null || !mimeType.equals("text/plain")) {
             return null;
         }

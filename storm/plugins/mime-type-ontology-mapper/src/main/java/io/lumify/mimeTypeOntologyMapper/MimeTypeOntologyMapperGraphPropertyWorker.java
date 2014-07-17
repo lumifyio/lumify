@@ -4,8 +4,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Element;
@@ -57,7 +56,7 @@ public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWork
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(data.getElement());
+        String mimeType = LumifyProperties.MIME_TYPE.getPropertyValue(data.getElement());
         Concept concept = null;
 
         if (imageConcept != null && mimeType.startsWith("image")) {
@@ -76,9 +75,9 @@ public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWork
         }
 
         LOGGER.debug("assigning concept type %s to vertex %s", concept.getTitle(), data.getElement().getId());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), concept.getTitle(), data.createPropertyMetadata(), data.getVisibility(), getAuthorizations());
+        LumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), concept.getTitle(), data.createPropertyMetadata(), data.getVisibility(), getAuthorizations());
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, LumifyProperties.CONCEPT_TYPE.getPropertyName());
     }
 
     @Override
@@ -87,11 +86,11 @@ public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWork
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(element);
+        String mimeType = LumifyProperties.MIME_TYPE.getPropertyValue(element);
         return mimeType != null;
     }
 }

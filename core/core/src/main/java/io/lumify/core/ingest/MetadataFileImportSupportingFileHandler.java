@@ -1,6 +1,6 @@
 package io.lumify.core.ingest;
 
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
 import org.securegraph.property.StreamingPropertyValue;
@@ -25,7 +25,7 @@ public class MetadataFileImportSupportingFileHandler extends FileImportSupportin
             final FileInputStream mappingJsonInputStream = new FileInputStream(mappingJsonFile);
             StreamingPropertyValue mappingJsonValue = new StreamingPropertyValue(mappingJsonInputStream, byte[].class);
             mappingJsonValue.searchIndex(false);
-            RawLumifyProperties.METADATA_JSON.setProperty(vertexBuilder, mappingJsonValue, visibility);
+            LumifyProperties.METADATA_JSON.setProperty(vertexBuilder, mappingJsonValue, visibility);
             return new AddSupportingFilesResult() {
                 @Override
                 public void close() throws IOException {

@@ -3,8 +3,8 @@ package io.lumify.storm.video;
 import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -48,7 +48,7 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp3FileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), MediaLumifyProperties.MIME_TYPE_AUDIO_MP3);
+                metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), MediaLumifyProperties.MIME_TYPE_AUDIO_MP3);
                 MediaLumifyProperties.AUDIO_MP3.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save(getAuthorizations());
                 getGraph().flush();
@@ -68,10 +68,10 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

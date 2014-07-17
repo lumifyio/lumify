@@ -2,7 +2,7 @@ package io.lumify.foodTruck;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -45,7 +45,7 @@ public class FoodTruckRemoveOldGeoLocationsGraphPropertyWorker extends GraphProp
             return false;
         }
 
-        String conceptType = OntologyLumifyProperties.CONCEPT_TYPE.getPropertyValue(element);
+        String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(element);
         if (!conceptType.equals(FoodTruckOntology.CONCEPT_TYPE_FOOD_TRUCK)) {
             return false;
         }

@@ -5,8 +5,8 @@ import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import org.apache.commons.io.IOUtils;
@@ -93,7 +93,7 @@ public class JsonSerializer {
             String sandboxStatus = sandboxStatuses[i].toString();
             VideoFrameInfo videoFrameInfo;
             if ((videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property)) != null) {
-                String textDescription = (String) property.getMetadata().get(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                String textDescription = (String) property.getMetadata().get(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
                 addVideoFramePropertyToResults(resultsJson, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
             } else {
                 JSONObject propertyJson = toJsonProperty(property);
@@ -137,7 +137,7 @@ public class JsonSerializer {
             json.put("key", propertyKey);
             json.put("name", MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName());
             json.put("sandboxStatus", sandboxStatus);
-            json.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, textDescription);
+            json.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, textDescription);
             json.put("streamingPropertyValue", true);
             resultsJson.put(json);
         }

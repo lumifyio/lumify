@@ -5,7 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.video.SubRip;
 import org.securegraph.Element;
@@ -44,7 +44,7 @@ public class CCExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
             ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
             Map<String, Object> metadata = data.createPropertyMetadata();
-            metadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, "Close Caption");
+            metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Close Caption");
             addVideoTranscriptAsTextPropertiesToMutation(m, PROPERTY_KEY, videoTranscript, metadata, data.getVisibility());
             Vertex v = m.save(getAuthorizations());
             getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, PROPERTY_KEY, getUser(), data.getVisibility());
@@ -63,10 +63,10 @@ public class CCExtractorGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

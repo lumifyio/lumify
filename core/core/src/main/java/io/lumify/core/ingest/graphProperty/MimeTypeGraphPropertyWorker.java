@@ -3,7 +3,7 @@ package io.lumify.core.ingest.graphProperty;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -40,10 +40,10 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        if (RawLumifyProperties.MIME_TYPE.getPropertyValue(element) != null) {
+        if (LumifyProperties.MIME_TYPE.getPropertyValue(element) != null) {
             return false;
         }
 
@@ -52,7 +52,7 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String fileName = RawLumifyProperties.FILE_NAME.getPropertyValue(data.getElement());
+        String fileName = LumifyProperties.FILE_NAME.getPropertyValue(data.getElement());
         String mimeType = getMimeType(in, fileName);
         if (mimeType == null) {
             return;
@@ -64,8 +64,8 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
         if (visibilityJson != null) {
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(mimeTypeMetadata, visibilityJson);
         }
-        RawLumifyProperties.MIME_TYPE.setProperty(m, mimeType, mimeTypeMetadata, data.getVisibility());
-        m.alterPropertyMetadata(data.getProperty(), RawLumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
+        LumifyProperties.MIME_TYPE.setProperty(m, mimeType, mimeTypeMetadata, data.getVisibility());
+        m.alterPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, this.getClass().getName(), getUser(), data.getVisibility());
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());

@@ -5,8 +5,8 @@ import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
@@ -60,7 +60,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     frameValue.searchIndex(false);
                     String key = String.format("%08d", Math.max(0L, frameStartTime));
                     Map<String, Object> metadata = data.createPropertyMetadata();
-                    metadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "image/png");
+                    metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), "image/png");
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
                     MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVisibility());
                     propertyKeys.add(key);
@@ -101,10 +101,10 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

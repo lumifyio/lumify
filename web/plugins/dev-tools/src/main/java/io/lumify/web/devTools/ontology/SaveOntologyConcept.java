@@ -4,7 +4,6 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
@@ -48,25 +47,25 @@ public class SaveOntologyConcept extends BaseRequestHandler {
         }
 
         if (color.length() != 0) {
-            concept.setProperty(OntologyLumifyProperties.COLOR.getPropertyName(), color, authorizations);
+            concept.setProperty(LumifyProperties.COLOR.getPropertyName(), color, authorizations);
         }
 
         if (timeFormula.length() != 0) {
-            concept.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);
+            concept.setProperty(LumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);
         } else {
-            concept.removeProperty(OntologyLumifyProperties.TITLE_FORMULA.getPropertyName(), authorizations);
+            concept.removeProperty(LumifyProperties.TITLE_FORMULA.getPropertyName(), authorizations);
         }
 
         if (subtitleFormula.length() != 0) {
-            concept.setProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName(), subtitleFormula, authorizations);
+            concept.setProperty(LumifyProperties.SUBTITLE_FORMULA.getPropertyName(), subtitleFormula, authorizations);
         } else {
-            concept.removeProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName(), authorizations);
+            concept.removeProperty(LumifyProperties.SUBTITLE_FORMULA.getPropertyName(), authorizations);
         }
 
         if (timeFormula.length() != 0) {
-            concept.setProperty(OntologyLumifyProperties.TIME_FORMULA.getPropertyName(), timeFormula, authorizations);
+            concept.setProperty(LumifyProperties.TIME_FORMULA.getPropertyName(), timeFormula, authorizations);
         } else {
-            concept.removeProperty(OntologyLumifyProperties.TIME_FORMULA.getPropertyName(), authorizations);
+            concept.removeProperty(LumifyProperties.TIME_FORMULA.getPropertyName(), authorizations);
         }
 
         ontologyRepository.clearCache();

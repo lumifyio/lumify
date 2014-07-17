@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
 import static io.lumify.core.model.properties.LumifyProperties.TITLE;
 
 public class ResolveDetectedObject extends BaseRequestHandler {

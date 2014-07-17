@@ -3,7 +3,6 @@ package io.lumify.core.ingest;
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -134,12 +133,12 @@ public class FileImport {
                 vertexBuilder = this.graph.prepareVertex(predefinedId, visibility);
             }
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, visibilityJson, visibility);
-            RawLumifyProperties.RAW.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, rawValue, propertyMetadata, visibility);
+            LumifyProperties.RAW.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, rawValue, propertyMetadata, visibility);
             LumifyProperties.TITLE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
             LumifyProperties.CONTENT_HASH.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);
-            RawLumifyProperties.FILE_NAME.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
-            RawLumifyProperties.FILE_NAME_EXTENSION.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, FilenameUtils.getExtension(f.getName()), propertyMetadata, visibility);
-            RawLumifyProperties.CREATE_DATE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, new Date(f.lastModified()), propertyMetadata, visibility);
+            LumifyProperties.FILE_NAME.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
+            LumifyProperties.FILE_NAME_EXTENSION.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, FilenameUtils.getExtension(f.getName()), propertyMetadata, visibility);
+            LumifyProperties.CREATE_DATE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, new Date(f.lastModified()), propertyMetadata, visibility);
 
             for (FileImportSupportingFileHandler fileImportSupportingFileHandler : this.fileImportSupportingFileHandlers) {
                 FileImportSupportingFileHandler.AddSupportingFilesResult addSupportingFilesResult = fileImportSupportingFileHandler.addSupportingFiles(vertexBuilder, f, visibility);
@@ -192,7 +191,7 @@ public class FileImport {
     private void pushOnQueue(Vertex vertex) {
         LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
         this.workQueueRepository.pushElement(vertex);
-        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, RawLumifyProperties.RAW.getPropertyName());
+        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
     }
 
     private Vertex findExistingVertexWithHash(String hash, Authorizations authorizations) {

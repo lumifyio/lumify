@@ -2,7 +2,7 @@ package io.lumify.foodTruck;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import io.lumify.core.model.properties.EntityLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.*;
 
 import java.io.InputStream;
@@ -17,11 +17,11 @@ public class FoodTruckHasTwitterAccountOnCreateGraphPropertyWorker extends Graph
         Vertex foodTruckVertex = hasTwitterUserEdge.getVertex(Direction.OUT, getAuthorizations());
         Vertex twitterUserVertex = hasTwitterUserEdge.getVertex(Direction.IN, getAuthorizations());
 
-        String imageVertexId = EntityLumifyProperties.IMAGE_VERTEX_ID.getPropertyValue(twitterUserVertex);
+        String imageVertexId = LumifyProperties.IMAGE_VERTEX_ID.getPropertyValue(twitterUserVertex);
         if (imageVertexId != null && imageVertexId.length() > 0) {
-            EntityLumifyProperties.IMAGE_VERTEX_ID.addPropertyValue(foodTruckVertex, MULTI_VALUE_KEY, imageVertexId, data.getVisibility(), getAuthorizations());
+            LumifyProperties.IMAGE_VERTEX_ID.addPropertyValue(foodTruckVertex, MULTI_VALUE_KEY, imageVertexId, data.getVisibility(), getAuthorizations());
             getGraph().flush();
-            getWorkQueueRepository().pushGraphPropertyQueue(foodTruckVertex, MULTI_VALUE_KEY, EntityLumifyProperties.IMAGE_VERTEX_ID.getPropertyName());
+            getWorkQueueRepository().pushGraphPropertyQueue(foodTruckVertex, MULTI_VALUE_KEY, LumifyProperties.IMAGE_VERTEX_ID.getPropertyName());
         }
     }
 

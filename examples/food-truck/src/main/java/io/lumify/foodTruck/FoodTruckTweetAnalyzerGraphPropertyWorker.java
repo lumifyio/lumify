@@ -5,8 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
@@ -85,7 +84,7 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
             keywordVertices = toList(
                     getGraph()
                             .query(getAuthorizations())
-                            .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), FoodTruckOntology.CONCEPT_TYPE_LOCATION)
+                            .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), FoodTruckOntology.CONCEPT_TYPE_LOCATION)
                             .vertices()
             );
             keywordVerticesCache.put(KEYWORD_VERTICES_CACHE_KEY, keywordVertices);
@@ -99,10 +98,10 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.TEXT.getPropertyName())) {
+        if (!property.getName().equals(LumifyProperties.TEXT.getPropertyName())) {
             return false;
         }
-        if (!OntologyLumifyProperties.CONCEPT_TYPE.getPropertyValue(element).equals(TwitterOntology.CONCEPT_TYPE_TWEET)) {
+        if (!LumifyProperties.CONCEPT_TYPE.getPropertyValue(element).equals(TwitterOntology.CONCEPT_TYPE_TWEET)) {
             return false;
         }
         return true;

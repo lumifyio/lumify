@@ -5,8 +5,7 @@ import io.lumify.core.model.ontology.PropertyType;
 import org.json.JSONObject;
 import org.securegraph.Vertex;
 
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
-import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+import static io.lumify.core.model.properties.LumifyProperties.*;
 
 public class SecureGraphOntologyProperty extends OntologyProperty {
     private final Vertex vertex;

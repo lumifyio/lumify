@@ -76,17 +76,17 @@ public class InMemoryConcept extends Concept {
 
     @Override
     public void setProperty(String name, Object value, Authorizations authorizations) {
-        if (OntologyLumifyProperties.COLOR.getPropertyName().equals(name)) {
+        if (LumifyProperties.COLOR.getPropertyName().equals(name)) {
             this.color = (String) value;
-        } else if (OntologyLumifyProperties.DISPLAY_TYPE.getPropertyName().equals(name)) {
+        } else if (LumifyProperties.DISPLAY_TYPE.getPropertyName().equals(name)) {
             this.displayType = (String) value;
-        } else if (OntologyLumifyProperties.TITLE_FORMULA.getPropertyName().equals(name)) {
+        } else if (LumifyProperties.TITLE_FORMULA.getPropertyName().equals(name)) {
             this.titleFormula = (String) value;
-        } else if (OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName().equals(name)) {
+        } else if (LumifyProperties.SUBTITLE_FORMULA.getPropertyName().equals(name)) {
             this.subtitleFormula = (String) value;
-        } else if (OntologyLumifyProperties.TIME_FORMULA.getPropertyName().equals(name)) {
+        } else if (LumifyProperties.TIME_FORMULA.getPropertyName().equals(name)) {
             this.timeFormula = (String) value;
-        } else if (OntologyLumifyProperties.USER_VISIBLE.getPropertyName().equals(name)) {
+        } else if (LumifyProperties.USER_VISIBLE.getPropertyName().equals(name)) {
             this.userVisible = (Boolean) value;
         } else if (LumifyProperties.GLYPH_ICON.getPropertyName().equals(name)) {
             this.glyphIcon = (byte[]) value;
@@ -103,11 +103,11 @@ public class InMemoryConcept extends Concept {
 
     @Override
     public void removeProperty(String name, Authorizations authorizations) {
-        if (OntologyLumifyProperties.TITLE_FORMULA.getPropertyName().equals(name)) {
+        if (LumifyProperties.TITLE_FORMULA.getPropertyName().equals(name)) {
             this.titleFormula = null;
-        } else if (OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName().equals(name)) {
+        } else if (LumifyProperties.SUBTITLE_FORMULA.getPropertyName().equals(name)) {
             this.subtitleFormula = null;
-        } else if (OntologyLumifyProperties.TIME_FORMULA.getPropertyName().equals(name)) {
+        } else if (LumifyProperties.TIME_FORMULA.getPropertyName().equals(name)) {
             this.timeFormula = null;
         } else {
             throw new LumifyException("Remove not implemented for property " + name);

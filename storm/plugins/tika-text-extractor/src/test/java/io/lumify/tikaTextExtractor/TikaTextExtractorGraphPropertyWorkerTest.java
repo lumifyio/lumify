@@ -5,7 +5,6 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -76,7 +75,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
 
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
-        Property property = vertex.getProperty(RawLumifyProperties.RAW.getPropertyName());
+        Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         textExtractor.execute(in, workData);
 
@@ -86,9 +85,9 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         assertEquals(
                 "Five reasons why Windows 8 has failed\n" +
                         "The numbers speak for themselves. Vista, universally acknowledged as a failure, actually had significantly better adoption numbers than Windows 8. At similar points in their roll-outs, Vista had a desktop market share of 4.52% compared to Windows 8's share of 2.67%. Underlining just how poorly Windows 8's adoption has gone, Vista didn't even have the advantage of holiday season sales to boost its numbers. Tablets--and not Surface RT tablets--were what people bought last December, not Windows 8 PCs.\n",
-                IOUtils.toString(RawLumifyProperties.TEXT.getPropertyValue(vertex).getInputStream())
+                IOUtils.toString(LumifyProperties.TEXT.getPropertyValue(vertex).getInputStream())
         );
-        assertEquals(new Date(1357063760000L), RawLumifyProperties.CREATE_DATE.getPropertyValue(vertex));
+        assertEquals(new Date(1357063760000L), LumifyProperties.CREATE_DATE.getPropertyValue(vertex));
     }
 
     private void createVertex(String data) {
@@ -96,8 +95,8 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(data.getBytes()), byte[].class);
         textValue.searchIndex(false);
         Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "text/html");
-        RawLumifyProperties.RAW.setProperty(v, textValue, metadata, visibility);
+        metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), "text/html");
+        LumifyProperties.RAW.setProperty(v, textValue, metadata, visibility);
         v.save(authorizations);
     }
 
@@ -115,14 +114,14 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
 
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
-        Property property = vertex.getProperty(RawLumifyProperties.RAW.getPropertyName());
+        Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
         assertEquals("Test Title", LumifyProperties.TITLE.getPropertyValue(vertex));
-        assertEquals("", IOUtils.toString(RawLumifyProperties.TEXT.getPropertyValue(vertex).getInputStream()));
-        assertEquals(new Date(1357063760000L), RawLumifyProperties.CREATE_DATE.getPropertyValue(vertex));
+        assertEquals("", IOUtils.toString(LumifyProperties.TEXT.getPropertyValue(vertex).getInputStream()));
+        assertEquals(new Date(1357063760000L), LumifyProperties.CREATE_DATE.getPropertyValue(vertex));
     }
 
     @Test
@@ -137,7 +136,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
 
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
-        Property property = vertex.getProperty(RawLumifyProperties.RAW.getPropertyName());
+        Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         textExtractor.execute(in, workData);
 
@@ -146,9 +145,9 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         assertEquals(
                 "Five reasons why Windows 8 has failed\n" +
                         "The numbers speak for themselves. Vista, universally acknowledged as a failure, actually had significantly better adoption numbers than Windows 8. At similar points in their roll-outs, Vista had a desktop market share of 4.52% compared to Windows 8's share of 2.67%. Underlining just how poorly Windows 8's adoption has gone, Vista didn't even have the advantage of holiday season sales to boost its numbers. Tablets--and not Surface RT tablets--were what people bought last December, not Windows 8 PCs.\n",
-                IOUtils.toString(RawLumifyProperties.TEXT.getPropertyValue(vertex).getInputStream())
+                IOUtils.toString(LumifyProperties.TEXT.getPropertyValue(vertex).getInputStream())
         );
-        assertEquals(new Date(1357063760000L), RawLumifyProperties.CREATE_DATE.getPropertyValue(vertex));
+        assertEquals(new Date(1357063760000L), LumifyProperties.CREATE_DATE.getPropertyValue(vertex));
     }
 
     //todo : add test with image metadata

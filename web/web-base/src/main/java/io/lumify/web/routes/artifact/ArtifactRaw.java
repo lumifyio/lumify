@@ -27,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.lumify.core.model.properties.RawLumifyProperties.*;
 
 public class ArtifactRaw extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactRaw.class);
@@ -61,7 +60,7 @@ public class ArtifactRaw extends BaseRequestHandler {
             return;
         }
 
-        String fileName = FILE_NAME.getPropertyValue(artifactVertex);
+        String fileName = LumifyProperties.FILE_NAME.getPropertyValue(artifactVertex);
         if (fileName == null) {
             fileName = LumifyProperties.TITLE.getPropertyValue(artifactVertex);
         }
@@ -78,7 +77,7 @@ public class ArtifactRaw extends BaseRequestHandler {
                 response.addHeader("Content-Disposition", "inline; filename=" + fileName);
             }
 
-            StreamingPropertyValue rawValue = RAW.getPropertyValue(artifactVertex);
+            StreamingPropertyValue rawValue = LumifyProperties.RAW.getPropertyValue(artifactVertex);
             if (rawValue == null) {
                 LOGGER.warn("Could not find raw on artifact: %s", artifactVertex.getId().toString());
                 respondWithNotFound(response);
@@ -179,7 +178,7 @@ public class ArtifactRaw extends BaseRequestHandler {
     }
 
     private String getMimeType(Vertex artifactVertex) {
-        String mimeType = MIME_TYPE.getPropertyValue(artifactVertex);
+        String mimeType = LumifyProperties.MIME_TYPE.getPropertyValue(artifactVertex);
         if (mimeType == null || mimeType.isEmpty()) {
             mimeType = "application/octet-stream";
         }

@@ -5,7 +5,7 @@ import org.securegraph.Vertex;
 
 import java.util.List;
 
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
+import static io.lumify.core.model.properties.LumifyProperties.ONTOLOGY_TITLE;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 
 public class SecureGraphRelationship extends Relationship {

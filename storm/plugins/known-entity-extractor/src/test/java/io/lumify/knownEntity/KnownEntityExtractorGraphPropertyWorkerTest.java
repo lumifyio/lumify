@@ -6,7 +6,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.term.extraction.TermMention;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.user.User;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -79,11 +79,11 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         InputStream in = getClass().getResourceAsStream("bffls.txt");
         VertexBuilder vertexBuilder = graph.prepareVertex("v1", visibility);
         StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(in, String.class);
-        RawLumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
+        LumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
         in = getClass().getResourceAsStream("bffls.txt");
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
+        Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         extractor.execute(in, workData);
         assertEquals(3, termMentions.size());

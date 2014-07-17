@@ -1,7 +1,7 @@
 package io.lumify.core.ingest.graphProperty;
 
 import com.google.inject.Inject;
-import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
@@ -25,7 +25,7 @@ public abstract class PostMimeTypeWorker {
     public abstract void execute(String mimeType, GraphPropertyWorkData data, Authorizations authorizations) throws Exception;
 
     protected File getLocalFileForRaw(Element element) throws IOException {
-        StreamingPropertyValue rawValue = RawLumifyProperties.RAW.getPropertyValue(element);
+        StreamingPropertyValue rawValue = LumifyProperties.RAW.getPropertyValue(element);
         InputStream in = rawValue.getInputStream();
         try {
             File f = File.createTempFile("imageOrientation", "image");

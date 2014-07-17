@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 
-import static io.lumify.core.model.properties.RawLumifyProperties.RAW;
+import static io.lumify.core.model.properties.LumifyProperties.RAW;
 
 public class ArtifactThumbnail extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnail.class);
