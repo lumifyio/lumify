@@ -69,13 +69,15 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
     }
 
     private Vertex importEvent(Context context, GDELTEvent event) throws IOException, InterruptedException {
+        context.getCounter(GDELTImportCounters.EVENTS_ATTEMPTED).increment(1);
+
         // event vertex
         VertexBuilder eventVertexBuilder = prepareVertex(generateEventId(event), visibility);
         GDELTProperties.CONCEPT_TYPE.setProperty(eventVertexBuilder, GDELTConstants.EVENT_CONCEPT_URI, visibility);
         GDELTProperties.GLOBAL_EVENT_ID.setProperty(eventVertexBuilder, event.getGlobalEventId(), visibility);
         GDELTProperties.EVENT_DATE_OF_OCCURRENCE.setProperty(eventVertexBuilder, event.getDateOfOccurrence(), visibility);
-        GDELTProperties.EVENT_IS_ROOT_EVENT.setProperty(eventVertexBuilder, event.isRootEvent(), visibility);
         GDELTProperties.EVENT_CODE.setProperty(eventVertexBuilder, event.getEventCode(), visibility);
+        setOptionalProperty(GDELTProperties.EVENT_IS_ROOT_EVENT, eventVertexBuilder, event.isRootEvent());
         setOptionalProperty(GDELTProperties.EVENT_BASE_CODE, eventVertexBuilder, event.getEventBaseCode());
         setOptionalProperty(GDELTProperties.EVENT_ROOT_CODE, eventVertexBuilder, event.getEventRootCode());
         setOptionalProperty(GDELTProperties.EVENT_QUAD_CLASS, eventVertexBuilder, event.getQuadClass());
@@ -95,12 +97,20 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
     }
 
     private void importActor1(Context context, GDELTEvent event, Vertex eventVertex) throws IOException, InterruptedException {
-        // actor 1 vertex
         GDELTActor actor = event.getActor1();
+
+        if (actor.getCode() == null) {
+            context.getCounter(GDELTImportCounters.ACTORS_SKIPPED).increment(1);
+            return;
+        }
+
+        context.getCounter(GDELTImportCounters.ACTORS_ATTEMPTED).increment(1);
+
+        // actor 1 vertex
         VertexBuilder vertexBuilder = prepareVertex(generateActorId(actor), visibility);
         GDELTProperties.CONCEPT_TYPE.setProperty(vertexBuilder, GDELTConstants.ACTOR_CONCEPT_URI, visibility);
         GDELTProperties.ACTOR_CODE.setProperty(vertexBuilder, actor.getCode(), visibility);
-        GDELTProperties.ACTOR_NAME.setProperty(vertexBuilder, actor.getName(), visibility);
+        setOptionalProperty(GDELTProperties.ACTOR_NAME, vertexBuilder, actor.getName());
         setOptionalProperty(GDELTProperties.ACTOR_COUNTRY_CODE, vertexBuilder, actor.getCountryCode());
         setOptionalProperty(GDELTProperties.ACTOR_ETHNIC_CODE, vertexBuilder, actor.getEthnicCode());
         addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "1", actor.getReligion1Code());
@@ -117,6 +127,8 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
 
         context.getCounter(GDELTImportCounters.ACTORS_PROCESSED).increment(1);
 
+        context.getCounter(GDELTImportCounters.EDGES_ATTEMPTED).increment(1);
+
         // actor 1 to event edge
         EdgeBuilder actor1EdgeBuilder = prepareEdge(generateActor1ToEventEdgeId(actorVertex, eventVertex), actorVertex, eventVertex, GDELTProperties.ACTOR1_TO_EVENT_EDGE, visibility);
         Edge actor1ToEventEdge = actor1EdgeBuilder.save(authorizations);
@@ -130,12 +142,20 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
     }
 
     private void importActor2(Context context, GDELTEvent event, Vertex eventVertex) throws IOException, InterruptedException {
+        GDELTActor actor = event.getActor2();
+
+        if (actor.getCode() == null) {
+            context.getCounter(GDELTImportCounters.ACTORS_SKIPPED).increment(1);
+            return;
+        }
+
+        context.getCounter(GDELTImportCounters.ACTORS_ATTEMPTED).increment(1);
+
         // actor 2 vertex
-        GDELTActor actor = event.getActor1();
         VertexBuilder vertexBuilder = prepareVertex(generateActorId(actor), visibility);
         GDELTProperties.CONCEPT_TYPE.setProperty(vertexBuilder, GDELTConstants.ACTOR_CONCEPT_URI, visibility);
         GDELTProperties.ACTOR_CODE.setProperty(vertexBuilder, actor.getCode(), visibility);
-        GDELTProperties.ACTOR_NAME.setProperty(vertexBuilder, actor.getName(), visibility);
+        setOptionalProperty(GDELTProperties.ACTOR_NAME, vertexBuilder, actor.getName());
         setOptionalProperty(GDELTProperties.ACTOR_COUNTRY_CODE, vertexBuilder, actor.getCountryCode());
         setOptionalProperty(GDELTProperties.ACTOR_ETHNIC_CODE, vertexBuilder, actor.getEthnicCode());
         addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "1", actor.getReligion1Code());
@@ -151,6 +171,8 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
         context.write(key, AccumuloSession.createMutationFromRow(auditActor));
 
         context.getCounter(GDELTImportCounters.ACTORS_PROCESSED).increment(1);
+
+        context.getCounter(GDELTImportCounters.EDGES_ATTEMPTED).increment(1);
 
         // event to actor 2 edge
         EdgeBuilder eventToActor2EdgeBuilder = prepareEdge(generateEventToActor2EdgeId(actorVertex, eventVertex), eventVertex, actorVertex, GDELTProperties.EVENT_TO_ACTOR2_EDGE, visibility);
