@@ -52,7 +52,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
-        GraphPropertyWorkerPrepareData prepareData = new GraphPropertyWorkerPrepareData(null, null, null, null, null, null);
+        GraphPropertyWorkerPrepareData prepareData = new GraphPropertyWorkerPrepareData(config, null, null, null, null, null);
         textExtractor.setConfiguration(configuration);
         textExtractor.setGraph(graph);
         textExtractor.setWorkQueueRepository(workQueueRepository);
