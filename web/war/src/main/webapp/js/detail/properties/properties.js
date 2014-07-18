@@ -163,6 +163,9 @@ define([
                         ontologyProperty = self.ontologyProperties.byTitle[property.name],
                         dataType = ontologyProperty && ontologyProperty.dataType;
 
+                    valueSpan.textContent = '';
+                    visibilitySpan.textContent = '';
+
                     if (visibility) {
                         dataType = 'visibility';
                     } else {

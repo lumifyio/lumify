@@ -200,9 +200,12 @@ define([
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
             if (matching) {
-                this.select('titleSelector').html(
-                    F.vertex.title(matching)
-                );
+                $('<div>')
+                    .addClass('subtitle')
+                    .text(matching.concept.displayName)
+                    .appendTo(
+                        this.select('titleSelector').text(F.vertex.title(matching))
+                    )
             }
         };
 
