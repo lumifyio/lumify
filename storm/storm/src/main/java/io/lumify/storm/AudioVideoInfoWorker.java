@@ -58,7 +58,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
         JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Double duration = null;
-        if (outJson != null){
+        if (outJson != null) {
             duration = DurationUtil.extractDurationFromJSON(outJson);
         }
 
@@ -71,18 +71,19 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         }
 
         if (outJson != null) {
-            Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(outJson);
-            if (videoRotation != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        videoRotationIri,
-                        videoRotation,
-                        data.getVisibility(),
-                        getAuthorizations());
+            int videoRotation = 0;
+            Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(outJson);
+            if (nullableRotation != null) {
+                videoRotation = nullableRotation;
             }
+            data.getElement().addPropertyValue(
+                    PROPERTY_KEY,
+                    videoRotationIri,
+                    videoRotation,
+                    data.getVisibility(),
+                    getAuthorizations());
+
         }
-
-
 
         m.save(getAuthorizations());
         getGraph().flush();
