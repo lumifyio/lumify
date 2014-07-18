@@ -22,7 +22,8 @@ define([
         this.defaultAttrs({
             deleteButtonSelector: '.btn-danger',
             editButtonSelector: '.btn-edit',
-            addButtonSelector: '.btn-add'
+            addButtonSelector: '.btn-add',
+            justificationValueSelector: 'a'
         });
 
         this.before('initialize', function(node, config) {
@@ -54,7 +55,8 @@ define([
                     self.on(self.popover, 'click', {
                         deleteButtonSelector: self.onDelete,
                         editButtonSelector: self.onEdit,
-                        addButtonSelector: self.onAdd
+                        addButtonSelector: self.onAdd,
+                        justificationValueSelector: self.teardown
                     });
 
                     self.contentRoot = d3.select(self.popover.get(0))
@@ -145,9 +147,43 @@ define([
                         });
                 });
 
+            // Justification
+            var justification = [], isSource = false;
+            if (property._justificationMetadata) {
+                justification.push(property._justificationMetadata.justificationText);
+            } else if (property._sourceMetadata) {
+                isSource = true;
+                justification.push(property._sourceMetadata);
+            }
+
+            var justificationRow = this.contentRoot.select('table').selectAll('.justificationValue')
+                .data(justification)
+                .call(function() {
+                    this.enter()
+                        .call(function() {
+                            this.append('tr').attr('class', 'property-name property-justification')
+                                .append('td').attr('colspan', 2).text('Justification');
+                            this.append('tr')
+                                .append('td').attr('class', 'justificationValue').attr('colspan', 2);
+                        });
+
+                    var node = this.select('.justificationValue').node();
+                    if (node) {
+                        require(['util/vertex/justification/viewer'], function(JustificationViewer) {
+                            $(node).teardownAllComponents();
+                            JustificationViewer.attachTo(node, {
+                                justificationMetadata: property._justificationMetadata,
+                                sourceMetadata: property._sourceMetadata
+                            });
+                            positionDialog();
+                        });
+                    }
+                })
+                .exit().remove();
+
             row.exit().remove();
 
-            positionDialog(true);
+            positionDialog();
         };
 
         this.onVerticesUpdated = function(event, data) {

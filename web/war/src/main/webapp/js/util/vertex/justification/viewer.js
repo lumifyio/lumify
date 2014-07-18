@@ -34,7 +34,6 @@ define([
 
         this.onSourceInfo = function(e) {
             e.preventDefault();
-            e.stopPropagation();
 
             var metadata = this.attr.sourceMetadata,
                 vertexId = metadata.vertexId,
