@@ -69,9 +69,9 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         extractor.setGraph(graph);
 
         Map<String, String> stormConf = new HashMap<String, String>();
-        stormConf.put(OpenNLPMaximumEntropyExtractorGraphPropertyWorker.CONFIG_LOCATION_IRI, "http://lumify.io/test#location");
-        stormConf.put(OpenNLPMaximumEntropyExtractorGraphPropertyWorker.CONFIG_ORGANIZATION_IRI, "http://lumify.io/test#organization");
-        stormConf.put(OpenNLPMaximumEntropyExtractorGraphPropertyWorker.CONFIG_PERSON_IRI, "http://lumify.io/test#person");
+        stormConf.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_LOCATION, "http://lumify.io/test#location");
+        stormConf.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
+        stormConf.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PERSON, "http://lumify.io/test#person");
         stormConf.put(OpenNLPMaximumEntropyExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
 
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
