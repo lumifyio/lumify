@@ -194,11 +194,15 @@ define([
                 artifactUrl = function(type, p) {
                     return _.template('artifact/{ type }?' + $.param($.extend(params, p || {})), { type: type });
                 },
+                entityImageUrl = F.vertex.prop(vertex, 'entityImageUrl'),
                 entityImageVertexId = F.vertex.prop(vertex, 'entityImageVertexId');
 
             vertex.imageSrcIsFromConcept = false;
 
-            if (entityImageVertexId) {
+            if (entityImageUrl) {
+                vertex.imageSrc = entityImageUrl;
+                vertex.imageDetailSrc = entityImageUrl;
+            } else if (entityImageVertexId) {
                 vertex.imageSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 150 });
                 vertex.imageDetailSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
             } else {

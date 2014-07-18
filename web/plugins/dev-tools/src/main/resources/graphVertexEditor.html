@@ -1,0 +1,187 @@
+<html>
+<head>
+    <title>Lumify: Admin: Graph Vertex Editor</title>
+    <script src='/libs/jquery/jquery.js'></script>
+    <script src='/libs/ejs/ejs.js'></script>
+    <style>
+        h4 {
+            padding-bottom: 0;
+            margin-bottom: 0;;
+        }
+    </style>
+</head>
+<body>
+
+<input type="hidden" name="csrfToken">
+
+<div>
+    <h4>Workspace Id</h4>
+    <input type="text" id="workspaceId" value="WORKSPACE_077e45806eca4b8eadba5282086d5cfe" size="100"/>
+</div>
+
+<div>
+    <h4>Vertex Id</h4>
+    <input type="text" id="vertexId" value="CLAVIN-4781530" size="100"/>
+</div>
+
+<button onclick="loadVertex()">Load Vertex</button>
+
+<div id="vertexData">
+
+</div>
+
+<script>
+    var vertexTemplate;
+
+    function loadVertex() {
+        var workspaceId = $('#workspaceId').val();
+        var vertexId = $('#vertexId').val();
+
+        console.log('workspaceId', workspaceId);
+        console.log('vertexId', vertexId);
+        $.getJSON('/vertex/properties', {
+            graphVertexId: vertexId,
+            workspaceId: workspaceId
+        }).done(function (json) {
+            console.log("JSON Data: ", json);
+            json.properties.forEach(function (p) {
+                var metadata = {};
+                var visibilitySource = '';
+                Object.keys(p).forEach(function (key) {
+                    if (key == 'http://lumify.io#visibilityJson') {
+                        var v = p[key];
+                        if (v) {
+                            visibilitySource = v.source;
+                            if (!(typeof visibilitySource == 'string')) {
+                                visibilitySource = JSON.stringify(visibilitySource);
+                            }
+                        }
+                        return;
+                    }
+                    if (key == 'http://lumify.io#visibility') {
+                        return;
+                    }
+                    if (key.match(/^http/)) {
+                        metadata[key] = p[key];
+                    }
+                });
+                p.visibilitySource = visibilitySource;
+                p.metadata = metadata;
+            });
+            json.properties.push({
+                name: '',
+                key: '',
+                value: '',
+                metadata: {},
+                visibilitySource: ''
+            });
+            var html = ejs.render(vertexTemplate, json);
+            $('#vertexData').html(html);
+        });
+    }
+
+    function deleteProperty(e) {
+        var li = $(e).parent('li');
+        var workspaceId = $('#workspaceId').val();
+        var vertexId = $('#vertexId').val();
+        var propertyName = $("input[name='name']", li).val();
+        var propertyKey = $("input[name='key']", li).val();
+
+        $.post('/vertex/property/delete', {
+            csrfToken: $('input[name=csrfToken]').val(),
+            graphVertexId: vertexId,
+            workspaceId: workspaceId,
+            propertyKey: propertyKey,
+            propertyName: propertyName
+        }, function (data, result) {
+            if (result == 'success') {
+                loadVertex();
+            } else {
+                alert(result);
+            }
+        });
+    }
+
+    function saveProperty(e) {
+        var li = $(e).parent('li');
+        var workspaceId = $('#workspaceId').val();
+        var vertexId = $('#vertexId').val();
+        var visibilitySource = $("input[name='visibilitySource']", li).val();
+        var propertyName = $("input[name='name']", li).val();
+        var propertyKey = $("input[name='key']", li).val();
+        var propertyValue = $("input[name='value']", li).val();
+        var metadata = JSON.parse($("textarea[name='metadata']", li).val());
+
+        $.post('/vertex/property/set', {
+            csrfToken: $('input[name=csrfToken]').val(),
+            graphVertexId: vertexId,
+            workspaceId: workspaceId,
+            propertyKey: propertyKey,
+            propertyName: propertyName,
+            value: propertyValue,
+            metadata: JSON.stringify(metadata),
+            justificationText: 'admin graph vertex editor',
+            visibilitySource: visibilitySource
+        }, function (data, result) {
+            if (result == 'success') {
+                loadVertex();
+            } else {
+                alert(result);
+            }
+        });
+    }
+
+    $(function () {
+        vertexTemplate = document.getElementById('vertexTemplate').innerHTML;
+
+        $.get('/user/me')
+                .fail(function () {
+                    alert('Not logged in or no token');
+                })
+                .done(function (user) {
+                    $('input[name=csrfToken]').val(user.csrfToken);
+                })
+    });
+</script>
+
+<script id="vertexTemplate" type="text/template">
+    <div>
+        <h4>Sandbox Status</h4>
+
+        <div id="sandboxStatus"><%= sandboxStatus %></div>
+    </div>
+
+    <div id="properties">
+        <ul>
+            <% properties.forEach(function(p) { %>
+            <li x-data="">
+                <div>
+                    <h4>Name</h4>
+                    <input type="text" name="name" value="<%= p.name %>" size="100"/>
+                </div>
+                <div>
+                    <h4>Key</h4>
+                    <input type="text" name="key" value="<%= p.key %>" size="100"/>
+                </div>
+                <div>
+                    <h4>Value</h4>
+                    <input type="text" name="value" value="<%= p.value || '' %>" size="100"/>
+                </div>
+                <div>
+                    <h4>Visibility Source</h4>
+                    <input type="text" name="visibilitySource" value="<%= p.visibilitySource || '' %>" size="100"/>
+                </div>
+                <div>
+                    <h4>Metadata</h4>
+                    <textarea name="metadata" rows="5" cols="100"><%= JSON.stringify(p.metadata, null, 2) %></textarea>
+                </div>
+                <button onclick="deleteProperty(this)">Delete Property</button>
+                <button onclick="saveProperty(this)">Save Property</button>
+            </li>
+            <% }) %>
+        </ul>
+    </div>
+</script>
+
+</body>
+</html>

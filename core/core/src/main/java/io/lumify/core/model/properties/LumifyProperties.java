@@ -38,7 +38,8 @@ public class LumifyProperties {
     public static final StringLumifyProperty FILE_NAME = new StringLumifyProperty("http://lumify.io#fileName");
     public static final StringLumifyProperty FILE_NAME_EXTENSION = new StringLumifyProperty("http://lumify.io#fileNameExtension");
     public static final StringLumifyProperty GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#glyphIconFileName");
-    public static final StringLumifyProperty IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
+    public static final StringLumifyProperty ENTITY_IMAGE_URL = new StringLumifyProperty("http://lumify.io#entityImageUrl");
+    public static final StringLumifyProperty ENTITY_IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
     public static final StringLumifyProperty MAP_GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#mapGlyphIconFileName");
     public static final StringLumifyProperty MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
     public static final StringLumifyProperty MODIFIED_BY = new StringLumifyProperty("http://lumify.io#modifiedBy");

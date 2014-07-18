@@ -127,7 +127,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactVertexBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
-        entityVertexMutation.setProperty(LumifyProperties.IMAGE_VERTEX_ID.getPropertyName(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
+        entityVertexMutation.setProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save(authorizations);
         graph.flush();

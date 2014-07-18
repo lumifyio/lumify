@@ -257,6 +257,15 @@
     </owl:DatatypeProperty>
 
 
+    <!-- http://lumify.io#entityImageUrl -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;entityImageUrl">
+        <rdfs:label xml:lang="en">Entity Image URL</rdfs:label>
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
     <!-- http://lumify.io#entityImageVertexId -->
 
