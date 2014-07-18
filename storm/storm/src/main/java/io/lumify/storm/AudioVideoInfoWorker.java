@@ -8,13 +8,15 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.DurationUtil;
+import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -24,8 +26,10 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private ProcessRunner processRunner;
     private static final String AUDIO_DURATION_IRI = "ontology.iri.audioDuration";
     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
+    private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
     private String audioDurationIri;
     private String videoDurationIri;
+    private String videoRotationIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -40,6 +44,11 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (videoDurationIri == null || videoDurationIri.length() == 0) {
             LOGGER.warn("Could not find config: " + VIDEO_DURATION_IRI + ": skipping video duration extraction.");
         }
+
+        videoRotationIri = (String) workerPrepareData.getStormConf().get(VIDEO_ROTATION_IRI);
+        if (videoRotationIri == null || videoRotationIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + VIDEO_ROTATION_IRI + ": skipping video rotation extraction.");
+        }
     }
 
     @Override
@@ -47,28 +56,10 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         boolean isAudio = mimeType.startsWith("audio");
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        processRunner.execute(
-                "ffprobe",
-                new String[]{
-                        "-v", "quiet",
-                        "-print_format", "json",
-                        "-show_format",
-                        "-show_streams",
-                        data.getLocalFile().getAbsolutePath()
-                },
-                out,
-                data.getLocalFile().getAbsolutePath() + ": "
-        );
-        String outString = new String(out.toByteArray());
-        JSONObject outJson = new JSONObject(outString);
-        LOGGER.debug("info for %s:\n%s", data.getLocalFile().getAbsolutePath(), outJson.toString(2));
-
-        JSONObject formatJson = outJson.optJSONObject("format");
-
+        JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Double duration = null;
-        if (formatJson != null) {
-            duration = formatJson.optDouble("duration");
+        if (outJson != null){
+            duration = DurationUtil.extractDurationFromJSON(outJson);
         }
 
         Map<String, Object> metadata = data.createPropertyMetadata();
@@ -78,6 +69,20 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (duration != null) {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
+
+        if (outJson != null) {
+            Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(outJson);
+            if (videoRotation != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        videoRotationIri,
+                        videoRotation,
+                        data.getVisibility(),
+                        getAuthorizations());
+            }
+        }
+
+
 
         m.save(getAuthorizations());
         getGraph().flush();

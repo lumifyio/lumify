@@ -46,7 +46,6 @@
 
         <owl:DatatypeProperty rdf:about="http://lumify.io/exif#yAxisFlipNeeded">
             <rdfs:label xml:lang="en">Y Axis Flip Needed</rdfs:label>
-            <lumify:userVisible>false</lumify:userVisible>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
             <rdfs:range rdf:resource="&xsd;boolean"/>
         </owl:DatatypeProperty>
@@ -57,7 +56,6 @@
 
         <owl:DatatypeProperty rdf:about="http://lumify.io/exif#cwRotationNeeded">
             <rdfs:label xml:lang="en">CW Rotation Needed</rdfs:label>
-            <lumify:userVisible>false</lumify:userVisible>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
             <rdfs:range rdf:resource="&xsd;integer"/>
         </owl:DatatypeProperty>

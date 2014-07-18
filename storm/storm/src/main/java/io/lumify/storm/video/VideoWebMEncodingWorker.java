@@ -6,6 +6,10 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.StringUtil;
+import io.lumify.storm.util.VideoRotationUtil;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -15,6 +19,7 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,26 +30,11 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File webmFile = File.createTempFile("encode_webm_", ".webm");
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(data, webmFile);
         try {
             processRunner.execute(
                     "ffmpeg",
-                    new String[]{
-                            "-y", // overwrite output files
-                            "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "libvpx",
-                            "-b:v", "600k",
-                            "-qmin", "10",
-                            "-qmax", "42",
-                            "-maxrate", "500k",
-                            "-bufsize", "1000k",
-                            "-threads", "2",
-                            "-vf", "scale=720:480",
-                            "-acodec", "libvorbis",
-                            "-map", "0", // process all streams
-                            "-map", "-0:s", // ignore subtitles
-                            "-f", "webm",
-                            webmFile.getAbsolutePath()
-                    },
+                    ffmpegOptionsArray,
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
@@ -65,6 +55,56 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         } finally {
             webmFile.delete();
         }
+    }
+
+    private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File webmFile) {
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        if (videoRotation == null)
+            videoRotation = 0;
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ffmpegOptionsList.add("-y");
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(data.getLocalFile().getAbsolutePath());
+        ffmpegOptionsList.add("-vcodec");
+        ffmpegOptionsList.add("libvpx");
+        ffmpegOptionsList.add("-b:v");
+        ffmpegOptionsList.add("600k");
+        ffmpegOptionsList.add("-qmin");
+        ffmpegOptionsList.add("10");
+        ffmpegOptionsList.add("-qmax");
+        ffmpegOptionsList.add("42");
+        ffmpegOptionsList.add("-maxrate");
+        ffmpegOptionsList.add("500k");
+        ffmpegOptionsList.add("-bufsize");
+        ffmpegOptionsList.add("1000k");
+        ffmpegOptionsList.add("-threads");
+        ffmpegOptionsList.add("2");
+
+        //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
+        ffmpegOptionsList.add("-vf");
+        ffmpegOptionsList.add("scale=720:480");
+
+        //Rotate.
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+
+        ffmpegOptionsList.add("-acodec");
+        ffmpegOptionsList.add("libvorbis");
+        ffmpegOptionsList.add("-map");
+        ffmpegOptionsList.add("0");
+        ffmpegOptionsList.add("-map");
+        ffmpegOptionsList.add("-0:s");
+        ffmpegOptionsList.add("-f");
+        ffmpegOptionsList.add("webm");
+        ffmpegOptionsList.add(webmFile.getAbsolutePath());
+        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
+        return ffmpegOptionsArray;
     }
 
     @Override

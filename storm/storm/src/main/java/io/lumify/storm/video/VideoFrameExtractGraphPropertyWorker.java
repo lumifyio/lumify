@@ -10,7 +10,12 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.DurationUtil;
+import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.StringUtil;
+import io.lumify.storm.util.VideoRotationUtil;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -32,14 +37,14 @@ import static org.securegraph.util.IterableUtils.toList;
 public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoFrameExtractGraphPropertyWorker.class);
     private ProcessRunner processRunner;
-    private double framesPerSecondToExtract = 0.1; // TODO make this configurable
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
-            extractFrames(data.getLocalFile(), tempDir, framesPerSecondToExtract);
+            extractFrames(data.getLocalFile(), tempDir, framesPerSecondToExtract, data);
 
             List<String> propertyKeys = new ArrayList<String>();
             long videoDuration = 0;
@@ -82,17 +87,43 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         }
     }
 
-    private void extractFrames(File videoFileName, File outDir, double framesPerSecondToExtract) throws IOException, InterruptedException {
+    private void extractFrames(File videoFileName, File outDir, double framesPerSecondToExtract, GraphPropertyWorkData data) throws IOException, InterruptedException {
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(videoFileName, outDir, data, framesPerSecondToExtract);
         processRunner.execute(
                 "ffmpeg",
-                new String[]{
-                        "-i", videoFileName.getAbsolutePath(),
-                        "-r", "" + framesPerSecondToExtract,
-                        new File(outDir, "image-%8d.png").getAbsolutePath()
-                },
+                ffmpegOptionsArray,
                 null,
                 videoFileName.getAbsolutePath() + ": "
         );
+    }
+
+    private String[] prepareFFMPEGOptions(File videoFileName, File outDir, GraphPropertyWorkData data, double framesPerSecondToExtract) {
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        if (videoRotation == null)
+            videoRotation = 0;
+
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(videoFileName.getAbsolutePath());
+        ffmpegOptionsList.add("-r");
+        ffmpegOptionsList.add("" + framesPerSecondToExtract);
+
+        //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
+        ffmpegOptionsList.add("-s");
+        ffmpegOptionsList.add("720x480");
+
+        //Rotate.
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+
+        ffmpegOptionsList.add(new File(outDir, "image-%8d.png").getAbsolutePath());
+        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
+        return ffmpegOptionsArray;
     }
 
     @Override
@@ -194,6 +225,18 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             results.remove(results.size() - 1);
         }
         return results;
+    }
+
+    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data) {
+        int numberOfFrames = 20;
+        JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Double duration = null;
+        if (outJson != null) {
+            duration = DurationUtil.extractDurationFromJSON(outJson);
+        }
+
+        double framesPerSecondToExtract = numberOfFrames / duration;
+        return framesPerSecondToExtract;
     }
 
 
