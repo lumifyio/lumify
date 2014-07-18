@@ -47,7 +47,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
         videoRotationIri = (String) workerPrepareData.getStormConf().get(VIDEO_ROTATION_IRI);
         if (videoRotationIri == null || videoRotationIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + VIDEO_ROTATION_IRI + ": skipping video rotation extraction.");
+            LOGGER.warn("Could not find config: " + VIDEO_ROTATION_IRI + ": skipping setting the videoRotation property.");
         }
     }
 
