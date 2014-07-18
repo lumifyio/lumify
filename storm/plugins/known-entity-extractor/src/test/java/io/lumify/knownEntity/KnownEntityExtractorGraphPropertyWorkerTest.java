@@ -48,6 +48,9 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
     @Before
     public void setup() throws Exception {
         Map config = new HashMap();
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PERSON, "http://lumify.io/test#person");
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_LOCATION, "http://lumify.io/test#location");
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 

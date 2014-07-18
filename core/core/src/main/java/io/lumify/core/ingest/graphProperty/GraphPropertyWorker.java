@@ -43,10 +43,6 @@ import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
-    public static final String CONFIG_LOCATION_IRI = "ontology.iri.location";
-    public static final String CONFIG_ORGANIZATION_IRI = "ontology.iri.organization";
-    public static final String CONFIG_PERSON_IRI = "ontology.iri.person";
-    public static final String THING_IRI = "http://www.w3.org/2002/07/owl#Thing";
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
     private OntologyRepository ontologyRepository;
@@ -66,19 +62,19 @@ public abstract class GraphPropertyWorker {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
         }
 
-        this.locationIri = (String) workerPrepareData.getStormConf().get(CONFIG_LOCATION_IRI);
+        this.locationIri = (String) workerPrepareData.getStormConf().get(Configuration.ONTOLOGY_IRI_LOCATION);
         if (this.locationIri == null || this.locationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + CONFIG_LOCATION_IRI);
+            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_LOCATION);
         }
 
-        this.organizationIri = (String) workerPrepareData.getStormConf().get(CONFIG_ORGANIZATION_IRI);
+        this.organizationIri = (String) workerPrepareData.getStormConf().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
         if (this.organizationIri == null || this.organizationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + CONFIG_ORGANIZATION_IRI);
+            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_ORGANIZATION);
         }
 
-        this.personIri = (String) workerPrepareData.getStormConf().get(CONFIG_PERSON_IRI);
+        this.personIri = (String) workerPrepareData.getStormConf().get(Configuration.ONTOLOGY_IRI_PERSON);
         if (this.personIri == null || this.personIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + CONFIG_PERSON_IRI);
+            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
         }
     }
 
@@ -177,7 +173,7 @@ public abstract class GraphPropertyWorker {
         } else if ("person".equals(type)) {
             ontologyClassUri = this.personIri;
         } else {
-            ontologyClassUri = THING_IRI;
+            ontologyClassUri = LumifyProperties.CONCEPT_TYPE_THING;
         }
         return ontologyClassUri;
     }
