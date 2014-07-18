@@ -22,7 +22,8 @@
   </div>
 </div>
 
-<h1 class="generic-draggable artifact-title" data-vertex-id='<%= vertex.id %>'><%= F.vertex.title(vertex) %></h1>
+<h1 class="generic-draggable artifact-title" 
+  data-vertex-id='<%= vertex.id %>'><%= F.vertex.title(vertex) %><div class="subtitle"><%= vertex.concept.displayName %></div></h1>
 
 <% if(vertex.concept.displayType == 'video') { %>
   <div class="preview"/>
@@ -52,9 +53,7 @@
   <% }}); %></div>
 
 <div class="artifact-header">
-  <div class="properties">
-    <div class="nav-header">Properties<span class="badge loading"/></div>
-  </div>
+  <div class="properties"></div>
 </div>
 
 <div class="texts"></div>

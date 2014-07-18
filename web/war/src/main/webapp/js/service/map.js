@@ -10,7 +10,7 @@ define([
             'geocode'
         ];
 
-        this.memoizeFunctions(toMemoize);
+        this.memoizeFunctions('map', toMemoize);
 
         return this;
     }

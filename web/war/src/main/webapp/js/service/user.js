@@ -23,7 +23,7 @@ define([
             'userInfo',
         ];
 
-        this.memoizeFunctions(toMemoize);
+        this.memoizeFunctions('user', toMemoize);
 
         return this;
     }

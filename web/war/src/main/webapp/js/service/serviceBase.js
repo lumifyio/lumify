@@ -3,6 +3,8 @@ define(['atmosphere', 'util/offlineOverlay'],
     function(atmosphere, Overlay) {
         'use strict';
 
+        var memoizedMap = {};
+
         // Add CSRF Header to all non-GET requests
         $.ajaxPrefilter(function(options) {
             var eligibleForProtection = !(/get/i).test(options.type),
@@ -188,27 +190,29 @@ define(['atmosphere', 'util/offlineOverlay'],
             return this.options.jsonp ? 'jsonp' : 'json';
         };
 
-        var memoizedMap = {};
-        ServiceBase.prototype.memoizeFunctions = function(toMemoize) {
+        ServiceBase.prototype.memoizeFunctions = function(serviceName, toMemoize) {
             var self = this;
+
             toMemoize.forEach(function(f) {
                 var cachedFunction = self[f],
-                hashFunction = self[f].memoizeHashFunction;
+                    hashFunction = cachedFunction.memoizeHashFunction;
+
                 self[f] = function() {
                     var key = hashFunction && hashFunction.apply(self, arguments);
                     if (!key && arguments.length) key = arguments[0];
                     if (!key) key = '(noargs)';
                     key = f + key;
 
-                    var result = memoizedMap[key];
+                    var result = memoizedMap[serviceName + key];
 
                     if (result && result.statusText != 'abort') {
                         return result;
                     }
-                    memoizedMap[key] = result = cachedFunction.apply(self, arguments);
+
+                    memoizedMap[serviceName + key] = result = cachedFunction.apply(self, arguments);
                     if (result.fail) {
                         result.fail(function() {
-                            delete memoizedMap[key];
+                            delete memoizedMap[serviceName + key];
                         })
                     }
                     return result;

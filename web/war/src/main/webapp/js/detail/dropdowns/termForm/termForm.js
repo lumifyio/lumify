@@ -726,8 +726,8 @@ define([
                                 html: html,
                                 item: item,
                                 F: F,
-                                properties: item.properties &&
-                                    Properties.filterPropertiesForDisplay(item, ontologyProperties),
+                                // TODO: show some properties
+                                properties: [],
                                 iconSrc: item.imageSrc,
                                 concept: concept
                             });

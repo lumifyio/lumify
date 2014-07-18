@@ -5,6 +5,7 @@ define([
     'data/withVertexCache',
     'data/withAjaxFilters',
     'data/withServiceHandlers',
+    'data/withSocketHandlers',
     'data/withPendingChanges',
     'util/withAsyncQueue',
     'util/withDocumentUnloadHandlers',
@@ -22,7 +23,7 @@ define([
     // Flight
     defineComponent, registry,
     // Mixins
-    withVertexCache, withAjaxFilters, withServiceHandlers,
+    withVertexCache, withAjaxFilters, withServiceHandlers, withSocketHandlers,
     withPendingChanges, withAsyncQueue, withDocumentUnloadHandlers,
     // Service
     Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
@@ -38,6 +39,7 @@ define([
                                         withVertexCache,
                                         withAjaxFilters,
                                         withServiceHandlers,
+                                        withSocketHandlers,
                                         withDocumentUnloadHandlers,
                                         withPendingChanges);
 
@@ -142,8 +144,6 @@ define([
             this.on('requestUsersForChat', this.onRequestUsersForChat);
             this.on('requestHistogramValues', this.onRequestHistogramValues);
 
-            this.on('socketMessage', this.onSocketMessage);
-
             this.on('copydocumenttext', this.onDocumentTextCopy);
 
             this.on('selectAll', this.onSelectAll);
@@ -228,66 +228,6 @@ define([
                         });
                     });
                 });
-        };
-
-        this.onSocketMessage = function(evt, message) {
-            var self = this,
-                updated = null;
-
-            switch (message.type) {
-                case 'propertiesChange':
-
-                    // TODO: create edgesUpdated events
-                    if (message.data && message.data.vertex && !message.data.vertex.sourceVertexId) {
-                        updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
-                        if (updated) {
-                            self.trigger('verticesUpdated', { vertices: [updated] });
-                        }
-                    }
-                    break;
-                case 'entityImageUpdated':
-                    if (message.data && message.data.graphVertexId) {
-                        updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
-                        if (updated) {
-                            self.trigger('verticesUpdated', { vertices: [updated] });
-                            self.trigger('iconUpdated', { src: null });
-                        }
-                    } else console.warn('entityImageUpdated event received with no graphVertexId', message);
-                    break;
-
-                case 'textUpdated':
-                    if (message.data && message.data.graphVertexId) {
-                        self.trigger('textUpdated', { vertexId: message.data.graphVertexId })
-                    } else console.warn('textUpdated event received with no graphVertexId', message);
-                    break;
-
-                case 'edgeDeletion':
-                    if (_.findWhere(self.selectedEdges, { id: message.data.edgeId })) {
-                        self.trigger('selectObjects');
-                    }
-                    self.trigger('edgesDeleted', { edgeId: message.data.edgeId});
-                    break;
-
-                case 'verticesDeleted':
-                    if (_.some(self.selectedVertices, function(vertex) {
-                            return ~message.data.vertexIds.indexOf(vertex.id);
-                        })) {
-                        self.trigger('selectObjects');
-                    }
-                    self.trigger('verticesDeleted', {
-                        vertices: message.data.vertexIds.map(function(vId) {
-                            return { id: vId };
-                        })
-                    });
-                    break;
-
-                case 'detectedObjectChange':
-                    updated = self.updateCacheWithVertex(message.data.artifactVertex, { returnNullIfNotChanged: true });
-                    if (updated) {
-                        self.trigger('verticesUpdated', { vertices: [updated] });
-                    }
-                    break;
-            }
         };
 
         this.onSearchTitle = function(event, data) {
