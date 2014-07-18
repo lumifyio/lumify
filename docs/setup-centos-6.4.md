@@ -102,7 +102,12 @@
             <value>true</value>
           </property>
 
-
+        
+        cp /usr/lib/hadoop-0.20-mapreduce/example-confs/conf.secure/hadoop-env.sh /usr/lib/hadoop-0.20-mapreduce/conf/
+        
+        vi /usr/lib/hadoop-0.20-mapreduce/conf/hadoop-env.sh
+        # add export JAVA_HOME="/path/to/java"
+        
 ### Accumulo
 
 *as root:*
