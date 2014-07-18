@@ -112,9 +112,12 @@ define([
                             });
                     });
 
+            this.contentRoot.select('.btn-danger')
+                .style('display', canEdit ? 'inline' : 'none');
             this.contentRoot.select('.editadd')
                 .classed('btn-edit', canEdit)
                 .classed('btn-add', !canEdit)
+                .classed('nodelete', !canEdit)
                 .text(canEdit ? 'Edit' : 'Add');
             this.contentRoot.selectAll('tr')
                 .call(function() {
@@ -148,24 +151,29 @@ define([
                 });
 
             // Justification
-            var justification = [], isSource = false;
-            if (property._justificationMetadata) {
-                justification.push(property._justificationMetadata.justificationText);
-            } else if (property._sourceMetadata) {
-                isSource = true;
-                justification.push(property._sourceMetadata);
+            var justification = [];
+            if (property._justificationMetadata || property._sourceMetadata) {
+                justification.push(true);
             }
 
-            var justificationRow = this.contentRoot.select('table').selectAll('.justificationValue')
+            var table = this.contentRoot.select('table'),
+                justificationRow = this.contentRoot.selectAll('.justification')
+
+            justificationRow
                 .data(justification)
                 .call(function() {
                     this.enter()
                         .call(function() {
-                            this.append('tr').attr('class', 'property-name property-justification')
-                                .append('td').attr('colspan', 2).text('Justification');
-                            this.append('tr')
-                                .append('td').attr('class', 'justificationValue').attr('colspan', 2);
+                            this.insert('div', 'button').attr('class', 'justification')
+                                .call(function() {
+                                    this.append('div')
+                                        .attr('class', 'property-name property-justification')
+                                        .text('Justification');
+                                    this.append('div')
+                                        .attr('class', 'justificationValue');
+                                });
                         });
+                    this.exit().remove();
 
                     var node = this.select('.justificationValue').node();
                     if (node) {
@@ -179,7 +187,6 @@ define([
                         });
                     }
                 })
-                .exit().remove();
 
             row.exit().remove();
 

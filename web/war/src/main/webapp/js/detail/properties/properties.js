@@ -131,12 +131,13 @@ define([
                                         this.append('span').attr('class', 'value');
                                         this.append('button')
                                             .attr('class', 'info')
-                                            .on('click', function(property) {
-                                                self.showPropertyInfo(this, property);
-                                            });
                                         this.append('span').attr('class', 'visibility');
                                     })
-                            })
+                            });
+                        this.select('button.info')
+                            .on('click', function(property) {
+                                self.showPropertyInfo(this, property);
+                            });
                     });
 
             row.each(function(d) {
