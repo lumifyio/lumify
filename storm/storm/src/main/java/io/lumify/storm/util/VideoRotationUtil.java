@@ -10,8 +10,9 @@ public class VideoRotationUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotationUtil.class);
 
     public static Integer extractRotationFromJSON(JSONObject json) {
-        if (json == null)
+        if (json == null) {
             return null;
+        }
 
         Integer rotate = null;
         try {
