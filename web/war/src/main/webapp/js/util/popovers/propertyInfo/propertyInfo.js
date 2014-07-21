@@ -75,6 +75,7 @@ define([
                 displayTypes = this.metadataPropertiesTypeMap,
                 canEdit = F.vertex.sandboxStatus(property) ||
                     property.name === 'http://lumify.io#visibilityJson',
+                canDelete = canEdit && property.name !== 'http://lumify.io#visibilityJson',
                 metadata = _.pick.apply(_, [property].concat(this.metadataProperties)),
                 transformed = _.chain(metadata)
                     .pairs()
@@ -113,11 +114,11 @@ define([
                     });
 
             this.contentRoot.select('.btn-danger')
-                .style('display', canEdit ? 'inline' : 'none');
+                .style('display', canDelete ? 'inline' : 'none');
             this.contentRoot.select('.editadd')
                 .classed('btn-edit', canEdit)
                 .classed('btn-add', !canEdit)
-                .classed('nodelete', !canEdit)
+                .classed('nodelete', !canDelete)
                 .text(canEdit ? 'Edit' : 'Add');
             this.contentRoot.selectAll('tr')
                 .call(function() {
