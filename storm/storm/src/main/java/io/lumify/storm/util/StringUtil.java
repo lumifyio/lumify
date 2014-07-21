@@ -1,5 +1,6 @@
 package io.lumify.storm.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StringUtil {
@@ -9,5 +10,15 @@ public class StringUtil {
             stringArray[i] = list.get(i);
         }
         return stringArray;
+    }
+
+    public static String[] removeNullsFromStringArray(String[] array) {
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null && !array[i].equals("")) {
+                arrayList.add(array[i]);
+            }
+        }
+        return createStringArrayFromList(arrayList);
     }
 }
