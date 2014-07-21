@@ -35,7 +35,9 @@ define([
         });
 
         this.onSelectObjects = function(event, data) {
-            this.onObjectsSelected(null, data);
+            if (!data.focus) {
+                this.onObjectsSelected(null, data);
+            }
         };
 
         this.onFinishedTypeContent = function() {
