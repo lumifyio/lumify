@@ -21,6 +21,7 @@ import org.securegraph.accumulo.AccumuloGraph;
 import org.securegraph.accumulo.mapreduce.ElementMapper;
 import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
 import org.securegraph.id.IdGenerator;
+import org.securegraph.type.GeoPoint;
 import org.securegraph.util.MapUtils;
 
 import java.io.IOException;
@@ -86,6 +87,7 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
         setOptionalProperty(GDELTProperties.EVENT_NUM_MENTIONS, eventVertexBuilder, event.getNumMentions());
         setOptionalProperty(GDELTProperties.EVENT_NUM_SOURCES, eventVertexBuilder, event.getNumSources());
         setOptionalProperty(GDELTProperties.EVENT_NUM_ARTICLES, eventVertexBuilder, event.getNumArticles());
+        setGeolocationProperty(event, eventVertexBuilder);
         Vertex eventVertex = eventVertexBuilder.save(authorizations);
 
         // audit event
@@ -95,6 +97,13 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
 
         context.getCounter(GDELTImportCounters.EVENTS_PROCESSED).increment(1);
         return eventVertex;
+    }
+
+    private void setGeolocationProperty(GDELTEvent event, VertexBuilder eventVertexBuilder) {
+        if (event.getActionGeoFullName() != null) {
+            GeoPoint point = new GeoPoint(event.getActionGeoLatitude(), event.getActionGeoLongitude(), event.getActionGeoFullName());
+            GDELTProperties.EVENT_GEOLOCATION.setProperty(eventVertexBuilder, point, visibility);
+        }
     }
 
     private void importActor1(Context context, GDELTEvent event, Vertex eventVertex) throws IOException, InterruptedException {
