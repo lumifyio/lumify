@@ -9,6 +9,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.DurationUtil;
+import io.lumify.storm.util.GeoLocationUtil;
 import io.lumify.storm.util.JSONExtractor;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
+import org.securegraph.type.GeoPoint;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -27,9 +29,11 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String AUDIO_DURATION_IRI = "ontology.iri.audioDuration";
     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
     private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
+    private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
     private String audioDurationIri;
     private String videoDurationIri;
     private String videoRotationIri;
+    private String geoLocationIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -49,6 +53,12 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (videoRotationIri == null || videoRotationIri.length() == 0) {
             LOGGER.warn("Could not find config: " + VIDEO_ROTATION_IRI + ": skipping setting the videoRotation property.");
         }
+
+        geoLocationIri = (String) workerPrepareData.getStormConf().get(CONFIG_GEO_LOCATION_IRI);
+        if (geoLocationIri == null || geoLocationIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + CONFIG_GEO_LOCATION_IRI + ": skipping setting the geoLocation property.");
+        }
+
     }
 
     @Override
@@ -56,10 +66,10 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         boolean isAudio = mimeType.startsWith("audio");
 
-        JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Double duration = null;
-        if (outJson != null) {
-            duration = DurationUtil.extractDurationFromJSON(outJson);
+        if (json != null) {
+            duration = DurationUtil.extractDurationFromJSON(json);
         }
 
         Map<String, Object> metadata = data.createPropertyMetadata();
@@ -70,9 +80,9 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
 
-        if (outJson != null) {
+        if (json != null) {
             int videoRotation = 0;
-            Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(outJson);
+            Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
             if (nullableRotation != null) {
                 videoRotation = nullableRotation;
             }
@@ -82,6 +92,18 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                     videoRotation,
                     data.getVisibility(),
                     getAuthorizations());
+
+
+            GeoPoint geoPoint = GeoLocationUtil.extractGeoLocationFromJSON(json);
+            if (geoPoint != null){
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        geoLocationIri,
+                        geoPoint,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
 
         }
 
