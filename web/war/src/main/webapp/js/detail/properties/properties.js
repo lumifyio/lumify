@@ -262,14 +262,16 @@ define([
                 .append('table')
                 .attr('class', 'table')
                 .call(function() {
-                    this.append('tr')
-                        .attr('class', 'buttons-row requires-EDIT')
-                        .append('td')
-                            .attr('colspan', 3)
-                            .attr('class', 'buttons')
-                            .append('button')
-                                .attr('class', 'add-new-properties btn btn-mini btn-default')
-                                .text('Add Property');
+                    if (!F.vertex.isEdge(self.attr.data)) {
+                        this.append('tr')
+                            .attr('class', 'buttons-row requires-EDIT')
+                            .append('td')
+                                .attr('colspan', 3)
+                                .attr('class', 'buttons')
+                                .append('button')
+                                    .attr('class', 'add-new-properties btn btn-mini btn-default')
+                                    .text('Add Property');
+                    }
                 });
 
             $.when(
