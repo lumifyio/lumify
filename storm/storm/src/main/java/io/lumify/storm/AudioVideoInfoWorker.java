@@ -8,10 +8,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.util.DurationUtil;
-import io.lumify.storm.util.GeoLocationUtil;
-import io.lumify.storm.util.JSONExtractor;
-import io.lumify.storm.util.VideoRotationUtil;
+import io.lumify.storm.util.*;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -20,6 +17,7 @@ import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.type.GeoPoint;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Map;
 
 public class AudioVideoInfoWorker extends GraphPropertyWorker {
@@ -30,10 +28,12 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
     private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
     private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
+    private static final String CREATION_TIME_IRI = "ontology.iri.creationTime";
     private String audioDurationIri;
     private String videoDurationIri;
     private String videoRotationIri;
     private String geoLocationIri;
+    private String creationTimeIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -57,6 +57,11 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         geoLocationIri = (String) workerPrepareData.getStormConf().get(CONFIG_GEO_LOCATION_IRI);
         if (geoLocationIri == null || geoLocationIri.length() == 0) {
             LOGGER.warn("Could not find config: " + CONFIG_GEO_LOCATION_IRI + ": skipping setting the geoLocation property.");
+        }
+
+        creationTimeIri = (String) workerPrepareData.getStormConf().get(CREATION_TIME_IRI);
+        if (creationTimeIri == null || creationTimeIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + CREATION_TIME_IRI + ": skipping setting the creationTime property.");
         }
 
     }
@@ -95,7 +100,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
 
             GeoPoint geoPoint = GeoLocationUtil.extractGeoLocationFromJSON(json);
-            if (geoPoint != null){
+            if (geoPoint != null) {
                 data.getElement().addPropertyValue(
                         PROPERTY_KEY,
                         geoLocationIri,
@@ -104,6 +109,18 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                         getAuthorizations()
                 );
             }
+
+            Date creationTime = DateUtil.extractDateFromJSON(json);
+            if (creationTime != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        creationTimeIri,
+                        creationTime,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
 
         }
 
