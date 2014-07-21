@@ -58,13 +58,12 @@ define([
             var d3Deferred = $.Deferred();
             require(['d3'], d3Deferred.resolve);
             $.when(
-                this.handleCancelling(this.vertexService.getMultiple(ids)),
+                this.handleCancelling(appData.refresh(ids)),
                 this.handleCancelling(this.ontologyService.concepts()),
                 this.handleCancelling(this.ontologyService.properties()),
                 d3Deferred
-            ).done(function(verticesResponse, concepts, properties, _d3) {
+            ).done(function(vertices, concepts, properties, _d3) {
                 d3 = _d3;
-                var vertices = verticesResponse[0].vertices;
 
                 VertexList.attachTo(self.select('vertexListSelector'), {
                     vertices: vertices
