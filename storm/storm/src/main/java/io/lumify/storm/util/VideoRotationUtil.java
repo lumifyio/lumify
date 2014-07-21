@@ -14,26 +14,22 @@ public class VideoRotationUtil {
             return null;
         }
 
-        Integer rotate = null;
         try {
-            JSONArray streamsJson = json.optJSONArray("streams");
+            JSONArray streamsJson = json.getJSONArray("streams");
             for(int i = 0; i < streamsJson.length(); i++){
                 try {
-                    JSONObject streamsIndexJson = streamsJson.optJSONObject(i);
-                    JSONObject tagsJson = streamsIndexJson.optJSONObject("tags");
-                    Integer nullable = tagsJson.getInt("rotate");
-                    if (nullable != null){
-                        rotate = nullable % 360;
-                        break;
-                    }
+                    JSONObject streamsIndexJson = streamsJson.getJSONObject(i);
+                    JSONObject tagsJson = streamsIndexJson.getJSONObject("tags");
+                    Integer rotate = tagsJson.getInt("rotate") % 360;
+                    return rotate;
                 } catch (JSONException e){
-                    //Could not find "rotate" name on this pathway.
+                    //Could not find "rotate" name on this pathway. No action needed.
                 }
             }
         } catch (Exception e) {
             LOGGER.info("Could not retrieve a \"rotate\" value from the JSON object.");
         }
-        return rotate;
+        return null;
     }
 
     /**
