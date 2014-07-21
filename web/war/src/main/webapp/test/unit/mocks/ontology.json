@@ -1,456 +1,1084 @@
-{
-    "properties": [{
-        "userVisible": true,
-        "dataType": "date",
-        "title": "http://lumify.io/dev#formationDate",
-        "displayName": "Formation Date"
-    }, {
-        "userVisible": true,
-        "dataType": "string",
-        "title": "http://lumify.io/dev#alias",
-        "displayName": "Alias"
-    }, {
-        "userVisible": true,
-        "dataType": "currency",
-        "title": "http://lumify.io/dev#netIncome",
-        "displayName": "Net Income"
-    }, {
-        "userVisible": true,
-        "dataType": "string",
-        "title": "http://lumify.io/dev#abbreviation",
-        "displayName": "Abbreviation"
-    }, {
-        "userVisible": false,
-        "dataType": "string",
-        "title": "http://lumify.io#title",
-        "displayName": "Title"
-    }, {
-        "userVisible": true,
-        "dataType": "date",
-        "title": "http://lumify.io/dev#publishedDate",
-        "displayName": "Published Date"
-    }, {
-        "userVisible": true,
-        "dataType": "date",
-        "title": "http://lumify.io/dev#birthDate",
-        "displayName": "Birth Date"
-    }, {
-        "userVisible": false,
-        "dataType": "image",
-        "title": "http://lumify.io#glyphIcon",
-        "displayName": "Glyph Icon"
-    }, {
-        "userVisible": true,
-        "dataType": "string",
-        "title": "http://lumify.io#source",
-        "displayName": "Source"
-    }, {
-        "userVisible": true,
-        "dataType": "string",
-        "title": "http://lumify.io#source",
-        "displayName": "Source"
-    }, {
-        "userVisible": false,
-        "dataType": "string",
-        "title": "http://lumify.io#rowKey",
-        "displayName": "Row Key"
-    }, {
-        "userVisible": false,
-        "dataType": "image",
-        "title": "http://lumify.io#mapGlyphIcon",
-        "displayName": "Map Glyph Icon"
-    }, {
-        "userVisible": true,
-        "dataType": "string",
-        "title": "http://lumify.io/dev#gender",
-        "displayName": "Gender"
-    }, {
-        "userVisible": true,
-        "dataType": "date",
-        "title": "http://lumify.io/dev#date",
-        "displayName": "Date"
-    }, {
-        "userVisible": true,
-        "dataType": "date",
-        "title": "http://lumify.io#publishedDate",
-        "displayName": "Published Date"
-    }, {
-        "userVisible": false,
-        "dataType": "string",
-        "title": "http://lumify.io#conceptType",
-        "displayName": "Concept Type"
-    }, {
-        "userVisible": false,
-        "dataType": "string",
-        "title": "http://lumify.io#mimeType",
-        "displayName": "Mime Type"
-    }, {
-        "userVisible": true,
-        "dataType": "geoLocation",
-        "title": "http://lumify.io/dev#geolocation",
-        "displayName": "Geolocation"
-    }],
-    "relationships": [{
-        "title": "http://lumify.io/dev#entityHasImageRaw",
-        "dest": "http://lumify.io/dev#image",
-        "source": "http://www.w3.org/2002/07/owl#Thing",
-        "displayName": "Has Image"
-    }, {
-        "title": "http://lumify.io/dev#eventHappenedInLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#event",
-        "displayName": "Happened In"
-    }, {
-        "title": "http://lumify.io/dev#eventPlannedByOrganization",
-        "dest": "http://lumify.io/dev#organization",
-        "source": "http://lumify.io/dev#event",
-        "displayName": "Planned By"
-    }, {
-        "title": "http://lumify.io/dev#locationHasLeaderPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#location",
-        "displayName": "Has Leader"
-    }, {
-        "title": "http://lumify.io/dev#locationIsCaptialOfLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#location",
-        "displayName": "Is Capital Of"
-    }, {
-        "title": "http://lumify.io/dev#locationIsInLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#location",
-        "displayName": "Is In"
-    }, {
-        "title": "http://lumify.io/dev#organizationHasKeyLeader",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#organization",
-        "displayName": "Has Key Leader"
-    }, {
-        "title": "http://lumify.io/dev#organizationHasOfficeAtLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#organization",
-        "displayName": "Has Office At"
-    }, {
-        "title": "http://lumify.io/dev#organizationHeadquarteredAtLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#organization",
-        "displayName": "Headquartered At"
-    }, {
-        "title": "http://lumify.io/dev#personHasChildPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Child"
-    }, {
-        "title": "http://lumify.io/dev#personHasCitizenshipInCountry",
-        "dest": "http://lumify.io/dev#country",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Citizenship In"
-    }, {
-        "title": "http://lumify.io/dev#personHasCoworkerPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Coworker"
-    }, {
-        "title": "http://lumify.io/dev#personHasEmailAddress",
-        "dest": "http://lumify.io/dev#emailAddress",
-        "source": "http://lumify.io/dev#organization",
-        "displayName": "Has Email Address"
-    }, {
-        "title": "http://lumify.io/dev#personHasFriendPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Friend"
-    }, {
-        "title": "http://lumify.io/dev#personHasHomeAddressLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Home Address"
-    }, {
-        "title": "http://lumify.io/dev#personHasLivedLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Lived In"
-    }, {
-        "title": "http://lumify.io/dev#personHasParentPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Parent"
-    }, {
-        "title": "http://lumify.io/dev#personHasPhoneNumber",
-        "dest": "http://lumify.io/dev#phoneNumber",
-        "source": "http://lumify.io/dev#organization",
-        "displayName": "Has Phone Number"
-    }, {
-        "title": "http://lumify.io/dev#personHasSiblingPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Sibling"
-    }, {
-        "title": "http://lumify.io/dev#personHasVisitedLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Has Visited"
-    }, {
-        "title": "http://lumify.io/dev#personIsEmployedByOrganizaton",
-        "dest": "http://lumify.io/dev#organization",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Is Employed By"
-    }, {
-        "title": "http://lumify.io/dev#personIsFromLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Is From"
-    }, {
-        "title": "http://lumify.io/dev#personIsMemberOfOrganization",
-        "dest": "http://lumify.io/dev#organization",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Is Member Of"
-    }, {
-        "title": "http://lumify.io/dev#personKnowsPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Knows"
-    }, {
-        "title": "http://lumify.io/dev#personLivesAtLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Lives At"
-    }, {
-        "title": "http://lumify.io/dev#personLivesWithPerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Lives With"
-    }, {
-        "title": "http://lumify.io/dev#personOwnsLocation",
-        "dest": "http://lumify.io/dev#location",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Owns"
-    }, {
-        "title": "http://lumify.io/dev#personSupportsOrganization",
-        "dest": "http://lumify.io/dev#organization",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Supports"
-    }, {
-        "title": "http://lumify.io/dev#personWorksAtCompany",
-        "dest": "http://lumify.io/dev#organization",
-        "source": "http://lumify.io/dev#person",
-        "displayName": "Works At"
-    }, {
-        "title": "http://lumify.io/dev#rawContainsImageOfEntity",
-        "dest": "http://www.w3.org/2002/07/owl#Thing",
-        "source": "http://lumify.io/dev#raw",
-        "displayName": "Contains Image of"
-    }, {
-        "title": "http://lumify.io/dev#rawHasEntity",
-        "dest": "http://www.w3.org/2002/07/owl#Thing",
-        "source": "http://lumify.io/dev#raw",
-        "displayName": "Has Entity"
-    }, {
-        "title": "http://lumify.io/dev#rawHasSourceOrganization",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#raw",
-        "displayName": "Has Author"
-    }, {
-        "title": "http://lumify.io/dev#rawHasSourcePerson",
-        "dest": "http://lumify.io/dev#person",
-        "source": "http://lumify.io/dev#raw",
-        "displayName": "Has Author"
-    }, {
-        "title": "http://lumify.io/workspace/toEntity",
-        "dest": "http://lumify.io#root",
-        "source": "http://lumify.io/workspace",
-        "displayName": "workspace to entity"
-    }, {
-        "title": "http://lumify.io/workspace/toUser",
-        "dest": "http://lumify.io#root",
-        "source": "http://lumify.io/workspace",
-        "displayName": "workspace to user"
-    }],
-    "concepts": [{
-        "id": "http://lumify.io#root",
-        "title": "http://lumify.io#root",
-        "pluralDisplayName": "roots",
-        "properties": [],
-        "displayName": "root"
-    }, {
-        "id": "http://lumify.io/dev#address",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23address",
-        "title": "http://lumify.io/dev#address",
-        "color": "rgb(219, 63, 219)",
-        "pluralDisplayName": "Addresses",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#location",
-        "displayName": "Address"
-    }, {
-        "id": "http://lumify.io/dev#audio",
-        "title": "http://lumify.io/dev#audio",
-        "color": "rgb(149, 138, 218)",
-        "displayType": "audio",
-        "pluralDisplayName": "Audios",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#raw",
-        "displayName": "Audio"
-    }, {
-        "id": "http://lumify.io/dev#city",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23city",
-        "title": "http://lumify.io/dev#city",
-        "color": "rgb(191, 13, 191)",
-        "pluralDisplayName": "Cities",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#location",
-        "displayName": "City"
-    }, {
-        "id": "http://lumify.io/dev#company",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23company",
-        "title": "http://lumify.io/dev#company",
-        "color": "rgb(210, 52, 32)",
-        "pluralDisplayName": "Companies",
-        "properties": ["http://lumify.io/dev#netIncome"],
-        "parentConcept": "http://lumify.io/dev#organization",
-        "displayName": "Company"
-    }, {
-        "id": "http://lumify.io/dev#contactInformation",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23contactInformation",
-        "title": "http://lumify.io/dev#contactInformation",
-        "color": "rgb(225, 128, 0)",
-        "pluralDisplayName": "Contact Informations",
-        "properties": [],
-        "parentConcept": "http://www.w3.org/2002/07/owl#Thing",
-        "displayName": "Contact Information"
-    }, {
-        "id": "http://lumify.io/dev#country",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23country",
-        "title": "http://lumify.io/dev#country",
-        "color": "rgb(112, 0, 112)",
-        "pluralDisplayName": "Countries",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#location",
-        "displayName": "Country"
-    }, {
-        "id": "http://lumify.io/dev#document",
-        "title": "http://lumify.io/dev#document",
-        "color": "rgb(28, 137, 28)",
-        "displayType": "document",
-        "pluralDisplayName": "Documents",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#raw",
-        "displayName": "Document"
-    }, {
-        "id": "http://lumify.io/dev#emailAddress",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23emailAddress",
-        "title": "http://lumify.io/dev#emailAddress",
-        "color": "rgb(203, 130, 4)",
-        "pluralDisplayName": "Email Addresses",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#contactInformation",
-        "displayName": "Email Address"
-    }, {
-        "id": "http://lumify.io/dev#event",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23event",
-        "title": "http://lumify.io/dev#event",
-        "color": "rgb(23, 30, 239)",
-        "pluralDisplayName": "Events",
-        "properties": ["http://lumify.io/dev#date", "http://lumify.io/dev#geolocation"],
-        "parentConcept": "http://www.w3.org/2002/07/owl#Thing",
-        "displayName": "Event"
-    }, {
-        "id": "http://lumify.io/dev#image",
-        "title": "http://lumify.io/dev#image",
-        "color": "rgb(176, 87, 53)",
-        "displayType": "image",
-        "pluralDisplayName": "Images",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#raw",
-        "displayName": "Image"
-    }, {
-        "id": "http://lumify.io/dev#location",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23location",
-        "title": "http://lumify.io/dev#location",
-        "color": "rgb(160, 7, 206)",
-        "pluralDisplayName": "Locations",
-        "properties": ["http://lumify.io/dev#geolocation"],
-        "parentConcept": "http://www.w3.org/2002/07/owl#Thing",
-        "displayName": "Location"
-    }, {
-        "id": "http://lumify.io/dev#organization",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23organization",
-        "title": "http://lumify.io/dev#organization",
-        "color": "rgb(137, 39, 26)",
-        "pluralDisplayName": "Organizations",
-        "properties": ["http://lumify.io/dev#formationDate", "http://lumify.io/dev#abbreviation"],
-        "parentConcept": "http://www.w3.org/2002/07/owl#Thing",
-        "displayName": "Organization"
-    }, {
-        "id": "http://lumify.io/dev#person",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23person",
-        "title": "http://lumify.io/dev#person",
-        "pluralDisplayName": "Persons",
-        "properties": ["http://lumify.io/dev#alias", "http://lumify.io/dev#birthDate", "http://lumify.io/dev#gender"],
-        "parentConcept": "http://www.w3.org/2002/07/owl#Thing",
-        "displayName": "Person"
-    }, {
-        "id": "http://lumify.io/dev#phoneNumber",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23phoneNumber",
-        "title": "http://lumify.io/dev#phoneNumber",
-        "color": "rgb(225, 225, 24)",
-        "pluralDisplayName": "Phone Numbers",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#contactInformation",
-        "displayName": "Phone Number"
-    }, {
-        "id": "http://lumify.io/dev#raw",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23raw",
-        "title": "http://lumify.io/dev#raw",
-        "color": "rgb(28, 137, 28)",
-        "pluralDisplayName": "Raws",
-        "properties": ["http://lumify.io/dev#publishedDate"],
-        "parentConcept": "http://www.w3.org/2002/07/owl#Thing",
-        "displayName": "Raw"
-    }, {
-        "id": "http://lumify.io/dev#state",
-        "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23state",
-        "title": "http://lumify.io/dev#state",
-        "color": "rgb(153, 0, 153)",
-        "pluralDisplayName": "States",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#location",
-        "displayName": "State"
-    }, {
-        "id": "http://lumify.io/dev#video",
-        "title": "http://lumify.io/dev#video",
-        "color": "rgb(149, 138, 218)",
-        "displayType": "video",
-        "pluralDisplayName": "Videos",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#raw",
-        "displayName": "Video"
-    }, {
-        "id": "http://lumify.io/dev#videoSub",
-        "title": "http://lumify.io/dev#videoSub",
-        "color": "rgb(149, 138, 218)",
-        "pluralDisplayName": "VideosSub",
-        "properties": [],
-        "parentConcept": "http://lumify.io/dev#video",
-        "displayName": "Video"
-    }, {
-        "id": "http://lumify.io/user",
-        "title": "http://lumify.io/user",
-        "pluralDisplayName": "lumifyUsers",
-        "properties": [],
-        "displayName": "lumifyUser"
-    }, {
-        "id": "http://lumify.io/workspace",
-        "title": "http://lumify.io/workspace",
-        "pluralDisplayName": "workspaces",
-        "properties": [],
-        "displayName": "workspace"
-    }, {
-        "id": "http://www.w3.org/2002/07/owl#Thing",
-        "glyphIconHref": "resource?id=http%3A%2F%2Fwww.w3.org%2F2002%2F07%2Fowl%23Thing",
-        "title": "http://www.w3.org/2002/07/owl#Thing",
-        "pluralDisplayName": "things",
-        "properties": ["http://lumify.io#title", "http://lumify.io#glyphIcon", "http://lumify.io#source", "http://lumify.io#source", "http://lumify.io#rowKey", "http://lumify.io#mapGlyphIcon", "http://lumify.io#publishedDate", "http://lumify.io#conceptType", "http://lumify.io#mimeType"],
-        "parentConcept": "http://lumify.io#root",
-        "displayName": "thing"
-    }]
+{  
+   "properties":[  
+      {  
+         "userVisible":true,
+         "dataType":"double",
+         "title":"http://lumify.io/dev#duration",
+         "displayName":"Duration",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"currency",
+         "title":"http://lumify.io/dev#netIncome",
+         "displayName":"Net Income",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"date",
+         "title":"http://lumify.io/dev#date",
+         "displayName":"Date",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"geoLocation",
+         "title":"http://lumify.io/dev#geolocation",
+         "displayName":"Geolocation",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io/dev#abbreviation",
+         "displayName":"Abbreviation",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"date",
+         "title":"http://lumify.io/dev#formationDate",
+         "displayName":"Formation Date",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io/dev#alias",
+         "displayName":"Alias",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"date",
+         "title":"http://lumify.io/dev#birthDate",
+         "displayName":"Birth Date",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io/dev#gender",
+         "possibleValues":{  
+            "F":"Female",
+            "M":"Male"
+         },
+         "displayName":"Gender",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"date",
+         "title":"http://lumify.io/dev#publishedDate",
+         "displayName":"Published Date",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"boolean",
+         "title":"http://lumify.io/dev#boolean",
+         "displayName":"Boolean",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "displayTime":true,
+         "dataType":"date",
+         "title":"http://lumify.io/dev#dateAndTime",
+         "displayName":"Date and Time",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"date",
+         "title":"http://lumify.io/dev#dateOnly",
+         "displayName":"Date Only",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io/dev#titleFormulaEntityPropA",
+         "displayName":"PropA",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io/dev#titleFormulaEntityPropB",
+         "displayName":"PropB",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io/dev#titleFormulaEntityPropC",
+         "displayName":"PropC",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"date",
+         "title":"http://lumify.io/dev#titleFormulaEntityPropD",
+         "displayName":"PropD",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#authorizations",
+         "displayName":"http://lumify.io/user#authorizations",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"date",
+         "title":"http://lumify.io/user#createDate",
+         "displayName":"http://lumify.io/user#createDate",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"date",
+         "title":"http://lumify.io/user#currentLoginDate",
+         "displayName":"http://lumify.io/user#currentLoginDate",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#currentLoginRemoteAddr",
+         "displayName":"http://lumify.io/user#currentLoginRemoteAddr",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#currentWorkspace",
+         "displayName":"http://lumify.io/user#currentWorkspace",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#displayName",
+         "displayName":"http://lumify.io/user#displayName",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"double",
+         "title":"http://lumify.io/user#loginCount",
+         "displayName":"http://lumify.io/user#loginCount",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"binary",
+         "title":"http://lumify.io/user#passwordHash",
+         "displayName":"http://lumify.io/user#passwordHash",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"binary",
+         "title":"http://lumify.io/user#passwordSalt",
+         "displayName":"http://lumify.io/user#passwordSalt",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"date",
+         "title":"http://lumify.io/user#previousLoginDate",
+         "displayName":"http://lumify.io/user#previousLoginDate",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#previousLoginRemoteAddr",
+         "displayName":"http://lumify.io/user#previousLoginRemoteAddr",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#privileges",
+         "displayName":"http://lumify.io/user#privileges",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#status",
+         "displayName":"http://lumify.io/user#status",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#uiPreferences",
+         "displayName":"http://lumify.io/user#uiPreferences",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/user#username",
+         "displayName":"http://lumify.io/user#username",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/workspace#title",
+         "displayName":"http://lumify.io/workspace#title",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io#author",
+         "displayName":"Author",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#conceptType",
+         "displayName":"Concept Type",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"double",
+         "title":"http://lumify.io#confidence",
+         "displayName":"Confidence",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#contentHash",
+         "displayName":"Content Hash",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"date",
+         "title":"http://lumify.io#createDate",
+         "displayName":"Create Date",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#dataType",
+         "displayName":"http://lumify.io#dataType",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#displayName",
+         "displayName":"http://lumify.io#displayName",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#entityImageUrl",
+         "displayName":"Entity Image URL",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#entityImageVertexId",
+         "displayName":"Entity Image Vertex ID",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#fileName",
+         "displayName":"File Name",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#fileNameExtension",
+         "displayName":"File Name Extension",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#mappingJson",
+         "displayName":"Mapping JSON",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#metadataJson",
+         "displayName":"Metadata JSON",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#mimeType",
+         "displayName":"Mime Type",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#modifiedBy",
+         "displayName":"Modified By",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"date",
+         "title":"http://lumify.io#modifiedDate",
+         "displayName":"Modified Date",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#ontologyTitle",
+         "displayName":"http://lumify.io#ontologyTitle",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#process",
+         "displayName":"Process",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"date",
+         "title":"http://lumify.io#publishedDate",
+         "displayName":"Published Date",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"binary",
+         "title":"http://lumify.io#raw",
+         "displayName":"Raw Data",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#rowKey",
+         "displayName":"Row Key",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io#source",
+         "displayName":"Source",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#sourceUrl",
+         "displayName":"Source URL",
+         "searchable":true
+      },
+      {  
+         "userVisible":true,
+         "dataType":"string",
+         "title":"http://lumify.io#title",
+         "displayName":"Title",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#visibility",
+         "displayName":"Visibility",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io#visibilityJson",
+         "displayName":"Visibility JSON",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"string",
+         "title":"http://lumify.io/workspace#access",
+         "displayName":"http://lumify.io/workspace#access",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"boolean",
+         "title":"http://lumify.io/workspace#creator",
+         "displayName":"http://lumify.io/workspace#creator",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"integer",
+         "title":"http://lumify.io/workspace#graphPositionX",
+         "displayName":"http://lumify.io/workspace#graphPositionX",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"integer",
+         "title":"http://lumify.io/workspace#graphPositionY",
+         "displayName":"http://lumify.io/workspace#graphPositionY",
+         "searchable":true
+      },
+      {  
+         "userVisible":false,
+         "dataType":"boolean",
+         "title":"http://lumify.io/workspace#visible",
+         "displayName":"http://lumify.io/workspace#visible",
+         "searchable":true
+      }
+   ],
+   "relationships":[  
+      {  
+         "title":"http://lumify.io/dev#callConnectedPhone",
+         "dest":"http://lumify.io/dev#phoneCall",
+         "source":"http://lumify.io/dev#phoneNumber",
+         "displayName":"Call Connected"
+      },
+      {  
+         "title":"http://lumify.io/dev#entityHasImageRaw",
+         "dest":"http://lumify.io/dev#image",
+         "source":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"Has Image"
+      },
+      {  
+         "title":"http://lumify.io/dev#eventHappenedInLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#event",
+         "displayName":"Happened In"
+      },
+      {  
+         "title":"http://lumify.io/dev#eventPlannedByOrganization",
+         "dest":"http://lumify.io/dev#organization",
+         "source":"http://lumify.io/dev#event",
+         "displayName":"Planned By"
+      },
+      {  
+         "title":"http://lumify.io/dev#hasEmailAddress",
+         "dest":"http://lumify.io/dev#emailAddress",
+         "source":"http://lumify.io/dev#organization",
+         "displayName":"Has Email Address"
+      },
+      {  
+         "title":"http://lumify.io/dev#locationHasLeaderPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#location",
+         "displayName":"Has Leader"
+      },
+      {  
+         "title":"http://lumify.io/dev#locationIsCaptialOfLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#location",
+         "displayName":"Is Capital Of"
+      },
+      {  
+         "title":"http://lumify.io/dev#locationIsInLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#location",
+         "displayName":"Is In"
+      },
+      {  
+         "title":"http://lumify.io/dev#organizationHasKeyLeader",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#organization",
+         "displayName":"Has Key Leader"
+      },
+      {  
+         "title":"http://lumify.io/dev#organizationHasOfficeAtLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#organization",
+         "displayName":"Has Office At"
+      },
+      {  
+         "title":"http://lumify.io/dev#organizationHasPhoneNumber",
+         "dest":"http://lumify.io/dev#phoneNumber",
+         "source":"http://lumify.io/dev#organization",
+         "displayName":"Has Phone Number"
+      },
+      {  
+         "title":"http://lumify.io/dev#organizationHeadquarteredAtLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#organization",
+         "displayName":"Headquartered At"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasChildPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#person",
+         "inverseOfs":[  
+            {  
+               "primaryIri":"http://lumify.io/dev#personHasChildPerson",
+               "iri":"http://lumify.io/dev#personHasParentPerson"
+            }
+         ],
+         "displayName":"Has Child"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasCitizenshipInCountry",
+         "dest":"http://lumify.io/dev#country",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Citizenship In"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasCoworkerPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Coworker"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasFriendPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Friend"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasHomeAddressLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Home Address"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasLivedLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Lived In"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasParentPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#person",
+         "inverseOfs":[  
+            {  
+               "primaryIri":"http://lumify.io/dev#personHasChildPerson",
+               "iri":"http://lumify.io/dev#personHasChildPerson"
+            }
+         ],
+         "displayName":"Has Parent"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasPhoneNumber",
+         "dest":"http://lumify.io/dev#phoneNumber",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Phone Number"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasSiblingPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Sibling"
+      },
+      {  
+         "title":"http://lumify.io/dev#personHasVisitedLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Has Visited"
+      },
+      {  
+         "title":"http://lumify.io/dev#personIsEmployedByOrganizaton",
+         "dest":"http://lumify.io/dev#organization",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Is Employed By"
+      },
+      {  
+         "title":"http://lumify.io/dev#personIsFromLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Is From"
+      },
+      {  
+         "title":"http://lumify.io/dev#personIsMemberOfOrganization",
+         "dest":"http://lumify.io/dev#organization",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Is Member Of"
+      },
+      {  
+         "title":"http://lumify.io/dev#personKnowsPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Knows"
+      },
+      {  
+         "title":"http://lumify.io/dev#personLivesAtLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Lives At"
+      },
+      {  
+         "title":"http://lumify.io/dev#personLivesWithPerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Lives With"
+      },
+      {  
+         "title":"http://lumify.io/dev#personOwnsLocation",
+         "dest":"http://lumify.io/dev#location",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Owns"
+      },
+      {  
+         "title":"http://lumify.io/dev#personSupportsOrganization",
+         "dest":"http://lumify.io/dev#organization",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Supports"
+      },
+      {  
+         "title":"http://lumify.io/dev#personWorksAtCompany",
+         "dest":"http://lumify.io/dev#organization",
+         "source":"http://lumify.io/dev#person",
+         "displayName":"Works At"
+      },
+      {  
+         "title":"http://lumify.io/dev#phoneCallContainsAudio",
+         "dest":"http://lumify.io/dev#audio",
+         "source":"http://lumify.io/dev#phoneCall",
+         "displayName":"Contains Audio"
+      },
+      {  
+         "title":"http://lumify.io/dev#phoneMadeCall",
+         "dest":"http://lumify.io/dev#phoneCall",
+         "source":"http://lumify.io/dev#phoneNumber",
+         "displayName":"Made Call"
+      },
+      {  
+         "title":"http://lumify.io/dev#rawContainsImageOfEntity",
+         "dest":"http://www.w3.org/2002/07/owl#Thing",
+         "source":"http://lumify.io/dev#raw",
+         "displayName":"Contains Image of"
+      },
+      {  
+         "title":"http://lumify.io/dev#rawHasEntity",
+         "dest":"http://www.w3.org/2002/07/owl#Thing",
+         "source":"http://lumify.io/dev#raw",
+         "displayName":"Has Entity"
+      },
+      {  
+         "title":"http://lumify.io/dev#rawHasSourceOrganization",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#raw",
+         "displayName":"Has Author"
+      },
+      {  
+         "title":"http://lumify.io/dev#rawHasSourcePerson",
+         "dest":"http://lumify.io/dev#person",
+         "source":"http://lumify.io/dev#raw",
+         "displayName":"Has Author"
+      },
+      {  
+         "title":"http://lumify.io/workspace/toEntity",
+         "dest":"http://lumify.io#root",
+         "source":"http://lumify.io/workspace",
+         "displayName":"workspace to entity"
+      },
+      {  
+         "title":"http://lumify.io/workspace/toUser",
+         "dest":"http://lumify.io#root",
+         "source":"http://lumify.io/workspace",
+         "displayName":"workspace to user"
+      }
+   ],
+   "concepts":[  
+      {  
+         "id":"http://lumify.io#root",
+         "title":"http://lumify.io#root",
+         "pluralDisplayName":"roots",
+         "properties":[  
+
+         ],
+         "displayName":"root"
+      },
+      {  
+         "id":"http://lumify.io/dev#address",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23address",
+         "title":"http://lumify.io/dev#address",
+         "color":"rgb(219, 63, 219)",
+         "pluralDisplayName":"Addresses",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#location",
+         "displayName":"Address"
+      },
+      {  
+         "id":"http://lumify.io/dev#audio",
+         "title":"http://lumify.io/dev#audio",
+         "color":"rgb(149, 138, 218)",
+         "displayType":"audio",
+         "pluralDisplayName":"Audios",
+         "properties":[  
+            "http://lumify.io/dev#duration"
+         ],
+         "parentConcept":"http://lumify.io/dev#raw",
+         "displayName":"Audio"
+      },
+      {  
+         "id":"http://lumify.io/dev#city",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23city",
+         "title":"http://lumify.io/dev#city",
+         "color":"rgb(191, 13, 191)",
+         "pluralDisplayName":"Cities",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#location",
+         "displayName":"City"
+      },
+      {  
+         "id":"http://lumify.io/dev#company",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23company",
+         "title":"http://lumify.io/dev#company",
+         "color":"rgb(210, 52, 32)",
+         "pluralDisplayName":"Companies",
+         "properties":[  
+            "http://lumify.io/dev#netIncome"
+         ],
+         "parentConcept":"http://lumify.io/dev#organization",
+         "displayName":"Company"
+      },
+      {  
+         "id":"http://lumify.io/dev#contactInformation",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23contactInformation",
+         "title":"http://lumify.io/dev#contactInformation",
+         "color":"rgb(225, 128, 0)",
+         "pluralDisplayName":"Contact Informations",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"Contact Information"
+      },
+      {  
+         "id":"http://lumify.io/dev#country",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23country",
+         "title":"http://lumify.io/dev#country",
+         "color":"rgb(112, 0, 112)",
+         "pluralDisplayName":"Countries",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#location",
+         "displayName":"Country"
+      },
+      {  
+         "id":"http://lumify.io/dev#document",
+         "title":"http://lumify.io/dev#document",
+         "color":"rgb(28, 137, 28)",
+         "displayType":"document",
+         "pluralDisplayName":"Documents",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#raw",
+         "subtitleFormula":"prop('http://lumify.io#author') || ''",
+         "displayName":"Document"
+      },
+      {  
+         "id":"http://lumify.io/dev#emailAddress",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23emailAddress",
+         "title":"http://lumify.io/dev#emailAddress",
+         "color":"rgb(203, 130, 4)",
+         "pluralDisplayName":"Email Addresses",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#contactInformation",
+         "displayName":"Email Address"
+      },
+      {  
+         "id":"http://lumify.io/dev#event",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23event",
+         "title":"http://lumify.io/dev#event",
+         "color":"rgb(23, 30, 239)",
+         "pluralDisplayName":"Events",
+         "properties":[  
+            "http://lumify.io/dev#date",
+            "http://lumify.io/dev#geolocation"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"Event"
+      },
+      {  
+         "id":"http://lumify.io/dev#image",
+         "title":"http://lumify.io/dev#image",
+         "color":"rgb(176, 87, 53)",
+         "displayType":"image",
+         "pluralDisplayName":"Images",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#raw",
+         "displayName":"Image"
+      },
+      {  
+         "id":"http://lumify.io/dev#location",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23location",
+         "title":"http://lumify.io/dev#location",
+         "color":"rgb(160, 7, 206)",
+         "pluralDisplayName":"Locations",
+         "properties":[  
+            "http://lumify.io/dev#geolocation"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"Location"
+      },
+      {  
+         "id":"http://lumify.io/dev#nonprofit",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23nonprofit",
+         "title":"http://lumify.io/dev#nonprofit",
+         "color":"rgb(210, 52, 32)",
+         "pluralDisplayName":"Non Profits",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#company",
+         "displayName":"Non Profit"
+      },
+      {  
+         "id":"http://lumify.io/dev#organization",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23organization",
+         "title":"http://lumify.io/dev#organization",
+         "timeFormula":"prop('http://lumify.io/dev#formationDate') || ''",
+         "color":"rgb(137, 39, 26)",
+         "pluralDisplayName":"Organizations",
+         "properties":[  
+            "http://lumify.io/dev#abbreviation",
+            "http://lumify.io/dev#formationDate"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "subtitleFormula":"prop('http://lumify.io/dev#abbreviation') || ''",
+         "displayName":"Organization"
+      },
+      {  
+         "id":"http://lumify.io/dev#person",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23person",
+         "title":"http://lumify.io/dev#person",
+         "timeFormula":"prop('http://lumify.io/dev#birthDate') || ''",
+         "color":"rgb(28, 137, 28)",
+         "pluralDisplayName":"Persons",
+         "properties":[  
+            "http://lumify.io/dev#alias",
+            "http://lumify.io/dev#birthDate",
+            "http://lumify.io/dev#gender"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"Person"
+      },
+      {  
+         "id":"http://lumify.io/dev#phoneCall",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23phoneCall",
+         "title":"http://lumify.io/dev#phoneCall",
+         "color":"rgb(225, 225, 24)",
+         "pluralDisplayName":"Phone Calls",
+         "properties":[  
+            "http://lumify.io/dev#duration"
+         ],
+         "parentConcept":"http://lumify.io/dev#event",
+         "subtitleFormula":"prop('http://lumify.io/dev#duration') || ''",
+         "displayName":"Phone Call"
+      },
+      {  
+         "id":"http://lumify.io/dev#phoneNumber",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23phoneNumber",
+         "title":"http://lumify.io/dev#phoneNumber",
+         "color":"rgb(225, 225, 24)",
+         "pluralDisplayName":"Phone Numbers",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#contactInformation",
+         "displayName":"Phone Number"
+      },
+      {  
+         "id":"http://lumify.io/dev#raw",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23raw",
+         "title":"http://lumify.io/dev#raw",
+         "color":"rgb(28, 137, 28)",
+         "pluralDisplayName":"Raws",
+         "properties":[  
+            "http://lumify.io/dev#publishedDate"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"Raw"
+      },
+      {  
+         "id":"http://lumify.io/dev#state",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23state",
+         "title":"http://lumify.io/dev#state",
+         "color":"rgb(153, 0, 153)",
+         "pluralDisplayName":"States",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#location",
+         "displayName":"State"
+      },
+      {  
+         "id":"http://lumify.io/dev#titleFormulaEntity",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23titleFormulaEntity",
+         "title":"http://lumify.io/dev#titleFormulaEntity",
+         "timeFormula":"prop('http://lumify.io/dev#titleFormulaEntityPropD') || ''",
+         "color":"rgb(28, 137, 28)",
+         "pluralDisplayName":"Title Formula Entities",
+         "properties":[  
+            "http://lumify.io/dev#boolean",
+            "http://lumify.io/dev#dateAndTime",
+            "http://lumify.io/dev#dateOnly",
+            "http://lumify.io/dev#titleFormulaEntityPropA",
+            "http://lumify.io/dev#titleFormulaEntityPropB",
+            "http://lumify.io/dev#titleFormulaEntityPropC",
+            "http://lumify.io/dev#titleFormulaEntityPropD"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "subtitleFormula":"prop('http://lumify.io/dev#titleFormulaEntityPropC') || ''",
+         "displayName":"Title Formula Entity",
+         "titleFormula":"prop('http://lumify.io/dev#titleFormulaEntityPropA') || '' + ', ' + prop('http://lumify.io/dev#titleFormulaEntityPropB') || ''"
+      },
+      {  
+         "id":"http://lumify.io/dev#video",
+         "title":"http://lumify.io/dev#video",
+         "color":"rgb(149, 138, 218)",
+         "displayType":"video",
+         "pluralDisplayName":"Videos",
+         "properties":[  
+            "http://lumify.io/dev#duration"
+         ],
+         "parentConcept":"http://lumify.io/dev#raw",
+         "displayName":"Video"
+      },
+      {  
+         "id":"http://lumify.io/dev#zipCode",
+         "glyphIconHref":"resource?id=http%3A%2F%2Flumify.io%2Fdev%23zipCode",
+         "title":"http://lumify.io/dev#zipCode",
+         "color":"rgb(219, 63, 219)",
+         "pluralDisplayName":"Zip Codes",
+         "properties":[  
+
+         ],
+         "parentConcept":"http://lumify.io/dev#location",
+         "displayName":"Zip Code"
+      },
+      {  
+         "id":"http://lumify.io/user",
+         "title":"http://lumify.io/user",
+         "pluralDisplayName":"lumifyUsers",
+         "properties":[  
+
+         ],
+         "displayName":"lumifyUser"
+      },
+      {  
+         "userVisible":false,
+         "id":"http://lumify.io/user#user",
+         "title":"http://lumify.io/user#user",
+         "pluralDisplayName":"http://lumify.io/user#users",
+         "properties":[  
+            "http://lumify.io/user#authorizations",
+            "http://lumify.io/user#createDate",
+            "http://lumify.io/user#currentLoginDate",
+            "http://lumify.io/user#currentLoginRemoteAddr",
+            "http://lumify.io/user#currentWorkspace",
+            "http://lumify.io/user#displayName",
+            "http://lumify.io/user#loginCount",
+            "http://lumify.io/user#passwordHash",
+            "http://lumify.io/user#passwordSalt",
+            "http://lumify.io/user#previousLoginDate",
+            "http://lumify.io/user#previousLoginRemoteAddr",
+            "http://lumify.io/user#privileges",
+            "http://lumify.io/user#status",
+            "http://lumify.io/user#uiPreferences",
+            "http://lumify.io/user#username"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"http://lumify.io/user#user"
+      },
+      {  
+         "id":"http://lumify.io/workspace",
+         "title":"http://lumify.io/workspace",
+         "pluralDisplayName":"workspaces",
+         "properties":[  
+
+         ],
+         "displayName":"workspace"
+      },
+      {  
+         "userVisible":false,
+         "id":"http://lumify.io/workspace#workspace",
+         "title":"http://lumify.io/workspace#workspace",
+         "pluralDisplayName":"http://lumify.io/workspace#workspaces",
+         "properties":[  
+            "http://lumify.io/workspace#title"
+         ],
+         "parentConcept":"http://www.w3.org/2002/07/owl#Thing",
+         "displayName":"http://lumify.io/workspace#workspace"
+      },
+      {  
+         "id":"http://www.w3.org/2002/07/owl#Thing",
+         "glyphIconHref":"resource?id=http%3A%2F%2Fwww.w3.org%2F2002%2F07%2Fowl%23Thing",
+         "title":"http://www.w3.org/2002/07/owl#Thing",
+         "timeFormula":"prop('http://lumify.io#publishedDate') || ''",
+         "pluralDisplayName":"things",
+         "properties":[  
+            "http://lumify.io#author",
+            "http://lumify.io#conceptType",
+            "http://lumify.io#confidence",
+            "http://lumify.io#contentHash",
+            "http://lumify.io#createDate",
+            "http://lumify.io#dataType",
+            "http://lumify.io#displayName",
+            "http://lumify.io#entityImageUrl",
+            "http://lumify.io#entityImageVertexId",
+            "http://lumify.io#fileName",
+            "http://lumify.io#fileNameExtension",
+            "http://lumify.io#mappingJson",
+            "http://lumify.io#metadataJson",
+            "http://lumify.io#mimeType",
+            "http://lumify.io#modifiedBy",
+            "http://lumify.io#modifiedDate",
+            "http://lumify.io#ontologyTitle",
+            "http://lumify.io#process",
+            "http://lumify.io#publishedDate",
+            "http://lumify.io#raw",
+            "http://lumify.io#rowKey",
+            "http://lumify.io#source",
+            "http://lumify.io#sourceUrl",
+            "http://lumify.io#title",
+            "http://lumify.io#visibility",
+            "http://lumify.io#visibilityJson",
+            "http://lumify.io/workspace#access",
+            "http://lumify.io/workspace#creator",
+            "http://lumify.io/workspace#graphPositionX",
+            "http://lumify.io/workspace#graphPositionY",
+            "http://lumify.io/workspace#visible"
+         ],
+         "parentConcept":"http://lumify.io#root",
+         "subtitleFormula":"prop('http://lumify.io#source') || ''",
+         "displayName":"thing",
+         "titleFormula":"prop('http://lumify.io#title') || ''"
+      }
+   ]
 }

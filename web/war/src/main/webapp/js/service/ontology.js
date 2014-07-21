@@ -151,7 +151,7 @@ define([
         // dest->children
         function conceptGrouping(concepts, relationships) {
             var groups = {},
-                addToAllDestChildrenGroups = function(r, source, dest) {
+                addToAllSourceDestChildrenGroups = function(r, source, dest) {
                     var key = genKey(source, dest);
 
                     if (!groups[key]) {
@@ -163,20 +163,20 @@ define([
                     var destConcept = concepts.byId[dest]
                     if (destConcept && destConcept.children) {
                         destConcept.children.forEach(function(c) {
-                            addToAllDestChildrenGroups(r, source, c.id);
+                            addToAllSourceDestChildrenGroups(r, source, c.id);
                         })
+                    }
+
+                    var sourceConcept = concepts.byId[source]
+                    if (sourceConcept && sourceConcept.children) {
+                        sourceConcept.children.forEach(function(c) {
+                            addToAllSourceDestChildrenGroups(r, c.id, dest);
+                        });
                     }
                 };
 
             relationships.forEach(function(r) {
-                addToAllDestChildrenGroups(r, r.source, r.dest);
-
-                var sourceConcept = concepts.byId[r.source]
-                if (sourceConcept && sourceConcept.children) {
-                    sourceConcept.children.forEach(function(c) {
-                        addToAllDestChildrenGroups(r, c.id, r.dest);
-                    })
-                }
+                addToAllSourceDestChildrenGroups(r, r.source, r.dest);
             });
 
             return groups;
