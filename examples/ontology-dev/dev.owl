@@ -620,6 +620,17 @@
 
 
 
+    <!-- http://lumify.io/dev#creationTime -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#creationTime">
+        <rdfs:label xml:lang="en">Creation Time</rdfs:label>
+        <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
