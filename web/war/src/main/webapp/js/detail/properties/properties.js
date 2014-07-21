@@ -9,7 +9,6 @@ define([
     'util/vertex/formatters',
     'util/privileges',
     '../dropdowns/propertyForm/propForm',
-    'hbs!./template',
     'hbs!../audit/audit-list',
     'data',
     'sf',
@@ -24,7 +23,6 @@ define([
     F,
     Privileges,
     PropertyForm,
-    propertiesTemplate,
     auditsListTemplate,
     appData,
     sf,
@@ -212,8 +210,6 @@ define([
                 ontologyService.properties(),
                 configService.getProperties()
             ).done(function(ontologyRelationships, ontologyProperties, config) {
-                    var popoutEnabled = false;
-
                     self.ontologyProperties = ontologyProperties;
                     self.ontologyRelationships = ontologyRelationships;
                     self.update(properties);
@@ -246,11 +242,6 @@ define([
                 .closest('.type-content')
                 .off('.properties')
                 .on('toggleAuditDisplay.properties', this.onToggleAuditing.bind(this));
-
-            //this.$node.html(propertiesTemplate({
-                //properties: null
-            //}));
-            //this.displayProperties(this.attr.data);
         });
 
         this.before('teardown', function() {

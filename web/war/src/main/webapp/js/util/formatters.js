@@ -196,7 +196,7 @@ define([
                     };
                 }
             },
-            pretty: function(geo) {
+            pretty: function(geo, withholdDescription) {
 
                 if (_.isString(geo)) {
 
@@ -216,7 +216,7 @@ define([
                             _.isNumber(geo.longitude) ? geo.longitude : parseFloat(geo.longitude)
                         ).toFixed(3);
 
-                    if (geo.description) {
+                    if (withholdDescription !== true && geo.description) {
                         return geo.description + ' ' + latlon;
                     }
 

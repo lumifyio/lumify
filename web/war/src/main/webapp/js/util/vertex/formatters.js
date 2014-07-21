@@ -66,6 +66,34 @@ define([
                         property.value &&
                         property.value.source
                     ) || 'public').appendTo(el);
+                },
+
+                geoLocation: function(el, property) {
+                    if ($('#app.fullscreen-details').length) {
+                        $(el).append(
+                            F.geoLocation.pretty(property.value)
+                        );
+                        return;
+                    }
+
+                    var anchor = $('<a>')
+                        .addClass('map-coordinates')
+                        .data({
+                            latitude: property.value.latitude,
+                            longitude: property.value.longitude
+                        }),
+                        displayValue = F.geoLocation.pretty(property.value, true);
+
+                    if (property.value.description) {
+                        anchor.append(property.value.description + ' ');
+                    }
+
+                    $('<small>')
+                        .css('white-space', 'nowrap')
+                        .text(F.geoLocation.pretty(property.value, true))
+                        .appendTo(anchor);
+
+                    anchor.appendTo(el);
                 }
             },
 
