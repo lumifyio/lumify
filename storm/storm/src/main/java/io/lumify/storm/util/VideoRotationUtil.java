@@ -23,7 +23,7 @@ public class VideoRotationUtil {
                     Integer rotate = tagsJson.getInt("rotate") % 360;
                     return rotate;
                 } catch (JSONException e) {
-                    //Could not find "rotate" name on this pathway. No action needed.
+                    //Could not find "creation_time" name on this pathway. Keep searching.
                 }
             }
         } catch (Exception e) {
