@@ -16,13 +16,13 @@ public class VideoRotationUtil {
 
         try {
             JSONArray streamsJson = json.getJSONArray("streams");
-            for(int i = 0; i < streamsJson.length(); i++){
+            for (int i = 0; i < streamsJson.length(); i++) {
                 try {
                     JSONObject streamsIndexJson = streamsJson.getJSONObject(i);
                     JSONObject tagsJson = streamsIndexJson.getJSONObject("tags");
                     Integer rotate = tagsJson.getInt("rotate") % 360;
                     return rotate;
-                } catch (JSONException e){
+                } catch (JSONException e) {
                     //Could not find "rotate" name on this pathway. No action needed.
                 }
             }
