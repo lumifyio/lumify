@@ -56,7 +56,7 @@ public class DateUtil {
         if (dateString.length() < 9) {
             return null;
         }
-        Integer year = Integer.parseInt(dateString.substring(0, 4)) - 1900;
+        Integer year = Integer.parseInt(dateString.substring(0, 4));
         Integer month = Integer.parseInt(dateString.substring(5,7));
         Integer day = Integer.parseInt(dateString.substring(8,10));
 
