@@ -9,7 +9,8 @@ define([
     'service/ontology',
     'detail/properties/properties',
     'util/vertex/formatters',
-    'sf'
+    'sf',
+    'd3'
 ], function(
     defineComponent,
     appData,
@@ -21,7 +22,8 @@ define([
     OntologyService,
     Properties,
     F,
-    sf) {
+    sf,
+    d3) {
     'use strict';
 
     var relationshipService = new RelationshipService(),
@@ -47,25 +49,87 @@ define([
                 vertexToVertexRelationshipSelector: this.onVertexToVertexRelationshipClicked
             });
 
+            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+
             this.loadRelationship();
         });
+
+        this.onVerticesUpdated = function(event, data) {
+            var source = _.findWhere(data.vertices, { id: this.relationship.source.id }),
+                target = _.findWhere(data.vertices, { id: this.relationship.target.id });
+
+            if (source) {
+                this.relationship.source = source;
+            }
+            if (target) {
+                this.relationship.target = target;
+            }
+
+            this.update();
+        };
+
+        this.update = function() {
+            var predicate = { name: 'http://lumify.io#conceptType' },
+                relationship = this.relationship,
+                source = relationship.source,
+                target = relationship.target;
+
+            $.extend(source, {
+                concept: this.ontology.conceptsById[
+                    _.findWhere(source.properties, predicate).value
+                ].displayName
+            });
+
+            $.extend(target, {
+                concept: this.ontology.conceptsById[
+                    _.findWhere(target.properties, predicate).value
+                ].displayName
+            });
+
+            d3.select(this.node).selectAll('.vertex-to-vertex-relationship')
+                .data([source, target])
+                .call(function() {
+                    this
+                        .text(function(d) {
+                            return F.vertex.title(d);
+                        })
+                        .append('div')
+                        .attr('class', 'subtitle')
+                        .text(function(d) {
+                            return d.concept;
+                        });
+                })
+        };
 
         this.loadRelationship = function() {
             var self = this,
                 data = this.attr.data;
             $.when(
+                self.handleCancelling(self.ontologyService.ontology()),
                 self.handleCancelling(self.ontologyService.relationships()),
                 self.handleCancelling(relationshipService.getRelationshipDetails(data.id))
-            ).done(function(ontologyRelationships, relationshipData) {
+            ).done(function(ontology, ontologyRelationships, relationshipData) {
+                var relationship = relationshipData[0];
+
+                self.ontology = ontology;
+                self.ontologyRelationships = ontologyRelationships;
+                self.relationship = relationship;
                 self.$node.html(template({
-                    appData: appData,
-                    auditsButton: self.auditsButton(),
-                    relationshipData: relationshipData[0],
+                    auditsButton: self.auditsButton()
+                }));
+                self.update();
+
+                /*
+                self.$node.html(template({
+                    appdata: appdata,
+                    auditsbutton: self.auditsbutton(),
+                    relationshipData: relationship,
                     F: F
                 }));
+                */
 
                 Properties.attachTo(self.select('propertiesSelector'), {
-                    data: relationshipData[0]
+                    data: relationship
                 });
 
                 self.updateEntityAndArtifactDraggables();

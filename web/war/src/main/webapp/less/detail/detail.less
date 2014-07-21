@@ -170,6 +170,26 @@
     }
   }
 
+  .relationship-header {
+    padding: 0.5em;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  .vertex-to-vertex-relationship {
+    font-size: 90%;   
+    line-height: 1.1em;    
+    
+    &:hover {          
+      text-decoration: none;
+    }
+    .subtitle {   
+      color: #999;
+      font-size: 75%;
+      font-variant: small-caps;
+      text-transform: lowercase;
+    }
+  }
+  
   .underneath {
     @import "dropdown";
   }
@@ -607,14 +627,12 @@
     }
 
     h1 {
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      white-space: nowrap;
       bottom: 0;
-      color: white;
-      display: -webkit-box;
+      color: white;      
       font-size: 150%;
       left: 0;
-      max-height: 2.7em;
+      right: 0;      
       overflow: hidden;
       padding: 0 0.75em;
       position: absolute;
@@ -625,6 +643,7 @@
       .subtitle {
         margin-bottom: 0.5em;
         font-size: 80%;
+        color: fadeOut(white, 15%);
       }
     }
 
