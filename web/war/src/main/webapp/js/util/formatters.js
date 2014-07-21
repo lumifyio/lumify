@@ -285,12 +285,14 @@ define([
         },
         date: {
             local: function(str) {
+                if (_.isUndefined(str)) return '';
                 var millis = _.isString(str) && !isNaN(Number(str)) ? Number(str) : str,
                     dateInLocale = _.isDate(millis) ? millis : new Date(millis);
 
                 return dateInLocale;
             },
             utc: function(str) {
+                if (_.isUndefined(str)) return '';
                 var dateInLocale = FORMATTERS.date.local(str),
                     millisInMinutes = 1000 * 60,
                     millisFromLocaleToUTC = dateInLocale.getTimezoneOffset() * millisInMinutes,
