@@ -41,6 +41,7 @@ public class DateUtil {
             }
         }
 
+        LOGGER.debug("Could not extract dateTaken from json.");
         return null;
     }
 
@@ -83,6 +84,7 @@ public class DateUtil {
             }
         }
 
+        LOGGER.debug("Could not extract dateDigitized (creation_time) from json.");
         return null;
     }
 
@@ -93,7 +95,7 @@ public class DateUtil {
             Date parsedDate = format.parse(dateTaken);
             return parsedDate;
         } catch (ParseException e) {
-            LOGGER.warn("ParseException: could not parse dateTaken: " + dateTaken + " with date format: " + dateFormat);
+            LOGGER.error("ParseException: could not parse dateTaken: " + dateTaken + " with date format: " + dateFormat);
         }
 
         return null;
@@ -107,7 +109,7 @@ public class DateUtil {
             Date parsedDate = format.parse(dateDigitizedInUTC);
             return parsedDate;
         } catch (ParseException e) {
-            LOGGER.warn("ParseException: could not parse dateDigitized: " + dateDigitized + " with date format: " + dateFormat);
+            LOGGER.error("ParseException: could not parse dateDigitized: " + dateDigitized + " with date format: " + dateFormat);
         }
 
         return null;

@@ -20,7 +20,7 @@ public class DurationUtil {
             }
         }
 
-        LOGGER.info("Could not retrieve a \"duration\" value from the JSON object.");
+        LOGGER.debug("Could not retrieve a \"duration\" value from the JSON object.");
         return null;
     }
 }

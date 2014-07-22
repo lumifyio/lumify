@@ -13,17 +13,22 @@ public class GeoLocationUtil {
             return null;
         }
 
-        try {
-            JSONObject formatObject = json.getJSONObject("format");
-            JSONObject tagsObject = formatObject.getJSONObject("tags");
-            String locationString = tagsObject.getString("location");
-            GeoPoint geoPoint = parseGeoLocationString(locationString);
-            return geoPoint;
-        } catch (Exception e) {
-            LOGGER.info("Could not retrieve a \"geoLocation\" value from the JSON object.");
-            e.printStackTrace();
+        JSONObject formatObject = json.optJSONObject("format");
+        if (formatObject != null) {
+            JSONObject tagsObject = formatObject.optJSONObject("tags");
+            if (tagsObject != null) {
+                String locationString = tagsObject.optString("location");
+                if (!locationString.equals("")) {
+                    GeoPoint geoPoint = parseGeoLocationString(locationString);
+                    if (geoPoint != null) {
+                        return geoPoint;
+                    }
+                }
+            }
         }
 
+
+        LOGGER.debug("Could not retrieve a \"geoLocation\" value from the JSON object.");
         return null;
     }
 
@@ -31,14 +36,14 @@ public class GeoLocationUtil {
         String myRegularExpression = "(\\+|\\-|/)";
         String[] tempValues = locationString.split(myRegularExpression);
         String[] values = StringUtil.removeNullsFromStringArray(tempValues);
-        if(values.length < 2){
+        if (values.length < 2) {
             return null;
         }
 
         String latitudeValue = values[0];
         String latitudeSign = "";
         int indexOfLatitude = locationString.indexOf(latitudeValue);
-        if (indexOfLatitude != 0 ){
+        if (indexOfLatitude != 0) {
             latitudeSign = locationString.substring(0, 1);
         }
         String latitudeString = latitudeSign + latitudeValue;
@@ -46,9 +51,9 @@ public class GeoLocationUtil {
 
         String longitudeValue = values[1];
         String longitudeSign = "";
-        int indexOfLongitude = locationString.indexOf(longitudeValue, indexOfLatitude + latitudeValue.length() );
+        int indexOfLongitude = locationString.indexOf(longitudeValue, indexOfLatitude + latitudeValue.length());
         String longitudePreviousChar = locationString.substring(indexOfLongitude - 1, indexOfLongitude);
-        if (longitudePreviousChar.equals("-") || longitudePreviousChar.equals("+") ){
+        if (longitudePreviousChar.equals("-") || longitudePreviousChar.equals("+")) {
             longitudeSign = longitudePreviousChar;
         }
         String longitudeString = longitudeSign + longitudeValue;
@@ -56,12 +61,12 @@ public class GeoLocationUtil {
 
         String altitudeValue = null;
         Double altitude = null;
-        if (values.length == 3){
+        if (values.length == 3) {
             altitudeValue = values[2];
             String altitudeSign = "";
-            int indexOfAltitude = locationString.indexOf(altitudeValue, indexOfLongitude + longitudeValue.length() );
+            int indexOfAltitude = locationString.indexOf(altitudeValue, indexOfLongitude + longitudeValue.length());
             String altitudePreviousChar = locationString.substring(indexOfAltitude - 1, indexOfAltitude);
-            if(altitudePreviousChar.equals("-") || altitudePreviousChar.equals("+")){
+            if (altitudePreviousChar.equals("-") || altitudePreviousChar.equals("+")) {
                 altitudeSign = altitudePreviousChar;
             }
             String altitudeString = altitudeSign + altitudeValue;

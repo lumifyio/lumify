@@ -3,7 +3,6 @@ package io.lumify.storm.util;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VideoRotationUtil {
@@ -14,21 +13,21 @@ public class VideoRotationUtil {
             return null;
         }
 
-        try {
-            JSONArray streamsJson = json.getJSONArray("streams");
+        JSONArray streamsJson = json.optJSONArray("streams");
+        if (streamsJson != null) {
             for (int i = 0; i < streamsJson.length(); i++) {
-                try {
-                    JSONObject streamsIndexJson = streamsJson.getJSONObject(i);
-                    JSONObject tagsJson = streamsIndexJson.getJSONObject("tags");
-                    Integer rotate = tagsJson.getInt("rotate") % 360;
-                    return rotate;
-                } catch (JSONException e) {
-                    //Could not find "creation_time" name on this pathway. Keep searching.
+                JSONObject streamsIndexJson = streamsJson.optJSONObject(i);
+                if (streamsIndexJson != null) {
+                    JSONObject tagsJson = streamsIndexJson.optJSONObject("tags");
+                    if (tagsJson != null) {
+                        Integer rotate = tagsJson.optInt("rotate", 0) % 360;
+                        return rotate;
+                    }
                 }
             }
-        } catch (Exception e) {
-            LOGGER.info("Could not retrieve a \"rotate\" value from the JSON object.");
         }
+
+        LOGGER.debug("Could not retrieve a \"rotate\" value from the JSON object.");
         return null;
     }
 
