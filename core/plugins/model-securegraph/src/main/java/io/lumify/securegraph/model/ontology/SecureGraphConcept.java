@@ -6,6 +6,7 @@ import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import org.codehaus.plexus.util.IOUtil;
+import org.json.JSONArray;
 import org.securegraph.Authorizations;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
@@ -75,6 +76,9 @@ public class SecureGraphConcept extends Concept {
     public boolean getUserVisible() {
         return LumifyProperties.USER_VISIBLE.getPropertyValue(vertex, true);
     }
+
+    @Override
+    public String getAddRelatedConceptWhiteList () { return LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyValue(vertex); }
 
     @Override
     public void setProperty(String name, Object value, Authorizations authorizations) {

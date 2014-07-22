@@ -822,6 +822,11 @@
         <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#titleFormulaEntityPropC&apos;) || &apos;&apos;</lumify:subtitleFormula>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#titleFormulaEntityPropD&apos;) || &apos;&apos;</lumify:timeFormula>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+        <lumify:addRelatedConceptWhiteList xml:lang="en">
+        [
+            "http://lumify.io/dev#document"
+        ]
+        </lumify:addRelatedConceptWhiteList>
     </owl:Class>
     
 

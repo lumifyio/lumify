@@ -128,6 +128,10 @@
 
     <owl:AnnotationProperty rdf:about="&lumify;boost"/>
 
+    <!-- http://lumify.io#addRelatedWhiteList -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;addRelatedConceptWhiteList"/>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //

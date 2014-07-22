@@ -230,6 +230,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         String mapGlyphIconFileName = getMapGlyphIconFileName(o, ontologyClass);
         setIconProperty(result, inDir, mapGlyphIconFileName, LumifyProperties.MAP_GLYPH_ICON.getPropertyName(), authorizations);
 
+        String addRelatedWhiteList = getAddRelatedConceptWhiteList(o, ontologyClass);
+        if (addRelatedWhiteList != null) {
+            result.setProperty(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName(), addRelatedWhiteList, authorizations);
+        }
+
         return result;
     }
 
@@ -501,6 +506,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             return null;
         }
         return new JSONObject(val);
+    }
+
+    protected  String getAddRelatedConceptWhiteList(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName());
+        if (val == null || val.trim().length() == 0) {
+            return null;
+        }
+        return val;
     }
 
     protected Collection<TextIndexHint> getTextIndexHints(OWLOntology o, OWLDataProperty owlEntity) {

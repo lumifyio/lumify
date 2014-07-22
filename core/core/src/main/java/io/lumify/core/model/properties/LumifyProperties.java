@@ -1,13 +1,13 @@
 package io.lumify.core.model.properties;
 
 import io.lumify.core.model.properties.types.*;
+import org.apache.avro.data.Json;
 
 public class LumifyProperties {
+    public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
     public static final String META_DATA_LANGUAGE = "http://lumify.io#language";
     public static final String META_DATA_TEXT_DESCRIPTION = "http://lumify.io#textDescription";
     public static final String META_DATA_MIME_TYPE = "http://lumify.io#mimeType";
-
-    public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
 
     public static final BooleanLumifyProperty DISPLAY_TIME = new BooleanLumifyProperty("http://lumify.io#displayTime");
     public static final BooleanLumifyProperty SEARCHABLE = new BooleanLumifyProperty("http://lumify.io#searchable");
@@ -29,6 +29,7 @@ public class LumifyProperties {
     public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("http://lumify.io#text");
     public static final StreamingLumifyProperty RAW = new StreamingLumifyProperty("http://lumify.io#raw");
 
+    public static final StringLumifyProperty ADD_RELATED_CONCEPT_WHITE_LIST = new StringLumifyProperty("http://lumify.io#addRelatedConceptWhiteList");
     public static final StringLumifyProperty AUTHOR = new StringLumifyProperty("http://lumify.io#author");
     public static final StringLumifyProperty COLOR = new StringLumifyProperty("http://lumify.io#color");
     public static final StringLumifyProperty CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io#conceptType");
