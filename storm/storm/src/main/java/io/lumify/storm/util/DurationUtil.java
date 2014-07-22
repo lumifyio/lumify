@@ -7,17 +7,20 @@ import org.json.JSONObject;
 public class DurationUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DurationUtil.class);
 
-    public static Double extractDurationFromJSON(JSONObject json){
-        if (json == null)
+    public static Double extractDurationFromJSON(JSONObject json) {
+        if (json == null) {
             return null;
-
-        Double duration = null;
-        try {
-            JSONObject formatJson = json.optJSONObject("format");
-            duration = formatJson.optDouble("duration");
-        } catch (Exception e){
-            LOGGER.info("Could not retrieve a \"duration\" value from the JSON object.");
         }
-        return duration;
+
+        JSONObject formatJson = json.optJSONObject("format");
+        if (formatJson != null) {
+            Double duration = formatJson.optDouble("duration");
+            if (duration != null && !Double.isNaN(duration)) {
+                return duration;
+            }
+        }
+
+        LOGGER.info("Could not retrieve a \"duration\" value from the JSON object.");
+        return null;
     }
 }
