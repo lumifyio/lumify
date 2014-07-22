@@ -1,95 +1,116 @@
 package io.lumify.storm.util;
 
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class DateUtil {
-    public static Date extractDateFromJSON(JSONObject json) {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DateUtil.class);
+
+    public static Date extractDateTakenFromJSON(JSONObject json) {
         if (json == null) {
             return null;
         }
 
-        try {
-            JSONArray streamsJson = json.getJSONArray("streams");
-            for (int i = 0; i < streamsJson.length(); i++) {
-                try {
-                    JSONObject streamsIndexJson = streamsJson.getJSONObject(i);
-                    JSONObject tagsJson = streamsIndexJson.getJSONObject("tags");
-                    String creationTime = tagsJson.getString("creation_time");
-                    System.out.println(creationTime);
-                    Date date = parseDateString(creationTime);
+        JSONObject formatObject = json.optJSONObject("format");
+        if (formatObject != null) {
+            JSONObject tagsObject = formatObject.optJSONObject("tags");
+            if (tagsObject != null) {
+                String dateTaken = null;
+                String optionalDateTaken = tagsObject.optString("date");
+                if (!"".equals(optionalDateTaken)) {
+                    dateTaken = optionalDateTaken;
+                } else {
+                    String optionalDateTakenEng = tagsObject.optString("date-eng");
+                    if (!"".equals(optionalDateTakenEng)) {
+                        dateTaken = optionalDateTakenEng;
+                    }
+                }
+
+                if (!"".equals(dateTaken)) {
+                    Date date = parseDateTakenString(dateTaken);
                     if (date != null) {
                         return date;
                     }
-                } catch (JSONException e) {
-                    //Could not find "creation_time" name on this pathway. Keep searching.
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Could not retrieve a \"geoLocation\" value from the JSON object.");
-            e.printStackTrace();
-        }
-
-        try {
-            JSONObject formatObject = json.getJSONObject("format");
-            JSONObject tagsObject = formatObject.getJSONObject("tags");
-            String creationTime = tagsObject.getString("creation_time");
-            System.out.println(creationTime);
-            Date date = parseDateString(creationTime);
-            if (date != null) {
-                return date;
-            }
-        } catch (Exception e) {
-            //Could not find "creation_time" name on this pathway. Keep searching.
         }
 
         return null;
     }
 
-
-    private static Date parseDateString(String dateString) {
-        if (dateString.length() < 9) {
+    public static Date extractDateDigitizedFromJSON(JSONObject json) {
+        if (json == null) {
             return null;
         }
-        Integer year = Integer.parseInt(dateString.substring(0, 4));
-        Integer month = Integer.parseInt(dateString.substring(5,7));
-        Integer day = Integer.parseInt(dateString.substring(8,10));
 
-        Integer hour = null;
-        Integer min = null;
-        try {
-            hour = Integer.parseInt(dateString.substring(11, 13));
-            min = Integer.parseInt(dateString.substring(14, 16));
-        } catch (Exception e){
-            //No action required.
-        }
+        JSONArray streamsJson = json.optJSONArray("streams");
+        if (streamsJson != null) {
+            for (int i = 0; i < streamsJson.length(); i++) {
+                JSONObject streamsIndexJson = streamsJson.optJSONObject(i);
+                if (streamsIndexJson != null) {
+                    JSONObject tagsJson = streamsIndexJson.optJSONObject("tags");
+                    if (tagsJson != null) {
+                        String creationTime = tagsJson.optString("creation_time");
+                        if (!"".equals(creationTime)) {
+                            Date date = parseDateDigitizedString(creationTime);
+                            if (date != null) {
+                                return date;
+                            }
+                        }
+                    }
 
-        Integer sec = null;
-        try {
-            sec = Integer.parseInt(dateString.substring(17, 19));
-        } catch (Exception e){
-            //No action required.
-        }
-
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        cal.clear();
-        if(year != null && month != null && day != null){
-            if(hour != null && min != null && sec != null){
-                cal.set(year,month,day,hour,min,sec);
-            } else if (hour != null && min != null){
-                cal.set(year,month,day,hour,min);
-            } else {
-                cal.set(year, month, day);
+                }
             }
-            Date date = cal.getTime();
-            return date;
-        } else {
-            return null;
         }
+
+        JSONObject formatObject = json.optJSONObject("format");
+        if (formatObject != null) {
+            JSONObject tagsObject = formatObject.optJSONObject("tags");
+            if (tagsObject != null) {
+                String creationTime = tagsObject.optString("creation_time");
+                if (!"".equals(creationTime)) {
+                    Date date = parseDateDigitizedString(creationTime);
+                    if (date != null) {
+                        return date;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
+
+    private static Date parseDateTakenString(String dateTaken) {
+        String dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ";
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+        try {
+            Date parsedDate = format.parse(dateTaken);
+            return parsedDate;
+        } catch (ParseException e) {
+            LOGGER.warn("ParseException: could not parse dateTaken: " + dateTaken + " with date format: " + dateFormat);
+        }
+
+        return null;
+    }
+
+    private static Date parseDateDigitizedString(String dateDigitized) {
+        String dateFormat = "yyyy-MM-dd HH:mm:ssZ";
+        String dateDigitizedInUTC = dateDigitized + "-0000";
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+        try {
+            Date parsedDate = format.parse(dateDigitizedInUTC);
+            return parsedDate;
+        } catch (ParseException e) {
+            LOGGER.warn("ParseException: could not parse dateDigitized: " + dateDigitized + " with date format: " + dateFormat);
+        }
+
+        return null;
+    }
+
 }
