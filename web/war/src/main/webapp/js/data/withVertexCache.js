@@ -183,6 +183,10 @@ define([
 
             $.extend(true, vertex, cache);
 
+            if (hasChanged) {
+                this.trigger('vertexCacheUpdated', { vertex: cache });
+            }
+
             return (options && options.returnNullIfNotChanged === true && !hasChanged) ? null : cache;
         };
 
