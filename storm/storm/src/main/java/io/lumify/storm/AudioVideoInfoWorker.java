@@ -28,12 +28,14 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
     private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
     private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
-    private static final String CREATION_TIME_IRI = "ontology.iri.creationTime";
+    private static final String DATE_DIGITIZED_IRI = "ontology.iri.dateDigitized";
+    private static final String DATE_TAKEN_IRI = "ontology.iri.dateTaken";
     private String audioDurationIri;
     private String videoDurationIri;
     private String videoRotationIri;
     private String geoLocationIri;
-    private String creationTimeIri;
+    private String dateDigitizedIri;
+    private String dateTakenIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -59,9 +61,14 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             LOGGER.warn("Could not find config: " + CONFIG_GEO_LOCATION_IRI + ": skipping setting the geoLocation property.");
         }
 
-        creationTimeIri = (String) workerPrepareData.getStormConf().get(CREATION_TIME_IRI);
-        if (creationTimeIri == null || creationTimeIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + CREATION_TIME_IRI + ": skipping setting the creationTime property.");
+        dateDigitizedIri = (String) workerPrepareData.getStormConf().get(DATE_DIGITIZED_IRI);
+        if (dateDigitizedIri == null || dateDigitizedIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + DATE_DIGITIZED_IRI + ": skipping setting the dateDigitized property.");
+        }
+
+        dateTakenIri = (String) workerPrepareData.getStormConf().get(DATE_TAKEN_IRI);
+        if (dateTakenIri == null || dateTakenIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + DATE_TAKEN_IRI + ": skipping setting the dateTaken property.");
         }
 
     }
@@ -110,12 +117,23 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                 );
             }
 
-            Date creationTime = DateUtil.extractDateFromJSON(json);
-            if (creationTime != null) {
+            Date dateDigitized = DateUtil.extractDateDigitizedFromJSON(json);
+            if (dateDigitized != null) {
                 data.getElement().addPropertyValue(
                         PROPERTY_KEY,
-                        creationTimeIri,
-                        creationTime,
+                        dateDigitizedIri,
+                        dateDigitized,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            Date dateTaken = DateUtil.extractDateTakenFromJSON(json);
+            if (dateTaken != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        dateTakenIri,
+                        dateTaken,
                         data.getVisibility(),
                         getAuthorizations()
                 );
