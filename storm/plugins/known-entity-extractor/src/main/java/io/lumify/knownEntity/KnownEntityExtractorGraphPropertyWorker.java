@@ -49,7 +49,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         String text = IOUtils.toString(in); // TODO convert AhoCorasick to use InputStream
-        Iterator<SearchResult<Match>> searchResults = tree.search(text.getBytes());
+        Iterator<SearchResult<Match>> searchResults = tree.search(text.toCharArray());
         List<TermMention> termMentions = new ArrayList<TermMention>();
         while (searchResults.hasNext()) {
             SearchResult searchResult = searchResults.next();
@@ -120,7 +120,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             if (line.size() != 2) {
                 throw new RuntimeException("Invalid number of entries on a line. Expected 2 found " + line.size());
             }
-            tree.add(line.get(0).getBytes(), new Match(type, line.get(0), line.get(1)));
+            tree.add(line.get(0), new Match(type, line.get(0), line.get(1)));
         }
     }
 

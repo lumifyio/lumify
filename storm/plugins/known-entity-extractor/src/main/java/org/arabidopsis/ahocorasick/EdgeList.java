@@ -1,12 +1,10 @@
 package org.arabidopsis.ahocorasick;
 
 /**
- * Simple interface for mapping bytes to States.
+ * Simple interface for mapping chars to States.
  */
-interface EdgeList<T> {
-  State<T> get(byte ch);
-
-  void put(byte ch, State<T> state);
-
-  byte[] keys();
+interface EdgeList {
+  State get(char ch);
+  void put(char ch, State state);
+  char[] keys();
 }
