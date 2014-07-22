@@ -20,6 +20,8 @@ public class GDELTProperties {
     public static final IntegerLumifyProperty EVENT_NUM_ARTICLES = new IntegerLumifyProperty("http://lumify.io/gdelt#numArticles");
     public static final DoubleLumifyProperty EVENT_AVG_TONE = new DoubleLumifyProperty("http://lumify.io/gdelt#avgTone");
     public static final GeoPointLumifyProperty EVENT_GEOLOCATION = new GeoPointLumifyProperty("http://lumify.io/gdelt#geoLocation");
+    public static final DateLumifyProperty EVENT_DATE_ADDED = new DateLumifyProperty("http://lumify.io/gdelt#dateAdded");
+    public static final StringLumifyProperty EVENT_SOURCE_URL = new StringLumifyProperty("http://lumify.io/gdelt#sourceUrl");
 
     // actor properties
     public static final StringLumifyProperty ACTOR_CODE = new StringLumifyProperty("http://lumify.io/gdelt#actorCode");

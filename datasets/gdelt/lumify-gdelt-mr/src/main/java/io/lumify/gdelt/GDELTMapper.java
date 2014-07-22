@@ -87,6 +87,10 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
         setOptionalProperty(GDELTProperties.EVENT_NUM_MENTIONS, eventVertexBuilder, event.getNumMentions());
         setOptionalProperty(GDELTProperties.EVENT_NUM_SOURCES, eventVertexBuilder, event.getNumSources());
         setOptionalProperty(GDELTProperties.EVENT_NUM_ARTICLES, eventVertexBuilder, event.getNumArticles());
+        setOptionalProperty(GDELTProperties.EVENT_AVG_TONE, eventVertexBuilder, event.getAverageTone());
+        setOptionalProperty(GDELTProperties.EVENT_DATE_ADDED, eventVertexBuilder, event.getDateAdded());
+        setOptionalProperty(GDELTProperties.EVENT_SOURCE_URL, eventVertexBuilder, event.getSourceUrl());
+
         setGeolocationProperty(event, eventVertexBuilder);
         Vertex eventVertex = eventVertexBuilder.save(authorizations);
 
