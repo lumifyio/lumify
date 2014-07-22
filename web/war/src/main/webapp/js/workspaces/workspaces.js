@@ -44,7 +44,7 @@ define([
             if ($target.closest('.workspace-form').length) return;
 
             var li = $(event.target).closest('li'),
-                workspaceId = li.data('workspaceId');
+                workspaceId = li.data('workspaceId').toString();
 
             if (workspaceId) {
                 this.switchToWorkspace(workspaceId);
