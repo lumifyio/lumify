@@ -278,12 +278,16 @@
 
 ### clone the Lumify projects
 
+*as a non-root user:*
+
         cd ~
         git clone https://github.com/lumifyio/lumify-root.git
         git clone https://github.com/lumifyio/lumify.git
 
 
 ### configure Lumify
+
+*as a non-root user:*
 
         sudo mkdir -p /opt/lumify/{config,lib,logs}
 
@@ -300,11 +304,15 @@
 
 ### install Lumify Root
 
+*as a non-root user:*
+
         cd ~/lumify-root
         mvn install
 
 
 ### build and deploy the Lumify web application and authentication plugin
+
+*as a non-root user:*
 
         cd ~/lumify
         mvn package -P web-war -pl web/war -am
@@ -321,10 +329,14 @@
 
 ### build and deploy the Lumify Storm topology
 
+*as a non-root user:*
+
         cd ~/lumify
         mvn package -pl storm/storm -am
+        mvn package -pl $(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target) | sed -e 's/ /,/g') -am
 
-**TODO: build and copy property workers**
+        /usr/lib/hadoop/bin/hadoop fs -put \
+          $(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do ls ${t}/*.jar | tail -1; done) \
+          /lumify/libcache
 
         /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
-
