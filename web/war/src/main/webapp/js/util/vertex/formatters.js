@@ -98,13 +98,13 @@ define([
             },
 
             hasMetadata: function(property) {
-                var status = V.sandboxStatus(property.metadata),
-                    modifiedBy = property.metadata['http://lumify.io#modifiedBy'],
-                    modifiedDate = property.metadata['http://lumify.io#modifiedDate'],
-                    sourceTimezone = property.metadata['http://lumify.io#sourceTimezone'],
-                    confidence = property.metadata['http://lumify.io#confidence'],
-                    justification = property.metadata._justificationMetadata,
-                    source = property.metadata._sourceMetadata;
+                var status = V.sandboxStatus(property),
+                    modifiedBy = property['http://lumify.io#modifiedBy'],
+                    modifiedDate = property['http://lumify.io#modifiedDate'],
+                    sourceTimezone = property['http://lumify.io#sourceTimezone'],
+                    confidence = property['http://lumify.io#confidence'],
+                    justification = property._justificationMetadata,
+                    source = property._sourceMetadata;
 
                 return (
                     status ||

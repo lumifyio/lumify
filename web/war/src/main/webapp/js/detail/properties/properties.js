@@ -229,7 +229,10 @@ define([
                             visibilitySpan, { value: property[VISIBILITY_NAME] }, self.attr.data.id);
                     }
 
-                    $(this).find('button').toggle(!property.hideInfo);
+                    $(this).find('button').toggle(Boolean(
+                        !property.hideInfo &&
+                        (Privileges.canEDIT || F.vertex.hasMetadata(property))
+                    ));
 
                     if (dataType && F.vertex.properties[dataType]) {
                         F.vertex.properties[dataType](valueSpan, property, self.attr.data.id);
