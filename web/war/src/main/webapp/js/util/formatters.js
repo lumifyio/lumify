@@ -312,9 +312,11 @@ define([
                 );
             },
             dateStringUtc: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return FORMATTERS.date.dateString(FORMATTERS.date.utc(millisStr));
             },
             dateTimeStringUtc: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr));
             },
             timeString: function(millisStr) {
@@ -322,9 +324,11 @@ define([
                 return sf('{0:HH:mm}', FORMATTERS.date.local(millisStr));
             },
             timeStringUtc: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return FORMATTERS.date.timeString(FORMATTERS.date.utc(millisStr));
             },
             relativeToNow: function(date) {
+                if (_.isUndefined(date)) return '';
                 var span = new sf.TimeSpan(FORMATTERS.date.utc(Date.now()) - date),
                     time = '';
 
