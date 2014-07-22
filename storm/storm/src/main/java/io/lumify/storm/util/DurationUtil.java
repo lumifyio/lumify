@@ -15,7 +15,7 @@ public class DurationUtil {
         JSONObject formatJson = json.optJSONObject("format");
         if (formatJson != null) {
             Double duration = formatJson.optDouble("duration");
-            if (duration != null && !Double.isNaN(duration)) {
+            if (!Double.isNaN(duration)) {
                 return duration;
             }
         }

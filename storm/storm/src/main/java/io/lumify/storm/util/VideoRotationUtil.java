@@ -20,8 +20,11 @@ public class VideoRotationUtil {
                 if (streamsIndexJson != null) {
                     JSONObject tagsJson = streamsIndexJson.optJSONObject("tags");
                     if (tagsJson != null) {
-                        Integer rotate = tagsJson.optInt("rotate", 0) % 360;
-                        return rotate;
+                        Double optionalRotate = tagsJson.optDouble("rotate");
+                        if (!Double.isNaN(optionalRotate)){
+                            Integer rotate = optionalRotate.intValue() % 360;
+                            return rotate;
+                        }
                     }
                 }
             }
