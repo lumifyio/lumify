@@ -81,7 +81,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         }
 
         deviceModelIri = (String) workerPrepareData.getStormConf().get(DEVICE_MODEL_IRI);
-        if (deviceModelIri == null || deviceModelIri.length() == 0){
+        if (deviceModelIri == null || deviceModelIri.length() == 0) {
             LOGGER.warn("Could not find config: " + DEVICE_MODEL_IRI + ": skipping setting the deviceModel property.");
         }
 
@@ -165,7 +165,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             }
 
             String deviceModel = MakeAndModelUtil.extractModelFromJSON(json);
-            if (deviceModel != null){
+            if (deviceModel != null) {
                 data.getElement().addPropertyValue(
                         PROPERTY_KEY,
                         deviceModelIri,
@@ -174,7 +174,6 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                         getAuthorizations()
                 );
             }
-
 
         }
 

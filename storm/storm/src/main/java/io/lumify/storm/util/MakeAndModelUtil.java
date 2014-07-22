@@ -18,7 +18,7 @@ public class MakeAndModelUtil {
 
     private static String extractMakeAndModelFromJSON(JSONObject json,
                                                       String firstSearchString,
-                                                      String secondSearchString){
+                                                      String secondSearchString) {
         if (json == null) {
             return null;
         }
