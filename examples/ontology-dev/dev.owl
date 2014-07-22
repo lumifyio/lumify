@@ -642,6 +642,24 @@
 
 
 
+    <!-- http://lumify.io/dev#deviceMake -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#deviceMake">
+        <rdfs:label xml:lang="en">Device Make</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io/dev#deviceModel -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#deviceModel">
+        <rdfs:label xml:lang="en">Device Model</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
