@@ -23,16 +23,16 @@ public class DateUtil {
             if (tagsObject != null) {
                 String dateTaken = null;
                 String optionalDateTaken = tagsObject.optString("date");
-                if (!"".equals(optionalDateTaken)) {
+                if (!optionalDateTaken.equals("")) {
                     dateTaken = optionalDateTaken;
                 } else {
                     String optionalDateTakenEng = tagsObject.optString("date-eng");
-                    if (!"".equals(optionalDateTakenEng)) {
+                    if (!optionalDateTakenEng.equals("")) {
                         dateTaken = optionalDateTakenEng;
                     }
                 }
 
-                if (!"".equals(dateTaken)) {
+                if (!dateTaken.equals("")) {
                     Date date = parseDateTakenString(dateTaken);
                     if (date != null) {
                         return date;
@@ -58,7 +58,7 @@ public class DateUtil {
                     JSONObject tagsJson = streamsIndexJson.optJSONObject("tags");
                     if (tagsJson != null) {
                         String creationTime = tagsJson.optString("creation_time");
-                        if (!"".equals(creationTime)) {
+                        if (!creationTime.equals("")) {
                             Date date = parseDateDigitizedString(creationTime);
                             if (date != null) {
                                 return date;
@@ -75,7 +75,7 @@ public class DateUtil {
             JSONObject tagsObject = formatObject.optJSONObject("tags");
             if (tagsObject != null) {
                 String creationTime = tagsObject.optString("creation_time");
-                if (!"".equals(creationTime)) {
+                if (!creationTime.equals("")) {
                     Date date = parseDateDigitizedString(creationTime);
                     if (date != null) {
                         return date;
