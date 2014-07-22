@@ -18,8 +18,7 @@ public class SqlWorkspace implements Workspace {
     @Column(name = "display_title")
     private String displayTitle;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn(name = "user_id")
+    @OneToOne(fetch = FetchType.EAGER)
     private SqlUser creator;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceUserId.workspace")

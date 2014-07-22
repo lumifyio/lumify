@@ -88,6 +88,18 @@ public class SqlWorkspaceRepositoryTest {
     }
 
     @Test
+    public void testFindById () throws Exception {
+        SqlWorkspace workspace = (SqlWorkspace)sqlWorkspaceRepository.add("test workspace", testUser);
+        SqlWorkspace workspace2 = (SqlWorkspace)sqlWorkspaceRepository.add("test workspace 2", testUser);
+
+        SqlWorkspace testWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace.getId(), testUser);
+        SqlWorkspace testWorkspace2 = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace2.getId(), testUser);
+
+        assertEquals(workspace.getCreator().getUserId(), testWorkspace.getCreator().getUserId());
+        assertEquals(workspace2.getCreator().getUserId(), testWorkspace2.getCreator().getUserId());
+    }
+
+    @Test
     public void testFindAll() throws Exception {
         Iterable<Workspace> userIterable = sqlWorkspaceRepository.findAll(testUser);
         assertTrue(IterableUtils.count(userIterable) == 0);
