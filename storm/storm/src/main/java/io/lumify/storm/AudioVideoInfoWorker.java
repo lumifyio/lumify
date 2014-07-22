@@ -30,12 +30,16 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
     private static final String DATE_DIGITIZED_IRI = "ontology.iri.dateDigitized";
     private static final String DATE_TAKEN_IRI = "ontology.iri.dateTaken";
+    private static final String DEVICE_MAKE_IRI = "ontology.iri.deviceMake";
+    private static final String DEVICE_MODEL_IRI = "ontology.iri.deviceModel";
     private String audioDurationIri;
     private String videoDurationIri;
     private String videoRotationIri;
     private String geoLocationIri;
     private String dateDigitizedIri;
     private String dateTakenIri;
+    private String deviceMakeIri;
+    private String deviceModelIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -69,6 +73,16 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         dateTakenIri = (String) workerPrepareData.getStormConf().get(DATE_TAKEN_IRI);
         if (dateTakenIri == null || dateTakenIri.length() == 0) {
             LOGGER.warn("Could not find config: " + DATE_TAKEN_IRI + ": skipping setting the dateTaken property.");
+        }
+
+        deviceMakeIri = (String) workerPrepareData.getStormConf().get(DEVICE_MAKE_IRI);
+        if (deviceMakeIri == null || deviceMakeIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + DEVICE_MAKE_IRI + ": skipping setting the deviceMake property.");
+        }
+
+        deviceModelIri = (String) workerPrepareData.getStormConf().get(DEVICE_MODEL_IRI);
+        if (deviceModelIri == null || deviceModelIri.length() == 0){
+            LOGGER.warn("Could not find config: " + DEVICE_MODEL_IRI + ": skipping setting the deviceModel property.");
         }
 
     }
@@ -134,6 +148,28 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                         PROPERTY_KEY,
                         dateTakenIri,
                         dateTaken,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            String deviceMake = MakeAndModelUtil.extractMakeFromJSON(json);
+            if (deviceMake != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        deviceMakeIri,
+                        deviceMake,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            String deviceModel = MakeAndModelUtil.extractModelFromJSON(json);
+            if (deviceModel != null){
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        deviceModelIri,
+                        deviceModel,
                         data.getVisibility(),
                         getAuthorizations()
                 );
