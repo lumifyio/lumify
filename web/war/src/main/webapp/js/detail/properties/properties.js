@@ -377,14 +377,10 @@ define([
                     .find('.hidden').removeClass('hidden').end()
                     .find('.show-more').remove();
 
-                var itemTemplate = $.Deferred();
-                require(['hbs!detail/properties/item'], itemTemplate.resolve);
-
                 $.when(
                         ontologyService.ontology(),
-                        this.auditRequest = auditService.getAudits(this.attr.data.id),
-                        itemTemplate
-                    ).done(function(ontology, auditResponse, itemTemplate) {
+                        this.auditRequest = auditService.getAudits(this.attr.data.id)
+                    ).done(function(ontology, auditResponse) {
                         var audits = _.sortBy(auditResponse[0].auditHistory, function(a) {
                                 return new Date(a.dateTime).getTime() * -1;
                             }),
@@ -436,7 +432,7 @@ define([
                             }));
 
                         if (auditGroups.property) {
-                            self.updatePropertyAudits(itemTemplate, auditGroups.property);
+                            self.updatePropertyAudits(auditGroups.property);
                         }
                         auditsEl.show();
 
@@ -451,7 +447,7 @@ define([
             }
         };
 
-        this.updatePropertyAudits = function(itemTemplate, audits) {
+        this.updatePropertyAudits = function(audits) {
             var self = this,
                 auditsByProperty = _.groupBy(audits, function(a) {
                     return a.propertyAudit.propertyName + a.propertyAudit.propertyKey;
@@ -463,42 +459,13 @@ define([
                     propertyKey = audits[0].propertyAudit.propertyKey,
                     propertyName = audits[0].propertyAudit.propertyName;
 
-                if (!propLi.length) {
-                    var property = self.ontologyProperties.byTitle[propertyName],
-                        value;
-
-                    if (property && property.userVisible) {
-                        for (var i = 0; i < audits.length; i++) {
-                            var propAudit = audits[i].propertyAudit;
-                            value = propAudit.newValue || propAudit.previousValue;
-                            if (value) {
-                                break;
-                            }
-                        }
-
-                        propLi = $(
-                            itemTemplate({
-                                displayType: property.dataType,
-                                name: propertyName,
-                                key: propertyKey,
-                                displayName: property.displayName,
-                                stringValue: F.vertex.displayProp({
-                                    name: propertyName,
-                                    value: value
-                                }),
-                                value: value || 'deleted',
-                                metadata: {}
-                            })
-                        ).addClass('audit-only-property').insertBefore(self.$node.find('table tbody .buttons-row'));
-                    } else if (_.isUndefined(property)) {
-                        console.warn(propertyName + " in audit record doesn't exist in ontology");
-                    }
+                // TODO: support properties that were deleted
+                if (propLi.length) {
+                    propLi.after(auditsListTemplate({
+                        audits: audits,
+                        MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
+                    }));
                 }
-
-                propLi.after(auditsListTemplate({
-                    audits: audits,
-                    MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
-                }));
             });
         };
 
