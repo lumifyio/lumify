@@ -174,8 +174,7 @@
         mkdir storm/logs
 
         # edit /opt/storm/conf/storm.yaml and add the following lines to the end:
-          storm.zookeeper.servers:
-            - 192.168.33.10
+          storm.zookeeper.servers: [192.168.33.10]
           nimbus.host: 192.168.33.10
           supervisor.slots.ports: [6700, 6701, 6702, 6703]
           ui.port: 8081
