@@ -179,6 +179,8 @@ define([
                             });
                         this.select('button.info')
                             .on('click', function(property) {
+                                d3.event.stopPropagation();
+                                d3.event.preventDefault();
                                 self.showPropertyInfo(this, property);
                             });
                     });
