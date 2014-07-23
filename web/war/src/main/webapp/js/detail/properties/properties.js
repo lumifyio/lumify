@@ -8,6 +8,7 @@ define([
     'service/config',
     'util/vertex/formatters',
     'util/privileges',
+    'util/messages',
     '../dropdowns/propertyForm/propForm',
     'hbs!../audit/audit-list',
     'data',
@@ -22,6 +23,7 @@ define([
     ConfigService,
     F,
     Privileges,
+    messages,
     PropertyForm,
     auditsListTemplate,
     appData,
@@ -197,7 +199,7 @@ define([
                     }
 
                     if (isVisibility(d)) {
-                        return 'Visibility';
+                        return messages('visibility.label');
                     }
 
                     var ontologyProperty = self.ontologyProperties.byTitle[d.name];
