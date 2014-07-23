@@ -200,16 +200,50 @@ define([
                 data.loadActiveWorkspace();
                 self.trigger(document, 'applicationReady');
             }
+
+            _.delay(function() {
+                if (self.attr.addVertexIds) {
+                    self.handleAddToWorkspace(self.attr.addVertexIds);
+                }
+            }, 500);
         });
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
 
             if (data && data.anchorTo && data.anchorTo.page) {
-                this.trigger(event.target, 'positionChanged', {
-                    position: data.anchorTo.page
+                reposition(data.anchorTo.page);
+                this.on(document, 'windowResize', function() {
+                    reposition(data.anchorTo.page);
                 });
             }
+
+            function reposition(position) {
+                if (position === 'center') {
+                    position = {
+                        x: $(window).width() / 2 + $('.menubar-pane').width() / 2,
+                        y: $(window).height() / 2
+                    };
+                }
+                self.trigger(event.target, 'positionChanged', {
+                    position: position
+                });
+            }
+        };
+
+        this.handleAddToWorkspace = function(addVertexIds) {
+            var self = this;
+
+            require(['util/popovers/addToWorkspace/addToWorkspace'], function(AddToWorkspace) {
+                AddToWorkspace.attachTo(self.node, {
+                    addVertexIds: addVertexIds,
+                    overlay: true,
+                    teardownOnTap: false,
+                    anchorTo: {
+                        page: 'center'
+                    }
+                });
+            });
         };
 
         this.handleFilesDropped = function(files, event) {
@@ -226,7 +260,6 @@ define([
                     }
                 });
             });
-
         };
 
         this.toggleSearchPane = function() {

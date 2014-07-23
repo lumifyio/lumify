@@ -19,6 +19,7 @@ define([
 
         this.after('teardown', function() {
             this.dialog.remove();
+            $('.popover-bg-overlay').remove();
         });
 
         this.after('initialize', function() {
@@ -30,6 +31,10 @@ define([
 
         this.setupWithTemplate = function(tpl) {
             var self = this;
+
+            if (this.attr.overlay) {
+                $(document.body).append('<div class="popover-bg-overlay">')
+            }
 
             this.dialog = $('<div class="dialog-popover">')
                 .css({position: 'absolute'})

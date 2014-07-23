@@ -45,7 +45,10 @@ define([
                         window.currentUser = user;
                         require(['app'], function(App) {
                             App.attachTo('#app', {
-                                animateFromLogin: true
+                                animateFromLogin: true,
+                                addVertexIds: self.attr.toOpen &&
+                                    self.attr.toOpen.type === 'ADD' ?
+                                    self.attr.toOpen : null
                             });
 
                             self.$node.find('.logo').one(TRANSITION_END, function() {
