@@ -1,9 +1,13 @@
 
 <% if (requiredFallback) { %>
+  <% if (!noWorkspaceGiven) { %>
   <h1>Unauthorized Workspace</h1>
+  <% } %>
 
   <div class="no-workspace-access">
+    <% if (!noWorkspaceGiven) { %>
       You do not have access to the requested workspace.<br>
+    <% } %>
     <% if (somePublished) { %>
       Displaying published items using 
         <div class="btn-group">

@@ -954,7 +954,9 @@ define([
         };
 
         this.onSwitchWorkspace = function(evt, data) {
-            if (data.workspaceId != this.workspaceId) {
+            if (!data || !data.workspaceId) {
+                this.loadActiveWorkspace();
+            } else if (data.workspaceId != this.workspaceId) {
                 this.trigger('selectObjects');
                 this.loadWorkspace(data.workspaceId);
             }
