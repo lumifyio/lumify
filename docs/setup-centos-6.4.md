@@ -79,9 +79,8 @@
         rpm -ivH cloudera-cdh-4-0.x86_64.rpm
         yum install -y hadoop-0.20-conf-pseudo zookeeper-server
 
-        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
-        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
-        chown hdfs:hdfs /var/local/hadoop
+        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}  /var/local/hadoop
+        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}  /var/local/hadoop
         
         service zookeeper-server init
         # The following warning is expected (and ok):
