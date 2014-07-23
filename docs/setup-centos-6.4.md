@@ -81,6 +81,7 @@
 
         mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
         chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
+        chown hdfs:hdfs /var/local/hadoop
         
         service zookeeper-server init
         # The following warning is expected (and ok):
