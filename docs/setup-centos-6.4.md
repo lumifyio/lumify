@@ -154,7 +154,7 @@
         cd /usr/lib
         tar xzf ~/elasticsearch-1.1.2.tar.gz
         ln -s elasticsearch-1.1.2 elasticsearch
-        
+
         chown -R esearch:hadoop elasticsearch/
 
         elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
@@ -173,12 +173,15 @@
 
         mkdir storm/logs
 
+        # edit /opt/storm/conf/storm.yaml and add the following lines to the end:
+          storm.zookeeper.servers:
+            - 192.168.33.10
+          nimbus.host: 192.168.33.10
+          supervisor.slots.ports: [6700, 6701, 6702, 6703]
+          ui.port: 8081
+
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
-        echo "storm.zookeeper.servers:" >> /opt/storm/conf/storm.yaml
-        echo " - ${ip_address}" >> /opt/storm/conf/storm.yaml
-        echo "nimbus.host: ${ip_address}" >> /opt/storm/conf/storm.yaml
-        echo "supervisor.slots.ports: [6700, 6701, 6702, 6703]" >> /opt/storm/conf/storm.yaml
-        echo "ui.port: 8081" >> /opt/storm/conf/storm.yaml
+        sed -i -e "s/192.168.33.10/${ip_address}/" /opt/storm/conf/storm.yaml
 
 
 ### RabbitMQ
