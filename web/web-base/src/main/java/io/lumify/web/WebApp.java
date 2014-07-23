@@ -3,6 +3,7 @@ package io.lumify.web;
 import com.altamiracorp.miniweb.App;
 import com.altamiracorp.miniweb.Handler;
 import com.google.inject.Injector;
+import io.lumify.core.config.LumifyResourceBundle;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -14,15 +15,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.securegraph.util.CloseableUtils.closeQuietly;
 
 
 public class WebApp extends App {
+    public static final String RESOURCE_BUNDLE_BASE_NAME = "MessageBundle";
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WebApp.class);
     private final Injector injector;
     private Map<String, String> javaScriptSources = new HashMap<String, String>();
     private Map<String, String> cssSources = new HashMap<String, String>();
+    private ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, Locale.getDefault());
 
     public WebApp(final ServletConfig servletConfig, final Injector injector) {
         super(servletConfig);
@@ -81,6 +86,37 @@ public class WebApp extends App {
         } finally {
             closeQuietly(stream);
         }
+    }
+
+    public void registerResourceBundle(String resourceBundleResourceName) {
+        InputStream stream = WebApp.class.getResourceAsStream(resourceBundleResourceName);
+        if (stream == null) {
+            throw new LumifyException("Could not find resource bundle resource: " + resourceBundleResourceName);
+        }
+        try {
+            LOGGER.info("registering ResourceBundle plugin file: %s", resourceBundleResourceName);
+
+            // TODO: extract language, country, and platform from filename: e.g. MessageBundle_zh_TW.properties
+
+            resourceBundle = new LumifyResourceBundle(stream, resourceBundle);
+        } catch (IOException e) {
+            throw new LumifyException("Could not read resource bundle resource: " + resourceBundleResourceName);
+        } finally {
+            closeQuietly(stream);
+        }
+    }
+
+    public ResourceBundle getBundle() {
+        return getBundle(Locale.getDefault());
+    }
+
+    public ResourceBundle getBundle(Locale locale) {
+        // TODO: use the locale
+        return resourceBundle;
+    }
+
+    public String getString(String key) {
+        return getBundle().getString(key);
     }
 
     public Map<String, String> getJavaScriptSources() {

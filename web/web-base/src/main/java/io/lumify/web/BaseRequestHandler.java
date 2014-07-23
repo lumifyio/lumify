@@ -31,14 +31,13 @@ import java.util.*;
  * and provides common methods for handler usage
  */
 public abstract class BaseRequestHandler implements Handler {
-
     public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
-    private static final String RFC1123_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    public static final String LOCALE_LANGUAGE_PARAMETER = "localeLanguage";
+    public static final String LOCALE_COUNTRY_PARAMETER = "localeCountry";
+    public static final String LOCALE_PLATFORM_PARAMETER = "localePlatform";
     protected static final int EXPIRES_1_HOUR = 60 * 60;
     protected static final int EXPIRES_1_DAY = 24 * 60 * 60;
-
-    protected static final ResourceBundle STRINGS = ResourceBundle.getBundle("MessageBundle", Locale.getDefault());
-
+    private static final String RFC1123_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
     private final Configuration configuration;
@@ -51,6 +50,34 @@ public abstract class BaseRequestHandler implements Handler {
 
     @Override
     public abstract void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception;
+
+    protected Locale getLocale(HttpServletRequest request) {
+        String language = getOptionalParameter(request, LOCALE_LANGUAGE_PARAMETER);
+        String country = getOptionalParameter(request, LOCALE_COUNTRY_PARAMETER);
+        String platform = getOptionalParameter(request, LOCALE_PLATFORM_PARAMETER);
+
+        if (language != null) {
+            if (country != null) {
+                if (platform != null) {
+                    return new Locale(language, country, platform);
+                }
+                return new Locale(language, country);
+            }
+            return new Locale(language);
+        }
+        return Locale.getDefault();
+    }
+
+    protected ResourceBundle getBundle(HttpServletRequest request) {
+        WebApp webApp = getWebApp(request);
+        Locale locale = getLocale(request);
+        return webApp.getBundle(locale);
+    }
+
+    protected String getString(HttpServletRequest request, String key) {
+        ResourceBundle resourceBundle = getBundle(request);
+        return resourceBundle.getString(key);
+    }
 
     /**
      * Attempts to extract the specified parameter from the provided request
