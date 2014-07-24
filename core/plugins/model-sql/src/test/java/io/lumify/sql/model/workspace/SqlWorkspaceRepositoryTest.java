@@ -10,6 +10,7 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceUser;
+import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.SessionFactory;
@@ -34,7 +35,6 @@ public class SqlWorkspaceRepositoryTest {
     private final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
     private SqlWorkspaceRepository sqlWorkspaceRepository;
     private static org.hibernate.cfg.Configuration configuration;
-    private static SessionFactory sessionFactory;
     private SqlUserRepository sqlUserRepository;
 
     private SqlUser testUser;
@@ -50,11 +50,11 @@ public class SqlWorkspaceRepositoryTest {
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-        sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
+        HibernateSessionManager.initialize(configuration.buildSessionFactory(serviceRegistryBuilder));
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory, sqlUserRepository);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, userListenerUtil);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository(sqlUserRepository);
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, null, new String[0]);
     }
 

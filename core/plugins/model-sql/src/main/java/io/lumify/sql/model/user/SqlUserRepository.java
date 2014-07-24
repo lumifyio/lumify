@@ -9,6 +9,7 @@ import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -24,28 +25,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
-    private final SessionFactory sessionFactory;
     private final AuthorizationRepository authorizationRepository;
     private final UserListenerUtil userListenerUtil;
 
     @Inject
     public SqlUserRepository(final Configuration configuration,
                              final AuthorizationRepository authorizationRepository,
-                             final SessionFactory sessionFactory,
                              final UserListenerUtil userListenerUtil) {
         super(configuration);
         this.authorizationRepository = authorizationRepository;
-        this.sessionFactory = sessionFactory;
         this.userListenerUtil = userListenerUtil;
     }
 
     @Override
     public User findByUsername(String username) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.username=:username")
                 .setParameter("username", username)
                 .list();
-        session.close();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
@@ -57,20 +54,18 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public Iterable<User> findAll() {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         List<User> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user")
                 .list();
-        session.close();
         return users;
     }
 
     @Override
     public User findById(String userId) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.id=:id")
                 .setParameter("id", Integer.parseInt(userId))
                 .list();
-        session.close();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
@@ -82,7 +77,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
         }
@@ -112,8 +107,6 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while adding user", e);
-        } finally {
-            session.close();
         }
 
         userListenerUtil.fireNewUserAddedEvent(newUser);
@@ -124,7 +117,7 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public void setPassword(User user, String password) {
         checkNotNull(password);
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         if (user == null || user.getUserId() == null || findById(user.getUserId()) == null) {
             throw new LumifyException("User is not valid");
         }
@@ -144,8 +137,6 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while setting password", e);
-        } finally {
-            session.close();
         }
     }
 
@@ -164,7 +155,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void recordLogin(User user, String remoteAddr) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -187,8 +178,6 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while recording login", e);
-        } finally {
-            session.close();
         }
     }
 
@@ -198,7 +187,7 @@ public class SqlUserRepository extends UserRepository {
             throw new LumifyException("UserId cannot be null");
         }
 
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         Transaction transaction = null;
         SqlUser sqlUser = null;
         try {
@@ -222,8 +211,6 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while setting current workspace", e);
-        } finally {
-            session.close();
         }
         return sqlUser;
     }
@@ -234,7 +221,7 @@ public class SqlUserRepository extends UserRepository {
             throw new LumifyException("UserId cannot be null");
         }
 
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         try {
             SqlUser sqlUser = (SqlUser) findById(userId);
             if (sqlUser == null) {
@@ -243,14 +230,12 @@ public class SqlUserRepository extends UserRepository {
             return sqlUser.getCurrentWorkspace() == null ? null : sqlUser.getCurrentWorkspace().getId();
         } catch (HibernateException e) {
             throw new LumifyException("HibernateException while getting current workspace", e);
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void setUiPreferences(User user, JSONObject preferences) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -264,14 +249,12 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while setting preferences", e);
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public User setStatus(String userId, UserStatus status) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
         }
@@ -292,8 +275,6 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while setting status", e);
-        } finally {
-            session.close();
         }
         return sqlUser;
     }
@@ -318,7 +299,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void delete(User user) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
 
         Transaction transaction = null;
         SqlUser sqlUser;
@@ -335,14 +316,12 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while deleting user", e);
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void setPrivileges(User user, Set<Privilege> privileges) {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
 
         Transaction transaction = null;
         SqlUser sqlUser;
@@ -360,8 +339,6 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while setting privileges", e);
-        } finally {
-            session.close();
         }
     }
 }

@@ -8,6 +8,7 @@ import io.lumify.core.model.user.UserListenerUtil;
 import io.lumify.core.model.user.UserPasswordUtil;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.user.User;
+import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,7 +31,6 @@ public class SqlUserRepositoryTest {
     private final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
     private SqlUserRepository sqlUserRepository;
     private static org.hibernate.cfg.Configuration configuration;
-    private static SessionFactory sessionFactory;
 
     @Mock
     private AuthorizationRepository authorizationRepository;
@@ -40,11 +40,11 @@ public class SqlUserRepositoryTest {
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-        sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
+        HibernateSessionManager.initialize(configuration.buildSessionFactory(serviceRegistryBuilder));
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();;
         UserListenerUtil userListenerUtil = new UserListenerUtil();
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, userListenerUtil);
     }
 
     @Test
@@ -165,11 +165,11 @@ public class SqlUserRepositoryTest {
 
     @Test
     public void testSetCurrentWorkspace() throws Exception {
-        Session session = sessionFactory.openSession();
+        Session session = HibernateSessionManager.getSession();
         SqlWorkspace sqlWorkspace = new SqlWorkspace();
         sqlWorkspace.setDisplayTitle("workspace1");
         session.save(sqlWorkspace);
-        session.close();
+        HibernateSessionManager.clearSession();
 
         User user = sqlUserRepository.addUser("123", "abc", null, null, new String[0]);
         sqlUserRepository.setCurrentWorkspace(user.getUserId(), sqlWorkspace.getId());
