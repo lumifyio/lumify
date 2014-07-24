@@ -31,7 +31,6 @@ public class SqlUser implements User {
     private String privileges;
     private String uiPreferencesString;
     private SqlWorkspace currentWorkspace;
-    private int currentWorkspaceId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -177,11 +176,11 @@ public class SqlUser implements User {
     @Override
     @Transient
     public String getCurrentWorkspaceId() {
-        return currentWorkspace.getId();
+        return currentWorkspace != null ? currentWorkspace.getId() : null;
     }
 
     @OneToOne
-    @JoinColumn(name = "workspaceId")
+    @JoinColumn(referencedColumnName = "workspace_id", name="current_workspace_id")
     public SqlWorkspace getCurrentWorkspace() {
         return currentWorkspace;
     }
