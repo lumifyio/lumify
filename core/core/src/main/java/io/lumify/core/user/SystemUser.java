@@ -6,6 +6,7 @@ import io.lumify.core.model.user.UserType;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Set;
 
 public class SystemUser implements User {
     private static final long serialVersionUID = 1L;
@@ -76,7 +77,14 @@ public class SystemUser implements User {
     public JSONObject getUiPreferences() { return new JSONObject(); }
 
     @Override
+    public Set<Privilege> getPrivileges() {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return "SystemUser";
     }
+
+
 }
