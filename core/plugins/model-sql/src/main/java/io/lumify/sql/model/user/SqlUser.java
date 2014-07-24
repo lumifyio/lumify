@@ -5,11 +5,13 @@ import io.lumify.core.model.user.UserType;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
+import io.lumify.sql.model.workspace.SqlWorkspaceUser;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,6 +33,7 @@ public class SqlUser implements User {
     private String privileges;
     private String uiPreferencesString;
     private SqlWorkspace currentWorkspace;
+    private List<SqlWorkspaceUser> sqlWorkspaceUserList;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -180,7 +183,7 @@ public class SqlUser implements User {
     }
 
     @OneToOne
-    @JoinColumn(referencedColumnName = "workspace_id", name="current_workspace_id")
+    @JoinColumn(referencedColumnName = "workspace_id", name = "current_workspace_id")
     public SqlWorkspace getCurrentWorkspace() {
         return currentWorkspace;
     }
@@ -221,6 +224,15 @@ public class SqlUser implements User {
 
     public void setPrivilegesString(String privileges) {
         this.privileges = privileges;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUser.user")
+    public List<SqlWorkspaceUser> getSqlWorkspaceUserList() {
+        return sqlWorkspaceUserList;
+    }
+
+    public void setSqlWorkspaceUserList(List<SqlWorkspaceUser> sqlWorkspaceUserList) {
+        this.sqlWorkspaceUserList = sqlWorkspaceUserList;
     }
 
     @Override

@@ -9,10 +9,10 @@ import java.io.Serializable;
 public class SqlWorkspaceUserId implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     private SqlUser user;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     private SqlWorkspace workspace;
 
     public SqlUser getUser() {
