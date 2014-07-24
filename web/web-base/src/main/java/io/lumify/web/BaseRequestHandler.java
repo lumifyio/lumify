@@ -34,7 +34,7 @@ public abstract class BaseRequestHandler implements Handler {
     public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
     public static final String LOCALE_LANGUAGE_PARAMETER = "localeLanguage";
     public static final String LOCALE_COUNTRY_PARAMETER = "localeCountry";
-    public static final String LOCALE_PLATFORM_PARAMETER = "localePlatform";
+    public static final String LOCALE_VARIANT_PARAMETER = "localeVariant";
     protected static final int EXPIRES_1_HOUR = 60 * 60;
     protected static final int EXPIRES_1_DAY = 24 * 60 * 60;
     private static final String RFC1123_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
@@ -54,18 +54,12 @@ public abstract class BaseRequestHandler implements Handler {
     protected Locale getLocale(HttpServletRequest request) {
         String language = getOptionalParameter(request, LOCALE_LANGUAGE_PARAMETER);
         String country = getOptionalParameter(request, LOCALE_COUNTRY_PARAMETER);
-        String platform = getOptionalParameter(request, LOCALE_PLATFORM_PARAMETER);
+        String variant = getOptionalParameter(request, LOCALE_VARIANT_PARAMETER);
 
         if (language != null) {
-            if (country != null) {
-                if (platform != null) {
-                    return new Locale(language, country, platform);
-                }
-                return new Locale(language, country);
-            }
-            return new Locale(language);
+            return WebApp.getLocal(language, country, variant);
         }
-        return Locale.getDefault();
+        return request.getLocale();
     }
 
     protected ResourceBundle getBundle(HttpServletRequest request) {
