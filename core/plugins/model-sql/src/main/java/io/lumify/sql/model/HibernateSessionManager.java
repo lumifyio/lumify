@@ -13,18 +13,31 @@ public class HibernateSessionManager {
         }
     };
 
+    // this is to prevent opening a session just to clear it
+    private static ThreadLocal<Boolean> threadLocalSessionIsOpen = new InheritableThreadLocal<Boolean>() {
+        @Override
+        protected Boolean initialValue() {
+            return Boolean.FALSE;
+        }
+    };
+
     public static void initialize(SessionFactory factory) {
         sessionFactory = factory;
         threadLocalSession.remove();
     }
 
     public static Session getSession() {
+        threadLocalSessionIsOpen.set(Boolean.TRUE);
         return threadLocalSession.get();
     }
 
     public static void clearSession() {
-        threadLocalSession.get().close();
+        if (threadLocalSessionIsOpen.get()) {
+            threadLocalSession.get().close();
+        }
+
         threadLocalSession.remove();
+        threadLocalSessionIsOpen.remove();
     }
 
 }

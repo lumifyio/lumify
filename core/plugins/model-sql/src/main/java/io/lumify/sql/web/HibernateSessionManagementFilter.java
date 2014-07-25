@@ -10,10 +10,6 @@ public class HibernateSessionManagementFilter implements Filter {
 
     private static final String ALREADY_FILTERED = "HibernateSessionManagementFilter.filtered";
 
-    public HibernateSessionManagementFilter(SessionFactory sessionFactory) {
-        HibernateSessionManager.initialize(sessionFactory);
-    }
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         // noop
