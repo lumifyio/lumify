@@ -368,6 +368,7 @@ define([
             workspaceService[type](diffsToSend)
                 .always(function() {
                     bothButtons.hide().removeAttr('disabled').removeClass('loading');
+                    self.trigger(document, 'updateDiff');
                 })
                 .fail(function(xhr, status, errorText) {
                     var error = $('<div>')

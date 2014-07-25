@@ -66,12 +66,13 @@ define([
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
-            this.on(document, 'currentUserChanged', this.onCurrentUserChanged)
-            this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded)
+            this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
+            this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
 
-            this.on(document, 'verticesUpdated', this.updateDiffBadge)
-            this.on(document, 'verticesAdded', this.updateDiffBadge)
-            this.on(document, 'edgesDeleted', this.updateDiffBadge)
+            this.on(document, 'verticesUpdated', this.updateDiffBadge);
+            this.on(document, 'verticesAdded', this.updateDiffBadge);
+            this.on(document, 'edgesDeleted', this.updateDiffBadge);
+            this.on(document, 'updateDiff', this.updateDiffBadge);
 
             this.on(document, 'showDiffPanel', this.showDiffPanel);
             this.on(document, 'escape', this.closeDiffPanel);
