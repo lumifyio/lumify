@@ -25,6 +25,8 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
 
         app.post("/workspace/shareWithMe", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, WorkspaceShareWithMe.class);
 
+        app.get("/admin/graphVertexEditor.html", authenticationHandler, new StaticResourceHandler(getClass(), "/graphVertexEditor.html", "text/html"));
+
         app.get("/admin/requeue.html", authenticationHandler, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
         app.post("/admin/queueVertices", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueVertices.class);
         app.post("/admin/queueEdges", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueEdges.class);

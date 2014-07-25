@@ -104,6 +104,8 @@ function(jQuery,
          UserService) {
     'use strict';
 
+    var App, FullScreenApp, Login;
+
     configureApplication();
 
     function configureApplication() {
@@ -142,7 +144,7 @@ function(jQuery,
             workspaceId = toOpen && toOpen.workspaceId,
 
             // Is this the popoout details app? ids passed to hash?
-            popoutDetails = !!(ids && ids.length),
+            popoutDetails = !!(toOpen && toOpen.type === 'FULLSCREEN' && ids.length),
 
             // If this is a hash change
             event = e && e.originalEvent,
@@ -170,53 +172,71 @@ function(jQuery,
         function attachApplication(loginRequired, message, options) {
             var user = !loginRequired && window.currentUser;
 
-            $('html')
-                .toggleClass('fullscreenApp', mainApp)
-                .toggleClass('fullscreenDetails', popoutDetails);
+            if (!event) {
+                $('html')
+                    .toggleClass('fullscreenApp', mainApp)
+                    .toggleClass('fullscreenDetails', popoutDetails);
 
-            window.isFullscreenDetails = popoutDetails;
+                window.isFullscreenDetails = popoutDetails;
+            }
 
             if (loginRequired) {
+                console.log('Attaching login', loginRequired)
                 require(['login'], function(Login) {
                     Login.teardownAll();
                     Login.attachTo('#login', {
                         errorMessage: message,
-                        errorMessageOptions: options
+                        errorMessageOptions: options,
+                        toOpen: toOpen
                     });
                 });
             } else if (popoutDetails) {
+                console.log('Attaching fullscreen', loginRequired)
                 $('#login').remove();
-                require(['appFullscreenDetails'], function(PopoutDetailsApp) {
-                    PopoutDetailsApp.teardownAll();
-                    PopoutDetailsApp.attachTo('#app', {
-                        graphVertexIds: ids,
-                        workspaceId: workspaceId
-                    });
+                require(['appFullscreenDetails'], function(comp) {
+                    if (event) {
+                        location.reload();
+                    } else {
+                        if (App) {
+                            App.teardownAll();
+                        }
+                        FullScreenApp = comp;
+                        FullScreenApp.teardownAll();
+                        FullScreenApp.attachTo('#app', {
+                            graphVertexIds: ids,
+                            workspaceId: workspaceId
+                        });
+                    }
                 });
             } else {
+                console.log('Attaching app', loginRequired, event)
                 $('#login').remove();
-                require(['app'], function(App) {
+                require(['app'], function(comp) {
+                    App = comp;
                     if (event) {
-                        location.replace(location.href);
+                        location.reload();
                     } else {
+                        if (FullScreenApp) {
+                            FullScreenApp.teardownAll();
+                        }
                         App.teardownAll();
-                        App.attachTo('#app');
-                    }
-
-                    _.defer(function() {
-                        // Cache login in case server goes down
-                        require(['login'], function(Login) {
+                        var options = {};
+                        if (toOpen && toOpen.type === 'ADD' && ids.length) {
+                            options.addVertexIds = toOpen;
+                        }
+                        App.attachTo('#app', options);
+                        _.defer(function() {
+                            // Cache login in case server goes down
+                            require(['login']);
                         });
-                    });
+                    }
                 });
             }
         }
     }
 
     function isPopoutUrl(url) {
-        var toOpen = F.vertexUrl.parametersInUrl(url);
-
-        return toOpen && toOpen.vertexIds && toOpen.vertexIds.length;
+        return F.vertexUrl.isFullscreenUrl(url);
     }
 
 });

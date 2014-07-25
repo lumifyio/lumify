@@ -106,6 +106,7 @@ public class SecureGraphUser implements User, Serializable {
         this.userStatus = status;
     }
 
+    @Override
     public Set<Privilege> getPrivileges() {
         return privileges;
     }

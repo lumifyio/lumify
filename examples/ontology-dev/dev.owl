@@ -713,8 +713,14 @@
         <lumify:glyphIconFileName xml:lang="en">glyphicons_263_bank@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(210, 52, 32)</lumify:color>
     </owl:Class>
-    
 
+    <!-- http://lumify.io/dev#nonprofit -->
+    <owl:Class rdf:about="http://lumify.io/dev#nonprofit">
+        <rdfs:label xml:lang="en">Non Profit</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/dev#company"/>
+        <lumify:glyphIconFileName xml:lang="en">glyphicons_263_bank@2x.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(210, 52, 32)</lumify:color>
+    </owl:Class>
 
     <!-- http://lumify.io/dev#contactInformation -->
 
@@ -867,6 +873,11 @@
         <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#titleFormulaEntityPropC&apos;) || &apos;&apos;</lumify:subtitleFormula>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#titleFormulaEntityPropD&apos;) || &apos;&apos;</lumify:timeFormula>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+        <lumify:addRelatedConceptWhiteList xml:lang="en">
+        [
+            "http://lumify.io/dev#document"
+        ]
+        </lumify:addRelatedConceptWhiteList>
     </owl:Class>
     
 

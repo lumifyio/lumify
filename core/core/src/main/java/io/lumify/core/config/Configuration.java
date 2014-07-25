@@ -46,6 +46,9 @@ public final class Configuration {
     public static final String ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY = ONTOLOGY_IRI_PREFIX + "artifactHasEntity";
     public static final String ONTOLOGY_IRI_ENTITY_HAS_IMAGE = ONTOLOGY_IRI_PREFIX + "entityHasImage";
     public static final String ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY = ONTOLOGY_IRI_PREFIX + "artifactContainsImageOfEntity";
+    public static final String ONTOLOGY_IRI_LOCATION = ONTOLOGY_IRI_PREFIX + "location";
+    public static final String ONTOLOGY_IRI_ORGANIZATION = ONTOLOGY_IRI_PREFIX + "organization";
+    public static final String ONTOLOGY_IRI_PERSON = ONTOLOGY_IRI_PREFIX + "person";
     public static final String GRAPH_PROVIDER = "graph";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";

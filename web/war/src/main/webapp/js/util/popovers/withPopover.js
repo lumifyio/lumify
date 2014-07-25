@@ -19,6 +19,7 @@ define([
 
         this.after('teardown', function() {
             this.dialog.remove();
+            $('.popover-bg-overlay').remove();
         });
 
         this.after('initialize', function() {
@@ -30,6 +31,10 @@ define([
 
         this.setupWithTemplate = function(tpl) {
             var self = this;
+
+            if (this.attr.overlay) {
+                $(document.body).append('<div class="popover-bg-overlay">')
+            }
 
             this.dialog = $('<div class="dialog-popover">')
                 .css({position: 'absolute'})
@@ -53,8 +58,6 @@ define([
         this.registerAnchorTo = function() {
             var self = this;
 
-            this.positionDialog = _.throttle(this.positionDialog.bind(this), 1000 / 60);
-            this.after('onPositionChange', this.positionDialog);
             this.on('positionChanged', this.onPositionChange);
             this.trigger('registerForPositionChanges', this.attr);
 
@@ -70,6 +73,14 @@ define([
         this.onPositionChange = function(event, data) {
             clearTimeout(this.positionChangeErrorCheck);
             this.dialogPosition = data.position;
+            this.positionDialog();
+
+            if (!this.throttledPositionDialog) {
+                this.throttledPositionDialog = true;
+                _.delay(function() {
+                    this.positionDialog = _.throttle(this.positionDialog.bind(this), 1000 / 60);
+                }.bind(this), 500);
+            }
         };
 
         this.positionDialog = function() {
@@ -90,12 +101,17 @@ define([
 
                 if (this.dialogPosition.y < height) {
                     proposed.top = Math.min(maxTop, this.dialogPosition.yMax || this.dialogPosition.y);
-                    this.popover.removeClass('top').addClass('bottom');
-                } else {
+                    if (!~this.popover[0].className.indexOf('bottom')) {
+                        this.popover.removeClass('top').addClass('bottom');
+                    }
+                } else if (!~this.popover[0].className.indexOf('top')) {
                     this.popover.removeClass('bottom').addClass('top');
                 }
 
-                var percent = ((this.dialogPosition.x - proposed.left) / width * 100) + '%';
+                var arrowLeft = this.dialogPosition.x - proposed.left,
+                    maxLeftAllowed = width - padding * 1.5,
+                    percent = (Math.min(maxLeftAllowed, arrowLeft) / width * 100) + '%';
+
                 this.dialog.find('.arrow').css('left', percent);
 
                 this.dialog.css(proposed);

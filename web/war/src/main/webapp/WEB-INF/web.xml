@@ -57,10 +57,6 @@
     <servlet>
         <servlet-name>lumify</servlet-name>
         <servlet-class>io.lumify.web.Router</servlet-class>
-        <init-param>
-            <param-name>env</param-name>
-            <param-value>dev</param-value>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>lumify</servlet-name>

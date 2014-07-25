@@ -4,7 +4,11 @@ define([
 ], function(F) {
     'use strict';
 
-    var V = {
+    var URL_TYPES = {
+            FULLSCREEN: 'v',
+            ADD: 'add'
+        },
+        V = {
             url: function(vertices, workspaceId) {
                 return window.location.href.replace(/#.*$/,'') +
                     '#v=' + _.map(vertices, function(v) {
@@ -17,15 +21,27 @@ define([
                 return V.url(vertices, workspaceId).replace(/^.*#/, '#');
             },
 
+            isFullscreenUrl: function(url) {
+                var toOpen = V.parametersInUrl(url);
+
+                return toOpen &&
+                    toOpen.vertexIds &&
+                    toOpen.vertexIds.length &&
+                    toOpen.type === URL_TYPES.FULLSCREEN;
+            },
+
             parametersInUrl: function(url) {
-                var match = url.match(/#v=(.+?)(?:&w=(.*))?$/);
-                if (match && match.length === 3) {
+                var type = _.invert(URL_TYPES),
+                    match = url.match(/#(v|add)=(.+?)(?:&w=(.*))?$/);
+
+                if (match && match.length === 4) {
                     return {
-                        vertexIds: _.map(match[1].split(','), function(v) {
+                        vertexIds: _.map(match[2].split(','), function(v) {
                             return decodeURIComponent(v);
                         }),
-                        workspaceId: decodeURIComponent(match[2] || '')
-                    }
+                        workspaceId: decodeURIComponent(match[3] || ''),
+                        type: type[match[1]]
+                    };
                 }
                 return null;
             }

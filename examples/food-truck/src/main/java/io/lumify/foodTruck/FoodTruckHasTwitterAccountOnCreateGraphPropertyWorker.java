@@ -17,11 +17,11 @@ public class FoodTruckHasTwitterAccountOnCreateGraphPropertyWorker extends Graph
         Vertex foodTruckVertex = hasTwitterUserEdge.getVertex(Direction.OUT, getAuthorizations());
         Vertex twitterUserVertex = hasTwitterUserEdge.getVertex(Direction.IN, getAuthorizations());
 
-        String imageVertexId = LumifyProperties.IMAGE_VERTEX_ID.getPropertyValue(twitterUserVertex);
+        String imageVertexId = LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyValue(twitterUserVertex);
         if (imageVertexId != null && imageVertexId.length() > 0) {
-            LumifyProperties.IMAGE_VERTEX_ID.addPropertyValue(foodTruckVertex, MULTI_VALUE_KEY, imageVertexId, data.getVisibility(), getAuthorizations());
+            LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(foodTruckVertex, MULTI_VALUE_KEY, imageVertexId, data.getVisibility(), getAuthorizations());
             getGraph().flush();
-            getWorkQueueRepository().pushGraphPropertyQueue(foodTruckVertex, MULTI_VALUE_KEY, LumifyProperties.IMAGE_VERTEX_ID.getPropertyName());
+            getWorkQueueRepository().pushGraphPropertyQueue(foodTruckVertex, MULTI_VALUE_KEY, LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
         }
     }
 

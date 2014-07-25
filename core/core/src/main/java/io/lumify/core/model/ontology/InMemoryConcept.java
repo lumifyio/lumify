@@ -2,6 +2,7 @@ package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
+import org.json.JSONArray;
 import org.securegraph.Authorizations;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class InMemoryConcept extends Concept {
     private String subtitleFormula;
     private String timeFormula;
     private String conceptIRI;
+    private String addRelatedConceptWhiteList;
     private byte[] glyphIcon;
     private byte[] mapGlyphIcon;
     private boolean userVisible;
@@ -75,6 +77,9 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
+    public String getAddRelatedConceptWhiteList() { return addRelatedConceptWhiteList; }
+
+    @Override
     public void setProperty(String name, Object value, Authorizations authorizations) {
         if (LumifyProperties.COLOR.getPropertyName().equals(name)) {
             this.color = (String) value;
@@ -96,7 +101,9 @@ public class InMemoryConcept extends Concept {
             this.title = (String) value;
         } else if (LumifyProperties.DISPLAY_NAME.getPropertyName().equals(name)) {
             this.displayName = (String) value;
-        } else {
+        } else if (LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName().equals(name)) {
+            this.addRelatedConceptWhiteList = (String) value;
+        } else{
             throw new LumifyException("Set not implemented for property " + name);
         }
     }

@@ -4,38 +4,37 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.sql.model.user.SqlUser;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "workspace")
 public class SqlWorkspace implements Workspace {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "workspace_id", unique = true)
     private int workspaceId;
-
-    @Column(name = "display_title")
     private String displayTitle;
+    private SqlUser workspaceCreator;
+    private List<SqlWorkspaceUser> sqlWorkspaceUserList = new ArrayList<SqlWorkspaceUser>();
+    private List<SqlWorkspaceVertex> sqlWorkspaceVertices = new ArrayList<SqlWorkspaceVertex>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn(name = "user_id")
-    private SqlUser creator;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceUserId.workspace")
-    public Set<SqlWorkspaceUser> sqlWorkspaceUser = new HashSet<SqlWorkspaceUser>(0);
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<SqlWorkspaceVertex> sqlWorkspaceVertices = new HashSet<SqlWorkspaceVertex>(0);
-
+    @Override
+    @Transient
     public String getId() {
         return Integer.toString(workspaceId);
     }
 
-    public void setId(int workspaceId) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "workspace_id", unique = true)
+    public int getWorkspaceId() {
+        return workspaceId;
+    }
+
+    public void setWorkspaceId(int workspaceId) {
         this.workspaceId = workspaceId;
     }
 
+    @Override
+    @Column(name = "display_title")
     public String getDisplayTitle() {
         return displayTitle;
     }
@@ -44,27 +43,31 @@ public class SqlWorkspace implements Workspace {
         this.displayTitle = displayTitle;
     }
 
-    public SqlUser getCreator() {
-        return creator;
+    @OneToOne
+    @JoinColumn(referencedColumnName = "user_id", name = "creator_user_id")
+    public SqlUser getWorkspaceCreator() {
+        return workspaceCreator;
     }
 
-    public void setCreator(SqlUser creator) {
-        this.creator = creator;
+    public void setWorkspaceCreator(SqlUser workspaceCreator) {
+        this.workspaceCreator = workspaceCreator;
     }
 
-    public Set<SqlWorkspaceUser> getSqlWorkspaceUser() {
-        return sqlWorkspaceUser;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUser.workspace", cascade = CascadeType.ALL)
+    public List<SqlWorkspaceUser> getSqlWorkspaceUserList() {
+        return sqlWorkspaceUserList;
     }
 
-    public void setSqlWorkspaceUser(Set<SqlWorkspaceUser> sqlWorkspaceUser) {
-        this.sqlWorkspaceUser = sqlWorkspaceUser;
+    public void setSqlWorkspaceUserList(List<SqlWorkspaceUser> sqlWorkspaceUserList) {
+        this.sqlWorkspaceUserList = sqlWorkspaceUserList;
     }
 
-    public Set<SqlWorkspaceVertex> getSqlWorkspaceVertices() {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workspace")
+    public List<SqlWorkspaceVertex> getSqlWorkspaceVertices() {
         return sqlWorkspaceVertices;
     }
 
-    public void setSqlWorkspaceVertices(Set<SqlWorkspaceVertex> sqlWorkspaceVertices) {
+    public void setSqlWorkspaceVertices(List<SqlWorkspaceVertex> sqlWorkspaceVertices) {
         this.sqlWorkspaceVertices = sqlWorkspaceVertices;
     }
 }

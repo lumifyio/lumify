@@ -64,7 +64,7 @@ public class TwitterProfileImageDownloadGraphPropertyWorker extends GraphPropert
             LOGGER.debug("created vertex: %s", profileImageVertex.getId());
 
             getGraph().addEdge((Vertex) data.getElement(), profileImageVertex, entityHasImageIri, data.getVisibility(), getAuthorizations());
-            LumifyProperties.IMAGE_VERTEX_ID.setProperty(data.getElement(), profileImageVertex.getId().toString(), data.getVisibility(), getAuthorizations());
+            LumifyProperties.ENTITY_IMAGE_VERTEX_ID.setProperty(data.getElement(), profileImageVertex.getId().toString(), data.getVisibility(), getAuthorizations());
             getGraph().flush();
 
         } finally {

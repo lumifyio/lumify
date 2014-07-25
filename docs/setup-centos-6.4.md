@@ -79,8 +79,8 @@
         rpm -ivH cloudera-cdh-4-0.x86_64.rpm
         yum install -y hadoop-0.20-conf-pseudo zookeeper-server
 
-        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
-        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
+        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}  /var/local/hadoop
+        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}  /var/local/hadoop
         
         service zookeeper-server init
         # The following warning is expected (and ok):
@@ -102,7 +102,12 @@
             <value>true</value>
           </property>
 
-
+        
+        cp /usr/lib/hadoop-0.20-mapreduce/example-confs/conf.secure/hadoop-env.sh /usr/lib/hadoop-0.20-mapreduce/conf/
+        
+        vi /usr/lib/hadoop-0.20-mapreduce/conf/hadoop-env.sh
+        # add export JAVA_HOME="/path/to/java"
+        
 ### Accumulo
 
 *as root:*
@@ -149,7 +154,7 @@
         cd /usr/lib
         tar xzf ~/elasticsearch-1.1.2.tar.gz
         ln -s elasticsearch-1.1.2 elasticsearch
-        
+
         chown -R esearch:hadoop elasticsearch/
 
         elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
@@ -168,12 +173,14 @@
 
         mkdir storm/logs
 
+        # edit /opt/storm/conf/storm.yaml and add the following lines to the end:
+          storm.zookeeper.servers: [192.168.33.10]
+          nimbus.host: 192.168.33.10
+          supervisor.slots.ports: [6700, 6701, 6702, 6703]
+          ui.port: 8081
+
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
-        echo "storm.zookeeper.servers:" >> /opt/storm/conf/storm.yaml
-        echo " - ${ip_address}" >> /opt/storm/conf/storm.yaml
-        echo "nimbus.host: ${ip_address}" >> /opt/storm/conf/storm.yaml
-        echo "supervisor.slots.ports: [6700, 6701, 6702, 6703]" >> /opt/storm/conf/storm.yaml
-        echo "ui.port: 8081" >> /opt/storm/conf/storm.yaml
+        sed -i -e "s/192.168.33.10/${ip_address}/" /opt/storm/conf/storm.yaml
 
 
 ### RabbitMQ
@@ -273,12 +280,16 @@
 
 ### clone the Lumify projects
 
+*as a non-root user:*
+
         cd ~
         git clone https://github.com/lumifyio/lumify-root.git
         git clone https://github.com/lumifyio/lumify.git
 
 
 ### configure Lumify
+
+*as a non-root user:*
 
         sudo mkdir -p /opt/lumify/{config,lib,logs}
 
@@ -295,11 +306,15 @@
 
 ### install Lumify Root
 
+*as a non-root user:*
+
         cd ~/lumify-root
         mvn install
 
 
 ### build and deploy the Lumify web application and authentication plugin
+
+*as a non-root user:*
 
         cd ~/lumify
         mvn package -P web-war -pl web/war -am
@@ -316,10 +331,14 @@
 
 ### build and deploy the Lumify Storm topology
 
+*as a non-root user:*
+
         cd ~/lumify
         mvn package -pl storm/storm -am
+        mvn package -pl $(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target) | sed -e 's/ /,/g') -am
 
-**TODO: build and copy property workers**
+        /usr/lib/hadoop/bin/hadoop fs -put \
+          $(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do ls ${t}/*.jar | tail -1; done) \
+          /lumify/libcache
 
         /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
-

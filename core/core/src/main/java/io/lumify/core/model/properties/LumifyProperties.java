@@ -1,8 +1,10 @@
 package io.lumify.core.model.properties;
 
 import io.lumify.core.model.properties.types.*;
+import org.apache.avro.data.Json;
 
 public class LumifyProperties {
+    public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
     public static final String META_DATA_LANGUAGE = "http://lumify.io#language";
     public static final String META_DATA_TEXT_DESCRIPTION = "http://lumify.io#textDescription";
     public static final String META_DATA_MIME_TYPE = "http://lumify.io#mimeType";
@@ -27,6 +29,7 @@ public class LumifyProperties {
     public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("http://lumify.io#text");
     public static final StreamingLumifyProperty RAW = new StreamingLumifyProperty("http://lumify.io#raw");
 
+    public static final StringLumifyProperty ADD_RELATED_CONCEPT_WHITE_LIST = new StringLumifyProperty("http://lumify.io#addRelatedConceptWhiteList");
     public static final StringLumifyProperty AUTHOR = new StringLumifyProperty("http://lumify.io#author");
     public static final StringLumifyProperty COLOR = new StringLumifyProperty("http://lumify.io#color");
     public static final StringLumifyProperty CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io#conceptType");
@@ -38,7 +41,8 @@ public class LumifyProperties {
     public static final StringLumifyProperty FILE_NAME = new StringLumifyProperty("http://lumify.io#fileName");
     public static final StringLumifyProperty FILE_NAME_EXTENSION = new StringLumifyProperty("http://lumify.io#fileNameExtension");
     public static final StringLumifyProperty GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#glyphIconFileName");
-    public static final StringLumifyProperty IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
+    public static final StringLumifyProperty ENTITY_IMAGE_URL = new StringLumifyProperty("http://lumify.io#entityImageUrl");
+    public static final StringLumifyProperty ENTITY_IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
     public static final StringLumifyProperty MAP_GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#mapGlyphIconFileName");
     public static final StringLumifyProperty MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
     public static final StringLumifyProperty MODIFIED_BY = new StringLumifyProperty("http://lumify.io#modifiedBy");

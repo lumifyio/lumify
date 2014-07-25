@@ -35,7 +35,9 @@ define([
         });
 
         this.onSelectObjects = function(event, data) {
-            this.onObjectsSelected(null, data);
+            if (!data.focus) {
+                this.onObjectsSelected(null, data);
+            }
         };
 
         this.onFinishedTypeContent = function() {
@@ -49,12 +51,8 @@ define([
 
         this.onMapCoordinatesClicked = function(evt, data) {
             evt.preventDefault();
-            var $target = $(evt.target);
-            data = {
-                latitude: $target.data('latitude'),
-                longitude: $target.data('longitude')
-            };
-            this.trigger('mapCenter', data);
+            var $target = $(evt.target).closest('a');
+            this.trigger('mapCenter', $target.data());
         };
 
         this.onObjectsSelected = function(evt, data) {

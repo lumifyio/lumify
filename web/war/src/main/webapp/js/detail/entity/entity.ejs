@@ -2,7 +2,7 @@
 <div class="entity-background">
   <div class="entity-glyphIcon"/>
 
-  <h1 title="<%= F.vertex.title(vertex) %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= F.vertex.title(vertex) %></h1>
+  <h1 title="<%= F.vertex.title(vertex) %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= F.vertex.title(vertex) %><div class="subtitle"><%= vertex.concept.displayName %></div></h1>
 
   <div class="detail-toolbar">
     <div class="btn-toolbar">
@@ -18,7 +18,7 @@
 </div>
 
 <div class="nav-with-background">
-    <div class="properties"/>
+    <div class="properties"></div>
 
     <section class="relationships collapsible">
       <h1>

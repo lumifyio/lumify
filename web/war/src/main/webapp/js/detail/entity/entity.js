@@ -103,13 +103,16 @@ define([
         };
 
         this.onVerticesUpdated = function(event, data) {
-            var self = this;
+            var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
-            data.vertices.forEach(function(vertex) {
-                if (vertex.id === self.attr.data.id) {
-                    self.select('titleSelector').html(F.vertex.title(vertex));
-                }
-            });
+            if (matching) {
+                $('<div>')
+                    .addClass('subtitle')
+                    .text(matching.concept.displayName)
+                    .appendTo(
+                        this.select('titleSelector').text(F.vertex.title(matching))
+                    )
+            }
         };
 
         this.loadEntity = function() {

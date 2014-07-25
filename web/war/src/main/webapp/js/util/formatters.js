@@ -108,6 +108,12 @@ define([
                     return (decimalAdjust('round', number / 1000, -1) + 'K');
                 } else return FORMATTERS.number.pretty(number);
             },
+            percent: function(number) {
+                if (_.isString(number)) {
+                    number = parseFloat(number);
+                }
+                return Math.round(number * 100) + '%';
+            },
             /**
              * Split 32-bit integers into 12-bit index, 20-bit offset
              */
@@ -190,7 +196,7 @@ define([
                     };
                 }
             },
-            pretty: function(geo) {
+            pretty: function(geo, withholdDescription) {
 
                 if (_.isString(geo)) {
 
@@ -203,12 +209,18 @@ define([
                 }
 
                 if (geo && geo.latitude && geo.longitude) {
-                    return (
-                        _.isNumber(geo.latitude) ? geo.latitude : parseFloat(geo.latitude)
-                    ).toFixed(3) + ', ' +
-                    (
-                        _.isNumber(geo.longitude) ? geo.longitude : parseFloat(geo.longitude)
-                    ).toFixed(3);
+                    var latlon = (
+                            _.isNumber(geo.latitude) ? geo.latitude : parseFloat(geo.latitude)
+                        ).toFixed(3) + ', ' +
+                        (
+                            _.isNumber(geo.longitude) ? geo.longitude : parseFloat(geo.longitude)
+                        ).toFixed(3);
+
+                    if (withholdDescription !== true && geo.description) {
+                        return geo.description + ' ' + latlon;
+                    }
+
+                    return latlon;
                 }
             }
         },
@@ -273,12 +285,14 @@ define([
         },
         date: {
             local: function(str) {
+                if (_.isUndefined(str)) return '';
                 var millis = _.isString(str) && !isNaN(Number(str)) ? Number(str) : str,
                     dateInLocale = _.isDate(millis) ? millis : new Date(millis);
 
                 return dateInLocale;
             },
             utc: function(str) {
+                if (_.isUndefined(str)) return '';
                 var dateInLocale = FORMATTERS.date.local(str),
                     millisInMinutes = 1000 * 60,
                     millisFromLocaleToUTC = dateInLocale.getTimezoneOffset() * millisInMinutes,
@@ -298,9 +312,11 @@ define([
                 );
             },
             dateStringUtc: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return FORMATTERS.date.dateString(FORMATTERS.date.utc(millisStr));
             },
             dateTimeStringUtc: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr));
             },
             timeString: function(millisStr) {
@@ -308,9 +324,11 @@ define([
                 return sf('{0:HH:mm}', FORMATTERS.date.local(millisStr));
             },
             timeStringUtc: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return FORMATTERS.date.timeString(FORMATTERS.date.utc(millisStr));
             },
             relativeToNow: function(date) {
+                if (_.isUndefined(date)) return '';
                 var span = new sf.TimeSpan(FORMATTERS.date.utc(Date.now()) - date),
                     time = '';
 

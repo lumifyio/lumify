@@ -1,3 +1,4 @@
+
 @import (reference) "../util/constants.less";
 @import (reference) "../util/selection.less";
 
@@ -34,6 +35,9 @@
     height: 300px;
     cursor: pointer;
     background: black;
+    margin-top: 1em;
+  }
+  .type-content > .audio-preview {
     margin-top: 1em;
   }
 
@@ -166,6 +170,26 @@
     }
   }
 
+  .relationship-header {
+    padding: 0.5em;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  .vertex-to-vertex-relationship {
+    font-size: 90%;   
+    line-height: 1.1em;    
+    
+    &:hover {          
+      text-decoration: none;
+    }
+    .subtitle {   
+      color: #999;
+      font-size: 75%;
+      font-variant: small-caps;
+      text-transform: lowercase;
+    }
+  }
+  
   .underneath {
     @import "dropdown";
   }
@@ -517,14 +541,25 @@
     padding: 1em 1em 0 1em;
     margin: 0; 
     font-size: 130%;
+    .subtitle {
+      font-size: 90%;
+    }
   }
   .artifact-header {    
     margin: 1em 0 0 0;
     padding: 0;
   }
 
-  .nav-with-background {
-    margin: 175px 0 0 0;
+  .nav-with-background {  
+    overflow: auto;    
+    margin: 200px 0 0 0;
+    padding: 0;
+    position: absolute;
+    top: 0;    
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%; 
 
     .relationships {
       padding-bottom: 1em;
@@ -592,20 +627,24 @@
     }
 
     h1 {
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      white-space: nowrap;
       bottom: 0;
-      color: white;
-      display: -webkit-box;
+      color: white;      
       font-size: 150%;
       left: 0;
-      max-height: 2.7em;
+      right: 0;      
       overflow: hidden;
       padding: 0 0.75em;
       position: absolute;
       text-overflow: ellipsis;
       text-shadow: 0 0px 20px rgba(0,0,0,0.2), 0 0px 2px rgba(0,0,0,1);
       z-index: 4;
+      margin: 0;
+      .subtitle {
+        margin-bottom: 0.5em;
+        font-size: 80%;
+        color: fadeOut(white, 15%);
+      }
     }
 
     .entity-background .dropdown-menu {
@@ -690,4 +729,3 @@
     font-weight: bold;
   }
 }
-

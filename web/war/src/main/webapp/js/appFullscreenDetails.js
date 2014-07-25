@@ -59,9 +59,7 @@ define([
             this.$node.addClass('fullscreen-details');
 
             this.trigger(document, 'applicationReady');
-            if (this.attr.workspaceId) {
-                this.switchWorkspace(this.attr.workspaceId);
-            }
+            this.switchWorkspace(this.attr.workspaceId);
         });
 
         this.clearFlashing = function() {
@@ -177,7 +175,8 @@ define([
                         vertices: notFoundIds,
                         requiredFallback: fallbackToPublic,
                         somePublished: true,
-                        workspaceTitle: this.workspaceTitle
+                        workspaceTitle: this.workspaceTitle,
+                        noWorkspaceGiven: !this.attr.workspaceId
                     }))
                     .addClass('visible someVerticesFound');
                 this.loadWorkspaces();
@@ -246,7 +245,7 @@ define([
         };
 
         this.onChangeWorkspace = function(event) {
-            var workspaceId = $(event.target).closest('li').data('id');
+            var workspaceId = $(event.target).closest('li').data('id').toString();
             this.switchWorkspace(workspaceId);
         };
 

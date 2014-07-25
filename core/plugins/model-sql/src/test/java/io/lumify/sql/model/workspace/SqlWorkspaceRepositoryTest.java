@@ -78,13 +78,25 @@ public class SqlWorkspaceRepositoryTest {
     @Test
     public void testAdd() throws Exception {
         SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace", testUser);
-        assertEquals("1", workspace.getCreator().getUserId());
+        assertEquals("1", workspace.getWorkspaceCreator().getUserId());
         assertEquals("test workspace", workspace.getDisplayTitle());
-        assertEquals(1, workspace.getSqlWorkspaceUser().size());
+        assertEquals(1, workspace.getSqlWorkspaceUserList().size());
 
-        SqlWorkspaceUser sqlWorkspaceUser = workspace.getSqlWorkspaceUser().iterator().next();
+        SqlWorkspaceUser sqlWorkspaceUser = workspace.getSqlWorkspaceUserList().iterator().next();
         assertEquals(WorkspaceAccess.WRITE.toString(), sqlWorkspaceUser.getWorkspaceAccess());
         assertEquals("1", sqlWorkspaceUser.getWorkspace().getId());
+    }
+
+    @Test
+    public void testFindById () throws Exception {
+        SqlWorkspace workspace = (SqlWorkspace)sqlWorkspaceRepository.add("test workspace", testUser);
+        SqlWorkspace workspace2 = (SqlWorkspace)sqlWorkspaceRepository.add("test workspace 2", testUser);
+
+        SqlWorkspace testWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace.getId(), testUser);
+        SqlWorkspace testWorkspace2 = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace2.getId(), testUser);
+
+        assertEquals(workspace.getWorkspaceCreator().getUserId(), testWorkspace.getWorkspaceCreator().getUserId());
+        assertEquals(workspace2.getWorkspaceCreator().getUserId(), testWorkspace2.getWorkspaceCreator().getUserId());
     }
 
     @Test
@@ -178,15 +190,13 @@ public class SqlWorkspaceRepositoryTest {
         String vertexId = "1234";
 
         sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, 0, 0, testUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
-        Set<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        List<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);;
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertTrue(sqlWorkspaceVertex.isVisible());
 
         sqlWorkspaceRepository.softDeleteEntityFromWorkspace(sqlWorkspace, "1234", testUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
-        sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);;
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertFalse(sqlWorkspaceVertex.isVisible());
@@ -199,8 +209,7 @@ public class SqlWorkspaceRepositoryTest {
 
         sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, 0, 0, testUser);
 
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
-        Set<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        List<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertEquals("1234", sqlWorkspaceVertex.getVertexId());
@@ -210,8 +219,7 @@ public class SqlWorkspaceRepositoryTest {
 
         sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, false, 1, 10, testUser);
 
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
-        sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertEquals("1234", sqlWorkspaceVertex.getVertexId());

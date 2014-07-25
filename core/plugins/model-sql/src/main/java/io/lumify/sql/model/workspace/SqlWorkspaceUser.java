@@ -4,28 +4,26 @@ import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.sql.model.user.SqlUser;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "workspace_user")
-@AssociationOverrides({@AssociationOverride(name = "sqlWorkspaceUserId.user", joinColumns = @JoinColumn(name = "user_id")),
-        @AssociationOverride(name = "sqlWorkspaceUserId.workspace", joinColumns = @JoinColumn(name = "workspace_id"))})
-public class SqlWorkspaceUser implements Serializable{
-    public static final long serialVersionUID = 1L;
+@AssociationOverrides({@AssociationOverride(name = "sqlWorkspaceUser.user", joinColumns = @JoinColumn(name = "user_id")),
+        @AssociationOverride(name = "sqlWorkspaceUser.workspace", joinColumns = @JoinColumn(name = "workspace_id"))})
+public class SqlWorkspaceUser {
     @EmbeddedId
-    private SqlWorkspaceUserId sqlWorkspaceUserId = new SqlWorkspaceUserId();
+    private SqlWorkspaceUserId sqlWorkspaceUser = new SqlWorkspaceUserId();
     @Column(name = "access")
     private String workspaceAccess;
 
     public SqlWorkspaceUser() {
     }
 
-    public SqlWorkspaceUserId getSqlWorkspaceUserId() {
-        return sqlWorkspaceUserId;
+    public SqlWorkspaceUserId getSqlWorkspaceUser() {
+        return sqlWorkspaceUser;
     }
 
-    public void setSqlWorkspaceUserId(SqlWorkspaceUserId sqlWorkspaceUserId) {
-        this.sqlWorkspaceUserId = sqlWorkspaceUserId;
+    public void setSqlWorkspaceUser(SqlWorkspaceUserId sqlWorkspaceUser) {
+        this.sqlWorkspaceUser = sqlWorkspaceUser;
     }
 
     public String getWorkspaceAccess() {
@@ -38,23 +36,23 @@ public class SqlWorkspaceUser implements Serializable{
 
     @Transient
     public SqlWorkspace getWorkspace() {
-        return getSqlWorkspaceUserId().getWorkspace();
+        return getSqlWorkspaceUser().getWorkspace();
     }
 
     public void setWorkspace(SqlWorkspace workspace) {
-        getSqlWorkspaceUserId().setWorkspace(workspace);
+        getSqlWorkspaceUser().setWorkspace(workspace);
     }
 
     @Transient
     public SqlUser getUser() {
-        return getSqlWorkspaceUserId().getUser();
+        return getSqlWorkspaceUser().getUser();
     }
 
     public void setUser(SqlUser user) {
-        getSqlWorkspaceUserId().setUser(user);
+        getSqlWorkspaceUser().setUser(user);
     }
 
-    public boolean equals (Object o) {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -64,13 +62,13 @@ public class SqlWorkspaceUser implements Serializable{
         }
 
         SqlWorkspaceUser sqlWorkspaceUser = (SqlWorkspaceUser) o;
-        if (getSqlWorkspaceUserId() != null ? !getSqlWorkspaceUserId().equals(sqlWorkspaceUser.getSqlWorkspaceUserId()) : sqlWorkspaceUser.getSqlWorkspaceUserId() != null) {
+        if (getSqlWorkspaceUser() != null ? !getSqlWorkspaceUser().equals(sqlWorkspaceUser.getSqlWorkspaceUser()) : sqlWorkspaceUser.getSqlWorkspaceUser() != null) {
             return false;
         }
         return true;
     }
 
-    public int hashCode () {
-        return (getSqlWorkspaceUserId() != null ? getSqlWorkspaceUserId().hashCode() : 0);
+    public int hashCode() {
+        return (getSqlWorkspaceUser() != null ? getSqlWorkspaceUser().hashCode() : 0);
     }
 }

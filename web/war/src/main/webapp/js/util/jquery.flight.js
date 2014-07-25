@@ -5,6 +5,18 @@ define(['flight/lib/registry', 'jquery'],function(registry) {
         return _lookupComponent(this[0], instanceConstructor);
     };
 
+    $.fn.lookupAllComponents = function(instanceConstructor) {
+        var instances = [],
+            results = registry.findInstanceInfoByNode(this[0]);
+
+        for (var i = 0; i < results.length; ++i) {
+            var instance = results[i].instance;
+            instances.push(instance);
+        }
+
+        return instances;
+    };
+
     $.fn.teardownComponent = function(instanceConstructor) {
         var instance = _lookupComponent(this[0], instanceConstructor);
         if (instance) {

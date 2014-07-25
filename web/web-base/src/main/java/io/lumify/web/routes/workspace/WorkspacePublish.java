@@ -243,7 +243,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Property property : vertex.getProperties()) {
             OntologyProperty ontologyProperty = ontologyRepository.getProperty(property.getName());
             checkNotNull(ontologyProperty, "Could not find property " + property.getName());
-            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.IMAGE_VERTEX_ID.getPropertyName())) {
+            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
                 publishProperty(vertexElementMutation, property, workspaceId, user);
             }
         }
@@ -372,7 +372,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Vertex entityVertex = hasImageEdge.getVertex(Direction.OUT, authorizations);
         checkNotNull(entityVertex, "Could not find has image source vertex " + hasImageEdge.getVertexId(Direction.OUT));
         ExistingElementMutation elementMutation = entityVertex.prepareMutation();
-        Iterable<Property> glyphIconProperties = entityVertex.getProperties(LumifyProperties.IMAGE_VERTEX_ID.getPropertyName());
+        Iterable<Property> glyphIconProperties = entityVertex.getProperties(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
         for (Property glyphIconProperty : glyphIconProperties) {
             if (publishProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
                 elementMutation.save(authorizations);

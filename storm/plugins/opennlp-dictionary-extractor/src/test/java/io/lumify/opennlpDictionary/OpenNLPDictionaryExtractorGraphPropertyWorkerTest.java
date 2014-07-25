@@ -60,6 +60,9 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         final List<TokenNameFinder> finders = loadFinders();
 
         Map config = new HashMap();
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PERSON, "http://lumify.io/test#person");
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_LOCATION, "http://lumify.io/test#location");
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();;
 
@@ -81,13 +84,12 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         extractor.setDictionaryEntryRepository(dictionaryEntryRepository);
         extractor.setGraph(graph);
 
-        Map<String, String> stormConf = new HashMap<String, String>();
-        stormConf.put(OpenNLPDictionaryExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
+        config.put(OpenNLPDictionaryExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
         authorizations = new InMemoryAuthorizations();
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
-        GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(stormConf, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
+        GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
         extractor.prepare(workerPrepareData);
     }
 

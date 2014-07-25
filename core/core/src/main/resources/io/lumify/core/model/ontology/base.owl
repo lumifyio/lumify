@@ -128,6 +128,10 @@
 
     <owl:AnnotationProperty rdf:about="&lumify;boost"/>
 
+    <!-- http://lumify.io#addRelatedWhiteList -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;addRelatedConceptWhiteList"/>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -257,6 +261,15 @@
     </owl:DatatypeProperty>
 
 
+    <!-- http://lumify.io#entityImageUrl -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;entityImageUrl">
+        <rdfs:label xml:lang="en">Entity Image URL</rdfs:label>
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
     <!-- http://lumify.io#entityImageVertexId -->
 
@@ -452,6 +465,16 @@
         <userVisible>false</userVisible>
         <rdfs:label xml:lang="en">Source URL</rdfs:label>
         <textIndexHints>FULL_TEXT,EXACT_MATCH</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
+
+    <!-- http://lumify.io#text -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;text">
+        <rdfs:label xml:lang="en">Text</rdfs:label>
+        <userVisible>false</userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>

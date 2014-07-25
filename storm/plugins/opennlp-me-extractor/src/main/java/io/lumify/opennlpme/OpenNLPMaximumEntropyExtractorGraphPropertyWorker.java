@@ -1,6 +1,5 @@
 package io.lumify.opennlpme;
 
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
@@ -32,38 +31,16 @@ import java.util.List;
 
 public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OpenNLPMaximumEntropyExtractorGraphPropertyWorker.class);
-    public static final String CONFIG_LOCATION_IRI = "ontology.iri.location";
-    public static final String CONFIG_ORGANIZATION_IRI = "ontology.iri.organization";
-    public static final String CONFIG_PERSON_IRI = "ontology.iri.person";
     public static final String PATH_PREFIX_CONFIG = "termextraction.opennlp.pathPrefix";
     private static final String DEFAULT_PATH_PREFIX = "hdfs://";
     private static final int NEW_LINE_CHARACTER_LENGTH = 1;
-    public static final String THING_IRI = "http://www.w3.org/2002/07/owl#Thing";
 
     private List<TokenNameFinder> finders;
     private Tokenizer tokenizer;
-    private String locationIri;
-    private String organizationIri;
-    private String personIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-
-        this.locationIri = (String) workerPrepareData.getStormConf().get(CONFIG_LOCATION_IRI);
-        if (this.locationIri == null || this.locationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + CONFIG_LOCATION_IRI);
-        }
-
-        this.organizationIri = (String) workerPrepareData.getStormConf().get(CONFIG_ORGANIZATION_IRI);
-        if (this.organizationIri == null || this.organizationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + CONFIG_ORGANIZATION_IRI);
-        }
-
-        this.personIri = (String) workerPrepareData.getStormConf().get(CONFIG_PERSON_IRI);
-        if (this.personIri == null || this.personIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + CONFIG_PERSON_IRI);
-        }
 
         String pathPrefix = (String) workerPrepareData.getStormConf().get(PATH_PREFIX_CONFIG);
         if (pathPrefix == null) {
@@ -113,17 +90,8 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
         int start = charOffset + tokenListPositions[foundName.getStart()].getStart();
         int end = charOffset + tokenListPositions[foundName.getEnd() - 1].getEnd();
         String type = foundName.getType();
-        String ontologyClassUri;
+        String ontologyClassUri = mapToOntologyIri(type);
 
-        if ("location".equals(type)) {
-            ontologyClassUri = this.locationIri;
-        } else if ("organization".equals(type)) {
-            ontologyClassUri = this.organizationIri;
-        } else if ("person".equals(type)) {
-            ontologyClassUri = this.personIri;
-        } else {
-            ontologyClassUri = THING_IRI;
-        }
         return new TermMention.Builder(start, end, name, ontologyClassUri, propertyKey, visibility)
                 .resolved(false)
                 .useExisting(true)

@@ -38,6 +38,8 @@ public abstract class Concept {
 
     public abstract boolean getUserVisible();
 
+    public abstract String getAddRelatedConceptWhiteList ();
+
     public Collection<OntologyProperty> getProperties() {
         return properties;
     }
@@ -78,6 +80,9 @@ public abstract class Concept {
             }
             if (getColor() != null) {
                 result.put("color", getColor());
+            }
+            if (getAddRelatedConceptWhiteList() != null) {
+                result.put("addRelatedConceptWhiteList", new JSONArray(getAddRelatedConceptWhiteList()));
             }
             if (this.properties != null) {
                 JSONArray propertiesJson = new JSONArray();

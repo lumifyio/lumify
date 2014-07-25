@@ -153,6 +153,12 @@ define(['service/ontology'], function(OntologyService) {
             shouldHaveRelationship('person', 'city', 'personLivesAtLocation')
             shouldHaveRelationship('person', 'address', 'personLivesAtLocation')
 
+            shouldHaveRelationship('company', 'city', 'organizationHeadquarteredAtLocation')
+            shouldHaveRelationship('company', 'location', 'organizationHeadquarteredAtLocation')
+
+            shouldHaveRelationship('nonprofit', 'location', 'organizationHeadquarteredAtLocation')
+            shouldHaveRelationship('nonprofit', 'city', 'organizationHeadquarteredAtLocation')
+
             // Check inverse not true
             shouldNotHaveRelationship('city', 'person', 'personLivesAtLocation')
             shouldNotHaveRelationship('location', 'person', 'personLivesAtLocation')

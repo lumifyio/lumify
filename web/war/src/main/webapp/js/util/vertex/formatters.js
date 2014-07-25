@@ -17,17 +17,94 @@ define([
             },
 
             sandboxStatus: function(vertex) {
-                return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
+                return V.metadata.sandboxStatus(vertex.sandboxStatus);
+            },
+
+            metadata: {
+                // Define/override metadata dataType specific displayTransformers here
+                //
+                // All functions receive: function(value, property, vertexId)
+                // return a value synchronously
+                // - or -
+                // append "Async" to function name and return a $.Deferred().promise()
+
+                datetime: function(value) {
+                    return F.date.dateTimeString(value);
+                },
+
+                sandboxStatus: function(value) {
+                    return (/^(private|public_changed)$/i).test(value) ? 'unpublished' : undefined;
+                },
+
+                percent: function(value) {
+                    return F.number.percent(value);
+                },
+
+                userAsync: function(userId) {
+                    var d = $.Deferred();
+                    require(['service/user'], function(UserService) {
+                        new UserService().userInfo(userId)
+                            .fail(d.reject)
+                            .done(function(user) {
+                                d.resolve(user.displayName);
+                            });
+                    })
+                    return d.promise();
+                }
+            },
+
+            properties: {
+                // Define/override dataType specific displayTransformers here
+                //
+                // All functions receive: function(HtmlElement, property, vertexId)
+                // Must populate the dom element with value
+                //
+                // for example: geoLocation: function(...) { el.textContent = 'coords'; }
+
+                visibility: function(el, property) {
+                    $('<i>').text((
+                        property.value &&
+                        property.value.source
+                    ) || 'public').appendTo(el);
+                },
+
+                geoLocation: function(el, property) {
+                    if ($('#app.fullscreen-details').length) {
+                        $(el).append(
+                            F.geoLocation.pretty(property.value)
+                        );
+                        return;
+                    }
+
+                    var anchor = $('<a>')
+                        .addClass('map-coordinates')
+                        .data({
+                            latitude: property.value.latitude,
+                            longitude: property.value.longitude
+                        }),
+                        displayValue = F.geoLocation.pretty(property.value, true);
+
+                    if (property.value.description) {
+                        anchor.append(property.value.description + ' ');
+                    }
+
+                    $('<small>')
+                        .css('white-space', 'nowrap')
+                        .text(F.geoLocation.pretty(property.value, true))
+                        .appendTo(anchor);
+
+                    anchor.appendTo(el);
+                }
             },
 
             hasMetadata: function(property) {
-                var status = V.sandboxStatus(property.metadata),
-                    modifiedBy = property.metadata['http://lumify.io#modifiedBy'],
-                    modifiedDate = property.metadata['http://lumify.io#modifiedDate'],
-                    sourceTimezone = property.metadata['http://lumify.io#sourceTimezone'],
-                    confidence = property.metadata['http://lumify.io#confidence'],
-                    justification = property.metadata._justificationMetadata,
-                    source = property.metadata._sourceMetadata;
+                var status = V.sandboxStatus(property),
+                    modifiedBy = property['http://lumify.io#modifiedBy'],
+                    modifiedDate = property['http://lumify.io#modifiedDate'],
+                    sourceTimezone = property['http://lumify.io#sourceTimezone'],
+                    confidence = property['http://lumify.io#confidence'],
+                    justification = property._justificationMetadata,
+                    source = property._sourceMetadata;
 
                 return (
                     status ||

@@ -70,22 +70,23 @@ define([
 
         this.refresh = function(vertex) {
             var self = this,
-                deferred = null;
+                deferred = $.Deferred(),
+                request = null,
+                cachedVertex;
 
             if (_.isArray(vertex)) {
                 var vertices = [], toRequest = [];
                 vertex.forEach(function(v) {
-                    var cachedVertex = self.vertex(v);
+                    cachedVertex = self.vertex(v);
                     if (cachedVertex) {
                         vertices.push(cachedVertex);
                     } else {
                         toRequest.push(v);
                     }
                 })
-                deferred = $.Deferred();
 
                 if (toRequest.length) {
-                    this.vertexService.getMultiple(toRequest)
+                    request = this.vertexService.getMultiple(toRequest)
                         .done(function(data) {
                             deferred.resolve(vertices.concat(data.vertices));
                         })
@@ -93,12 +94,33 @@ define([
                     deferred.resolve(vertices);
                 }
 
-                return deferred;
             } else if (_.isString(vertex) || _.isNumber(vertex)) {
-                deferred = this.vertexService.getVertexProperties(vertex);
+                cachedVertex = this.vertex(vertex);
+                if (cachedVertex) {
+                    deferred.resolve(cachedVertex);
+                } else {
+                    request = this.vertexService.getVertexProperties(vertex)
+                        .done(function(data) {
+                            deferred.resolve(data[0]);
+                        })
+                }
             } else {
-                deferred = this.vertexService.getVertexProperties(vertex.id);
+                cachedVertex = this.vertex(vertex.id);
+                if (cachedVertex) {
+                    deferred.resolve(cachedVertex);
+                } else {
+                    request = this.vertexService.getVertexProperties(vertex.id)
+                        .done(function(data) {
+                            deferred.resolve(data[0]);
+                        })
+                }
             }
+
+            deferred.abort = function() {
+                if (request) {
+                    request.abort();
+                }
+            };
 
             return deferred;
         };
@@ -161,6 +183,10 @@ define([
 
             $.extend(true, vertex, cache);
 
+            if (hasChanged) {
+                this.trigger('vertexCacheUpdated', { vertex: cache });
+            }
+
             return (options && options.returnNullIfNotChanged === true && !hasChanged) ? null : cache;
         };
 
@@ -194,11 +220,15 @@ define([
                 artifactUrl = function(type, p) {
                     return _.template('artifact/{ type }?' + $.param($.extend(params, p || {})), { type: type });
                 },
+                entityImageUrl = F.vertex.prop(vertex, 'entityImageUrl'),
                 entityImageVertexId = F.vertex.prop(vertex, 'entityImageVertexId');
 
             vertex.imageSrcIsFromConcept = false;
 
-            if (entityImageVertexId) {
+            if (entityImageUrl) {
+                vertex.imageSrc = entityImageUrl;
+                vertex.imageDetailSrc = entityImageUrl;
+            } else if (entityImageVertexId) {
                 vertex.imageSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 150 });
                 vertex.imageDetailSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
             } else {

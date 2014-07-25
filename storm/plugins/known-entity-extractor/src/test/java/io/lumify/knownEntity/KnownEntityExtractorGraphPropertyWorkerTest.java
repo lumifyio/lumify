@@ -48,6 +48,9 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
     @Before
     public void setup() throws Exception {
         Map config = new HashMap();
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PERSON, "http://lumify.io/test#person");
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_LOCATION, "http://lumify.io/test#location");
+        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
@@ -61,13 +64,12 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         };
         extractor.setConfiguration(configuration);
 
-        Map<String, String> stormConf = new HashMap<String, String>();
-        stormConf.put(KnownEntityExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file://" + dictionaryPath);
+        config.put(KnownEntityExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file://" + dictionaryPath);
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
         authorizations = new InMemoryAuthorizations();
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
-        GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(stormConf, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
+        GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
         graph = new InMemoryGraph();
         visibility = new Visibility("");
         extractor.prepare(workerPrepareData);
@@ -89,7 +91,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         assertEquals(3, termMentions.size());
         for (TermMention termMention : termMentions) {
             assertTrue(termMention.isResolved());
-            assertEquals("person", termMention.getOntologyClassUri());
+            assertEquals("http://lumify.io/test#person", termMention.getOntologyClassUri());
             assertEquals("Joe Ferner", termMention.getSign());
         }
     }
