@@ -7,7 +7,6 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.JSONExtractor;
-import io.lumify.storm.util.StringUtil;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -103,7 +102,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-f");
         ffmpegOptionsList.add("webm");
         ffmpegOptionsList.add(webmFile.getAbsolutePath());
-        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
+        String[] ffmpegOptionsArray = ffmpegOptionsList.toArray(new String[ffmpegOptionsList.size()]);
         return ffmpegOptionsArray;
     }
 

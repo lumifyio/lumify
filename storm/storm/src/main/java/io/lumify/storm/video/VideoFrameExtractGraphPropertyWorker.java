@@ -12,7 +12,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.DurationUtil;
 import io.lumify.storm.util.JSONExtractor;
-import io.lumify.storm.util.StringUtil;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -130,7 +129,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         ffmpegOptionsList.add(new File(outDir, "image-%8d.png").getAbsolutePath());
-        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
+        String[] ffmpegOptionsArray = ffmpegOptionsList.toArray(new String[ffmpegOptionsList.size()]);
         return ffmpegOptionsArray;
     }
 

@@ -9,7 +9,6 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.JSONExtractor;
-import io.lumify.storm.util.StringUtil;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -27,9 +26,8 @@ import java.util.Map;
 
 public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
-    private ProcessRunner processRunner;
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoMp4EncodingWorker.class);
-
+    private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
@@ -117,7 +115,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-f");
         ffmpegOptionsList.add("mp4");
         ffmpegOptionsList.add(mp4File.getAbsolutePath());
-        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
+        String[] ffmpegOptionsArray = ffmpegOptionsList.toArray(new String[ffmpegOptionsList.size()]);
         return ffmpegOptionsArray;
     }
 
