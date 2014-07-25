@@ -45,7 +45,7 @@ public class DateUtil {
         return null;
     }
 
-    public static Date extractDateDigitizedFromJSON(JSONObject json) {
+    public static Date extractLastModifyDateFromJSON(JSONObject json) {
         if (json == null) {
             return null;
         }
@@ -59,7 +59,7 @@ public class DateUtil {
                     if (tagsJson != null) {
                         String creationTime = tagsJson.optString("creation_time");
                         if (!creationTime.equals("")) {
-                            Date date = parseDateDigitizedString(creationTime);
+                            Date date = parseLastModifyDateString(creationTime);
                             if (date != null) {
                                 return date;
                             }
@@ -76,7 +76,7 @@ public class DateUtil {
             if (tagsObject != null) {
                 String creationTime = tagsObject.optString("creation_time");
                 if (!creationTime.equals("")) {
-                    Date date = parseDateDigitizedString(creationTime);
+                    Date date = parseLastModifyDateString(creationTime);
                     if (date != null) {
                         return date;
                     }
@@ -84,7 +84,7 @@ public class DateUtil {
             }
         }
 
-        LOGGER.debug("Could not extract dateDigitized (creation_time) from json.");
+        LOGGER.debug("Could not extract lastModifyDate (creation_time) from json.");
         return null;
     }
 
@@ -101,15 +101,15 @@ public class DateUtil {
         return null;
     }
 
-    private static Date parseDateDigitizedString(String dateDigitized) {
+    private static Date parseLastModifyDateString(String lastModifyDate) {
         String dateFormat = "yyyy-MM-dd HH:mm:ssZ";
-        String dateDigitizedInUTC = dateDigitized + "-0000";
+        String lastModifyDateInUTC = lastModifyDate + "-0000";
         SimpleDateFormat format = new SimpleDateFormat(dateFormat);
         try {
-            Date parsedDate = format.parse(dateDigitizedInUTC);
+            Date parsedDate = format.parse(lastModifyDateInUTC);
             return parsedDate;
         } catch (ParseException e) {
-            LOGGER.error("ParseException: could not parse dateDigitized: " + dateDigitized + " with date format: " + dateFormat);
+            LOGGER.error("ParseException: could not parse lastModifyDate: " + lastModifyDate + " with date format: " + dateFormat);
         }
 
         return null;

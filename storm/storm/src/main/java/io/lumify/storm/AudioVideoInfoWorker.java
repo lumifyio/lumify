@@ -28,7 +28,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
     private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
     private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
-    private static final String DATE_DIGITIZED_IRI = "ontology.iri.dateDigitized";
+    private static final String LAST_MODIFY_DATE_IRI = "ontology.iri.lastModifyDate";
     private static final String DATE_TAKEN_IRI = "ontology.iri.dateTaken";
     private static final String DEVICE_MAKE_IRI = "ontology.iri.deviceMake";
     private static final String DEVICE_MODEL_IRI = "ontology.iri.deviceModel";
@@ -36,7 +36,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private String videoDurationIri;
     private String videoRotationIri;
     private String geoLocationIri;
-    private String dateDigitizedIri;
+    private String lastModifyDateIri;
     private String dateTakenIri;
     private String deviceMakeIri;
     private String deviceModelIri;
@@ -65,9 +65,9 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             LOGGER.warn("Could not find config: " + CONFIG_GEO_LOCATION_IRI + ": skipping setting the geoLocation property.");
         }
 
-        dateDigitizedIri = (String) workerPrepareData.getStormConf().get(DATE_DIGITIZED_IRI);
-        if (dateDigitizedIri == null || dateDigitizedIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + DATE_DIGITIZED_IRI + ": skipping setting the dateDigitized property.");
+        lastModifyDateIri = (String) workerPrepareData.getStormConf().get(LAST_MODIFY_DATE_IRI);
+        if (lastModifyDateIri == null || lastModifyDateIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + LAST_MODIFY_DATE_IRI + ": skipping setting the lastModifyDate property.");
         }
 
         dateTakenIri = (String) workerPrepareData.getStormConf().get(DATE_TAKEN_IRI);
@@ -131,12 +131,12 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                 );
             }
 
-            Date dateDigitized = DateUtil.extractDateDigitizedFromJSON(json);
-            if (dateDigitized != null) {
+            Date lastModifyDate = DateUtil.extractLastModifyDateFromJSON(json);
+            if (lastModifyDate != null) {
                 data.getElement().addPropertyValue(
                         PROPERTY_KEY,
-                        dateDigitizedIri,
-                        dateDigitized,
+                        lastModifyDateIri,
+                        lastModifyDate,
                         data.getVisibility(),
                         getAuthorizations()
                 );
