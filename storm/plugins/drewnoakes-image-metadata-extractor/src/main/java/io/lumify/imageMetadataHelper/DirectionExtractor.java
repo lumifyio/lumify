@@ -18,7 +18,7 @@ public class DirectionExtractor {
                 return imageFacingDirection;
             } catch (MetadataException e) {
                 LOGGER.debug("getDouble(TAG_GPS_IMAGE_DIRECTION) threw MetadataException when attempting to" +
-                        "retrieve GPS Image Direction.");
+                        " retrieve GPS Image Direction.");
             }
         }
         return null;
