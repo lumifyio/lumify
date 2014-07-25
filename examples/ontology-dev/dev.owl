@@ -614,16 +614,17 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#videoRotation">
         <rdfs:label xml:lang="en">Video Rotation</rdfs:label>
+        <lumify:userVisible>false</lumify:userVisible>
         <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
 
 
 
-    <!-- http://lumify.io/dev#dateDigitized -->
+    <!-- http://lumify.io/dev#lastModifyDate -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#dateDigitized">
-        <rdfs:label xml:lang="en">Date Digitized</rdfs:label>
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#lastModifyDate">
+        <rdfs:label xml:lang="en">Last Modify Date</rdfs:label>
         <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
         <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
