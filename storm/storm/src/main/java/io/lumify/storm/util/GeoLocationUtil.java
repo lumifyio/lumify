@@ -5,6 +5,8 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
 import org.securegraph.type.GeoPoint;
 
+import java.util.ArrayList;
+
 public class GeoLocationUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GeoLocationUtil.class);
 
@@ -35,7 +37,7 @@ public class GeoLocationUtil {
     private static GeoPoint parseGeoLocationString(String locationString) {
         String myRegularExpression = "(\\+|\\-|/)";
         String[] tempValues = locationString.split(myRegularExpression);
-        String[] values = StringUtil.removeNullsFromStringArray(tempValues);
+        String[] values = removeNullsFromStringArray(tempValues);
         if (values.length < 2) {
             return null;
         }
@@ -80,5 +82,16 @@ public class GeoLocationUtil {
         } else {
             return null;
         }
+    }
+
+    public static String[] removeNullsFromStringArray(String[] array) {
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null && !array[i].equals("")) {
+                arrayList.add(array[i]);
+            }
+        }
+        String[] newArray = arrayList.toArray(new String[arrayList.size()]);
+        return newArray;
     }
 }
