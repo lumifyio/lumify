@@ -14,7 +14,7 @@ public class HttpConnection {
     }
 
     public String getResponseAsString() throws IOException {
-        return IOUtils.toString(getResponseInputStream());
+        return IOUtils.toString(getResponseInputStream(), "UTF-8");
     }
 
     public InputStream getResponseInputStream() throws IOException {

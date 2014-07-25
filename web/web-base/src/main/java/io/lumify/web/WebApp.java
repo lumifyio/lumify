@@ -60,7 +60,7 @@ public class WebApp extends App {
         }
         try {
             LOGGER.info("registering JavaScript plugin file: %s", scriptResourceName);
-            javaScriptSources.put(scriptResourceName, IOUtils.toString(stream));
+            javaScriptSources.put(scriptResourceName, IOUtils.toString(stream, "UTF-8"));
         } catch (IOException e) {
             throw new LumifyException("Could not read script resource: " + scriptResourceName);
         } finally {
@@ -75,7 +75,7 @@ public class WebApp extends App {
         }
         try {
             LOGGER.info("registering CSS plugin file: %s", cssResourceName);
-            cssSources.put(cssResourceName, IOUtils.toString(stream));
+            cssSources.put(cssResourceName, IOUtils.toString(stream, "UTF-8"));
         } catch (IOException e) {
             throw new LumifyException("Could not read css resource: " + cssResourceName);
         } finally {
