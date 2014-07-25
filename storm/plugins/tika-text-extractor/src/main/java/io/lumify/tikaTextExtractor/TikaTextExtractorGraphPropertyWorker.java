@@ -175,7 +175,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         String bodyContent = new String(out.toByteArray(), charset);
 
         if (isHtml(mimeType)) {
-            text = extractTextFromHtml(IOUtils.toString(new ByteArrayInputStream(input)));
+            text = extractTextFromHtml(IOUtils.toString(new ByteArrayInputStream(input), "UTF-8"));
             if (text == null || text.length() == 0) {
                 text = cleanExtractedText(bodyContent);
             }

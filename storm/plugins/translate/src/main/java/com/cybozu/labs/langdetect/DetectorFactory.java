@@ -76,7 +76,7 @@ public class DetectorFactory {
             FileInputStream is = null;
             try {
                 is = new FileInputStream(file);
-                LangProfile profile = new LangProfile(new JSONObject(IOUtils.toString(is)));
+                LangProfile profile = new LangProfile(new JSONObject(IOUtils.toString(is, "UTF-8")));
                 try {
                     addProfile(profile, index, langsize);
                 } catch (LangDetectException e) {
