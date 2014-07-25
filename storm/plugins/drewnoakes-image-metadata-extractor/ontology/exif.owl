@@ -63,6 +63,7 @@
         </owl:DatatypeProperty>
 
 
+
     <!-- http://lumify.io/exif#directionDescription -->
 
         <owl:DatatypeProperty rdf:about="http://lumify.io/exif#directionDescription">
