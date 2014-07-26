@@ -52,7 +52,14 @@ define([
     ConfigService.prototype = Object.create(ServiceBase.prototype);
 
     ConfigService.prototype.getConfiguration = function() {
-        return this._ajaxGet({ url: 'configuration' });
+        var language = 'en';
+        try {
+            var preferredLanguage = localStorage.getItem('language');
+            if (preferredLanguage) {
+                language = preferredLanguage;
+            }
+        } catch(e) { }
+        return this._ajaxGet({ url: 'configuration', data: { localeLanguage: language } });
     };
 
     ConfigService.prototype.getProperties = function() {
