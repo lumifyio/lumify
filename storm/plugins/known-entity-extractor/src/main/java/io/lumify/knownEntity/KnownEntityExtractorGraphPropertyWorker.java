@@ -48,7 +48,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String text = IOUtils.toString(in); // TODO convert AhoCorasick to use InputStream
+        String text = IOUtils.toString(in, "UTF-8"); // TODO convert AhoCorasick to use InputStream
         Iterator<SearchResult<Match>> searchResults = tree.search(text.toCharArray());
         List<TermMention> termMentions = new ArrayList<TermMention>();
         while (searchResults.hasNext()) {

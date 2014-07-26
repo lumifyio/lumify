@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 public interface User extends Serializable {
     public static final long serialVersionUID = 2L;
@@ -39,4 +40,6 @@ public interface User extends Serializable {
     public String getCurrentWorkspaceId();
 
     public JSONObject getUiPreferences();
+
+    public Set<Privilege> getPrivileges();
 }

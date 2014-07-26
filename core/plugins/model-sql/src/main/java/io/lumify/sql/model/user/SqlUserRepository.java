@@ -103,7 +103,7 @@ public class SqlUserRepository extends UserRepository {
                 newUser.setPasswordHash(passwordHash);
             }
             newUser.setUserStatus(UserStatus.OFFLINE.name());
-            newUser.setPrivileges(Privilege.toString(getDefaultPrivileges()));
+            newUser.setPrivilegesString(Privilege.toString(getDefaultPrivileges()));
             LOGGER.debug("add %s to user table", displayName);
             session.save(newUser);
             transaction.commit();
@@ -352,7 +352,7 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            sqlUser.setPrivileges(Privilege.toString(privileges));
+            sqlUser.setPrivilegesString(Privilege.toString(privileges));
             session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {

@@ -35,7 +35,7 @@ public class BingTranslator implements Translator {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            String translatedText = IOUtils.toString(connection.getInputStream());
+            String translatedText = IOUtils.toString(connection.getInputStream(), "UTF-8");
             return translatedText;
         } catch (Exception ex) {
             throw new LumifyException("Could not translate text", ex);
@@ -69,7 +69,7 @@ public class BingTranslator implements Translator {
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             connection.setRequestProperty("Content-Length", Long.toString(formData.getBytes().length));
             connection.getOutputStream().write(formData.getBytes());
-            String results = IOUtils.toString(connection.getInputStream());
+            String results = IOUtils.toString(connection.getInputStream(), "UTF-8");
             JSONObject json = new JSONObject(results);
             accessToken = json.getString("access_token");
             int expiresIn = json.getInt("expires_in");

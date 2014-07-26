@@ -84,6 +84,13 @@ define([
                     list.forEach(function(concept) {
                         if (concept.userVisible !== false) {
                             relatedSubmenuItems.push({
+                                shouldHide: function(vertex) {
+                                    var whitelist = vertex.concept.addRelatedConceptWhiteList;
+                                    if (whitelist && whitelist.length) {
+                                        return whitelist.indexOf(concept.id) === -1;
+                                    }
+                                    return false;
+                                },
                                 label: concept.pluralDisplayName,
                                 event: relatedSubmenuItems[0].event,
                                 selection: 1,
@@ -92,7 +99,7 @@ define([
                                 }
                             })
                         }
-                    })
+                    });
                 }
             });
 
@@ -142,6 +149,7 @@ define([
 
             this.$node.append(template({
                 items: items,
+                vertex: appData.vertex(this.attr.vertexId),
                 shouldDisable: function(item) {
                     var currentSelection = appData.selectedVertexIds,
                         thisVertex = self.attr.vertexId,
@@ -172,6 +180,8 @@ define([
 
                     $this.text(F.string.shortcut($this.text()));
                 });
+
+            this.$menu.find('.dropdown-menu li.divider:last-child').remove();
 
             this.positionMenu(this.attr.position);
 

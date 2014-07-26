@@ -30,7 +30,7 @@
         <% item.submenu.forEach(function(item) { %>
           <% if (item === 'DIVIDER') { %>
             <li class="divider"/>
-          <% } else { %>
+          <% } else if (!item.shouldHide || !item.shouldHide(vertex)) { %>
             <li <%= shouldDisable(item) ? 'disabled' : '' %>>
             <a 
               data-args="<%= JSON.stringify(item.args || {}) %>"

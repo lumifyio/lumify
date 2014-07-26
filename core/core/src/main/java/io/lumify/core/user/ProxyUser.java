@@ -6,6 +6,7 @@ import io.lumify.core.model.user.UserType;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * This class is used to store the userId only in a web session. If we were to store the entire
@@ -156,6 +157,15 @@ public class ProxyUser implements User {
             return null;
         }
         return proxiedUser.getUiPreferences();
+    }
+
+    @Override
+    public Set<Privilege> getPrivileges() {
+        ensureUser();
+        if (proxiedUser == null) {
+            return  null;
+        }
+        return proxiedUser.getPrivileges();
     }
 
     private void ensureUser() {
