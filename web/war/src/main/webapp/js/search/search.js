@@ -301,6 +301,10 @@ define([
                     return {
                         cls: type.toLowerCase(),
                         name: type,
+                        displayName: {
+                            Lumify: i18n('search.types.lumify'),
+                            Workspace: i18n('search.types.workspace')
+                        }[type],
                         selected: i === 0
                     }
                 }),
