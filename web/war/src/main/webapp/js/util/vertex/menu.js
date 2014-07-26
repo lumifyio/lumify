@@ -18,7 +18,7 @@ define([
             items = [
                 {
                     cls: 'requires-EDIT',
-                    label: 'Connect',
+                    label: i18n('vertex.contextmenu.connect'),
                     shortcut: 'CTRL+drag',
                     event: 'startVertexConnection',
                     selection: 1,
@@ -31,7 +31,7 @@ define([
                 },
 
                 {
-                    label: 'Find Path',
+                    label: i18n('vertex.contextmenu.find_path'),
                     shortcut: 'CTRL+drag',
                     event: 'startVertexConnection',
                     selection: 1,
@@ -46,7 +46,7 @@ define([
                 DIVIDER,
 
                 {
-                    label: 'Search',
+                    label: i18n('vertex.contextmenu.search'),
                     submenu: [
                         { label: '\"{ title }\"', shortcut: 'alt+t', event: 'searchTitle', selection: 1 },
                         { label: 'Related Items', shortcut: 'alt+s', event: 'searchRelated', selection: 1 }
@@ -54,7 +54,7 @@ define([
                 },
 
                 {
-                    label: 'Add Related',
+                    label: i18n('vertex.contextmenu.add_related'),
                     submenu: (relatedSubmenuItems = [
                         { label: 'Items', shortcut: 'alt+r', event: 'addRelatedItems', selection: 1 }
                     ])
@@ -63,9 +63,9 @@ define([
                 DIVIDER,
 
                 {
-                    label: 'Remove',
+                    label: i18n('vertex.contextmenu.remove'),
                     shortcut: 'delete',
-                    subtitle: 'Remove from Workspace',
+                    subtitle: i18n('vertex.contextmenu.remove.subtitle'),
                     event: 'deleteSelected',
                     selection: 2,
                     shouldDisable: function(selection, vertexId, target) {

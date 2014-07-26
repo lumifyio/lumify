@@ -40,8 +40,8 @@ define([
                             .teardownComponent(VertexList)
                             .empty(),
                         $hits = $searchResults.find('.total-hits').find('span').text(
-                            'Found 0 results'
-                        ).end().toggle(!result.totalHits);
+                            i18n('search.results.none')
+                        ).end().toggle(!result.totalHits || result.totalHits === 0);
 
                     VertexList.attachTo($resultsContainer, {
                         vertices: vertices,

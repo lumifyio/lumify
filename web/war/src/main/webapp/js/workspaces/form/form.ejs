@@ -1,23 +1,22 @@
 <div class="scroller">
   <ul class="share-list nav nav-list">
     <% if (editable) { %>
-    <li class="nav-header">Edit Workspace</li>
+      <li class="nav-header"><%= i18n('workspaces.form.header') %></li>
 
     <li><input class="workspace-title" type="text" value="<%= workspace.title %>" required></li>
     <% } %>
 
-    <li class="nav-header share-header">Sharing<span class="badge loading"/></li>
+    <li class="nav-header share-header"><%= i18n('workspaces.form.sharing') %><span class="badge loading"/></li>
 
     <li class="share-form" style="display:none">
-        <input name="title" type="text" autocomplete="off" placeholder="Share with user..." />
+    <input name="title" type="text" autocomplete="off" placeholder="<%= i18n('workspaces.form.sharing.placeholder') %>" />
     </li>
   </ul>
 </div>
 
 <div class="buttons">
-<!-- <button class="copy btn btn-primary">Copy</button> -->
 <% if (editable) { %>
-<button class="delete btn btn-danger">Delete</button>
+  <button class="delete btn btn-danger"><%= i18n('workspaces.form.button.delete') %></button>
 <% } %>
 </div>
 

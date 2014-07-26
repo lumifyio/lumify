@@ -1,6 +1,6 @@
 <div class="fileImportPopover popover top collapseVisibility">
   <div class="popover-title">
-    Import {{pluralString}}
+    {{ i18n 'popovers.file_import.title' }} {{pluralString}}
   </div>
   <div class="arrow"></div>
   <div class="popover-content">
@@ -15,7 +15,7 @@
 
     {{#if multipleFiles}}
     <label class="checkbox">
-      <input class="copyVisibility" type="checkbox" checked> Apply to all files
+      <input class="copyVisibility" type="checkbox" checked> {{ i18n 'popovers.file_import.visibility.apply_to_all }}
     </label>
     {{/if}}
 
@@ -26,8 +26,8 @@
     </div>
 
     <div>
-      <button class="btn btn-primary">Import</button>
-      <button style="display:none" class="btn btn-default">Cancel</button>
+      <button class="btn btn-primary">{{ i18n 'popovers.file_import.button.import' }}</button>
+      <button style="display:none" class="btn btn-default">{{ i18n 'popovers.file_import.button.cancel' }}</button>
     </div>
   </div>
 </div>

@@ -19,11 +19,11 @@ define([
                                              'http://lumify.io#modifiedBy,' +
                                              'sandboxStatus,' +
                                              'http://lumify.io#confidence',
-        'properties.metadata.propertyNamesDisplay': 'Original,' +
-                                                    'Modified,' +
-                                                    'By,' +
-                                                    'Status,' +
-                                                    'Confidence',
+        'properties.metadata.propertyNamesDisplay': 'properties.metadata.label.source_timezone,' +
+                                                    'properties.metadata.label.modified_date,' +
+                                                    'properties.metadata.label.modified_by,' +
+                                                    'properties.metadata.label.status,' +
+                                                    'properties.metadata.label.confidence',
         'properties.metadata.propertyNamesType': 'timezone,' +
                                                  'datetime,' +
                                                  'user,' +

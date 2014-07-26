@@ -234,7 +234,9 @@ define([
             var loading = this.$node.find('.infinite-loading');
 
             if (!data.success) {
-                loading.html(alertTemplate({ error: 'Error loading search results' }));
+                loading.html(alertTemplate({
+                    error: i18n('vertex.list.infinite_scroll.error')
+                }));
                 this.attr.infiniteScrolling = false;
             } else if (data.vertices.length === 0) {
                 loading.remove();

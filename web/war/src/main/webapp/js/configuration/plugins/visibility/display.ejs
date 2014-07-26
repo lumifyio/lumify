@@ -1,5 +1,5 @@
 <% if (_.isUndefined(value) || value === '') { %>
-  <i>public</i>
+  <i><%= i18n('visibility.blank') %></i>
 <% } else { %>
   <%= value %>
 <% } %>

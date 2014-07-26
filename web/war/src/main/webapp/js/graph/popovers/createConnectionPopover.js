@@ -50,8 +50,8 @@ define([
                     select = this.popover.find('select'),
                     button = this.popover.find('button');
 
-                select.html('<option>Loading...</option>');
-                button.text('Connect').attr('disabled', true);
+                select.html('<option>' + i18n('popovers.connection.loading') + '</option>');
+                button.text(i18n('popovers.connection.button.connect')).attr('disabled', true);
 
                 this.visibilitySource = { value: '', valid: true };
                 this.on('visibilitychange', this.onVisibilityChange);
@@ -62,7 +62,7 @@ define([
                     cy.getElementById(this.attr.edge.data('source')),
                     cy.getElementById(this.attr.edge.data('target'))
                 ).fail(function() {
-                    select.html('<option>Unknown Server Error</option>');
+                    select.html('<option>' + i18n('popovers.connection.error') + '</option>');
                 }).done(function(relationships) {
 
                     if (relationships.length) {
@@ -83,7 +83,7 @@ define([
                             self.positionDialog();
                         });
                     } else {
-                        select.html('<option>No valid relationships</option>');
+                        select.html('<option>' + i18n('relationship.form.no_valid_relationships') + '</option>');
                     }
 
                     self.positionDialog();
@@ -142,7 +142,7 @@ define([
                     self.attr.teardownOnTap = true;
                 })
                 .fail(function(req, reason, statusText) {
-                    $target.text('Connect')
+                    $target.text(i18n('popovers.connection.button.connect'))
                         .add(inputs)
                         .removeAttr('disabled');
                     self.markFieldErrors(statusText);

@@ -8,18 +8,24 @@ define([
 
     return defineComponent(Menubar);
 
+    function nameToI18N(name) {
+        return i18n('menubar.icons.' + name);
+    }
+
     function Menubar() {
 
         // Add class name of <li> buttons here
-        var BUTTONS = 'dashboard graph map search workspaces activity chat logout',
+        var BUTTONS = 'dashboard graph map search workspaces activity chat logout'.split(' '),
             TOOLTIPS = {
-                dashboard: 'Dashboard',
-                graph: { html: 'Graph<span class="subtitle">2D / 3D</span>' },
-                map: 'Map',
-                search: 'Find',
-                workspaces: 'Workspaces',
-                chat: 'Chat',
-                logout: 'Log&nbsp;out'
+                dashboard: i18n('menubar.icons.dashboard.tooltip'),
+                graph: { html: i18n('menubar.icons.graph') +
+                    '<span class="subtitle">' +
+                    i18n('menubar.icons.graph.tooltip.suffix') + '</span>' },
+                map: i18n('menubar.icons.map.tooltip'),
+                search: i18n('menubar.icons.search.tooltip'),
+                workspaces: i18n('menubar.icons.workspaces.tooltip'),
+                chat: i18n('menubar.icons.chat.tooltip'),
+                logout: i18n('menubar.icons.logout.tooltip')
             },
 
             // Which cannot both be active
@@ -29,14 +35,14 @@ define([
             ],
 
             // Don't change state to highlighted on click
-            DISABLE_ACTIVE_SWITCH = 'activity metrics prefs logout'.split(' '),
+            DISABLE_ACTIVE_SWITCH = 'activity logout'.split(' '),
 
             DISABLE_HIDE_TOOLTIP_ON_CLICK = 'activity logout'.split(' ');
 
         this.activities = 0;
 
         var attrs = {}, events = {};
-        BUTTONS.split(' ').forEach(function(name) {
+        BUTTONS.forEach(function(name) {
             var sel = name + 'IconSelector';
 
             attrs[sel] = '.' + name;
@@ -86,7 +92,7 @@ define([
                 self.$node.find('.' + selectorClass).tooltip({
                     placement: 'right',
                     html: true,
-                    title: TOOLTIPS[selectorClass].html || TOOLTIPS[selectorClass],
+                    title: (TOOLTIPS[selectorClass].html || TOOLTIPS[selectorClass]).replace(/\s+/g, '&nbsp;'),
                     delay: { show: 250, hide: 0 }
                 });
             });

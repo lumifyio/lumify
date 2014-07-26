@@ -113,7 +113,7 @@ define([
 
                     FieldSelection.attachTo(self.select('propertyListSelector'), {
                         properties: propertiesList,
-                        placeholder: 'Select Property'
+                        placeholder: i18n('property.form.field.selection.placeholder')
                     });
                 });
             }
@@ -274,8 +274,8 @@ define([
 
             this.select('deleteButtonSelector')
                 .text(
-                    sandboxStatus === 'PRIVATE' ?  'Delete' :
-                    sandboxStatus === 'PUBLIC_CHANGED' ?  'Undo' : ''
+                    sandboxStatus === 'PRIVATE' ?  i18n('property.form.button.delete') :
+                    sandboxStatus === 'PUBLIC_CHANGED' ?  i18n('property.form.button.undo') : ''
                 )
                 .toggle(
                     (!!isExistingProperty) &&
@@ -283,7 +283,8 @@ define([
                     propertyName !== 'http://lumify.io#visibilityJson'
                 );
 
-            var button = this.select('saveButtonSelector').text(isExistingProperty ? 'Update' : 'Add');
+            var button = this.select('saveButtonSelector')
+                .text(isExistingProperty ? i18n('property.form.button.update') : i18n('property.form.button.add'));
             if (isExistingProperty) {
                 button.removeAttr('disabled');
             } else {
@@ -327,7 +328,11 @@ define([
                             predicates: false,
                             tooltip: {
                                 html: true,
-                                title: '<strong>Include a Reference</strong><br>Paste value from document text',
+                                title:
+                                    '<strong>' +
+                                    i18n('justification.field.tooltip.title') +
+                                    '</strong><br>' +
+                                    i18n('justification.field.tooltip.subtitle'),
                                 placement: 'left',
                                 trigger: 'focus'
                             }

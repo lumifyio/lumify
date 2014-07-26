@@ -71,8 +71,6 @@ define([
                 self.updateDraggables();
             });
 
-            // DEBUG $('.workspace-overlay .badge').popover('show')
-
             self.on('click', {
                 selectAllButtonSelector: self.onSelectAll,
                 buttonSelector: self.onButtonClick,
@@ -125,15 +123,9 @@ define([
                     self.$node.find('.diffs-list').scrollTop(previousScroll);
                 });
             })
-            //self.on('mouseenter', { rowSelector: this.onRowHover });
-            //self.on('mouseleave', { rowSelector: this.onRowHover });
             self.on('markPublishDiffItem', self.onMarkPublish);
             self.on('markUndoDiffItem', self.onMarkUndo);
             self.on(document, 'objectsSelected', self.onObjectsSelected);
-        };
-
-        this.onRowHover = function(event) {
-            console.log(event.type, event.target)
         };
 
         this.processDiffs = function(diffs) {
@@ -158,9 +150,9 @@ define([
                 _.keys(groupedByVertex).forEach(function(vertexId) {
                     var diffs = groupedByVertex[vertexId],
                         actionTypes = {
-                            CREATE: { type: 'create', display: 'New' },
-                            UPDATE: { type: 'update', display: 'Existing' },
-                            DELETE: { type: 'delete', display: 'Deleted' }
+                            CREATE: { type: 'create', display: i18n('workspaces.diff.action.types.create') },
+                            UPDATE: { type: 'update', display: i18n('workspaces.diff.action.types.update') },
+                            DELETE: { type: 'delete', display: i18n('workspaces.diff.action.types.delete') }
                         },
                         outputItem = {
                             id: '',
@@ -374,7 +366,7 @@ define([
                         .addClass('alert alert-error')
                         .html(
                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            'An error occured during ' + type + '.<br>Reason: ' + errorText
+                            i18n('workspaces.diff.error', type, errorText)
                         )
                         .appendTo(header);
 

@@ -6,8 +6,8 @@
             <% if (subtitle) { %> has-subtitle<%}%>" data-vertex-id="<%= vertex.id %>"
     ><a><%= F.vertex.title(vertex) %>
       <ul>
-        <li class="graph"><button title="Displayed in Graph" href="#">Graph</button></li>
-        <li class="map"><button title="Displayed in Map" href="#">Map</button></li>
+        <li class="graph"><button title="<%= i18n('vertex.list.in_graph.tooltip') %>" href="#"><%= i18n('vertex.list.in_graph') %></button></li>
+        <li class="map"><button title="<%= i18n('vertex.list.in_map.tooltip') %>" href="#"><%= i18n('vertex.list.in_map') %></button></li>
       </ul>
       <div>
         <span class="preview"/>

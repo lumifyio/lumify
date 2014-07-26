@@ -122,7 +122,7 @@ define([
                 $error.empty();
             } else {
                 $error.html(
-                    alertTemplate({ error: data.error || 'Server error' })
+                    alertTemplate({ error: data.error || i18n('search.query.error') })
                 )
             }
         };

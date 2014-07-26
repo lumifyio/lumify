@@ -91,7 +91,7 @@ define([
         var vertices, idToCyNode;
         this.onVerticesHovering = function(evt, data) {
             if (!this.isWorkspaceEditable) {
-                return this.trigger('displayInformation', { message: 'Workspace is read only' })
+                return this.trigger('displayInformation', { message: i18n('graph.workspace.readonly') })
             }
             this.cytoscapeReady(function(cy) {
                 var self = this,
@@ -1227,11 +1227,11 @@ define([
             this.on('hidePanel', this.onHidePanel);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: 'Graph',
+                scope: i18n('graph.help.scope'),
                 shortcuts: {
-                    '-': { fire: 'zoomOut', desc: 'Zoom out' },
-                    '=': { fire: 'zoomIn', desc: 'Zoom in' },
-                    'alt-f': { fire: 'fit', desc: 'Fit all objects on screen' },
+                    '-': { fire: 'zoomOut', desc: i18n('graph.help.zoom_out') },
+                    '=': { fire: 'zoomIn', desc: i18n('graph.help.zoom_in') },
+                    'alt-f': { fire: 'fit', desc: i18n('graph.help.fit') },
                 }
             });
 

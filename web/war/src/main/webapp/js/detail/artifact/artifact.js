@@ -558,7 +558,7 @@ define([
 
         this.processArtifactText = function(text) {
             var self = this,
-                warningText = 'No Text Available';
+                warningText = i18n('detail.text.none_available');
 
             // Looks like JSON ?
             if (/^\s*{/.test(text)) {
@@ -582,7 +582,7 @@ define([
                     });
                 } else if (json) {
                     text = null;
-                    warningText = 'No Transcripts Available';
+                    warningText = i18n('detail.transcript.none_available');
                 }
             }
 
