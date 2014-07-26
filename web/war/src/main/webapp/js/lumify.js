@@ -17,6 +17,13 @@ window.enableLiveReload = function(enable) {
         }
     }
 }
+window.switchLanguage = function(code) {
+    if ('en es de'.split(' ').indexOf(code) >= 0) {
+        localStorage.setItem('language', code);
+        location.reload();
+    } else console.error('Only allowed: en, es, de');
+}
+
 if ('localStorage' in window) {
     if (localStorage.getItem('liveReloadEnabled')) {
         enableLiveReload(true);
