@@ -289,8 +289,6 @@ define([
                     truncated = wordsArray.slice(0, words).join(' '),
                     ellipsis = '…';
 
-                if (/^North/.test(str)) debugger;
-
                 if (truncated.length > maxChars) {
                     // Use standard truncation (set amount of characters)
                     truncated = string.substring(0, maxChars) + ellipsis;
