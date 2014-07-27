@@ -408,13 +408,9 @@ define([
         };
 
         this.updateCyNodeData = function(data, vertex) {
-            var truncatedTitle = F.vertex.title(vertex);
+            var truncatedTitle = F.string.truncate(F.vertex.title(vertex), 3),
+                merged = data;
 
-            if (truncatedTitle.length > MAX_TITLE_LENGTH) {
-                truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + '...';
-            }
-
-            var merged = data;
             merged.truncatedTitle = truncatedTitle;
             merged.imageSrc = vertex.imageSrc;
             merged.conceptType = F.vertex.prop(vertex, 'conceptType');

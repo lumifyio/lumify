@@ -281,6 +281,24 @@ define([
                     case 1: return '1 ' + singular;
                     default: return count + ' ' + plural;
                 }
+            },
+            truncate: function(str, words) {
+                var maxChars = 7 * words,
+                    string = $.trim(str),
+                    wordsArray = string.split(/\s+/),
+                    truncated = wordsArray.slice(0, words).join(' '),
+                    ellipsis = '…';
+
+                if (/^North/.test(str)) debugger;
+
+                if (truncated.length > maxChars) {
+                    // Use standard truncation (set amount of characters)
+                    truncated = string.substring(0, maxChars) + ellipsis;
+                } else if (truncated !== string) {
+                    truncated = truncated + ellipsis;
+                }
+
+                return truncated
             }
         },
         date: {
