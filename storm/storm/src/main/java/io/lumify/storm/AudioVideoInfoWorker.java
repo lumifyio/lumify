@@ -32,6 +32,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String DATE_TAKEN_IRI = "ontology.iri.dateTaken";
     private static final String DEVICE_MAKE_IRI = "ontology.iri.deviceMake";
     private static final String DEVICE_MODEL_IRI = "ontology.iri.deviceModel";
+    private static final String METADATA_IRI = "ontology.iri.metadata";
     private String audioDurationIri;
     private String videoDurationIri;
     private String videoRotationIri;
@@ -40,6 +41,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private String dateTakenIri;
     private String deviceMakeIri;
     private String deviceModelIri;
+    private String metadataIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -83,6 +85,11 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         deviceModelIri = (String) workerPrepareData.getStormConf().get(DEVICE_MODEL_IRI);
         if (deviceModelIri == null || deviceModelIri.length() == 0) {
             LOGGER.warn("Could not find config: " + DEVICE_MODEL_IRI + ": skipping setting the deviceModel property.");
+        }
+
+        metadataIri = (String) workerPrepareData.getStormConf().get(METADATA_IRI);
+        if (metadataIri == null || metadataIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + METADATA_IRI + ": skipping setting the metadata property.");
         }
 
     }
@@ -173,6 +180,20 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                         data.getVisibility(),
                         getAuthorizations()
                 );
+            }
+
+            JSONObject videoMetadataJSON = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+            if (videoMetadataJSON != null){
+                String videoMetadataJSONString = videoMetadataJSON.toString();
+                if (videoMetadataJSONString != null){
+                    data.getElement().addPropertyValue(
+                            PROPERTY_KEY,
+                            metadataIri,
+                            videoMetadataJSONString,
+                            data.getVisibility(),
+                            getAuthorizations()
+                    );
+                }
             }
 
         }
