@@ -661,6 +661,17 @@
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
 
+
+
+    <!-- http://lumify.io/dev#metadata -->
+
+        <owl:DatatypeProperty rdf:about="http://lumify.io/dev#metadata">
+            <rdfs:label xml:lang="en">Metadata</rdfs:label>
+            <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+            <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+            <rdfs:range rdf:resource="&xsd;string"/>
+        </owl:DatatypeProperty>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //

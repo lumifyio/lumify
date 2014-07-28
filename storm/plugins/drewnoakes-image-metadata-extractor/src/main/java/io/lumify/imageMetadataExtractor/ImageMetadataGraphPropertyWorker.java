@@ -21,6 +21,8 @@ import java.util.Date;
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImageMetadataGraphPropertyWorker.class);
     private static final String MULTI_VALUE_KEY = ImageMetadataGraphPropertyWorker.class.getName();
+    private static final String METADATA_IRI = "ontology.iri.metadata";
+    private String metadataIri;
 
     @Override
     public boolean isLocalFileRequired() {
@@ -30,6 +32,12 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
+
+        metadataIri = (String) workerPrepareData.getStormConf().get(METADATA_IRI);
+        if (metadataIri == null || metadataIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + METADATA_IRI + ": skipping 'dump of all media metadata into JSON' ");
+        }
+
     }
 
     @Override
@@ -67,8 +75,19 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
         if (imageFacingDirectionDescription != null) {
             Ontology.DIRECTION_DESCRIPTION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirectionDescription, data.getVisibility(), getAuthorizations());
         }
-    }
 
+        String leftoverMetadata = LeftoverMetadataExtractor.getAllMetadata(metadata);
+        if (leftoverMetadata != null) {
+            data.getElement().addPropertyValue(
+                    MULTI_VALUE_KEY,
+                    metadataIri,
+                    leftoverMetadata,
+                    data.getVisibility(),
+                    getAuthorizations()
+            );
+        }
+
+    }
 
     @Override
     public boolean isHandled(Element element, Property property) {
