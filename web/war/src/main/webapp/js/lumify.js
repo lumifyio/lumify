@@ -17,11 +17,23 @@ window.enableLiveReload = function(enable) {
         }
     }
 }
+
 window.switchLanguage = function(code) {
-    if ('en es de'.split(' ').indexOf(code) >= 0) {
-        localStorage.setItem('language', code);
+    var availableLocales = 'en es de zh_TW'.split(' '),
+        locale = availableLocales[availableLocales.indexOf(code)];
+    if (locale) {
+        var parts = locale.split('_');
+        if (parts[0]) {
+            localStorage.setItem('language', parts[0]);
+        }
+        if (parts[1]) {
+            localStorage.setItem('country', parts[1]);
+        }
+        if (parts[2]) {
+            localStorage.setItem('variant', parts[2]);
+        }
         location.reload();
-    } else console.error('Only allowed: en, es, de');
+    } else console.error('Available Locales: ' + availableLocales.join(', '));
 }
 
 if ('localStorage' in window) {
