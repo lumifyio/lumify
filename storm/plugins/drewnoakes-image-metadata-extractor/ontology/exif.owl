@@ -56,20 +56,10 @@
     <!-- http://lumify.io/exif#direction -->
 
         <owl:DatatypeProperty rdf:about="http://lumify.io/exif#direction">
-            <rdfs:label xml:lang="en">Direction (Degrees)</rdfs:label>
+            <rdfs:label xml:lang="en">Direction</rdfs:label>
             <lumify:userVisible>false</lumify:userVisible>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
             <rdfs:range rdf:resource="&xsd;double"/>
-        </owl:DatatypeProperty>
-
-
-
-    <!-- http://lumify.io/exif#directionDescription -->
-
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#directionDescription">
-            <rdfs:label xml:lang="en">Direction</rdfs:label>
-            <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
-            <rdfs:range rdf:resource="&xsd;string"/>
         </owl:DatatypeProperty>
 
 
