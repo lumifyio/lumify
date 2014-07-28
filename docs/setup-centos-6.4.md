@@ -52,6 +52,7 @@
         yum install -y git nodejs npm
 
         npm install -g bower
+        npm install -g inherits
         npm install -g grunt
         npm install -g grunt-cli
 
