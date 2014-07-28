@@ -62,7 +62,7 @@ define([
             if (country) {
                 data.localeCountry = country;
             }
-            var variant = localStorage.getItem('variant')
+            var variant = localStorage.getItem('variant');
             if (variant) {
                 data.localeVariant = variant;
             }
