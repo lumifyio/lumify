@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class LeftoverMetadataExtractor {
 
-    public static JSONObject getAllMetadata(Metadata metadata) {
+    public static JSONObject getAsJSON(Metadata metadata) {
         JSONObject json = new JSONObject();
         for (Directory directory : metadata.getDirectories()) {
             if (directory != null) {
