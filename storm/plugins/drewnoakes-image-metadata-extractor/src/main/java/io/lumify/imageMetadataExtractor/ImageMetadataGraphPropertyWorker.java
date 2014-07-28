@@ -9,6 +9,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.imageMetadataHelper.*;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.type.GeoPoint;
@@ -76,15 +77,18 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             Ontology.DIRECTION_DESCRIPTION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirectionDescription, data.getVisibility(), getAuthorizations());
         }
 
-        String leftoverMetadata = LeftoverMetadataExtractor.getAllMetadata(metadata);
+        JSONObject leftoverMetadata = LeftoverMetadataExtractor.getAllMetadata(metadata);
         if (leftoverMetadata != null) {
-            data.getElement().addPropertyValue(
-                    MULTI_VALUE_KEY,
-                    metadataIri,
-                    leftoverMetadata,
-                    data.getVisibility(),
-                    getAuthorizations()
-            );
+            String leftoverMetadataString = leftoverMetadata.toString();
+            if (leftoverMetadataString != null) {
+                data.getElement().addPropertyValue(
+                        MULTI_VALUE_KEY,
+                        metadataIri,
+                        leftoverMetadataString,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
         }
 
     }
