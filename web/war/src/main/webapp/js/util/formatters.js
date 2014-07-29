@@ -3,9 +3,10 @@ define([
     'sf',
     'jstz',
     'timezone-js',
+    'util/messages',
     'jquery',
-    'underscore',
-], function(sf, jstz, timezoneJS) {
+    'underscore'
+], function(sf, jstz, timezoneJS, i18n) {
     'use strict';
 
     var BITS_FOR_INDEX = 12,
