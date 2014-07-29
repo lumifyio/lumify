@@ -1,19 +1,19 @@
 package io.lumify.web.routes.graph;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Path;
 import org.securegraph.Vertex;
-import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +58,7 @@ public class GraphFindPath extends BaseRequestHandler {
 
         Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, authorizations);
         for (Path path : paths) {
-            JSONArray verticesJson = JsonSerializer.toJson(graph.getVerticesInOrder(path, authorizations), workspaceId);
+            JSONArray verticesJson = JsonSerializer.toJson(graph.getVerticesInOrder(path, authorizations), workspaceId, authorizations);
             pathResults.put(verticesJson);
         }
 

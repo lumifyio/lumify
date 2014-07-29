@@ -1,5 +1,7 @@
 package io.lumify.web.routes.graph;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -8,14 +10,12 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Direction;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
-import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,7 +72,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         for (Vertex vertex : vertices) {
             if (limitConceptIds.size() == 0 || !isLimited(limitConceptIds, vertex)) {
                 if (count < maxVerticesToReturn) {
-                    verticesJson.put(JsonSerializer.toJson(vertex, workspaceId));
+                    verticesJson.put(JsonSerializer.toJson(vertex, workspaceId, authorizations));
                 }
                 count++;
             }

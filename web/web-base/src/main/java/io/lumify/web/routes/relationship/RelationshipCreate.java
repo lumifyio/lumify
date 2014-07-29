@@ -78,11 +78,11 @@ public class RelationshipCreate extends BaseRequestHandler {
         graph.flush();
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Statement created:\n" + JsonSerializer.toJson(edge, workspaceId).toString(2));
+            LOGGER.info("Statement created:\n" + JsonSerializer.toJson(edge, workspaceId, authorizations).toString(2));
         }
 
         workQueueRepository.pushElement(edge);
 
-        respondWithJson(response, JsonSerializer.toJson(edge, workspaceId));
+        respondWithJson(response, JsonSerializer.toJson(edge, workspaceId, authorizations));
     }
 }
