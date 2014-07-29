@@ -104,6 +104,9 @@
 
         echo "source /etc/profile.d/java.sh" >> /usr/lib/hadoop-0.20-mapreduce/conf/hadoop-env.sh
 
+        cd /usr/lib
+        ln -s hadoop-0.20-mapreduce hadoop-mapreduce
+
         
 ### Accumulo
 
