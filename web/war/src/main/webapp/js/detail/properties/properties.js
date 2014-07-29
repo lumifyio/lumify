@@ -76,6 +76,7 @@ define([
 
             require(['util/popovers/propertyInfo/propertyInfo'], function(PropertyInfo) {
                 if (shouldOpen) {
+                    PropertyInfo.teardownAll();
                     PropertyInfo.attachTo($target, {
                         property: property,
                         vertexId: vertexId
