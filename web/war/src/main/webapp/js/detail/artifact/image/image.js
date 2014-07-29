@@ -14,6 +14,7 @@ define([
         this.defaultAttrs({
             imageSelector: 'img',
             boxSelector: '.facebox',
+            artifactImageSelector: '.artifact-image',
             boxEditingSelector: '.facebox.editing'
         });
 
@@ -33,6 +34,7 @@ define([
         this.setupEditingFacebox = function() {
             var self = this,
                 image = this.select('imageSelector'),
+                artifactImage = this.select('artifactImageSelector'),
                 imageEl = image.get(0),
                 naturalWidth = imageEl.naturalWidth,
                 naturalHeight = imageEl.naturalHeight;
@@ -84,11 +86,14 @@ define([
                 event.preventDefault();
 
                 var box = this.select('boxEditingSelector'),
-                    offsetParent = this.$node.offset(),
-                    offsetParentWidth = this.$node.width(),
-                    offsetParentHeight = this.$node.height(),
+                    offsetParent = artifactImage.offset(),
+                    offsetParentWidth = artifactImage.width(),
+                    offsetParentHeight = artifactImage.height(),
                     startPosition = {
-                        left: event.pageX - offsetParent.left,
+                        left: Math.min(
+                            offsetParentWidth,
+                            Math.max(0, event.pageX - offsetParent.left)
+                        ),
                         top: event.pageY - offsetParent.top,
                         width: 1,
                         height: 1
@@ -96,11 +101,14 @@ define([
 
                 $(document).on('mousemove.facebox', function(evt) {
                         var currentPosition = {
-                                left: Math.min(offsetParentWidth, Math.max(0, evt.pageX - offsetParent.left)),
+                                left: Math.min(
+                                    offsetParentWidth,
+                                    Math.max(0, evt.pageX - offsetParent.left)
+                                ),
                                 top: Math.min(offsetParentHeight, Math.max(0, evt.pageY - offsetParent.top))
                             },
-                            width = Math.abs(startPosition.left - currentPosition.left),
-                            height = Math.abs(startPosition.top - currentPosition.top);
+                            width = Math.min(offsetParentWidth, Math.abs(startPosition.left - currentPosition.left)),
+                            height = Math.min(offsetParentWidth, Math.abs(startPosition.top - currentPosition.top));
 
                         if (width >= 5 && height >= 5) {
                             box.css({
@@ -125,16 +133,13 @@ define([
 
             this.select('boxEditingSelector')
                 .resizable({
-                    containment: this.$node,
+                    containment: 'parent',
                     handles: 'all',
                     minWidth: 5,
                     minHeight: 5,
-                    start: function(event, ui) {
-                        // Make fixed percentages during drag
-                    },
                     stop: convertToPercentageAndTrigger
                 }).draggable({
-                    containment: this.$node,
+                    containment: 'parent',
                     cursor: 'move',
                     stop: convertToPercentageAndTrigger
                 });
