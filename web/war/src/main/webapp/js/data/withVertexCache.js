@@ -153,6 +153,11 @@ define([
                     _.pick.apply(_, [vertex].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES))
                 );
 
+            if (_.isEqual(_.keys(vertex), 'id workspace'.split(' '))) {
+                cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
+                return cache;
+            }
+
             if (!cache.properties) cache.properties = [];
             if (!cache.workspace) cache.workspace = {};
 
