@@ -1,7 +1,10 @@
 package io.lumify.core.bootstrap;
 
 import com.altamiracorp.bigtable.model.ModelSession;
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
+import com.google.inject.Provider;
+import com.google.inject.Scopes;
 import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;
@@ -192,10 +195,9 @@ public class LumifyBootstrap extends AbstractModule {
     private void injectProviders() {
         LOGGER.info("Running %s", BootstrapBindingProvider.class.getName());
         ServiceLoader<BootstrapBindingProvider> bindingProviders = ServiceLoaderUtil.load(BootstrapBindingProvider.class);
-        Binder binder = binder();
         for (BootstrapBindingProvider provider : bindingProviders) {
             LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());
-            provider.addBindings(binder, configuration);
+            provider.addBindings(this.binder(), configuration);
         }
     }
 
