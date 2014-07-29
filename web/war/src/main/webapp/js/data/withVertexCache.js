@@ -9,7 +9,8 @@ define([
         'http://lumify.io#visibilityJson',
         'detectedObjects',
         'properties',
-        'sandboxStatus'
+        'sandboxStatus',
+        'edgeLabels'
     ];
 
     return withVertexCache;
@@ -166,6 +167,7 @@ define([
                 'sandboxStatus']));
 
             cache.detectedObjects = vertex.detectedObjects;
+            cache.edgeLabels = vertex.edgeLabels;
 
             if (this.workspaceVertices[id]) {
                 this.workspaceVertices[id] = cache.workspace;
@@ -180,6 +182,7 @@ define([
             }
 
             cache.detectedObjects = cache.detectedObjects || [];
+            cache.edgeLabels = cache.edgeLabels || [];
 
             $.extend(true, vertex, cache);
 
