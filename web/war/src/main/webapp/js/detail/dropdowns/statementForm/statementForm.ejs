@@ -6,18 +6,18 @@
 
   <div class="arrow-wrap">
     <select>
-        <option>Loading...</option>
-      </select>
+        <option><%= i18n('relationship.form.types.loading') %></option>
+    </select>
 
     <div class="arrow"/>
-      <a class="invert" href="#">Invert</a>
+      <a class="invert" href="#"><%= i18n('relationship.form.button.invert') %></a>
   </div>
 
   <div class="justification"></div>
   <div class="visibility"></div>
 
   <div class="buttons">
-    <button class="btn btn-link btn-small cancel">Cancel</button>
-    <button class="create-statement btn btn-small btn-primary">Connect</button>
+    <button class="btn btn-link btn-small cancel"><%= i18n('relationship.form.button.cancel') %></button>
+    <button class="create-statement btn btn-small btn-primary"><%= i18n('relationship.form.button.create') %></button>
   </div>
 </div>

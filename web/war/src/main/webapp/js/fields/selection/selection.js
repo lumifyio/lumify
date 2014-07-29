@@ -11,7 +11,7 @@ define([
 
     function FieldSelection() {
 
-        var PLACEHOLDER = 'Type to filter properties';
+        var PLACEHOLDER = i18n('field.selection.placeholder');
 
         this.defaultAttrs({
             findPropertySelection: 'input'
@@ -26,7 +26,7 @@ define([
 
             if (this.attr.properties.length === 0 || this.attr.properties.length.value === 0) {
                 this.select('findPropertySelection')
-                    .attr('placeholder', 'No valid properties')
+                    .attr('placeholder', i18n('field.selection.no_valid'))
                     .attr('disabled', true);
             } else {
                 var properties = self.filteredProperties || self.attr.properties,

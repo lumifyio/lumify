@@ -34,12 +34,12 @@ public class HdfsLibCacheLoader extends LibLoader {
 
         String hdfsLibCacheTempDirectoryString = configuration.get(Configuration.HDFS_LIB_CACHE_TEMP_DIRECTORY, null);
         if (hdfsLibCacheTempDirectoryString != null) {
-            hdfsLibCacheTempDirectory = new File(hdfsLibCacheTempDirectoryString);
+            hdfsLibCacheTempDirectory = new File(hdfsLibCacheTempDirectoryString + "-" + System.getProperty("user.name"));
         }
 
         if (hdfsLibCacheTempDirectory == null) {
             File baseDir = new File(System.getProperty("java.io.tmpdir"));
-            hdfsLibCacheTempDirectory = new File(baseDir, "lumify-hdfslibcache");
+            hdfsLibCacheTempDirectory = new File(baseDir, "lumify-hdfslibcache-" + System.getProperty("user.name"));
         }
 
         FileSystem hdfsFileSystem = getFileSystem(configuration);

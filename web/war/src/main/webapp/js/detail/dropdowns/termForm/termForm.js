@@ -122,13 +122,14 @@ define([
 
                 if (this.unresolve) {
                     this.select('actionButtonSelector')
-                        .text('Unresolve')
+                        .text(i18n('detail.resolve.form.button.unresolve'))
                         .show();
                     this.$node.find('input,select').attr('disabled', true);
                 } else {
                     this.select('actionButtonSelector')
                         .text(newGraphVertexId && !initial && !this.attr.coords ?
-                              'Resolve as Existing' : 'Resolve as New')
+                              i18n('detail.resolve.form.button.resolve.existing') :
+                              i18n('detail.resolve.form.button.resolve.new'))
                         .show();
                 }
                 this.select('helpSelector').hide();
@@ -422,7 +423,9 @@ define([
                 sign: $.trim(objectSign),
                 graphVertexId: graphVertexId,
                 objectSign: $.trim(objectSign) || '',
-                buttonText: existingEntity ? 'Resolve as Existing' : 'Resolve as New'
+                buttonText: existingEntity ?
+                    i18n('detail.resolve.form.button.resolve.existing') :
+                    i18n('detail.resolve.form.button.resolve.new')
             }));
 
             this.graphVertexChanged(graphVertexId, data, true);
@@ -586,8 +589,9 @@ define([
             var hasVertices = !_.isUndefined(vertices);
             this.$node.find('.badge')
                 .attr('title', hasVertices ?
-                      (vertices.length + ' match' + (vertices.length === 1 ? '' : 'es') + ' found') :
-                      'Server error')
+                      i18n('detail.resolve.form.entity_search.found' +
+                           (vertices.length === 1 ? '' : '.plural'), vertices.length) :
+                      i18n('detail.resolve.form.error'))
                 .text(hasVertices ? vertices.length : '!');
         };
 
@@ -595,7 +599,7 @@ define([
             var self = this,
                 items = [],
                 input = this.select('objectSignSelector'),
-                createNewText = 'Resolve as new entity';
+                createNewText = i18n('detail.resolve.form.entity_search.resolve_as_new');
 
             self.ontologyService.properties().done(function(ontologyProperties) {
                 var debouncedQuery = _.debounce(function(instance, query, callback) {

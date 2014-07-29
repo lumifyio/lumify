@@ -63,7 +63,7 @@ define([
                 this.on('showPanel', this.onShowPanel);
                 this.on('hidePanel', this.onHidePanel);
             } else {
-                this.$node.html(alertTemplate({error: 'Error: WebGL is not available'}));
+                this.$node.html(alertTemplate({error: i18n('graph.3d.webgl.error')}));
             }
         });
 

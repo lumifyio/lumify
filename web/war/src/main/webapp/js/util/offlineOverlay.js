@@ -32,7 +32,9 @@ define([
 
         this.updateLastCheck = function() {
             if (this.lastCheck) {
-                this.$lastCheck.text('Last checked ' + F.date.relativeToNow(this.lastCheck)).show();
+                this.$lastCheck.text(
+                    i18n('lumify.offline_overlay.last_check', F.date.relativeToNow(this.lastCheck))
+                ).show();
             } else {
                 this.$lastCheck.hide();
             }

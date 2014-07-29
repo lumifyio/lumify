@@ -38,8 +38,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             '../libs/es5-shim/es5-sham',
             '../libs/underscore/underscore',
 
-            'util/handlebars/eachWithLimit',
-            'util/handlebars/date'
+            'util/handlebars/helpers'
         ],
 
         callback: function(chai, sinon) {

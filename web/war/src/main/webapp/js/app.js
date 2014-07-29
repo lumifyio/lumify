@@ -120,23 +120,23 @@ define([
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: ['Graph', 'Map'],
+                scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
-                    escape: { fire: 'escape', desc: 'Close all open panes and deselect objects' },
+                    escape: { fire: 'escape', desc: i18n('lumify.help.escape') },
                 }
             });
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: 'Search',
+                scope: i18n('search.help.scope'),
                 shortcuts: {
-                    '/': { fire: 'toggleSearchPane', desc: 'Show search pane / toggle search type' }
+                    '/': { fire: 'toggleSearchPane', desc: i18n('search.help.toggle') }
                 }
             });
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: 'Lumify',
+                scope: i18n('lumify.help.scope'),
                 shortcuts: {
-                    'alt-l': { fire: 'logout', desc: 'Log out of Lumify' }
+                    'alt-l': { fire: 'logout', desc: i18n('lumify.help.logout') }
                 }
             });
 
@@ -365,7 +365,7 @@ define([
                             .append('<div id="login"/>');
                         Login.teardownAll();
                         Login.attachTo('#login', {
-                            errorMessage: data && data.message || 'Server is unavailable'
+                            errorMessage: data && data.message || i18n('lumify.server.not_found')
                         });
                         _.defer(function() {
                             self.teardown();

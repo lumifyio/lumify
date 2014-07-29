@@ -234,7 +234,7 @@ define([
             this.ontologyService.concepts().done(function(concepts) {
                 self.select('conceptsSelector').html(
                     conceptsTemplate({
-                        defaultText: 'All Concepts',
+                        defaultText: i18n('search.filters.all_concepts'),
                         concepts: _.filter(concepts.byTitle, function(c) {
                             return c.userVisible !== false;
                         })
@@ -255,7 +255,7 @@ define([
                 self.$node.find('.prop-filter-header').after(itemTemplate({}));
                 FieldSelection.attachTo(self.select('fieldSelectionSelector'), {
                     properties: self.properties,
-                    placeholder: 'Add Filter'
+                    placeholder: i18n('search.filters.add_filter.placeholder')
                 });
             });
         };

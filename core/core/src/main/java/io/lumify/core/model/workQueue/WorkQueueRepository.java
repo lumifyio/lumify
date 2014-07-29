@@ -200,7 +200,7 @@ public abstract class WorkQueueRepository {
     protected JSONObject getBroadcastEntityImageJson(Vertex graphVertex) {
         JSONObject dataJson = new JSONObject();
 
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null);
+        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null, null);
         dataJson.put("vertex", vertexJson);
         dataJson.put("graphVertexId", graphVertex.getId());
 
@@ -213,7 +213,7 @@ public abstract class WorkQueueRepository {
     protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName, String workspaceId) {
         JSONObject dataJson = new JSONObject();
 
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId);
+        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId, null);
         dataJson.put("vertex", vertexJson);
 
         JSONObject propertyJson = new JSONObject();
@@ -234,7 +234,7 @@ public abstract class WorkQueueRepository {
     protected JSONObject getBroadcastPropertyChangeJson(Edge edge, String propertyKey, String propertyName, String workspaceId) {
         JSONObject dataJson = new JSONObject();
 
-        JSONObject vertexJson = JsonSerializer.toJson(edge, workspaceId);
+        JSONObject vertexJson = JsonSerializer.toJson(edge, workspaceId, null);
         dataJson.put("edge", vertexJson);
 
         JSONObject propertyJson = new JSONObject();

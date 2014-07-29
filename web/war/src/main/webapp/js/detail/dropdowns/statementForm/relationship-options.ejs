@@ -1,12 +1,12 @@
 <%
 if (relationships.length == 0) { %>
-    <option value =''>No valid relationships</option>
+  <option value =''><%= i18n('relationship.form.no_valid_relationships') %></option>
 <% }
 else
 {%>
-    <option value=''>Select...</option>
-    <% relationships.forEach(function(relationship) { %>
-    <option
-        value="<%= relationship.title%>"><%= relationship.displayName %></option>
+  <option value=''><%= i18n('relationship.form.select.placeholder') %></option>
+  <% relationships.forEach(function(relationship) { %>
+  <option
+      value="<%= relationship.title%>"><%= relationship.displayName %></option>
 <% })}; %>
 

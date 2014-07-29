@@ -6,23 +6,23 @@
     <div class="preview" />
     <input 
       autocomplete="off" 
-      placeholder="Resolve to Entity" 
+      placeholder="<%= i18n('detail.resolve.form.entity_search.placeholder') %>" 
       class="object-sign"
       type="text" 
       value="<%= objectSign || sign %>">
     <span class="badge"/>
   </div>
 
-  <div class="help">Click to show existing matches</div>
+  <div class="help"><%= i18n('detail.resolve.form.entity_search.help') %></div>
 
   <select style="<%= graphVertexId ? '' : 'display:none' %>">
-    <option>Loading...</option>
+    <option><%= i18n('detail.resolve.form.entity_search.loading') %></option>
   </select>
 
   <div class="visibility"></div>
 
   <div class="buttons">
-    <button class="btn btn-link btn-small cancel">Cancel</button>
+    <button class="btn btn-link btn-small cancel"><%= i18n('detail.resolve.form.button.cancel') %></button>
     <button style="display:none" class="btn btn-small btn-primary"><%= buttonText %></button>
   </div>
 </div>

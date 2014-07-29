@@ -197,7 +197,7 @@ define([
                     }
 
                     if (isVisibility(d)) {
-                        return 'Visibility';
+                        return i18n('visibility.label');
                     }
 
                     var ontologyProperty = self.ontologyProperties.byTitle[d.name];
@@ -275,7 +275,7 @@ define([
                                 .attr('class', 'buttons')
                                 .append('button')
                                     .attr('class', 'add-new-properties btn btn-mini btn-default')
-                                    .text('Add Property');
+                                    .text(i18n('properties.button.add_property'));
                     }
                 });
 

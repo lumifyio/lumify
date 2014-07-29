@@ -1,6 +1,8 @@
 package io.lumify.web.routes.vertex;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -8,12 +10,10 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +49,7 @@ public class VertexProperties extends BaseRequestHandler {
             respondWithNotFound(response);
             return;
         }
-        JSONObject json = JsonSerializer.toJson(vertex, workspaceId);
+        JSONObject json = JsonSerializer.toJson(vertex, workspaceId, authorizations);
 
         json.put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
 

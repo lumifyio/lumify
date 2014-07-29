@@ -56,7 +56,7 @@ public class VertexMultiple extends BaseRequestHandler {
         results.put("vertices", vertices);
         results.put("requiredFallback", getAuthorizationsResult.requiredFallback);
         for (Vertex v : graphVertices) {
-            vertices.put(JsonSerializer.toJson(v, workspaceId));
+            vertices.put(JsonSerializer.toJson(v, workspaceId, getAuthorizationsResult.authorizations));
         }
 
         respondWithJson(response, results);

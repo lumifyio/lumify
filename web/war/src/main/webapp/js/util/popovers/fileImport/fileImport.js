@@ -39,7 +39,7 @@ define([
             config.rolledUp = [{
                 name: config.files.length === 1 ?
                     config.files[0].name :
-                    F.string.plural(config.files.length, 'file'),
+                    i18n('popovers.file_import.files.some', config.files.length),
                 size: F.bytes.pretty(
                     _.chain(config.files)
                         .map(_.property('size'))
@@ -58,7 +58,9 @@ define([
                     index: i
                 };
             })
-            config.pluralString = F.string.plural(config.files.length, 'file');
+            config.pluralString = i18n('popovers.file_import.files.' + (
+                config.files.length === 1 ? 'one' : 'some'
+            ), config.files.length);
 
             this.after('setupWithTemplate', function() {
                 var self = this;
@@ -163,13 +165,13 @@ define([
             this.request = vertexService.importFiles(this.attr.files, visibilityValue)
                 .progress(function(complete) {
                     var percent = Math.round(complete * 100);
-                    button.text(percent + '% Importing...');
+                    button.text(percent + '% ' + i18n('popovers.file_import.importing'));
                 })
                 .fail(function(xhr, m, error) {
                     self.attr.teardownOnTap = true;
                     self.markFieldErrors(error, self.popover);
                     cancelButton.hide();
-                    button.text('Import')
+                    button.text(i18n('popovers.file_import.button.import'))
                         .removeClass('loading')
                         .removeAttr('disabled')
 

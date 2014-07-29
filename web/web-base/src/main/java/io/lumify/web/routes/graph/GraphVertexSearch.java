@@ -140,7 +140,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         long retrievalStartTime = System.nanoTime();
         List<JSONObject> verticesJsonList = new ArrayList<JSONObject>();
         for (Vertex vertex : searchResults) {
-            JSONObject vertexJson = JsonSerializer.toJson(vertex, workspaceId);
+            JSONObject vertexJson = JsonSerializer.toJson(vertex, workspaceId, authorizations);
             if (scores != null) {
                 vertexJson.put("score", scores.get(vertex.getId()));
             }

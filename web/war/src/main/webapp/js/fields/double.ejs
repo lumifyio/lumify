@@ -7,13 +7,13 @@
       <span class="add-on">
         <% if (predicates) { %>
         <select class="predicate">
-          <option value="<">less than</option>
-          <option value=">">greater than</option>
-          <option value="range">between</option>
-          <option value="=">is</option>
+          <option value="<"><%= i18n('field.double.form.less_than') %></option>
+          <option value=">"><%= i18n('field.double.form.greater_than') %></option>
+          <option value="range"><%= i18n('field.double.form.between') %></option>
+          <option value="="><%= i18n('field.double.form.equal') %></option>
         </select>
         <% } else { %>
-        #
+          {{ i18n 'field.double.addon.prefix' }}
         <% } %>
       </span>
     </td>

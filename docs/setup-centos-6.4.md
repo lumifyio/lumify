@@ -36,6 +36,7 @@
         chmod u+x jdk-6u45-linux-x64-rpm.bin
         ./jdk-6u45-linux-x64-rpm.bin
         echo "export JAVA_HOME=/usr/java/jdk1.6.0_45/jre; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
+        source /etc/profile.d/java.sh
 
 
 ### EPEL Repository
@@ -51,9 +52,7 @@
 
         yum install -y git nodejs npm
 
-        npm install -g bower
-        npm install -g grunt
-        npm install -g grunt-cli
+        npm install -g inherits bower grunt grunt-cli
 
 
 ### Maven
@@ -66,6 +65,7 @@
         tar xzf ~/apache-maven-3.0.5-bin.tar.gz
         ln -s apache-maven-3.0.5 maven
         echo "export MVN_HOME=/opt/maven; export PATH=\$MVN_HOME/bin:\$PATH" > /etc/profile.d/maven.sh
+        source /etc/profile.d/maven.sh
 
 
 ## Install Servers
@@ -79,8 +79,8 @@
         rpm -ivH cloudera-cdh-4-0.x86_64.rpm
         yum install -y hadoop-0.20-conf-pseudo zookeeper-server
 
-        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}  /var/local/hadoop
-        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}  /var/local/hadoop
+        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data} /var/local/hadoop
+        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data} /var/local/hadoop
         
         service zookeeper-server init
         # The following warning is expected (and ok):
@@ -102,11 +102,11 @@
             <value>true</value>
           </property>
 
-        
-        cp /usr/lib/hadoop-0.20-mapreduce/example-confs/conf.secure/hadoop-env.sh /usr/lib/hadoop-0.20-mapreduce/conf/
-        
-        vi /usr/lib/hadoop-0.20-mapreduce/conf/hadoop-env.sh
-        # add export JAVA_HOME="/path/to/java"
+        echo "source /etc/profile.d/java.sh" >> /usr/lib/hadoop-0.20-mapreduce/conf/hadoop-env.sh
+
+        cd /usr/lib
+        ln -s hadoop-0.20-mapreduce hadoop-mapreduce
+
         
 ### Accumulo
 
@@ -173,7 +173,8 @@
 
         mkdir storm/logs
 
-        # edit /opt/storm/conf/storm.yaml and add the following lines to the end:
+        vi /opt/storm/conf/storm.yaml
+        # add the following at the end of the file:
           storm.zookeeper.servers: [192.168.33.10]
           nimbus.host: 192.168.33.10
           supervisor.slots.ports: [6700, 6701, 6702, 6703]
@@ -213,7 +214,7 @@
                                       -dname CN=lumify -keystore /opt/lumify/config/jetty.jks
 
         vi jetty/etc/jetty.xml
-        # add the following after the existing addConnector call
+        # add the following after the existing addConnector call:
           <Call name="addConnector">
             <Arg>
               <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
@@ -278,9 +279,20 @@
         /opt/storm/bin/storm nimbus 2>&1 > /opt/storm/logs/nimbus-console.out &
         /opt/storm/bin/storm supervisor 2>&1 > /opt/storm/logs/supervisor-console.out &
 
+
+### create a lumify user
+
+*as root*
+
+        useradd -g hadoop -G wheel lumify
+        passwd lumify
+
+        sed -i 's/^# %wheel/%wheel/' /etc/sudoers
+
+
 ### clone the Lumify projects
 
-*as a non-root user:*
+*as the lumify user:*
 
         cd ~
         git clone https://github.com/lumifyio/lumify-root.git
@@ -289,24 +301,27 @@
 
 ### configure Lumify
 
-*as a non-root user:*
+*as the lumify user:*
 
         sudo mkdir -p /opt/lumify/{config,lib,logs}
+        sudo chgrp -R hadoop /opt/lumify
+        sudo chmod -R g+ws /opt/lumify
 
         cd ~/lumify
         sudo cp docs/{lumify.properties,log4j.xml} /opt/lumify/config
+        sudo chmod g+w /opt/lumify/config/*
 
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         sudo sed -i -e "s/192.168.33.10/${ip_address}/" /opt/lumify/config/lumify.properties
 
-        /usr/lib/hadoop/bin/hadoop fs -mkdir -p /lumify/libcache
+        hadoop fs -mkdir -p /lumify/libcache
 
 
 ## Build and Deploy Lumify
 
 ### install Lumify Root
 
-*as a non-root user:*
+*as the lumify user:*
 
         cd ~/lumify-root
         mvn install
@@ -314,31 +329,35 @@
 
 ### build and deploy the Lumify web application and authentication plugin
 
-*as a non-root user:*
+*as the lumify user:*
 
         cd ~/lumify
         mvn package -P web-war -pl web/war -am
         mvn package -pl web/plugins/auth-username-only -am
 
-        sudo cp web/war/target/lumify-web-war-0.2.0-SNAPSHOT.war /opt/jetty/webapps/lumify.war
+        sudo cp web/war/target/lumify-web-war-0.2.0-SNAPSHOT.war /opt/jetty/webapps/ROOT.war
         sudo cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-0.2.0-SNAPSHOT.jar /opt/lumify/lib
 
         sudo /opt/jetty/bin/jetty.sh restart
 
-1. browse to https://localhost:8443/lumify
+1. browse to https://localhost:8443
 1. login by entering any username (if using the `lumify-web-auth-username-only` plugin)
 
 
 ### build and deploy the Lumify Storm topology
 
-*as a non-root user:*
+*as the lumify user:*
 
         cd ~/lumify
         mvn package -pl storm/storm -am
         mvn package -pl $(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target) | sed -e 's/ /,/g') -am
 
-        /usr/lib/hadoop/bin/hadoop fs -put \
+        hadoop fs -put \
           $(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do ls ${t}/*.jar | tail -1; done) \
           /lumify/libcache
+
+        # TODO: fix these plugins
+        hadoop fs -rm /lumify/libcache/lumify-translat*.jar
+        hadoop fs -rm /lumify/libcache/lumify-geocoder-bing-*.jar
 
         /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner

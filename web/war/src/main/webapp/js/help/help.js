@@ -10,7 +10,12 @@ define([
     helpTemplate,
     sectionsTemplate) {
 
-    var SCOPE_SORTING_HINTS = 'Lumify Search Graph Map'.split(' ');
+    var SCOPE_SORTING_HINTS = [
+        'lumify.help.scope',
+        'search.help.scope',
+        'graph.help.scope',
+        'map.help.scope'
+    ].map(i18n);
 
     return defineComponent(Help);
 
@@ -34,8 +39,8 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Help',
                 shortcuts: {
-                    escape: { fire: 'escape', desc: 'Close this help dialog' },
-                    'shift-/': { fire: 'toggleHelp', desc: 'Toggle this help dialog' }
+                    escape: { fire: 'escape', desc: i18n('help.shortcut.escape.desc') },
+                    'shift-/': { fire: 'toggleHelp', desc: i18n('help.shortcut.toggle.desc') }
                 }
             })
             this.trigger(document, 'requestKeyboardShortcuts');

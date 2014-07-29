@@ -97,8 +97,6 @@ define([
                             return self.matcher(item)
                         });
 
-                        //items = this.sorter(items)
-
                         this.render(items.slice(0)).show();
 
                         var selected = _.find(this.$menu.find('li').toArray(), function(i) {
@@ -117,12 +115,6 @@ define([
                 typeahead.$element[0].select();
                 this.typeahead = typeahead;
                 this.positionDialog();
-                /*
-                var active = this.popover.find('.active');
-                if (active.length) {
-                    active.get(0).scrollIntoView();
-                }
-                */
             });
         });
 

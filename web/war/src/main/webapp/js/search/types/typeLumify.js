@@ -49,7 +49,7 @@ define([
                 { offset: 0 }
             )
                 .fail(function() {
-                    self.trigger('searchRequestCompleted', { success: false, error: 'Invalid Query' });
+                    self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
                 })
                 .done(function(result) {
                     self.trigger('searchRequestCompleted', { success: true, result: result });

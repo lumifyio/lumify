@@ -24,7 +24,7 @@ public class DocumentMappingGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         StreamingPropertyValue mappingJson = LumifyProperties.MAPPING_JSON.getPropertyValue(data.getElement());
-        String mappingJsonString = IOUtils.toString(mappingJson.getInputStream());
+        String mappingJsonString = IOUtils.toString(mappingJson.getInputStream(), "UTF-8");
         DocumentMapping mapping = jsonMapper.readValue(mappingJsonString, DocumentMapping.class);
 
         String text = executeTextExtraction(in, data, mapping);

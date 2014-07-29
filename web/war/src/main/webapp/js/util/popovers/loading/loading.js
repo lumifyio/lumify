@@ -17,7 +17,7 @@ define([
 
         this.before('initialize', function(node, config) {
             config.template = 'loading/template';
-            config.message = config.message || 'Loading...';
+            config.message = config.message || i18n('popovers.loading.message');
             config.teardownOnTap = false;
         });
 

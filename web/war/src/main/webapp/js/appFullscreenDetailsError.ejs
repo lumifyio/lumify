@@ -1,15 +1,15 @@
 
 <% if (requiredFallback) { %>
   <% if (!noWorkspaceGiven) { %>
-  <h1>Unauthorized Workspace</h1>
+    <h1><%= i18n('fullscreen.unauthorized_workspace') %></h1>
   <% } %>
 
   <div class="no-workspace-access">
     <% if (!noWorkspaceGiven) { %>
-      You do not have access to the requested workspace.<br>
+      <%= i18n('fullscreen.unauthorized.body') %><br>
     <% } %>
     <% if (somePublished) { %>
-      Displaying published items using 
+      <%= i18n('fullscreen.published.prefix.body') %>
         <div class="btn-group">
           <a class="btn btn-link dropdown-toggle disabled" data-toggle="dropdown">
             <%= workspaceTitle %>
@@ -24,16 +24,20 @@
 <% if (vertices.length === 1) { %>
 
   <% if (!requiredFallback) { %>
-    <h1>Item Not Found</h1>
+    <h1><%= i18n('fullscreen.item_not_found') %></h1>
   <% } %>
-  <p>The item with <code>identifier = <%= vertices[0] %></code> could not be found.</p>
+  <p>
+  <%= i18n('fullscreen.item_not_found.body.prefix') %> 
+  <code><%= i18n('fullscreen.item_not_found.identifier', vertices[0]) %></code>
+  <%= i18n('fullscreen.item_not_found.body.suffix') %> 
+  </p>
 
 <% } else if (vertices.length > 1) { %>
 
   <% if (!requiredFallback) { %>
-    <h1>Items Not Found</h1>
+    <h1><%= i18n('fullscreen.items_not_found') %></h1>
   <% } %>
-  <p>The items with the following identifiers can not be found:</p>
+  <p><%= i18n('fullscreen.items_not_found.body') %></p>
   <p>
     <% vertices.forEach(function(vertex, i) { %>
       <code><%= vertex %></code>
@@ -46,4 +50,4 @@
 <% } %>
 
 
-<p class="return-to-lumify"><a href="/">Return to Lumify</a>
+<p class="return-to-lumify"><a href="/"><%= i18n('fullscreen.return_to_lumify') %></a>

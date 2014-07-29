@@ -86,11 +86,11 @@ define([
             this.padding = {l: 0,r: 0,b: 0,t: 0};
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: 'Map',
+                scope: i18n('map.help.scope'),
                 shortcuts: {
-                    '-': { fire: 'zoomOut', desc: 'Zoom out' },
-                    '=': { fire: 'zoomIn', desc: 'Zoom in' },
-                    'alt-f': { fire: 'fit', desc: 'Fit all objects on screen' },
+                    '-': { fire: 'zoomOut', desc: i18n('map.help.zoom_out') },
+                    '=': { fire: 'zoomIn', desc: i18n('map.help.zoom_in') },
+                    'alt-f': { fire: 'fit', desc: i18n('map.help.fit') },
                 }
             });
 

@@ -103,7 +103,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         LumifyVisibility visibility = this.visibilityTranslator.toVisibility(visibilityJson);
         if (!graph.isVisibilityValid(visibility.getVisibility(), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
-            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
+            respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
             chain.next(request, response);
             return;
         }

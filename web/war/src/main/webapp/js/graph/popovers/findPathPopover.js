@@ -50,8 +50,11 @@ define([
             var self = this,
                 cy = this.attr.cy,
                 title = this.popover.find('.popover-title').hide().find('.title').text(''),
-                text = this.popover.find('span.path').text('Finding paths...'),
-                button = this.popover.find('button').hide().text('Add Vertices').attr('disabled', true).focus();
+                text = this.popover.find('span.path').text(
+                    i18n('popovers.find_path.loading')
+                ),
+                button = this.popover.find('button').hide()
+                    .text(i18n('popovers.find_path.button.add')).attr('disabled', true).focus();
 
             this.select('findPathHopsButtonSelector').off('click').on('click', this.onFindPathHopsButton.bind(this));
 
@@ -62,7 +65,7 @@ define([
 
             this.findPathRequest = this.findPath(src, dest)
                 .fail(function() {
-                    self.popover.find('span.path').text('Server returned an error finding paths');
+                    self.popover.find('span.path').text(i18n('popovers.find_path.error'));
                     self.positionDialog();
                 })
                 .done(function(result) {
@@ -75,14 +78,21 @@ define([
                         notInWorkspace = vertices.filter(function(v) {
                             return !appData.workspaceVertices[v.id];
                         }),
-                        pathsFoundText = F.string.plural(paths.length, 'path') + ' found';
+                        pathsFoundText = i18n('popovers.find_path.' + (
+                            paths.length === 0 ? 'none' :
+                            paths.length === 1 ? 'one' : 'some'
+                        ), paths.length);
 
                     if (paths.length) {
                         if (notInWorkspace.length) {
-                            var vertexText = F.string.plural(notInWorkspace.length, 'vertex', 'vertices'),
-                                suffix = notInWorkspace.length === 1 ? ' isn\'t' : ' aren\'t';
-                            text.text(vertexText + suffix + ' already in workspace');
-                            button.text('Add ' + vertexText).removeAttr('disabled').show();
+                            var vertexText = i18n('popovers.find_path.not_in_workspace.' + (
+                                    notInWorkspace.length === 1 ? 'one' : 'some'
+                                ), notInWorkspace.length);
+
+                            text.text(vertexText);
+                            button.text(i18n('popovers.find_path.button.add.' + (
+                                notInWorkspace.length === 1 ? 'one' : 'some'
+                            ), notInWorkspace.length)).removeAttr('disabled').show();
 
                             var index, map = {};
                             for (var i = 0; i < notInWorkspace.length; i++) {
@@ -102,12 +112,12 @@ define([
                             self.verticesToAdd = notInWorkspace;
                             self.verticesToAddLayoutMap = map;
                         } else {
-                            text.text('all vertices are already added to workspace');
+                            text.text(i18n('popovers.find_path.not_in_workspace.none'));
                         }
 
                         cy.$('.temp').remove();
                         self.trigger('focusPaths', { paths: paths, sourceId: src, targetId: dest });
-                    } else text.text('Searching up to ' + F.string.plural(self.attr.hops, 'hop'));
+                    } else text.text(i18n('popovers.find_path.searching.hops', self.attr.hops));
 
                     title.text(pathsFoundText).closest('.popover-title').show();
                     self.positionDialog();

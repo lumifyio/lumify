@@ -4,7 +4,7 @@
   <% if (!predicates || hasGeocoder) { %>
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span class="add-on">Description</span>
+      <span class="add-on"><%= i18n('field.geolocation.form.description') %></span>
     </td>
 
     <td class="input-row">
@@ -15,7 +15,7 @@
 
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span class="add-on">Latitude</span>
+      <span class="add-on"><%= i18n('field.geolocation.form.latitude') %></span>
     </td>
 
     <td class="input-row">
@@ -25,7 +25,7 @@
 
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span class="add-on">Longitude</span>
+      <span class="add-on"><%= i18n('field.geolocation.form.longitude') %></span>
     </td>
 
     <td class="input-row">
@@ -36,11 +36,11 @@
   <% if (predicates) { %>
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span class="add-on">Radius</span>
+      <span class="add-on"><%= i18n('field.geolocation.form.radius') %></span>
     </td>
 
     <td class="input-row">
-      <input class="radius" placeholder="km" type="text"></input>
+      <input class="radius" placeholder="<%= i18n('field.geolocation.form.radius.placeholder') %>" type="text"></input>
     </td>
   </tr>
   <% } %>

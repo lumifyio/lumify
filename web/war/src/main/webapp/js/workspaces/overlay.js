@@ -78,9 +78,9 @@ define([
             this.on(document, 'escape', this.closeDiffPanel);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: ['Graph', 'Map'],
+                scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
-                    'alt-d':  { fire: 'showDiffPanel', desc: 'Show unpublished changes' }
+                    'alt-d':  { fire: 'showDiffPanel', desc: i18n('workspaces.help.show_diff') }
                 }
             });
         });
@@ -141,7 +141,11 @@ define([
 
         this.setContent = function(title, isEditable, subtitle) {
             this.select('nameSelector').text(title);
-            this.select('subtitleSelector').html(isEditable === false ? 'read only' : subtitle);
+            this.select('subtitleSelector').html(
+                isEditable === false ?
+                    i18n('workspaces.overlay.read_only') :
+                    subtitle
+            );
         };
 
         this.onSwitchWorkspace = function() {
@@ -151,7 +155,7 @@ define([
 
         this.onWorkspaceLoaded = function(event, data) {
             this.workspaceDeferred.resolve();
-            this.setContent(data.title, data.isEditable, 'no changes');
+            this.setContent(data.title, data.isEditable, i18n('workspaces.overlay.no_changes'));
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
             this.updateDiffBadge();
@@ -162,7 +166,7 @@ define([
         };
 
         this.onWorkspaceSaving = function(event, data) {
-            this.select('subtitleSelector').text('saving...');
+            this.select('subtitleSelector').text(i18n('workspaces.overlay.saving'));
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
         };
@@ -177,13 +181,16 @@ define([
 
             this.updateWorkspaceTooltip(data);
 
-            var prefix = 'last saved ',
-                subtitle = this.select('subtitleSelector').text(prefix + 'moments ago'),
+            var subtitle = this.select('subtitleSelector').text(
+                    i18n('workspaces.overlay.last_saved_moments_ago')
+                ),
                 setTimer = function() {
                     this.updateTimer = setTimeout(function() {
 
                         var time = F.date.relativeToNow(this.lastSaved);
-                        subtitle.text(prefix + time);
+                        subtitle.text(
+                            i18n('workspaces.overlay.last_saved_time', time)
+                        );
 
                         setTimer();
                     }.bind(this), LAST_SAVED_UPDATE_FREQUENCY_SECONDS * 1000);
@@ -222,7 +229,7 @@ define([
                 .fail(function() {
                     badge.removePrefixedClasses('badge-').addClass('badge-important')
                         .popover('destroy')
-                        .attr('title', 'An error occured')
+                        .attr('title', i18n('workspaces.overlay.error'))
                         .text('!');
                 })
                 .done(function(response, ontologyProperties) {
@@ -270,7 +277,11 @@ define([
                         } else {
                             badge
                                 .popover('destroy')
-                                .popover({placement: 'top', content: 'Loading...', title: 'Unpublished Changes'});
+                                .popover({
+                                    placement: 'top',
+                                    content: i18n('workspaces.diff.loading'),
+                                    title: i18n('workspaces.diff.header.unpublished_changes')
+                                });
 
                             popover = badge.data('popover');
                             tip = popover.tip();
@@ -309,7 +320,9 @@ define([
                     });
 
                     badge.removePrefixedClasses('badge-').addClass('badge-info')
-                        .attr('title', F.string.plural(formattedCount, 'unpublished change'))
+                        .attr('title', i18n('workspaces.diff.unpublished_change.' + (
+                            formattedCount === 1 ?
+                            'one' : 'some'), formattedCount))
                         .text(count > 0 ? formattedCount : '');
 
                     if (count > 0) {
@@ -325,7 +338,7 @@ define([
             badge.text(formattedCount).css('width', 'auto');
 
             var previousWidth = badge.width(),
-                html = formattedCount + ' <span>unpublished</span>',
+                html = formattedCount + ' <span>' + i18n('workspaces.diff.unpublished') + '</span>',
                 findWidth = function() {
                     return (
                         badge[0].scrollWidth - (
@@ -381,10 +394,15 @@ define([
                     .tooltip({
                         placement: 'right',
                         html: true,
-                        title: '<span><strong>Authorizations</strong> ' +
-                                    (data.user.authorizations.join(', ') || 'none') +
+                        title: '<span><strong>' +
+                            i18n('workspaces.overlay.authorizations') +
+                            '</strong> ' +
+                                    (data.user.authorizations.join(', ') ||
+                                     i18n('workspaces.overlay.authorizations.none')) +
                                 '</span>' +
-                                '<div><strong>Privileges</strong> ' +
+                                '<div><strong>' +
+                                i18n('workspaces.overlay.privileges') +
+                                '</strong> ' +
                                     _.without(data.user.privileges, 'READ').join(', ') +
                                 '</div>',
                         trigger: 'hover',
@@ -408,8 +426,10 @@ define([
             var name = this.select('nameSelector'),
                 tooltip = name.data('tooltip'),
                 tip = tooltip && tooltip.tip(),
-                text = 'Vertices: ' + F.number.pretty(this.verticesCount || 0) +
-                    ', Edges: ' + F.number.pretty(this.edgesCount || 0)
+                text = i18n('workspaces.overlay.vertices') + ': ' +
+                    F.number.pretty(this.verticesCount || 0) + ', ' +
+                    i18n('workspaces.overlay.edges') + ': ' +
+                    F.number.pretty(this.edgesCount || 0)
 
             if (tip && tip.is(':visible')) {
                 tip.find('.tooltip-inner span').text(text);

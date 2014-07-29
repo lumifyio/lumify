@@ -19,9 +19,13 @@
 
   <script src='jsc/require.config.js'></script>
   <script>
-    // Uncomment to run without requirejs concatenation (faster)
-    // require.baseUrl = 'js';
-    // require.urlArgs = "cache-bust=" +  Date.now();
+    (function() {
+      var buildNumber = '${buildNumber}',
+          buildTokenReplaced = buildNumber !== ('${' + 'buildNumber' + '}'),
+          versionParameter = buildTokenReplaced ? buildNumber : Date.now();
+
+      require.urlArgs = "v=" + versionParameter;
+    })();
   </script>
   <script data-main="lumify" src='libs/requirejs/require.js'></script>
 </head>

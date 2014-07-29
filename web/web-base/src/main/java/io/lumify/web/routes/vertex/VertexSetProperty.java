@@ -88,7 +88,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
-            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
+            respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
             chain.next(request, response);
             return;
         }
@@ -133,7 +133,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         // TODO: use property key from client when we implement multi-valued properties
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId);
 
-        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId);
+        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId, authorizations);
         respondWithJson(response, result);
     }
 }

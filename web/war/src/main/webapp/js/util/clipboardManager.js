@@ -80,11 +80,13 @@ define([
                         vertices = parameters && parameters.vertexIds;
 
                     if (vertices && vertices.length === 1) {
-                        self.trigger('displayInformation', { message: 'Copied vertex' });
+                        self.trigger('displayInformation', { message: i18n('vertex.clipboard.copy.one') });
                     } else if (vertices && vertices.length > 1) {
-                        self.trigger('displayInformation', { message: 'Copied ' + vertices.length + ' vertices' });
+                        self.trigger('displayInformation', {
+                            message: i18n('vertex.clipboard.copy.some', vertices.length)
+                        });
                     } else if (!vertices) {
-                        self.trigger('displayInformation', { message: 'Copied data' });
+                        self.trigger('displayInformation', { message: i18n('clipboard.copy') });
                     }
                 })
             }

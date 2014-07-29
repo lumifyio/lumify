@@ -125,7 +125,7 @@ public class WorkspaceHelper {
 
         auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, visibility.getVisibility());
 
-        JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId);
+        JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId, authorizations);
         artifactJson.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, modelUserContext, authorizations, workspaceId));
         result.put("artifactVertex", artifactJson);
         return result;
@@ -143,7 +143,7 @@ public class WorkspaceHelper {
         JSONArray propertiesJson = JsonSerializer.toJsonProperties(properties, workspaceId);
         json.put("properties", propertiesJson);
         json.put("deletedProperty", property.getName());
-        json.put("vertex", JsonSerializer.toJson(vertex, workspaceId));
+        json.put("vertex", JsonSerializer.toJson(vertex, workspaceId, authorizations));
 
         workQueueRepository.pushGraphPropertyQueue(vertex, property);
 

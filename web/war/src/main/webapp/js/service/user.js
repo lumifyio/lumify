@@ -9,7 +9,7 @@ define([
                 new UserService().isLoginRequired()
                     .fail(function(xhr, status, message) {
                         $(document).trigger('logout', {
-                            message: 'Session expired'
+                            message: i18n('lumify.session.expired')
                         });
                     })
             }
@@ -44,7 +44,7 @@ define([
                         window.currentUser = user;
                         deferred.resolve(user);
                     } else {
-                        deferred.reject('Read access is required', {
+                        deferred.reject(i18n('lumify.access.read_required'), {
                             username: user.userName,
                             focus: 'username'
                         });
@@ -83,15 +83,15 @@ define([
                 var errorDeferred = $.Deferred();
                 switch (error.status) {
                     case 403:
-                        errorDeferred.reject('Invalid Username or Password', {
+                        errorDeferred.reject(i18n('lumify.credentials.invalid'), {
                             focus: 'password'
                         });
                         break;
                     case 404:
-                        errorDeferred.reject('Server is unavailable');
+                        errorDeferred.reject(i18n('lumify.server.not_found'));
                         break;
                     default:
-                        errorDeferred.reject(error.statusText || 'Unknown Server Error');
+                        errorDeferred.reject(error.statusText || i18n('lumify.server.error'));
                         break;
                 }
                 return errorDeferred.promise();
