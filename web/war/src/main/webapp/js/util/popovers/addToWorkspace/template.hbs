@@ -1,18 +1,18 @@
 <div class="addToWorkspacePopover popover top">
   <div class="popover-title">
-    Add to Workspace
+    {{ i18n 'popovers.add_to_workspace.title' }}
   </div>
   <div class="arrow"></div>
   <div class="popover-content">
     <label>
-      <strong>Workspace</strong>
+      <strong>{{ i18n 'popovers.add_to_workspace.field.label' }}</strong>
       <select>
-        <option>Loading...</option>
+        <option>{{ i18n 'popovers.add_to_workspace.loading' }}</option>
       </select>
     </label>
     <div>
-      <button class="btn btn-primary" disabled>Add {{ vertexCount }}</button>
-      <button class="btn btn-default">Cancel</button>
+      <button class="btn btn-primary" disabled>{{ i18n 'popovers.add_to_workspace.button.add' }} {{ vertexCount }}</button>
+      <button class="btn btn-default">{{ i18n 'popovers.add_to_workspace.button.cancel' }}</button>
     </div>
   </div>
 </div>

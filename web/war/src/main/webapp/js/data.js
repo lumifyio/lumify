@@ -160,22 +160,22 @@ define([
             var self = this;
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: ['Graph', 'Map'],
+                scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
-                    'meta-a': { fire: 'selectAll', desc: 'Select all vertices' },
+                    'meta-a': { fire: 'selectAll', desc: i18n('lumify.help.select_all') },
                     'delete': {
                         fire: 'deleteSelected',
-                        desc: 'Removes selected vertices from workspace, deletes selected relationships'
+                        desc: i18n('lumify.help.delete')
                     },
                 }
             });
 
             this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: ['Graph', 'Map', 'Search'],
+                scope: ['graph.help.scope', 'map.help.scope', 'search.help.scope'].map(i18n),
                 shortcuts: {
-                    'alt-r': { fire: 'addRelatedItems', desc: 'Add related items to workspace' },
-                    'alt-t': { fire: 'searchTitle', desc: 'Search for selected title' },
-                    'alt-s': { fire: 'searchRelated', desc: 'Search vertices related to selected' },
+                    'alt-r': { fire: 'addRelatedItems', desc: i18n('lumify.help.add_related') },
+                    'alt-t': { fire: 'searchTitle', desc: i18n('lumify.help.search_title') },
+                    'alt-s': { fire: 'searchRelated', desc: i18n('lumify.help.search_related') },
                 }
             });
 
@@ -283,12 +283,12 @@ define([
                             anchorTo: {
                                 vertexId: data.vertexId
                             },
-                            message: 'Loading Related...'
+                            message: i18n('lumify.add_related.loading')
                         });
                     });
                 }, 1000);
 
-            this.trigger('displayInformation', { message: 'Loading Related...', dismissDuration: 1000 });
+            this.trigger('displayInformation', { message: i18n('lumify.add_related.loading'), dismissDuration: 1000 });
 
             $.when(
                 this.configService.getProperties(),
@@ -570,7 +570,7 @@ define([
                     if (existing.length) self.trigger('existingVerticesAdded', { vertices: existing });
 
                     if (added.length === 0) {
-                        var message = 'No New Vertices Added';
+                        var message = i18n('lumify.no_new_vertices_added');
                         self.trigger('displayInformation', { message: message });
                         return;
                     }
@@ -668,9 +668,10 @@ define([
         };
 
         this.formatVertexAction = function(action, vertices) {
-            var len = vertices.length,
-                plural = len === 1 ? 'vertex' : 'vertices';
-            return (action + ' ' + len + ' ' + plural);
+            var len = vertices.length;
+            return i18n('vertex.clipboard.action.' + (
+                len === 1 ? 'one' : 'some'
+            ), i18n('vertex.clipboard.action' + action.toLowerCase()), len);
         };
 
         this.onClipboardCut = function(evt, data) {
@@ -701,11 +702,9 @@ define([
                 this.vertexService.getMultiple(vertexIds).done(function(data) {
                     if (data.vertices.length !== vertexIds.length) {
                         self.trigger('displayInformation', {
-                            message: 'Unable to add ' +
-                                F.string.plural(
-                                    vertexIds.length - data.vertices.length,
-                                    'unpublished vertex', 'unpublished vertices'
-                                )
+                            message: i18n('vertex.clipboard.private.vertices.' + (
+                                (vertexIds.length - data.vertices.length) === 1 ? 'one' : 'some'
+                            ), (vertexIds.length - data.vertices.length))
                         });
                     } else {
                         self.trigger('displayInformation', {

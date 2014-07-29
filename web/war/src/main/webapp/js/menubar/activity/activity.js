@@ -15,13 +15,19 @@ define([
                 eventStarting: 'workspaceSaving',
                 eventFinished: 'workspaceSaved',
                 disableTooltipFlash: true,
-                descriptions: ['Workspace saving', 'Workspace saved']
+                descriptions: [
+                    i18n('menubar.activity.workspace_saving'),
+                    i18n('menubar.activity.workspace_saved')
+                ]
             },
             {
                 eventStarting: 'workspaceDeleting',
                 eventFinished: 'workspaceDeleted',
                 disableTooltipFlash: true,
-                descriptions: ['Workspace deleting', 'Workspace deleted']
+                descriptions: [
+                    i18n('menubar.activity.workspace_deleting'),
+                    i18n('menubar.activity.workspace_deleted')
+                ]
             }
 
         ];
@@ -72,7 +78,7 @@ define([
             this.$node.tooltip({
                 placement: 'right',
                 html: true,
-                title: 'No&nbsp;activity'
+                title: i18n('menubar.activity.none').replace(/\s+/g, '&nbsp')
             });
             this.on('shown', function() {
                 clearTimeout(this.hideTooltipTimeout);

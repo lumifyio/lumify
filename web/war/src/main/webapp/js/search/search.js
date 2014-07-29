@@ -122,7 +122,7 @@ define([
                 $error.empty();
             } else {
                 $error.html(
-                    alertTemplate({ error: data.error || 'Server error' })
+                    alertTemplate({ error: data.error || i18n('search.query.error') })
                 )
             }
         };
@@ -301,6 +301,10 @@ define([
                     return {
                         cls: type.toLowerCase(),
                         name: type,
+                        displayName: {
+                            Lumify: i18n('search.types.lumify'),
+                            Workspace: i18n('search.types.workspace')
+                        }[type],
                         selected: i === 0
                     }
                 }),

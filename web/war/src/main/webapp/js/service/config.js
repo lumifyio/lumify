@@ -19,11 +19,11 @@ define([
                                              'http://lumify.io#modifiedBy,' +
                                              'sandboxStatus,' +
                                              'http://lumify.io#confidence',
-        'properties.metadata.propertyNamesDisplay': 'Original,' +
-                                                    'Modified,' +
-                                                    'By,' +
-                                                    'Status,' +
-                                                    'Confidence',
+        'properties.metadata.propertyNamesDisplay': 'properties.metadata.label.source_timezone,' +
+                                                    'properties.metadata.label.modified_date,' +
+                                                    'properties.metadata.label.modified_by,' +
+                                                    'properties.metadata.label.status,' +
+                                                    'properties.metadata.label.confidence',
         'properties.metadata.propertyNamesType': 'timezone,' +
                                                  'datetime,' +
                                                  'user,' +
@@ -43,18 +43,45 @@ define([
 
     function ConfigService() {
         ServiceBase.call(this);
-        this.memoizeFunctions('config', ['getProperties']);
+        this.memoizeFunctions('config', [
+            'getConfiguration'
+        ]);
         return this;
     }
 
     ConfigService.prototype = Object.create(ServiceBase.prototype);
 
-    ConfigService.prototype.getProperties = function() {
-        return this._ajaxGet({ url: 'configuration' }).then(this.applyDefaults);
+    ConfigService.prototype.getConfiguration = function() {
+        var data = {};
+        try {
+            var language = localStorage.getItem('language');
+            if (language) {
+                data.localeLanguage = language;
+            }
+            var country = localStorage.getItem('country');
+            if (country) {
+                data.localeCountry = country;
+            }
+            var variant = localStorage.getItem('variant');
+            if (variant) {
+                data.localeVariant = variant;
+            }
+        } catch(e) { }
+        return this._ajaxGet({ url: 'configuration', data: data });
     };
 
-    ConfigService.prototype.applyDefaults = function(properties) {
-        return _.extend({}, DEFAULTS, properties);
+    ConfigService.prototype.getProperties = function() {
+        return this.getConfiguration().then(this.applyDefaults);
+    };
+
+    ConfigService.prototype.getMessages = function() {
+        return this.getConfiguration().then(function(config) {
+            return config.messages;
+        });
+    };
+
+    ConfigService.prototype.applyDefaults = function(config) {
+        return _.extend({}, DEFAULTS, config.properties);
     };
 
     return ConfigService;

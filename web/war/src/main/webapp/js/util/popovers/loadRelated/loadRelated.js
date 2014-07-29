@@ -19,7 +19,7 @@ define([
         this.before('initialize', function(node, config) {
             if (!config.title) {
                 console.warn('title attribute required');
-                config.title = 'Unknown';
+                config.title = i18n('popovers.load_related.title_unknown');
             }
             config.template = config.forceSearch ?
                 'loadRelated/loadRelatedForceSearch' :

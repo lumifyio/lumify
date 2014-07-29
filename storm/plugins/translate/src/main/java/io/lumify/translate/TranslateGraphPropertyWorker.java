@@ -36,7 +36,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String text = IOUtils.toString(in);
+        String text = IOUtils.toString(in, "UTF-8");
         if (text.length() < 50) {
             LOGGER.debug("Skipping language detection because the text is too short. (length: %d)", text.length());
             return;
@@ -141,7 +141,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
         String profileFileString;
         InputStream profileFileIn = TranslateGraphPropertyWorker.class.getResourceAsStream(profileFileName);
         try {
-            profileFileString = IOUtils.toString(profileFileIn);
+            profileFileString = IOUtils.toString(profileFileIn, "UTF-8");
         } finally {
             profileFileIn.close();
         }
@@ -149,7 +149,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     public String[] getProfileFilesList() throws IOException {
-        String filesListContents = IOUtils.toString(TranslateGraphPropertyWorker.class.getResourceAsStream("files.list"));
+        String filesListContents = IOUtils.toString(TranslateGraphPropertyWorker.class.getResourceAsStream("files.list"), "UTF-8");
         return filesListContents.split("\n");
     }
 

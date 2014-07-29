@@ -1,5 +1,7 @@
 package io.lumify.web.routes.relationship;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -7,10 +9,8 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.*;
-import com.google.inject.Inject;
 import org.json.JSONObject;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,9 +43,9 @@ public class RelationshipProperties extends BaseRequestHandler {
         Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
         Vertex targetVertex = edge.getVertex(Direction.IN, authorizations);
 
-        JSONObject results = JsonSerializer.toJson(edge, workspaceId);
-        results.put("source", JsonSerializer.toJson(sourceVertex, workspaceId));
-        results.put("target", JsonSerializer.toJson(targetVertex, workspaceId));
+        JSONObject results = JsonSerializer.toJson(edge, workspaceId, authorizations);
+        results.put("source", JsonSerializer.toJson(sourceVertex, workspaceId, authorizations));
+        results.put("target", JsonSerializer.toJson(targetVertex, workspaceId, authorizations));
 
         respondWithJson(response, results);
     }

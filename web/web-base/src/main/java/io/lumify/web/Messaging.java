@@ -48,7 +48,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     public void onRequest(AtmosphereResource resource) throws IOException {
         ensureInitialized(resource);
 
-        String requestData = org.apache.commons.io.IOUtils.toString(resource.getRequest().getInputStream());
+        String requestData = org.apache.commons.io.IOUtils.toString(resource.getRequest().getInputStream(), "UTF-8");
         try {
             if (!StringUtils.isBlank(requestData)) {
                 processRequestData(resource, requestData);

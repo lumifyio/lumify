@@ -1,5 +1,5 @@
 
-<li class="nav-header">Workspaces</li>
+<li class="nav-header"><%= i18n('workspaces.list.header') %></li>
 
 <% (results.mine || []).forEach(function(workspace) { %>
   <% include workspaces/item %>
@@ -7,13 +7,13 @@
 
 <li class="new-workspace">
   <div class="input-append">
-    <input class="new" name="title" type="text" placeholder="Workspace name" />
-    <button class="new btn btn-mini">Add</button>
+    <input class="new" name="title" type="text" placeholder="<%= i18n('workspaces.form.name.placeholder') %>" />
+    <button class="new btn btn-mini"><%= i18n('workspaces.form.button.add') %></button>
   </div>
 </li>
 
 <li class="divider"/>
-<li class="nav-header">Shared with me</li>
+<li class="nav-header"><%= i18n('workspaces.list.shared_with_me') %></li>
 
 <% (results.shared || []).forEach(function(workspace) { %>
   <% include workspaces/item %>

@@ -1,6 +1,6 @@
 
-define(['atmosphere', 'util/offlineOverlay'],
-    function(atmosphere, Overlay) {
+define(['atmosphere'],
+    function(atmosphere) {
         'use strict';
 
         var memoizedMap = {};
@@ -57,55 +57,58 @@ define(['atmosphere', 'util/offlineOverlay'],
         };
 
         ServiceBase.prototype.subscribe = function(config) {
-            var self = this,
-                req = {
-                    url: 'messaging',
-                    transport: 'websocket',
-                    fallbackTransport: 'long-polling',
-                    contentType: 'application/json',
-                    trackMessageLength: true,
-                    suspend: false,
-                    shared: false,
-                    connectTimeout: -1,
-                    enableProtocol: true,
-                    maxReconnectOnClose: 2,
-                    maxStreamingLength: 2000,
-                    logLevel: 'debug',
-                    onOpen: function(response) {
-                        if (config.onOpen) config.onOpen.apply(null, arguments);
-                    },
-                    onClientTimeout: function() {
-                        console.error('timeout');
-                        self.subscribe(config);
-                    },
-                    onClose: function(req) {
-                        console.error('closed', req.reasonPhrase, req.error);
-                    },
-                    onMessage: function(response) {
-                        var body = response.responseBody,
-                            data = JSON.parse(body);
+            var self = this;
 
-                        if (data && data.sourceId == document.subSocketId) {
-                            return;
+            require(['util/offlineOverlay'], function(Overlay) {
+                var req = {
+                        url: 'messaging',
+                        transport: 'websocket',
+                        fallbackTransport: 'long-polling',
+                        contentType: 'application/json',
+                        trackMessageLength: true,
+                        suspend: false,
+                        shared: false,
+                        connectTimeout: -1,
+                        enableProtocol: true,
+                        maxReconnectOnClose: 2,
+                        maxStreamingLength: 2000,
+                        logLevel: 'debug',
+                        onOpen: function(response) {
+                            if (config.onOpen) config.onOpen.apply(null, arguments);
+                        },
+                        onClientTimeout: function() {
+                            console.error('timeout');
+                            self.subscribe(config);
+                        },
+                        onClose: function(req) {
+                            console.error('closed', req.reasonPhrase, req.error);
+                        },
+                        onMessage: function(response) {
+                            var body = response.responseBody,
+                                data = JSON.parse(body);
+
+                            if (data && data.sourceId == document.subSocketId) {
+                                return;
+                            }
+
+                            if (config.onMessage) config.onMessage(null, data);
+                        },
+                        onError: function(response) {
+                            console.error('subscribe error:', response);
+                            if (config.onMessage) config.onMessage(response.error, null);
+
+                            // Might be closing because of browser refresh, delay
+                            // so it only happens if server went down
+                            _.delay(function() {
+                                Overlay.attachTo(document);
+                            }, 1000);
                         }
+                    };
+                document.$subSocket = self.getSocket().subscribe(req);
+                document.subSocketId = $.atmosphere.guid();
 
-                        if (config.onMessage) config.onMessage(null, data);
-                    },
-                    onError: function(response) {
-                        console.error('subscribe error:', response);
-                        if (config.onMessage) config.onMessage(response.error, null);
-
-                        // Might be closing because of browser refresh, delay
-                        // so it only happens if server went down
-                        _.delay(function() {
-                            Overlay.attachTo(document);
-                        }, 1000);
-                    }
-                };
-            document.$subSocket = this.getSocket().subscribe(req);
-            document.subSocketId = $.atmosphere.guid();
-
-            $(document).trigger('registerBeforeUnloadHandler', self.disconnect);
+                $(document).trigger('registerBeforeUnloadHandler', self.disconnect);
+            });
         };
 
         ServiceBase.prototype.disconnect = function() {

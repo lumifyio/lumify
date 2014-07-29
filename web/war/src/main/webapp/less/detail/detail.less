@@ -507,10 +507,16 @@
     margin-top: 1em;
   }
 
-  .artifact {
-    .image {
-        width:100% !important;
-    }
+
+  .image-preview {
+    text-align: center;      
+    .artifact-image {
+      position: relative;
+      display: inline-block;
+      .image {
+        max-height: 350px;      
+      }
+    }    
   }
 
   .badge {
@@ -540,9 +546,18 @@
   .artifact-title {
     padding: 1em 1em 0 1em;
     margin: 0; 
-    font-size: 130%;
+    font-size: 130%;    
+  }
+  .artifact-title, .entity-title {
     .subtitle {
+      margin: 0;
+      padding: 0;
       font-size: 90%;
+      line-height: 1.1em;
+      margin-top: 0em;
+      color: #999;
+      font-variant: small-caps;
+      text-transform: lowercase;
     }
   }
   .artifact-header {    

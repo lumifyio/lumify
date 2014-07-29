@@ -74,8 +74,8 @@ public class VertexRelationships extends BaseRequestHandler {
             }
 
             JSONObject relationshipJson = new JSONObject();
-            relationshipJson.put("relationship", JsonSerializer.toJson(edge, workspaceId));
-            relationshipJson.put("vertex", JsonSerializer.toJson(otherVertex, workspaceId));
+            relationshipJson.put("relationship", JsonSerializer.toJson(edge, workspaceId, authorizations));
+            relationshipJson.put("vertex", JsonSerializer.toJson(otherVertex, workspaceId, authorizations));
             relationshipsJson.put(relationshipJson);
         }
         json.put("totalReferences", totalReferences);

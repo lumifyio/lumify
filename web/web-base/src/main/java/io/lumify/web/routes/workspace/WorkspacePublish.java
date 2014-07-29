@@ -357,7 +357,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     detectedObjectRepository.updateColumnVisibility(detectedObjectModel, originalEdgeVisibility.getVisibilityString(), lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
 
                     Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
-                    JSONObject artifactVertexWithDetectedObjects = JsonSerializer.toJsonVertex(artifactVertex, workspaceId);
+                    JSONObject artifactVertexWithDetectedObjects = JsonSerializer.toJsonVertex(artifactVertex, workspaceId, authorizations);
                     artifactVertexWithDetectedObjects.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, systemUser, authorizations, workspaceId));
 
                     this.workQueueRepository.pushDetectedObjectChange(artifactVertexWithDetectedObjects);

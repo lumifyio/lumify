@@ -28,18 +28,18 @@ import static org.securegraph.util.IterableUtils.toList;
 public class JsonSerializer {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(JsonSerializer.class);
 
-    public static JSONArray toJson(Iterable<? extends Element> elements, String workspaceId) {
+    public static JSONArray toJson(Iterable<? extends Element> elements, String workspaceId, Authorizations authorizations) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
-            result.put(toJson(element, workspaceId));
+            result.put(toJson(element, workspaceId, authorizations));
         }
         return result;
     }
 
-    public static JSONObject toJson(Element element, String workspaceId) {
+    public static JSONObject toJson(Element element, String workspaceId, Authorizations authorizations) {
         checkNotNull(element, "element cannot be null");
         if (element instanceof Vertex) {
-            return toJsonVertex((Vertex) element, workspaceId);
+            return toJsonVertex((Vertex) element, workspaceId, authorizations);
         }
         if (element instanceof Edge) {
             return toJsonEdge((Edge) element, workspaceId);
@@ -47,12 +47,29 @@ public class JsonSerializer {
         throw new RuntimeException("Unexpected element type: " + element.getClass().getName());
     }
 
-    public static JSONObject toJsonVertex(Vertex vertex, String workspaceId) {
+    public static JSONObject toJsonVertex(Vertex vertex, String workspaceId, Authorizations authorizations) {
         try {
-            return toJsonElement(vertex, workspaceId);
+            JSONObject json = toJsonElement(vertex, workspaceId);
+            JSONArray vertexEdgeLabelsJson = getVertexEdgeLabelsJson(vertex, authorizations);
+            if (vertexEdgeLabelsJson != null) {
+                json.put("edgeLabels", vertexEdgeLabelsJson);
+            }
+            return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static JSONArray getVertexEdgeLabelsJson(Vertex vertex, Authorizations authorizations) {
+        if (authorizations == null) {
+            return null;
+        }
+        Iterable<String> edgeLabels = vertex.getEdgeLabels(Direction.BOTH, authorizations);
+        JSONArray result = new JSONArray();
+        for (String edgeLabel : edgeLabels) {
+            result.put(edgeLabel);
+        }
+        return result;
     }
 
     public static JSONObject toJsonEdge(Edge edge, String workspaceId) {

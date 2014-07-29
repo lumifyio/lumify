@@ -26,7 +26,8 @@ define([
     d3) {
     'use strict';
 
-    var relationshipService = new RelationshipService(),
+    var predicate = { name: 'http://lumify.io#conceptType' },
+        relationshipService = new RelationshipService(),
         vertexService = new VertexService(),
         ontologyService = new OntologyService();
 
@@ -69,22 +70,9 @@ define([
         };
 
         this.update = function() {
-            var predicate = { name: 'http://lumify.io#conceptType' },
-                relationship = this.relationship,
+            var relationship = this.relationship,
                 source = relationship.source,
                 target = relationship.target;
-
-            $.extend(source, {
-                concept: this.ontology.conceptsById[
-                    _.findWhere(source.properties, predicate).value
-                ].displayName
-            });
-
-            $.extend(target, {
-                concept: this.ontology.conceptsById[
-                    _.findWhere(target.properties, predicate).value
-                ].displayName
-            });
 
             d3.select(this.node).selectAll('.vertex-to-vertex-relationship')
                 .data([source, target])
@@ -96,7 +84,7 @@ define([
                         .append('div')
                         .attr('class', 'subtitle')
                         .text(function(d) {
-                            return d.concept;
+                            return d.concept.displayName;
                         });
                 })
         };
@@ -114,19 +102,21 @@ define([
                 self.ontology = ontology;
                 self.ontologyRelationships = ontologyRelationships;
                 self.relationship = relationship;
+                $.extend(relationship.source, {
+                    concept: self.ontology.conceptsById[
+                        _.findWhere(relationship.source.properties, predicate).value
+                    ]
+                });
+
+                $.extend(relationship.target, {
+                    concept: self.ontology.conceptsById[
+                        _.findWhere(relationship.target.properties, predicate).value
+                    ]
+                });
                 self.$node.html(template({
                     auditsButton: self.auditsButton()
                 }));
                 self.update();
-
-                /*
-                self.$node.html(template({
-                    appdata: appdata,
-                    auditsbutton: self.auditsbutton(),
-                    relationshipData: relationship,
-                    F: F
-                }));
-                */
 
                 Properties.attachTo(self.select('propertiesSelector'), {
                     data: relationship

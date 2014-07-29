@@ -33,7 +33,9 @@ define([
                 },
 
                 sandboxStatus: function(value) {
-                    return (/^(private|public_changed)$/i).test(value) ? 'unpublished' : undefined;
+                    return (/^(private|public_changed)$/i).test(value) ?
+                        i18n('vertex.status.unpublished') :
+                        undefined;
                 },
 
                 percent: function(value) {
@@ -65,7 +67,7 @@ define([
                     $('<i>').text((
                         property.value &&
                         property.value.source
-                    ) || 'public').appendTo(el);
+                    ) || i18n('visibility.blank')).appendTo(el);
                 },
 
                 geoLocation: function(el, property) {
@@ -355,7 +357,8 @@ define([
                 }
 
                 return hasValue ? foundProperties[0].value :
-                    (defaultValue || ('No ' + displayName.toLowerCase() + ' available'));
+                    (defaultValue ||
+                    i18n('vertex.property.not_available', displayName.toLowerCase()))
             },
 
             isEdge: function(vertex) {

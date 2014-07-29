@@ -124,7 +124,7 @@ public class ArtifactImport extends BaseRequestHandler {
 
         if (invalidVisibilities.size() > 0) {
             LOGGER.warn("%s is not a valid visibility for %s user", invalidVisibilities.toString(), user.getDisplayName());
-            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"), invalidVisibilities);
+            respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"), invalidVisibilities);
             chain.next(request, response);
             return null;
         }

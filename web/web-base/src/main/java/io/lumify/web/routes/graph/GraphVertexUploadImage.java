@@ -146,7 +146,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         graph.flush();
         workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(), workspaceId);
 
-        respondWithJson(response, JsonSerializer.toJson(entityVertex, workspaceId));
+        respondWithJson(response, JsonSerializer.toJson(entityVertex, workspaceId, authorizations));
     }
 
     private JSONObject getLumifyVisibility(Vertex entityVertex, String workspaceId) {

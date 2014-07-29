@@ -3,9 +3,10 @@ define([
     'sf',
     'jstz',
     'timezone-js',
+    'util/messages',
     'jquery',
-    'underscore',
-], function(sf, jstz, timezoneJS) {
+    'underscore'
+], function(sf, jstz, timezoneJS, i18n) {
     'use strict';
 
     var BITS_FOR_INDEX = 12,
@@ -17,14 +18,14 @@ define([
         isFirefox = ~navigator.userAgent.indexOf('Firefox'),
         keyboardMappings = {
             metaIcons: {
-                shift: isMac ? '⇧' : 'Shift',
-                meta: isMac ? '⌘' : 'Ctrl',
-                ctrl: isMac ? '⌃' : 'Ctrl',
-                alt: isMac ? '⌥' : 'Alt'
+                shift: isMac ? '⇧' : i18n('keyboard.shift'),
+                meta: isMac ? '⌘' : i18n('keyboard.ctrl'),
+                ctrl: isMac ? '⌃' : i18n('keyboard.ctrl'),
+                alt: isMac ? '⌥' : i18n('keyboard.alt')
             },
             charIcons: {
                 esc: isMac ? '⎋' : null,
-                escape: isMac ? '⎋' : 'esc',
+                escape: isMac ? '⎋' : i18n('keyboard.escape'),
                 'delete': isMac ? '⌫' : null,
                 backspace: isMac ? '⌦' : null,
                 up: '↑',
@@ -101,11 +102,11 @@ define([
             },
             prettyApproximate: function(number) {
                 if (number >= 1000000000) {
-                    return (decimalAdjust('round', number / 1000000000, -1) + 'B');
+                    return (decimalAdjust('round', number / 1000000000, -1) + i18n('numbers.billion_suffix'));
                 } else if (number >= 1000000) {
-                    return (decimalAdjust('round', number / 1000000, -1) + 'M');
+                    return (decimalAdjust('round', number / 1000000, -1) + i18n('numbers.million_suffix'));
                 } else if (number >= 1000) {
-                    return (decimalAdjust('round', number / 1000, -1) + 'K');
+                    return (decimalAdjust('round', number / 1000, -1) + i18n('numbers.thousand_suffix'));
                 } else return FORMATTERS.number.pretty(number);
             },
             percent: function(number) {
@@ -135,7 +136,7 @@ define([
 
         boolean: {
             pretty: function(bool) {
-                return bool ? 'Yes' : 'No';
+                return bool ? i18n('boolean.true') : i18n('boolean.false');
             }
         },
 
@@ -149,22 +150,22 @@ define([
                 precision = _.isUndefined(precision) ? 1 : precision;
 
                 if ((bytes >= 0) && (bytes < k)) {
-                    return bytes + ' B';
+                    return bytes + ' ' + i18n('bytes.suffix');
 
                 } else if ((bytes >= k) && (bytes < m)) {
-                    return (bytes / k).toFixed(precision) + ' KB';
+                    return (bytes / k).toFixed(precision) + ' ' + i18n('bytes.kilo');
 
                 } else if ((bytes >= m) && (bytes < g)) {
-                    return (bytes / m).toFixed(precision) + ' MB';
+                    return (bytes / m).toFixed(precision) + ' ' + i18n('bytes.mega');
 
                 } else if ((bytes >= g) && (bytes < t)) {
-                    return (bytes / g).toFixed(precision) + ' GB';
+                    return (bytes / g).toFixed(precision) + ' ' + i18n('bytes.giga');
 
                 } else if (bytes >= t) {
-                    return (bytes / t).toFixed(precision) + ' TB';
+                    return (bytes / t).toFixed(precision) + ' ' + i18n('bytes.tera');
 
                 } else {
-                    return bytes + ' B';
+                    return bytes + ' ' + i18n('bytes.suffix');
                 }
             }
         },
@@ -281,6 +282,22 @@ define([
                     case 1: return '1 ' + singular;
                     default: return count + ' ' + plural;
                 }
+            },
+            truncate: function(str, words) {
+                var maxChars = 7 * words,
+                    string = $.trim(str),
+                    wordsArray = string.split(/\s+/),
+                    truncated = wordsArray.slice(0, words).join(' '),
+                    ellipsis = '…';
+
+                if (truncated.length > maxChars) {
+                    // Use standard truncation (set amount of characters)
+                    truncated = string.substring(0, maxChars) + ellipsis;
+                } else if (truncated !== string) {
+                    truncated = truncated + ellipsis;
+                }
+
+                return truncated
             }
         },
         date: {
@@ -333,30 +350,30 @@ define([
                     time = '';
 
                 if (span.years > 1) {
-                    time = sf("{0:^y 'years'}", span);
+                    time = sf("{0:^y '" + i18n('time.years') + "'}", span);
                 } else if (span.years === 1) {
-                    time = 'a year';
+                    time = i18n('time.year');
                 } else if (span.months > 1) {
-                    time = sf("{0:^M 'months'}", span);
+                    time = sf("{0:^M '" + i18n('time.months') + "'}", span);
                 } else if (span.months === 1) {
-                    time = 'a month';
+                    time = i18n('time.month');
                 } else if (span.days > 1) {
-                    time = sf("{0:^d 'days'}", span);
+                    time = sf("{0:^d '" + i18n('time.days') + "'}", span);
                 } else if (span.days === 1) {
-                    time = 'a day';
+                    time = i18n('time.day');
                 } else if (span.hours > 1) {
-                    time = sf("{0:^h 'hours'}", span);
+                    time = sf("{0:^h '" + i18n('time.hours') + "'}", span);
                 } else if (span.hours === 1) {
-                    time = 'an hour';
+                    time = i18n('time.hour');
                 } else if (span.minutes > 1) {
-                    time = sf("{0:^m 'minutes'}", span);
+                    time = sf("{0:^m '" + i18n('time.minutes') + "'}", span);
                 } else if (span.minutes === 1) {
-                    time = 'a minute';
+                    time = i18n('time.minute');
                 } else {
-                    time = 'moments';
+                    time = i18n('time.moments');
                 }
 
-                return time + ' ago';
+                return time + ' ' + i18n('time.ago');
             }
         },
         timezone: {

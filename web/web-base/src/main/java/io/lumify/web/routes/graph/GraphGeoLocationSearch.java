@@ -62,7 +62,7 @@ public class GraphGeoLocationSearch extends BaseRequestHandler {
                     vertices().
                     iterator();
             while (vertexIterator.hasNext()) {
-                vertices.put(JsonSerializer.toJson(vertexIterator.next(), workspaceId));
+                vertices.put(JsonSerializer.toJson(vertexIterator.next(), workspaceId, authorizations));
             }
         }
 

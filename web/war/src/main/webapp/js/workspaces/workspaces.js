@@ -249,7 +249,7 @@ define([
 
         this.onWorkspaceNotAvailable = function(event, data) {
             this.loadWorkspaceList();
-            this.trigger('displayInformation', { message: 'Workspace not found' });
+            this.trigger('displayInformation', { message: i18n('workspaces.not_found') });
         };
 
         this.switchActive = function(workspaceId) {
@@ -312,18 +312,20 @@ define([
         this.workspaceDataForItemRow = function(w) {
             var row = $.extend({}, w),
                 createdBy = this.usersById[row.createdBy].displayName,
-                text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to' : 'Shared with',
+                text = row.isSharedToUser ?
+                    i18n('workspaces.shared_with_me.subtitle.prefix', createdBy) :
+                    i18n('workspaces.sharing.subtitle.prefix'),
                 usersNotCurrent = row.users.filter(function(u) {
                     return u.userId != window.currentUser.id;
                 }),
                 people = usersNotCurrent.length;
 
             if (people === 1 && row.isSharedToUser) {
-                row.sharingSubtitle = text + ' you';
+                row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.only_you');
             } else if (people === 1) {
-                row.sharingSubtitle = text + ' 1 person';
+                row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.one_other');
             } else if (people) {
-                row.sharingSubtitle = text + ' ' + people + ' people';
+                row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.others', people);
             } else {
                 row.sharingSubtitle = null;
             }

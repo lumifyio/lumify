@@ -118,7 +118,10 @@ define([
         this.handleNoVertices = function() {
             var requiredFallback = this.attr.workspaceId !== appData.workspaceId;
 
-            document.title = requiredFallback ? 'Unauthorized' : 'No vertices found';
+            document.title = requiredFallback ?
+                i18n('fullscreen.unauthorized') :
+                i18n('fullscreen.no_vertices');
+
             this.select('noResultsSelector')
                 .html(errorTemplate({
                     vertices: this.attr.graphVertexIds,
@@ -386,11 +389,12 @@ define([
                 this.timer = setTimeout(function f() {
                     if (self._windowIsHidden && i++ % 2 === 0) {
                         if (newVertexIds.length === 1) {
-                            document.title = '"' +
-                                F.vertex.title(newVerticesById[newVertexIds[0]]) +
-                                '" added';
+                            document.title = i18n(
+                                'fullscreen.title.added.one',
+                                F.vertex.title(newVerticesById[newVertexIds[0]])
+                            );
                         } else {
-                            document.title = newVertexIds.length + ' items added';
+                            document.title = i18n('fullscreen.title.added.some', newVertexIds.length);
                         }
                     } else {
                         self.updateTitle();
@@ -405,7 +409,7 @@ define([
 
         this.titleForVertices = function() {
             if (!this.vertices || this.vertices.length === 0) {
-                return 'Loading...';
+                return i18n('fullscreen.loading');
             }
 
             var sorted = _.sortBy(this.vertices, function(v) {
@@ -418,7 +422,11 @@ define([
                 var first = '"' + F.vertex.title(sorted[0]) + '"',
                     l = sorted.length - 1;
 
-                return first + ' and ' + l + ' other' + (l > 1 ? 's' : '');
+                if (l > 1) {
+                    return i18n('fullscreen.title.some', first, l)
+                }
+
+                return i18n('fullscreen.title.one', first)
             }
         };
 

@@ -1,8 +1,10 @@
 <li class="entity-filter-row" data-filter-key="relatedToVertexId">
   <div class="add-property">
-    <input type="text" value="Related To" readonly style="cursor:default;"/>
+    <input type="text" 
+    value="<%= i18n('search.filters.related_to') %>" 
+    readonly style="cursor:default;"/>
   </div>
-  <button class="remove">Remove</button>
+  <button class="remove"><%= i18n('search.filters.button.remove') %></button>
   <div class="configuration">
     <input readonly type="text" value="<%= title %>"></input>
   </div>

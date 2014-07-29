@@ -3,13 +3,13 @@
   <div class="popover-content">
 
     {{#if sourceTimezone}}
-    <label class="toggle-source">Edit Original:<button class="toggle btn btn-link">{{sourceTimezone}}</button></label>
+    <label class="toggle-source">{{ i18n 'popovers.timezone.edit.label' }}:<button class="toggle btn btn-link">{{sourceTimezone}}</button></label>
     {{/if}}
 
     <div class="navbar-search">
-      <input type="text" class="search-query" placeholder="Search">
+      <input type="text" class="search-query" placeholder="{{ i18n 'popovers.timezone.search.placeholder' }}">
     </div>
 
-    <div class="dst">* Observes Daylight Saving</div>
+    <div class="dst">* {{ i18n 'popovers.timezone.observes_dst }}</div>
   </div>
 </div>

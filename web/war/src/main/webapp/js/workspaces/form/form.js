@@ -31,7 +31,6 @@ define([
             permissionsSelector: '.permissions',
             permissionsRadioSelector: '.popover input',
             deleteSelector: '.delete',
-            copySelector: '.copy',
             removeAccessSelector: '.remove-access'
         });
 
@@ -49,9 +48,6 @@ define([
                 editable: this.editable
             }));
             this.userService.getCurrentUsers().done(this.loadUserPermissionsList.bind(this));
-            this.on('click', {
-                copySelector: this.onCopy
-            });
 
             if (this.editable) {
                 this.setupTypeahead();
@@ -134,7 +130,10 @@ define([
                 return {
                     user: {
                         access: userPermission.access,
-                        permissionLabel: {read: 'View', write: 'Edit'}[userPermission.access.toLowerCase()],
+                        permissionLabel: {
+                            read: i18n('workspaces.form.sharing.access.view'),
+                            write: i18n('workspaces.form.sharing.access.edit')
+                        }[userPermission.access.toLowerCase()],
                         userId: user.id,
                         displayName: user.displayName
                     },
@@ -222,7 +221,7 @@ define([
 
             this.trigger('workspaceDeleting', this.attr.data);
 
-            $target.text('Deleting...').attr('disabled', true);
+            $target.text(i18n('workspaces.form.button.deleting')).attr('disabled', true);
 
             this.workspaceService['delete'](workspaceId)
                 .always(function() {
@@ -230,23 +229,6 @@ define([
                 })
                 .done(function() {
                     self.trigger('workspaceDeleted', { workspaceId: workspaceId });
-                });
-        };
-
-        this.onCopy = function(event) {
-            var self = this,
-                workspaceId = this.attr.data.workspaceId,
-                $target = $(event.target),
-                previousText = $target.text();
-
-            $target.text('Copying...').attr('disabled', true);
-
-            this.workspaceService.copy(workspaceId)
-                .always(function() {
-                    $target.text(previousText).removeAttr('disabled');
-                })
-                .done(function(workspace) {
-                    self.trigger(document, 'workspaceCopied', { workspaceId: workspace.workspaceId });
                 });
         };
 

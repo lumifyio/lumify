@@ -8,13 +8,13 @@
     <tr class="show-all-button-row">
       <td>&nbsp;</td>
       <td colspan="2">
-        <button class="btn btn-link btn-small">Show all...</button>
+        <button class="btn btn-link btn-small">{{ i18n 'audit.property.show_all.button' }}</button>
       </td>
     </tr>
   {{/if}}
 
 {{else}}
 
-  <tr><td colspan="3">No audit events</td></tr>
+  <tr><td colspan="3">{{ i18n 'audit.none_available' }}</td></tr>
 
 {{/eachWithLimit}}

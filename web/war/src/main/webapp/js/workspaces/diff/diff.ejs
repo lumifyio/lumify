@@ -2,21 +2,21 @@
 
   <div class="diff-header">
       <div class="select-actions">
-        <span>Select All</span>
+        <span><%= i18n('workspaces.diff.button.select_all') %></span>
         <div class="btn-group actions">
           <% if (Privileges.canPUBLISH) { %>
           <button data-action="publish"
-                  class="btn btn-mini select-all-publish requires-PUBLISH">Publish</button>
+            class="btn btn-mini select-all-publish requires-PUBLISH"><%= i18n('workspaces.diff.button.publish') %></button>
           <% } %>
           <button data-action="undo"
-                  class="btn btn-mini select-all-undo">Undo</button>
+            class="btn btn-mini select-all-undo"><%= i18n('workspaces.diff.button.undo') %></button>
         </div>
       </div>
 
       <h1 class="header">
-        <button class="btn btn-small publish-all btn-success">Publish</button>
-        <button class="btn btn-small undo-all btn-danger">Undo</button>
-        <span>Unpublished Changes</span>
+        <button class="btn btn-small publish-all btn-success"><%= i18n('workspaces.diff.button.publish') %></button>
+        <button class="btn btn-small undo-all btn-danger"><%= i18n('workspaces.diff.button.undo') %></button>
+        <span><%= i18n('workspaces.diff.header.unpublished_changes') %></span>
       </h1>
   </div>
 

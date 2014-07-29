@@ -470,6 +470,16 @@
     </owl:DatatypeProperty>
 
 
+    <!-- http://lumify.io#text -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;text">
+        <rdfs:label xml:lang="en">Text</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
+
     <!-- http://lumify.io#textIndexHints -->
 
     <owl:DatatypeProperty rdf:about="&lumify;textIndexHints">

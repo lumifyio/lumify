@@ -17,6 +17,25 @@ window.enableLiveReload = function(enable) {
         }
     }
 }
+
+window.switchLanguage = function(code) {
+    var availableLocales = 'en es de zh_TW'.split(' '),
+        locale = availableLocales[availableLocales.indexOf(code)];
+    if (locale) {
+        var parts = locale.split('_');
+        if (parts[0]) {
+            localStorage.setItem('language', parts[0]);
+        }
+        if (parts[1]) {
+            localStorage.setItem('country', parts[1]);
+        }
+        if (parts[2]) {
+            localStorage.setItem('variant', parts[2]);
+        }
+        location.reload();
+    } else console.error('Available Locales: ' + availableLocales.join(', '));
+}
+
 if ('localStorage' in window) {
     if (localStorage.getItem('liveReloadEnabled')) {
         enableLiveReload(true);
@@ -74,6 +93,7 @@ require([
     'util/visibility',
     'util/privileges',
     'util/vertex/urlFormatters',
+    'util/messages',
     'service/user',
 
     'easing',
@@ -83,9 +103,7 @@ require([
     'util/jquery.flight',
     'util/jquery.removePrefixedClasses',
 
-    // Handlebar helpers (also add to test/unit/runner/testRunner.js)
-    'util/handlebars/eachWithLimit',
-    'util/handlebars/date'
+    'util/handlebars/helpers'
 ],
 function(jQuery,
          jQueryui,
@@ -101,8 +119,15 @@ function(jQuery,
          Visibility,
          Privileges,
          F,
+         messages,
          UserService) {
     'use strict';
+
+    // Make localization global
+    if ('i18n' in window) {
+        console.error('i18n function exists');
+    }
+    window.i18n = messages;
 
     var App, FullScreenApp, Login;
 
@@ -181,7 +206,6 @@ function(jQuery,
             }
 
             if (loginRequired) {
-                console.log('Attaching login', loginRequired)
                 require(['login'], function(Login) {
                     Login.teardownAll();
                     Login.attachTo('#login', {
@@ -191,7 +215,6 @@ function(jQuery,
                     });
                 });
             } else if (popoutDetails) {
-                console.log('Attaching fullscreen', loginRequired)
                 $('#login').remove();
                 require(['appFullscreenDetails'], function(comp) {
                     if (event) {
@@ -209,7 +232,6 @@ function(jQuery,
                     }
                 });
             } else {
-                console.log('Attaching app', loginRequired, event)
                 $('#login').remove();
                 require(['app'], function(comp) {
                     App = comp;

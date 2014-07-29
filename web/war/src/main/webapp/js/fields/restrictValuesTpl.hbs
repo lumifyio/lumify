@@ -4,7 +4,7 @@
     <tr>
       <td class="input-row input-row-select">
        <select>
-        <option value="">Choose {{displayName}}...</option>
+         <option value="">{{ i18n 'field.restrict_values.form.placeholder' displayName }}</option>
         {{#each values}}
         <option value="{{key}}"
                 {{#if selected}}

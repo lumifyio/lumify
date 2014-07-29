@@ -28,7 +28,6 @@ define([
 
         this.before('initialize', function(node, config) {
             config.template = 'propertyInfo/template';
-            config.hideUntilEvent = 'popoverRendered';
         });
 
         this.after('initialize', function() {
@@ -38,7 +37,7 @@ define([
                 configService.getProperties().done(function(config) {
                     var splitRegex = /\s*,\s*/,
                         metadataDisplay =
-                            config['properties.metadata.propertyNamesDisplay'].split(splitRegex),
+                            config['properties.metadata.propertyNamesDisplay'].split(splitRegex).map(i18n),
                         metadataType =
                             config['properties.metadata.propertyNamesType'].split(splitRegex);
 
@@ -119,7 +118,10 @@ define([
                 .classed('btn-edit', canEdit)
                 .classed('btn-add', !canEdit)
                 .classed('nodelete', !canDelete)
-                .text(canEdit ? 'Edit' : 'Add');
+                .text(canEdit ?
+                  i18n('popovers.property_info.button.edit') :
+                  i18n('popovers.property_info.button.add')
+                );
             this.contentRoot.selectAll('tr')
                 .call(function() {
                     var self = this;
@@ -138,13 +140,13 @@ define([
                             if (formatterAsync) {
                                 formatterAsync(value, property, vertexId)
                                     .fail(function() {
-                                        d3.select(self).text('Error: ' + value);
+                                        d3.select(self).text(i18n('popovers.property_info.error', value));
                                     })
                                     .done(function(value) {
                                         d3.select(self).text(value);
                                     })
                                     .always(positionDialog);
-                                return 'Loading...';
+                                return i18n('popovers.property_info.loading');
                             }
 
                             return value;
@@ -169,7 +171,7 @@ define([
                                 .call(function() {
                                     this.append('div')
                                         .attr('class', 'property-name property-justification')
-                                        .text('Justification');
+                                        .text(i18n('popovers.property_info.justification'));
                                     this.append('div')
                                         .attr('class', 'justificationValue');
                                 });

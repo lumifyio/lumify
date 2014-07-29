@@ -2,12 +2,12 @@
 
   <div class="segmented-control">
     {{#each types}}
-    <button data-type="{{name}}" class="find-{{cls}} {{#if selected}}active{{/if}}">{{name}}</button>
+    <button data-type="{{name}}" class="find-{{cls}} {{#if selected}}active{{/if}}">{{displayName}}</button>
     {{/each}}
   </div>
 
   <div class="search-query-container">
-    <input type="text" class="search-query" placeholder="Search">
+    <input type="text" class="search-query" placeholder="{{ i18n 'search.field.placeholder' }}">
     <a style="display:none"></a>
   </div>
 

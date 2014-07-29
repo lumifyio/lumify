@@ -1,12 +1,5 @@
 <ul class="nav nav-list">
 
-  {{#if chats}}
-    <li class="nav-header conversations">Conversations</li>
-    {{#each chats}}
-    {{> chat/userListItemTpl }}
-    {{/each}}
-  {{/if}}
-
   {{#each usersByWorkspace}}
   <li title="{{name}}" class="nav-header">{{name}}</li>
     {{#each users}}
@@ -14,7 +7,7 @@
     {{/each}}
     </li>
   {{else}}
-    <li class="none"><em>No users online</em></li>
+  <li class="none"><em>{{ i18n 'chat.users.no_users_online' }}</em></li>
   {{/each}}
 
 </ul>

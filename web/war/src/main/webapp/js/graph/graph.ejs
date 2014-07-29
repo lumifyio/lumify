@@ -8,43 +8,43 @@
   <li><a tabindex="-1" href="#">Redo</a></li>
   <li class="divider"></li>
   -->
-  <li><a class="has-shortcut" data-func="fitToWindow" tabindex="-1" href="#">Fit to Window<span class="shortcut">alt+f</span></a></li>
+  <li><a class="has-shortcut" data-func="fitToWindow" tabindex="-1" href="#"><%= i18n('graph.contextmenu.fit_to_window') %><span class="shortcut">alt+f</span></a></li>
 
   <li class="divider"></li>
 
   <li class="dropdown-submenu">
-    <a tabindex="-1" href="#">Layout</a>
+    <a tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout') %></a>
     <ul class="dropdown-menu">
-      <li><a data-func="layout" data-args='["circle"]' tabindex="-1" href="#">Circle</a></li>
-      <li><a data-func="layout" data-args='["grid"]' tabindex="-1" href="#">Grid</a></li>
-      <li><a data-func="layout" data-args='["random"]' tabindex="-1" href="#">Random</a></li>
-      <li><a data-func="layout" data-args='["breadthfirst"]' tabindex="-1" href="#">Hierarchical</a></li>
-      <li><a data-func="layout" data-args='["arbor"]' tabindex="-1" href="#">Force Directed</a></li>
+      <li><a data-func="layout" data-args='["circle"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.circle') %></a></li>
+      <li><a data-func="layout" data-args='["grid"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.grid') %></a></li>
+      <li><a data-func="layout" data-args='["random"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.random') %></a></li>
+      <li><a data-func="layout" data-args='["breadthfirst"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.hierarchical') %></a></li>
+      <li><a data-func="layout" data-args='["arbor"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.force_directed') %></a></li>
     </ul>
   </li>
 
   <li class="dropdown-submenu layout-multi">
-    <a tabindex="-1" href="#">Layout Selection</a>
+    <a tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.selection') %></a>
     <ul class="dropdown-menu">
-      <li><a data-func="layout" data-args='["circle",{"onlySelected":true}]' tabindex="-1" href="#">Circle</a></li>
-      <li><a data-func="layout" data-args='["grid", {"onlySelected":true}]' tabindex="-1" href="#">Grid</a></li>
-      <li><a data-func="layout" data-args='["random", {"onlySelected":true}]' tabindex="-1" href="#">Random</a></li>
-      <li><a data-func="layout" data-args='["breadthfirst", {"onlySelected":true}]' tabindex="-1" href="#">Hierarchical</a></li>
-      <li><a data-func="layout" data-args='["arbor", {"onlySelected":true}]' tabindex="-1" href="#">Force Directed</a></li>
+      <li><a data-func="layout" data-args='["circle",{"onlySelected":true}]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.circle') %></a></li>
+      <li><a data-func="layout" data-args='["grid", {"onlySelected":true}]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.grid') %></a></li>
+      <li><a data-func="layout" data-args='["random", {"onlySelected":true}]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.random') %></a></li>
+      <li><a data-func="layout" data-args='["breadthfirst", {"onlySelected":true}]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.hierarchical') %></a></li>
+      <li><a data-func="layout" data-args='["arbor", {"onlySelected":true}]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.force_directed') %></a></li>
     </ul>
   </li>
 
   <li class="divider"></li>
 
-  <li><a data-func="zoom" data-args="[2]" tabindex="-1" href="#">Zoom 2x</a></li>
-  <li><a data-func="zoom" data-args="[1]" tabindex="-1" href="#">Zoom 1x</a></li>
-  <li><a data-func="zoom" data-args="[0.5]" tabindex="-1" href="#">Zoom &#189;x</a></li>
+  <li><a data-func="zoom" data-args="[2]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.x2') %></a></li>
+  <li><a data-func="zoom" data-args="[1]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.x1') %></a></li>
+  <li><a data-func="zoom" data-args="[0.5]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.half') %></a></li>
 </ul>
 </div>
 
 <div>
 <ul class="edge-context-menu dropdown-menu" role="menu">
-  <li><a data-func="deleteEdge" tabindex="-1" href="#">Remove Relationship</a></li>
+  <li><a data-func="deleteEdge" tabindex="-1" href="#"><%= i18n('graph.contextmenu.relationship.delete') %></a></li>
   <!-- THIS WHOLE MENU is hidden based on privileges, change that if you add more -->
 </ul>
 </div>

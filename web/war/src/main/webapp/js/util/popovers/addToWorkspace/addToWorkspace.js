@@ -34,9 +34,10 @@ define([
 
         this.before('initialize', function(node, config) {
             config.template = 'addToWorkspace/template';
-            config.vertexCount = F.string.plural(config.addVertexIds.vertexIds.length, 'vertex', 'vertices');
-
-            console.log(config)
+            var count = config.addVertexIds.vertexIds.length;
+            config.vertexCount = i18n('popovers.add_to_workspace.vertex_count.' + (
+                count === 0 ? 'none' : count === 1 ? 'one' : 'some'
+            ), config.addVertexIds.vertexIds.length);
 
             this.after('setupWithTemplate', function() {
                 this.on(this.popover, 'click', {
@@ -62,7 +63,7 @@ define([
 
         this.fail = function(vertexResponse, workspaceResponse) {
             this.popover.find('.btn-primary')
-                .text('Error Loading Vertices')
+                .text(i18n('popovers.add_to_workspace.error'))
         };
 
         this.done = function(vertexResponse, workspaceResponse) {
@@ -89,7 +90,7 @@ define([
                 })
                 .text(function(workspace) {
                     if (!workspace.isEditable) {
-                        return workspace.title + ' (read only)';
+                        return workspace.title + ' (' + i18n('popovers.add_to_workspace.readonly') + ')';
                     }
                     return workspace.title;
                 });
