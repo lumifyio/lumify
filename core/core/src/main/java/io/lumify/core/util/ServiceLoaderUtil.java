@@ -12,6 +12,10 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * This class exists to provide much deeper and extensive debugging and logging as
+ * opposed to (@see java.util.ServiceLoader)
+ */
 public class ServiceLoaderUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ServiceLoaderUtil.class);
     private static final String PREFIX = "META-INF/services/";
@@ -58,7 +62,7 @@ public class ServiceLoaderUtil {
 
     public static <T> T loadClass(URL config, String className) {
         try {
-            LOGGER.debug("Loading %s from %s", className, config.toString());
+            LOGGER.info("Loading %s from %s", className, config.toString());
             Class<? extends T> serviceClass = ClassUtil.forName(className);
             Constructor<? extends T> constructor = serviceClass.getConstructor();
             return constructor.newInstance();
