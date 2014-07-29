@@ -1,16 +1,15 @@
 package io.lumify.opencvObjectDetector;
 
-import com.google.inject.Inject;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -35,18 +34,18 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OpenCVObjectDetectorPropertyWorker.class);
+    public static final String MULTI_VALUE_KEY_PREFIX = OpenCVObjectDetectorPropertyWorker.class.getName();
     public static final String OPENCV_CLASSIFIER_CONCEPT_LIST = "objectdetection.classifierConcepts";
     public static final String OPENCV_CLASSIFIER_PATH_PREFIX = "objectdetection.classifier.";
     public static final String OPENCV_CLASSIFIER_PATH_SUFFIX = ".path";
+    private static final String PROCESS = OpenCVObjectDetectorPropertyWorker.class.getName();
 
     private List<CascadeClassifierHolder> objectClassifiers = new ArrayList<CascadeClassifierHolder>();
-    private DetectedObjectRepository detectedObjectRepository;
-    private User user;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        this.user = workerPrepareData.getUser();
 
         loadNativeLibrary();
 
@@ -59,7 +58,9 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
             File localFile = createLocalFile(classifierFilePath, workerPrepareData.getHdfsFileSystem());
             CascadeClassifier objectClassifier = new CascadeClassifier(localFile.getPath());
             addObjectClassifier(classifierConcept, objectClassifier);
-            localFile.delete();
+            if (!localFile.delete()) {
+                LOGGER.warn("Could not delete file: %s", localFile.getAbsolutePath());
+            }
         }
     }
 
@@ -114,16 +115,8 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
     }
 
     private void saveDetectedObject(Vertex artifactVertex, ArtifactDetectedObject detectedObject) {
-        detectedObjectRepository.saveDetectedObject(
-                artifactVertex.getId(),
-                null,
-                null,
-                detectedObject.getConcept(),
-                detectedObject.getX1(), detectedObject.getY1(), detectedObject.getX2(), detectedObject.getY2(),
-                false,
-                detectedObject.getProcess(),
-                new LumifyVisibility().getVisibility(),
-                this.user.getModelUserContext());
+        String multiKey = detectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
+        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, multiKey, detectedObject, new LumifyVisibility().getVisibility(), getAuthorizations());
     }
 
     public List<ArtifactDetectedObject> detectObjects(BufferedImage bImage) {
@@ -143,7 +136,8 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
                             (rect.x + rect.width) / width,
                             (rect.y + rect.height) / height,
                             objectClassifier.concept,
-                            this.getClass().getName());
+                            PROCESS,
+                            null);
                     detectedObjectList.add(detectedObject);
                 }
             }
@@ -169,10 +163,5 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
             this.concept = concept;
             this.cascadeClassifier = cascadeClassifier;
         }
-    }
-
-    @Inject
-    public void setDetectedObjectRepository(DetectedObjectRepository detectedObjectRepository) {
-        this.detectedObjectRepository = detectedObjectRepository;
     }
 }

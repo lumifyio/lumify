@@ -66,13 +66,6 @@ define([], function() {
                         })
                     });
                     break;
-
-                case 'detectedObjectChange':
-                    updated = self.updateCacheWithVertex(message.data.artifactVertex, { returnNullIfNotChanged: true });
-                    if (updated) {
-                        self.trigger('verticesUpdated', { vertices: [updated] });
-                    }
-                    break;
             }
         };
     }

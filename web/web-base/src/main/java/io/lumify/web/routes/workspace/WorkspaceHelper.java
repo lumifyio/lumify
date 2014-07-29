@@ -5,14 +5,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
-import io.lumify.core.model.detectedObjects.DetectedObjectModel;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
-import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
@@ -33,21 +30,19 @@ public class WorkspaceHelper {
     private final TermMentionRepository termMentionRepository;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
-    private final DetectedObjectRepository detectedObjectRepository;
     private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
 
     @Inject
-    public WorkspaceHelper(final TermMentionRepository termMentionRepository,
-                           final AuditRepository auditRepository,
-                           final UserRepository userRepository,
-                           final DetectedObjectRepository detectedObjectRepository,
-                           final WorkQueueRepository workQueueRepository,
-                           final Graph graph) {
+    public WorkspaceHelper(
+            final TermMentionRepository termMentionRepository,
+            final AuditRepository auditRepository,
+            final UserRepository userRepository,
+            final WorkQueueRepository workQueueRepository,
+            final Graph graph) {
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
-        this.detectedObjectRepository = detectedObjectRepository;
         this.workQueueRepository = workQueueRepository;
         this.graph = graph;
     }
@@ -91,46 +86,6 @@ public class WorkspaceHelper {
         return result;
     }
 
-    public JSONObject unresolveDetectedObject(Vertex vertex, String edgeId, DetectedObjectModel detectedObjectModel,
-                                              DetectedObjectModel analyzedDetectedObject,
-                                              LumifyVisibility visibility, String workspaceId,
-                                              ModelUserContext modelUserContext, User user,
-                                              Authorizations authorizations) {
-
-        JSONObject result = new JSONObject();
-        Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
-
-        detectedObjectRepository.delete(detectedObjectModel.getRowKey());
-
-        if (analyzedDetectedObject == null) {
-            result.put("deleteTag", true);
-        } else {
-            result.put("detectedObject", analyzedDetectedObject.toJson());
-        }
-
-        if (edgeId != null) {
-            Edge edge = graph.getEdge(edgeId, authorizations);
-            graph.removeEdge(edge, authorizations);
-
-            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
-            this.workQueueRepository.pushEdgeDeletion(edge);
-            graph.flush();
-        }
-
-        Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
-        Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
-        for (Edge edge : workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization)) {
-            graph.removeEdge(edge, systemAuthorization);
-        }
-
-        auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, visibility.getVisibility());
-
-        JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId, authorizations);
-        artifactJson.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, modelUserContext, authorizations, workspaceId));
-        result.put("artifactVertex", artifactJson);
-        return result;
-    }
-
     public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId, User user, Authorizations authorizations) {
         auditRepository.auditEntityProperty(AuditAction.DELETE, vertex.getId(), property.getKey(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
 
@@ -159,18 +114,9 @@ public class WorkspaceHelper {
             this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
         }
 
-        Iterator<Property> rowKeys = destVertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName()).iterator();
-        while (rowKeys.hasNext()) {
-            Property rowKeyProperty = rowKeys.next();
+        for (Property rowKeyProperty : destVertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
-            if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
-                if (detectedObjectModel == null) {
-                    continue;
-                } else {
-                    detectedObjectRepository.delete(detectedObjectModel.getRowKey());
-                }
-            } else if (termMentionModel.getMetadata().getEdgeId().equals(edge.getId())) {
+            if (termMentionModel != null && termMentionModel.getMetadata().getEdgeId().equals(edge.getId())) {
                 termMentionRepository.delete(termMentionModel.getRowKey());
                 workQueueRepository.pushTextUpdated(sourceVertex.getId().toString());
             }

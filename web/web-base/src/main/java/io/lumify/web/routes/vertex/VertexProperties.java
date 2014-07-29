@@ -1,10 +1,8 @@
 package io.lumify.web.routes.vertex;
 
-import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
@@ -20,20 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 
 public class VertexProperties extends BaseRequestHandler {
     private final Graph graph;
-    private final DetectedObjectRepository detectedObjectRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public VertexProperties(
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
-            final WorkspaceRepository workspaceRepository,
-            final DetectedObjectRepository detectedObjectRepository) {
+            final WorkspaceRepository workspaceRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
-        this.detectedObjectRepository = detectedObjectRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -42,7 +35,6 @@ public class VertexProperties extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
         if (vertex == null) {
@@ -50,8 +42,6 @@ public class VertexProperties extends BaseRequestHandler {
             return;
         }
         JSONObject json = JsonSerializer.toJson(vertex, workspaceId, authorizations);
-
-        json.put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
 
         respondWithJson(response, json);
     }

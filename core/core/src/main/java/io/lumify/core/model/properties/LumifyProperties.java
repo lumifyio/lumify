@@ -56,6 +56,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty TIME_FORMULA = new StringLumifyProperty("http://lumify.io#timeFormula");
     public static final StringLumifyProperty TITLE = new StringLumifyProperty("http://lumify.io#title");
     public static final StringLumifyProperty TITLE_FORMULA = new StringLumifyProperty("http://lumify.io#titleFormula");
+    public static final DetectedObjectProperty DETECTED_OBJECT = new DetectedObjectProperty("http://lumify.io#detectedObject");
 
     private LumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");
