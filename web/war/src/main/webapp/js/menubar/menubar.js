@@ -19,7 +19,7 @@ define([
             TOOLTIPS = {
                 dashboard: i18n('menubar.icons.dashboard.tooltip'),
                 graph: { html: i18n('menubar.icons.graph') +
-                    '<span class="subtitle">' +
+                    ' <span class="subtitle">' +
                     i18n('menubar.icons.graph.tooltip.suffix') + '</span>' },
                 map: i18n('menubar.icons.map.tooltip'),
                 search: i18n('menubar.icons.search.tooltip'),
