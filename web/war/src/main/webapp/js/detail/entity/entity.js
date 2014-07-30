@@ -53,7 +53,7 @@ define([
             propertiesSelector: '.properties',
             relationshipsSelector: 'section .relationships',
             titleSelector: '.entity-title',
-            relationshipsHeaderSelector: 'section.relationships'
+            relationshipsHeaderSelector: 'section.collapsible'
         });
 
         this.after('teardown', function() {
@@ -81,6 +81,8 @@ define([
             if ($section.hasClass('expanded')) {
                 return $section.removeClass('expanded');
             }
+
+            $section.addClass('expanded');
 
             /*
             $badge.addClass('loading');
@@ -171,6 +173,7 @@ define([
                                             this.append('strong');
                                             this.append('span').attr('class', 'badge');
                                         });
+                                    this.append('div').text('Content Here')
                                 });
 
                             this.select('h1 strong').text(function(d) {
