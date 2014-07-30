@@ -32,12 +32,12 @@ public class OpenCVObjectDetectorPropertyWorkerTest {
         BufferedImage bImage = ImageIO.read(cl.getResourceAsStream(TEST_IMAGE));
 
         CascadeClassifier objectClassifier = new CascadeClassifier(cl.getResource(CLASSIFIER).getPath());
-        objectDetector.addObjectClassifier("face", objectClassifier);
+        objectDetector.addObjectClassifier("face", objectClassifier, "http://test.lumify.io/#face");
         List<ArtifactDetectedObject> detectedObjectList = objectDetector.detectObjects(bImage);
         assertTrue("Incorrect number of objects found", detectedObjectList.size() == 1);
 
         ArtifactDetectedObject detectedObject = detectedObjectList.get(0);
-        assertEquals("face", detectedObject.getConcept());
+        assertEquals("http://test.lumify.io/#face", detectedObject.getConcept());
         assertEquals(0.423828125, detectedObject.getX1(), 0.0);
         assertEquals(0.1828125, detectedObject.getY1(), 0.0);
         assertEquals(0.6220703125, detectedObject.getX2(), 0.0);

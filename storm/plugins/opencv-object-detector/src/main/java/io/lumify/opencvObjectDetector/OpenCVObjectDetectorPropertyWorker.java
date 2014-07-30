@@ -1,5 +1,6 @@
 package io.lumify.opencvObjectDetector;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
@@ -57,7 +58,12 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
 
             File localFile = createLocalFile(classifierFilePath, workerPrepareData.getHdfsFileSystem());
             CascadeClassifier objectClassifier = new CascadeClassifier(localFile.getPath());
-            addObjectClassifier(classifierConcept, objectClassifier);
+            String iriConfigurationKey = Configuration.ONTOLOGY_IRI_PREFIX + classifierConcept;
+            String conceptIRI = (String) workerPrepareData.getStormConf().get(iriConfigurationKey);
+            if (conceptIRI == null) {
+                throw new LumifyException("Could not find concept IRI for " + iriConfigurationKey);
+            }
+            addObjectClassifier(classifierConcept, objectClassifier, conceptIRI);
             if (!localFile.delete()) {
                 LOGGER.warn("Could not delete file: %s", localFile.getAbsolutePath());
             }
@@ -73,8 +79,8 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
         }
     }
 
-    public void addObjectClassifier(String concept, CascadeClassifier objectClassifier) {
-        objectClassifiers.add(new CascadeClassifierHolder(concept, objectClassifier));
+    public void addObjectClassifier(String concept, CascadeClassifier objectClassifier, String conceptIRI) {
+        objectClassifiers.add(new CascadeClassifierHolder(concept, objectClassifier, conceptIRI));
     }
 
     private File createLocalFile(String classifierFilePath, FileSystem fs) throws IOException {
@@ -135,7 +141,7 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
                             rect.y / height,
                             (rect.x + rect.width) / width,
                             (rect.y + rect.height) / height,
-                            objectClassifier.concept,
+                            objectClassifier.conceptIRI,
                             PROCESS,
                             null);
                     detectedObjectList.add(detectedObject);
@@ -158,10 +164,12 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
     private class CascadeClassifierHolder {
         public final String concept;
         public final CascadeClassifier cascadeClassifier;
+        public final String conceptIRI;
 
-        public CascadeClassifierHolder(String concept, CascadeClassifier cascadeClassifier) {
+        public CascadeClassifierHolder(String concept, CascadeClassifier cascadeClassifier, String conceptIRI) {
             this.concept = concept;
             this.cascadeClassifier = cascadeClassifier;
+            this.conceptIRI = conceptIRI;
         }
     }
 }
