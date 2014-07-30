@@ -5,7 +5,12 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.VideoRotationUtil;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -15,36 +20,24 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoMp4EncodingWorker.class);
     private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File mp4File = File.createTempFile("encode_mp4_", ".mp4");
-        File mp4ReloactedFile = File.createTempFile("relocated_mp4_", ".mp4");
+        File mp4RelocatedFile = File.createTempFile("relocated_mp4_", ".mp4");
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(data, mp4File);
         try {
             processRunner.execute(
                     "ffmpeg",
-                    new String[]{
-                            "-y", // overwrite output files
-                            "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "libx264",
-                            "-vprofile", "high",
-                            "-preset", "slow",
-                            "-b:v", "500k",
-                            "-maxrate", "500k",
-                            "-bufsize", "1000k",
-                            "-vf", "scale=720:480",
-                            "-threads", "0",
-                            "-acodec", "libfdk_aac",
-                            "-b:a", "128k",
-                            "-f", "mp4",
-                            mp4File.getAbsolutePath()
-                    },
+                    ffmpegOptionsArray,
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
@@ -53,7 +46,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
                     "qt-faststart",
                     new String[]{
                             mp4File.getAbsolutePath(),
-                            mp4ReloactedFile.getAbsolutePath()
+                            mp4RelocatedFile.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
@@ -61,7 +54,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
 
             ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
-            InputStream mp4RelocatedFileIn = new FileInputStream(mp4ReloactedFile);
+            InputStream mp4RelocatedFileIn = new FileInputStream(mp4RelocatedFile);
             try {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp4RelocatedFileIn, byte[].class);
                 spv.searchIndex(false);
@@ -74,8 +67,56 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
             }
         } finally {
             mp4File.delete();
-            mp4ReloactedFile.delete();
+            mp4RelocatedFile.delete();
         }
+    }
+
+    public String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File mp4File) {
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        if (videoRotation == null)
+            videoRotation = 0;
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ffmpegOptionsList.add("-y");
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(data.getLocalFile().getAbsolutePath());
+        ffmpegOptionsList.add("-vcodec");
+        ffmpegOptionsList.add("libx264");
+        ffmpegOptionsList.add("-vprofile");
+        ffmpegOptionsList.add("high");
+        ffmpegOptionsList.add("-preset");
+        ffmpegOptionsList.add("slow");
+        ffmpegOptionsList.add("-b:v");
+        ffmpegOptionsList.add("500k");
+        ffmpegOptionsList.add("-maxrate");
+        ffmpegOptionsList.add("500k");
+        ffmpegOptionsList.add("-bufsize");
+        ffmpegOptionsList.add("1000k");
+
+        //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
+        ffmpegOptionsList.add("-vf");
+        ffmpegOptionsList.add("scale=720:480");
+
+        //Rotate.
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+
+        ffmpegOptionsList.add("-threads");
+        ffmpegOptionsList.add("0");
+        ffmpegOptionsList.add("-acodec");
+        ffmpegOptionsList.add("libfdk_aac");
+        ffmpegOptionsList.add("-b:a");
+        ffmpegOptionsList.add("128k");
+        ffmpegOptionsList.add("-f");
+        ffmpegOptionsList.add("mp4");
+        ffmpegOptionsList.add(mp4File.getAbsolutePath());
+        String[] ffmpegOptionsArray = ffmpegOptionsList.toArray(new String[ffmpegOptionsList.size()]);
+        return ffmpegOptionsArray;
     }
 
     @Override

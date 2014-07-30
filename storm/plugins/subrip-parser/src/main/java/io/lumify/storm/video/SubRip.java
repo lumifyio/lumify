@@ -42,7 +42,7 @@ public class SubRip {
                         frame = Integer.parseInt(line);
                         readState = ReadState.Time;
                     } catch (NumberFormatException e) {
-                        LOGGER.warn("%d is not a number.", line);
+                        LOGGER.warn("%s is not a number.", line);
                     }
                     break;
                 case Time:
