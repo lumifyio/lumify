@@ -222,7 +222,11 @@ define([
         this.handleVertexLoaded = function(vertex, config) {
             var self = this,
                 displayType = this.attr.data.concept.displayType,
-                properties = vertex && vertex.properties;
+                properties = vertex && vertex.properties,
+                detectedObjects = vertex && F.vertex.props(vertex, 'detectedObject').sort(function(a, b) {
+                    var aX = a.x1, bX = b.x1;
+                    return aX - bX;
+                }) || [];
 
             this.attr.data = vertex;
 
@@ -236,19 +240,15 @@ define([
                 }
             }
 
-            vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b) {
-                var aX = a.x1, bX = b.x1;
-                return aX - bX;
-            });
-
             this.$node.html(template({
                 vertex: vertex,
+                detectedObjects: detectedObjects,
                 fullscreenButton: this.fullscreenButton([vertex.id]),
                 auditsButton: this.auditsButton(),
                 F: F
             }));
 
-            this.select('detectedObjectLabelsSelector').toggle(vertex.detectedObjects.length > 0);
+            this.select('detectedObjectLabelsSelector').toggle(detectedObjects.length > 0);
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
@@ -501,11 +501,15 @@ define([
             var self = this,
                 vertex = appData.vertex(this.attr.data.id),
                 detectedObject,
+                detectedObjects = F.vertex.props(vertex, 'detectedObject'),
                 width = parseFloat(data.x2) - parseFloat(data.x1),
                 height = parseFloat(data.y2) - parseFloat(data.y1);
 
-            if (vertex.detectedObjects) {
-                detectedObject = $.extend(true, {}, _.find(vertex.detectedObjects, function(obj) {
+            if (detectedObjects.length) {
+                detectedObject = $.extend(true, {}, _.find(detectedObjects, function(obj) {
+                    // TODO: don't have the vertices given a detectedObject
+                    // edgeID
+                    return false;
                     if (obj.entityVertex) {
                         return obj.entityVertex.id === data.id;
                     }
