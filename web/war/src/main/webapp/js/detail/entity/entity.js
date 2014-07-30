@@ -155,14 +155,32 @@ define([
         };
 
         this.updateRelationships = function() {
-            var self = this,
-                edgeLabels = this.attr.data.edgeLabels;
+            var self = this;
 
             this.handleCancelling(ontologyService.relationships())
                 .done(function(relationships) {
+                    var relations = _.chain(self.attr.data.edgeLabels)
+                            .map(function(label) {
+                                var relation = {
+                                        label: label,
+                                        displayName: label
+                                    },
+                                    ontologyRelationship = relationships.byTitle[label];
+
+                                if (ontologyRelationship) {
+                                    relation.displayName = ontologyRelationship.displayName;
+                                }
+
+                                return relation;
+                            })
+                            .sortBy(function(relation) {
+                                return relation.displayName.toLowerCase();
+                            })
+                            .value();
+
                     d3.select(self.$node.find('.nav-with-background').get(0))
                         .selectAll('section.collapsible')
-                        .data(edgeLabels)
+                        .data(relations)
                         .call(function() {
                             this.enter()
                                 .append('section')
@@ -176,13 +194,8 @@ define([
                                     this.append('div').text('Content Here')
                                 });
 
-                            this.select('h1 strong').text(function(d) {
-                                var ontologyRelationship = relationships.byTitle[d];
-                                if (ontologyRelationship) {
-                                    return ontologyRelationship.displayName;
-                                }
-
-                                return d;
+                            this.select('h1 strong').text(function(relation) {
+                                return relation.displayName;
                             });
                         })
                         .exit().remove();
