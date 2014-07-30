@@ -6,13 +6,13 @@ import io.lumify.core.config.Configuration;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 
-import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 public class BingGeocoderWebAppPlugin implements WebAppPlugin {
     private Configuration configuration;
 
     @Override
-    public void init(WebApp app, ServletConfig config, Handler authenticationHandler) {
+    public void init(WebApp app, ServletContext servletContext, Handler authenticationHandler) {
         Class<? extends Handler> authenticationHandlerClass = authenticationHandler.getClass();
 
         if (BingGeocoder.verifyConfiguration(configuration)) {

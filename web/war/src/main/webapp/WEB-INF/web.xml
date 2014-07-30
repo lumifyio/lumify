@@ -6,6 +6,10 @@
         <listener-class>io.lumify.web.ApplicationBootstrap</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>io.lumify.web.WebAppInitializer</listener-class>
+    </listener>
+
     <servlet>
         <description>AtmosphereServlet</description>
         <servlet-name>AtmosphereServlet</servlet-name>
@@ -52,15 +56,6 @@
     <servlet-mapping>
         <servlet-name>AtmosphereServlet</servlet-name>
         <url-pattern>/messaging/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>lumify</servlet-name>
-        <servlet-class>io.lumify.web.Router</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>lumify</servlet-name>
-        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
     <filter>

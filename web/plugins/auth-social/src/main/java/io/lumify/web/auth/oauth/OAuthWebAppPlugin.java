@@ -10,7 +10,7 @@ import io.lumify.web.WebAppPlugin;
 import io.lumify.web.auth.oauth.routes.Google;
 import io.lumify.web.auth.oauth.routes.Twitter;
 
-import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 public class OAuthWebAppPlugin implements WebAppPlugin {
     private OAuthConfiguration twitterConfig;
@@ -27,7 +27,7 @@ public class OAuthWebAppPlugin implements WebAppPlugin {
     }
 
     @Override
-    public void init(WebApp app, ServletConfig config, Handler authenticationHandler) {
+    public void init(WebApp app, ServletContext servletContext, Handler authenticationHandler) {
         StaticResourceHandler jsHandler = new StaticResourceHandler(this.getClass(), "/oauth/authentication.js", "application/javascript");
         StaticResourceHandler lessHandler = new StaticResourceHandler(this.getClass(), "/oauth/less/oauth.less", "text/plain");
         StaticResourceHandler loginTemplateHandler = new StaticResourceHandler(this.getClass(), "/oauth/templates/login.hbs", "text/plain");
