@@ -607,8 +607,71 @@
         <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-    
 
+
+
+    <!-- http://lumify.io/dev#videoRotation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#videoRotation">
+        <rdfs:label xml:lang="en">Video Rotation</rdfs:label>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io/dev#lastModifyDate -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#lastModifyDate">
+        <rdfs:label xml:lang="en">Last Modify Date</rdfs:label>
+        <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io/dev#dateTaken -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#dateTaken">
+        <rdfs:label xml:lang="en">Date Taken</rdfs:label>
+        <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io/dev#deviceMake -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#deviceMake">
+        <rdfs:label xml:lang="en">Device Make</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io/dev#deviceModel -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#deviceModel">
+        <rdfs:label xml:lang="en">Device Model</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io/dev#metadata -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#metadata">
+        <rdfs:label xml:lang="en">Metadata</rdfs:label>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
