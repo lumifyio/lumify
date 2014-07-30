@@ -46,6 +46,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
+            String nullCurrentWorkspacesSql = "update " + SqlUser.class.getSimpleName() + " set current_workspace_id = null where current_workspace_id = :workspaceId";
+            session.createQuery(nullCurrentWorkspacesSql).setString("workspaceId", workspace.getId()).executeUpdate();
             session.delete(workspace);
             transaction.commit();
         } catch (HibernateException e) {

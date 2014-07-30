@@ -182,7 +182,7 @@ public class SqlUser implements User {
         return currentWorkspace != null ? currentWorkspace.getId() : null;
     }
 
-    @OneToOne
+    @ManyToOne()
     @JoinColumn(referencedColumnName = "workspace_id", name = "current_workspace_id")
     public SqlWorkspace getCurrentWorkspace() {
         return currentWorkspace;

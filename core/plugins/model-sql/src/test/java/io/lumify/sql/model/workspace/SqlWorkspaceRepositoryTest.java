@@ -76,6 +76,16 @@ public class SqlWorkspaceRepositoryTest {
     }
 
     @Test
+    public void testDeleteWhenUsersHaveCurrentWorkspaceReference() {
+        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", testUser);
+        sqlUserRepository.setCurrentWorkspace(testUser.getUserId(), workspace.getId());
+        sqlWorkspaceRepository.delete(workspace, testUser);
+
+        HibernateSessionManager.getSession().refresh(testUser);
+        assertNull(testUser.getCurrentWorkspaceId());
+    }
+
+    @Test
     public void testAdd() throws Exception {
         SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace", testUser);
         assertEquals("1", workspace.getWorkspaceCreator().getUserId());

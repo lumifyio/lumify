@@ -8,7 +8,7 @@
         <property name="hibernate.connection.password">lumify</property>
         <property name="hibernate.connection.url">jdbc:mysql://192.168.33.10:3306/lumify</property>
         <property name="hibernate.connection.username">lumify</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
         <property name="hibernate.c3p0.min_size">5</property>

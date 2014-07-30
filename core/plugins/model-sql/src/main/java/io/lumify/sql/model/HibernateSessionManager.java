@@ -1,14 +1,18 @@
 package io.lumify.sql.model;
 
 
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class HibernateSessionManager {
+    private static LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HibernateSessionManager.class);
     private static SessionFactory sessionFactory;
     private static ThreadLocal<Session> threadLocalSession = new InheritableThreadLocal<Session>() {
         @Override
         protected Session initialValue() {
+            LOGGER.info("Opening Hibernate session");
             return sessionFactory.openSession();
         }
     };
@@ -33,7 +37,11 @@ public class HibernateSessionManager {
 
     public static void clearSession() {
         if (threadLocalSessionIsOpen.get()) {
-            threadLocalSession.get().close();
+            Session session = threadLocalSession.get();
+            if (session.isOpen()) {  // double checking
+                session.close();
+                LOGGER.info("Closed Hibernate session");
+            }
         }
 
         threadLocalSession.remove();
