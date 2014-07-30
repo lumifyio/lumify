@@ -367,10 +367,11 @@
 
         cd ~/lumify
         mvn package -pl storm/storm -am
-        mvn package -pl $(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target) | sed -e 's/ /,/g') -am
+        plugins=$(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ! -name '*opencv*' ) | sed -e 's/ /,/g')
+        mvn package -pl ${plugins} -am
 
-        hadoop fs -put \
-          $(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done) \
-          /lumify/libcache
+        jars=$(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done)
+        hadoop fs -put ${jars} /lumify/libcache
 
         /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
+
