@@ -15,7 +15,8 @@ define([
     'service/ontology',
     'service/vertex',
     'service/config',
-    'sf'
+    'sf',
+    'd3'
 ], function(defineComponent,
     appData,
     Image,
@@ -31,7 +32,8 @@ define([
     OntologyService,
     VertexService,
     ConfigService,
-    sf) {
+    sf,
+    d3) {
     'use strict';
 
     var ontologyService = new OntologyService(),
@@ -80,6 +82,7 @@ define([
                 return $section.removeClass('expanded');
             }
 
+            /*
             $badge.addClass('loading');
 
             this.vertexRefresh
@@ -99,6 +102,7 @@ define([
                         })
                         .done(self.loadRelationships.bind(self, vertex));
                 });
+            */
 
         };
 
@@ -112,6 +116,9 @@ define([
                     .appendTo(
                         this.select('titleSelector').text(F.vertex.title(matching))
                     )
+
+                this.attr.data = matching;
+                this.updateRelationships();
             }
         };
 
@@ -123,6 +130,7 @@ define([
 
             vertexRefresh
                 .done(function(vertex) {
+                    self.vertex = vertex;
                     self.$node.html(template({
                         vertex: vertex,
                         fullscreenButton: self.fullscreenButton([vertex.id]),
@@ -139,8 +147,42 @@ define([
                        data: vertex
                    });
 
+                   self.updateRelationships();
                    self.updateEntityAndArtifactDraggables();
+                });
+        };
 
+        this.updateRelationships = function() {
+            var self = this,
+                edgeLabels = this.attr.data.edgeLabels;
+
+            this.handleCancelling(ontologyService.relationships())
+                .done(function(relationships) {
+                    d3.select(self.$node.find('.nav-with-background').get(0))
+                        .selectAll('section.collapsible')
+                        .data(edgeLabels)
+                        .call(function() {
+                            this.enter()
+                                .append('section')
+                                .attr('class', 'collapsible')
+                                .call(function() {
+                                    this.append('h1')
+                                        .call(function() {
+                                            this.append('strong');
+                                            this.append('span').attr('class', 'badge');
+                                        });
+                                });
+
+                            this.select('h1 strong').text(function(d) {
+                                var ontologyRelationship = relationships.byTitle[d];
+                                if (ontologyRelationship) {
+                                    return ontologyRelationship.displayName;
+                                }
+
+                                return d;
+                            });
+                        })
+                        .exit().remove();
                 });
         };
 
