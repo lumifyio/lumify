@@ -56,16 +56,17 @@ To add a new type:
 
         require(['util/vertex/formatters'], function(F) {
             $.extend(F.vertex.metadata, {
-                pluralize: function(value) {
-                    return value + 's';
+                pluralize: function(el, value) {
+                    el.textContent = value + 's';
                 },
 
                 // Suffix name with "Async" and return a promise
-                translateAsync: function(value) {
+                translateAsync: function(el, value) {
                     var translationPromise = $.Deferred();
                     $.get('/translateService', { string:value })
                         .done(function(result) {
-                            translationPromise.resolve(result);
+                            el.textContent = result;
+                            translationPromise.resolve();
                         })
 
                     return translationPromise.promise();

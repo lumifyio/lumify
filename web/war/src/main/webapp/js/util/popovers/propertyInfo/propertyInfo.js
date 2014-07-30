@@ -78,27 +78,6 @@ define([
                 metadata = _.pick.apply(_, [property].concat(this.metadataProperties)),
                 transformed = _.chain(metadata)
                     .pairs()
-                    .map(function(pair) {
-                        var name = pair[0],
-                            value = pair[1],
-                            typeName = displayTypes[name],
-                            formatter = F.vertex.metadata[typeName],
-                            formatterAsync = F.vertex.metadata[typeName + 'Async'];
-
-                        if (!formatter && !formatterAsync) {
-                            console.warn('No metadata type formatter: ' + typeName);
-                            return pair;
-                        }
-
-                        if (formatter) {
-                            return [name, formatter(value, property, vertexId)];
-                        }
-
-                        return pair;
-                    })
-                    .reject(function(pair) {
-                        return _.isUndefined(pair[1]);
-                    })
                     .value(),
                 row = this.contentRoot.select('table')
                     .selectAll('tr')
@@ -126,31 +105,38 @@ define([
                 .call(function() {
                     var self = this;
 
-                    self.select('td.property-name').text(function(d) {
+                    this.select('td.property-name').text(function(d) {
                         return displayNames[d[0]];
                     });
 
                     var valueElement = self.select('td.property-value')
-                        .text(function(d) {
+                        .each(function(d) {
                             var self = this,
+                                $self = $(this),
                                 typeName = displayTypes[d[0]],
+                                formatter = F.vertex.metadata[typeName],
                                 formatterAsync = F.vertex.metadata[typeName + 'Async'],
                                 value = d[1];
 
-                            if (formatterAsync) {
-                                formatterAsync(value, property, vertexId)
+                            if (formatter) {
+                                formatter(this, value);
+                            } else if (formatterAsync) {
+                                formatterAsync(self, value, property, vertexId)
                                     .fail(function() {
                                         d3.select(self).text(i18n('popovers.property_info.error', value));
                                     })
-                                    .done(function(value) {
-                                        d3.select(self).text(value);
-                                    })
                                     .always(positionDialog);
-                                return i18n('popovers.property_info.loading');
+                                d3.select(this).text(i18n('popovers.property_info.loading'));
+                            } else {
+                                console.warn('No metadata type formatter: ' + typeName);
+                                d3.select(this).text(value);
                             }
-
-                            return value;
                         });
+                })
+
+                // Hide blank metadata
+                .each(function(d) {
+                    $(this).toggle($(this).find('.property-value').text() !== '');
                 });
 
             // Justification
