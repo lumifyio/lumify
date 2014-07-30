@@ -31,17 +31,6 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <!-- http://lumify.io/exif#dateTaken -->
-
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#dateTaken">
-            <rdfs:label xml:lang="en">Date Taken</rdfs:label>
-            <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
-            <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
-            <rdfs:range rdf:resource="&xsd;dateTime"/>
-        </owl:DatatypeProperty>
-
-
-
     <!-- http://lumify.io/exif#yAxisFlipNeeded -->
 
         <owl:DatatypeProperty rdf:about="http://lumify.io/exif#yAxisFlipNeeded">
@@ -64,51 +53,12 @@
 
 
 
-    <!-- http://lumify.io/exif#deviceMake -->
-
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#deviceMake">
-            <rdfs:label xml:lang="en">Device Make</rdfs:label>
-            <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
-            <rdfs:range rdf:resource="&xsd;string"/>
-        </owl:DatatypeProperty>
-
-
-
-    <!-- http://lumify.io/exif#deviceModel -->
-
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#deviceModel">
-            <rdfs:label xml:lang="en">Device Model</rdfs:label>
-            <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
-            <rdfs:range rdf:resource="&xsd;string"/>
-        </owl:DatatypeProperty>
-
-
-
-    <!-- http://lumify.io/exif#geoLocation -->
-
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#geoLocation">
-            <rdfs:label xml:lang="en">Location</rdfs:label>
-            <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
-            <rdfs:range rdf:resource="&lumify;geolocation"/>
-        </owl:DatatypeProperty>
-
-
-
     <!-- http://lumify.io/exif#direction -->
 
         <owl:DatatypeProperty rdf:about="http://lumify.io/exif#direction">
             <rdfs:label xml:lang="en">Direction</rdfs:label>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
             <rdfs:range rdf:resource="&xsd;double"/>
-        </owl:DatatypeProperty>
-
-
-    <!-- http://lumify.io/exif#directionDescription -->
-
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#directionDescription">
-            <rdfs:label xml:lang="en">Direction (Description)</rdfs:label>
-            <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
-            <rdfs:range rdf:resource="&xsd;string"/>
         </owl:DatatypeProperty>
 
 

@@ -35,7 +35,7 @@
         cd ~
         chmod u+x jdk-6u45-linux-x64-rpm.bin
         ./jdk-6u45-linux-x64-rpm.bin
-        echo "export JAVA_HOME=/usr/java/jdk1.6.0_45/jre; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
+        echo "export JAVA_HOME=/usr/java/jdk1.6.0_45; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
         source /etc/profile.d/java.sh
 
 
@@ -46,11 +46,11 @@
         rpm -ivH http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 
-### Git, NodeJS, NPM, and NPM modules
+### RPMs and NPM modules
 
 *as root:*
 
-        yum install -y git nodejs npm
+        yum install -y git nodejs npm libuuid-devel libtool unzip
 
         npm install -g inherits bower grunt grunt-cli
 
@@ -138,6 +138,8 @@
               <value>hdfs://192.168.33.10:8020</value>
            </property>
 
+        sed -i -e "s|<value>secret</value>|<value>password</value>|" accumulo/conf/accumulo-site.xml
+
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         sed -i -e "s/192.168.33.10/${ip_address}/" accumulo/conf/accumulo-site.xml
         sed -i -e "s/localhost/${ip_address}/" accumulo/conf/monitor
@@ -166,12 +168,26 @@
 *as root:*
 
         cd ~
-        curl http://www.us.apache.org/dist/incubator/storm/apache-storm-0.9.2-incubating/apache-storm-0.9.2-incubating.tar.gz -O
-        cd /opt
-        tar xzf ~/apache-storm-0.9.2-incubating.tar.gz
-        ln -s apache-storm-0.9.2-incubating storm
+        curl http://download.zeromq.org/zeromq-2.1.7.tar.gz -O
+        tar -xzf zeromq-2.1.7.tar.gz
+        cd zeromq-2.1.7
+        ./configure
+        make
+        make install
 
-        mkdir storm/logs
+        cd ~
+        git clone https://github.com/nathanmarz/jzmq.git
+        cd jzmq
+        ./autogen.sh
+        ./configure
+        make
+        make install
+
+        cd ~
+        curl https://dl.dropboxusercontent.com/s/tqdpoif32gufapo/storm-0.9.0.1.tar.gz -O
+        cd /opt
+        tar xzf ~/storm-0.9.0.1.tar.gz
+        ln -s storm-0.9.0.1 storm
 
         vi /opt/storm/conf/storm.yaml
         # add the following at the end of the file:
@@ -276,8 +292,9 @@
 
         service rabbitmq-server start
 
-        /opt/storm/bin/storm nimbus 2>&1 > /opt/storm/logs/nimbus-console.out &
-        /opt/storm/bin/storm supervisor 2>&1 > /opt/storm/logs/supervisor-console.out &
+        /opt/storm/bin/storm nimbus &
+        /opt/storm/bin/storm ui &
+        /opt/storm/bin/storm supervisor &
 
 
 ### create a lumify user
@@ -350,14 +367,11 @@
 
         cd ~/lumify
         mvn package -pl storm/storm -am
-        mvn package -pl $(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target) | sed -e 's/ /,/g') -am
+        plugins=$(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ! -name '*opencv*' ) | sed -e 's/ /,/g')
+        mvn package -pl ${plugins} -am
 
-        hadoop fs -put \
-          $(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do ls ${t}/*.jar | tail -1; done) \
-          /lumify/libcache
-
-        # TODO: fix these plugins
-        hadoop fs -rm /lumify/libcache/lumify-translat*.jar
-        hadoop fs -rm /lumify/libcache/lumify-geocoder-bing-*.jar
+        jars=$(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done)
+        hadoop fs -put ${jars} /lumify/libcache
 
         /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
+

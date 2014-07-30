@@ -8,11 +8,11 @@ import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 import io.lumify.web.auth.usernamepassword.routes.Login;
 
-import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 public class UsernamePasswordWebAppPlugin implements WebAppPlugin {
     @Override
-    public void init(WebApp app, ServletConfig config, Handler authenticationHandler) {
+    public void init(WebApp app, ServletContext servletContext, Handler authenticationHandler) {
         StaticResourceHandler jsHandler = new StaticResourceHandler(this.getClass(), "/username-password/authentication.js", "application/javascript");
         StaticResourceHandler loginTemplateHandler = new StaticResourceHandler(this.getClass(), "/username-password/templates/login.hbs", "text/plain");
         StaticResourceHandler lessHandler = new StaticResourceHandler(this.getClass(), "/username-password/less/login.less", "text/plain");

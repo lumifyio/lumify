@@ -10,7 +10,11 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.DurationUtil;
+import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.VideoRotationUtil;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -32,14 +36,21 @@ import static org.securegraph.util.IterableUtils.toList;
 public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoFrameExtractGraphPropertyWorker.class);
     private ProcessRunner processRunner;
-    private double framesPerSecondToExtract = 0.1; // TODO make this configurable
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        int videoRotation = 0;
+        Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        if (nullableRotation != null) {
+            videoRotation = nullableRotation;
+        }
+
+        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
-            extractFrames(data.getLocalFile(), tempDir, framesPerSecondToExtract);
+            extractFrames(data.getLocalFile(), tempDir, data, framesPerSecondToExtract, videoRotation);
 
             List<String> propertyKeys = new ArrayList<String>();
             long videoDuration = 0;
@@ -72,7 +83,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
 
             getGraph().flush();
 
-            generateAndSaveVideoPreviewImage((Vertex) data.getElement());
+            generateAndSaveVideoPreviewImage((Vertex) data.getElement(), videoRotation);
 
             for (String propertyKey : propertyKeys) {
                 getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getPropertyName());
@@ -82,17 +93,44 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         }
     }
 
-    private void extractFrames(File videoFileName, File outDir, double framesPerSecondToExtract) throws IOException, InterruptedException {
+    private void extractFrames(File videoFileName, File outDir, GraphPropertyWorkData data, double framesPerSecondToExtract, int videoRotation) throws IOException, InterruptedException {
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(videoFileName, outDir, data, framesPerSecondToExtract, videoRotation);
         processRunner.execute(
                 "ffmpeg",
-                new String[]{
-                        "-i", videoFileName.getAbsolutePath(),
-                        "-r", "" + framesPerSecondToExtract,
-                        new File(outDir, "image-%8d.png").getAbsolutePath()
-                },
+                ffmpegOptionsArray,
                 null,
                 videoFileName.getAbsolutePath() + ": "
         );
+    }
+
+    private String[] prepareFFMPEGOptions(File videoFileName, File outDir, GraphPropertyWorkData data, double framesPerSecondToExtract, int videoRotation) {
+
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(videoFileName.getAbsolutePath());
+        ffmpegOptionsList.add("-r");
+        ffmpegOptionsList.add("" + framesPerSecondToExtract);
+
+        //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
+        if (videoRotation == 0 || videoRotation == 180) {
+            ffmpegOptionsList.add("-s");
+            ffmpegOptionsList.add("720x480");
+        } else if (videoRotation == 90 || videoRotation == 270) {
+            ffmpegOptionsList.add("-s");
+            ffmpegOptionsList.add("480x720");
+        }
+
+        //Rotate.
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+
+        ffmpegOptionsList.add(new File(outDir, "image-%8d.png").getAbsolutePath());
+        String[] ffmpegOptionsArray = ffmpegOptionsList.toArray(new String[ffmpegOptionsList.size()]);
+        return ffmpegOptionsArray;
     }
 
     @Override
@@ -112,13 +150,13 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         return true;
     }
 
-    private void generateAndSaveVideoPreviewImage(Vertex artifactVertex) {
+    private void generateAndSaveVideoPreviewImage(Vertex artifactVertex, int videoRotation) {
         LOGGER.info("Generating video preview for %s", artifactVertex.getId().toString());
 
         try {
             Iterable<Property> videoFrames = getVideoFrameProperties(artifactVertex);
             List<Property> videoFramesForPreview = getFramesForPreview(videoFrames);
-            BufferedImage previewImage = createPreviewImage(videoFramesForPreview);
+            BufferedImage previewImage = createPreviewImage(videoFramesForPreview, videoRotation);
             saveImage(artifactVertex, previewImage);
         } catch (IOException e) {
             throw new RuntimeException("Could not create preview image for artifact: " + artifactVertex.getId(), e);
@@ -136,16 +174,26 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         getGraph().flush();
     }
 
-    private BufferedImage createPreviewImage(List<Property> videoFrames) throws IOException {
-        BufferedImage previewImage = new BufferedImage(ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH * videoFrames.size(), ArtifactThumbnailRepository.PREVIEW_FRAME_HEIGHT, BufferedImage.TYPE_INT_RGB);
+    private BufferedImage createPreviewImage(List<Property> videoFrames, int videoRotation) throws IOException {
+        int previewFrameWidth;
+        int previewFrameHeight;
+        if (videoRotation == 0 || videoRotation == 180) {
+            previewFrameWidth = ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH;
+            previewFrameHeight = ArtifactThumbnailRepository.PREVIEW_FRAME_HEIGHT;
+        } else {
+            previewFrameWidth = ArtifactThumbnailRepository.PREVIEW_FRAME_HEIGHT;
+            previewFrameHeight = ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH;
+        }
+
+        BufferedImage previewImage = new BufferedImage(previewFrameWidth * videoFrames.size(), previewFrameHeight, BufferedImage.TYPE_INT_RGB);
         Graphics g = previewImage.getGraphics();
         for (int i = 0; i < videoFrames.size(); i++) {
             Property videoFrame = videoFrames.get(i);
             Image img = loadImage(videoFrame);
-            int dx1 = i * ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH;
+            int dx1 = i * previewFrameWidth;
             int dy1 = 0;
-            int dx2 = dx1 + ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH;
-            int dy2 = ArtifactThumbnailRepository.PREVIEW_FRAME_HEIGHT;
+            int dx2 = dx1 + previewFrameWidth;
+            int dy2 = previewFrameHeight;
             int sx1 = 0;
             int sy1 = 0;
             int sx2 = img.getWidth(null);
@@ -194,6 +242,18 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             results.remove(results.size() - 1);
         }
         return results;
+    }
+
+    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data) {
+        int numberOfFrames = 20;
+        JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Double duration = null;
+        if (outJson != null) {
+            duration = DurationUtil.extractDurationFromJSON(outJson);
+        }
+
+        double framesPerSecondToExtract = numberOfFrames / duration;
+        return framesPerSecondToExtract;
     }
 
 

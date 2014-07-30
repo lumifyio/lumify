@@ -8,7 +8,7 @@
     <div class="btn-toolbar">
       <% var sourceUrl = _.findWhere(vertex.properties, { name: 'http://lumify.io#sourceUrl' }); %>
       <% if (sourceUrl) { %>
-        <a title="Open Source URL" class="btn btn-small" target="_blank" href="<%= sourceUrl.value %>"><i class="icon-share"></i></a>
+        <a title="<%= i18n('detail.entity.source_url.button') %>" class="btn btn-small" target="_blank" href="<%= sourceUrl.value %>"><i class="icon-share"></i></a>
       <% } %>
       <%- fullscreenButton %>
 

@@ -44,6 +44,7 @@ public class VertexRelationships extends BaseRequestHandler {
         String graphVertexId = getAttributeString(request, "graphVertexId");
         long offset = getOptionalParameterLong(request, "offset", 0);
         long size = getOptionalParameterLong(request, "size", 25);
+        String edgeLabel = getOptionalParameter(request, "edgeLabel");
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
         if (vertex == null) {
@@ -51,7 +52,12 @@ public class VertexRelationships extends BaseRequestHandler {
             return;
         }
 
-        Iterable<Edge> edges = vertex.getEdges(Direction.BOTH, authorizations);
+        Iterable<Edge> edges;
+        if (edgeLabel == null) {
+            edges = vertex.getEdges(Direction.BOTH, authorizations);
+        } else {
+            edges = vertex.getEdges(Direction.BOTH, edgeLabel, authorizations);
+        }
 
         JSONObject json = new JSONObject();
         JSONArray relationshipsJson = new JSONArray();

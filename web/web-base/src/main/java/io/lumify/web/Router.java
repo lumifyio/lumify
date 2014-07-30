@@ -54,21 +54,18 @@ public class Router extends HttpServlet {
     private WebApp app;
     private UserAgentFilter userAgentFilter = new UserAgentFilter();
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
+    public Router(ServletContext servletContext) {
         try {
-            super.init(config);
+            final Injector injector = (Injector) servletContext.getAttribute(Injector.class.getName());
 
-            final Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
-
-            app = new WebApp(config, injector);
+            app = new WebApp(servletContext, injector);
 
             AuthenticationHandler authenticatorInstance = new AuthenticationHandler();
             Class<? extends Handler> authenticator = AuthenticationHandler.class;
 
             Class<? extends Handler> csrfProtector = LumifyCsrfHandler.class;
 
-            app.get("/", userAgentFilter, new StaticFileHandler(config, "/index.html"));
+            app.get("/", userAgentFilter, new StaticFileHandler(servletContext, "/index.html"));
             app.get("/plugins.css", csrfProtector, PluginsCss.class);
             app.get("/plugins.js", csrfProtector, PluginsJavaScript.class);
             app.get("/configuration", csrfProtector, Configuration.class);
@@ -145,7 +142,7 @@ public class Router extends HttpServlet {
                 LOGGER.info("Loading webapp plugin: %s", webAppPlugin.getClass().getName());
                 try {
                     injector.injectMembers(webAppPlugin);
-                    webAppPlugin.init(app, config, authenticatorInstance);
+                    webAppPlugin.init(app, servletContext, authenticatorInstance);
                 } catch (Exception e) {
                     throw new LumifyException("Could not initialize webapp plugin: " + webAppPlugin.getClass().getName(), e);
                 }
