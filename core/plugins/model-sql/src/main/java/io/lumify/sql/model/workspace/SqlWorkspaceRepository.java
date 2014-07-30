@@ -15,7 +15,6 @@ import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.securegraph.util.ConvertingIterable;
@@ -30,10 +29,12 @@ import static org.securegraph.util.IterableUtils.toList;
 public class SqlWorkspaceRepository extends WorkspaceRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlWorkspaceRepository.class);
     private final SqlUserRepository userRepository;
+    private final HibernateSessionManager sessionManager;
 
     @Inject
-    public SqlWorkspaceRepository(final SqlUserRepository userRepository) {
+    public SqlWorkspaceRepository(final SqlUserRepository userRepository, final HibernateSessionManager sessionManager) {
         this.userRepository = userRepository;
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -60,7 +61,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public Workspace findById(String workspaceId, User user) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("workspaceId", Integer.parseInt(workspaceId))).list();
         if (workspaces.size() == 0) {
             return null;
@@ -76,7 +77,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public Workspace add(String title, User user) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
 
         Transaction transaction = null;
         SqlWorkspace newWorkspace;
@@ -111,7 +112,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public Iterable<Workspace> findAll(User user) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         List workspaces = session.createCriteria(SqlWorkspaceUser.class)
                 .add(Restrictions.eq("sqlWorkspaceUser.user.id", Integer.parseInt(user.getUserId())))
                 .add(Restrictions.in("workspaceAccess", new String[]{WorkspaceAccess.READ.toString(), WorkspaceAccess.WRITE.toString()}))
@@ -127,7 +128,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void setTitle(Workspace workspace, String title, User user) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
@@ -169,7 +170,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         SqlWorkspace sqlWorkspace = (SqlWorkspace) session.get(SqlWorkspace.class, Integer.parseInt(workspace.getId()));
         List<WorkspaceEntity> workspaceEntities = new ArrayList<WorkspaceEntity>();
         List<SqlWorkspaceVertex> sqlWorkspaceVertices = sqlWorkspace.getSqlWorkspaceVertices();
@@ -190,7 +191,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -216,7 +217,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -269,7 +270,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
         SqlUser userToUpdate = (SqlUser) userRepository.findById(userId);
 
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -335,14 +336,14 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
 
     protected List<SqlWorkspaceUser> getSqlWorkspaceUserLists(String workspaceId) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         List<SqlWorkspaceUser> sqlWorkspaceUsers;
         sqlWorkspaceUsers = session.createCriteria(SqlWorkspaceUser.class).add(Restrictions.eq("sqlWorkspaceUser.workspace.id", Integer.parseInt(workspaceId))).list();
         return sqlWorkspaceUsers;
     }
 
     protected List<SqlWorkspaceVertex> getSqlWorkspaceVertices(SqlWorkspace sqlWorkspace) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         List<SqlWorkspaceVertex> sqlWorkspaceVertices;
         sqlWorkspaceVertices = session.createCriteria(SqlWorkspaceVertex.class).add(Restrictions.eq("workspace.id", Integer.parseInt(sqlWorkspace.getId()))).list();
         return sqlWorkspaceVertices;

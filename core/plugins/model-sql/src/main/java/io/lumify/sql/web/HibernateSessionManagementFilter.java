@@ -9,6 +9,11 @@ import java.io.IOException;
 public class HibernateSessionManagementFilter implements Filter {
 
     private static final String ALREADY_FILTERED = "HibernateSessionManagementFilter.filtered";
+    private final HibernateSessionManager sessionManager;
+
+    public HibernateSessionManagementFilter(HibernateSessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -24,13 +29,13 @@ public class HibernateSessionManagementFilter implements Filter {
             try {
                 filterChain.doFilter(servletRequest, servletResponse);
             } finally {
-                HibernateSessionManager.clearSession();
+                sessionManager.clearSession();
             }
         }
     }
 
     @Override
     public void destroy() {
-        HibernateSessionManager.clearSession();
+        sessionManager.clearSession();
     }
 }

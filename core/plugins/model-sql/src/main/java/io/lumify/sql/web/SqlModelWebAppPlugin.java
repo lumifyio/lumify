@@ -15,15 +15,16 @@ import java.util.EnumSet;
 
 public class SqlModelWebAppPlugin implements WebAppPlugin {
     public static final String FILTER_NAME = "hibernate-session-manager";
+    private HibernateSessionManager sessionManager;
 
     @Inject
-    public void configure(SessionFactory sessionFactory) {
-        HibernateSessionManager.initialize(sessionFactory);
+    public void configure(HibernateSessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
     @Override
     public void init(WebApp app, ServletContext servletContext, Handler authenticationHandler) {
-        FilterRegistration.Dynamic filter = servletContext.addFilter(FILTER_NAME, new HibernateSessionManagementFilter());
+        FilterRegistration.Dynamic filter = servletContext.addFilter(FILTER_NAME, new HibernateSessionManagementFilter(sessionManager));
         filter.addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST), false, WebAppInitializer.SERVLET_NAME);
         filter.setAsyncSupported(true);
     }

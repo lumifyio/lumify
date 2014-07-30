@@ -16,6 +16,7 @@ import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,18 +45,24 @@ public class SqlWorkspaceRepositoryTest {
 
     @Mock
     private UserListenerUtil userListenerUtil;
+    private HibernateSessionManager sessionManager;
 
     @Before
     public void setUp() throws Exception {
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-        HibernateSessionManager.initialize(configuration.buildSessionFactory(serviceRegistryBuilder));
+        sessionManager = new HibernateSessionManager(configuration.buildSessionFactory(serviceRegistryBuilder));
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, userListenerUtil);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository(sqlUserRepository);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, sessionManager, authorizationRepository, userListenerUtil);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository(sqlUserRepository, sessionManager);
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, null, new String[0]);
+    }
+
+    @After
+    public void teardown() {
+        sessionManager.clearSession();
     }
 
     @Test
@@ -81,7 +88,7 @@ public class SqlWorkspaceRepositoryTest {
         sqlUserRepository.setCurrentWorkspace(testUser.getUserId(), workspace.getId());
         sqlWorkspaceRepository.delete(workspace, testUser);
 
-        HibernateSessionManager.getSession().refresh(testUser);
+        sessionManager.getSession().refresh(testUser);
         assertNull(testUser.getCurrentWorkspaceId());
     }
 

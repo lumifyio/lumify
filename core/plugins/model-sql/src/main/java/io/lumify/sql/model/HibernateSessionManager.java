@@ -1,6 +1,5 @@
 package io.lumify.sql.model;
 
-
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.hibernate.Session;
@@ -8,8 +7,9 @@ import org.hibernate.SessionFactory;
 
 public class HibernateSessionManager {
     private static LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HibernateSessionManager.class);
-    private static SessionFactory sessionFactory;
-    private static ThreadLocal<Session> threadLocalSession = new InheritableThreadLocal<Session>() {
+    private SessionFactory sessionFactory;
+
+    private ThreadLocal<Session> threadLocalSession = new InheritableThreadLocal<Session>() {
         @Override
         protected Session initialValue() {
             LOGGER.info("Opening Hibernate session");
@@ -18,24 +18,24 @@ public class HibernateSessionManager {
     };
 
     // this is to prevent opening a session just to clear it
-    private static ThreadLocal<Boolean> threadLocalSessionIsOpen = new InheritableThreadLocal<Boolean>() {
+    private ThreadLocal<Boolean> threadLocalSessionIsOpen = new InheritableThreadLocal<Boolean>() {
         @Override
         protected Boolean initialValue() {
             return Boolean.FALSE;
         }
     };
 
-    public static void initialize(SessionFactory factory) {
+    public HibernateSessionManager(SessionFactory factory) {
         sessionFactory = factory;
         threadLocalSession.remove();
     }
 
-    public static Session getSession() {
+    public Session getSession() {
         threadLocalSessionIsOpen.set(Boolean.TRUE);
         return threadLocalSession.get();
     }
 
-    public static void clearSession() {
+    public void clearSession() {
         if (threadLocalSessionIsOpen.get()) {
             Session session = threadLocalSession.get();
             if (session.isOpen()) {  // double checking

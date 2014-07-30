@@ -13,10 +13,8 @@ import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.json.JSONObject;
-import org.securegraph.util.ConvertingIterable;
 
 import java.util.*;
 
@@ -27,19 +25,22 @@ public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
     private final AuthorizationRepository authorizationRepository;
     private final UserListenerUtil userListenerUtil;
+    private final HibernateSessionManager sessionManager;
 
     @Inject
     public SqlUserRepository(final Configuration configuration,
+                             final HibernateSessionManager sessionManager,
                              final AuthorizationRepository authorizationRepository,
                              final UserListenerUtil userListenerUtil) {
         super(configuration);
+        this.sessionManager = sessionManager;
         this.authorizationRepository = authorizationRepository;
         this.userListenerUtil = userListenerUtil;
     }
 
     @Override
     public User findByUsername(String username) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.username=:username")
                 .setParameter("username", username)
                 .list();
@@ -54,7 +55,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public Iterable<User> findAll() {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         List<User> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user")
                 .list();
         return users;
@@ -62,7 +63,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User findById(String userId) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.id=:id")
                 .setParameter("id", Integer.parseInt(userId))
                 .list();
@@ -77,7 +78,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
         }
@@ -117,7 +118,7 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public void setPassword(User user, String password) {
         checkNotNull(password);
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         if (user == null || user.getUserId() == null || findById(user.getUserId()) == null) {
             throw new LumifyException("User is not valid");
         }
@@ -155,7 +156,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void recordLogin(User user, String remoteAddr) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -187,7 +188,7 @@ public class SqlUserRepository extends UserRepository {
             throw new LumifyException("UserId cannot be null");
         }
 
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         Transaction transaction = null;
         SqlUser sqlUser = null;
         try {
@@ -221,7 +222,7 @@ public class SqlUserRepository extends UserRepository {
             throw new LumifyException("UserId cannot be null");
         }
 
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         try {
             SqlUser sqlUser = (SqlUser) findById(userId);
             if (sqlUser == null) {
@@ -235,7 +236,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void setUiPreferences(User user, JSONObject preferences) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -254,7 +255,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User setStatus(String userId, UserStatus status) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
         }
@@ -299,7 +300,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void delete(User user) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
 
         Transaction transaction = null;
         SqlUser sqlUser;
@@ -321,7 +322,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void setPrivileges(User user, Set<Privilege> privileges) {
-        Session session = HibernateSessionManager.getSession();
+        Session session = sessionManager.getSession();
 
         Transaction transaction = null;
         SqlUser sqlUser;
