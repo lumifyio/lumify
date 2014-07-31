@@ -24,7 +24,6 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.core.util.RowKeyHelper;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
@@ -108,7 +107,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
             return;
         }
 
-        Object id = resolvedVertexId == null ? graph.getIdGenerator().nextId() : resolvedVertexId;
+        String id = resolvedVertexId == null ? graph.getIdGenerator().nextId() : resolvedVertexId;
 
         Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 

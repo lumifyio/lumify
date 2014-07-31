@@ -19,7 +19,7 @@ public class TermMention {
     private final boolean useExisting;
     private final String propertyKey;
     private String process = "";
-    private Object id;
+    private String id;
     private Visibility visibility;
 
     private TermMention(
@@ -32,7 +32,7 @@ public class TermMention {
             List<TermMentionProperty> newProperties,
             boolean useExisting,
             String process,
-            Object id,
+            String id,
             Visibility visibility) {
         this.start = start;
         this.end = end;
@@ -67,7 +67,7 @@ public class TermMention {
         return propertyKey;
     }
 
-    public Object getId() {
+    public String getId() {
         return id;
     }
 
@@ -186,7 +186,7 @@ public class TermMention {
         private List<TermMentionProperty> newProperties = new ArrayList<TermMentionProperty>();
         private boolean useExisting;
         private final List<String> process = new ArrayList<String>();
-        private Object id;
+        private String id;
         private Visibility visibility;
 
         public Builder(int start, int end, String sign, String ontologyClassUri, String propertyKey, Visibility visibility) {
@@ -236,7 +236,7 @@ public class TermMention {
             return this;
         }
 
-        public Builder id(final Object id) {
+        public Builder id(final String id) {
             this.id = id;
             return this;
         }

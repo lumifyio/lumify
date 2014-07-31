@@ -59,9 +59,9 @@ public class WorkspaceRelationships extends BaseRequestHandler {
         JSONArray resultsJson = new JSONArray();
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
-        List<Object> allIds = toList(new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
+        List<String> allIds = toList(new ConvertingIterable<WorkspaceEntity, String>(workspaceEntities) {
             @Override
-            protected Object convert(WorkspaceEntity workspaceEntity) {
+            protected String convert(WorkspaceEntity workspaceEntity) {
                 return workspaceEntity.getEntityVertexId();
             }
         });
