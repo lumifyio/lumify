@@ -32,7 +32,7 @@ import java.util.List;
 public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(KnownEntityExtractorGraphPropertyWorker.class);
     public static final String PATH_PREFIX_CONFIG = "termextraction.knownEntities.pathPrefix";
-    public static final String DEFAULT_PATH_PREFIX = "hdfs://";
+    public static final String DEFAULT_PATH_PREFIX = "/lumify/config/knownEntities/";
     private AhoCorasick tree;
 
     @Override

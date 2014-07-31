@@ -53,10 +53,10 @@ public class Export extends BaseRequestHandler {
 
         Authorizations authorizations = getUserRepository().getAuthorizations(user, UserRepository.VISIBILITY_STRING, WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
 
-        List<Object> workspaceEntityIds = toList(getWorkspaceEntityIds(user, workspace));
+        List<String> workspaceEntityIds = toList(getWorkspaceEntityIds(user, workspace));
 
         // create this array so that we get the relationships from workspace to entities
-        ArrayList<Object> workspaceEntityIdsAndWorkspaceId = new ArrayList<Object>(workspaceEntityIds);
+        ArrayList<String> workspaceEntityIdsAndWorkspaceId = new ArrayList<String>(workspaceEntityIds);
         workspaceEntityIdsAndWorkspaceId.add(workspace.getId());
 
         Vertex workspaceVertex = this.workspaceRepository.getVertex(workspace.getId(), user);
@@ -75,10 +75,10 @@ public class Export extends BaseRequestHandler {
         }
     }
 
-    private Iterable<Object> getWorkspaceEntityIds(final User user, final Workspace workspace) {
-        return new ConvertingIterable<WorkspaceEntity, Object>(this.workspaceRepository.findEntities(workspace, user)) {
+    private Iterable<String> getWorkspaceEntityIds(final User user, final Workspace workspace) {
+        return new ConvertingIterable<WorkspaceEntity, String>(this.workspaceRepository.findEntities(workspace, user)) {
             @Override
-            protected Object convert(WorkspaceEntity o) {
+            protected String convert(WorkspaceEntity o) {
                 return o.getEntityVertexId();
             }
         };

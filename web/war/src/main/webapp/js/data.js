@@ -479,6 +479,10 @@ define([
         this.refreshRelationships = function() {
             var self = this;
 
+            if (this.verticesInWorkspace().length < 2) {
+                return;
+            }
+
             this.relationshipsUnload();
 
             this.workspaceService.getRelationships(this.workspaceId, this.newlyAddedIds)

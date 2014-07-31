@@ -179,7 +179,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
         String propertyKey = json.optString("propertyKey");
         String propertyName = json.optString("propertyName");
 
-        Object graphVertexId = json.opt("graphVertexId");
+        String graphVertexId = json.optString("graphVertexId");
         if (graphVertexId != null) {
             Vertex vertex = graph.getVertex(graphVertexId, this.authorizations);
             if (vertex == null) {
@@ -189,7 +189,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
             return;
         }
 
-        Object graphEdgeId = json.opt("graphEdgeId");
+        String graphEdgeId = json.optString("graphEdgeId");
         if (graphEdgeId != null) {
             Edge edge = graph.getEdge(graphEdgeId, this.authorizations);
             if (edge == null) {

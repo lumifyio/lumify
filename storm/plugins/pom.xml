@@ -16,7 +16,6 @@
     <modules>
         <module>ccextractor</module>
         <module>email-extractor</module>
-        <module>geocoder-bing</module>
         <module>known-entity-extractor</module>
         <module>opennlp-dictionary-extractor</module>
         <module>opennlp-me-extractor</module>

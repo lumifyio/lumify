@@ -5,9 +5,6 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.detectedObjects.DetectedObjectModel;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
-import io.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -31,14 +28,11 @@ import org.securegraph.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.util.Iterator;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class WorkspaceUndo extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUndo.class);
     private final TermMentionRepository termMentionRepository;
-    private final DetectedObjectRepository detectedObjectRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final UserRepository userRepository;
@@ -49,7 +43,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
     @Inject
     public WorkspaceUndo(
             final TermMentionRepository termMentionRepository,
-            final DetectedObjectRepository detectedObjectRepository,
             final Configuration configuration,
             final Graph graph,
             final VisibilityTranslator visibilityTranslator,
@@ -59,7 +52,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
             final WorkQueueRepository workQueueRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
-        this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceHelper = workspaceHelper;
@@ -156,9 +148,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        Iterator<Edge> hasImageEdges = vertex.getEdges(Direction.BOTH, entityHasImageIri, authorizations).iterator();
-        while (hasImageEdges.hasNext()) {
-            Edge edge = hasImageEdges.next();
+        for (Edge edge : vertex.getEdges(Direction.BOTH, entityHasImageIri, authorizations)) {
             if (edge.getVertexId(Direction.IN).equals(vertex.getId())) {
                 Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
                 Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
@@ -169,21 +159,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
         for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
-            if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
-                if (detectedObjectModel == null) {
-                    continue;
-                } else {
-                    DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKeyProperty.getValue().toString());
-                    DetectedObjectRowKey analyzedDetectedObjectRK = new DetectedObjectRowKey
-                            (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
-                                    detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
-                    DetectedObjectModel analyzedDetectedModel = detectedObjectRepository.findByRowKey(analyzedDetectedObjectRK.getRowKey(), modelUserContext);
-                    JSONObject artifactVertexWithDetectedObjects = workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel.getMetadata().getEdgeId(), detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations);
-                    this.workQueueRepository.pushDetectedObjectChange(artifactVertexWithDetectedObjects);
-                    unresolved.put(artifactVertexWithDetectedObjects);
-                }
-            } else {
+            if (termMentionModel != null) {
                 TermMentionRowKey termMentionRowKey = new TermMentionRowKey(rowKeyProperty.getValue().toString());
                 unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
             }

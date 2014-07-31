@@ -12,6 +12,8 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.securegraph.GraphConfiguration;
+import org.securegraph.elasticsearch.ElasticSearchSearchIndexBase;
 
 public class FormatLumify extends CommandLineBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FormatLumify.class);
@@ -41,19 +43,22 @@ public class FormatLumify extends CommandLineBase {
 
         getGraph().shutdown();
 
-        // TODO refactor to config file info. But since this is only for development this is low priority
-        String ES_INDEX = "securegraph";
-        LOGGER.debug("BEGIN deleting elastic search index: " + ES_INDEX);
+        // TODO refactor to pull graph. from some static reference
+        String indexName = getConfiguration().get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_INDEX_NAME);
+        String[] esLocations = getConfiguration().get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_ES_LOCATIONS).split(",");
+        LOGGER.debug("BEGIN deleting elastic search index: " + indexName);
         TransportClient client = new TransportClient();
-        for (String esLocation : new String[]{"192.168.33.10:9300"}) {
+        for (String esLocation : esLocations) {
             String[] locationSocket = esLocation.split(":");
-            client.addTransportAddress(new InetSocketTransportAddress(locationSocket[0], Integer.parseInt(locationSocket[1])));
+            String host = locationSocket[0];
+            String port = locationSocket.length > 1 ? locationSocket[1] : "9300";
+            client.addTransportAddress(new InetSocketTransportAddress(host, Integer.parseInt(port)));
         }
-        DeleteIndexResponse response = client.admin().indices().delete(new DeleteIndexRequest(ES_INDEX)).actionGet();
+        DeleteIndexResponse response = client.admin().indices().delete(new DeleteIndexRequest(indexName)).actionGet();
         if (!response.isAcknowledged()) {
-            LOGGER.error("Failed to delete elastic search index named %s", ES_INDEX);
+            LOGGER.error("Failed to delete elastic search index named %s", indexName);
         }
-        LOGGER.debug("END deleting elastic search index: " + ES_INDEX);
+        LOGGER.debug("END deleting elastic search index: " + indexName);
         client.close();
 
         return 0;

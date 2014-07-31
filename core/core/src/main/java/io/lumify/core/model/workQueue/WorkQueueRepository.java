@@ -88,6 +88,8 @@ public abstract class WorkQueueRepository {
         JSONObject dataJson = new JSONObject();
         if (edge != null) {
             dataJson.put("edgeId", edge.getId());
+            dataJson.put("outVertexId", edge.getVertexId(Direction.OUT));
+            dataJson.put("inVertexId", edge.getVertexId(Direction.IN));
         }
 
         JSONObject json = new JSONObject();
@@ -112,10 +114,6 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushDetectedObjectChange(JSONObject artifactVertexWithDetectedObjects) {
-        broadcastDetectedObjectChange(artifactVertexWithDetectedObjects);
-    }
-
     public void pushTextUpdated(String vertexId) {
         broadcastTextUpdated(vertexId);
     }
@@ -128,18 +126,6 @@ public abstract class WorkQueueRepository {
 
         JSONObject json = new JSONObject();
         json.put("type", "textUpdated");
-        json.put("data", dataJson);
-        broadcastJson(json);
-    }
-
-    protected void broadcastDetectedObjectChange(JSONObject artifactVertexWithDetectedObjects) {
-        JSONObject dataJson = new JSONObject();
-        if (artifactVertexWithDetectedObjects != null) {
-            dataJson = artifactVertexWithDetectedObjects;
-        }
-
-        JSONObject json = new JSONObject();
-        json.put("type", "detectedObjectChange");
         json.put("data", dataJson);
         broadcastJson(json);
     }

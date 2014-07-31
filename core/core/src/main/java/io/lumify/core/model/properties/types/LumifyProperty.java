@@ -205,6 +205,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         return element.getProperties(getPropertyName());
     }
 
+    public void removeProperty(Element element, String key, Authorizations authorizations) {
+        element.removeProperty(key, getPropertyName(), authorizations);
+    }
+
     /**
      * Function that converts the values returned by the Vertex.getProperty()
      * methods to the configured TRaw type.

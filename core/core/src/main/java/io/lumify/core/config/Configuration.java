@@ -37,7 +37,6 @@ public final class Configuration {
     public static final String ONTOLOGY_REPOSITORY = "repository.ontology";
     public static final String AUDIT_REPOSITORY = "repository.audit";
     public static final String TERM_MENTION_REPOSITORY = "repository.termMention";
-    public static final String DETECTED_OBJECT_REPOSITORY = "repository.detectedObject";
     public static final String ARTIFACT_THUMBNAIL_REPOSITORY = "repository.artifactThumbnail";
     public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";

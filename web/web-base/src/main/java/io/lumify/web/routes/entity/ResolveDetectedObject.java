@@ -4,10 +4,9 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
-import io.lumify.core.model.detectedObjects.DetectedObjectModel;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -20,6 +19,7 @@ import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
+import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
@@ -37,10 +37,10 @@ import static io.lumify.core.model.properties.LumifyProperties.TITLE;
 
 public class ResolveDetectedObject extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveDetectedObject.class);
+    private static final String MULTI_VALUE_KEY_PREFIX = ResolveDetectedObject.class.getName();
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
-    private final DetectedObjectRepository detectedObjectRepository;
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
@@ -53,7 +53,6 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
             final Configuration configuration,
-            final DetectedObjectRepository detectedObjectRepository,
             final WorkQueueRepository workQueueRepository,
             final VisibilityTranslator visibilityTranslator,
             final WorkspaceRepository workspaceRepository) {
@@ -61,7 +60,6 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
-        this.detectedObjectRepository = detectedObjectRepository;
         this.workQueueRepository = workQueueRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
@@ -81,10 +79,11 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
-        String x1 = getRequiredParameter(request, "x1");
-        String x2 = getRequiredParameter(request, "x2");
-        String y1 = getRequiredParameter(request, "y1");
-        String y2 = getRequiredParameter(request, "y2");
+        String originalPropertyKey = getOptionalParameter(request, "originalPropertyKey");
+        double x1 = Double.parseDouble(getRequiredParameter(request, "x1"));
+        double x2 = Double.parseDouble(getRequiredParameter(request, "x2"));
+        double y1 = Double.parseDouble(getRequiredParameter(request, "y1"));
+        double y2 = Double.parseDouble(getRequiredParameter(request, "y2"));
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
@@ -134,23 +133,30 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, artifactContainsImageOfEntityIri, lumifyVisibility.getVisibility(), authorizations);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
-        // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
-                (artifactId, edge.getId(), resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
-                        Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility(),
-                        user.getModelUserContext());
+        ArtifactDetectedObject artifactDetectedObject = new ArtifactDetectedObject(
+                x1,
+                y1,
+                x2,
+                y2,
+                concept.getIRI(),
+                "user",
+                edge.getId(),
+                resolvedVertex.getId(),
+                originalPropertyKey);
+        String propertyKey = artifactDetectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
+        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, propertyKey, artifactDetectedObject, lumifyVisibility.getVisibility(), authorizations);
 
-        JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
-
-        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), detectedObjectModel.getRowKey().toString(), lumifyVisibility.getVisibility());
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId(), LumifyProperties.ROW_KEY.getPropertyName(), propertyKey, lumifyVisibility.getVisibility());
         resolvedVertexMutation.save(authorizations);
 
         graph.flush();
 
         workQueueRepository.pushElement(edge);
+        workQueueRepository.pushGraphPropertyQueue(artifactVertex, propertyKey, LumifyProperties.DETECTED_OBJECT.getPropertyName());
 
+        JSONObject result = JsonSerializer.toJson(artifactVertex, workspaceId, authorizations);
         respondWithJson(response, result);
     }
 }

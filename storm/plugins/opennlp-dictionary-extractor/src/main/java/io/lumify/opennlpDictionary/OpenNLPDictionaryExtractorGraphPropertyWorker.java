@@ -38,7 +38,7 @@ import java.util.Map;
 public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OpenNLPDictionaryExtractorGraphPropertyWorker.class);
     public static final String PATH_PREFIX_CONFIG = "termextraction.opennlp.pathPrefix";
-    private static final String DEFAULT_PATH_PREFIX = "hdfs://";
+    private static final String DEFAULT_PATH_PREFIX = "/lumify/config/opennlp/";
     private static final int NEW_LINE_CHARACTER_LENGTH = 1;
 
     private List<TokenNameFinder> finders;

@@ -100,7 +100,7 @@ public class SecureGraphWorkspaceRepositoryTest {
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff);
 
-        Object entity1VertexId = "entity1Id";
+        String entity1VertexId = "entity1Id";
         entity1Vertex = graph.addVertex(entity1VertexId, new LumifyVisibility().getVisibility(), new InMemoryAuthorizations());
     }
 
@@ -283,7 +283,7 @@ public class SecureGraphWorkspaceRepositoryTest {
 
         workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
-        Map<Object, InMemoryEdge> edgesAfterDelete = graph.getAllEdges();
+        Map<String, InMemoryEdge> edgesAfterDelete = graph.getAllEdges();
         assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users
         boolean foundRemovedEdge = false;
         for (InMemoryEdge edge : edgesAfterDelete.values()) {

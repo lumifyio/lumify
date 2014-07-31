@@ -239,6 +239,15 @@
     </owl:DatatypeProperty>
 
 
+    <!-- http://lumify.io#detectedObject -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;detectedObject">
+        <rdfs:label xml:lang="en">Detected Object</rdfs:label>
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
     <!-- http://lumify.io#displayName -->
 

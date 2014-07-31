@@ -28,7 +28,7 @@ public abstract class AbstractColumnEntityMapping implements ColumnEntityMapping
     /**
      * The ColumnValue used as the ID of this entity.
      */
-    private final ColumnValue<?> idColumn;
+    private final ColumnValue<String> idColumn;
 
     /**
      * The ColumnValue used as the sign of this entity.
@@ -60,7 +60,7 @@ public abstract class AbstractColumnEntityMapping implements ColumnEntityMapping
      * @param useExisting should existing entities be reused? null for default
      * @param required    is this entity required? null for default
      */
-    public AbstractColumnEntityMapping(final ColumnValue<?> idCol, final ColumnValue<String> signCol, final Map<String, ColumnValue<?>> props,
+    public AbstractColumnEntityMapping(final ColumnValue<String> idCol, final ColumnValue<String> signCol, final Map<String, ColumnValue<?>> props,
                                        final Boolean useExisting, final Boolean required) {
         checkNotNull(signCol, "sign column must be provided");
         this.idColumn = idCol;
@@ -120,7 +120,7 @@ public abstract class AbstractColumnEntityMapping implements ColumnEntityMapping
      */
     @Override
     public final TermMention mapTerm(final List<String> row, final int offset, final String processId, String propertyKey, Visibility visibility) {
-        Object id = idColumn != null ? idColumn.getValue(row) : null;
+        String id = idColumn != null ? idColumn.getValue(row) : null;
         String sign = signColumn.getValue(row);
         checkNotNull(sign, "sign cannot be null (offset: " + offset + ")");
         String conceptURI = getConceptURI(row);

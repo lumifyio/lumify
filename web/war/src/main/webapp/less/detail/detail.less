@@ -126,6 +126,7 @@
   .detected-object-labels {
     margin: 2em 0 0 0;
     padding: 0 1em;
+    
     &:empty {
       display:none;
     }
@@ -147,14 +148,22 @@
   }
 
   .detected-object-tag {
-    a {
+    a {      
+      font-size: 80%;
       padding: 0.3em 0.7em;
+      margin: 1em 0.25em 0 0.25em;
     }
     .label-info {
-      color: #555;
+      color: #777;
       background: rgba(0,0,0,0.1);
       text-shadow: none;
-    }
+      font-weight: normal;      
+      
+      &.resolved {
+        color: #555;
+        font-weight: bold;        
+      }
+    }    
   }
 
   .generic-draggable {

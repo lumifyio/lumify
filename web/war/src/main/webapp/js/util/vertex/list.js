@@ -374,7 +374,9 @@ define([
                     currentHtml = currentAnchor.html(),
                     src = vertex.imageSrc;
 
-                li.toggleClass('non_concept_preview', !vertex.imageSrcIsFromConcept);
+                li.toggleClass('non_concept_preview', !vertex.imageSrcIsFromConcept)
+                    .toggleClass('has-subtitle', !!F.vertex.subtitle(vertex))
+                    .toggleClass('has-timeSubtitle', !!F.vertex.time(vertex));
 
                 if (currentAnchor.length) {
                     if (src) {
