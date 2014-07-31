@@ -52,7 +52,7 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
 
 *as root:*
 
-        yum install -y git nodejs npm libuuid-devel libtool unzip
+        yum install -y git nodejs npm libuuid-devel libtool zip unzip
 
         npm install -g inherits bower grunt grunt-cli
 
@@ -186,10 +186,17 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
         make install
 
         cd ~
+        curl http://www.us.apache.org/dist/commons/io/binaries/commons-io-2.4-bin.zip -O
+
+        cd ~
         curl https://dl.dropboxusercontent.com/s/tqdpoif32gufapo/storm-0.9.0.1.tar.gz -O
         cd /opt
         tar xzf ~/storm-0.9.0.1.tar.gz
         ln -s storm-0.9.0.1 storm
+
+        cd storm/lib
+        rm -f rm commons-io-1.4.jar
+        unzip -j ~/commons-io-2.4-bin.zip commons-io-2.4/commons-io-2.4.jar
 
         vi /opt/storm/conf/storm.yaml
         # add the following at the end of the file:
@@ -324,14 +331,14 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
 
         sudo mkdir -p /opt/lumify/{config,lib,logs}
         sudo chgrp -R hadoop /opt/lumify
-        sudo chmod -R g+ws /opt/lumify
+        sudo chmod -R g+w /opt/lumify
+        sudo find /opt/lumify -type d -exec chmod g+s {} \;
 
         cd ~/lumify
-        sudo cp docs/{lumify.properties,log4j.xml} /opt/lumify/config
-        sudo chmod g+w /opt/lumify/config/*
+        cp config/{lumify.properties,log4j.xml} /opt/lumify/config
 
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
-        sudo sed -i -e "s/192.168.33.10/${ip_address}/" /opt/lumify/config/lumify.properties
+        sed -i -e "s/192.168.33.10/${ip_address}/" /opt/lumify/config/lumify.properties
 
         hadoop fs -mkdir -p /lumify/libcache
 
@@ -363,17 +370,43 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
 1. login by entering any username (if using the `lumify-web-auth-username-only` plugin)
 
 
+### upload the dev ontology
+
+1. create a `.zip` file with the dev ontology
+
+        cd ~/lumify/examples
+        zip -r ontology-dev.zip ontology-dev
+
+1. browse to https://localhost:8443/admin/uploadOntology.html
+1. enter `http://lumify.io/dev` as the Document IRI
+1. choose `ontology-dev.zip` as the OWL File
+1. click Submit
+
+
+### configure OpenNLP
+
+        cd ~/lumify
+        hadoop fs -mkdir -p /lumify/config
+        hadoop fs -put config/opennlp /lumify/config
+
+
 ### build and deploy the Lumify Storm topology
 
 *as the lumify user:*
 
         cd ~/lumify
         mvn package -pl storm/storm -am
-        plugins=$(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ! -name '*opencv*' ) | sed -e 's/ /,/g')
+
+        # exclude plugins that require optional dependencies that these instructions have not installed
+        # see https://github.com/lumifyio/lumify/blob/master/docs/dependencies-by-feature.md
+        #
+        excluded_plugins=$(cat docs/dependencies-by-feature.md | awk -F '|' '$2 ~ /text|media/ && $4 !~ /n\/a/ {print $4}' | sed -e 's/^ *//' -e 's/ *$//' -e 's| *<br */> *| |')
+        find_opts=$(echo $(echo $excluded_plugins) | sed -E 's/^| / ! -name /g')
+        plugins=$(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ${find_opts} ) | sed -e 's/ /,/g')
+
         mvn package -pl ${plugins} -am
 
         jars=$(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done)
         hadoop fs -put ${jars} /lumify/libcache
 
         /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
-
