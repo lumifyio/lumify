@@ -118,6 +118,10 @@ define([
                     (info && (info['http://lumify.io#conceptType'] || info.concept));
                 conceptType = conceptType && conceptType.value || conceptType || '';
 
+                if (conceptType === '' && self.attr.restrictConcept) {
+                    conceptType = self.attr.restrictConcept;
+                }
+
                 this.deferredConcepts.done(function() {
                     self.updateConceptSelect(conceptType).show();
                 });
@@ -142,6 +146,10 @@ define([
                         value: '',
                         readonly: self.unresolve
                     });
+                });
+            } else if (this.attr.restrictConcept) {
+                this.deferredConcepts.done(function() {
+                    self.updateConceptSelect(self.attr.restrictConcept);
                 });
             }
 
@@ -294,23 +302,6 @@ define([
             this.vertexService.unresolveDetectedObject(parameters)
                 .fail(this.requestFailure.bind(this))
                 .done(function(data) {
-                    console.log(data)
-                    /*
-                    var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused'),
-                        $tag = $focused.find('.label-info');
-
-                    if (data.deleteTag) {
-                        $focused.remove();
-                    } else {
-                        $tag.text(data.detectedObject.classifierConcept)
-                            .removeAttr('data-info')
-                            .data('info', data.detectedObject)
-                            .removeClass();
-                        $tag.addClass('label-info label detected-object opens-dropdown');
-                    }
-
-                    self.trigger(document, 'updateVertices', { vertices: [data.artifactVertex] });
-                    */
                     self.trigger(document, 'refreshRelationships');
                     _.defer(self.teardown.bind(self));
                 });
@@ -504,16 +495,36 @@ define([
                 ) || '';
 
                 self.select('conceptSelector').html(conceptsTemplate({
-                    concepts: self.allConcepts.map(function(c) {
-                        return {
-                            id: c.id,
-                            displayName: c.displayName,
-                            indent: c.flattenedDisplayName
-                                     .replace(/[^\/]/g, '')
-                                     .replace(/\//g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
-                            selected: selectedConceptId === c.id
-                        }
-                    })
+                    concepts: _.chain(self.allConcepts)
+                        .map(function(c) {
+                            return {
+                                id: c.id,
+                                displayName: c.displayName,
+                                indent: c.flattenedDisplayName
+                                         .replace(/[^\/]/g, '')
+                                         .replace(/\//g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
+                                selected: selectedConceptId === c.id
+                            }
+                        })
+                        .filter(function(concept) {
+                            if (self.attr.restrictConcept) {
+
+                                // Walk up tree to see if any match
+                                var parentConceptId = concept.id;
+                                do {
+                                    if (self.attr.restrictConcept === parentConceptId) {
+                                        return true;
+                                    }
+                                } while (
+                                    parentConceptId &&
+                                    (parentConceptId = concepts.byId[parentConceptId].parentConcept)
+                                );
+
+                                return false;
+                            }
+                            return true;
+                        })
+                        .value()
                 }));
 
                 if (self.select('conceptSelector').val() === '') {
@@ -531,7 +542,7 @@ define([
 
             var badge = this.select('objectSignSelector').nextAll('.badge')
                     .addClass('loading'),
-                request = this.vertexService.graphVertexSearch(query)
+                request = this.vertexService.graphVertexSearch(query, null, this.attr.restrictConcept)
                     .always(function() {
                         badge.removeClass('loading');
                     })
@@ -574,8 +585,6 @@ define([
                                 callback([]);
                             })
                             .done(function(entities) {
-                                console.log(entities)
-
                                 var all = _.map(entities, function(e) {
                                     return $.extend({
                                         toLowerCase: function() {

@@ -727,6 +727,7 @@ define([
             TermForm.attachTo (root, {
                 artifactData: this.attr.data,
                 dataInfo: dataInfo,
+                restrictConcept: dataInfo.concept,
                 existing: !!dataInfo.resolvedVertexId,
                 detectedObject: true
             });
