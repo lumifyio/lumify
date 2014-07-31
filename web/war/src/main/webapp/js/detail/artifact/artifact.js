@@ -352,6 +352,10 @@ define([
                             self.attr.detectedObjectTagSelector,
                             self.onDetectedObjectHover.bind(self)
                         );
+
+                    if (vertices.length) {
+                        self.trigger('updateDraggables');
+                    }
                 });
         };
 
