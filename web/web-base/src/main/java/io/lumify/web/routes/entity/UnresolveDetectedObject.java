@@ -89,8 +89,14 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         // remove edge
         graph.removeEdge(edge, authorizations);
         auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
-        this.workQueueRepository.pushEdgeDeletion(edge);
+
+        // remove property
+        LumifyProperties.DETECTED_OBJECT.removeProperty(artifactVertex, multiValueKey, authorizations);
+
         graph.flush();
+
+        this.workQueueRepository.pushEdgeDeletion(edge);
+        this.workQueueRepository.pushGraphPropertyQueue(artifactVertex, multiValueKey, LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId);
 
         auditRepository.auditVertex(AuditAction.UNRESOLVE, resolvedVertex.getId(), "", "", user, lumifyVisibility.getVisibility());
 
