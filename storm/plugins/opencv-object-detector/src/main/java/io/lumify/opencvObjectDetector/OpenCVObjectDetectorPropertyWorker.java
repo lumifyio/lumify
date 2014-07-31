@@ -142,9 +142,7 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
                             (rect.x + rect.width) / width,
                             (rect.y + rect.height) / height,
                             objectClassifier.conceptIRI,
-                            PROCESS,
-                            null,
-                            null);
+                            PROCESS);
                     detectedObjectList.add(detectedObject);
                 }
             }

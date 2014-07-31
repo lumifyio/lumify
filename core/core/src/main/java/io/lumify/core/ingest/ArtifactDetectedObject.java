@@ -7,6 +7,7 @@ import org.json.JSONObject;
 public class ArtifactDetectedObject {
     private final String edgeId;
     private final String resolvedVertexId;
+    private final String originalPropertyKey;
     private String concept;
     private double x1;
     private double y1;
@@ -23,9 +24,10 @@ public class ArtifactDetectedObject {
         this.concept = json.optString("concept");
         this.edgeId = json.optString("edgeId");
         this.resolvedVertexId = json.optString("resolvedVertexId");
+        this.originalPropertyKey = json.optString("originalPropertyKey");
     }
 
-    public ArtifactDetectedObject(double x1, double y1, double x2, double y2, String concept, String process, String edgeId, String resolvedVertexId) {
+    public ArtifactDetectedObject(double x1, double y1, double x2, double y2, String concept, String process, String edgeId, String resolvedVertexId, String originalPropertyKey) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -34,6 +36,11 @@ public class ArtifactDetectedObject {
         this.process = process;
         this.edgeId = edgeId;
         this.resolvedVertexId = resolvedVertexId;
+        this.originalPropertyKey = originalPropertyKey;
+    }
+
+    public ArtifactDetectedObject(double x1, double y1, double x2, double y2, String concept, String process) {
+        this(x1, y1, x2, y2, concept, process, null, null, null);
     }
 
     public double getX1() {
@@ -92,6 +99,10 @@ public class ArtifactDetectedObject {
         return resolvedVertexId;
     }
 
+    public String getOriginalPropertyKey() {
+        return originalPropertyKey;
+    }
+
     public String getMultivalueKey(String multiValueKeyPrefix) {
         return multiValueKeyPrefix
                 + ":"
@@ -121,6 +132,9 @@ public class ArtifactDetectedObject {
         }
         if (getResolvedVertexId() != null) {
             json.put("resolvedVertexId", getResolvedVertexId());
+        }
+        if (getOriginalPropertyKey() != null) {
+            json.put("originalPropertyKey", getOriginalPropertyKey());
         }
         return json;
     }

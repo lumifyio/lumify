@@ -79,7 +79,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
-        String propertyKey = getOptionalParameter(request, "propertyKey");
+        String originalPropertyKey = getOptionalParameter(request, "originalPropertyKey");
         double x1 = Double.parseDouble(getRequiredParameter(request, "x1"));
         double x2 = Double.parseDouble(getRequiredParameter(request, "x2"));
         double y1 = Double.parseDouble(getRequiredParameter(request, "y1"));
@@ -143,10 +143,9 @@ public class ResolveDetectedObject extends BaseRequestHandler {
                 concept.getIRI(),
                 "user",
                 edge.getId().toString(),
-                resolvedVertex.getId().toString());
-        if (propertyKey == null) {
-            propertyKey = artifactDetectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
-        }
+                resolvedVertex.getId().toString(),
+                originalPropertyKey);
+        String propertyKey = artifactDetectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
         LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, propertyKey, artifactDetectedObject, lumifyVisibility.getVisibility(), authorizations);
 
         resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), propertyKey, lumifyVisibility.getVisibility());
