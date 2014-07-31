@@ -88,6 +88,8 @@ public abstract class WorkQueueRepository {
         JSONObject dataJson = new JSONObject();
         if (edge != null) {
             dataJson.put("edgeId", edge.getId());
+            dataJson.put("outVertexId", edge.getVertexId(Direction.OUT));
+            dataJson.put("inVertexId", edge.getVertexId(Direction.IN));
         }
 
         JSONObject json = new JSONObject();
