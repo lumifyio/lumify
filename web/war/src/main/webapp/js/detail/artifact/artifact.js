@@ -87,9 +87,6 @@ define([
             this.on(document, 'textUpdated', this.onTextUpdated);
             this.after('tearDownDropdowns', this.onTeardownDropdowns);
 
-            this.$node.on('mouseenter.detectedObject mouseleave.detectedObject',
-                          this.attr.detectedObjectTagSelector,
-                          this.onDetectedObjectHover.bind(this));
             this.before('teardown', function() {
                 self.$node.off('.detectedObject');
             })
@@ -277,7 +274,8 @@ define([
         };
 
         this.updateDetectedObjects = function() {
-            var vertex = this.attr.data,
+            var self = this,
+                vertex = this.attr.data,
                 wasResolved = {},
                 needsLoading = [],
                 detectedObjects = vertex && F.vertex.props(vertex, 'detectedObject').sort(function(a, b) {
@@ -302,48 +300,58 @@ define([
                 appData.refresh(needsLoading),
                 this.ontologyService.concepts()
             ).done(function(vertices, concepts) {
-                var verticesById = _.indexBy(vertices, 'id');
+                var verticesById = _.indexBy(vertices, 'id'),
+                    detectedObjectKey = _.property('key');
 
                 d3.select(container.get(0))
                     .selectAll('.detected-object-tag')
-                    .data(detectedObjects)
+                    .data(detectedObjects, detectedObjectKey)
                     .call(function() {
                         this.enter()
                             .append('span')
                             .attr('class', 'detected-object-tag')
                             .append('a')
 
-                        this.style('display', function(detectedObject) {
-                            if (wasResolved[detectedObject.key]) {
-                                return 'none';
-                            }
-                        });
-                        this.select('a')
-                            .attr('data-vertex-id', function(detectedObject) {
-                                return detectedObject.value.resolvedVertexId;
+                        this
+                            .sort(function(a, b) {
+                                return a.value.x1 - b.value.x1;
                             })
-                            .attr('data-property-key', function(detectedObject) {
-                                return detectedObject.key;
-                            })
-                            .attr('class', function(detectedObject) {
-                                var classes = 'label label-info detected-object opens-dropdown';
-                                if (detectedObject.value.edgeId) {
-                                    return classes + ' resolved entity'
+                            .style('display', function(detectedObject) {
+                                if (wasResolved[detectedObject.key]) {
+                                    return 'none';
                                 }
-                                return classes;
                             })
-                            .text(function(detectedObject) {
-                                var resolvedVertexId = detectedObject.value.resolvedVertexId,
-                                    resolvedVertex = resolvedVertexId && verticesById[resolvedVertexId];
-                                if (resolvedVertex) {
-                                    return F.vertex.title(resolvedVertex);
-                                } else if (resolvedVertexId) {
-                                    return i18n('detail.detected_object.vertex_not_found');
-                                }
-                                return concepts.byId[detectedObject.value.concept].displayName;
-                            })
+                            .select('a')
+                                .attr('data-vertex-id', function(detectedObject) {
+                                    return detectedObject.value.resolvedVertexId;
+                                })
+                                .attr('data-property-key', detectedObjectKey)
+                                .attr('class', function(detectedObject) {
+                                    var classes = 'label label-info detected-object opens-dropdown';
+                                    if (detectedObject.value.edgeId) {
+                                        return classes + ' resolved entity'
+                                    }
+                                    return classes;
+                                })
+                                .text(function(detectedObject) {
+                                    var resolvedVertexId = detectedObject.value.resolvedVertexId,
+                                        resolvedVertex = resolvedVertexId && verticesById[resolvedVertexId];
+                                    if (resolvedVertex) {
+                                        return F.vertex.title(resolvedVertex);
+                                    } else if (resolvedVertexId) {
+                                        return i18n('detail.detected_object.vertex_not_found');
+                                    }
+                                    return concepts.byId[detectedObject.value.concept].displayName;
+                                })
                     })
                     .exit().remove();
+
+                    self.$node
+                        .off('.detectedObject')
+                        .on('mouseenter.detectedObject mouseleave.detectedObject',
+                            self.attr.detectedObjectTagSelector,
+                            self.onDetectedObjectHover.bind(self)
+                        );
                 });
         };
 
