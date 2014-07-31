@@ -79,6 +79,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        String propertyKey = getOptionalParameter(request, "propertyKey");
         double x1 = Double.parseDouble(getRequiredParameter(request, "x1"));
         double x2 = Double.parseDouble(getRequiredParameter(request, "x2"));
         double y1 = Double.parseDouble(getRequiredParameter(request, "y1"));
@@ -135,10 +136,12 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
         ArtifactDetectedObject artifactDetectedObject = new ArtifactDetectedObject(x1, y1, x2, y2, concept.getIRI(), "user", edge.getId().toString());
-        String multiKey = artifactDetectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
-        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, multiKey, artifactDetectedObject, lumifyVisibility.getVisibility(), authorizations);
+        if (propertyKey == null) {
+            propertyKey = artifactDetectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
+        }
+        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, propertyKey, artifactDetectedObject, lumifyVisibility.getVisibility(), authorizations);
 
-        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), multiKey, lumifyVisibility.getVisibility());
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), propertyKey, lumifyVisibility.getVisibility());
         resolvedVertexMutation.save(authorizations);
 
         graph.flush();
