@@ -175,19 +175,20 @@ define([
             }
         };
 
-        this.showFacebox = function(data, opts) {
+        this.showFacebox = function(property, opts) {
             var self = this,
                 options = $.extend({ editing: false, viewing: false }, opts || {});
 
             this.imageReady()
                 .done(function() {
-                    var box = (options.editing || options.viewing) ?
+                    var value = property.value,
+                        box = (options.editing || options.viewing) ?
                             self.select('boxEditingSelector') :
                             self.select('boxSelector').not('.editing'),
-                        w = (data.x2 - data.x1) * 100,
-                        h = (data.y2 - data.y1) * 100,
-                        x = data.x1 * 100,
-                        y = data.y1 * 100;
+                        w = (value.x2 - value.x1) * 100,
+                        h = (value.y2 - value.y1) * 100,
+                        x = value.x1 * 100,
+                        y = value.y1 * 100;
 
                     if (options.viewing) {
                         box.resizable('disable').draggable('disable')
@@ -205,12 +206,12 @@ define([
             });
         };
 
-        this.showFaceboxForEdit = function(data) {
-            this.showFacebox(data, { editing: true });
+        this.showFaceboxForEdit = function(property) {
+            this.showFacebox(property, { editing: true });
         };
 
-        this.showFaceboxForView = function(data) {
-            this.showFacebox(data, { viewing: true });
+        this.showFaceboxForView = function(property) {
+            this.showFacebox(property, { viewing: true });
         };
 
         this.onHover = function(event, data) {
@@ -227,16 +228,16 @@ define([
             toHide.hide();
         };
 
-        this.onEdit = function(event, data) {
-            if (data.entityVertex) {
-                this.currentlyEditing = data.entityVertex.id;
+        this.onEdit = function(event, property) {
+            if (property.value.resolvedVertexId) {
+                this.currentlyEditing = property.resolvedVertexId;
                 this.showFaceboxForView(data);
-            } else if (data.isNew) {
+            } else if (property.isNew) {
                 this.currentlyEditing = 'NEW';
-                this.showFaceboxForEdit(data);
+                this.showFaceboxForEdit(property);
             } else {
-                this.currentlyEditing = data['http://lumify.io#rowKey'];
-                this.showFaceboxForEdit(data);
+                this.currentlyEditing = property.key;
+                this.showFaceboxForEdit(property);
             }
         };
 

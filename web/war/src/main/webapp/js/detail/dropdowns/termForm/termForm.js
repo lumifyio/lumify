@@ -115,10 +115,12 @@ define([
 
                 var conceptType = _.isArray(info) ?
                     _.findWhere(info, { name: 'http://lumify.io#conceptType' }) :
-                    (info && info['http://lumify.io#conceptType']);
+                    (info && (info['http://lumify.io#conceptType'] || info.concept));
                 conceptType = conceptType && conceptType.value || conceptType || '';
 
-                this.updateConceptSelect(conceptType).show();
+                this.deferredConcepts.done(function() {
+                    self.updateConceptSelect(conceptType).show();
+                });
 
                 if (this.unresolve) {
                     this.select('actionButtonSelector')
@@ -253,22 +255,24 @@ define([
                 parameters = {
                     title: newSign,
                     conceptId: this.select('conceptSelector').val(),
-                    graphVertexId: this.attr.dataInfo.graphVertexId ?
-                        this.attr.dataInfo.graphVertexId :
+                    originalPropertyKey: this.attr.dataInfo.originalPropertyKey,
+                    graphVertexId: this.attr.dataInfo.resolvedVertexId ?
+                        this.attr.dataInfo.resolvedVertexId :
                         this.currentGraphVertexId,
-                    rowKey: this.attr.dataInfo['http://lumify.io#rowKey'],
                     artifactId: this.attr.artifactData.id,
                     x1: parseFloat(this.attr.dataInfo.x1),
                     y1: parseFloat(this.attr.dataInfo.y1),
                     x2: parseFloat(this.attr.dataInfo.x2),
                     y2: parseFloat(this.attr.dataInfo.y2),
-                    existing: !!this.currentGraphVertexId,
                     visibilitySource: this.visibilitySource || ''
                 };
 
             _.defer(this.buttonLoading.bind(this));
             if (this.unresolve) {
-                self.unresolveDetectedObject(parameters);
+                self.unresolveDetectedObject({
+                    vertexId: this.attr.artifactData.id,
+                    multiValueKey: this.attr.dataInfo.propertyKey
+                });
             } else {
                 self.resolveDetectedObject(parameters);
             }
@@ -331,6 +335,8 @@ define([
             this.vertexService.unresolveDetectedObject(parameters)
                 .fail(this.requestFailure.bind(this))
                 .done(function(data) {
+                    console.log(data)
+                    /*
                     var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused'),
                         $tag = $focused.find('.label-info');
 
@@ -345,6 +351,7 @@ define([
                     }
 
                     self.trigger(document, 'updateVertices', { vertices: [data.artifactVertex] });
+                    */
                     self.trigger(document, 'refreshRelationships');
                     _.defer(self.teardown.bind(self));
                 });
@@ -415,7 +422,7 @@ define([
                 data = this.attr.dataInfo;
                 objectSign = data && data.title;
                 existingEntity = this.attr.existing;
-                graphVertexId = data && data.graphVertexId
+                graphVertexId = data && data.resolvedVertexId;
                 this.unresolve = graphVertexId && graphVertexId !== '';
             }
 

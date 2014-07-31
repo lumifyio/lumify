@@ -19,7 +19,8 @@ define([
     'service/ontology',
     'service/vertex',
     'service/config',
-    'data'
+    'data',
+    'd3'
 ], function(
     defineComponent,
     VideoScrubber,
@@ -39,7 +40,8 @@ define([
     OntologyService,
     VertexService,
     ConfigService,
-    appData) {
+    appData,
+    d3) {
     'use strict';
 
     return defineComponent(Artifact, withTypeContent, withHighlighting);
@@ -200,12 +202,8 @@ define([
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
             if (matching) {
-                $('<div>')
-                    .addClass('subtitle')
-                    .text(matching.concept.displayName)
-                    .appendTo(
-                        this.select('titleSelector').text(F.vertex.title(matching))
-                    )
+                this.attr.data = matching;
+                this.update();
             }
         };
 
@@ -242,27 +240,111 @@ define([
 
             this.$node.html(template({
                 vertex: vertex,
-                detectedObjects: detectedObjects,
+                detectedObjects: [],
                 fullscreenButton: this.fullscreenButton([vertex.id]),
                 auditsButton: this.auditsButton(),
                 F: F
             }));
 
-            this.select('detectedObjectLabelsSelector').toggle(detectedObjects.length > 0);
-
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
-            this.updateText();
+            this.update()
 
             if (this[displayType + 'Setup']) {
                 this[displayType + 'Setup'](this.attr.data);
             }
         };
 
+        this.update = function() {
+            this.updateTitle();
+            this.updateDetectedObjects();
+            this.updateText();
+        };
+
+        this.updateTitle = function() {
+            $('<div>')
+                .addClass('subtitle')
+                .text(this.attr.data.concept.displayName)
+                .appendTo(
+                    this.select('titleSelector').text(F.vertex.title(this.attr.data))
+                )
+        };
+
         this.onTextUpdated = function(event, data) {
             if (data.vertexId === this.attr.data.id) {
                 this.updateText();
             }
+        };
+
+        this.updateDetectedObjects = function() {
+            var vertex = this.attr.data,
+                wasResolved = {},
+                needsLoading = [],
+                detectedObjects = vertex && F.vertex.props(vertex, 'detectedObject').sort(function(a, b) {
+                    return a.value.x1 - b.value.x1;
+                }) || [],
+                container = this.select('detectedObjectLabelsSelector').toggle(detectedObjects.length > 0);
+
+            detectedObjects.forEach(function(detectedObject) {
+                var key = detectedObject.value.originalPropertyKey,
+                    resolvedVertexId = detectedObject.value.resolvedVertexId;
+
+                if (key) {
+                    wasResolved[key] = true;
+                }
+
+                if (resolvedVertexId) {
+                    needsLoading.push(resolvedVertexId);
+                }
+            });
+
+            $.when(
+                appData.refresh(needsLoading),
+                this.ontologyService.concepts()
+            ).done(function(vertices, concepts) {
+                var verticesById = _.indexBy(vertices, 'id');
+
+                d3.select(container.get(0))
+                    .selectAll('.detected-object-tag')
+                    .data(detectedObjects)
+                    .call(function() {
+                        this.enter()
+                            .append('span')
+                            .attr('class', 'detected-object-tag')
+                            .append('a')
+
+                        this.style('display', function(detectedObject) {
+                            if (wasResolved[detectedObject.key]) {
+                                return 'none';
+                            }
+                        });
+                        this.select('a')
+                            .attr('data-vertex-id', function(detectedObject) {
+                                return detectedObject.value.resolvedVertexId;
+                            })
+                            .attr('data-property-key', function(detectedObject) {
+                                return detectedObject.key;
+                            })
+                            .attr('class', function(detectedObject) {
+                                var classes = 'label label-info detected-object opens-dropdown';
+                                if (detectedObject.value.edgeId) {
+                                    return classes + ' resolved entity'
+                                }
+                                return classes;
+                            })
+                            .text(function(detectedObject) {
+                                var resolvedVertexId = detectedObject.value.resolvedVertexId,
+                                    resolvedVertex = resolvedVertexId && verticesById[resolvedVertexId];
+                                if (resolvedVertex) {
+                                    return F.vertex.title(resolvedVertex);
+                                } else if (resolvedVertexId) {
+                                    return i18n('detail.detected_object.vertex_not_found');
+                                }
+                                return concepts.byId[detectedObject.value.concept].displayName;
+                            })
+                    })
+                    .exit().remove();
+                });
         };
 
         this.updateText = function() {
@@ -443,12 +525,16 @@ define([
             if (Privileges.missingEDIT) {
                 return;
             }
+
             event.preventDefault();
+
             var self = this,
                 $target = $(event.target),
-                info = $target.closest('.label-info').data('info');
+                propertyKey = $target.closest('.label-info').data('propertyKey'),
+                property = F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
+
             this.$node.find('.focused').removeClass('focused')
-            $target.closest('.label-info').parent().addClass('focused');
+            $target.closest('.detected-object').parent().addClass('focused');
 
             require(['util/actionbar/actionbar'], function(ActionBar) {
                 self.ActionBar = ActionBar;
@@ -471,13 +557,20 @@ define([
                         self.trigger('selectObjects', {
                             vertices: [
                                 {
-                                    id: $target.data('info').graphVertexId
+                                    id: property.value.resolvedVertexId
                                 }
                             ]
                         });
                     });
                     self.on('unresolve.actionbar', function() {
-                        _.defer(self.showForm.bind(self), info, this.attr.data, $target);
+                        _.defer(
+                            self.showForm.bind(self),
+                            $.extend({}, property.value, {
+                                title: F.vertex.title(appData.cachedVertices[property.value.resolvedVertexId]),
+                                propertyKey: property.key
+                            }),
+                            $target
+                        );
                     });
 
                 } else if (Privileges.canEDIT) {
@@ -490,8 +583,12 @@ define([
                     });
 
                     self.on('resolve.actionbar', function() {
-                        self.trigger(self.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
-                        _.defer(self.showForm.bind(self), info, this.attr.data, $target);
+                        self.trigger(self.select('imagePreviewSelector'), 'DetectedObjectEdit', property);
+                        _.defer(
+                            self.showForm.bind(self),
+                            $.extend({}, property.value, { originalPropertyKey: property.key }),
+                            $target
+                        );
                     })
                 }
             });
@@ -510,11 +607,13 @@ define([
                     // TODO: don't have the vertices given a detectedObject
                     // edgeID
                     return false;
+                    /*
                     if (obj.entityVertex) {
                         return obj.entityVertex.id === data.id;
                     }
 
                     return obj['http://lumify.io#rowKey'] === data.id;
+                    */
                 }));
             }
 
@@ -532,7 +631,7 @@ define([
             detectedObject.y1 = data.y1;
             detectedObject.x2 = data.x2;
             detectedObject.y2 = data.y2;
-            this.showForm(detectedObject, this.attr.data, this.$node);
+            this.showForm(detectedObject, this.$node);
             this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', detectedObject);
             this.select('detectedObjectLabelsSelector').show();
             this.$node.find('.detected-object-labels .detected-object').each(function() {
@@ -551,12 +650,12 @@ define([
             var $target = $(event.target),
                 tag = $target.closest('.detected-object-tag'),
                 badge = tag.find('.label-info'),
-                info = badge.data('info');
+                propertyKey = badge.data('propertyKey');
 
             this.trigger(
                 this.select('imagePreviewSelector'),
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
-                info
+                F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey)
             );
         };
 
@@ -620,7 +719,7 @@ define([
             });
         };
 
-        this.showForm = function(dataInfo, artifactInfo, $target) {
+        this.showForm = function(dataInfo, $target) {
             this.$node.find('.underneath').teardownComponent(TermForm)
             var root = $('<div class="underneath">');
 
@@ -631,9 +730,9 @@ define([
             }
 
             TermForm.attachTo (root, {
-                artifactData: artifactInfo,
+                artifactData: this.attr.data,
                 dataInfo: dataInfo,
-                existing: !!dataInfo.graphVertexId,
+                existing: !!dataInfo.resolvedVertexId,
                 detectedObject: true
             });
         };
