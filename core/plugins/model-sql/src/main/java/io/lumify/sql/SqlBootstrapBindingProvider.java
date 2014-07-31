@@ -6,6 +6,7 @@ import com.google.inject.Scopes;
 import io.lumify.core.bootstrap.BootstrapBindingProvider;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.sql.model.HibernateSessionManager;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
@@ -17,10 +18,10 @@ public class SqlBootstrapBindingProvider implements BootstrapBindingProvider {
 
     @Override
     public void addBindings(Binder binder, final Configuration configuration) {
-        binder.bind(SessionFactory.class)
-                .toProvider(new Provider<SessionFactory>() {
+        binder.bind(HibernateSessionManager.class)
+                .toProvider(new Provider<HibernateSessionManager>() {
                     @Override
-                    public SessionFactory get() {
+                    public HibernateSessionManager get() {
                         org.hibernate.cfg.Configuration config = new org.hibernate.cfg.Configuration();
                         File configFile = configuration.resolveFileName(HIBERNATE_CFG_XML);
                         if (!(configFile.exists())) {
@@ -29,7 +30,7 @@ public class SqlBootstrapBindingProvider implements BootstrapBindingProvider {
                         config.configure(configFile);
                         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
                         SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistryBuilder);
-                        return sessionFactory;
+                        return new HibernateSessionManager(sessionFactory);
                     }
                 })
                 .in(Scopes.SINGLETON);

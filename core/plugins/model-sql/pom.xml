@@ -21,6 +21,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-web</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>4.3.4.Final</version>
