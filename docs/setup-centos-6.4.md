@@ -22,6 +22,8 @@
 
 ## Install Dependencies
 
+See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional optional dependencies.
+
 ### Java 6
 
 1. browse to http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html
