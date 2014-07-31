@@ -68,7 +68,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
                 (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
                         detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
         DetectedObjectModel analyzedDetectedModel = detectedObjectRepository.findByRowKey(analyzedDetectedObjectRK.toString(), modelUserContext);
-        Object resolvedId = detectedObjectModel.getMetadata().getResolvedId();
+        String resolvedId = detectedObjectModel.getMetadata().getResolvedId();
 
         Vertex resolvedVertex = graph.getVertex(resolvedId, authorizations);
         Edge edge = graph.getEdge(detectedObjectRowKey.getEdgeId(), authorizations);

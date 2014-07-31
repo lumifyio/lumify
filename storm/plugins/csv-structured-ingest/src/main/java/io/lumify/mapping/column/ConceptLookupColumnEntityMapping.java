@@ -34,7 +34,7 @@ public class ConceptLookupColumnEntityMapping extends AbstractColumnEntityMappin
      * @param required    is this entity required? null for default
      */
     @JsonCreator
-    public ConceptLookupColumnEntityMapping(@JsonProperty("idColumn") final ColumnValue<?> idCol,
+    public ConceptLookupColumnEntityMapping(@JsonProperty("idColumn") final ColumnValue<String> idCol,
                                             @JsonProperty("signColumn") final ColumnValue<String> signCol,
                                             @JsonProperty("conceptColumn") final ColumnValue<String> concept,
                                             @JsonProperty(value = "properties", required = false) final Map<String, ColumnValue<?>> props,

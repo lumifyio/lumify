@@ -123,7 +123,7 @@ public class FlightRepository {
     }
 
     public boolean updateDestination(Vertex airplaneVertex, Vertex destinationVertex, Visibility visibility, Authorizations authorizations) {
-        List<Object> currentDestinations = toList(airplaneVertex.getVertexIds(Direction.BOTH, FlightTrackOntology.EDGE_LABEL_HAS_DESTINATION, authorizations));
+        List<String> currentDestinations = toList(airplaneVertex.getVertexIds(Direction.BOTH, FlightTrackOntology.EDGE_LABEL_HAS_DESTINATION, authorizations));
         if (currentDestinations.size() == 0 || !currentDestinations.get(0).equals(destinationVertex.getId())) {
             LOGGER.debug("airplane %s changed destinations to %s", airplaneVertex.getId(), destinationVertex.getId());
             for (Object currentDestinationEdgeId : airplaneVertex.getEdgeIds(Direction.BOTH, FlightTrackOntology.EDGE_LABEL_HAS_DESTINATION, authorizations)) {
@@ -138,7 +138,7 @@ public class FlightRepository {
     }
 
     public boolean updateOrigin(Vertex airplaneVertex, Vertex originVertex, Visibility visibility, Authorizations authorizations) {
-        List<Object> currentOrigins = toList(airplaneVertex.getVertexIds(Direction.BOTH, FlightTrackOntology.EDGE_LABEL_HAS_ORIGIN, authorizations));
+        List<String> currentOrigins = toList(airplaneVertex.getVertexIds(Direction.BOTH, FlightTrackOntology.EDGE_LABEL_HAS_ORIGIN, authorizations));
         if (currentOrigins.size() == 0 || !currentOrigins.get(0).equals(originVertex.getId())) {
             LOGGER.debug("airplane %s changed origin to %s", airplaneVertex.getId(), originVertex.getId());
             for (Object currentOriginEdgeId : airplaneVertex.getEdgeIds(Direction.BOTH, FlightTrackOntology.EDGE_LABEL_HAS_ORIGIN, authorizations)) {

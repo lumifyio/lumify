@@ -197,7 +197,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         return toList(new ConvertingIterable<Edge, WorkspaceEntity>(entityEdges) {
             @Override
             protected WorkspaceEntity convert(Edge edge) {
-                Object entityVertexId = edge.getOtherVertexId(workspace.getId());
+                String entityVertexId = edge.getOtherVertexId(workspace.getId());
 
                 Integer graphPositionX = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.getPropertyValue(edge);
                 Integer graphPositionY = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.getPropertyValue(edge);
@@ -211,7 +211,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     private Iterable<Edge> findEdges(final Workspace workspace, List<WorkspaceEntity> workspaceEntities, User user) {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Iterable<Vertex> vertices = WorkspaceEntity.toVertices(graph, workspaceEntities, authorizations);
-        Iterable<Object> edgeIds = toSet(new VerticesToEdgeIdsIterable(vertices, authorizations));
+        Iterable<String> edgeIds = toSet(new VerticesToEdgeIdsIterable(vertices, authorizations));
         return graph.getEdges(edgeIds, authorizations);
     }
 
@@ -223,7 +223,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
+    public void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user) {
         if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
@@ -241,7 +241,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
+    public void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
         if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }

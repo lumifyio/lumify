@@ -41,7 +41,7 @@ public class EntityHighlighterTest {
 
     @Test
     public void testGetHighlightedText() throws Exception {
-        when(graph.getVertices((Iterable<Object>) any(), eq(authorizations))).thenReturn(new ArrayList<Vertex>());
+        when(graph.getVertices((Iterable<String>) any(), eq(authorizations))).thenReturn(new ArrayList<Vertex>());
 
         ArrayList<TermMentionModel> terms = new ArrayList<TermMentionModel>();
         terms.add(createTermMention("joe ferner", 18, 28, "1"));
