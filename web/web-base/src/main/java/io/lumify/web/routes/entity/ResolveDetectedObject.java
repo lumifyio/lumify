@@ -142,18 +142,19 @@ public class ResolveDetectedObject extends BaseRequestHandler {
                 y2,
                 concept.getIRI(),
                 "user",
-                edge.getId().toString(),
-                resolvedVertex.getId().toString(),
+                edge.getId(),
+                resolvedVertex.getId(),
                 originalPropertyKey);
         String propertyKey = artifactDetectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
         LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, propertyKey, artifactDetectedObject, lumifyVisibility.getVisibility(), authorizations);
 
-        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), propertyKey, lumifyVisibility.getVisibility());
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId(), LumifyProperties.ROW_KEY.getPropertyName(), propertyKey, lumifyVisibility.getVisibility());
         resolvedVertexMutation.save(authorizations);
 
         graph.flush();
 
         workQueueRepository.pushElement(edge);
+        workQueueRepository.pushGraphPropertyQueue(artifactVertex, propertyKey, LumifyProperties.DETECTED_OBJECT.getPropertyName());
 
         JSONObject result = JsonSerializer.toJson(artifactVertex, workspaceId, authorizations);
         respondWithJson(response, result);
