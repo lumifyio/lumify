@@ -7,12 +7,15 @@ Lumify is an open source big data integration, analytics, and visualization plat
 
 ## Getting Started
 
-To get started quickly, you can download a virtual machine image with Lumify installed and preconfigured, or you can install Lumify and its dependencies from source.
-Please choose your adventure from the linked documents below.
+To get started quickly, you can try out a hosted installation of Lumify, or download a virtual machine image with Lumify installed and preconfigured. You can also install Lumify and its dependencies from source.
 
-- [Download a Virtual Machine Image] (docs/prebuilt-vm.md)
+Choose your adventure:
 
-- [Install from Source on CentOS 6.4] (docs/setup-centos-6.4.md)
+- [Try Lumify Now](http://lumify.io/try.html)
+
+- [Download a Virtual Machine Image](docs/prebuilt-vm.md)
+
+- [Install from Source on CentOS 6.4](docs/setup-centos-6.4.md)
 
 
 ## License
