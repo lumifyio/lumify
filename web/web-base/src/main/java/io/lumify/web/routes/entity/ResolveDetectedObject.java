@@ -135,7 +135,15 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        ArtifactDetectedObject artifactDetectedObject = new ArtifactDetectedObject(x1, y1, x2, y2, concept.getIRI(), "user", edge.getId().toString());
+        ArtifactDetectedObject artifactDetectedObject = new ArtifactDetectedObject(
+                x1,
+                y1,
+                x2,
+                y2,
+                concept.getIRI(),
+                "user",
+                edge.getId().toString(),
+                resolvedVertex.getId().toString());
         if (propertyKey == null) {
             propertyKey = artifactDetectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
         }

@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 public class ArtifactDetectedObject {
     private final String edgeId;
+    private final String resolvedVertexId;
     private String concept;
     private double x1;
     private double y1;
@@ -21,9 +22,10 @@ public class ArtifactDetectedObject {
         this.process = json.optString("process");
         this.concept = json.optString("concept");
         this.edgeId = json.optString("edgeId");
+        this.resolvedVertexId = json.optString("resolvedVertexId");
     }
 
-    public ArtifactDetectedObject(double x1, double y1, double x2, double y2, String concept, String process, String edgeId) {
+    public ArtifactDetectedObject(double x1, double y1, double x2, double y2, String concept, String process, String edgeId, String resolvedVertexId) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -31,6 +33,7 @@ public class ArtifactDetectedObject {
         this.concept = concept;
         this.process = process;
         this.edgeId = edgeId;
+        this.resolvedVertexId = resolvedVertexId;
     }
 
     public double getX1() {
@@ -85,6 +88,10 @@ public class ArtifactDetectedObject {
         return edgeId;
     }
 
+    public String getResolvedVertexId() {
+        return resolvedVertexId;
+    }
+
     public String getMultivalueKey(String multiValueKeyPrefix) {
         return multiValueKeyPrefix
                 + ":"
@@ -111,6 +118,9 @@ public class ArtifactDetectedObject {
         }
         if (getEdgeId() != null) {
             json.put("edgeId", getEdgeId());
+        }
+        if (getResolvedVertexId() != null) {
+            json.put("resolvedVertexId", getResolvedVertexId());
         }
         return json;
     }
