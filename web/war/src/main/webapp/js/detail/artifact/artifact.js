@@ -605,25 +605,11 @@ define([
         this.onCoordsChanged = function(event, data) {
             var self = this,
                 vertex = appData.vertex(this.attr.data.id),
-                detectedObject,
-                detectedObjects = F.vertex.props(vertex, 'detectedObject'),
+                detectedObject = F.vertex.propForNameAndKey(vertex, 'http://lumify.io#detectedObject', data.id),
                 width = parseFloat(data.x2) - parseFloat(data.x1),
-                height = parseFloat(data.y2) - parseFloat(data.y1);
-
-            if (detectedObjects.length) {
-                detectedObject = $.extend(true, {}, _.find(detectedObjects, function(obj) {
-                    // TODO: don't have the vertices given a detectedObject
-                    // edgeID
-                    return false;
-                    /*
-                    if (obj.entityVertex) {
-                        return obj.entityVertex.id === data.id;
-                    }
-
-                    return obj['http://lumify.io#rowKey'] === data.id;
-                    */
-                }));
-            }
+                height = parseFloat(data.y2) - parseFloat(data.y1),
+                newDetectedObject = $.extend(true, {}, detectedObject, { value: data }),
+                dataInfo = $.extend({}, detectedObject && detectedObject.value || {}, data);
 
             if ((this.$node.width() * width) < 5 ||
                 (this.$node.height() * height) < 5) {
@@ -631,19 +617,20 @@ define([
                 return;
             }
 
-            detectedObject = detectedObject || {};
-            if (data.id === 'NEW') {
-                detectedObject.isNew = true;
+            if (detectedObject) {
+                dataInfo.originalPropertyKey = detectedObject.key;
             }
-            detectedObject.x1 = data.x1;
-            detectedObject.y1 = data.y1;
-            detectedObject.x2 = data.x2;
-            detectedObject.y2 = data.y2;
-            this.showForm(detectedObject, this.$node);
-            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', detectedObject);
+
+            delete dataInfo.id;
+
+            if (data.id === 'NEW') {
+                dataInfo.isNew = true;
+            }
+            this.showForm(dataInfo, this.$node);
+            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', newDetectedObject);
             this.select('detectedObjectLabelsSelector').show();
             this.$node.find('.detected-object-labels .detected-object').each(function() {
-                if ($(this).data('info')['http://lumify.io#rowKey'] === data.id) {
+                if ($(this).data('propertyKey') === data.id) {
                     $(this).closest('span').addClass('focused')
                 }
             });

@@ -283,49 +283,8 @@ define([
             this.vertexService.resolveDetectedObject(parameters)
                 .fail(this.requestFailure.bind(this))
                 .done(function(data) {
-                    var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused'),
-                        $tag,
-                        result = data;
-
-                    if ($focused.length !== 0) {
-                        $tag = $focused.find('.label-info');
-                        $tag.text(data.title)
-                            .removeAttr('data-info').data('info', result)
-                        $tag.addClass('resolved entity label');
-
-                    } else {
-                        // Temporarily creating a new tag to show on ui prior to backend update
-                        var $allDetectedObjects = self.$node.closest('.type-content').find('.detected-object-labels'),
-                            $allDetectedObjectLabels = $allDetectedObjects.find('.detected-object-tag .label-info'),
-                            $parentSpan = $('<span>').addClass('detected-object-tag'),
-                            classes = $allDetectedObjectLabels.attr('class');
-
-                        if (!classes) {
-                            classes = 'label-info detected-object'
-                        }
-                        $tag = $('<a>').addClass(classes + ' label resolved entity').attr('href', '#').text(data.title);
-
-                        var added = false;
-
-                        $parentSpan.append($tag);
-
-                        $allDetectedObjectLabels.each(function() {
-                            if (parseFloat($(this).data('info').x1) > data.x1) {
-                                $tag.parent().insertBefore($(this).parent())
-                                added = true;
-                                return false;
-                            }
-                        });
-
-                        if (!added) {
-                            $allDetectedObjects.append($parentSpan);
-                        }
-                        $tag.data('info', result)
-                    }
-
                     self.trigger('termCreated', data);
                     self.trigger(document, 'refreshRelationships');
-
                     _.defer(self.teardown.bind(self));
                 });
         };

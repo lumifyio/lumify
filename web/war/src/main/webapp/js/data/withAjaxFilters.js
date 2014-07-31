@@ -21,7 +21,6 @@ define([], function() {
             /^login/,
             /^vertex\/relationships/,
             /^vertex\/removeRelationship/,
-            /^entity/,
             /^relationship\/properties/
         ],
 
