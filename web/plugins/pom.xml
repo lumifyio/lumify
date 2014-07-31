@@ -22,5 +22,6 @@
         <module>google-analytics</module>
         <module>import-export-workspaces</module>
         <module>opennlp-dictionary-extractor</module>
+        <module>geocoder-bing</module>
     </modules>
 </project>
