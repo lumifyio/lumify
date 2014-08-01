@@ -33,7 +33,7 @@ define([], function() {
                         var label = message.data.edge.label,
                             vertices = _.compact([
                                 self.cachedVertices[message.data.edge.sourceVertexId],
-                                self.cachedVertices[message.data.edge.destVertex]
+                                self.cachedVertices[message.data.edge.destVertexId]
                             ]);
 
                         vertices.forEach(function(vertex) {
