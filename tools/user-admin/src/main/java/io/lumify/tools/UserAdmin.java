@@ -155,7 +155,7 @@ public class UserAdmin extends CommandLineBase {
                 Date d1 = u1.getCreateDate();
                 Date d2 = u2.getCreateDate();
                 if (d1 != null && d2 != null) {
-                    return u1.getCreateDate().compareTo(u2.getCreateDate());
+                    return d1.compareTo(d2);
                 }
                 return 0;
             }
