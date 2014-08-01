@@ -41,7 +41,11 @@ define([
                             .empty(),
                         $hits = $searchResults.find('.total-hits').find('span').text(
                             i18n('search.results.none')
-                        ).end().toggle(!result.totalHits || result.totalHits === 0);
+                        ).end().toggle(
+                            _.isUndefined(result.totalHits) ?
+                                result.vertices.length === 0 :
+                                result.totalHits === 0
+                        );
 
                     VertexList.attachTo($resultsContainer, {
                         vertices: vertices,
