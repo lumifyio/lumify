@@ -37,16 +37,7 @@
   <div class="currentTranscript"></div>
 <% } %>
 
-<div class='detected-object-labels'><%
-  (detectedObjects).forEach(function(property) {
-      var value = property.value,
-          conceptType = value.concept,
-          title = value.edgeId ? 'resolved person' : 'person', // TODO: replace with conceptDisplayName
-          classes = value.edgeId ? 'resolved entity' : ''; %>
-      <span class="detected-object-tag">
-          <a class="<%= classes %> label label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(value) %>" href="#"><%= title %></a>
-      </span>
-  <% }); %></div>
+<div class='detected-object-labels'></div>
 
 <div class="artifact-header">
   <div class="properties"></div>

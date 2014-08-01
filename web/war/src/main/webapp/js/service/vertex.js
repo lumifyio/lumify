@@ -191,8 +191,11 @@ define([
         });
     };
 
-    VertexService.prototype.getVertexRelationships = function(graphVertexId, paging) {
+    VertexService.prototype.getVertexRelationships = function(graphVertexId, paging, edgeLabel) {
         var data = paging || {};
+        if (edgeLabel) {
+            data.edgeLabel = edgeLabel;
+        }
         data.graphVertexId = graphVertexId;
         return this._ajaxGet({
             url: 'vertex/relationships',
