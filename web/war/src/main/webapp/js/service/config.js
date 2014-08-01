@@ -10,6 +10,8 @@ define([
         'vertex.loadRelatedMaxBeforePrompt': 50,
         'vertex.loadRelatedMaxForceSearch': 250,
 
+        'vertex.relationships.maxPerSection': 5,
+
         // Hide multivalue properties after this count
         'properties.multivalue.defaultVisibleCount': 2,
 

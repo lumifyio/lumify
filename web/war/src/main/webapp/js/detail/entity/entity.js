@@ -36,7 +36,7 @@ define([
     d3) {
     'use strict';
 
-    var MAX_RELATIONS_TO_DISPLAY = 5,
+    var MAX_RELATIONS_TO_DISPLAY,
         ontologyService = new OntologyService(),
         vertexService = new VertexService(),
         configService = new ConfigService();
@@ -187,55 +187,57 @@ define([
                 this.handleCancelling(configService.getProperties()),
                 this.handleCancelling(ontologyService.relationships())
             ).done(function(config, relationships) {
-                    var hasEntityLabel = config['ontology.iri.artifactHasEntity'],
-                        relations = _.map(self.attr.data.edgeLabels, function(label) {
-                            var relation = {
-                                    label: label,
-                                    displayName: label
-                                },
-                                ontologyRelationship = relationships.byTitle[label];
+                MAX_RELATIONS_TO_DISPLAY = config['vertex.relationships.maxPerSection'];
 
-                            if (label === hasEntityLabel) {
-                                relation.displayName = i18n('detail.entity.relationships.has_entity');
-                            } else if (ontologyRelationship) {
-                                relation.displayName = ontologyRelationship.displayName;
-                            }
+                var hasEntityLabel = config['ontology.iri.artifactHasEntity'],
+                    relations = _.map(self.attr.data.edgeLabels, function(label) {
+                        var relation = {
+                                label: label,
+                                displayName: label
+                            },
+                            ontologyRelationship = relationships.byTitle[label];
 
-                            return relation;
-                        });
+                        if (label === hasEntityLabel) {
+                            relation.displayName = i18n('detail.entity.relationships.has_entity');
+                        } else if (ontologyRelationship) {
+                            relation.displayName = ontologyRelationship.displayName;
+                        }
 
-                    d3.select(self.$node.find('.nav-with-background').get(0))
-                        .selectAll('section.collapsible')
-                        .data(relations, _.property('label'))
-                        .call(function() {
-                            this.enter()
-                                .append('section')
-                                .attr('class', 'collapsible')
-                                .call(function() {
-                                    this.append('h1')
-                                        .call(function() {
-                                            this.append('strong');
-                                            this.append('span').attr('class', 'badge');
-                                        });
-                                    this.append('div');
-                                });
+                        return relation;
+                    });
 
-                            this
-                                .sort(function(a, b) {
-                                    var aIsReference = a.label === hasEntityLabel,
-                                        bIsReference = b.label === hasEntityLabel,
-                                        nameA = a.displayName, nameB = b.displayName;
+                d3.select(self.$node.find('.nav-with-background').get(0))
+                    .selectAll('section.collapsible')
+                    .data(relations, _.property('label'))
+                    .call(function() {
+                        this.enter()
+                            .append('section')
+                            .attr('class', 'collapsible')
+                            .call(function() {
+                                this.append('h1')
+                                    .call(function() {
+                                        this.append('strong');
+                                        this.append('span').attr('class', 'badge');
+                                    });
+                                this.append('div');
+                            });
 
-                                    if (aIsReference && !bIsReference) return 1;
-                                    if (bIsReference && !aIsReference) return -1;
+                        this
+                            .sort(function(a, b) {
+                                var aIsReference = a.label === hasEntityLabel,
+                                    bIsReference = b.label === hasEntityLabel,
+                                    nameA = a.displayName, nameB = b.displayName;
 
-                                    return a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase());
-                                })
-                                .attr('data-label', _.property('label'))
-                                .select('h1 strong').text(_.property('displayName'));
-                        })
-                        .exit().remove();
-                });
+                                if (aIsReference && !bIsReference) return 1;
+                                if (bIsReference && !aIsReference) return -1;
+
+                                return a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase());
+                            })
+                            .attr('data-label', _.property('label'))
+                            .select('h1 strong').text(_.property('displayName'));
+                    })
+                    .exit().remove();
+            });
         };
 
         this.onPaneClicked = function(evt) {
