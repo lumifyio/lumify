@@ -246,6 +246,7 @@ define([
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
             this.update()
+            this.updateText();
 
             if (this[displayType + 'Setup']) {
                 this[displayType + 'Setup'](this.attr.data);
@@ -255,7 +256,6 @@ define([
         this.update = function() {
             this.updateTitle();
             this.updateDetectedObjects();
-            this.updateText();
         };
 
         this.updateTitle = function() {
