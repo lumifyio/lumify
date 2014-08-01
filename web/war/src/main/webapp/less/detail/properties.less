@@ -2,9 +2,12 @@
 .properties {
   margin: 0;
   padding: 0;
-
+  
   tr.hidden {
     display: none;
+    &.unhide {
+      display: table-row;
+    }
   }
 
   .property-name {    
@@ -38,19 +41,24 @@
     }
   }
 
-  .show-more .property-value {
-      padding-top: 0.25em;
-      font-size: 85%;
-      button {
-        .opacity(75);
-        padding: 0;
-        &:hover {
-          .opacity(100);
-          text-decoration: none;
-        }
-      }
+  .show-more {   
+    padding-top: 0.5em;
+    font-size: 70%;
+    font-weight: bold;
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-style: italic;
+    float: left;
+    clear: left;
+    display: none;
+    &:after {
+      content:'…'
+    }
   }
-
+  tr.last-not-hidden .show-more {
+    display: inline;
+  }
+  
   .property-value {
     width: 100%;
     word-break: break-word;

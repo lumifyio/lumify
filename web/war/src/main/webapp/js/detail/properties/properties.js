@@ -65,8 +65,7 @@ define([
             auditDateSelector: '.audit-date',
             auditUserSelector: '.audit-user',
             auditEntitySelector: '.resolved',
-            propertiesInfoSelector: 'button.info',
-            showMorePropertiesSelector: '.show-more button'
+            propertiesInfoSelector: 'button.info'
         });
 
         this.showPropertyInfo = function(button, property) {
@@ -161,7 +160,6 @@ define([
                     .call(function() {
                         this.enter()
                             .insert('tr', '.buttons-row')
-                            .attr('class', 'property-row ')
                             .call(function() {
                                 this.append('td')
                                     .attr('class', 'property-name')
@@ -176,8 +174,48 @@ define([
                                         this.append('button')
                                             .attr('class', 'info')
                                         this.append('span').attr('class', 'visibility');
+                                        this.append('a').attr('class', 'show-more');
                                     })
                             });
+
+                        var propertyCountByName = {},
+                            propertyPreventHideByName = {},
+                            maxProperties = parseInt(self.config['properties.multivalue.defaultVisibleCount'], 10);
+
+                        this.each(function(property) {
+                            var classes = ['property-row'],
+                                count = propertyCountByName[property.name] || 0,
+                                $this = $(this);
+
+                            propertyCountByName[property.name] = ++count;
+
+                            if (count > maxProperties) {
+                                if ($this.hasClass('unhide')) {
+                                    propertyPreventHideByName[property.name] = true;
+                                    classes.push('unhide');
+                                } else if (count === maxProperties + 1) {
+                                    $this.prev('.property-row').addClass('last-not-hidden');
+                                }
+
+                                if (propertyPreventHideByName[property.name] !== true) {
+                                    classes.push('hidden');
+                                }
+                            }
+
+                            $this.attr('class', classes.join(' '));
+                        });
+                        this.select('.show-more')
+                            .text(function(property) {
+                                return i18n(
+                                    'properties.button.show_more',
+                                    F.number.pretty(propertyCountByName[property.name] - maxProperties)
+                                );
+                            })
+                            .on('click', function() {
+                                $(this)
+                                    .closest('tr').removeClass('last-not-hidden')
+                                    .nextUntil(':not(.hidden)').addClass('unhide');
+                            })
                         this.select('button.info')
                             .on('click', function(property) {
                                 d3.event.stopPropagation();
@@ -285,6 +323,7 @@ define([
                 ontologyService.properties(),
                 configService.getProperties()
             ).done(function(ontologyRelationships, ontologyProperties, config) {
+                    self.config = config;
                     self.ontologyProperties = ontologyProperties;
                     self.ontologyRelationships = ontologyRelationships;
                     self.update(properties);
@@ -295,8 +334,7 @@ define([
                 auditDateSelector: this.onAuditDateClicked,
                 auditUserSelector: this.onAuditUserClicked,
                 auditShowAllSelector: this.onAuditShowAll,
-                auditEntitySelector: this.onEntitySelected,
-                showMorePropertiesSelector: this.onShowMoreProperties
+                auditEntitySelector: this.onEntitySelected
             });
             this.on('addProperty', this.onAddProperty);
             this.on('deleteProperty', this.onDeleteProperty);
@@ -493,15 +531,6 @@ define([
             return JSON.stringify(info);
         };
 
-        this.onShowMoreProperties = function(event) {
-            $(event.target)
-                .closest('tr')
-                    .nextUntil(':not(.hidden)')
-                        .removeClass('hidden')
-                    .end()
-                .remove();
-        };
-
         this.onVerticesUpdated = function(event, data) {
             var self = this;
 
@@ -509,7 +538,6 @@ define([
                 if (vertex.id === self.attr.data.id) {
                     self.attr.data.properties = vertex.properties;
                     self.update(vertex.properties)
-                    //self.displayProperties(vertex);
                 }
             });
         };
