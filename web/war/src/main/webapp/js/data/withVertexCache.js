@@ -7,7 +7,6 @@ define([
     var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
         'http://lumify.io#visibility',
         'http://lumify.io#visibilityJson',
-        'detectedObjects',
         'properties',
         'sandboxStatus',
         'edgeLabels'
@@ -171,7 +170,6 @@ define([
                 'http://lumify.io#visibilityJson',
                 'sandboxStatus']));
 
-            cache.detectedObjects = vertex.detectedObjects;
             cache.edgeLabels = vertex.edgeLabels;
 
             if (this.workspaceVertices[id]) {
@@ -186,7 +184,6 @@ define([
                 console.error('Unable to attach concept to vertex', conceptType);
             }
 
-            cache.detectedObjects = cache.detectedObjects || [];
             cache.edgeLabels = cache.edgeLabels || [];
 
             $.extend(true, vertex, cache);

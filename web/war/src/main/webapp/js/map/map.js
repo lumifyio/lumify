@@ -713,13 +713,18 @@ define([
                   wrapDateLine: false
               });
             } else if (configProperties['map.provider'] == 'osm') {
-              var tileServerURL = configProperties['map.provider.osm.url'];
-              if (tileServerURL) {
-                tileServerURL = $.map(tileServerURL.split(','), $.trim)
+              var osmURL = configProperties['map.provider.osm.url'];
+              if (osmURL) {
+                  osmURL = $.map(osmURL.split(','), $.trim);
               }
-              base = new OpenLayers.Layer.OSM('Open Street Map', tileServerURL, {
+              base = new ol.Layer.OSM('Open Street Map', osmURL, {
                 tileOptions: { crossOriginKeyword: null }
               });
+            } else if (configProperties['map.provider'] == 'ArcGIS93Rest') {
+                var arcgisURL = configProperties['map.provider.ArcGIS93Rest.url'];
+                base = new ol.Layer.ArcGIS93Rest('ArcGIS93Rest', arcgisURL, {
+                   layers: '0,1,2'
+                });
             } else {
               console.error('Unknown map provider type: ', configProperties['map.provider']);
             }

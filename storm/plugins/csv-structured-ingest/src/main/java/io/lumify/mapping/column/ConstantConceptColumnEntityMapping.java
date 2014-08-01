@@ -29,7 +29,7 @@ public class ConstantConceptColumnEntityMapping extends AbstractColumnEntityMapp
      * @param useExisting should existing entities be reused? null for default
      * @param required    is this entity required? null for default
      */
-    public ConstantConceptColumnEntityMapping(@JsonProperty("idColumn") final ColumnValue<?> idCol,
+    public ConstantConceptColumnEntityMapping(@JsonProperty("idColumn") final ColumnValue<String> idCol,
                                               @JsonProperty("signColumn") final ColumnValue<String> signCol,
                                               @JsonProperty("conceptURI") final String concept,
                                               @JsonProperty(value = "properties", required = false) final Map<String, ColumnValue<?>> props,

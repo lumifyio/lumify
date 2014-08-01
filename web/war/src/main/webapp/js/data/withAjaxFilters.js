@@ -21,9 +21,7 @@ define([], function() {
             /^login/,
             /^vertex\/relationships/,
             /^vertex\/removeRelationship/,
-            /^entity/,
-            /^relationship\/properties/,
-            /^relationship\/create/
+            /^relationship\/properties/
         ],
 
         // Custom converters for routes that are more complicated than above,

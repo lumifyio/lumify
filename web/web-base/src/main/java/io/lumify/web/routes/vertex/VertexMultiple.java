@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
-import org.securegraph.util.ConvertingIterable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,13 +42,7 @@ public class VertexMultiple extends BaseRequestHandler {
         GetAuthorizationsResult getAuthorizationsResult = getAuthorizations(request, fallbackToPublic, user);
         String workspaceId = getWorkspaceId(request);
 
-        Iterable<Object> vertexIds = new ConvertingIterable<String, Object>(toIterable(vertexStringIds)) {
-            @Override
-            protected Object convert(String s) {
-                return s;
-            }
-        };
-
+        Iterable<String> vertexIds = toIterable(vertexStringIds);
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, getAuthorizationsResult.authorizations);
         JSONObject results = new JSONObject();
         JSONArray vertices = new JSONArray();

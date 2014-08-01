@@ -177,7 +177,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         workspaceEntities = toList(new ConvertingIterable<SqlWorkspaceVertex, WorkspaceEntity>(sqlWorkspaceVertices) {
             @Override
             protected WorkspaceEntity convert(SqlWorkspaceVertex sqlWorkspaceVertex) {
-                Object vertexId = sqlWorkspaceVertex.getVertexId();
+                String vertexId = sqlWorkspaceVertex.getVertexId();
 
                 int graphPositionX = sqlWorkspaceVertex.getGraphPositionX();
                 int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
@@ -190,7 +190,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
+    public void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user) {
         Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
@@ -210,7 +210,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
+    public void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
         checkNotNull(workspace, "Workspace cannot be null");
 
         if (!hasWritePermissions(workspace.getId(), user)) {

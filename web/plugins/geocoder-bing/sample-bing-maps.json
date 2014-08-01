@@ -1,0 +1,224 @@
+{
+    "authenticationResultCode": "ValidCredentials",
+    "brandLogoUri": "http:\/\/dev.virtualearth.net\/Branding\/logo_powered_by.png",
+    "copyright": "Copyright © 2014 Microsoft and its suppliers. All rights reserved. This API cannot be accessed and the content and any results may not be used, reproduced or transmitted in any manner without express written permission from Microsoft Corporation.",
+    "resourceSets": [
+        {
+            "estimatedTotal": 5,
+            "resources": [
+                {
+                    "__type": "Location:http:\/\/schemas.microsoft.com\/search\/local\/ws\/rest\/v1",
+                    "bbox": [
+                        38.930708266909789,
+                        -77.404193265411664,
+                        38.9886490328949,
+                        -77.304882662322711
+                    ],
+                    "name": "Reston, VA",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            38.959678649902344,
+                            -77.354537963867187
+                        ]
+                    },
+                    "address": {
+                        "adminDistrict": "VA",
+                        "adminDistrict2": "Fairfax Co.",
+                        "countryRegion": "United States",
+                        "formattedAddress": "Reston, VA",
+                        "locality": "Reston"
+                    },
+                    "confidence": "High",
+                    "entityType": "PopulatedPlace",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                38.959678649902344,
+                                -77.354537963867187
+                            ],
+                            "calculationMethod": "Rooftop",
+                            "usageTypes": [
+                                "Display"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Good"
+                    ]
+                },
+                {
+                    "__type": "Location:http:\/\/schemas.microsoft.com\/search\/local\/ws\/rest\/v1",
+                    "bbox": [
+                        49.556961059570313,
+                        -101.10146331787109,
+                        49.564716339111328,
+                        -101.09026336669922
+                    ],
+                    "name": "Reston, MB",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            49.562259674072266,
+                            -101.094970703125
+                        ]
+                    },
+                    "address": {
+                        "adminDistrict": "MB",
+                        "countryRegion": "Canada",
+                        "formattedAddress": "Reston, MB",
+                        "locality": "Reston"
+                    },
+                    "confidence": "High",
+                    "entityType": "PopulatedPlace",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                49.562259674072266,
+                                -101.094970703125
+                            ],
+                            "calculationMethod": "Rooftop",
+                            "usageTypes": [
+                                "Display"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Good"
+                    ]
+                },
+                {
+                    "__type": "Location:http:\/\/schemas.microsoft.com\/search\/local\/ws\/rest\/v1",
+                    "bbox": [
+                        55.8226302639801,
+                        -2.2561214670921967,
+                        55.880571029965211,
+                        -2.118598629495938
+                    ],
+                    "name": "Reston, Borders, United Kingdom",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            55.851600646972656,
+                            -2.1873600482940674
+                        ]
+                    },
+                    "address": {
+                        "adminDistrict": "Scotland",
+                        "adminDistrict2": "Borders",
+                        "countryRegion": "United Kingdom",
+                        "formattedAddress": "Reston, Borders, United Kingdom",
+                        "locality": "Reston"
+                    },
+                    "confidence": "High",
+                    "entityType": "PopulatedPlace",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                55.851600646972656,
+                                -2.1873600482940674
+                            ],
+                            "calculationMethod": "Rooftop",
+                            "usageTypes": [
+                                "Display"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Good"
+                    ]
+                },
+                {
+                    "__type": "Location:http:\/\/schemas.microsoft.com\/search\/local\/ws\/rest\/v1",
+                    "bbox": [
+                        53.303144790347289,
+                        0.012955774321313021,
+                        53.3610855563324,
+                        0.14223423157716264
+                    ],
+                    "name": "Reston, Lincs, United Kingdom",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            53.332115173339844,
+                            0.077595002949237823
+                        ]
+                    },
+                    "address": {
+                        "adminDistrict": "England",
+                        "adminDistrict2": "Lincs",
+                        "countryRegion": "United Kingdom",
+                        "formattedAddress": "Reston, Lincs, United Kingdom",
+                        "locality": "Reston"
+                    },
+                    "confidence": "High",
+                    "entityType": "PopulatedPlace",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                53.332115173339844,
+                                0.077595002949237823
+                            ],
+                            "calculationMethod": "Rooftop",
+                            "usageTypes": [
+                                "Display"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Good"
+                    ]
+                },
+                {
+                    "__type": "Location:http:\/\/schemas.microsoft.com\/search\/local\/ws\/rest\/v1",
+                    "bbox": [
+                        43.007330276187133,
+                        0.6378877002899801,
+                        43.065271042172242,
+                        0.74353231599877723
+                    ],
+                    "name": "Reston, Haute-Garonne, France",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            43.036300659179688,
+                            0.69071000814437866
+                        ]
+                    },
+                    "address": {
+                        "adminDistrict": "Mid-Pyrenees",
+                        "adminDistrict2": "Haute-Garonne",
+                        "countryRegion": "France",
+                        "formattedAddress": "Reston, Haute-Garonne, France",
+                        "locality": "Reston"
+                    },
+                    "confidence": "High",
+                    "entityType": "Neighborhood",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                43.036300659179688,
+                                0.69071000814437866
+                            ],
+                            "calculationMethod": "Rooftop",
+                            "usageTypes": [
+                                "Display"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Good"
+                    ]
+                }
+            ]
+        }
+    ],
+    "statusCode": 200,
+    "statusDescription": "OK",
+    "traceId": "b92a397abf8c45b1b7058e8f7d9361b6|BN20130423|02.00.151.2000|BN2SCH020170836, BN2SCH020201454, BN2SCH020181230"
+}

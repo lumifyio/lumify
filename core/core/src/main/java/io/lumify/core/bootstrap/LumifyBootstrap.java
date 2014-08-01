@@ -13,7 +13,6 @@ import io.lumify.core.metrics.JmxMetricsManager;
 import io.lumify.core.metrics.MetricsManager;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.audit.AuditRepository;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -144,9 +143,6 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(TermMentionRepository.class)
                 .toProvider(this.<TermMentionRepository>getConfigurableProvider(configuration, Configuration.TERM_MENTION_REPOSITORY))
-                .in(Scopes.SINGLETON);
-        bind(DetectedObjectRepository.class)
-                .toProvider(this.<DetectedObjectRepository>getConfigurableProvider(configuration, Configuration.DETECTED_OBJECT_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(ArtifactThumbnailRepository.class)
                 .toProvider(this.<ArtifactThumbnailRepository>getConfigurableProvider(configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))

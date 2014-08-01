@@ -64,9 +64,9 @@ public abstract class WorkspaceRepository {
         return newWorkspace;
     }
 
-    public abstract void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
+    public abstract void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user);
 
-    public abstract void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
+    public abstract void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
 
     public abstract void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
