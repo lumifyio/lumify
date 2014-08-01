@@ -63,26 +63,26 @@ public class VertexRelationships extends BaseRequestHandler {
         JSONArray relationshipsJson = new JSONArray();
         long referencesAdded = 0, skipped = 0, totalReferences = 0;
         for (Edge edge : edges) {
-            Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
-            if (otherVertex == null) { // user doesn't have access to other side of edge
+            totalReferences++;
+            if (referencesAdded >= size) {
                 continue;
             }
 
-            if (edge.getLabel().equals(this.artifactHasEntityIri)) {
-                totalReferences++;
-                if (referencesAdded >= size) continue;
-                if (skipped < offset) {
-                    skipped++;
-                    continue;
-                }
+            if (skipped < offset) {
+                skipped++;
+                continue;
+            }
 
-                referencesAdded++;
+            Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
+            if (otherVertex == null) { // user doesn't have access to other side of edge
+                continue;
             }
 
             JSONObject relationshipJson = new JSONObject();
             relationshipJson.put("relationship", JsonSerializer.toJson(edge, workspaceId, authorizations));
             relationshipJson.put("vertex", JsonSerializer.toJson(otherVertex, workspaceId, authorizations));
             relationshipsJson.put(relationshipJson);
+            referencesAdded++;
         }
         json.put("totalReferences", totalReferences);
         json.put("relationships", relationshipsJson);
