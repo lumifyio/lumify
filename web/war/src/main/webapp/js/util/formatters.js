@@ -131,6 +131,23 @@ define([
              */
             compactOffsetValues: function(index, offset) {
                 return (index << BITS_FOR_OFFSET) | offset;
+            },
+            heading: function(value) {
+                if (_.isUndefined(value)) {
+                    return;
+                }
+
+                var inRange = value % 360;
+                return i18n('field.heading.' + [
+                    'north',
+                    'northeast',
+                    'east',
+                    'southeast',
+                    'south',
+                    'southwest',
+                    'west',
+                    'northwest',
+                ][Math.round(inRange / 45) % 8]) + ' ' + FORMATTERS.number.pretty(inRange) + '°';
             }
         },
 
