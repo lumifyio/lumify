@@ -288,6 +288,7 @@ define([
                         }
                         return F.date.dateStringUtc(value);
                     }
+                    case 'double':
                     case 'currency':
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);
