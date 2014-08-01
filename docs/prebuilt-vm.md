@@ -18,7 +18,7 @@ The following capabilities and system resources are required for prebuilt virtua
 1. set up a Host-Only network in your virtual machine software called vboxnet0 and configure the ip address to be 192.168.33.1
 2. download the latest `.ova` file for your platform architecture:
   - [32-bit .ova](http://bits.lumify.io/vm/lumify-demo-opensource-20140321-32bit.ova)
-  - [64-bit .ova](http://bits.lumify.io/vm/lumify-demo-opensource-20140321-64bit.ova)
+  - [64-bit .ova](http://bits.lumify.io/vm/lumify-demo-20140801-64bit.ova)
 3. import the .ova file into your preferred virtual machine software
 4. start the VM
 5. browse to ```https://localhost:8443```
