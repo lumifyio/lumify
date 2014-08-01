@@ -321,7 +321,6 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
 *as the lumify user:*
 
         cd ~
-        git clone https://github.com/lumifyio/lumify-root.git
         git clone https://github.com/lumifyio/lumify.git
 
 
@@ -344,14 +343,6 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
 
 
 ## Build and Deploy Lumify
-
-### install Lumify Root
-
-*as the lumify user:*
-
-        cd ~/lumify-root
-        mvn install
-
 
 ### build and deploy the Lumify web application and authentication plugin
 
