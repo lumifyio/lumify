@@ -1,7 +1,7 @@
 package io.lumify.web.auth.oauth;
 
 import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.StaticResourceHandler;
+import com.altamiracorp.miniweb.handlers.StaticResourceHandler;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;

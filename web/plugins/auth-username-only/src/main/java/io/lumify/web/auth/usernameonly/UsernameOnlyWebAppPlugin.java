@@ -1,7 +1,7 @@
 package io.lumify.web.auth.usernameonly;
 
 import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.StaticResourceHandler;
+import com.altamiracorp.miniweb.handlers.StaticResourceHandler;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.WebApp;

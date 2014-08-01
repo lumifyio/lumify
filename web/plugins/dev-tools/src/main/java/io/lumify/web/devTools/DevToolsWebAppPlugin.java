@@ -1,7 +1,7 @@
 package io.lumify.web.devTools;
 
 import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.StaticResourceHandler;
+import com.altamiracorp.miniweb.handlers.StaticResourceHandler;
 import io.lumify.web.LumifyCsrfHandler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
