@@ -54,7 +54,8 @@ define([
             propertiesSelector: '.properties',
             relationshipsSelector: 'section .relationships',
             titleSelector: '.entity-title',
-            relationshipsHeaderSelector: 'section.collapsible h1'
+            relationshipsHeaderSelector: 'section.collapsible h1',
+            relationshipsPagingButtonsSelector: 'section.collapsible .paging button'
         });
 
         this.after('teardown', function() {
@@ -67,28 +68,38 @@ define([
 
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on('click', {
-                relationshipsHeaderSelector: this.onToggleRelationships
+                relationshipsHeaderSelector: this.onToggleRelationships,
+                relationshipsPagingButtonsSelector: this.onPageRelationships
             });
 
             this.loadEntity();
         });
 
         this.onToggleRelationships = function(event) {
-            var self = this,
-                $section = $(event.target).closest('.collapsible'),
-                $content = $section.children('div'),
-                $badge = $section.find('.badge');
+            var $section = $(event.target).closest('.collapsible');
 
             if ($section.hasClass('expanded')) {
                 return $section.removeClass('expanded');
             }
 
+            this.requestRelationships($section.data({
+                offset: 0,
+                size: MAX_RELATIONS_TO_DISPLAY
+            }));
+        };
+
+        this.requestRelationships = function($section) {
+            var self = this,
+                $content = $section.children('div'),
+                $badge = $section.find('.badge'),
+                paging = _.pick($section.data(), 'offset', 'size');
+
             $badge.addClass('loading');
 
-            self.handleCancelling(
+            this.handleCancelling(
                 vertexService.getVertexRelationships(
                     this.attr.data.id,
-                    { offset: 0, size: MAX_RELATIONS_TO_DISPLAY },
+                    paging,
                     $section.data('label')
                 )
             )
@@ -111,27 +122,51 @@ define([
                         return;
                     }
 
+                    $section.data('total', result.totalReferences);
+
                     var node = $content.empty().append('<div>').find('div'),
-                        trimmedVertices = _.pluck(relationships, 'vertex').slice(
-                            0, MAX_RELATIONS_TO_DISPLAY
-                        );
+                        vertices = _.pluck(relationships, 'vertex');
 
                     node.teardownComponent(VertexList);
                     VertexList.attachTo(node, {
-                        vertices: trimmedVertices
+                        vertices: vertices
                     });
 
-                    if (result.relationships.length !== trimmedVertices.length) {
+                    if (result.relationships.length !== result.totalReferences) {
                         $('<p>')
                             .addClass('paging')
                             .text(i18n(
                                 'detail.entity.relationships.paging',
-                                F.number.pretty(MAX_RELATIONS_TO_DISPLAY),
-                                F.number.pretty(relationships.length)
+                                F.number.pretty(paging.offset / paging.size + 1),
+                                F.number.pretty(Math.ceil(result.totalReferences / paging.size))
                             ))
-                            .appendTo($content);
+                            .append('<button class="previous">')
+                            .append('<button class="next">')
+                            .appendTo($content)
                     }
                 });
+        };
+
+        this.onPageRelationships = function(event) {
+            var $target = $(event.target),
+                isNext = $target.hasClass('next'),
+                $section = $target.closest('section'),
+                paging = $section.data(),
+                previousOffset = paging.offset;
+
+            if (isNext) {
+                if (paging.offset + paging.size < paging.total) {
+                    paging.offset += paging.size;
+                }
+            } else {
+                if (paging.offset - paging.size >= 0) {
+                    paging.offset -= paging.size;
+                }
+            }
+
+            if (previousOffset !== paging.offset) {
+                this.requestRelationships($section);
+            }
         };
 
         this.onVerticesUpdated = function(event, data) {
@@ -187,7 +222,7 @@ define([
                 this.handleCancelling(configService.getProperties()),
                 this.handleCancelling(ontologyService.relationships())
             ).done(function(config, relationships) {
-                MAX_RELATIONS_TO_DISPLAY = config['vertex.relationships.maxPerSection'];
+                MAX_RELATIONS_TO_DISPLAY = parseInt(config['vertex.relationships.maxPerSection'], 10);
 
                 var hasEntityLabel = config['ontology.iri.artifactHasEntity'],
                     relations = _.map(self.attr.data.edgeLabels, function(label) {

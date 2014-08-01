@@ -242,8 +242,47 @@
       font-size: 100%;
       color: #999;
       margin-top: 0.5em;
+      padding: 0 1.5em;
       text-shadow: 0 1px 0 white;
       letter-spacing: 0.2ex;
+      position: relative;      
+      
+      .previous, .next {
+        border: none;
+        background: none;
+        position: absolute;
+        top: 0; bottom: 0;
+        width: 40%;
+        outline: none;
+        &:after {
+          @width: 5px;
+          position: absolute;          
+          top: 50%;
+          margin-top: -@width;
+          content: '';          
+          border-color: transparent #999;
+          border-style: solid;  
+          border-width: @width;
+        }
+        &:hover:after {
+          border-color: transparent @blue-color;
+        }
+      }
+      .previous {
+        left: 0;    
+        &:after {
+          left: 1em;
+          border-left-width: 0;
+        }
+      }
+      .next {
+        right: 0;
+        float: right;
+        &:after {
+          right: 1em;
+          border-right-width: 0;          
+        }
+      }
     }
 
     &.expanded {
