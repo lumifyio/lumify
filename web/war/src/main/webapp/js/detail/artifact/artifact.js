@@ -217,11 +217,7 @@ define([
         this.handleVertexLoaded = function(vertex, config) {
             var self = this,
                 displayType = this.attr.data.concept.displayType,
-                properties = vertex && vertex.properties,
-                detectedObjects = vertex && F.vertex.props(vertex, 'detectedObject').sort(function(a, b) {
-                    var aX = a.x1, bX = b.x1;
-                    return aX - bX;
-                }) || [];
+                properties = vertex && vertex.properties;
 
             this.attr.data = vertex;
 
@@ -237,7 +233,6 @@ define([
 
             this.$node.html(template({
                 vertex: vertex,
-                detectedObjects: [],
                 fullscreenButton: this.fullscreenButton([vertex.id]),
                 auditsButton: this.auditsButton(),
                 F: F
@@ -278,9 +273,7 @@ define([
                 vertex = this.attr.data,
                 wasResolved = {},
                 needsLoading = [],
-                detectedObjects = vertex && F.vertex.props(vertex, 'detectedObject').sort(function(a, b) {
-                    return a.value.x1 - b.value.x1;
-                }) || [],
+                detectedObjects = vertex && F.vertex.props(vertex, 'detectedObject') || [],
                 container = this.select('detectedObjectLabelsSelector').toggle(detectedObjects.length > 0);
 
             detectedObjects.forEach(function(detectedObject) {
