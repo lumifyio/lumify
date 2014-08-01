@@ -1,8 +1,8 @@
 package io.lumify.web;
 
 import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.StaticFileHandler;
-import com.altamiracorp.miniweb.StaticResourceHandler;
+import com.altamiracorp.miniweb.handlers.StaticFileHandler;
+import com.altamiracorp.miniweb.handlers.StaticResourceHandler;
 import com.google.inject.Injector;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
