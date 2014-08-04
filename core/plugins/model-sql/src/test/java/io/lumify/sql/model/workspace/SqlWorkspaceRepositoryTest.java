@@ -10,11 +10,13 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceUser;
+import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +36,6 @@ public class SqlWorkspaceRepositoryTest {
     private final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
     private SqlWorkspaceRepository sqlWorkspaceRepository;
     private static org.hibernate.cfg.Configuration configuration;
-    private static SessionFactory sessionFactory;
     private SqlUserRepository sqlUserRepository;
 
     private SqlUser testUser;
@@ -44,18 +45,24 @@ public class SqlWorkspaceRepositoryTest {
 
     @Mock
     private UserListenerUtil userListenerUtil;
+    private HibernateSessionManager sessionManager;
 
     @Before
     public void setUp() throws Exception {
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-        sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
+        sessionManager = new HibernateSessionManager(configuration.buildSessionFactory(serviceRegistryBuilder));
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory, sqlUserRepository);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, sessionManager, authorizationRepository, userListenerUtil);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository(sqlUserRepository, sessionManager);
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, null, new String[0]);
+    }
+
+    @After
+    public void teardown() {
+        sessionManager.clearSession();
     }
 
     @Test
@@ -73,6 +80,16 @@ public class SqlWorkspaceRepositoryTest {
         SqlUser sqlUser = new SqlUser();
         sqlUser.setId(2);
         sqlWorkspaceRepository.delete(workspace, sqlUser);
+    }
+
+    @Test
+    public void testDeleteWhenUsersHaveCurrentWorkspaceReference() {
+        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", testUser);
+        sqlUserRepository.setCurrentWorkspace(testUser.getUserId(), workspace.getId());
+        sqlWorkspaceRepository.delete(workspace, testUser);
+
+        sessionManager.getSession().refresh(testUser);
+        assertNull(testUser.getCurrentWorkspaceId());
     }
 
     @Test

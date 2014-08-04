@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class HdfsLibCacheLoader extends LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsLibCacheLoader.class);
-    private static boolean HDFS_STREAM_HANDLER_INITIALIZED = false;
+    private static boolean hdfsStreamHandlerInitialized = false;
 
     @Override
     public void loadLibs(Configuration configuration) {
@@ -45,13 +45,16 @@ public class HdfsLibCacheLoader extends LibLoader {
         return hdfsFileSystem;
     }
 
-    private synchronized void ensureHdfsStreamHandler(Configuration lumifyConfig) {
-        if (HDFS_STREAM_HANDLER_INITIALIZED) {
+    private static synchronized void ensureHdfsStreamHandler(Configuration lumifyConfig) {
+        LOGGER.debug("begin ensureHdfsStreamHandler: %s", Boolean.toString(hdfsStreamHandlerInitialized));
+        if (hdfsStreamHandlerInitialized) {
+            LOGGER.debug("already init");
             return;
         }
-
+        LOGGER.debug("initing");
         URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory(lumifyConfig.toHadoopConfiguration()));
-        HDFS_STREAM_HANDLER_INITIALIZED = true;
+        hdfsStreamHandlerInitialized = true;
+        LOGGER.debug("end ensureHdfsStreamHandler");
     }
 
     private static void addFilesFromHdfs(FileSystem fs, Path source) throws IOException, NoSuchAlgorithmException {

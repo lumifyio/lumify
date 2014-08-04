@@ -44,6 +44,7 @@ public class VertexRelationships extends BaseRequestHandler {
         String graphVertexId = getAttributeString(request, "graphVertexId");
         long offset = getOptionalParameterLong(request, "offset", 0);
         long size = getOptionalParameterLong(request, "size", 25);
+        String edgeLabel = getOptionalParameter(request, "edgeLabel");
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
         if (vertex == null) {
@@ -51,32 +52,37 @@ public class VertexRelationships extends BaseRequestHandler {
             return;
         }
 
-        Iterable<Edge> edges = vertex.getEdges(Direction.BOTH, authorizations);
+        Iterable<Edge> edges;
+        if (edgeLabel == null) {
+            edges = vertex.getEdges(Direction.BOTH, authorizations);
+        } else {
+            edges = vertex.getEdges(Direction.BOTH, edgeLabel, authorizations);
+        }
 
         JSONObject json = new JSONObject();
         JSONArray relationshipsJson = new JSONArray();
         long referencesAdded = 0, skipped = 0, totalReferences = 0;
         for (Edge edge : edges) {
+            totalReferences++;
+            if (referencesAdded >= size) {
+                continue;
+            }
+
+            if (skipped < offset) {
+                skipped++;
+                continue;
+            }
+
             Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
             if (otherVertex == null) { // user doesn't have access to other side of edge
                 continue;
             }
 
-            if (edge.getLabel().equals(this.artifactHasEntityIri)) {
-                totalReferences++;
-                if (referencesAdded >= size) continue;
-                if (skipped < offset) {
-                    skipped++;
-                    continue;
-                }
-
-                referencesAdded++;
-            }
-
             JSONObject relationshipJson = new JSONObject();
-            relationshipJson.put("relationship", JsonSerializer.toJson(edge, workspaceId));
-            relationshipJson.put("vertex", JsonSerializer.toJson(otherVertex, workspaceId));
+            relationshipJson.put("relationship", JsonSerializer.toJson(edge, workspaceId, authorizations));
+            relationshipJson.put("vertex", JsonSerializer.toJson(otherVertex, workspaceId, authorizations));
             relationshipsJson.put(relationshipJson);
+            referencesAdded++;
         }
         json.put("totalReferences", totalReferences);
         json.put("relationships", relationshipsJson);

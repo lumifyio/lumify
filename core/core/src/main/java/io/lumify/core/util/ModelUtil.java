@@ -3,7 +3,6 @@ package io.lumify.core.util;
 import com.altamiracorp.bigtable.model.ModelSession;
 import io.lumify.core.model.artifactThumbnails.BigTableArtifactThumbnail;
 import io.lumify.core.model.audit.Audit;
-import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.user.User;
 
@@ -17,7 +16,6 @@ public class ModelUtil {
             BigTableArtifactThumbnail.TABLE_NAME,
             TermMentionModel.TABLE_NAME,
             Audit.TABLE_NAME,
-            DetectedObjectModel.TABLE_NAME,
             // TODO refactor to config file info. But since this is only for development this is low priority
             "lumify_securegraph_d",
             "lumify_securegraph_v",

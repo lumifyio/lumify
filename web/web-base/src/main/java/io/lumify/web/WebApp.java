@@ -9,7 +9,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
 
-import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,15 +27,9 @@ public class WebApp extends App {
     private Map<String, String> cssSources = new HashMap<String, String>();
     private LumifyResourceBundleManager lumifyResourceBundleManager = new LumifyResourceBundleManager();
 
-    public WebApp(final ServletConfig servletConfig, final Injector injector) {
-        super(servletConfig);
-
+    public WebApp(final ServletContext servletContext, final Injector injector) {
+        super(servletContext);
         this.injector = injector;
-        Enumeration initParamNames = servletConfig.getInitParameterNames();
-        while (initParamNames.hasMoreElements()) {
-            String initParam = (String) initParamNames.nextElement();
-            set(initParam, servletConfig.getInitParameter(initParam));
-        }
     }
 
     @Override

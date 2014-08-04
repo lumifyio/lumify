@@ -19,10 +19,9 @@ define([], function() {
             /^workspace\/undo/,
             /^map\/geocode/,
             /^login/,
-            /^vertex\/relationships/,
             /^vertex\/removeRelationship/,
-            /^entity/,
-            /^relationship\/properties/
+            /^relationship\/properties/,
+            /^relationship\/create/
         ],
 
         // Custom converters for routes that are more complicated than above,

@@ -9,8 +9,6 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
-import io.lumify.core.model.detectedObjects.DetectedObjectModel;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -24,7 +22,10 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
-import io.lumify.core.util.*;
+import io.lumify.core.util.GraphUtil;
+import io.lumify.core.util.JSONUtil;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,11 +43,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class WorkspacePublish extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspacePublish.class);
     private final TermMentionRepository termMentionRepository;
-    private final DetectedObjectRepository detectedObjectRepository;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
-    private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final String entityHasImageIri;
@@ -56,7 +55,6 @@ public class WorkspacePublish extends BaseRequestHandler {
             final TermMentionRepository termMentionRepository,
             final AuditRepository auditRepository,
             final UserRepository userRepository,
-            final DetectedObjectRepository detectedObjectRepository,
             final Configuration configuration,
             final Graph graph,
             final VisibilityTranslator visibilityTranslator,
@@ -64,14 +62,12 @@ public class WorkspacePublish extends BaseRequestHandler {
             final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository) {
         super(userRepository, workspaceRepository, configuration);
-        this.detectedObjectRepository = detectedObjectRepository;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
-        this.workQueueRepository = workQueueRepository;
 
         this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         if (this.entityHasImageIri == null) {
@@ -349,20 +345,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         for (Property rowKeyProperty : destVertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
-            if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
-                if (detectedObjectModel == null) {
-                    LOGGER.warn("No term mention or detected objects found for vertex, %s", sourceVertex.getId());
-                } else {
-                    detectedObjectRepository.updateColumnVisibility(detectedObjectModel, originalEdgeVisibility.getVisibilityString(), lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-
-                    Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
-                    JSONObject artifactVertexWithDetectedObjects = JsonSerializer.toJsonVertex(artifactVertex, workspaceId);
-                    artifactVertexWithDetectedObjects.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, systemUser, authorizations, workspaceId));
-
-                    this.workQueueRepository.pushDetectedObjectChange(artifactVertexWithDetectedObjects);
-                }
-            } else {
+            if (termMentionModel != null) {
                 termMentionRepository.updateColumnVisibility(termMentionModel, originalEdgeVisibility.getVisibilityString(), lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }

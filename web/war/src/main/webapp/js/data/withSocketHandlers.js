@@ -29,6 +29,31 @@ define([], function() {
                                 });
                             }
                         }
+                    } else if (message.data && message.data.edge) {
+                        var label = message.data.edge.label,
+                            vertices = _.compact([
+                                self.cachedVertices[message.data.edge.sourceVertexId],
+                                self.cachedVertices[message.data.edge.destVertexId]
+                            ]);
+
+                        vertices.forEach(function(vertex) {
+                            if (!vertex.edgeLabels) {
+                                vertex.edgeLabels = [];
+                            }
+
+                            if (vertex.edgeLabels.indexOf(label) === -1) {
+                                vertex.edgeLabels.push(label);
+                            }
+                        });
+
+                        if (vertices.length) {
+                            self.trigger('verticesUpdated', {
+                                vertices: vertices,
+                                options: {
+                                    originalEvent: message.type
+                                }
+                            });
+                        }
                     }
                     break;
                 case 'entityImageUpdated':
@@ -65,13 +90,6 @@ define([], function() {
                             return { id: vId };
                         })
                     });
-                    break;
-
-                case 'detectedObjectChange':
-                    updated = self.updateCacheWithVertex(message.data.artifactVertex, { returnNullIfNotChanged: true });
-                    if (updated) {
-                        self.trigger('verticesUpdated', { vertices: [updated] });
-                    }
                     break;
             }
         };

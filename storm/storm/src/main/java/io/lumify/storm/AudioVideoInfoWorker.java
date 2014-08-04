@@ -8,14 +8,16 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.*;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
+import org.securegraph.type.GeoPoint;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Map;
 
 public class AudioVideoInfoWorker extends GraphPropertyWorker {
@@ -24,8 +26,22 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private ProcessRunner processRunner;
     private static final String AUDIO_DURATION_IRI = "ontology.iri.audioDuration";
     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
+    private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
+    private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
+    private static final String LAST_MODIFY_DATE_IRI = "ontology.iri.lastModifyDate";
+    private static final String DATE_TAKEN_IRI = "ontology.iri.dateTaken";
+    private static final String DEVICE_MAKE_IRI = "ontology.iri.deviceMake";
+    private static final String DEVICE_MODEL_IRI = "ontology.iri.deviceModel";
+    private static final String METADATA_IRI = "ontology.iri.metadata";
     private String audioDurationIri;
     private String videoDurationIri;
+    private String videoRotationIri;
+    private String geoLocationIri;
+    private String lastModifyDateIri;
+    private String dateTakenIri;
+    private String deviceMakeIri;
+    private String deviceModelIri;
+    private String metadataIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -40,6 +56,42 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (videoDurationIri == null || videoDurationIri.length() == 0) {
             LOGGER.warn("Could not find config: " + VIDEO_DURATION_IRI + ": skipping video duration extraction.");
         }
+
+        videoRotationIri = (String) workerPrepareData.getStormConf().get(VIDEO_ROTATION_IRI);
+        if (videoRotationIri == null || videoRotationIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + VIDEO_ROTATION_IRI + ": skipping setting the videoRotation property.");
+        }
+
+        geoLocationIri = (String) workerPrepareData.getStormConf().get(CONFIG_GEO_LOCATION_IRI);
+        if (geoLocationIri == null || geoLocationIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + CONFIG_GEO_LOCATION_IRI + ": skipping setting the geoLocation property.");
+        }
+
+        lastModifyDateIri = (String) workerPrepareData.getStormConf().get(LAST_MODIFY_DATE_IRI);
+        if (lastModifyDateIri == null || lastModifyDateIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + LAST_MODIFY_DATE_IRI + ": skipping setting the lastModifyDate property.");
+        }
+
+        dateTakenIri = (String) workerPrepareData.getStormConf().get(DATE_TAKEN_IRI);
+        if (dateTakenIri == null || dateTakenIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + DATE_TAKEN_IRI + ": skipping setting the dateTaken property.");
+        }
+
+        deviceMakeIri = (String) workerPrepareData.getStormConf().get(DEVICE_MAKE_IRI);
+        if (deviceMakeIri == null || deviceMakeIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + DEVICE_MAKE_IRI + ": skipping setting the deviceMake property.");
+        }
+
+        deviceModelIri = (String) workerPrepareData.getStormConf().get(DEVICE_MODEL_IRI);
+        if (deviceModelIri == null || deviceModelIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + DEVICE_MODEL_IRI + ": skipping setting the deviceModel property.");
+        }
+
+        metadataIri = (String) workerPrepareData.getStormConf().get(METADATA_IRI);
+        if (metadataIri == null || metadataIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + METADATA_IRI + ": skipping setting the metadata property.");
+        }
+
     }
 
     @Override
@@ -47,28 +99,10 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         boolean isAudio = mimeType.startsWith("audio");
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        processRunner.execute(
-                "ffprobe",
-                new String[]{
-                        "-v", "quiet",
-                        "-print_format", "json",
-                        "-show_format",
-                        "-show_streams",
-                        data.getLocalFile().getAbsolutePath()
-                },
-                out,
-                data.getLocalFile().getAbsolutePath() + ": "
-        );
-        String outString = new String(out.toByteArray());
-        JSONObject outJson = new JSONObject(outString);
-        LOGGER.debug("info for %s:\n%s", data.getLocalFile().getAbsolutePath(), outJson.toString(2));
-
-        JSONObject formatJson = outJson.optJSONObject("format");
-
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Double duration = null;
-        if (formatJson != null) {
-            duration = formatJson.optDouble("duration");
+        if (json != null) {
+            duration = DurationUtil.extractDurationFromJSON(json);
         }
 
         Map<String, Object> metadata = data.createPropertyMetadata();
@@ -77,6 +111,91 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         String durationIri = isAudio ? audioDurationIri : videoDurationIri;
         if (duration != null) {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
+        }
+
+        if (json != null) {
+            int videoRotation = 0;
+            Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
+            if (nullableRotation != null) {
+                videoRotation = nullableRotation;
+            }
+            data.getElement().addPropertyValue(
+                    PROPERTY_KEY,
+                    videoRotationIri,
+                    videoRotation,
+                    data.getVisibility(),
+                    getAuthorizations());
+
+
+            GeoPoint geoPoint = GeoLocationUtil.extractGeoLocationFromJSON(json);
+            if (geoPoint != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        geoLocationIri,
+                        geoPoint,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            Date lastModifyDate = DateUtil.extractLastModifyDateFromJSON(json);
+            if (lastModifyDate != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        lastModifyDateIri,
+                        lastModifyDate,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            Date dateTaken = DateUtil.extractDateTakenFromJSON(json);
+            if (dateTaken != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        dateTakenIri,
+                        dateTaken,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            String deviceMake = MakeAndModelUtil.extractMakeFromJSON(json);
+            if (deviceMake != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        deviceMakeIri,
+                        deviceMake,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            String deviceModel = MakeAndModelUtil.extractModelFromJSON(json);
+            if (deviceModel != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        deviceModelIri,
+                        deviceModel,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            JSONObject videoMetadataJSON = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+            if (videoMetadataJSON != null){
+                String videoMetadataJSONString = videoMetadataJSON.toString();
+                if (videoMetadataJSONString != null){
+                    data.getElement().addPropertyValue(
+                            PROPERTY_KEY,
+                            metadataIri,
+                            videoMetadataJSONString,
+                            data.getVisibility(),
+                            getAuthorizations()
+                    );
+                }
+            }
+
         }
 
         m.save(getAuthorizations());

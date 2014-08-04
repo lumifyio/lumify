@@ -17,38 +17,39 @@ define([
             },
 
             sandboxStatus: function(vertex) {
-                return V.metadata.sandboxStatus(vertex.sandboxStatus);
+                return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ?
+                        i18n('vertex.status.unpublished') :
+                        undefined;
             },
 
             metadata: {
                 // Define/override metadata dataType specific displayTransformers here
                 //
-                // All functions receive: function(value, property, vertexId)
-                // return a value synchronously
+                // All functions receive: function(el, value, property, vertexId)
+                // set the value synchronously
                 // - or -
                 // append "Async" to function name and return a $.Deferred().promise()
 
-                datetime: function(value) {
-                    return F.date.dateTimeString(value);
+                datetime: function(el, value) {
+                    el.textContent = F.date.dateTimeString(value);
                 },
 
-                sandboxStatus: function(value) {
-                    return (/^(private|public_changed)$/i).test(value) ?
-                        i18n('vertex.status.unpublished') :
-                        undefined;
+                sandboxStatus: function(el, value) {
+                    el.textContent = V.sandboxStatus({ sandboxStatus: value }) || '';
                 },
 
-                percent: function(value) {
-                    return F.number.percent(value);
+                percent: function(el, value) {
+                    el.textContent = F.number.percent(value);
                 },
 
-                userAsync: function(userId) {
+                userAsync: function(el, userId) {
                     var d = $.Deferred();
                     require(['service/user'], function(UserService) {
                         new UserService().userInfo(userId)
                             .fail(d.reject)
                             .done(function(user) {
-                                d.resolve(user.displayName);
+                                el.textContent = user.displayName;
+                                d.resolve();
                             });
                     })
                     return d.promise();
@@ -96,7 +97,60 @@ define([
                         .appendTo(anchor);
 
                     anchor.appendTo(el);
+                },
+
+                currency: function(el, property) {
+                    var div = document.createElement('div'),
+                        dim = 12,
+                        half = dim / 2;
+
+                    el.textContent = F.number.heading(property.value);
+                    div.style.width = div.style.height = dim + 'px';
+                    div.style.display = 'inline-block';
+                    div.style.marginRight = '0.25em';
+                    div = el.insertBefore(div, el.childNodes[0]);
+
+                    require(['d3'], function(d3) {
+                        d3.select(div)
+                            .append('svg')
+                                .style('vertical-align', 'middle')
+                                .attr('width', dim)
+                                .attr('height', dim)
+                                .append('g')
+                                    .attr('transform', 'rotate(' + property.value + ' ' + half + ' ' + half + ')')
+                                    .call(function() {
+                                        this.append('line')
+                                            .attr('x1', half)
+                                            .attr('y1', 0)
+                                            .attr('x2', half)
+                                            .attr('y2', dim)
+                                            .call(styling)
+
+                                        this.append('g')
+                                            .attr('transform', 'rotate(30 ' + half + ' 0)')
+                                            .call(createArrowLine)
+
+                                        this.append('g')
+                                            .attr('transform', 'rotate(-30 ' + half + ' 0)')
+                                            .call(createArrowLine)
+                                    });
+                    });
+
+                    function createArrowLine() {
+                        this.append('line')
+                            .attr('x1', half)
+                            .attr('y1', 0)
+                            .attr('x2', half)
+                            .attr('y2', dim / 3)
+                            .call(styling);
+                    }
+                    function styling() {
+                        this.attr('stroke', '#555')
+                            .attr('line-cap', 'round')
+                            .attr('stroke-width', '1');
+                    }
                 }
+
             },
 
             hasMetadata: function(property) {
@@ -281,15 +335,21 @@ define([
 
                 switch (ontologyProperty.dataType) {
                     case 'boolean': return F.boolean.pretty(value);
+
                     case 'date': {
                         if (ontologyProperty.displayTime) {
                             return F.date.dateTimeString(value);
                         }
                         return F.date.dateStringUtc(value);
                     }
+
+                    case 'heading': return F.number.heading(value);
+
+                    case 'double':
                     case 'currency':
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);
+
                     default: return value;
                 }
             },

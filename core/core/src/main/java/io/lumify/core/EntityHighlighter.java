@@ -55,11 +55,11 @@ public class EntityHighlighter {
 
             while (endOffsets.size() > 0 && endOffsets.peek() <= OffsetItem.getOffset(offsetItem.getStart())) {
                 int end = endOffsets.poll();
-                result.append(escapeHtml(safeSubstring(text, lastStart, end)));
+                result.append(StringEscapeUtils.escapeHtml(safeSubstring(text, lastStart, end)));
                 result.append("</span>");
                 lastStart = end;
             }
-            result.append(escapeHtml(safeSubstring(text, lastStart, (int) OffsetItem.getOffset(offsetItem.getStart()))));
+            result.append(StringEscapeUtils.escapeHtml(safeSubstring(text, lastStart, (int) OffsetItem.getOffset(offsetItem.getStart()))));
 
             JSONObject infoJson = offsetItem.getInfoJson();
 
@@ -82,11 +82,11 @@ public class EntityHighlighter {
 
         while (endOffsets.size() > 0) {
             int end = endOffsets.poll();
-            result.append(escapeHtml(safeSubstring(text, lastStart, end)));
+            result.append(StringEscapeUtils.escapeHtml(safeSubstring(text, lastStart, end)));
             result.append("</span>");
             lastStart = end;
         }
-        result.append(escapeHtml(safeSubstring(text, lastStart)));
+        result.append(StringEscapeUtils.escapeHtml(safeSubstring(text, lastStart)));
 
         return result.toString();
     }
@@ -156,13 +156,6 @@ public class EntityHighlighter {
         beginIndex = Math.min(beginIndex, text.length());
         endIndex = Math.min(endIndex, text.length());
         return text.substring(beginIndex, endIndex);
-    }
-
-    private static String escapeHtml(String text) {
-        return text
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;");
     }
 
     public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, String workspaceId) {

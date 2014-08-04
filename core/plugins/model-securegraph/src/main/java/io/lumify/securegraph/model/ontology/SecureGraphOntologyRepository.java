@@ -252,8 +252,18 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         if (relationshipVertex == null) {
             return null;
         }
-        String from = single(relationshipVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
-        String to = single(relationshipVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
+        String from;
+        String to;
+        try {
+            from = single(relationshipVertex.getVertexIds(Direction.IN, getAuthorizations()));
+        } catch (IllegalStateException ex) {
+            throw new IllegalStateException(String.format("Wrong number of 'IN' vertices for \"%s\"", relationshipIRI), ex);
+        }
+        try {
+            to = single(relationshipVertex.getVertexIds(Direction.OUT, getAuthorizations()));
+        } catch (IllegalStateException ex) {
+            throw new IllegalStateException(String.format("Wrong number of 'OUT' vertices for \"%s\"", relationshipIRI), ex);
+        }
         List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(relationshipVertex);
         return new SecureGraphRelationship(relationshipVertex, from, to, inverseOfIRIs);
     }

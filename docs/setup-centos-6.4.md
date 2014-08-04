@@ -22,6 +22,8 @@
 
 ## Install Dependencies
 
+See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional optional dependencies.
+
 ### Java 6
 
 1. browse to http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html
@@ -35,7 +37,7 @@
         cd ~
         chmod u+x jdk-6u45-linux-x64-rpm.bin
         ./jdk-6u45-linux-x64-rpm.bin
-        echo "export JAVA_HOME=/usr/java/jdk1.6.0_45/jre; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
+        echo "export JAVA_HOME=/usr/java/jdk1.6.0_45; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
         source /etc/profile.d/java.sh
 
 
@@ -46,11 +48,11 @@
         rpm -ivH http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 
-### Git, NodeJS, NPM, and NPM modules
+### RPMs and NPM modules
 
 *as root:*
 
-        yum install -y git nodejs npm
+        yum install -y git nodejs npm libuuid-devel libtool zip unzip
 
         npm install -g inherits bower grunt grunt-cli
 
@@ -104,6 +106,9 @@
 
         echo "source /etc/profile.d/java.sh" >> /usr/lib/hadoop-0.20-mapreduce/conf/hadoop-env.sh
 
+        cd /usr/lib
+        ln -s hadoop-0.20-mapreduce hadoop-mapreduce
+
         
 ### Accumulo
 
@@ -135,6 +140,8 @@
               <value>hdfs://192.168.33.10:8020</value>
            </property>
 
+        sed -i -e "s|<value>secret</value>|<value>password</value>|" accumulo/conf/accumulo-site.xml
+
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         sed -i -e "s/192.168.33.10/${ip_address}/" accumulo/conf/accumulo-site.xml
         sed -i -e "s/localhost/${ip_address}/" accumulo/conf/monitor
@@ -163,12 +170,33 @@
 *as root:*
 
         cd ~
-        curl http://www.us.apache.org/dist/incubator/storm/apache-storm-0.9.2-incubating/apache-storm-0.9.2-incubating.tar.gz -O
-        cd /opt
-        tar xzf ~/apache-storm-0.9.2-incubating.tar.gz
-        ln -s apache-storm-0.9.2-incubating storm
+        curl http://download.zeromq.org/zeromq-2.1.7.tar.gz -O
+        tar -xzf zeromq-2.1.7.tar.gz
+        cd zeromq-2.1.7
+        ./configure
+        make
+        make install
 
-        mkdir storm/logs
+        cd ~
+        git clone https://github.com/nathanmarz/jzmq.git
+        cd jzmq
+        ./autogen.sh
+        ./configure
+        make
+        make install
+
+        cd ~
+        curl http://www.us.apache.org/dist/commons/io/binaries/commons-io-2.4-bin.zip -O
+
+        cd ~
+        curl https://dl.dropboxusercontent.com/s/tqdpoif32gufapo/storm-0.9.0.1.tar.gz -O
+        cd /opt
+        tar xzf ~/storm-0.9.0.1.tar.gz
+        ln -s storm-0.9.0.1 storm
+
+        cd storm/lib
+        rm -f rm commons-io-1.4.jar
+        unzip -j ~/commons-io-2.4-bin.zip commons-io-2.4/commons-io-2.4.jar
 
         vi /opt/storm/conf/storm.yaml
         # add the following at the end of the file:
@@ -273,8 +301,9 @@
 
         service rabbitmq-server start
 
-        /opt/storm/bin/storm nimbus 2>&1 > /opt/storm/logs/nimbus-console.out &
-        /opt/storm/bin/storm supervisor 2>&1 > /opt/storm/logs/supervisor-console.out &
+        /opt/storm/bin/storm nimbus &
+        /opt/storm/bin/storm ui &
+        /opt/storm/bin/storm supervisor &
 
 
 ### create a lumify user
@@ -292,7 +321,6 @@
 *as the lumify user:*
 
         cd ~
-        git clone https://github.com/lumifyio/lumify-root.git
         git clone https://github.com/lumifyio/lumify.git
 
 
@@ -302,27 +330,19 @@
 
         sudo mkdir -p /opt/lumify/{config,lib,logs}
         sudo chgrp -R hadoop /opt/lumify
-        sudo chmod -R g+ws /opt/lumify
+        sudo chmod -R g+w /opt/lumify
+        sudo find /opt/lumify -type d -exec chmod g+s {} \;
 
         cd ~/lumify
-        sudo cp docs/{lumify.properties,log4j.xml} /opt/lumify/config
-        sudo chmod g+w /opt/lumify/config/*
+        cp config/{lumify.properties,log4j.xml} /opt/lumify/config
 
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
-        sudo sed -i -e "s/192.168.33.10/${ip_address}/" /opt/lumify/config/lumify.properties
+        sed -i -e "s/192.168.33.10/${ip_address}/" /opt/lumify/config/lumify.properties
 
         hadoop fs -mkdir -p /lumify/libcache
 
 
 ## Build and Deploy Lumify
-
-### install Lumify Root
-
-*as the lumify user:*
-
-        cd ~/lumify-root
-        mvn install
-
 
 ### build and deploy the Lumify web application and authentication plugin
 
@@ -332,13 +352,33 @@
         mvn package -P web-war -pl web/war -am
         mvn package -pl web/plugins/auth-username-only -am
 
-        sudo cp web/war/target/lumify-web-war-0.2.0-SNAPSHOT.war /opt/jetty/webapps/ROOT.war
-        sudo cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-0.2.0-SNAPSHOT.jar /opt/lumify/lib
+        sudo cp web/war/target/lumify-web-war-0.4.0-SNAPSHOT.war /opt/jetty/webapps/ROOT.war
+        sudo cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-0.4.0-SNAPSHOT.jar /opt/lumify/lib
 
         sudo /opt/jetty/bin/jetty.sh restart
 
 1. browse to https://localhost:8443
 1. login by entering any username (if using the `lumify-web-auth-username-only` plugin)
+
+
+### upload the dev ontology
+
+1. create a `.zip` file with the dev ontology
+
+        cd ~/lumify/examples
+        zip -r ontology-dev.zip ontology-dev
+
+1. browse to https://localhost:8443/admin/uploadOntology.html
+1. enter `http://lumify.io/dev` as the Document IRI
+1. choose `ontology-dev.zip` as the OWL File
+1. click Submit
+
+
+### configure OpenNLP
+
+        cd ~/lumify
+        hadoop fs -mkdir -p /lumify/config
+        hadoop fs -put config/opennlp /lumify/config
 
 
 ### build and deploy the Lumify Storm topology
@@ -347,14 +387,17 @@
 
         cd ~/lumify
         mvn package -pl storm/storm -am
-        mvn package -pl $(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target) | sed -e 's/ /,/g') -am
 
-        hadoop fs -put \
-          $(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do ls ${t}/*.jar | tail -1; done) \
-          /lumify/libcache
+        # exclude plugins that require optional dependencies that these instructions have not installed
+        # see https://github.com/lumifyio/lumify/blob/master/docs/dependencies-by-feature.md
+        #
+        excluded_plugins=$(cat docs/dependencies-by-feature.md | awk -F '|' '$2 ~ /text|media/ && $4 !~ /n\/a/ {print $4}' | sed -e 's/^ *//' -e 's/ *$//' -e 's| *<br */> *| |')
+        find_opts=$(echo $(echo $excluded_plugins) | sed -E 's/^| / ! -name /g')
+        plugins=$(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ${find_opts} ) | sed -e 's/ /,/g')
 
-        # TODO: fix these plugins
-        hadoop fs -rm /lumify/libcache/lumify-translat*.jar
-        hadoop fs -rm /lumify/libcache/lumify-geocoder-bing-*.jar
+        mvn package -pl ${plugins} -am
 
-        /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
+        jars=$(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done)
+        hadoop fs -put ${jars} /lumify/libcache
+
+        /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.4.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner

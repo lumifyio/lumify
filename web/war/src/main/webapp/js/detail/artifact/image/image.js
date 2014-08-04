@@ -14,6 +14,7 @@ define([
         this.defaultAttrs({
             imageSelector: 'img',
             boxSelector: '.facebox',
+            artifactImageSelector: '.artifact-image',
             boxEditingSelector: '.facebox.editing'
         });
 
@@ -33,6 +34,7 @@ define([
         this.setupEditingFacebox = function() {
             var self = this,
                 image = this.select('imageSelector'),
+                artifactImage = this.select('artifactImageSelector'),
                 imageEl = image.get(0),
                 naturalWidth = imageEl.naturalWidth,
                 naturalHeight = imageEl.naturalHeight;
@@ -84,11 +86,14 @@ define([
                 event.preventDefault();
 
                 var box = this.select('boxEditingSelector'),
-                    offsetParent = this.$node.offset(),
-                    offsetParentWidth = this.$node.width(),
-                    offsetParentHeight = this.$node.height(),
+                    offsetParent = artifactImage.offset(),
+                    offsetParentWidth = artifactImage.width(),
+                    offsetParentHeight = artifactImage.height(),
                     startPosition = {
-                        left: event.pageX - offsetParent.left,
+                        left: Math.min(
+                            offsetParentWidth,
+                            Math.max(0, event.pageX - offsetParent.left)
+                        ),
                         top: event.pageY - offsetParent.top,
                         width: 1,
                         height: 1
@@ -96,11 +101,14 @@ define([
 
                 $(document).on('mousemove.facebox', function(evt) {
                         var currentPosition = {
-                                left: Math.min(offsetParentWidth, Math.max(0, evt.pageX - offsetParent.left)),
+                                left: Math.min(
+                                    offsetParentWidth,
+                                    Math.max(0, evt.pageX - offsetParent.left)
+                                ),
                                 top: Math.min(offsetParentHeight, Math.max(0, evt.pageY - offsetParent.top))
                             },
-                            width = Math.abs(startPosition.left - currentPosition.left),
-                            height = Math.abs(startPosition.top - currentPosition.top);
+                            width = Math.min(offsetParentWidth, Math.abs(startPosition.left - currentPosition.left)),
+                            height = Math.min(offsetParentWidth, Math.abs(startPosition.top - currentPosition.top));
 
                         if (width >= 5 && height >= 5) {
                             box.css({
@@ -125,16 +133,13 @@ define([
 
             this.select('boxEditingSelector')
                 .resizable({
-                    containment: this.$node,
+                    containment: 'parent',
                     handles: 'all',
                     minWidth: 5,
                     minHeight: 5,
-                    start: function(event, ui) {
-                        // Make fixed percentages during drag
-                    },
                     stop: convertToPercentageAndTrigger
                 }).draggable({
-                    containment: this.$node,
+                    containment: 'parent',
                     cursor: 'move',
                     stop: convertToPercentageAndTrigger
                 });
@@ -170,19 +175,20 @@ define([
             }
         };
 
-        this.showFacebox = function(data, opts) {
+        this.showFacebox = function(property, opts) {
             var self = this,
                 options = $.extend({ editing: false, viewing: false }, opts || {});
 
             this.imageReady()
                 .done(function() {
-                    var box = (options.editing || options.viewing) ?
+                    var value = property.value,
+                        box = (options.editing || options.viewing) ?
                             self.select('boxEditingSelector') :
                             self.select('boxSelector').not('.editing'),
-                        w = (data.x2 - data.x1) * 100,
-                        h = (data.y2 - data.y1) * 100,
-                        x = data.x1 * 100,
-                        y = data.y1 * 100;
+                        w = (value.x2 - value.x1) * 100,
+                        h = (value.y2 - value.y1) * 100,
+                        x = value.x1 * 100,
+                        y = value.y1 * 100;
 
                     if (options.viewing) {
                         box.resizable('disable').draggable('disable')
@@ -200,12 +206,12 @@ define([
             });
         };
 
-        this.showFaceboxForEdit = function(data) {
-            this.showFacebox(data, { editing: true });
+        this.showFaceboxForEdit = function(property) {
+            this.showFacebox(property, { editing: true });
         };
 
-        this.showFaceboxForView = function(data) {
-            this.showFacebox(data, { viewing: true });
+        this.showFaceboxForView = function(property) {
+            this.showFacebox(property, { viewing: true });
         };
 
         this.onHover = function(event, data) {
@@ -222,16 +228,16 @@ define([
             toHide.hide();
         };
 
-        this.onEdit = function(event, data) {
-            if (data.entityVertex) {
-                this.currentlyEditing = data.entityVertex.id;
+        this.onEdit = function(event, property) {
+            if (property.value.resolvedVertexId) {
+                this.currentlyEditing = property.resolvedVertexId;
                 this.showFaceboxForView(data);
-            } else if (data.isNew) {
+            } else if (property.isNew) {
                 this.currentlyEditing = 'NEW';
-                this.showFaceboxForEdit(data);
+                this.showFaceboxForEdit(property);
             } else {
-                this.currentlyEditing = data['http://lumify.io#rowKey'];
-                this.showFaceboxForEdit(data);
+                this.currentlyEditing = property.key;
+                this.showFaceboxForEdit(property);
             }
         };
 

@@ -1,5 +1,7 @@
 package io.lumify.web.routes.workspace;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -10,13 +12,11 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.util.LookAheadIterable;
-import com.google.inject.Inject;
-import org.json.JSONArray;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,21 +47,21 @@ public class WorkspaceVertices extends BaseRequestHandler {
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
-        Iterable<Object> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
+        Iterable<String> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
-        JSONArray results = JsonSerializer.toJson(graphVertices, workspaceId);
+        JSONArray results = JsonSerializer.toJson(graphVertices, workspaceId, authorizations);
         respondWithJson(response, results);
     }
 
-    private LookAheadIterable<WorkspaceEntity, Object> getVisibleWorkspaceEntityIds(final List<WorkspaceEntity> workspaceEntities) {
-        return new LookAheadIterable<WorkspaceEntity, Object>() {
+    private LookAheadIterable<WorkspaceEntity, String> getVisibleWorkspaceEntityIds(final List<WorkspaceEntity> workspaceEntities) {
+        return new LookAheadIterable<WorkspaceEntity, String>() {
             @Override
-            protected boolean isIncluded(WorkspaceEntity workspaceEntity, Object entityVertexId) {
+            protected boolean isIncluded(WorkspaceEntity workspaceEntity, String entityVertexId) {
                 return workspaceEntity.isVisible();
             }
 
             @Override
-            protected Object convert(WorkspaceEntity workspaceEntity) {
+            protected String convert(WorkspaceEntity workspaceEntity) {
                 return workspaceEntity.getEntityVertexId();
             }
 

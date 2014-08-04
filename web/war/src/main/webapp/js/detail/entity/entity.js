@@ -15,7 +15,8 @@ define([
     'service/ontology',
     'service/vertex',
     'service/config',
-    'sf'
+    'sf',
+    'd3'
 ], function(defineComponent,
     appData,
     Image,
@@ -31,10 +32,12 @@ define([
     OntologyService,
     VertexService,
     ConfigService,
-    sf) {
+    sf,
+    d3) {
     'use strict';
 
-    var ontologyService = new OntologyService(),
+    var MAX_RELATIONS_TO_DISPLAY,
+        ontologyService = new OntologyService(),
         vertexService = new VertexService(),
         configService = new ConfigService();
 
@@ -51,7 +54,8 @@ define([
             propertiesSelector: '.properties',
             relationshipsSelector: 'section .relationships',
             titleSelector: '.entity-title',
-            relationshipsHeaderSelector: 'section.relationships'
+            relationshipsHeaderSelector: 'section.collapsible h1',
+            relationshipsPagingButtonsSelector: 'section.collapsible .paging button'
         });
 
         this.after('teardown', function() {
@@ -63,43 +67,106 @@ define([
             this.$node.on('click.paneClick', this.onPaneClicked.bind(this));
 
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
-            this.on('infiniteScrollRequest', this.handleReferenceLoadingRequest);
             this.on('click', {
-                relationshipsHeaderSelector: this.onToggleRelationships
+                relationshipsHeaderSelector: this.onToggleRelationships,
+                relationshipsPagingButtonsSelector: this.onPageRelationships
             });
 
             this.loadEntity();
         });
 
         this.onToggleRelationships = function(event) {
-            var self = this,
-                $section = $(event.target).closest('.collapsible'),
-                $badge = $section.find('.badge');
+            var $section = $(event.target).closest('.collapsible');
 
             if ($section.hasClass('expanded')) {
                 return $section.removeClass('expanded');
             }
 
+            this.requestRelationships($section.data({
+                offset: 0,
+                size: MAX_RELATIONS_TO_DISPLAY
+            }));
+        };
+
+        this.requestRelationships = function($section) {
+            var self = this,
+                $content = $section.children('div'),
+                $badge = $section.find('.badge'),
+                paging = _.pick($section.data(), 'offset', 'size');
+
             $badge.addClass('loading');
 
-            this.vertexRefresh
-                .then(function(vertex) {
-                    $.when(
-                            self.handleCancelling(ontologyService.relationships()),
-                            self.handleCancelling(vertexService.getVertexRelationships(vertex.id))
-                        )
-                        .always(function() {
-                            $badge.removeClass('loading');
-                            $section.addClass('expanded');
-                        })
-                        .fail(function() {
-                            self.select('relationshipsSelector').html(alertTemplate({
-                                error: 'Unable to load relationships'
-                            }));
-                        })
-                        .done(self.loadRelationships.bind(self, vertex));
-                });
+            this.handleCancelling(
+                vertexService.getVertexRelationships(
+                    this.attr.data.id,
+                    paging,
+                    $section.data('label')
+                )
+            )
+                .always(function() {
+                    $badge.removeClass('loading');
+                    $section.addClass('expanded');
+                })
+                .fail(function() {
+                    $content.html(alertTemplate({
+                        error: i18n('detail.entity.relationships.error')
+                    }));
+                })
+                .done(function(result) {
+                    var relationships = result.relationships;
 
+                    if (!relationships.length) {
+                        $content.html(alertTemplate({
+                            message: i18n('detail.entity.relationships.none_found')
+                        }));
+                        return;
+                    }
+
+                    $section.data('total', result.totalReferences);
+
+                    var node = $content.empty().append('<div>').find('div'),
+                        vertices = _.pluck(relationships, 'vertex');
+
+                    node.teardownComponent(VertexList);
+                    VertexList.attachTo(node, {
+                        vertices: vertices
+                    });
+
+                    if (result.relationships.length !== result.totalReferences) {
+                        $('<p>')
+                            .addClass('paging')
+                            .text(i18n(
+                                'detail.entity.relationships.paging',
+                                F.number.pretty(paging.offset / paging.size + 1),
+                                F.number.pretty(Math.ceil(result.totalReferences / paging.size))
+                            ))
+                            .append('<button class="previous">')
+                            .append('<button class="next">')
+                            .appendTo($content)
+                    }
+                });
+        };
+
+        this.onPageRelationships = function(event) {
+            var $target = $(event.target),
+                isNext = $target.hasClass('next'),
+                $section = $target.closest('section'),
+                paging = $section.data(),
+                previousOffset = paging.offset;
+
+            if (isNext) {
+                if (paging.offset + paging.size < paging.total) {
+                    paging.offset += paging.size;
+                }
+            } else {
+                if (paging.offset - paging.size >= 0) {
+                    paging.offset -= paging.size;
+                }
+            }
+
+            if (previousOffset !== paging.offset) {
+                this.requestRelationships($section);
+            }
         };
 
         this.onVerticesUpdated = function(event, data) {
@@ -112,6 +179,9 @@ define([
                     .appendTo(
                         this.select('titleSelector').text(F.vertex.title(matching))
                     )
+
+                this.attr.data = matching;
+                this.updateRelationships();
             }
         };
 
@@ -123,6 +193,7 @@ define([
 
             vertexRefresh
                 .done(function(vertex) {
+                    self.vertex = vertex;
                     self.$node.html(template({
                         vertex: vertex,
                         fullscreenButton: self.fullscreenButton([vertex.id]),
@@ -139,144 +210,69 @@ define([
                        data: vertex
                    });
 
+                   self.updateRelationships();
                    self.updateEntityAndArtifactDraggables();
-
                 });
         };
 
-        this.loadRelationships = function(vertex, ontologyRelationships, vertexRelationships) {
-            var self = this,
-                totalReferences = vertexRelationships[0].totalReferences,
-                allRelationships = vertexRelationships[0].relationships,
-                relationships = [];
-
-            configService.getProperties().done(function(config) {
-                // Create source/dest/other properties
-                allRelationships.forEach(function(r) {
-                    if (ontologyRelationships.byTitle[r.relationship.label]) {
-                        r.displayLabel = ontologyRelationships.byTitle[r.relationship.label].displayName;
-                        var src, dest, other;
-                        if (vertex.id == r.relationship.sourceVertexId) {
-                            src = vertex;
-                            dest = other = r.vertex;
-                        } else {
-                            src = other = r.vertex;
-                            dest = vertex;
-                        }
-
-                        r.vertices = {
-                            src: src,
-                            dest: dest,
-                            other: other,
-                            classes: {
-                                src: self.classesForVertex(src),
-                                dest: self.classesForVertex(dest),
-                                other: self.classesForVertex(other)
-                            }
-                        };
-
-                        r.relationshipInfo = {
-                            id: r.relationship.id,
-                            properties: $.extend({}, r.relationship.properties, {
-                                'http://lumify.io#conceptType': 'relationship',
-                                id: r.relationship.id,
-                                relationshipType: r.relationship.label,
-                                source: r.relationship.sourceVertexId,
-                                target: r.relationship.destVertexId
-                            })
-                        };
-                        relationships.push(r);
-                    }
-                });
-
-                var groupedByType = _.groupBy(relationships, function(r) {
-
-                        // Has Entity are collected into references (no matter
-                        // relationship direction
-                        if (r.relationship.label === config['ontology.iri.artifactHasEntity']) {
-                            return 'references';
-                        }
-
-                        return r.displayLabel;
-                    }),
-                    sortedKeys = Object.keys(groupedByType);
-
-                sortedKeys.forEach(function(section) {
-                    if (section !== 'references') {
-                        groupedByType[section].sort(function(a, b) {
-                            var direction = defaultSort(
-                                    a.vertex.id === a.vertices.src.id ? 0 : 1,
-                                    b.vertex.id === b.vertices.src.id ? 0 : 1
-                            )
-                            if (direction === 0) {
-                                return defaultSort(
-                                    F.vertex.title(a.vertex).toLowerCase(),
-                                    F.vertex.title(b.vertex).toLowerCase()
-                                );
-                            } else {
-                                return direction;
-                            }
-                        });
-                    }
-                });
-
-                sortedKeys.sort(function(a, b) {
-                    // If in references group sort by the title
-                    if (a === b && a === 'references') {
-                        return defaultSort(
-                            F.vertex.title(a.vertex),
-                            F.vertex.title(b.vertex)
-                        );
-                    }
-
-                    // Specifies the special group sort order
-                    var groups = { references: 1 };
-                    if (groups[a] && groups[b]) {
-                        return defaultSort(groups[a], groups[b]);
-                    } else if (groups[a]) {
-                        return 1;
-                    } else if (groups[b]) {
-                        return -1;
-                    }
-
-                    return defaultSort(a, b);
-                });
-
-                var $rels = self.select('relationshipsSelector');
-                $rels.html(relationshipsTemplate({
-                    relationshipsGroupedByType: groupedByType,
-                    sortedKeys: sortedKeys,
-                    F: F
-                }));
-
-                VertexList.attachTo($rels.find('.references'), {
-                    vertices: _.map(groupedByType.references, function(r) {
-                        return r.vertices.other;
-                    }),
-                    infiniteScrolling: (groupedByType.references && groupedByType.references.length) > 0,
-                    total: totalReferences
-                });
-            });
-        };
-
-        this.handleReferenceLoadingRequest = function(evt, data) {
+        this.updateRelationships = function() {
             var self = this;
 
-            this.handleCancelling(vertexService.getVertexRelationships(this.attr.data.id, data.paging))
-                .done(function(response) {
-                    var relationships = response.relationships,
-                        total = response.totalReferences;
+            $.when(
+                this.handleCancelling(configService.getProperties()),
+                this.handleCancelling(ontologyService.relationships())
+            ).done(function(config, relationships) {
+                MAX_RELATIONS_TO_DISPLAY = parseInt(config['vertex.relationships.maxPerSection'], 10);
 
-                    self.trigger(
-                        self.select('relationshipsSelector').find('.references'),
-                        'addInfiniteVertices',
-                        {
-                            vertices: _.pluck(relationships, 'vertex'),
-                            total: total
+                var hasEntityLabel = config['ontology.iri.artifactHasEntity'],
+                    relations = _.map(self.attr.data.edgeLabels, function(label) {
+                        var relation = {
+                                label: label,
+                                displayName: label
+                            },
+                            ontologyRelationship = relationships.byTitle[label];
+
+                        if (label === hasEntityLabel) {
+                            relation.displayName = i18n('detail.entity.relationships.has_entity');
+                        } else if (ontologyRelationship) {
+                            relation.displayName = ontologyRelationship.displayName;
                         }
-                    );
 
-                });
+                        return relation;
+                    });
+
+                d3.select(self.$node.find('.nav-with-background').get(0))
+                    .selectAll('section.collapsible')
+                    .data(relations, _.property('label'))
+                    .call(function() {
+                        this.enter()
+                            .append('section')
+                            .attr('class', 'collapsible')
+                            .call(function() {
+                                this.append('h1')
+                                    .call(function() {
+                                        this.append('strong');
+                                        this.append('span').attr('class', 'badge');
+                                    });
+                                this.append('div');
+                            });
+
+                        this
+                            .sort(function(a, b) {
+                                var aIsReference = a.label === hasEntityLabel,
+                                    bIsReference = b.label === hasEntityLabel,
+                                    nameA = a.displayName, nameB = b.displayName;
+
+                                if (aIsReference && !bIsReference) return 1;
+                                if (bIsReference && !aIsReference) return -1;
+
+                                return a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase());
+                            })
+                            .attr('data-label', _.property('label'))
+                            .select('h1 strong').text(_.property('displayName'));
+                    })
+                    .exit().remove();
+            });
         };
 
         this.onPaneClicked = function(evt) {

@@ -11,6 +11,8 @@
           <option value=">"><%= i18n('field.currency.form.greater_than') %></option>
           <option value="range"><%= i18n('field.currency.form.between') %></option>
         </select>
+        <% } else { %>
+          <%= i18n('field.currency.addon.prefix') %>
         <% } %>
       </span>
     </td>

@@ -133,7 +133,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         // TODO: use property key from client when we implement multi-valued properties
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId);
 
-        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId);
+        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId, authorizations);
         respondWithJson(response, result);
     }
 }

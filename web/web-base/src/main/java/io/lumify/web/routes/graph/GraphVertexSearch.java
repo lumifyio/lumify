@@ -1,11 +1,9 @@
 package io.lumify.web.routes.graph;
 
-import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -39,8 +37,6 @@ public class GraphVertexSearch extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
-    private final DetectedObjectRepository detectedObjectRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public GraphVertexSearch(
@@ -48,13 +44,10 @@ public class GraphVertexSearch extends BaseRequestHandler {
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
-            final WorkspaceRepository workspaceRepository,
-            final DetectedObjectRepository detectedObjectRepository) {
+            final WorkspaceRepository workspaceRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
-        this.detectedObjectRepository = detectedObjectRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -78,7 +71,6 @@ public class GraphVertexSearch extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         JSONArray filterJson = new JSONArray(filter);
 
@@ -140,11 +132,10 @@ public class GraphVertexSearch extends BaseRequestHandler {
         long retrievalStartTime = System.nanoTime();
         List<JSONObject> verticesJsonList = new ArrayList<JSONObject>();
         for (Vertex vertex : searchResults) {
-            JSONObject vertexJson = JsonSerializer.toJson(vertex, workspaceId);
+            JSONObject vertexJson = JsonSerializer.toJson(vertex, workspaceId, authorizations);
             if (scores != null) {
                 vertexJson.put("score", scores.get(vertex.getId()));
             }
-            vertexJson.put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
             verticesJsonList.add(vertexJson);
         }
         long retrievalEndTime = System.nanoTime();

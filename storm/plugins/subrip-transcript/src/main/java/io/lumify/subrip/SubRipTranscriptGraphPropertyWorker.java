@@ -13,6 +13,7 @@ import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.InputStream;
+import java.util.Map;
 
 public class SubRipTranscriptGraphPropertyWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = SubRipTranscriptGraphPropertyWorker.class.getName();
@@ -23,7 +24,9 @@ public class SubRipTranscriptGraphPropertyWorker extends GraphPropertyWorker {
         VideoTranscript videoTranscript = SubRip.read(youtubeccValue.getInputStream());
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
-        addVideoTranscriptAsTextPropertiesToMutation(m, PROPERTY_KEY, videoTranscript, data.createPropertyMetadata(), data.getVisibility());
+        Map<String, Object> metadata = data.createPropertyMetadata();
+        metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Sub-rip Transcript");
+        addVideoTranscriptAsTextPropertiesToMutation(m, PROPERTY_KEY, videoTranscript, metadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, PROPERTY_KEY, getUser(), data.getVisibility());
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());

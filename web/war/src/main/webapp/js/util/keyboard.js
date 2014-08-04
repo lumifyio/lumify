@@ -91,6 +91,8 @@ define([
                     16: 'shiftKey',
                     17: 'controlKey',
                     18: 'altKey',
+                    38: 'up',
+                    40: 'down',
                     91: 'metaKey',
                     93: 'metaKey'
                 };

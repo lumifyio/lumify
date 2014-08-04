@@ -1,10 +1,7 @@
 package io.lumify.core.bootstrap;
 
 import com.altamiracorp.bigtable.model.ModelSession;
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Scopes;
+import com.google.inject.*;
 import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;
@@ -16,7 +13,6 @@ import io.lumify.core.metrics.JmxMetricsManager;
 import io.lumify.core.metrics.MetricsManager;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.audit.AuditRepository;
-import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -38,7 +34,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -149,9 +144,6 @@ public class LumifyBootstrap extends AbstractModule {
         bind(TermMentionRepository.class)
                 .toProvider(this.<TermMentionRepository>getConfigurableProvider(configuration, Configuration.TERM_MENTION_REPOSITORY))
                 .in(Scopes.SINGLETON);
-        bind(DetectedObjectRepository.class)
-                .toProvider(this.<DetectedObjectRepository>getConfigurableProvider(configuration, Configuration.DETECTED_OBJECT_REPOSITORY))
-                .in(Scopes.SINGLETON);
         bind(ArtifactThumbnailRepository.class)
                 .toProvider(this.<ArtifactThumbnailRepository>getConfigurableProvider(configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))
                 .in(Scopes.SINGLETON);
@@ -194,7 +186,8 @@ public class LumifyBootstrap extends AbstractModule {
 
     private void injectProviders() {
         LOGGER.info("Running %s", BootstrapBindingProvider.class.getName());
-        ServiceLoader<BootstrapBindingProvider> bindingProviders = ServiceLoaderUtil.load(BootstrapBindingProvider.class);
+        Iterable<BootstrapBindingProvider> bindingProviders = ServiceLoaderUtil.load(BootstrapBindingProvider.class);
+        Binder binder = binder();
         for (BootstrapBindingProvider provider : bindingProviders) {
             LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());
             provider.addBindings(this.binder(), configuration);

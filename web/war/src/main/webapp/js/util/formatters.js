@@ -3,9 +3,10 @@ define([
     'sf',
     'jstz',
     'timezone-js',
+    'util/messages',
     'jquery',
-    'underscore',
-], function(sf, jstz, timezoneJS) {
+    'underscore'
+], function(sf, jstz, timezoneJS, i18n) {
     'use strict';
 
     var BITS_FOR_INDEX = 12,
@@ -130,6 +131,23 @@ define([
              */
             compactOffsetValues: function(index, offset) {
                 return (index << BITS_FOR_OFFSET) | offset;
+            },
+            heading: function(value) {
+                if (_.isUndefined(value)) {
+                    return;
+                }
+
+                var inRange = value % 360;
+                return i18n('field.heading.' + [
+                    'north',
+                    'northeast',
+                    'east',
+                    'southeast',
+                    'south',
+                    'southwest',
+                    'west',
+                    'northwest',
+                ][Math.round(inRange / 45) % 8]) + ' ' + FORMATTERS.number.pretty(inRange) + '°';
             }
         },
 
