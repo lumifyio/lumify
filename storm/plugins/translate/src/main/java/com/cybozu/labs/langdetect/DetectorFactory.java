@@ -75,6 +75,7 @@ public class DetectorFactory {
             if (file.getName().startsWith(".") || !file.isFile()) continue;
             FileInputStream is = null;
             try {
+                LOGGER.debug("Loading language profile %s", file.toString());
                 is = new FileInputStream(file);
                 LangProfile profile = new LangProfile(new JSONObject(IOUtils.toString(is, "UTF-8")));
                 try {
