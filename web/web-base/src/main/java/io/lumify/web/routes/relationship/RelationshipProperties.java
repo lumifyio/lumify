@@ -40,6 +40,10 @@ public class RelationshipProperties extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
 
         Edge edge = graph.getEdge(graphEdgeId, authorizations);
+        if (edge == null) {
+            super.respondWithNotFound(response, "Could not find edge: " + graphEdgeId);
+            return;
+        }
         Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
         Vertex targetVertex = edge.getVertex(Direction.IN, authorizations);
 
