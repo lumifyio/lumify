@@ -352,8 +352,8 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
         mvn package -P web-war -pl web/war -am
         mvn package -pl web/plugins/auth-username-only -am
 
-        sudo cp web/war/target/lumify-web-war-0.2.0-SNAPSHOT.war /opt/jetty/webapps/ROOT.war
-        sudo cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-0.2.0-SNAPSHOT.jar /opt/lumify/lib
+        sudo cp web/war/target/lumify-web-war-0.3.0.war /opt/jetty/webapps/ROOT.war
+        sudo cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-0.3.0.jar /opt/lumify/lib
 
         sudo /opt/jetty/bin/jetty.sh restart
 
@@ -400,4 +400,4 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
         jars=$(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done)
         hadoop fs -put ${jars} /lumify/libcache
 
-        /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.2.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
+        /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.3.0-jar-with-dependencies.jar io.lumify.storm.StormRunner

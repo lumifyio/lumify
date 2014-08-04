@@ -6,7 +6,7 @@
     <parent>
         <artifactId>lumify-core-plugins-group</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.2.0-SNAPSHOT</version>
+        <version>0.3.0</version>
     </parent>
     <artifactId>lumify-fs-hdfs</artifactId>
 
