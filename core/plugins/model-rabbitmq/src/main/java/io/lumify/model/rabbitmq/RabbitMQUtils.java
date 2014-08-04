@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RabbitMQUtils {
+    private static final String RABBITMQ_ADDR_PREFIX = "rabbitmq.addr";
     private static final int DEFAULT_PORT = 5672;
 
     public static Channel openChannel(Connection connection) {
@@ -33,14 +34,13 @@ public class RabbitMQUtils {
 
     private static Address[] getAddresses(Configuration configuration) {
         List<Address> addresses = new ArrayList<Address>();
-        for (int i = 0; i < 1000; i++) {
-            String host = configuration.get("rabbitmq.addr." + i + ".host");
-            if (host != null) {
-                int port = configuration.getInt("rabbitmq.addr." + i + ".port", DEFAULT_PORT);
+        for (String key : configuration.getKeys(RABBITMQ_ADDR_PREFIX)) {
+            if (key.endsWith(".host")) {
+                String host = configuration.get(key);
+                int port = configuration.getInt(key.replace(".host", ".port"), DEFAULT_PORT);
                 addresses.add(new Address(host, port));
             }
         }
-
         return addresses.toArray(new Address[addresses.size()]);
     }
 }
