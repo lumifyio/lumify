@@ -9,6 +9,7 @@ import org.apache.hadoop.fs.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLStreamHandlerFactory;
 import java.security.NoSuchAlgorithmException;
 
 public class HdfsLibCacheLoader extends LibLoader {
@@ -46,15 +47,13 @@ public class HdfsLibCacheLoader extends LibLoader {
     }
 
     private static synchronized void ensureHdfsStreamHandler(Configuration lumifyConfig) {
-        LOGGER.debug("begin ensureHdfsStreamHandler: %s", Boolean.toString(hdfsStreamHandlerInitialized));
         if (hdfsStreamHandlerInitialized) {
-            LOGGER.debug("already init");
             return;
         }
-        LOGGER.debug("initing");
-        URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory(lumifyConfig.toHadoopConfiguration()));
+        URLStreamHandlerFactory urlStreamHandlerFactory = new FsUrlStreamHandlerFactory(lumifyConfig.toHadoopConfiguration());
+        LOGGER.info("setting URLStreamHandlerFactory to %s", urlStreamHandlerFactory.getClass().getName());
+        URL.setURLStreamHandlerFactory(urlStreamHandlerFactory);
         hdfsStreamHandlerInitialized = true;
-        LOGGER.debug("end ensureHdfsStreamHandler");
     }
 
     private static void addFilesFromHdfs(FileSystem fs, Path source) throws IOException, NoSuchAlgorithmException {
