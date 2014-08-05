@@ -17,6 +17,13 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
         Class<? extends Handler> authenticationHandlerClass = authenticationHandler.getClass();
         Class<? extends Handler> csrfHandlerClass = LumifyCsrfHandler.class;
 
+        app.get("/jsc/io/lumify/web/devTools/vertex-editor-style.less",
+                new StaticResourceHandler(getClass(), "/io/lumify/web/devTools/vertex-editor-style.less", "text/less"));
+        app.get("/jsc/io/lumify/web/devTools/vertex-editor-template.hbs",
+                new StaticResourceHandler(getClass(), "/io/lumify/web/devTools/vertex-editor-template.hbs", "text/html"));
+        app.registerJavaScript("/io/lumify/web/devTools/vertex-editor-plugin.js");
+        app.registerResourceBundle("/io/lumify/web/devTools/messages.properties");
+
         app.get("/admin/userAdmin.html", authenticationHandler, new StaticResourceHandler(getClass(), "/userAdmin.html", "text/html"));
         app.post("/user/auth/add", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, UserAddAuthorization.class);
         app.post("/user/auth/remove", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, UserRemoveAuthorization.class);

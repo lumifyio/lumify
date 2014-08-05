@@ -203,11 +203,12 @@ define([
         });
     };
 
-    VertexService.prototype.getVertexProperties = function(graphVertexId) {
+    VertexService.prototype.getVertexProperties = function(graphVertexId, workspaceId) {
         return this._ajaxGet({
             url: 'vertex/properties',
             data: {
-                graphVertexId: graphVertexId
+                graphVertexId: graphVertexId,
+                workspaceId: workspaceId
             }
         });
     };

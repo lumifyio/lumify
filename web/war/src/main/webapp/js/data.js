@@ -107,8 +107,13 @@ define([
 
             // Set Current WorkspaceId header on all ajax requests
             $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+                var requestContainsWorkspaceParameter =
+                    originalOptions &&
+                    originalOptions.data &&
+                    !_.isUndefined(originalOptions.data.workspaceId);
+
                 if (!options.headers) options.headers = {};
-                if (self.workspaceId) {
+                if (self.workspaceId && !requestContainsWorkspaceParameter) {
                     options.headers['Lumify-Workspace-Id'] = self.workspaceId;
                 }
             });
