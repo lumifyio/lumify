@@ -523,6 +523,7 @@ define([
             this.collapse([
                 this.select('searchSelector'),
                 this.select('workspacesSelector'),
+                this.select('adminSelector'),
                 this.select('detailPaneSelector')
             ]);
 

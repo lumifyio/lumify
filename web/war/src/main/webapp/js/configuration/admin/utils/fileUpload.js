@@ -1,13 +1,11 @@
 define([
     'flight/lib/component',
     'require',
-    'hbs!./fileUploadTemplate',
     'util/messages',
     'util/handlebars/helpers'
 ], function(
     defineComponent,
     require,
-    template,
     i18n) {
     'use strict';
 
@@ -26,6 +24,8 @@ define([
         });
 
         this.after('initialize', function() {
+            var self = this;
+
             this.on('change', {
                 uploadInputSelector: this.onFileChange
             });
@@ -34,7 +34,9 @@ define([
             });
             this.on('reset', this.onRemove);
 
-            this.$node.html(template(this.attr));
+            require(['hbs!./fileUploadTemplate'], function(tpl) {
+                self.$node.html(tpl(self.attr));
+            });
         });
 
         this.onRemove = function(event) {

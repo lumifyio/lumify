@@ -6,12 +6,14 @@ define([
     'flight/lib/registry',
     'service/admin',
     'tpl!util/alert',
+    'util/messages',
     'util/formatters',
     'util/handlebars/helpers'
 ], function(defineComponent,
     registry,
     AdminService,
     alertTemplate,
+    i18n,
     F) {
     'use strict';
 
