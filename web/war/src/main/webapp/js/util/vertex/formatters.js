@@ -99,7 +99,7 @@ define([
                     anchor.appendTo(el);
                 },
 
-                currency: function(el, property) {
+                heading: function(el, property) {
                     var div = document.createElement('div'),
                         dim = 12,
                         half = dim / 2;
@@ -279,6 +279,7 @@ define([
                             break;
 
                         case 'double':
+                        case 'heading':
                         case 'currency':
                             compareFunction = predicateCompare;
                             break;
