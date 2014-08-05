@@ -190,7 +190,7 @@ public class LumifyBootstrap extends AbstractModule {
         Binder binder = binder();
         for (BootstrapBindingProvider provider : bindingProviders) {
             LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());
-            provider.addBindings(binder, configuration);
+            provider.addBindings(this.binder(), configuration);
         }
     }
 

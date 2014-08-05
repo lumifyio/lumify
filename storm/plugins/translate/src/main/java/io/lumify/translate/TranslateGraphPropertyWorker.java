@@ -113,7 +113,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
         tempDirectory.deleteOnExit();
         String[] filesList = getProfileFilesList();
         for (String profileFileName : filesList) {
-            LOGGER.info("Loading langdetect profile file: %s", profileFileName);
+            LOGGER.info("Copying langdetect profile file: %s", profileFileName);
             try {
                 copyProfileFile(profileFileName, tempDirectory);
             } catch (Exception ex) {
@@ -130,7 +130,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
         new JSONObject(profileFileString).length(); // validate the json
         OutputStream profileFileOut = new FileOutputStream(profileFile);
         try {
-            profileFileOut.write(profileFileString.getBytes());
+            profileFileOut.write(profileFileString.getBytes("UTF-8"));
         } finally {
             profileFileOut.close();
         }

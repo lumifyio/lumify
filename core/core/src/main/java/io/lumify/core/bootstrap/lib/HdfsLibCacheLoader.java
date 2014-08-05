@@ -4,23 +4,17 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocatedFileStatus;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.fs.*;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.security.MessageDigest;
+import java.net.URL;
+import java.net.URLStreamHandlerFactory;
 import java.security.NoSuchAlgorithmException;
 
 public class HdfsLibCacheLoader extends LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsLibCacheLoader.class);
-    private File hdfsLibCacheTempDirectory;
+    private static boolean hdfsStreamHandlerInitialized = false;
 
     @Override
     public void loadLibs(Configuration configuration) {
@@ -32,110 +26,46 @@ public class HdfsLibCacheLoader extends LibLoader {
             return;
         }
 
-        String hdfsLibCacheTempDirectoryString = configuration.get(Configuration.HDFS_LIB_CACHE_TEMP_DIRECTORY, null);
-        if (hdfsLibCacheTempDirectoryString != null) {
-            hdfsLibCacheTempDirectory = new File(hdfsLibCacheTempDirectoryString + "-" + System.getProperty("user.name"));
-        }
-
-        if (hdfsLibCacheTempDirectory == null) {
-            File baseDir = new File(System.getProperty("java.io.tmpdir"));
-            hdfsLibCacheTempDirectory = new File(baseDir, "lumify-hdfslibcache-" + System.getProperty("user.name"));
-        }
-
-        FileSystem hdfsFileSystem = getFileSystem(configuration);
-        File libCacheDirectory = ensureLocalLibCacheDirectory();
-
         try {
-            syncLibCache(hdfsFileSystem, new Path(hdfsLibCacheDirectory), libCacheDirectory);
-        } catch (Exception ex) {
-            throw new LumifyException(String.format("Could not sync HDFS libcache. %s -> %s", hdfsLibCacheDirectory, libCacheDirectory.getAbsolutePath()), ex);
+            FileSystem hdfsFileSystem = getFileSystem(configuration);
+            ensureHdfsStreamHandler(configuration);
+            addFilesFromHdfs(hdfsFileSystem, new Path(hdfsLibCacheDirectory));
+        } catch (Exception e) {
+            throw new LumifyException(String.format("Could not add HDFS files from %s", hdfsLibCacheDirectory), e);
         }
-    }
-
-    private File ensureLocalLibCacheDirectory() {
-        LOGGER.debug("using local lib cache directory: %s", hdfsLibCacheTempDirectory.getAbsolutePath());
-        hdfsLibCacheTempDirectory.mkdirs();
-        return hdfsLibCacheTempDirectory;
     }
 
     private FileSystem getFileSystem(Configuration configuration) {
         FileSystem hdfsFileSystem;
         try {
             String hdfsRootDir = configuration.get(Configuration.HADOOP_URL);
-            org.apache.hadoop.conf.Configuration hadoopConfiguration = new org.apache.hadoop.conf.Configuration();
-            hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), hadoopConfiguration, "hadoop");
+            hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), configuration.toHadoopConfiguration(), "hadoop");
         } catch (Exception ex) {
             throw new LumifyException("Could not open HDFS file system.", ex);
         }
         return hdfsFileSystem;
     }
 
-    private static void syncLibCache(FileSystem fs, Path source, File destDir) throws IOException, NoSuchAlgorithmException {
-        if (!fs.exists(source)) {
-            throw new LumifyException(String.format("Could not sync directory %s. Directory does not exist.", source));
+    private static synchronized void ensureHdfsStreamHandler(Configuration lumifyConfig) {
+        if (hdfsStreamHandlerInitialized) {
+            return;
         }
-
-        addFilesFromHdfs(fs, source, destDir);
+        URLStreamHandlerFactory urlStreamHandlerFactory = new FsUrlStreamHandlerFactory(lumifyConfig.toHadoopConfiguration());
+        LOGGER.info("setting URLStreamHandlerFactory to %s", urlStreamHandlerFactory.getClass().getName());
+        URL.setURLStreamHandlerFactory(urlStreamHandlerFactory);
+        hdfsStreamHandlerInitialized = true;
     }
 
-    private static void addFilesFromHdfs(FileSystem fs, Path source, File destDir) throws IOException, NoSuchAlgorithmException {
-        LOGGER.debug("adding files from hdfs %s -> %s", source.toString(), destDir.getAbsolutePath());
+    private static void addFilesFromHdfs(FileSystem fs, Path source) throws IOException, NoSuchAlgorithmException {
+        LOGGER.debug("adding files from HDFS path %s", source.toString());
         RemoteIterator<LocatedFileStatus> sourceFiles = fs.listFiles(source, true);
         while (sourceFiles.hasNext()) {
             LocatedFileStatus sourceFile = sourceFiles.next();
             if (sourceFile.isDirectory()) {
                 continue;
             }
-            String sourceFileRelativePath = sourceFile.getPath().toString().substring(source.toString().length());
-            File tempLocalFile = copyFileLocally(fs, sourceFile);
-            String md5 = calculateFileMd5(tempLocalFile);
-            File newLocalFile = getLocalFileName(sourceFileRelativePath, md5, destDir);
-            if (newLocalFile == null) {
-                throw new LumifyException("Could not sync " + sourceFileRelativePath);
-            }
-
-            LOGGER.debug("copy to local %s -> %s", sourceFile.getPath().toString(), newLocalFile.getAbsolutePath());
-            if (!newLocalFile.getParentFile().exists() && !newLocalFile.getParentFile().mkdirs()) {
-                throw new LumifyException("Could not make directory for file " + newLocalFile);
-            }
-            if (!tempLocalFile.renameTo(newLocalFile)) {
-                throw new LumifyException("Could not move file " + tempLocalFile + " to " + newLocalFile);
-            }
-
-            addLibFile(newLocalFile);
+            addLibFile(sourceFile.getPath().toUri().toURL());
         }
     }
 
-    private static File getLocalFileName(String sourceFileRelativePath, String md5, File destDir) {
-        int lastPeriod = sourceFileRelativePath.lastIndexOf('.');
-        if (lastPeriod <= 0) {
-            return null;
-        }
-        String relativePath = sourceFileRelativePath.substring(0, lastPeriod)
-                + "-" + md5
-                + sourceFileRelativePath.substring(lastPeriod);
-        return new File(destDir, relativePath);
-    }
-
-    private static String calculateFileMd5(File tempLocalFile) throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        InputStream in = new FileInputStream(tempLocalFile);
-        try {
-            byte[] buffer = new byte[1024];
-            int count;
-            while ((count = in.read(buffer)) > 0) {
-                md.update(buffer, 0, count);
-            }
-            byte[] digest = md.digest();
-            return new String(Hex.encodeHex(digest));
-        } finally {
-            in.close();
-        }
-    }
-
-    private static File copyFileLocally(FileSystem fs, LocatedFileStatus sourceFile) throws IOException {
-        File tempLocalFile = File.createTempFile("hdfslibcache-temp", "jar");
-        fs.copyToLocalFile(sourceFile.getPath(), new Path(tempLocalFile.getAbsolutePath()));
-        return tempLocalFile;
-    }
 }
