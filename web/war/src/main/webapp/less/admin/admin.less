@@ -1,0 +1,65 @@
+@import (reference) "../util/positioning.less";
+
+width: 225px;
+
+li {
+  .subtitle {
+    color: #555;
+    font-size: x-small;
+  }
+
+  &.active {
+    .subtitle {
+      color: inherit;
+    }
+  }
+}
+
+.admin-form {
+  .pin-left-split;
+
+  width: 200px;
+  background: @pane-background;
+  z-index: 89;  // so it floats above graph, but below splitbar handles
+
+  .content {
+    padding: 1em;
+    
+    button.close {
+      display: none;
+    }
+
+    .btn-file {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      .box-sizing(border-box);
+      
+      input[type=file] {
+          position: absolute;
+          top: 0;
+          right: 0;
+          min-width: 100%;
+          min-height: 100%;
+          font-size: 999px;
+          text-align: right;
+          outline: none;
+          background: white;
+          cursor: inherit;
+          display: block;
+          .opacity(0);
+      }
+    }
+    
+    p {
+      font-size: 95%;
+      color: #555;
+    }
+
+    button {
+      display:block;            
+      width: 100%;
+      margin: 1em 0;
+    }
+  }
+}

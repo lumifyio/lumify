@@ -92,6 +92,7 @@ html.fullscreenDetails {
   .chat-pane,
   .search-pane,
   .workspaces-pane,
+  .admin-pane,
   .detail-pane {
     .above-graph;
     position: absolute;
@@ -101,6 +102,9 @@ html.fullscreenDetails {
       overflow: auto;
       height: 100%;
       .box-sizing(border-box);
+      & > .nav-list {
+        margin-top: 0.5em;
+      }
     }
   }
   .search-pane .content {
@@ -109,6 +113,7 @@ html.fullscreenDetails {
 
   .search-pane,
   .workspaces-pane,
+  .admin-pane,
   .detail-pane {
     height: 100%;
 
@@ -158,6 +163,12 @@ html.fullscreenDetails {
 }
 .workspace-overlay {
   @import "workspaces/overlay";
+}
+
+.admin-pane {
+  .left-pane;
+
+  @import "admin/admin";
 }
 
 .fullscreenApp .chat-pane {

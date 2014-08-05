@@ -8,6 +8,7 @@ define([
     'search/search',
     'workspaces/workspaces',
     'workspaces/overlay',
+    'admin/admin',
     'sync/sync',
     'chat/chat',
     'graph/graph',
@@ -27,6 +28,7 @@ define([
     Search,
     Workspaces,
     WorkspaceOverlay,
+    Admin,
     Sync,
     Chat,
     Graph,
@@ -58,6 +60,7 @@ define([
             searchSelector: '.search-pane',
             workspacesSelector: '.workspaces-pane',
             workspaceOverlaySelector: '.workspace-overlay',
+            adminSelector: '.admin-pane',
             helpDialogSelector: '.help-dialog',
             chatSelector: '.chat-pane',
             graphSelector: '.graph-pane',
@@ -75,6 +78,7 @@ define([
                 Dashboard,
                 Search,
                 Workspaces,
+                Admin,
                 Chat,
                 Graph,
                 Map,
@@ -149,6 +153,7 @@ define([
                 dashboardPane = content.filter('.dashboard-pane').data(DATA_MENUBAR_NAME, 'dashboard'),
                 searchPane = content.filter('.search-pane').data(DATA_MENUBAR_NAME, 'search'),
                 workspacesPane = content.filter('.workspaces-pane').data(DATA_MENUBAR_NAME, 'workspaces'),
+                adminPane = content.filter('.admin-pane').data(DATA_MENUBAR_NAME, 'admin'),
                 chatPane = content.filter('.chat-pane').data(DATA_MENUBAR_NAME, 'chat'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
                 detailPane = content.filter('.detail-pane'),
@@ -158,6 +163,7 @@ define([
             // Configure splitpane resizing
             resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this));
             resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
+            resizable(adminPane, 'e', 190, 250, this.onPaneResize.bind(this));
             resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
 
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
@@ -167,6 +173,7 @@ define([
             Dashboard.attachTo(dashboardPane);
             Search.attachTo(searchPane.find('.content'));
             Workspaces.attachTo(workspacesPane.find('.content'));
+            Admin.attachTo(adminPane.find('.content'));
             Chat.attachTo(chatPane.find('.content'));
             Graph.attachTo(graphPane.filter('.graph-pane-2d'));
             Map.attachTo(mapPane);
@@ -469,12 +476,22 @@ define([
                     $('.workspace-form:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
+                adminWidth = this.select('adminSelector')
+                    .filter('.visible:not(.collapsed)')
+                    .outerWidth(true) || 0,
+
+                adminFormWidth = adminWidth > 0 ?
+                    $('.admin-form:visible:not(.collapsed)')
+                        .outerWidth(true) || 0 : 0,
+
                 detailWidth = this.select('detailPaneSelector')
                     .filter('.visible:not(.collapsed)')
                     .outerWidth(true) || 0,
 
                 padding = {
-                    l: searchWidth + searchResultsWidth + workspacesWidth + workspaceFormWidth,
+                    l: searchWidth + searchResultsWidth +
+                       workspacesWidth + workspaceFormWidth +
+                       adminWidth + adminFormWidth,
                     r: detailWidth,
                     t: 0,
                     b: 0

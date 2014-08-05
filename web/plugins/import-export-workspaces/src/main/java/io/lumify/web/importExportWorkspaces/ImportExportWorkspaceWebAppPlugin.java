@@ -15,6 +15,13 @@ public class ImportExportWorkspaceWebAppPlugin implements WebAppPlugin {
         Class<? extends Handler> authenticationHandlerClass = authenticationHandler.getClass();
         Class<? extends Handler> csrfHandlerClass = LumifyCsrfHandler.class;
 
+        app.get("/jsc/io/lumify/web/importExportWorkspaces/import.hbs",
+                authenticationHandler,
+                new StaticResourceHandler(getClass(), "/io/lumify/web/importExportWorkspaces/import.hbs", "text/html"));
+        app.registerJavaScript("/io/lumify/web/importExportWorkspaces/import-plugin.js");
+        app.registerResourceBundle("/io/lumify/web/importExportWorkspaces/messages.properties");
+
+        // TODO: remove legacy when conversion complete
         app.get("/admin/workspaceImport.html", authenticationHandler, new StaticResourceHandler(getClass(), "/workspaceImport.html", "text/html"));
         app.get("/admin/workspaceExport.html", authenticationHandler, new StaticResourceHandler(getClass(), "/workspaceExport.html", "text/html"));
         app.get("/admin/workspace/export", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, Export.class);
