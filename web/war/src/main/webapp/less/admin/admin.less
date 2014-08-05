@@ -2,22 +2,6 @@
 
 width: 225px;
 
-li {
-  .subtitle {
-    color: #555;
-    font-size: x-small;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &.active {
-    .subtitle {
-      color: inherit;
-    }
-  }
-}
-
 .admin-form {
   .pin-left-split;
 
@@ -27,6 +11,12 @@ li {
 
   .content {
     padding: 1em;
+    overflow-x: hidden;
+    
+    .nav {
+      margin: -0.5em 0 0 0;
+      padding: 0;      
+    }
     
     button.close {
       display: none;

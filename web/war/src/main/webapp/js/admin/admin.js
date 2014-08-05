@@ -101,11 +101,16 @@ define([
                         d3.select(this)
                             .attr('data-component', JSON.stringify(_.pick(component, 'section', 'name')))
                             .select('a')
-                            .text(component.name)
-                            .append('div')
-                                .attr('class', 'subtitle')
-                                .attr('title', component.subtitle)
-                                .text(component.subtitle)
+                            .call(function() {
+                                this.append('div')
+                                    .attr('class', 'nav-list-title')
+                                    .text(component.name)
+
+                                this.append('div')
+                                    .attr('class', 'nav-list-subtitle')
+                                    .attr('title', component.subtitle)
+                                    .text(component.subtitle)
+                            });
                     });
                 })
                 .exit().remove();
