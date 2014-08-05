@@ -102,8 +102,10 @@ define([
                             .attr('data-component', JSON.stringify(_.pick(component, 'section', 'name')))
                             .select('a')
                             .text(component.name)
-                            .append('div').attr('class', 'subtitle')
-                            .text(component.subtitle)
+                            .append('div')
+                                .attr('class', 'subtitle')
+                                .attr('title', component.subtitle)
+                                .text(component.subtitle)
                     });
                 })
                 .exit().remove();
