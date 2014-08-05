@@ -16,7 +16,6 @@ public class ImportExportWorkspaceWebAppPlugin implements WebAppPlugin {
         Class<? extends Handler> csrfHandlerClass = LumifyCsrfHandler.class;
 
         app.get("/jsc/io/lumify/web/importExportWorkspaces/import.hbs",
-                authenticationHandler,
                 new StaticResourceHandler(getClass(), "/io/lumify/web/importExportWorkspaces/import.hbs", "text/html"));
         app.registerJavaScript("/io/lumify/web/importExportWorkspaces/import-plugin.js");
         app.registerResourceBundle("/io/lumify/web/importExportWorkspaces/messages.properties");
