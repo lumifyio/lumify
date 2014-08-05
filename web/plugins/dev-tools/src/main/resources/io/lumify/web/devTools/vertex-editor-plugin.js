@@ -1,11 +1,11 @@
 require([
     'configuration/admin/plugin',
-    'hbs!io/lumify/web/devTools/vertex-editor-template',
+    'hbs!io/lumify/web/devTools/templates/vertex-editor',
     'util/messages',
     'util/formatters',
     'd3',
     'service/vertex',
-    'less!io/lumify/web/devTools/vertex-editor-style'
+    'less!io/lumify/web/devTools/less/vertex-editor'
 ], function(
     defineLumifyAdminPlugin,
     template,

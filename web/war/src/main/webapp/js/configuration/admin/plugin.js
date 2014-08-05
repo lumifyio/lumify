@@ -45,7 +45,7 @@ define([
 
                 component.showSuccess = function(message) {
                     this.$node.find('.alert').remove();
-                    this.$node.prepend(alertTemplate({ info: message || i18n('admin.plugin.success') }));
+                    this.$node.prepend(alertTemplate({ message: message || i18n('admin.plugin.success') }));
                 };
                 component.showError = function(message) {
                     this.$node.find('.alert').remove();
