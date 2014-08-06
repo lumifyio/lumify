@@ -20,9 +20,10 @@ public class ImportExportWorkspaceWebAppPlugin implements WebAppPlugin {
         app.registerJavaScript("/io/lumify/web/importExportWorkspaces/import-plugin.js");
         app.registerResourceBundle("/io/lumify/web/importExportWorkspaces/messages.properties");
 
-        // TODO: remove legacy when conversion complete
-        app.get("/admin/workspaceImport.html", authenticationHandler, new StaticResourceHandler(getClass(), "/workspaceImport.html", "text/html"));
-        app.get("/admin/workspaceExport.html", authenticationHandler, new StaticResourceHandler(getClass(), "/workspaceExport.html", "text/html"));
+        app.get("/jsc/io/lumify/web/importExportWorkspaces/export.hbs",
+                new StaticResourceHandler(getClass(), "/io/lumify/web/importExportWorkspaces/export.hbs", "text/html"));
+        app.registerJavaScript("/io/lumify/web/importExportWorkspaces/export-plugin.js");
+
         app.get("/admin/workspace/export", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, Export.class);
         app.post("/admin/workspace/import", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, Import.class);
     }
