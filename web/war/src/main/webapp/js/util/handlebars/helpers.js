@@ -1,6 +1,6 @@
 
 define([
-    './date',
+    './formatters',
     './eachWithLimit',
     './i18n'
 ]);

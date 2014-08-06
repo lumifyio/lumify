@@ -12,4 +12,8 @@ define([
         return F.date.relativeToNow(F.date.utc(date));
     });
 
+    Handlebars.registerHelper('prettyBytes', function(value) {
+        return F.bytes.pretty(value);
+    });
+
 });

@@ -1,0 +1,42 @@
+
+.nav-list {
+
+  li {
+
+    .nav-list-subtitle {
+        display: block;
+        font-size: 80%;
+        color: #999;
+        line-height: 1.3em;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    &.active .nav-list-subtitle {
+        color: fadeout(white, 30%);      
+    }
+
+    .nav-list-title {
+        word-break: break-word;
+        white-space: normal;
+        display: block;
+    }
+
+    &.nav-header {
+      .badge {
+        float: right;
+      }
+      
+      &.has-badge {
+        .nav-list-title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding-right: 1em;
+        }
+      }
+    }
+
+  }
+}

@@ -2,6 +2,7 @@
 @import "util/animation";
 @import "util/button-loading";
 @import "util/controls";
+@import "util/collapsible";
 @import "util/splitbar";
 @import "util/positioning";
 @import "util/flexbox";
@@ -17,6 +18,7 @@
 @import "util/selection";
 @import "util/offlineOverlay";
 @import "util/privileges";
+@import "util/nav-lists";
 
 // Import bootstrap
 @import "../libs/bootstrap/less/bootstrap.less";
@@ -92,6 +94,7 @@ html.fullscreenDetails {
   .chat-pane,
   .search-pane,
   .workspaces-pane,
+  .admin-pane,
   .detail-pane {
     .above-graph;
     position: absolute;
@@ -101,6 +104,9 @@ html.fullscreenDetails {
       overflow: auto;
       height: 100%;
       .box-sizing(border-box);
+      & > .nav-list {
+        margin-top: 0.5em;
+      }
     }
   }
   .search-pane .content {
@@ -109,6 +115,7 @@ html.fullscreenDetails {
 
   .search-pane,
   .workspaces-pane,
+  .admin-pane,
   .detail-pane {
     height: 100%;
 
@@ -158,6 +165,12 @@ html.fullscreenDetails {
 }
 .workspace-overlay {
   @import "workspaces/overlay";
+}
+
+.admin-pane {
+  .left-pane;
+
+  @import "admin/admin";
 }
 
 .fullscreenApp .chat-pane {
@@ -298,5 +311,6 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 
 @import "util/badge-loading.less";
+
 
 @import "util/scrollbars.less";
