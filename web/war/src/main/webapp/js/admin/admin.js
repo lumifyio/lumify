@@ -3,7 +3,8 @@ define([
     'configuration/admin/plugin',
     'hbs!./template',
     'tpl!util/alert',
-    'd3'
+    'd3',
+    './plugin-list'
 ], function(
     defineComponent,
     lumifyAdminPlugins,
