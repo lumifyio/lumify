@@ -1,5 +1,6 @@
 package io.lumify.core.model.properties.types;
 
+import io.lumify.core.util.JSONUtil;
 import org.json.JSONObject;
 
 public class JsonLumifyProperty extends LumifyProperty<JSONObject, String> {
@@ -17,6 +18,6 @@ public class JsonLumifyProperty extends LumifyProperty<JSONObject, String> {
         if (value == null) {
             return null;
         }
-        return new JSONObject(value.toString());
+        return JSONUtil.parse(value.toString());
     }
 }

@@ -1,7 +1,9 @@
 package io.lumify.core.util;
 
+import io.lumify.core.exception.LumifyJsonParseException;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONUtil {
@@ -45,6 +47,14 @@ public class JSONUtil {
             if (jsonArray.get(i).toString().contains(WorkspaceRepository.VISIBILITY_STRING.toUpperCase())) {
                 jsonArray.remove(i);
             }
+        }
+    }
+
+    public static JSONObject parse(String jsonString) {
+        try {
+            return new JSONObject(jsonString);
+        } catch (JSONException ex) {
+            throw new LumifyJsonParseException(jsonString, ex);
         }
     }
 }

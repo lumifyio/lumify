@@ -144,17 +144,17 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
                 .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
                 .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
-                .setVertexId(vertex.getId().toString(), lumifyVisibility.getVisibility())
-                .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
+                .setVertexId(vertex.getId(), lumifyVisibility.getVisibility())
+                .setEdgeId(edge.getId(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention, FlushFlag.FLUSH);
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId(), LumifyProperties.ROW_KEY.getPropertyName(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         vertexMutation.save(authorizations);
 
         this.graph.flush();
