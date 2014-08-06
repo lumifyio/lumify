@@ -66,7 +66,7 @@ require([
                                     this.append('span').attr('class', 'badge');
                                     this.append('strong');
                                 })
-                            this.append('div').append('ol').attr('class', 'plugins');
+                            this.append('div').append('ol').attr('class', 'inner-list');
                         });
 
                     this.classed('expanded', function(d) {
@@ -78,8 +78,8 @@ require([
                     this.select('.badge').text(function(d) {
                         return F.number.pretty(d[1].length);
                     });
-                    this.select('ol.plugins')
-                        .selectAll('li.plugin')
+                    this.select('ol.inner-list')
+                        .selectAll('li')
                         .data(function(d) {
                             return d[1];
                         })

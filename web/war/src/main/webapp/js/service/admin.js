@@ -46,5 +46,36 @@ define([
         });
     };
 
+    AdminService.prototype.dictionary = function() {
+        return this._ajaxGet({
+            url: 'admin/dictionary'
+        });
+    };
+
+    AdminService.prototype.dictionaryAdd = function(concept, tokens, resolvedName) {
+        var data = {
+            concept: concept,
+            tokens: tokens
+        };
+
+        if (resolvedName) {
+            data.resolvedName = resolvedName;
+        }
+
+        return this._ajaxPost({
+            url: 'admin/dictionary',
+            data: data
+        });
+    };
+
+    AdminService.prototype.dictionaryDelete = function(rowKey) {
+        return this._ajaxPost({
+            url: 'admin/dictionary/delete',
+            data: {
+                entryRowKey: rowKey
+            }
+        });
+    };
+
     return AdminService;
 });
