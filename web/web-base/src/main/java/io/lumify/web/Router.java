@@ -134,7 +134,6 @@ public class Router extends HttpServlet {
             app.get("/admin", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminList.class);
 
             app.get("/admin/plugins", authenticator, csrfProtector, PluginList.class);
-            app.get("/admin/uploadOntology.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/uploadOntology.html", "text/html"));
             app.post("/admin/uploadOntology", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 
             List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));

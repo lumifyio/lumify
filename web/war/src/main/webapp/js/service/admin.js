@@ -33,6 +33,14 @@ define([
         });
     };
 
+    AdminService.prototype.ontologyEdit = function(concept) {
+        return this._ajaxPost({
+            url: 'admin/saveOntologyConcept',
+            dataType: 'html',
+            data: concept
+        });
+    };
+
     AdminService.prototype.queueVertices = function(parameterName) {
         var data = {};
         if (parameterName) {

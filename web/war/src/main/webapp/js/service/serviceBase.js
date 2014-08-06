@@ -193,6 +193,26 @@ define(['atmosphere'],
             return this.options.jsonp ? 'jsonp' : 'json';
         };
 
+        ServiceBase.prototype.clearMemoizeCache = function() {
+            if (!this.serviceName) {
+                return console.error('Service doesn\'t register serviceName, skipping');
+            }
+
+            var serviceName = this.serviceName,
+                toDelete = [];
+
+            _.each(memoizedMap, function(value, key) {
+                if (key.indexOf(serviceName) === 0) {
+                    toDelete.push(key);
+                }
+            });
+
+            toDelete.forEach(function(key) {
+                console.log('deleting', key);
+                delete memoizedMap[key];
+            });
+        }
+
         ServiceBase.prototype.memoizeFunctions = function(serviceName, toMemoize) {
             var self = this;
 

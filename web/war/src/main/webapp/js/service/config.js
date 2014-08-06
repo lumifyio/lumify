@@ -45,7 +45,8 @@ define([
 
     function ConfigService() {
         ServiceBase.call(this);
-        this.memoizeFunctions('config', [
+        this.serviceName = 'config';
+        this.memoizeFunctions(this.serviceName, [
             'getConfiguration'
         ]);
         return this;
