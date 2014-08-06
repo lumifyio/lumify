@@ -1,6 +1,6 @@
 require([
     'configuration/admin/plugin',
-    'hbs!x-tpl',
+    'hbs!io/lumify/web/importExportWorkspaces/export',
     'util/formatters',
     'util/messages',
     'service/workspace',
