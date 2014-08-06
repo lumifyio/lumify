@@ -21,6 +21,18 @@ define([
         });
     };
 
+    AdminService.prototype.ontologyUpload = function(iri, file) {
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('documentIRI', iri);
+
+        return this._ajaxUpload({
+            url: 'admin/uploadOntology',
+            dataType: 'html',
+            data: formData
+        });
+    };
+
     AdminService.prototype.queueVertices = function(parameterName) {
         var data = {};
         if (parameterName) {

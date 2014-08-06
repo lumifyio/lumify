@@ -28,6 +28,10 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
                 new StaticResourceHandler(getClass(), "/io/lumify/web/devTools/templates/requeue.hbs", "text/html"));
         app.registerJavaScript("/io/lumify/web/devTools/requeue-plugin.js");
 
+        app.get("/jsc/io/lumify/web/devTools/templates/ontology-upload.hbs",
+                new StaticResourceHandler(getClass(), "/io/lumify/web/devTools/templates/ontology-upload.hbs", "text/html"));
+        app.registerJavaScript("/io/lumify/web/devTools/ontology-upload-plugin.js");
+
         app.get("/admin/userAdmin.html", authenticationHandler, new StaticResourceHandler(getClass(), "/userAdmin.html", "text/html"));
         app.post("/user/auth/add", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, UserAddAuthorization.class);
         app.post("/user/auth/remove", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, UserRemoveAuthorization.class);
@@ -38,14 +42,11 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
 
         app.get("/admin/graphVertexEditor.html", authenticationHandler, new StaticResourceHandler(getClass(), "/graphVertexEditor.html", "text/html"));
 
-        app.get("/admin/requeue.html", authenticationHandler, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
         app.post("/admin/queueVertices", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueVertices.class);
         app.post("/admin/queueEdges", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueEdges.class);
 
         app.get("/admin/editOntology.html", authenticationHandler, new StaticResourceHandler(getClass(), "/editOntology.html", "text/html"));
         app.post("/admin/saveOntologyConcept", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, SaveOntologyConcept.class);
 
-        app.registerJavaScript("/io/lumify/web/devTools/dev.js");
-        app.registerCss("/io/lumify/web/devTools/dev.css");
     }
 }
