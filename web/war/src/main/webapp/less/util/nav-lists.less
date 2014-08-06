@@ -23,5 +23,20 @@
         display: block;
     }
 
+    &.nav-header {
+      .badge {
+        float: right;
+      }
+      
+      &.has-badge {
+        .nav-list-title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding-right: 1em;
+        }
+      }
+    }
+
   }
 }

@@ -40,5 +40,11 @@ define([
         });
     };
 
+    AdminService.prototype.plugins = function() {
+        return this._ajaxGet({
+            url: 'admin/plugins'
+        });
+    };
+
     return AdminService;
 });

@@ -36,22 +36,18 @@ define([
         }
 
         FlightComponent.attachTo = function attachToWithLessClass(selector) {
-            attachTo.apply(this, arguments);
-
-            $(selector).each(function() {
-                var component = $(this).addClass(cls).lookupComponent(FlightComponent);
-
-                component.adminService = adminService;
-
-                component.showSuccess = function(message) {
+            var self = this;
+            this.prototype.initialize = _.wrap(this.prototype.initialize, function(init) {
+                this.adminService = adminService;
+                this.showSuccess = function(message) {
                     this.$node.find('.alert').remove();
                     this.$node.prepend(alertTemplate({ message: message || i18n('admin.plugin.success') }));
                 };
-                component.showError = function(message) {
+                this.showError = function(message) {
                     this.$node.find('.alert').remove();
                     this.$node.prepend(alertTemplate({ error: message || i18n('admin.plugin.error') }));
                 };
-                component.handleSubmitButton = function(button, promise) {
+                this.handleSubmitButton = function(button, promise) {
                     var text = button.text();
 
                     button.attr('disabled', true);
@@ -64,7 +60,9 @@ define([
                             button.removeAttr('disabled').text(text);
                         });
                 };
+                return init.apply(this, Array.prototype.slice.call(arguments, 1));
             });
+            attachTo.apply(this, arguments);
         }
 
         componentInc++;
