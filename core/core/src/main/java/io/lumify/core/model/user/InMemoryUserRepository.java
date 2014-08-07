@@ -29,7 +29,7 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
-    public Iterable<User> findAll() {
+    public Iterable<User> find(int skip, int limit) {
         throw new RuntimeException("Not implemented");
     }
 

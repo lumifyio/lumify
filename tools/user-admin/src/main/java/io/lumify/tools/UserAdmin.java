@@ -14,6 +14,8 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static org.securegraph.util.IterableUtils.toList;
+
 public class UserAdmin extends CommandLineBase {
     private static final String CMD_ACTION_CREATE = "create";
     private static final String CMD_ACTION_LIST = "list";
@@ -59,10 +61,10 @@ public class UserAdmin extends CommandLineBase {
 
         opts.addOption(
                 OptionBuilder
-                    .withLongOpt(CMD_OPT_PASSWORD)
-                    .withDescription("The password value to set")
-                    .hasArg()
-                    .create()
+                        .withLongOpt(CMD_OPT_PASSWORD)
+                        .withDescription("The password value to set")
+                        .hasArg()
+                        .create()
         );
 
         opts.addOption(
@@ -123,7 +125,7 @@ public class UserAdmin extends CommandLineBase {
     private int create(CommandLine cmd) {
         String username = cmd.getOptionValue(CMD_OPT_USERNAME);
         String password = cmd.getOptionValue(CMD_OPT_PASSWORD);
-        String[] authorizations = new String[] {};
+        String[] authorizations = new String[]{};
 
         getUserRepository().addUser(username, username, null, password, authorizations);
 
@@ -144,10 +146,16 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private int list(CommandLine cmd) {
-        Iterable<User> users = getUserRepository().findAll();
+        int skip = 0;
+        int limit = 100;
         List<User> sortedUsers = new ArrayList<User>();
-        for (User user : users) {
-            sortedUsers.add(user);
+        while (true) {
+            List<User> users = toList(getUserRepository().find(skip, limit));
+            if (users.size() == 0) {
+                break;
+            }
+            sortedUsers.addAll(users);
+            skip += limit;
         }
         Collections.sort(sortedUsers, new Comparator<User>() {
             @Override
@@ -298,12 +306,12 @@ public class UserAdmin extends CommandLineBase {
                 maxLoginCountWidth = maxWidth(Integer.toString(user.getLoginCount()), maxLoginCountWidth);
             }
             String format = String.format("%%%ds %%%ds %%%ds %%%ds %%%ds %%%dd %%%ds%%n", -1 * maxCreateDateWidth,
-                                                                                          -1 * maxIdWidth,
-                                                                                          -1 * maxUsernameWidth,
-                                                                                          -1 * maxEmailAddressWidth,
-                                                                                          -1 * maxDisplayNameWidth,
-                                                                                          maxLoginCountWidth,
-                                                                                          -1 * maxPrivilegesWidth);
+                    -1 * maxIdWidth,
+                    -1 * maxUsernameWidth,
+                    -1 * maxEmailAddressWidth,
+                    -1 * maxDisplayNameWidth,
+                    maxLoginCountWidth,
+                    -1 * maxPrivilegesWidth);
             for (User user : users) {
                 System.out.printf(format,
                         valueOrBlank(user.getCreateDate()),

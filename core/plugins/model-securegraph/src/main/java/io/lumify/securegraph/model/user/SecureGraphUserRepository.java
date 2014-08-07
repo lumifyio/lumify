@@ -108,9 +108,11 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public Iterable<User> findAll() {
+    public Iterable<User> find(int skip, int limit) {
         return new ConvertingIterable<Vertex, User>(graph.query(authorizations)
                 .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .skip(skip)
+                .limit(limit)
                 .vertices()) {
             @Override
             protected User convert(Vertex vertex) {

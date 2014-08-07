@@ -11,12 +11,14 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.securegraph.util.FilterIterable;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.securegraph.util.IterableUtils.toList;
 
 public abstract class UserRepository {
     public static final String VISIBILITY_STRING = "user";
@@ -31,7 +33,7 @@ public abstract class UserRepository {
 
     public abstract User findByUsername(String username);
 
-    public abstract Iterable<User> findAll();
+    public abstract Iterable<User> find(int skip, int limit);
 
     public abstract User findById(String userId);
 
@@ -160,14 +162,22 @@ public abstract class UserRepository {
 
     public Iterable<User> find(String query) {
         final String lowerCaseQuery = query == null ? null : query.toLowerCase();
-        return new FilterIterable<User>(findAll()) {
-            @Override
-            protected boolean isIncluded(User user) {
-                if (lowerCaseQuery == null) {
-                    return true;
-                }
-                return user.getDisplayName().toLowerCase().contains(lowerCaseQuery);
+
+        int skip = 0;
+        int limit = 100;
+        List<User> foundUsers = new ArrayList<User>();
+        while (true) {
+            List<User> users = toList(find(skip, limit));
+            if (users.size() == 0) {
+                break;
             }
-        };
+            for (User user : users) {
+                if (lowerCaseQuery == null || user.getDisplayName().toLowerCase().contains(lowerCaseQuery)) {
+                    foundUsers.add(user);
+                }
+            }
+            skip += limit;
+        }
+        return foundUsers;
     }
 }

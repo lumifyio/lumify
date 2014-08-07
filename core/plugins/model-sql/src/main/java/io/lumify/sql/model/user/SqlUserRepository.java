@@ -54,9 +54,11 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public Iterable<User> findAll() {
+    public Iterable<User> find(int skip, int limit) {
         Session session = sessionManager.getSession();
         List<User> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user")
+                .setFirstResult(skip)
+                .setMaxResults(limit)
                 .list();
         return users;
     }

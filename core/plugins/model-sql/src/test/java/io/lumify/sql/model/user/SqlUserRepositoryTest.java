@@ -11,7 +11,6 @@ import io.lumify.core.user.User;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.junit.After;
@@ -44,7 +43,8 @@ public class SqlUserRepositoryTest {
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionManager = new HibernateSessionManager(configuration.buildSessionFactory(serviceRegistryBuilder));
         Map<?, ?> configMap = new HashMap<Object, Object>();
-        Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();;
+        Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();
+        ;
         UserListenerUtil userListenerUtil = new UserListenerUtil();
         sqlUserRepository = new SqlUserRepository(lumifyConfiguration, sessionManager, authorizationRepository, userListenerUtil);
     }
@@ -102,15 +102,17 @@ public class SqlUserRepositoryTest {
 
 
     @Test
-    public void testFindAll() throws Exception {
-        Iterable<User> userIterable = sqlUserRepository.findAll();
+    public void testFindSkipLimit() throws Exception {
+        Iterable<User> userIterable = sqlUserRepository.find(0, 100);
         assertTrue(IterableUtils.count(userIterable) == 0);
 
         sqlUserRepository.addUser("123", "test user1", null, "&gdja81", new String[0]);
         sqlUserRepository.addUser("456", "test user2", null, null, new String[0]);
         sqlUserRepository.addUser("789", "test user3", null, null, new String[0]);
-        userIterable = sqlUserRepository.findAll();
+        userIterable = sqlUserRepository.find(0, 100);
         assertTrue(IterableUtils.count(userIterable) == 3);
+        userIterable = sqlUserRepository.find(1, 100);
+        assertTrue(IterableUtils.count(userIterable) == 2);
     }
 
     @Test
