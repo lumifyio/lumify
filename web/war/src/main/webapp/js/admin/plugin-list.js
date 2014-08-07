@@ -1,11 +1,9 @@
 require([
     'configuration/admin/plugin',
-    'hbs!x-tpl',
     'util/formatters',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
-    template,
     F,
     d3
     ) {
