@@ -184,7 +184,7 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
         Vertex pageVertex = pageVertexBuilder.save(authorizations);
 
         // audit vertex
-        Text key = ImportMR.getKey(Audit.TABLE_NAME, pageVertex.getId().toString().getBytes());
+        Text key = ImportMR.getKey(Audit.TABLE_NAME, pageVertex.getId().getBytes());
         Audit audit = auditRepository.createAudit(AuditAction.CREATE, pageVertex.getId(), "Wikipedia MR", "", user, visibility);
         context.write(key, AccumuloSession.createMutationFromRow(audit));
 
@@ -214,13 +214,13 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
                     visibility,
                     authorizations);
 
-            TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId().toString(), "", link.getStartOffset(),
+            TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId(), "", link.getStartOffset(),
                     link.getEndOffset()));
             termMention.getMetadata()
                     .setConceptGraphVertexId(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility)
                     .setSign(linkTarget, visibility)
-                    .setVertexId(linkedPageVertex.getId().toString(), visibility)
-                    .setEdgeId(edge.getId().toString(), visibility)
+                    .setVertexId(linkedPageVertex.getId(), visibility)
+                    .setEdgeId(edge.getId(), visibility)
                     .setOntologyClassUri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
             key = ImportMR.getKey(TermMentionModel.TABLE_NAME, termMention.getRowKey().toString().getBytes());
             context.write(key, AccumuloSession.createMutationFromRow(termMention));
