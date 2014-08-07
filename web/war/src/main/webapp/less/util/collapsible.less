@@ -1,0 +1,70 @@
+
+section.collapsible {
+  .badge {      
+    position: absolute;
+    right: 1ex;
+    left: auto;
+    top: 0.4ex;
+  }
+
+  &.expanded {
+    h1:before {
+      .rotate(90deg);
+    }
+    & > div {
+      display: block;
+    }
+  }
+  
+  &.loading {      
+    strong {
+      padding-right: 1em;
+    }
+  }
+  
+  &.has-badge-number {
+    strong {
+      padding-right: 2em;
+    }
+  }
+
+  & > div {
+    display: none;
+  }
+
+  h1 {
+    font-size: 100%;
+    padding: 0.25em 1em;
+    margin: 0;
+    background: darken(@pane-background, 3%);
+    cursor: pointer;    
+    position: relative;
+    .disable-text-selection;
+
+    &:before, strong {
+      font-size: 80%;
+      font-variant: small-caps;
+      color: #999;      
+      text-shadow: 0 1px 0 white;
+      text-transform: uppercase;
+    }
+    &:before {
+      content: '▶';          
+      position: absolute;
+      left: 1.5ex;
+      font-size: 50%;
+      .transition-transform(ease-in-out);
+      .transform-origin(~"30% 45%");
+    }
+
+    &:hover {
+      background: darken(@pane-background, 6%);
+    }
+    strong {
+      display: block;          
+      text-overflow: ellipsis;
+      overflow: hidden;      
+      white-space: nowrap;
+    }
+  }
+}

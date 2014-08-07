@@ -18,7 +18,8 @@ define([
             'propertiesByRelationshipLabel'
         ];
 
-        this.memoizeFunctions('ontology', toMemoize);
+        this.serviceName = 'ontology';
+        this.memoizeFunctions(this.serviceName, toMemoize);
         return this;
     }
 

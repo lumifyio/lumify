@@ -23,7 +23,8 @@ define([
             'userInfo',
         ];
 
-        this.memoizeFunctions('user', toMemoize);
+        this.serviceName = 'user';
+        this.memoizeFunctions(this.serviceName, toMemoize);
 
         return this;
     }
@@ -113,11 +114,34 @@ define([
         return this.isLoginRequired();
     };
 
+    UserService.prototype.search = function(query, workspaceId) {
+        var data = {};
+        if (query) {
+            data.query = query;
+        }
+        if (workspaceId) {
+            data.workspaceId = workspaceId;
+        }
+        return this._ajaxGet({
+            url: 'users',
+            data: data
+        });
+    };
+
     UserService.prototype.getCurrentUsers = function(workspaceId) {
         return this._ajaxGet({
             url: 'users',
             data: {
                 workspaceId: workspaceId
+            }
+        });
+    };
+
+    UserService.prototype.getUser = function(userName) {
+        return this._ajaxGet({
+            url: 'user',
+            data: {
+                'user-name': userName
             }
         });
     };

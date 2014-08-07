@@ -18,6 +18,7 @@ define([], function() {
             /^workspace\/publish/,
             /^workspace\/undo/,
             /^map\/geocode/,
+            /^admin/,
             /^login/,
             /^vertex\/removeRelationship/,
             /^relationship\/properties/,

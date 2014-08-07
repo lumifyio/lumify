@@ -1,0 +1,142 @@
+@import (reference) "../util/positioning.less";
+
+width: 225px;
+
+.admin-form {
+  .pin-left-split;
+
+  width: 200px;
+  background: @pane-background;
+  z-index: 89;  // so it floats above graph, but below splitbar handles
+
+  .content {
+    padding: 1em;
+    overflow-x: hidden;
+    
+    .nav {
+      margin: -0.5em 0 0 0;
+      padding: 0;      
+    }
+    
+    .collapsible {
+      h1 {
+        margin: 0 -1em;
+        padding: 0.25em 1em;      
+        line-height: 1.5em;   
+        .badge {
+          margin-top: 0.5ex;
+        }
+      }  
+    }
+    
+    a.btn {
+      margin: 0;  
+      width: 100%;
+      .box-sizing(border-box);
+    }
+    
+    button.close {
+      display: none;
+    }
+    
+    select {
+      width: 100%;
+    }
+
+    .btn-file {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      .box-sizing(border-box);
+      
+      input[type=file] {
+          position: absolute;
+          top: 0;
+          right: 0;
+          min-width: 100%;
+          min-height: 100%;
+          font-size: 999px;
+          text-align: right;
+          outline: none;
+          background: white;
+          cursor: inherit;
+          display: block;
+          .opacity(0);
+      }
+    }
+    
+    p {
+      font-size: 95%;
+      color: #555;
+    }
+
+    button {
+      display:block;            
+      width: 100%;
+      margin: 1em 0;
+    }
+        
+    ol.inner-list {
+      margin: 0;
+      font-size: 90%;
+      li {
+        list-style: none;
+        word-break: break-all;
+        padding: 1em 0;
+        margin: 0;
+        line-height: 1.3em;
+        
+        &:last-child {
+          border: none;
+        }
+        border-bottom: 1px solid darken(@pane-background, 10%);
+      }
+      
+      .inner-list li {
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+    }  
+    
+    li {
+      position: relative;
+      
+      button.show-on-hover {        
+        position: absolute;
+        width: auto;
+        right: -100%;        
+        top: 50%;
+        margin-top: -1.6em;
+        .transition(~"right ease-in-out 0.1s 0");
+      }
+      &.show-hover-items .show-on-hover,
+      &:hover .show-on-hover {
+        right: 0;
+        .transition(~"right ease-in-out 0.1s 0.2s");
+      }      
+    }
+    
+    label {
+      input {
+        margin-right: 0.25em;
+        vertical-align: top;
+      }
+    }
+       
+    table {
+      
+      th {
+        text-align: right;
+        font-size: 80%;
+        color: #999;
+        white-space: nowrap;
+      }
+      td {
+        padding-left: 0.25em;
+        
+       
+      }
+    }
+  }
+}

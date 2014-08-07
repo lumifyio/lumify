@@ -10,7 +10,8 @@ define([
             'geocode'
         ];
 
-        this.memoizeFunctions('map', toMemoize);
+        this.serviceName = 'map';
+        this.memoizeFunctions(this.serviceName, toMemoize);
 
         return this;
     }

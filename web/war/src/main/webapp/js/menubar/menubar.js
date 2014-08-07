@@ -15,7 +15,7 @@ define([
     function Menubar() {
 
         // Add class name of <li> buttons here
-        var BUTTONS = 'dashboard graph map search workspaces activity chat logout'.split(' '),
+        var BUTTONS = 'dashboard graph map search workspaces admin activity chat logout'.split(' '),
             TOOLTIPS = {
                 dashboard: i18n('menubar.icons.dashboard.tooltip'),
                 graph: { html: i18n('menubar.icons.graph') +
@@ -24,6 +24,7 @@ define([
                 map: i18n('menubar.icons.map.tooltip'),
                 search: i18n('menubar.icons.search.tooltip'),
                 workspaces: i18n('menubar.icons.workspaces.tooltip'),
+                admin: i18n('menubar.icons.admin.tooltip'),
                 chat: i18n('menubar.icons.chat.tooltip'),
                 logout: i18n('menubar.icons.logout.tooltip')
             },
@@ -31,7 +32,7 @@ define([
             // Which cannot both be active
             MUTALLY_EXCLUSIVE_SWITCHES = [
                 { names: ['dashboard', 'graph','map'], options: { allowCollapse: false } },
-                { names: ['workspaces', 'search'], options: { } }
+                { names: ['workspaces', 'search', 'admin'], options: { } }
             ],
 
             // Don't change state to highlighted on click

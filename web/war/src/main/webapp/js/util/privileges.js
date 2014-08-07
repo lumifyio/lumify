@@ -13,6 +13,7 @@ define([
         this.workspaceEditable = false;
 
         this.after('initialize', function() {
+            this.workspaceEditable = true;
             this.on('currentUserChanged', this.update);
             this.on('workspaceLoaded', this.onWorkspaceLoaded);
             this.update();
@@ -28,10 +29,19 @@ define([
                 editable = this.workspaceEditable,
                 cls = [];
 
+            if (user) {
+                $.extend(user, {
+                    privilegesHelper: _.indexBy(user.privileges || [])
+                });
+            }
             PRIVILEGES.forEach(function(p) {
                 var missingKey = 'missing' + p;
 
-                Component[missingKey] = !user || !user.privilegesHelper[p] || !editable;
+                if (p === 'ADMIN') {
+                    Component[missingKey] = !user || !user.privilegesHelper[p];
+                } else {
+                    Component[missingKey] = !user || !user.privilegesHelper[p] || !editable;
+                }
                 Component['can' + p] = !Component[missingKey];
 
                 if (Component[missingKey]) {
