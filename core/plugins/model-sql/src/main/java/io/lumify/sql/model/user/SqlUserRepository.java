@@ -97,8 +97,7 @@ public class SqlUserRepository extends UserRepository {
             if (password != null && !password.equals("")) {
                 byte[] salt = UserPasswordUtil.getSalt();
                 byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
-                newUser.setPasswordSalt(salt);
-                newUser.setPasswordHash(passwordHash);
+                newUser.setPassword(salt, passwordHash);
             }
             newUser.setUserStatus(UserStatus.OFFLINE.name());
             newUser.setPrivilegesString(Privilege.toString(getDefaultPrivileges()));
@@ -131,8 +130,7 @@ public class SqlUserRepository extends UserRepository {
             byte[] salt = UserPasswordUtil.getSalt();
             byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
-            ((SqlUser) user).setPasswordSalt(salt);
-            ((SqlUser) user).setPasswordHash(passwordHash);
+            ((SqlUser) user).setPassword(salt, passwordHash);
             session.update(user);
             transaction.commit();
         } catch (HibernateException e) {
@@ -150,10 +148,12 @@ public class SqlUserRepository extends UserRepository {
             throw new LumifyException("User is not valid");
         }
 
-        if (((SqlUser) user).getPasswordHash() == null || ((SqlUser) user).getPasswordSalt() == null) {
+        byte[] passwordSalt = ((SqlUser) user).getPasswordSalt();
+        byte[] passwordHash = ((SqlUser) user).getPasswordHash();
+        if (passwordSalt == null || passwordHash == null) {
             return false;
         }
-        return UserPasswordUtil.validatePassword(password, ((SqlUser) user).getPasswordSalt(), ((SqlUser) user).getPasswordHash());
+        return UserPasswordUtil.validatePassword(password, passwordSalt, passwordHash);
     }
 
     @Override

@@ -19,8 +19,8 @@ import java.util.Set;
 public class SqlUser implements User {
     private int id;
     private String username;
-    private String passwordHash;
-    private String passwordSalt;
+    private String encodedPasswordHash;
+    private String encodedPasswordSalt;
     private String displayName;
     private String emailAddress;
     private Date createDate;
@@ -63,21 +63,37 @@ public class SqlUser implements User {
     }
 
     @Column(name = "password_hash")
-    public byte[] getPasswordHash() {
-        return Base64.decodeBase64(passwordHash);
+    public String getEncodedPasswordHash() {
+        return encodedPasswordHash;
     }
 
-    public void setPasswordHash(byte[] passwordHash) {
-        this.passwordHash = Base64.encodeBase64String(passwordHash);
+    @Transient
+    public byte[] getPasswordHash() {
+        return Base64.decodeBase64(encodedPasswordHash);
+    }
+
+    public void setEncodedPasswordHash(String encodedPasswordHash) {
+        this.encodedPasswordHash = encodedPasswordHash;
     }
 
     @Column(name = "password_salt")
-    public byte[] getPasswordSalt() {
-        return Base64.decodeBase64(passwordSalt);
+    public String getEncodedPasswordSalt() {
+        return encodedPasswordSalt;
     }
 
-    public void setPasswordSalt(byte[] passwordSalt) {
-        this.passwordSalt = Base64.encodeBase64String(passwordSalt);
+    @Transient
+    public byte[] getPasswordSalt() {
+        return Base64.decodeBase64(encodedPasswordSalt);
+    }
+
+    public void setEncodedPasswordSalt(String encodedPasswordSalt) {
+        this.encodedPasswordSalt = encodedPasswordSalt;
+    }
+
+    @Transient
+    public void setPassword(byte[] passwordSalt, byte[] passwordHash) {
+        setEncodedPasswordSalt(Base64.encodeBase64String(passwordSalt));
+        setEncodedPasswordHash(Base64.encodeBase64String(passwordHash));
     }
 
     @Override
