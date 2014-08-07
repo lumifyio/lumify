@@ -19,10 +19,10 @@ window.enableLiveReload = function(enable) {
 }
 
 window.switchLanguage = function(code) {
-    var availableLocales = 'en es de zh_TW'.split(' '),
-        locale = availableLocales[availableLocales.indexOf(code)];
-    if (locale) {
-        var parts = locale.split('_');
+    var availableLocales = 'en es de fr it zh_TW'.split(' ');
+
+    if (~availableLocales.indexOf(code)) {
+        var parts = code.split('_');
         if (parts[0]) {
             localStorage.setItem('language', parts[0]);
         }
