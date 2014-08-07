@@ -1,0 +1,32 @@
+
+<ul class="nav nav-list">
+    <li class="nav-header priv-header">Privileges<span style="display:none" class="badge loading"></span></li>
+    {{#each priv}}
+        <li><label><input {{#if disabled}}disabled{{/if}} class="priv priv-{{name}}" value="{{ name }}" type="checkbox" class="privilege-{{lower}}" {{#if has}}checked{{/if}}>{{name}}</label></li>
+    {{/each}}
+
+    <li class="nav-header">Authorizations</li>
+    {{#each authorizations}}
+        <li data-auth="{{ this }}" class="auth-item highlight-on-hover"><button style="margin-right: 1em;" class="btn btn-mini btn-danger show-on-hover">Delete</button><span style="line-height: 1.2em">{{ this }}</span></li>
+    {{/each}}
+
+    <li>
+        <input style="margin-top: 0.5em" class="auth" placeholder="Add Authorization" type="text">
+    </li>
+
+    <li class="nav-header">Workspaces</li>
+    {{#each workspaces}}
+        <li data-workspace-id="{{ workspaceId }}" class="highlight-on-hover">
+            <button style="margin-right:1em;" class="share show-on-hover btn btn-mini btn-primary">Share with Me</button>
+            <span class="nav-list-title">{{title}}{{#if isCurrent }} (current){{/if}}</span>
+            <span class="nav-list-subtitle">{{ workspaceId }}</span>
+            <ul class="inner-list">
+                {{#each users}}
+                    <li class="nav-list-subtitle">{{access}}: {{ userId }}</li>
+                {{/each}}
+            </ul>
+        </li>
+    {{/each}}
+
+    <li><button style="margin-top: 4em" class="delete-user btn btn-danger">Delete User</button></li>
+</ul>

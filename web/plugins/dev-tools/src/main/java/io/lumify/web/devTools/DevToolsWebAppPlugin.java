@@ -36,7 +36,12 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
                 new StaticResourceHandler(getClass(), "/io/lumify/web/devTools/templates/ontology-edit.hbs", "text/html"));
         app.registerJavaScript("/io/lumify/web/devTools/ontology-edit-plugin.js");
 
-        app.get("/admin/userAdmin.html", authenticationHandler, new StaticResourceHandler(getClass(), "/userAdmin.html", "text/html"));
+        app.get("/jsc/io/lumify/web/devTools/templates/user.hbs",
+                new StaticResourceHandler(getClass(), "/io/lumify/web/devTools/templates/user.hbs", "text/html"));
+        app.get("/jsc/io/lumify/web/devTools/templates/user-details.hbs",
+                new StaticResourceHandler(getClass(), "/io/lumify/web/devTools/templates/user-details.hbs", "text/html"));
+        app.registerJavaScript("/io/lumify/web/devTools/user-plugin.js");
+
         app.post("/user/auth/add", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, UserAddAuthorization.class);
         app.post("/user/auth/remove", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, UserRemoveAuthorization.class);
         app.post("/user/delete", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, UserDelete.class);

@@ -291,6 +291,9 @@ define([
                         self.select('listSelector').html(
                             listTemplate({
                                 results: _.chain(workspaces)
+                                    .reject(function(workspace) {
+                                        return _.isUndefined(workspace.createdBy);
+                                    })
                                     .map(self.workspaceDataForItemRow.bind(self))
                                     .sortBy(function(w) {
                                         return w.title.toLowerCase()

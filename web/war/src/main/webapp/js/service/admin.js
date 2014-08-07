@@ -97,5 +97,54 @@ define([
         });
     };
 
+    AdminService.prototype.userAuthAdd = function(userName, auth) {
+        return this._ajaxPost({
+            url: 'user/auth/add',
+            data: {
+                'user-name': userName,
+                auth: auth
+            }
+        });
+    };
+
+    AdminService.prototype.userAuthRemove = function(userName, auth) {
+        return this._ajaxPost({
+            url: 'user/auth/remove',
+            data: {
+                'user-name': userName,
+                auth: auth
+            }
+        });
+    };
+
+    AdminService.prototype.userUpdatePrivileges = function(userName, privileges) {
+        return this._ajaxPost({
+            url: 'user/privileges/update',
+            data: {
+                'user-name': userName,
+                privileges: _.isArray(privileges) ? privileges.join(',') : privileges
+            }
+        });
+    };  
+    
+    AdminService.prototype.userDelete = function(userName) {
+        return this._ajaxPost({
+            url: 'user/delete',
+            data: {
+                'user-name': userName
+            }
+        });
+    };
+
+    AdminService.prototype.workspaceShare = function(userName, workspaceId) {
+        return this._ajaxPost({
+            url: 'workspace/shareWithMe',
+            data: {
+                'user-name': userName,
+                workspaceId: workspaceId
+            }
+        });
+    };
+
     return AdminService;
 });
