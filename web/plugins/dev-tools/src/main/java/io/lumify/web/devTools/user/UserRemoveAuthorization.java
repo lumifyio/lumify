@@ -22,9 +22,10 @@ public class UserRemoveAuthorization extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        String userName = getRequiredParameter(request, "user-name");
         String auth = getRequiredParameter(request, "auth");
 
-        User user = getUser(request);
+        User user = getUserRepository().findByUsername(userName);
         if (user == null) {
             respondWithNotFound(response);
             return;

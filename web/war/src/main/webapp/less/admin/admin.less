@@ -102,12 +102,20 @@ width: 225px;
     li {
       position: relative;
       
+      &.highlight-on-hover {
+        margin: 0 -1em;
+        padding: 0.25em 1em;        
+        &:hover {
+          background: #eee;
+        }
+      }
+      
       button.show-on-hover {        
         position: absolute;
         width: auto;
         right: -100%;        
         top: 50%;
-        margin-top: -1.6em;
+        margin-top: -1em;
         .transition(~"right ease-in-out 0.1s 0");
       }
       &.show-hover-items .show-on-hover,
@@ -134,8 +142,6 @@ width: 225px;
       }
       td {
         padding-left: 0.25em;
-        
-       
       }
     }
   }

@@ -44,9 +44,8 @@ public class UserUpdatePrivileges extends BaseRequestHandler {
 
         LOGGER.info("Setting user %s privileges to %s", user.getUserId(), Privilege.toString(privileges));
         getUserRepository().setPrivileges(user, privileges);
-        this.graph.flush();
 
-        JSONObject json = new JSONObject();
+        JSONObject json = getUserRepository().toJsonWithAuths(user);
         respondWithJson(response, json);
     }
 }
