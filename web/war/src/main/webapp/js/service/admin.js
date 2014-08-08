@@ -125,8 +125,8 @@ define([
                 privileges: _.isArray(privileges) ? privileges.join(',') : privileges
             }
         });
-    };  
-    
+    };
+
     AdminService.prototype.userDelete = function(userName) {
         return this._ajaxPost({
             url: 'user/delete',
