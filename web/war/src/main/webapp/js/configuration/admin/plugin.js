@@ -36,6 +36,10 @@ define([
         }
 
         FlightComponent.attachTo = function attachToWithLessClass(selector) {
+            $(selector).each(function() {
+                $(this).addClass(cls)
+            });
+
             var self = this;
             this.prototype.initialize = _.wrap(this.prototype.initialize, function(init) {
                 this.adminService = adminService;

@@ -46,7 +46,7 @@ public class FoodTruckRemoveOldGeoLocationsGraphPropertyWorker extends GraphProp
         }
 
         String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(element);
-        if (!conceptType.equals(FoodTruckOntology.CONCEPT_TYPE_FOOD_TRUCK)) {
+        if (conceptType == null || !conceptType.equals(FoodTruckOntology.CONCEPT_TYPE_FOOD_TRUCK)) {
             return false;
         }
 

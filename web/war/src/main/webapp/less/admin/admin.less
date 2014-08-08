@@ -110,12 +110,13 @@ width: 225px;
         }
       }
       
-      button.show-on-hover {        
+      .show-on-hover {        
+        z-index: 1;
         position: absolute;
         width: auto;
         right: -100%;        
         top: 50%;
-        margin-top: -1em;
+        .translate(0, -50%);
         .transition(~"right ease-in-out 0.1s 0");
       }
       &.show-hover-items .show-on-hover,
