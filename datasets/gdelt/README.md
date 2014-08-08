@@ -1,28 +1,27 @@
 ## GDELT Import via Map Reduce
 
-1. Build the jar:
+1. build the GDELT MR and re-index MR jars:
 
-        mvn clean package
+        mvn package -pl datasets/gdelt/lumify-gdelt-mr -am
+        mvn package -pl tools/reindex-mr -am
 
-1. Copy the MR input file to HDFS:
+1. import the GDELT ontology:
+
+        bin/owlImport.sh -i datasets/gdelt/ontology/gdelt.owl --iri http://lumify.io/gdelt
+
+1. copy the GDELT data file(s) to HDFS:
 
         hadoop fs -mkdir -p /lumify/gdelt
-        hadoop fs -put data/20140701.export.txt /lumify/gdelt
+        hadoop fs -put data/small.export.txt /lumify/gdelt
 
-1. Submit the MR job:
+1. submit the GDELT MR job:
 
-        hadoop jar lumify-gdelt-mr-*-jar-with-dependencies.jar /lumify/gdelt/20140701.export.txt
+        hadoop jar datasets/gdelt/lumify-gdelt-mr/target/lumify-gdelt-mr-*-jar-with-dependencies.jar /lumify/gdelt
 
-1. Wait for the MR job to complete
+1. wait for the GDELT MR job to complete
 
-## Running inside an IDE
+1. submit the re-index MR job:
 
-1. Run format
+        hadoop jar tools/reindex-mr/target/lumify-reindex-mr-*-jar-with-dependencies.jar
 
-1. Import the dev.owl
-
-1. Import the gdelt.owl
-
-1. Run `io.lumify.gdelt.GDELTRunner data/20140701.export.txt`
-
-1. Run the public storm topology.
+1. search results will be incrementally available as the re-index MR job runs
