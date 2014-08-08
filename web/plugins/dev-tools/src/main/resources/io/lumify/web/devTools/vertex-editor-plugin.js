@@ -28,6 +28,7 @@ require([
     function VertexEditor() {
         this.defaultAttrs({
             loadSelector: '.btn-primary',
+            deleteSelector: '.delete-vertex',
             workspaceInputSelector: '.workspaceId',
             vertexInputSelector: '.vertexId'
         });
@@ -36,7 +37,8 @@ require([
             var self = this;
 
             this.on('click', {
-                loadSelector: this.onLoad
+                loadSelector: this.onLoad,
+                deleteSelector: this.onDelete
             });
 
             this.on(document, 'objectsSelected', this.onObjectsSelected);
@@ -76,7 +78,22 @@ require([
                 this.select('workspaceInputSelector').val()
             ).done(function(vertex) {
                 self.update(vertex);
-            })
+            });
+        };
+
+        this.onDelete = function() {
+            var graphVertexId = this.select('vertexInputSelector').val();
+            var workspaceId = this.select('workspaceInputSelector').val();
+            console.log('deleting vertex', graphVertexId, 'on workspace', workspaceId);
+            vertexService._ajaxPost({
+                url: 'admin/deleteVertex',
+                data: {
+                    graphVertexId: graphVertexId,
+                    workspaceId: workspaceId
+                }
+            }).done(function(vertex) {
+                self.update(vertex);
+            });
         };
 
         this.update = function(vertex) {
