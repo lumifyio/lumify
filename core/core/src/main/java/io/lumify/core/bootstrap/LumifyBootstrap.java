@@ -8,7 +8,6 @@ import com.netflix.curator.framework.CuratorFrameworkFactory;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.fs.FileSystemSession;
 import io.lumify.core.metrics.JmxMetricsManager;
 import io.lumify.core.metrics.MetricsManager;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
@@ -113,9 +112,6 @@ public class LumifyBootstrap extends AbstractModule {
 
         bind(ModelSession.class)
                 .toProvider(this.<ModelSession>getConfigurableProvider(configuration, Configuration.MODEL_PROVIDER))
-                .in(Scopes.SINGLETON);
-        bind(FileSystemSession.class)
-                .toProvider(this.<FileSystemSession>getConfigurableProvider(configuration, Configuration.FILESYSTEM_PROVIDER))
                 .in(Scopes.SINGLETON);
         bind(Graph.class)
                 .toProvider(getGraphProvider(configuration, Configuration.GRAPH_PROVIDER))

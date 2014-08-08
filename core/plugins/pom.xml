@@ -14,7 +14,6 @@
     <name>Lumify: Core: Plugins</name>
 
     <modules>
-        <module>fs-hdfs</module>
         <module>model-bigtable-queue</module>
         <module>model-rabbitmq</module>
         <module>model-securegraph</module>
