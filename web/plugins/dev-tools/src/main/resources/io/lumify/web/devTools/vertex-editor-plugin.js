@@ -189,14 +189,16 @@ require([
                 button,
                 vertexService._ajaxPost({
                     url: 'admin/deleteVertex',
+                    dataType: 'html',
                     data: {
                         graphVertexId: graphVertexId,
                         workspaceId: workspaceId
                     }
                 }).fail(function() {
                     self.showError();
-                }).done(function(vertex) {
-                    self.update(vertex);
+                }).done(function() {
+                    self.$node.find('section').remove();
+                    self.$node.find('.vertexId').val('');
                 })
             );
         };
