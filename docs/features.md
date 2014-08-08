@@ -18,7 +18,7 @@ Also see [Lumify Dependencies by Feature](dependencies-by-feature.md).
 | media    | annotation of video files with the text transcript in accompanying .srt files        | subrip-transcript <br /> subrip-parser  | [SubRip](http://zuggy.wz.cz/) |
 | media    | annotation of video files with the text transcript in accompanying .cc files         | youtube-transcript                      |
 | system   | sets MIME type metadata property of "raw" properties (e.g. file content)             | tika-mime-type                          | [Tika](http://tika.apache.org/) |
-| system   | sets the concept type propery of verticies based on thier MIME type                  | mime-type-ontology-mapper               |
+| system   | sets the concept type property of vertices based on their MIME type                  | mime-type-ontology-mapper               |
 | system   | facilitates updating the search index with new or changed data                       | reindex                                 |
-| example  | parse Java code and create the coresponding graph                                    | java-code                               | requires the [java-code ontology](../storm/plugins/java-code/ontology) |
+| example  | parse Java code and create the corresponding graph                                   | java-code                               | requires the [java-code ontology](../storm/plugins/java-code/ontology) |
 
