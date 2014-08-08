@@ -198,7 +198,9 @@ require([
         };
 
         this.update = function(vertex) {
-            var newVertex = vertex.id !== this.currentVertexId;
+            var newVertex = vertex.id !== this.currentVertexId,
+                addNewText = i18n('admin.vertex.editor.addNewProperty.label');
+
             this.currentVertexId = vertex.id;
             d3.select(this.node)
                 .selectAll('section')
@@ -206,9 +208,12 @@ require([
                     _.chain(vertex.properties)
                       .groupBy('name')
                       .pairs()
+                      .sortBy(function(pair) {
+                          return pair[0];
+                      })
                       .tap(function(pairs) {
                           pairs.push([
-                              'Add New Property',
+                              addNewText,
                               [{
                                   sandboxStatus: '',
                                   'http://lumify.io#visibilityJson': {
@@ -237,6 +242,13 @@ require([
                     if (newVertex) {
                         this.attr('class', 'collapsible')
                     }
+                    this.sort(function(pairA, pairB) {
+                        var a = pairA[0], b = pairB[0];
+                        if (a === addNewText) return 1;
+                        if (b === addNewText) return 0;
+
+                        return a.localeCompare(b);
+                    });
                     this.select('h1 strong').text(function(d) {
                         return d[0];
                     });
