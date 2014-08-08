@@ -19,7 +19,8 @@ define([
         visibilitySource,
         justificationText,
         sourceInfo,
-        metadata
+        metadata,
+        workspaceId
     ) {
         return this._ajaxPost({
             url: 'vertex/property/set',
@@ -28,14 +29,19 @@ define([
                 propertyName: propertyName,
                 value: value,
                 visibilitySource: visibilitySource,
-                justificationText: justificationText,
-                sourceInfo: JSON.stringify(sourceInfo)
+                justificationText: justificationText
             }, function(o) {
+                if (sourceInfo) {
+                    o.sourceInfo = JSON.stringify(sourceInfo);
+                }
                 if (propertyKey) {
                     o.propertyKey = propertyKey
                 }
                 if (metadata) {
                     o.metadata = JSON.stringify(metadata)
+                }
+                if (workspaceId) {
+                    o.workspaceId = workspaceId;
                 }
             })
         });
@@ -51,14 +57,18 @@ define([
         });
     };
 
-    VertexService.prototype.deleteProperty = function(vertexId, property) {
+    VertexService.prototype.deleteProperty = function(vertexId, property, workspaceId) {
         return this._ajaxPost({
             url: 'vertex/property/delete',
-            data: {
+            data: _.tap({
                 graphVertexId: vertexId,
                 propertyName: property.name,
                 propertyKey: property.key
-            }
+            }, function(data) {
+                if (workspaceId) {
+                    data.workspaceId = workspaceId;
+                }
+            })
         });
     };
 

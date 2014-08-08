@@ -1,19 +1,74 @@
 
-.multivalue ul {
-    li {
-      .nav-header {
-        margin: 0;
-        padding: 0;
-        span {
-          text-transform: none;
-          margin-left: 0.5em;
-          color: #333;
-          font-weight: normal;
-          font-size: 120%;
+.collapsible h1 strong {
+  text-transform: none;
+  font-variant: normal;
+  font-weight: bold;
+  font-size: 95%;
+  letter-spacing: 0.05ex;
+}
+
+.collapsible:nth-child(2):before {
+    content: 'Alt + Click to toggle all';
+    display: block;
+    color: #666;
+    text-align: center;
+    margin: 0 0 0.5em 0;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    font-weight: bold;
+    text-shadow: 0 1px 0 white;
+}
+
+.collapsible div {
+  .multivalue {
+    ul {
+      li {
+        .nav-header {
+          margin: 0;
+          padding: 0;
+          cursor: default;
+          span {
+            text-transform: none;
+            margin-left: 0.5em;
+            color: #333;
+            font-weight: normal;
+            font-size: 120%;
+            &.metadata {
+              font-size: 100%;
+              white-space: pre-wrap;
+              color: #666;
+              font-family: Menlo, courier;
+            }
+          }
+          textarea {
+            min-height: 8em;
+            font-size: 100%;
+          }
+          input, textarea {
+            display: none;
+          }
         }
+        list-style: none;
+        
       }
-      list-style: none;
+      margin: 0;
+      padding: 0;
     }
-    margin: 0;
-    padding: 0;
+        
+    .prop-save, .prop-cancel {
+      display: none;
+    }
+
+    &.editing {
+      .show-on-hover, .nav-header span {
+        display: none;
+      }
+      ul li .nav-header input, ul li .nav-header textarea {
+        display: inline;
+      }
+      .prop-save, .prop-cancel {
+        display: block;
+      }
+    }
+  }
 }
