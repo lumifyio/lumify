@@ -91,6 +91,15 @@ public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWork
         }
 
         String mimeType = LumifyProperties.MIME_TYPE.getPropertyValue(element);
-        return mimeType != null;
+        if (mimeType == null) {
+            return false;
+        }
+
+        String existingConceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(element);
+        if (existingConceptType != null) {
+            return false;
+        }
+
+        return true;
     }
 }
