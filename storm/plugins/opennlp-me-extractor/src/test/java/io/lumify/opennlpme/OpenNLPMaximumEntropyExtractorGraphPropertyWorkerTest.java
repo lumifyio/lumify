@@ -60,7 +60,8 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
 
         extractor = new OpenNLPMaximumEntropyExtractorGraphPropertyWorker() {
             @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) {
+            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
+                                                                        String workspaceId, String visibilitySource) {
                 OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
                 return null;
             }
@@ -88,7 +89,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
                 .setProperty("text", "none", new Visibility(""))
                 .save(new InMemoryAuthorizations());
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"));
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
         HashMap<String, TermMention> extractedTerms = new HashMap<String, TermMention>();
         for (TermMention term : termMentions) {

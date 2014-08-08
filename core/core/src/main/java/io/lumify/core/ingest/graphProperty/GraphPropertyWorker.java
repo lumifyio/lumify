@@ -19,9 +19,12 @@ import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.RowKeyHelper;
@@ -45,6 +48,7 @@ public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
+    private WorkspaceRepository workspaceRepository;
     private OntologyRepository ontologyRepository;
     private AuditRepository auditRepository;
     private TermMentionRepository termMentionRepository;
@@ -106,6 +110,11 @@ public abstract class GraphPropertyWorker {
     @Inject
     public final void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
         this.workQueueRepository = workQueueRepository;
+    }
+
+    @Inject
+    public final void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
     }
 
     protected WorkQueueRepository getWorkQueueRepository() {
@@ -200,8 +209,10 @@ public abstract class GraphPropertyWorker {
         return propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + startTime + RowKeyHelper.MINOR_FIELD_SEPARATOR + endTime;
     }
 
-    protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult) {
-        List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex, termExtractionResult.getTermMentions());
+    protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult,
+                                            String workspaceId, String visibilitySource) {
+        List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex,
+                termExtractionResult.getTermMentions(), workspaceId, visibilitySource);
         saveRelationships(termExtractionResult.getRelationships(), termMentionsResults);
         saveVertexRelationships(termExtractionResult.getVertexRelationships(), termMentionsResults);
     }
@@ -268,7 +279,8 @@ public abstract class GraphPropertyWorker {
         return null;
     }
 
-    protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) {
+    protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
+                                                                String workspaceId, String visibilitySource) {
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(),
                 getUser(), artifactGraphVertex.getVisibility());
         for (TermMentionFilter termMentionFilter : this.workerPrepareData.getTermMentionFilters()) {
@@ -281,12 +293,13 @@ public abstract class GraphPropertyWorker {
 
         List<TermMentionWithGraphVertex> results = new ArrayList<TermMentionWithGraphVertex>();
         for (TermMention termMention : termMentions) {
-            results.add(saveTermMention(artifactGraphVertex, termMention));
+            results.add(saveTermMention(artifactGraphVertex, termMention, workspaceId, visibilitySource));
         }
         return results;
     }
 
-    private TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention) {
+    private TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention,
+                                                       String workspaceId, String visibilitySource) {
         LOGGER.debug("Saving term mention '%s':%s:%s (%d:%d)", termMention.getSign(), termMention.getOntologyClassUri(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd());
         Vertex vertex = null;
         TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd()));
@@ -317,8 +330,11 @@ public abstract class GraphPropertyWorker {
                             .vertices(), null);
                 }
             }
-            JSONObject visibilityJson = new JSONObject();
-            visibilityJson.put(VisibilityTranslator.JSON_SOURCE, termMention.getVisibility().toString());
+
+            if (visibilitySource == null) {
+                visibilitySource = termMention.getVisibility().getVisibilityString();
+            }
+            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null ,visibilitySource, workspaceId);
 
             Map<String, Object> metadata = new HashMap<String, Object>();
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
@@ -339,6 +355,8 @@ public abstract class GraphPropertyWorker {
                 vertexElementMutation.addPropertyValue(termMentionProperty.getKey(), termMentionProperty.getName(), termMentionProperty.getValue(), metadata, termMention.getVisibility());
             }
 
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJson, metadata, termMention.getVisibility());
+
             if (!(vertexElementMutation instanceof ExistingElementMutation)) {
                 vertex = vertexElementMutation.save(getAuthorizations());
                 auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), termMention.getVisibility());
@@ -351,7 +369,14 @@ public abstract class GraphPropertyWorker {
             Edge edge = singleOrDefault(artifactGraphVertex.getEdges(vertex, Direction.OUT, artifactHasEntityIri, getAuthorizations()), null);
             if (edge == null) {
                 edge = graph.addEdge(artifactGraphVertex, vertex, artifactHasEntityIri, termMention.getVisibility(), getAuthorizations());
+                LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, termMention.getVisibility(), getAuthorizations());
                 auditRepository.auditRelationship(AuditAction.CREATE, artifactGraphVertex, vertex, edge, termMention.getProcess(), "", getUser(), termMention.getVisibility());
+            }
+
+            graph.flush();
+            if (workspaceId != null && !workspaceId.equals("")) {
+                Workspace workspace = workspaceRepository.findById(workspaceId, getUser());
+                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, null, getUser());
             }
 
             termMentionModel.getMetadata()

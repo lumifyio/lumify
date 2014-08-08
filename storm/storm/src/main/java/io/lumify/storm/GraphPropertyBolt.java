@@ -18,6 +18,8 @@ import io.lumify.core.ingest.graphProperty.*;
 import io.lumify.core.metrics.JmxMetricsManager;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -56,6 +58,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
     private Counter totalErrorCounter;
     private Timer processingTimeTimer;
     private List<GraphPropertyThreadedWrapper> workerWrappers;
+    private WorkspaceRepository workspaceRepository;
 
     @Override
     public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
@@ -178,6 +181,8 @@ public class GraphPropertyBolt extends BaseRichBolt {
         JSONObject json = getJsonFromTuple(input);
         String propertyKey = json.optString("propertyKey");
         String propertyName = json.optString("propertyName");
+        String workspaceId = json.optString("workspaceId");
+        String visibilitySource = json.optString("visibilitySource");
 
         String graphVertexId = json.optString("graphVertexId");
         if (graphVertexId != null && graphVertexId.length() > 0) {
@@ -185,7 +190,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
             if (vertex == null) {
                 throw new LumifyException("Could not find vertex with id " + graphVertexId);
             }
-            safeExecute(vertex, propertyKey, propertyName);
+            safeExecute(vertex, propertyKey, propertyName, workspaceId, visibilitySource);
             return;
         }
 
@@ -195,14 +200,14 @@ public class GraphPropertyBolt extends BaseRichBolt {
             if (edge == null) {
                 throw new LumifyException("Could not find edge with id " + graphEdgeId);
             }
-            safeExecute(edge, propertyKey, propertyName);
+            safeExecute(edge, propertyKey, propertyName, workspaceId, visibilitySource);
             return;
         }
 
         throw new LumifyException("Could not find graphVertexId or graphEdgeId");
     }
 
-    private void safeExecute(Element element, String propertyKey, String propertyName) throws Exception {
+    private void safeExecute(Element element, String propertyKey, String propertyName, String workspaceId, String visibilitySource) throws Exception {
         Property property;
         if ((propertyKey == null || propertyKey.length() == 0) && (propertyName == null || propertyName.length() == 0)) {
             property = null;
@@ -217,10 +222,10 @@ public class GraphPropertyBolt extends BaseRichBolt {
                 return;
             }
         }
-        safeExecute(element, property);
+        safeExecute(element, property, workspaceId, visibilitySource);
     }
 
-    private void safeExecute(Element element, Property property) throws Exception {
+    private void safeExecute(Element element, Property property, String workspaceId, String visibilitySource) throws Exception {
         String propertyText = property == null ? "[none]" : (property.getKey() + ":" + property.getName());
 
         List<GraphPropertyThreadedWrapper> interestedWorkerWrappers = findInterestedWorkers(element, property);
@@ -233,7 +238,8 @@ public class GraphPropertyBolt extends BaseRichBolt {
                 LOGGER.debug("interested worker for element %s property %s: %s", element.getId(), propertyText, interestedWorkerWrapper.getWorker().getClass().getName());
             }
         }
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(element, property);
+
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(element, property, workspaceId, visibilitySource);
 
         LOGGER.debug("Begin work on element %s property %s", element.getId(), propertyText);
         if (property != null && property.getValue() instanceof StreamingPropertyValue) {
@@ -338,6 +344,11 @@ public class GraphPropertyBolt extends BaseRichBolt {
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields(JSON_OUTPUT_FIELD));
+    }
+
+    @Inject
+    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
     }
 
     @Inject

@@ -35,8 +35,10 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
 
             getGraph().flush();
 
-            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY, Ontology.Y_AXIS_FLIP_NEEDED.getPropertyName());
-            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY, Ontology.CW_ROTATION_NEEDED.getPropertyName());
+            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY,
+                    Ontology.Y_AXIS_FLIP_NEEDED.getPropertyName(), data.getWorkspaceId(), data.getVisibilitySource());
+            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY,
+                    Ontology.CW_ROTATION_NEEDED.getPropertyName(), data.getWorkspaceId(), data.getVisibilitySource());
         }
     }
 

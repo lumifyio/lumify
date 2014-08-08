@@ -73,7 +73,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
             getGraph().flush();
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }
-        saveTermMentions((Vertex) data.getElement(), termMentions);
+        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
 
         untokenizedLineStream.close();
         LOGGER.debug("Stream processing completed");

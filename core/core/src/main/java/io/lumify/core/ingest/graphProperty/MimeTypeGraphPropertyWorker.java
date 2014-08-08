@@ -74,7 +74,7 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
 
         runPostMimeTypeWorkers(mimeType, data);
 
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), data.getProperty());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), data.getProperty(), data.getWorkspaceId(), data.getVisibilitySource());
     }
 
     private void runPostMimeTypeWorkers(String mimeType, GraphPropertyWorkData data) {

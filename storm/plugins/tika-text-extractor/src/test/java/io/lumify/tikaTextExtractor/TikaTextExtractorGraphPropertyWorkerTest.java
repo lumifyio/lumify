@@ -79,7 +79,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
@@ -118,7 +118,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
@@ -140,7 +140,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
@@ -161,7 +161,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);

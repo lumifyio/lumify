@@ -97,7 +97,7 @@ public class FileImport {
         if (vertex != null) {
             LOGGER.warn("vertex already exists with hash %s", hash);
             if (queueDuplicates) {
-                pushOnQueue(vertex);
+                pushOnQueue(vertex, workspace, visibilitySource);
             }
             return vertex;
         }
@@ -155,7 +155,7 @@ public class FileImport {
             }
 
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());
-            pushOnQueue(vertex);
+            pushOnQueue(vertex, workspace, visibilitySource);
             return vertex;
         } finally {
             fileInputStream.close();
@@ -188,10 +188,15 @@ public class FileImport {
         }
     }
 
-    private void pushOnQueue(Vertex vertex) {
+    private void pushOnQueue(Vertex vertex, Workspace workspace, String visibilitySource) {
         LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
         this.workQueueRepository.pushElement(vertex);
-        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
+        if (workspace != null) {
+            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY,
+                    LumifyProperties.RAW.getPropertyName(), workspace.getId(), visibilitySource);
+        } else {
+            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
+        }
     }
 
     private Vertex findExistingVertexWithHash(String hash, Authorizations authorizations) {

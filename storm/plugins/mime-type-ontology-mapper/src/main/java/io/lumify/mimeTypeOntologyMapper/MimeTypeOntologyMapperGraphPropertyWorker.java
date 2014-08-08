@@ -77,7 +77,8 @@ public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWork
         LOGGER.debug("assigning concept type %s to vertex %s", concept.getTitle(), data.getElement().getId());
         LumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), concept.getTitle(), data.createPropertyMetadata(), data.getVisibility(), getAuthorizations());
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, LumifyProperties.CONCEPT_TYPE.getPropertyName());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, LumifyProperties.CONCEPT_TYPE.getPropertyName(),
+                data.getWorkspaceId(), data.getVisibilitySource());
     }
 
     @Override
