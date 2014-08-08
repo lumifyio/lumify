@@ -180,7 +180,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
         String propertyName = json.optString("propertyName");
 
         String graphVertexId = json.optString("graphVertexId");
-        if (graphVertexId != null) {
+        if (graphVertexId != null && graphVertexId.length() > 0) {
             Vertex vertex = graph.getVertex(graphVertexId, this.authorizations);
             if (vertex == null) {
                 throw new LumifyException("Could not find vertex with id " + graphVertexId);
@@ -190,7 +190,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
         }
 
         String graphEdgeId = json.optString("graphEdgeId");
-        if (graphEdgeId != null) {
+        if (graphEdgeId != null && graphEdgeId.length() > 0) {
             Edge edge = graph.getEdge(graphEdgeId, this.authorizations);
             if (edge == null) {
                 throw new LumifyException("Could not find edge with id " + graphEdgeId);
