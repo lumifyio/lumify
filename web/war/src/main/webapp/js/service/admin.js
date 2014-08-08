@@ -136,6 +136,17 @@ define([
         });
     };
 
+    AdminService.prototype.vertexDelete = function(graphVertexId, workspaceId) {
+        return this._ajaxPost({
+            url: 'admin/deleteVertex',
+            dataType: 'html',
+            data: {
+                graphVertexId: graphVertexId,
+                workspaceId: workspaceId
+            }
+        });
+    };
+
     AdminService.prototype.workspaceShare = function(userName, workspaceId) {
         return this._ajaxPost({
             url: 'workspace/shareWithMe',

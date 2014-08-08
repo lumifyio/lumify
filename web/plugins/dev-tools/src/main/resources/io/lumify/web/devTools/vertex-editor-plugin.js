@@ -187,19 +187,13 @@ require([
 
             this.handleSubmitButton(
                 button,
-                vertexService._ajaxPost({
-                    url: 'admin/deleteVertex',
-                    dataType: 'html',
-                    data: {
-                        graphVertexId: graphVertexId,
-                        workspaceId: workspaceId
-                    }
-                }).fail(function() {
-                    self.showError();
-                }).done(function() {
-                    self.$node.find('section').remove();
-                    self.$node.find('.vertexId').val('');
-                })
+                this.adminService.vertexDelete(graphVertexId, workspaceId)
+                    .fail(function() {
+                        self.showError();
+                    }).done(function() {
+                        self.$node.find('section').remove();
+                        self.$node.find('.vertexId').val('');
+                    })
             );
         };
 
