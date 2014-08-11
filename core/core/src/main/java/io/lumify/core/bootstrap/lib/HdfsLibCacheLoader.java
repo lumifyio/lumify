@@ -4,7 +4,10 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.apache.hadoop.fs.*;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 
 import java.io.IOException;
 import java.net.URI;
@@ -27,30 +30,31 @@ public class HdfsLibCacheLoader extends LibLoader {
         }
 
         try {
-            FileSystem hdfsFileSystem = getFileSystem(configuration);
-            ensureHdfsStreamHandler(configuration);
+            String hdfsUser = "hadoop";
+            FileSystem hdfsFileSystem = getFileSystem(configuration, hdfsUser);
+            ensureHdfsStreamHandler(configuration, hdfsUser);
             addFilesFromHdfs(hdfsFileSystem, new Path(hdfsLibCacheDirectory));
         } catch (Exception e) {
             throw new LumifyException(String.format("Could not add HDFS files from %s", hdfsLibCacheDirectory), e);
         }
     }
 
-    private FileSystem getFileSystem(Configuration configuration) {
+    private FileSystem getFileSystem(Configuration configuration, String user) {
         FileSystem hdfsFileSystem;
         try {
             String hdfsRootDir = configuration.get(Configuration.HADOOP_URL);
-            hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), configuration.toHadoopConfiguration(), "hadoop");
+            hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), configuration.toHadoopConfiguration(), user);
         } catch (Exception ex) {
             throw new LumifyException("Could not open HDFS file system.", ex);
         }
         return hdfsFileSystem;
     }
 
-    private static synchronized void ensureHdfsStreamHandler(Configuration lumifyConfig) {
+    private static synchronized void ensureHdfsStreamHandler(Configuration lumifyConfig, String user) {
         if (hdfsStreamHandlerInitialized) {
             return;
         }
-        URLStreamHandlerFactory urlStreamHandlerFactory = new FsUrlStreamHandlerFactory(lumifyConfig.toHadoopConfiguration());
+        URLStreamHandlerFactory urlStreamHandlerFactory = new HdfsUrlStreamHandlerFactory(lumifyConfig.toHadoopConfiguration(), user);
         LOGGER.info("setting URLStreamHandlerFactory to %s", urlStreamHandlerFactory.getClass().getName());
         URL.setURLStreamHandlerFactory(urlStreamHandlerFactory);
         hdfsStreamHandlerInitialized = true;
