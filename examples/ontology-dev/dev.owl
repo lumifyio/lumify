@@ -673,6 +673,18 @@
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
 
+
+
+    <!-- http://lumify.io/dev#sentiment -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#sentiment">
+        <rdfs:label xml:lang="en">Sentiment</rdfs:label>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
