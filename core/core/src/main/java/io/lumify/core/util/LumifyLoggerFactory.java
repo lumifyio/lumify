@@ -30,7 +30,7 @@ public class LumifyLoggerFactory {
         }
     }
 
-    private static LumifyLogger getLogger(String name) {
+    public static LumifyLogger getLogger(String name) {
         ensureInitialized();
         synchronized (logMap) {
             LumifyLogger lumifyLogger = logMap.get(name);

@@ -2,6 +2,7 @@ package io.lumify.core.model.ontology;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
@@ -303,7 +304,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public List<Concept> getAllLeafNodesByConcept(Concept concept) {
-        List<Concept> concepts = new ArrayList<Concept>();
+        List<Concept> concepts = Lists.newArrayList(concept);
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
 
         try {
