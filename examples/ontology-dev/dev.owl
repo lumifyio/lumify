@@ -697,6 +697,28 @@
 
 
 
+    <!-- http://lumify.io/dev#fileSize -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#fileSize">
+        <rdfs:label xml:lang="en">File Size</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io/dev#format -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#format">
+        <rdfs:label xml:lang="en">Format</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+
     <!-- http://lumify.io/dev#sentiment -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#sentiment">
