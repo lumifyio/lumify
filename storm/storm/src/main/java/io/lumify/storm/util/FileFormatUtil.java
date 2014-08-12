@@ -15,7 +15,6 @@ public class FileFormatUtil {
         JSONObject formatObject = json.optJSONObject("format");
         if (formatObject != null) {
             String optionalFileName = formatObject.optString("filename");
-            LOGGER.debug("fileFormatDebug: " + optionalFileName);
             if (!optionalFileName.equals("")){
 
                 /*Take the last characters of the filename (before the graphPropertyBolt number) as the file format.
@@ -27,7 +26,6 @@ public class FileFormatUtil {
                     if (oneCharacter != null && isNumeric(oneCharacter) ){
                         numberPosition = i - 1;
                         String fileEnding = optionalFileName.substring(numberPosition + 1, optionalFileName.length());
-                        LOGGER.debug("fileFormatDebug: " + fileEnding);
                         return fileEnding;
                     }
                 }
