@@ -71,7 +71,7 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                 if (imageFacingDirection != null) {
                     Ontology.DIRECTION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
                 }
-                
+
                 if (metadataIri != null) {
                     JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(metadata);
                     if (imageMetadataJSON != null) {
