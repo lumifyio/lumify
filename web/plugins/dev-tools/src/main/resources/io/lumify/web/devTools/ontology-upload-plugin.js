@@ -13,13 +13,13 @@ require([
     ) {
     'use strict';
 
-    return defineLumifyAdminPlugin(DictionaryList, {
+    return defineLumifyAdminPlugin(OntologyUpload, {
         section: 'Ontology',
         name: 'Upload',
         subtitle: 'Upload new ontology owl'
     });
 
-    function DictionaryList() {
+    function OntologyUpload() {
 
         this.defaultAttrs({
             uploadSelector: '.btn-primary',
