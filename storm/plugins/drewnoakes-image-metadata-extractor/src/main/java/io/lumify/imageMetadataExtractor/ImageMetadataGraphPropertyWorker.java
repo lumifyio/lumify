@@ -44,49 +44,53 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File imageFile = data.getLocalFile();
+        if (imageFile != null) {
+            Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+            if (metadata != null) {
+                Date date = DateExtractor.getDateDefault(metadata);
+                if (date != null) {
+                    Ontology.DATE_TAKEN.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, date, data.getVisibility(), getAuthorizations());
+                }
 
-        Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+                String deviceMake = MakeExtractor.getMake(metadata);
+                if (deviceMake != null) {
+                    Ontology.DEVICE_MAKE.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, deviceMake, data.getVisibility(), getAuthorizations());
+                }
 
-        Date date = DateExtractor.getDateDefault(metadata);
-        if (date != null) {
-            Ontology.DATE_TAKEN.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, date, data.getVisibility(), getAuthorizations());
-        }
+                String deviceModel = ModelExtractor.getModel(metadata);
+                if (deviceModel != null) {
+                    Ontology.DEVICE_MODEL.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, deviceModel, data.getVisibility(), getAuthorizations());
+                }
 
-        String deviceMake = MakeExtractor.getMake(metadata);
-        if (deviceMake != null) {
-            Ontology.DEVICE_MAKE.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, deviceMake, data.getVisibility(), getAuthorizations());
-        }
+                GeoPoint imageLocation = GeoPointExtractor.getGeoPoint(metadata);
+                if (imageLocation != null) {
+                    Ontology.GEO_LOCATION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageLocation, data.getVisibility(), getAuthorizations());
+                }
 
-        String deviceModel = ModelExtractor.getModel(metadata);
-        if (deviceModel != null) {
-            Ontology.DEVICE_MODEL.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, deviceModel, data.getVisibility(), getAuthorizations());
-        }
-
-        GeoPoint imageLocation = GeoPointExtractor.getGeoPoint(metadata);
-        if (imageLocation != null) {
-            Ontology.GEO_LOCATION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageLocation, data.getVisibility(), getAuthorizations());
-        }
-
-        Double imageFacingDirection = DirectionExtractor.getImageFacingDirection(metadata);
-        if (imageFacingDirection != null) {
-            Ontology.DIRECTION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
-        }
-
-        if (metadataIri != null) {
-            JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(metadata);
-            if (imageMetadataJSON != null) {
-                String imageMetadataJSONString = imageMetadataJSON.toString();
-                if (imageMetadataJSONString != null) {
-                    data.getElement().addPropertyValue(
-                            MULTI_VALUE_KEY,
-                            metadataIri,
-                            imageMetadataJSONString,
-                            data.getVisibility(),
-                            getAuthorizations()
-                    );
+                Double imageFacingDirection = DirectionExtractor.getImageFacingDirection(metadata);
+                if (imageFacingDirection != null) {
+                    Ontology.DIRECTION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
+                }
+                
+                if (metadataIri != null) {
+                    JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(metadata);
+                    if (imageMetadataJSON != null) {
+                        String imageMetadataJSONString = imageMetadataJSON.toString();
+                        if (imageMetadataJSONString != null) {
+                            data.getElement().addPropertyValue(
+                                    MULTI_VALUE_KEY,
+                                    metadataIri,
+                                    imageMetadataJSONString,
+                                    data.getVisibility(),
+                                    getAuthorizations()
+                            );
+                        }
+                    }
                 }
             }
         }
+
+
     }
 
     @Override
