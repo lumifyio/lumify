@@ -32,7 +32,7 @@ public class DateUtil {
                     }
                 }
 
-                if (!dateTaken.equals("")) {
+                if (dateTaken != null && !dateTaken.equals("")) {
                     Date date = parseDateTakenString(dateTaken);
                     if (date != null) {
                         return date;
