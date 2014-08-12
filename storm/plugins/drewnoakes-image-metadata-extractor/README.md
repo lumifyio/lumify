@@ -18,3 +18,6 @@ The drew-noakes-image-metadata-extractor module requires the following ontology 
      
 Or to create your own ontologies, see file:
  /lumify/storm/plugins/drewnoakes-image-metadata-extractor/src/main/java/io/lumify/imageMetadataExtractor/Ontology.java
+ 
+ 
+ Please add the following to your /opt/lumify/lumify.properties file:
