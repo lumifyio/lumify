@@ -266,7 +266,8 @@ define([
                     switch (property.dataType) {
                         case 'date':
                             if (property.displayTime) {
-                                transformFunction = F.date.utc;
+                                vertexProperty = F.date.utc(vertexProperty).getTime();
+                                transformFunction = F.date.local;
                             } else {
                                 transformFunction = function(v, i) {
                                     if (_.isUndefined(i)) {
