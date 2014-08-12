@@ -2,6 +2,7 @@ package io.lumify.storm.video;
 
 import com.google.common.io.Files;
 import com.google.inject.Inject;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
@@ -247,9 +248,13 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data) {
         int numberOfFrames = 20;
         JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        Double duration = null;
-        if (outJson != null) {
-            duration = DurationUtil.extractDurationFromJSON(outJson);
+        if (outJson == null) {
+            throw new LumifyException("Could not get JSON from ffprobe");
+        }
+
+        Double duration = DurationUtil.extractDurationFromJSON(outJson);
+        if (duration == null) {
+            throw new LumifyException("Could not find duration in json:\n" + outJson.toString(2));
         }
 
         double framesPerSecondToExtract = numberOfFrames / duration;
