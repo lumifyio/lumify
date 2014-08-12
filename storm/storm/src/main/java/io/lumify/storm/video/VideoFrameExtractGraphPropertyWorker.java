@@ -46,7 +46,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             videoRotation = nullableRotation;
         }
 
-        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data);
+        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 1.0);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
@@ -244,16 +244,20 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         return results;
     }
 
-    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data) {
+    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data, double defaultFPSToExtract) {
         int numberOfFrames = 20;
         JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Double duration = null;
         if (outJson != null) {
             duration = DurationUtil.extractDurationFromJSON(outJson);
+            if (duration != null && duration != 0){
+                double framesPerSecondToExtract = numberOfFrames / duration;
+                return framesPerSecondToExtract;
+            }
         }
 
-        double framesPerSecondToExtract = numberOfFrames / duration;
-        return framesPerSecondToExtract;
+        //Upon failure to calculate FPS, return defaultFPS.
+        return defaultFPSToExtract;
     }
 
 
