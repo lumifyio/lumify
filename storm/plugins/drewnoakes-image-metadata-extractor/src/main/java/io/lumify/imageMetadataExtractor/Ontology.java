@@ -13,4 +13,5 @@ public class Ontology {
     public static final StringLumifyProperty DEVICE_MODEL = new StringLumifyProperty("http://lumify.io/dev#deviceModel");
     public static final IntegerLumifyProperty WIDTH = new IntegerLumifyProperty("http://lumify.io/dev#width");
     public static final IntegerLumifyProperty HEIGHT = new IntegerLumifyProperty("http://lumify.io/dev#height");
+    public static final StringLumifyProperty METADATA = new StringLumifyProperty("http://lumify.io/dev#metadata");
 }

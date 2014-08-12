@@ -6,8 +6,6 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.imageMetadataHelper.*;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -20,10 +18,7 @@ import java.util.Date;
 
 
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImageMetadataGraphPropertyWorker.class);
     private static final String MULTI_VALUE_KEY = ImageMetadataGraphPropertyWorker.class.getName();
-    private static final String METADATA_IRI = "ontology.iri.metadata";
-    private String metadataIri;
 
     @Override
     public boolean isLocalFileRequired() {
@@ -33,12 +28,6 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-
-        metadataIri = (String) workerPrepareData.getStormConf().get(METADATA_IRI);
-        if (metadataIri == null || metadataIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + METADATA_IRI + ": skipping 'dump of all media metadata into JSON' ");
-        }
-
     }
 
     @Override
@@ -82,24 +71,15 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                     Ontology.HEIGHT.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageHeight, data.getVisibility(), getAuthorizations());
                 }
 
-                if (metadataIri != null) {
-                    JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(metadata);
-                    if (imageMetadataJSON != null) {
-                        String imageMetadataJSONString = imageMetadataJSON.toString();
-                        if (imageMetadataJSONString != null) {
-                            data.getElement().addPropertyValue(
-                                    MULTI_VALUE_KEY,
-                                    metadataIri,
-                                    imageMetadataJSONString,
-                                    data.getVisibility(),
-                                    getAuthorizations()
-                            );
-                        }
+                JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(metadata);
+                if (imageMetadataJSON != null) {
+                    String imageMetadataJSONString = imageMetadataJSON.toString();
+                    if (imageMetadataJSONString != null) {
+                        Ontology.METADATA.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageMetadataJSONString, data.getVisibility(), getAuthorizations());
                     }
                 }
             }
         }
-
 
     }
 
