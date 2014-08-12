@@ -43,12 +43,16 @@ define([
                 userService.isLoginRequired()
                     .done(function(user) {
                         window.currentUser = user;
+                        $(document).trigger('currentUserChanged', { user: user });
                         require(['app'], function(App) {
                             App.attachTo('#app', {
                                 animateFromLogin: true,
                                 addVertexIds: self.attr.toOpen &&
                                     self.attr.toOpen.type === 'ADD' ?
-                                    self.attr.toOpen : null
+                                    self.attr.toOpen : null,
+                                openAdminTool: self.attr.toOpen &&
+                                    self.attr.toOpen.type === 'ADMIN' ?
+                                    _.pick(self.attr.toOpen, 'section', 'name') : null
                             });
 
                             self.$node.find('.logo').one(TRANSITION_END, function() {

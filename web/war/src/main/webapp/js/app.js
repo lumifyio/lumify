@@ -19,6 +19,7 @@ define([
     'util/withFileDrop',
     'util/vertex/menu',
     'util/contextMenu',
+    'util/privileges',
     'service/user',
     'service/vertex'
 ], function(
@@ -41,6 +42,7 @@ define([
     withFileDrop,
     VertexMenu,
     ContextMenu,
+    Privileges,
     UserService,
     VertexService) {
     'use strict';
@@ -218,7 +220,7 @@ define([
                 if (self.attr.addVertexIds) {
                     self.handleAddToWorkspace(self.attr.addVertexIds);
                 }
-                if (self.attr.openAdminTool) {
+                if (self.attr.openAdminTool && Privileges.canADMIN) {
                     self.trigger('menubarToggleDisplay', { name: 'admin' });
                     self.trigger('showAdminPlugin', self.attr.openAdminTool);
                 }
