@@ -72,6 +72,16 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                     Ontology.DIRECTION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
                 }
 
+                Integer imageWidth = DimensionsExtractor.getWidth(metadata);
+                if (imageWidth != null){
+                    Ontology.WIDTH.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageWidth, data.getVisibility(), getAuthorizations());
+                }
+
+                Integer imageHeight = DimensionsExtractor.getHeight(metadata);
+                if (imageHeight != null){
+                    Ontology.HEIGHT.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageHeight, data.getVisibility(), getAuthorizations());
+                }
+
                 if (metadataIri != null) {
                     JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(metadata);
                     if (imageMetadataJSON != null) {
