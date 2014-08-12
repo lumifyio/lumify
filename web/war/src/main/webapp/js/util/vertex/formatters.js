@@ -47,8 +47,9 @@ define([
                     require(['service/user'], function(UserService) {
                         new UserService().userInfo(userId)
                             .fail(d.reject)
-                            .done(function(user) {
-                                el.textContent = user.displayName;
+                            .done(function(result) {
+                                var user = result.users[userId];
+                                el.textContent = user && user.displayName || i18n('user.unknown.displayName');
                                 d.resolve();
                             });
                     })

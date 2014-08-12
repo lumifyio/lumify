@@ -275,41 +275,52 @@ define([
         this.loadWorkspaceList = function(switchToFirst) {
             var self = this;
 
-            return $.when(
-                    this.userService.getCurrentUsers(),
-                    this.workspaceService.list()
-                   )
-                   .done(function(usersResponse, workspaceResponse) {
-                       var users = usersResponse[0].users || [],
-                           workspaces = workspaceResponse[0].workspaces || [],
-                           usersById = _.indexBy(users, function(u) {
-                               return u.id;
-                           });
-
-                        self.usersById = usersById;
-                        self.$node.html(workspacesTemplate({}));
-                        self.select('listSelector').html(
-                            listTemplate({
-                                results: _.chain(workspaces)
-                                    .reject(function(workspace) {
-                                        return _.isUndefined(workspace.createdBy);
-                                    })
-                                    .map(self.workspaceDataForItemRow.bind(self))
-                                    .sortBy(function(w) {
-                                        return w.title.toLowerCase()
-                                    })
-                                    .groupBy(function(w) {
-                                        return w.isSharedToUser ? 'shared' : 'mine';
-                                    })
-                                    .value(),
-                                selected: self.workspaceId
+            return this.workspaceService.list()
+                .then(function(workspaceResponse) {
+                    var workspaces = workspaceResponse.workspaces || [],
+                        users = _.chain(workspaces)
+                            .map(function(workspace) {
+                                return _.pluck(workspace.users, 'userId');
                             })
-                        );
-                        self.trigger(document, 'paneResized');
-                        if (switchToFirst) {
-                            self.switchToWorkspace(workspaces[0].workspaceId);
-                        }
-                    });
+                            .flatten()
+                            .uniq()
+                            .value(),
+                        updateHtml = function() {
+                            self.$node.html(workspacesTemplate({}));
+                            self.select('listSelector').html(
+                                listTemplate({
+                                    results: _.chain(workspaces)
+                                        .reject(function(workspace) {
+                                            return _.isUndefined(workspace.createdBy);
+                                        })
+                                        .map(self.workspaceDataForItemRow.bind(self))
+                                        .sortBy(function(w) {
+                                            return w.title.toLowerCase()
+                                        })
+                                        .groupBy(function(w) {
+                                            return w.isSharedToUser ? 'shared' : 'mine';
+                                        })
+                                        .value(),
+                                    selected: self.workspaceId
+                                })
+                            );
+                            self.trigger(document, 'paneResized');
+                            if (switchToFirst) {
+                                self.switchToWorkspace(workspaces[0].workspaceId);
+                            }
+                        };
+
+                    self.usersById = self.usersById || {};
+
+                    if (users.length) {
+                        self.userService.userInfo(users).done(function(result) {
+                            self.usersById = $.extend(self.usersById, result.users);
+                            updateHtml();
+                        });
+                    } else {
+                        updateHtml();
+                    }
+                });
         };
 
         this.workspaceDataForItemRow = function(w) {

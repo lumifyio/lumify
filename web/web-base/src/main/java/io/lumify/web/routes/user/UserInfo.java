@@ -7,6 +7,7 @@ import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,15 +24,18 @@ public class UserInfo extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String userId = getRequiredParameter(request, "userId");
+        String[] userIds = getRequiredParameterArray(request, "userIds[]");
 
-        User user = getUserRepository().findById(userId);
-        if (user == null) {
-            respondWithNotFound(response, "Could not find user with id: " + userId);
-            return;
+        JSONObject result = new JSONObject();
+        JSONObject users = new JSONObject();
+        result.put("users", users);
+
+        for (String userId : userIds) {
+            User user = getUserRepository().findById(userId);
+            JSONObject userJson = UserRepository.toJson(user);
+            users.put(user.getUserId(), userJson);
         }
 
-        JSONObject json = UserRepository.toJson(user);
-        respondWithJson(response, json);
+        respondWithJson(response, result);
     }
 }
