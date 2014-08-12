@@ -220,7 +220,6 @@ public abstract class GraphPropertyWorker {
                 termExtractionResult.getTermMentions(), workspaceId, visibilitySource);
         saveRelationships(termExtractionResult.getRelationships(), termMentionsResults);
         saveVertexRelationships(termExtractionResult.getVertexRelationships(), termMentionsResults);
-        workQueueRepository.pushTextUpdated(artifactGraphVertex.getId());
     }
 
     private void saveVertexRelationships(List<VertexRelationship> vertexRelationships, List<TermMentionWithGraphVertex> termMentionsWithGraphVertices) {
