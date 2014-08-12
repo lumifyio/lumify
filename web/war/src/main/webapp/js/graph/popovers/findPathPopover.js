@@ -78,7 +78,7 @@ define([
                         notInWorkspace = vertices.filter(function(v) {
                             return !appData.workspaceVertices[v.id];
                         }),
-                        pathsFoundText = i18n('popovers.find_path.' + (
+                        pathsFoundText = i18n('popovers.find_path.found.' + (
                             paths.length === 0 ? 'none' :
                             paths.length === 1 ? 'one' : 'some'
                         ), paths.length);
