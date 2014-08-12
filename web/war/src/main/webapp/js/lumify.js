@@ -246,6 +246,9 @@ function(jQuery,
                         if (toOpen && toOpen.type === 'ADD' && ids.length) {
                             options.addVertexIds = toOpen;
                         }
+                        if (toOpen && toOpen.type === 'ADMIN' && toOpen.section && toOpen.name) {
+                            options.openAdminTool = _.pick(toOpen, 'section', 'name');
+                        }
                         App.attachTo('#app', options);
                         _.defer(function() {
                             // Cache login in case server goes down

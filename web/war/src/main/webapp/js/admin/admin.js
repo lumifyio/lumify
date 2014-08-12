@@ -40,6 +40,11 @@ define([
         this.onShowAdminPlugin = function(event, data) {
             var self = this;
 
+            if (data && data.name && data.section) {
+                data.name = data.name.toLowerCase();
+                data.section = data.section.toLowerCase();
+            }
+
             this.$node.find('li').filter(function() {
                 return _.isEqual($(this).data('component'), data);
             }).addClass('active').siblings('.active').removeClass('active');
@@ -53,7 +58,10 @@ define([
                             self.trigger(document, 'paneResized');
                         }
                     }).show().find('.content');
-                component = _.findWhere(lumifyAdminPlugins.ALL_COMPONENTS, data);
+                component = _.find(lumifyAdminPlugins.ALL_COMPONENTS, function(c) {
+                    return c.name.toLowerCase() === data.name &&
+                        c.section.toLowerCase() === data.section;
+                });
 
             form.teardownAllComponents();
             component.Component.attachTo(form);
@@ -99,7 +107,14 @@ define([
                         }
 
                         d3.select(this)
-                            .attr('data-component', JSON.stringify(_.pick(component, 'section', 'name')))
+                            .attr('data-component', JSON.stringify(
+                                _.chain(component)
+                                .pick('section', 'name')
+                                .tap(function(c) {
+                                    c.name = c.name.toLowerCase();
+                                    c.section = c.section.toLowerCase();
+                                }).value()
+                            ))
                             .select('a')
                             .call(function() {
                                 this.append('div')

@@ -218,6 +218,10 @@ define([
                 if (self.attr.addVertexIds) {
                     self.handleAddToWorkspace(self.attr.addVertexIds);
                 }
+                if (self.attr.openAdminTool) {
+                    self.trigger('menubarToggleDisplay', { name: 'admin' });
+                    self.trigger('showAdminPlugin', self.attr.openAdminTool);
+                }
             }, 500);
         });
 
