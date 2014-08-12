@@ -29,7 +29,7 @@ define([
 
         var FlightComponent = defineComponent(Component),
             attachTo = FlightComponent.attachTo,
-            cls = NODE_CLS_FOR_LESS_CONTAINMENT + componentInc;
+            cls = NODE_CLS_FOR_LESS_CONTAINMENT + (componentInc++);
 
         if (options && options.less) {
             options.less.applyStyleForClass(cls);
