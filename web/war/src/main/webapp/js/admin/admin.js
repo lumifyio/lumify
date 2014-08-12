@@ -63,7 +63,8 @@ define([
                         c.section.toLowerCase() === data.section;
                 });
 
-            form.teardownAllComponents();
+            form.teardownAllComponents()
+                .removePrefixedClasses('admin_less_cls');
             component.Component.attachTo(form);
 
             this.trigger(document, 'paneResized');

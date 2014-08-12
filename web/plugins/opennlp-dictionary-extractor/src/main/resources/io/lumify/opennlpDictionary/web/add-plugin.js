@@ -15,13 +15,13 @@ require([
 
     var ontologyService = new OntologyService();
 
-    return defineLumifyAdminPlugin(DictionaryList, {
+    return defineLumifyAdminPlugin(DictionaryAdd, {
         section: 'Dictionary',
         name: 'Add',
         subtitle: 'Create new dictionary entries'
     });
 
-    function DictionaryList() {
+    function DictionaryAdd() {
 
         this.defaultAttrs({
             createSelector: '.btn-primary',
