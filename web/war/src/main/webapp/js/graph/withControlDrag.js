@@ -54,7 +54,7 @@ define([], function() {
                 cy.on({
                     tap: function(event) {
                         if (state === STATE_CONNECTED) {
-                            this.trigger('finishedVertexConnection');
+                            self.trigger('finishedVertexConnection');
                         }
                     },
                     cxttapstart: mousedown,

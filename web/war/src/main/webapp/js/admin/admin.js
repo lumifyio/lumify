@@ -40,7 +40,6 @@ define([
         this.onShowAdminPlugin = function(event, data) {
             var self = this;
 
-            // TODO: toggleMenubar display if not visible
             this.$node.find('li').filter(function() {
                 return _.isEqual($(this).data('component'), data);
             }).addClass('active').siblings('.active').removeClass('active');

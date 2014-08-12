@@ -114,14 +114,22 @@ define([
         });
 
         this.after('initialize', function() {
-            appData
-                .getVertexTitle(this.attr.vertexId)
-                .done(this.setupMenu.bind(this));
+            this.on(document, 'closeVertexMenu', function() {
+                this.teardown();
+            });
 
             this.on('click', {
                 menuSelector: this.onMenuItemClick
             });
+
+            appData
+                .getVertexTitle(this.attr.vertexId)
+                .done(this.setupMenu.bind(this));
         });
+
+        this.onClose = function() {
+            this.teardown();
+        };
 
         this.onMenuItemClick = function(event) {
             event.preventDefault();
