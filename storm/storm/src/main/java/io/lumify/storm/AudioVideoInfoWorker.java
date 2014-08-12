@@ -35,6 +35,8 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String METADATA_IRI = "ontology.iri.metadata";
     private static final String WIDTH_IRI = "ontology.iri.width";
     private static final String HEIGHT_IRI = "ontology.iri.height";
+    private static final String FILE_SIZE_IRI = "ontology.iri.fileSize";
+    private static final String FORMAT_IRI = "ontology.iri.format";
     private String audioDurationIri;
     private String videoDurationIri;
     private String videoRotationIri;
@@ -46,6 +48,8 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private String metadataIri;
     private String widthIri;
     private String heightIri;
+    private String fileSizeIri;
+    private String formatIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -104,6 +108,16 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         heightIri = (String) workerPrepareData.getStormConf().get(HEIGHT_IRI);
         if (heightIri == null || heightIri.length() == 0) {
             LOGGER.warn("Could not find config: " + HEIGHT_IRI + ": skipping setting the height property.");
+        }
+
+        fileSizeIri = (String) workerPrepareData.getStormConf().get(FILE_SIZE_IRI);
+        if (fileSizeIri == null || fileSizeIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + FILE_SIZE_IRI + ": skipping setting the size property.");
+        }
+
+        formatIri = (String) workerPrepareData.getStormConf().get(FORMAT_IRI);
+        if (formatIri == null || formatIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + FORMAT_IRI + ": skipping setting the format property.");
         }
 
     }
@@ -213,6 +227,28 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                         PROPERTY_KEY,
                         heightIri,
                         height,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            Integer fileSize = FileSizeUtil.extractFileSizeFromJSON(json);
+            if (fileSize != null){
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        fileSizeIri,
+                        fileSize,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            String format = FileFormatUtil.extractFileFormatFromJSON(json);
+            if (format != null){
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        formatIri,
+                        format,
                         data.getVisibility(),
                         getAuthorizations()
                 );
