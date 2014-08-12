@@ -33,6 +33,8 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final String DEVICE_MAKE_IRI = "ontology.iri.deviceMake";
     private static final String DEVICE_MODEL_IRI = "ontology.iri.deviceModel";
     private static final String METADATA_IRI = "ontology.iri.metadata";
+    private static final String WIDTH_IRI = "ontology.iri.width";
+    private static final String HEIGHT_IRI = "ontology.iri.height";
     private String audioDurationIri;
     private String videoDurationIri;
     private String videoRotationIri;
@@ -42,6 +44,8 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private String deviceMakeIri;
     private String deviceModelIri;
     private String metadataIri;
+    private String widthIri;
+    private String heightIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -90,6 +94,16 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         metadataIri = (String) workerPrepareData.getStormConf().get(METADATA_IRI);
         if (metadataIri == null || metadataIri.length() == 0) {
             LOGGER.warn("Could not find config: " + METADATA_IRI + ": skipping setting the metadata property.");
+        }
+
+        widthIri = (String) workerPrepareData.getStormConf().get(WIDTH_IRI);
+        if (widthIri == null || widthIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + WIDTH_IRI + ": skipping setting the width property.");
+        }
+
+        heightIri = (String) workerPrepareData.getStormConf().get(HEIGHT_IRI);
+        if (heightIri == null || heightIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + HEIGHT_IRI + ": skipping setting the height property.");
         }
 
     }
@@ -177,6 +191,28 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                         PROPERTY_KEY,
                         deviceModelIri,
                         deviceModel,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            Integer width = DimensionsUtil.extractWidthFromJSON(json);
+            if (width != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        widthIri,
+                        width,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+
+            Integer height = DimensionsUtil.extractHeightFromJSON(json);
+            if (height != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        heightIri,
+                        height,
                         data.getVisibility(),
                         getAuthorizations()
                 );
