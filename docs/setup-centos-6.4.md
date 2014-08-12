@@ -359,7 +359,7 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
 
         sudo /opt/jetty/bin/jetty.sh restart
 
-1. browse to https://localhost:8443
+1. browse to [https://localhost:8443](https://localhost:8443)
 1. login by entering any username (if using the `lumify-web-auth-username-only` plugin)
 
 
@@ -370,7 +370,7 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
         cd ~/lumify/examples
         zip -r ontology-dev.zip ontology-dev
 
-1. browse to https://localhost:8443/#admin=ontology:upload
+1. browse to [https://localhost:8443/#admin=ontology:upload](https://localhost:8443/#admin=ontology:upload)
 1. enter `http://lumify.io/dev` as the Document IRI
 1. choose `ontology-dev.zip` as the OWL File
 1. click Submit
