@@ -90,7 +90,10 @@ require([
 
                             this.select('a')
                                 .attr('href', function(d) {
-                                    return 'https://github.com/lumifyio/lumify/search?q=' + d.className + '.java';
+                                    if ((/^io\.lumify\./).test(d.className)) {
+                                        return 'https://github.com/lumifyio/lumify/search?q=' + d.className + '.java';
+                                    }
+                                    return 'https://github.com/search?q=' + d.className + '.java&type=Code';
                                 })
                                 .text(function(d) {
                                     return d.className;
