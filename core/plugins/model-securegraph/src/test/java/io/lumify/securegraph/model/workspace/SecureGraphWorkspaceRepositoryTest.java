@@ -119,12 +119,12 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edge between workspace and user1
 
-        assertNull("Should not have access", graph.getVertex(workspace.getId(), new InMemoryAuthorizations()));
-        InMemoryAuthorizations authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
-        assertNotNull("Should have access", graph.getVertex(workspace.getId(), authorizations));
+        assertNull("Should not have access", graph.getVertex(workspace.getWorkspaceId(), new InMemoryAuthorizations()));
+        InMemoryAuthorizations authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace.getWorkspaceId());
+        assertNotNull("Should have access", graph.getVertex(workspace.getWorkspaceId(), authorizations));
 
-        Workspace foundWorkspace = workspaceRepository.findById(workspace.getId(), user1);
-        assertEquals(workspace.getId(), foundWorkspace.getId());
+        Workspace foundWorkspace = workspaceRepository.findById(workspace.getWorkspaceId(), user1);
+        assertEquals(workspace.getWorkspaceId(), foundWorkspace.getWorkspaceId());
     }
 
     @Test
@@ -176,14 +176,14 @@ public class SecureGraphWorkspaceRepositoryTest {
             fail("user1 should not have access to user2's workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user1, ex.getUser());
-            assertEquals(user2Workspaces.get(0).getId(), ex.getResourceId());
+            assertEquals(user2Workspaces.get(0).getWorkspaceId(), ex.getResourceId());
         }
 
         idGenerator.push(workspace3Id + "to" + user2.getUserId());
         workspaceRepository.updateUserOnWorkspace(user2Workspaces.get(0), user1.getUserId(), WorkspaceAccess.READ, user2);
         assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
         assertEquals(startingEdgeCount + 4, graph.getAllEdges().size()); // +4 = the edges between workspaces and users
-        List<WorkspaceUser> usersWithAccess = workspaceRepository.findUsersWithAccess(user2Workspaces.get(0).getId(), user2);
+        List<WorkspaceUser> usersWithAccess = workspaceRepository.findUsersWithAccess(user2Workspaces.get(0).getWorkspaceId(), user2);
         boolean foundUser1 = false;
         boolean foundUser2 = false;
         for (WorkspaceUser userWithAccess : usersWithAccess) {
@@ -205,7 +205,7 @@ public class SecureGraphWorkspaceRepositoryTest {
             fail("user1 should not have write access to user2's workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user1, ex.getUser());
-            assertEquals(user2Workspaces.get(0).getId(), ex.getResourceId());
+            assertEquals(user2Workspaces.get(0).getWorkspaceId(), ex.getResourceId());
         }
 
         try {
@@ -213,7 +213,7 @@ public class SecureGraphWorkspaceRepositoryTest {
             fail("user1 should not have write access to user2's workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user1, ex.getUser());
-            assertEquals(user2Workspaces.get(0).getId(), ex.getResourceId());
+            assertEquals(user2Workspaces.get(0).getWorkspaceId(), ex.getResourceId());
         }
 
         workspaceRepository.updateUserOnWorkspace(user2Workspaces.get(0), user1.getUserId(), WorkspaceAccess.WRITE, user2);
@@ -247,7 +247,7 @@ public class SecureGraphWorkspaceRepositoryTest {
             fail("user2 should not have write access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
-            assertEquals(workspace.getId(), ex.getResourceId());
+            assertEquals(workspace.getWorkspaceId(), ex.getResourceId());
         }
 
         idGenerator.push(workspaceId + "_to_" + entity1Vertex.getId());
@@ -270,7 +270,7 @@ public class SecureGraphWorkspaceRepositoryTest {
             fail("user2 should not have read access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
-            assertEquals(workspace.getId(), ex.getResourceId());
+            assertEquals(workspace.getWorkspaceId(), ex.getResourceId());
         }
 
         try {
@@ -278,7 +278,7 @@ public class SecureGraphWorkspaceRepositoryTest {
             fail("user2 should not have write access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
-            assertEquals(workspace.getId(), ex.getResourceId());
+            assertEquals(workspace.getWorkspaceId(), ex.getResourceId());
         }
 
         workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);

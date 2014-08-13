@@ -789,6 +789,7 @@ define([
                             };
                         });
                         self.trigger(document, 'updateVertices', { vertices: updates });
+                        self.fit(cy);
                     }
                 }, LAYOUT_OPTIONS[layout] || {});
 
@@ -1284,6 +1285,8 @@ define([
                     var $this = $(this), command = $this.text();
                     $this.text(F.string.shortcut($this.text()));
                 });
+
+                self.bindContextMenuClickEvent();
 
                 Controls.attachTo(self.select('graphToolsSelector'));
 

@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class SqlUser implements User {
-    private int id;
+    private String userId;
     private String username;
     private String encodedPasswordHash;
     private String encodedPasswordSalt;
@@ -35,21 +35,15 @@ public class SqlUser implements User {
     private SqlWorkspace currentWorkspace;
     private List<SqlWorkspaceUser> sqlWorkspaceUserList;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id", unique = true)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
-    @Transient
+    @Id
+    @Column(name = "user_id", unique = true)
     public String getUserId() {
-        return Integer.toString(id);
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -195,7 +189,7 @@ public class SqlUser implements User {
     @Override
     @Transient
     public String getCurrentWorkspaceId() {
-        return currentWorkspace != null ? currentWorkspace.getId() : null;
+        return currentWorkspace != null ? currentWorkspace.getWorkspaceId() : null;
     }
 
     @ManyToOne()

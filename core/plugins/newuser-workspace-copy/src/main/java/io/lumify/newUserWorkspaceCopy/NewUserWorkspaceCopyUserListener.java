@@ -40,7 +40,7 @@ public class NewUserWorkspaceCopyUserListener implements UserListener {
                 workspaceRepository.setTitle(newWorkspace, newWorkspaceTitle, user);
             }
 
-            this.userRepository.setCurrentWorkspace(user.getUserId(), newWorkspace.getId());
+            this.userRepository.setCurrentWorkspace(user.getUserId(), newWorkspace.getWorkspaceId());
         } catch (Exception ex) {
             LOGGER.error("Could not share workspace", ex);
         }

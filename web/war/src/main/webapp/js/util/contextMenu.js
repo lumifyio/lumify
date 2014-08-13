@@ -29,20 +29,11 @@ define([
                 altKey = event.altKey;
                 ctrlKey = event.ctrlKey;
                 mousedown = true;
-
-                if (altKey || ctrlKey) {
-                    if (altKey) {
-                        event.stopPropagation();
-                    }
-                }
             }, true);
 
             document.addEventListener('mouseup', function(event) {
                 mousedown = false;
                 if (altKey || ctrlKey || queueContextMenuEvent) {
-                    if (altKey) {
-                        event.stopPropagation();
-                    }
                     if (queueContextMenuEvent && distance([event.pageX, event.pageY], downPosition) < 20) {
                         self.triggerContextMenu(event);
                     }

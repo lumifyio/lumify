@@ -19,12 +19,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
+import org.securegraph.inmemory.InMemoryGraph;
 import org.securegraph.util.IterableUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public class SqlUserRepositoryTest {
@@ -34,19 +36,20 @@ public class SqlUserRepositoryTest {
 
     @Mock
     private AuthorizationRepository authorizationRepository;
+    private InMemoryGraph graph;
     private HibernateSessionManager sessionManager;
 
     @Before
     public void setup() {
+        graph = new InMemoryGraph();
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionManager = new HibernateSessionManager(configuration.buildSessionFactory(serviceRegistryBuilder));
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();
-        ;
         UserListenerUtil userListenerUtil = new UserListenerUtil();
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, sessionManager, authorizationRepository, userListenerUtil);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, sessionManager, authorizationRepository, userListenerUtil, graph);
     }
 
     @After
@@ -66,7 +69,6 @@ public class SqlUserRepositoryTest {
         assertNull(sqlUser2.getPasswordSalt());
         assertEquals("def", sqlUser2.getUsername());
         assertEquals("test user2", sqlUser2.getDisplayName());
-        assertEquals(2, sqlUser2.getId());
         assertEquals("OFFLINE", sqlUser2.getUserStatus());
 
         SqlUser sqlUser3 = (SqlUser) sqlUserRepository.addUser("ghi", "test user3", null, "&gdja81", new String[0]);
@@ -75,7 +77,6 @@ public class SqlUserRepositoryTest {
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
         assertEquals("ghi", sqlUser3.getUsername());
         assertEquals("test user3", sqlUser3.getDisplayName());
-        assertEquals(3, sqlUser3.getId());
         assertEquals("OFFLINE", sqlUser3.getUserStatus());
     }
 
@@ -87,14 +88,14 @@ public class SqlUserRepositoryTest {
 
     @Test
     public void testFindById() throws Exception {
-        sqlUserRepository.addUser("12345", "test user", null, "&gdja81", new String[0]);
-        SqlUser user = (SqlUser) sqlUserRepository.findById("1");
+        SqlUser addedUser = (SqlUser) sqlUserRepository.addUser("12345", "test user", null, "&gdja81", new String[0]);
+        SqlUser user = (SqlUser) sqlUserRepository.findById(addedUser.getUserId());
         byte[] salt = user.getPasswordSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
         assertEquals("12345", user.getUsername());
         assertEquals("test user", user.getDisplayName());
-        assertEquals(1, user.getId());
+        assertEquals(user.getUserId(), addedUser.getUserId());
         assertEquals("OFFLINE", user.getUserStatus());
 
         assertNull(sqlUserRepository.findById("2"));
@@ -144,7 +145,7 @@ public class SqlUserRepositoryTest {
     @Test(expected = LumifyException.class)
     public void testSetPasswordWithNonExistingUser() {
         SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(1);
+        sqlUser.setUserId("1");
         sqlUserRepository.setPassword(sqlUser, "123");
     }
 
@@ -169,34 +170,34 @@ public class SqlUserRepositoryTest {
 
     @Test(expected = LumifyException.class)
     public void testIsPasswordValidWithNonExisitingUser() {
-        sqlUserRepository.isPasswordValid(new SqlUser(), "123");
+        sqlUserRepository.isPasswordValid(null, "123");
     }
 
     @Test
     public void testSetCurrentWorkspace() throws Exception {
         Session session = sessionManager.getSession();
         SqlWorkspace sqlWorkspace = new SqlWorkspace();
+        sqlWorkspace.setWorkspaceId("WORKSPACE_1");
         sqlWorkspace.setDisplayTitle("workspace1");
         session.save(sqlWorkspace);
-        sessionManager.clearSession();
 
         User user = sqlUserRepository.addUser("123", "abc", null, null, new String[0]);
-        sqlUserRepository.setCurrentWorkspace(user.getUserId(), sqlWorkspace.getId());
+        sqlUserRepository.setCurrentWorkspace(user.getUserId(), sqlWorkspace.getWorkspaceId());
         SqlUser testUser = (SqlUser) sqlUserRepository.findById(user.getUserId());
         assertEquals("workspace1", testUser.getCurrentWorkspace().getDisplayTitle());
     }
 
     @Test(expected = LumifyException.class)
     public void testSetCurrentWorkspaceWithNonExisitingUser() {
-        sqlUserRepository.setCurrentWorkspace("1", new SqlWorkspace().getId());
+        sqlUserRepository.setCurrentWorkspace("1", new SqlWorkspace().getWorkspaceId());
     }
 
     @Test
     public void testSetStatus() throws Exception {
-        sqlUserRepository.addUser("123", "abc", null, null, new String[0]);
-        sqlUserRepository.setStatus("1", UserStatus.ONLINE);
+        SqlUser user = (SqlUser)sqlUserRepository.addUser("123", "abc", null, null, new String[0]);
+        sqlUserRepository.setStatus(user.getUserId(), UserStatus.ONLINE);
 
-        SqlUser testUser = (SqlUser) sqlUserRepository.findById("1");
+        SqlUser testUser = (SqlUser) sqlUserRepository.findById(user.getUserId());
         assertEquals(UserStatus.ONLINE.name(), testUser.getUserStatus());
     }
 
