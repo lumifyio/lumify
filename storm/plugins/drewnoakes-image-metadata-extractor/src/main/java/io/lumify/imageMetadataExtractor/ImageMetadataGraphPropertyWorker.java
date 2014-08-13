@@ -1,11 +1,14 @@
 package io.lumify.imageMetadataExtractor;
 
 import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.imageMetadataHelper.*;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -13,11 +16,14 @@ import org.securegraph.Property;
 import org.securegraph.type.GeoPoint;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
 
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImageMetadataGraphPropertyWorker.class);
+
     private static final String MULTI_VALUE_KEY = ImageMetadataGraphPropertyWorker.class.getName();
 
     @Override
@@ -34,7 +40,14 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File imageFile = data.getLocalFile();
         if (imageFile != null) {
-            Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+            Metadata metadata = null;
+            try {
+                metadata = ImageMetadataReader.readMetadata(imageFile);
+            } catch (ImageProcessingException e) {
+                LOGGER.debug("Could not read metadata from imageFile");
+            } catch (IOException e) {
+                LOGGER.debug("Could not read metadata from imageFile");
+            }
             if (metadata != null) {
                 Date date = DateExtractor.getDateDefault(metadata);
                 if (date != null) {
@@ -62,7 +75,7 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                 }
 
                 double fileSize = imageFile.length();
-                if (fileSize != 0){
+                if (fileSize != 0) {
                     Ontology.FILE_SIZE.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, fileSize, data.getVisibility(), getAuthorizations());
                 }
 
@@ -80,7 +93,7 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             if (metadata != null) {
                 imageWidth = DimensionsExtractor.getWidthViaMetadata(metadata);
             }
-            if (imageWidth != null){
+            if (imageWidth != null) {
                 imageWidth = DimensionsExtractor.getWidthViaBufferedImage(imageFile);
             }
             if (imageWidth != null) {
@@ -91,15 +104,12 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             if (metadata != null) {
                 imageHeight = DimensionsExtractor.getHeightViaMetadata(metadata);
             }
-            if (imageHeight != null){
+            if (imageHeight != null) {
                 imageHeight = DimensionsExtractor.getHeightViaBufferedImage(imageFile);
             }
             if (imageHeight != null) {
                 Ontology.HEIGHT.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageHeight, data.getVisibility(), getAuthorizations());
             }
-
-
-
 
 
         }
