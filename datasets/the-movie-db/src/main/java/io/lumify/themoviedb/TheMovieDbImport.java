@@ -38,6 +38,7 @@ public class TheMovieDbImport extends CommandLineBase {
     private static final String DIR_IMAGES = "images";
     private static final String DIR_PRODUCTION_COMPANIES = "productionCompanies";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat DATE_YEAR_FORMAT = new SimpleDateFormat("yyyy");
     private static final String THE_MOVIE_DB_SOURCE = "TheMovieDb.org";
     private static final String MULTI_VALUE_KEY = TheMovieDbImport.class.getName();
     private final Queue<WorkItem> workQueue = new LinkedList<WorkItem>();
@@ -267,7 +268,7 @@ public class TheMovieDbImport extends CommandLineBase {
 
         String releaseDateString = movieJson.optString("release_date");
         if (releaseDateString != null && releaseDateString.length() > 0) {
-            Date releaseDate = DATE_FORMAT.parse(releaseDateString);
+            Date releaseDate = parseDate(releaseDateString);
             TheMovieDbOntology.RELEASE_DATE.addPropertyValue(m, MULTI_VALUE_KEY, releaseDate, visibility);
         }
 
@@ -345,6 +346,8 @@ public class TheMovieDbImport extends CommandLineBase {
             }
         }
 
+        getGraph().flush();
+
         String posterImagePath = movieJson.optString("poster_path");
         if (posterImagePath != null && posterImagePath.length() > 0) {
             if (hasImageInCache(posterImagePath)) {
@@ -398,13 +401,13 @@ public class TheMovieDbImport extends CommandLineBase {
 
         String birthDateString = personJson.optString("birthday");
         if (birthDateString != null && birthDateString.length() > 0) {
-            Date birthDate = DATE_FORMAT.parse(birthDateString);
+            Date birthDate = parseDate(birthDateString);
             TheMovieDbOntology.BIRTHDATE.addPropertyValue(m, MULTI_VALUE_KEY, birthDate, visibility);
         }
 
         String deathDateString = personJson.optString("deathday");
         if (deathDateString != null && deathDateString.length() > 0) {
-            Date deathDate = DATE_FORMAT.parse(deathDateString);
+            Date deathDate = parseDate(deathDateString);
             TheMovieDbOntology.DEATH_DATE.addPropertyValue(m, MULTI_VALUE_KEY, deathDate, visibility);
         }
 
@@ -440,6 +443,8 @@ public class TheMovieDbImport extends CommandLineBase {
             getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, getAuthorizations());
         }
 
+        getGraph().flush();
+
         String profileImage = personJson.optString("profile_path");
         if (profileImage != null && profileImage.length() > 0) {
             if (hasImageInCache(profileImage)) {
@@ -448,6 +453,14 @@ public class TheMovieDbImport extends CommandLineBase {
             } else {
                 queueProfileImageDownload(personId, profileImage);
             }
+        }
+    }
+
+    private Date parseDate(String str) throws ParseException {
+        try {
+            return DATE_FORMAT.parse(str);
+        } catch (ParseException p) {
+            return DATE_YEAR_FORMAT.parse(str);
         }
     }
 
