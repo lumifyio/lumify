@@ -14,6 +14,7 @@ import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -52,8 +53,9 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         try {
             transaction = session.beginTransaction();
             String nullCurrentWorkspacesSql = "update " + SqlUser.class.getSimpleName() + " set current_workspace_id = null where current_workspace_id = :workspaceId";
-            session.createQuery(nullCurrentWorkspacesSql).setString("workspaceId", workspace.getWorkspaceId()).executeUpdate();
+            Query query = session.createQuery(nullCurrentWorkspacesSql).setString("workspaceId", workspace.getWorkspaceId());
             session.delete(workspace);
+            query.executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
