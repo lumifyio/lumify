@@ -40,11 +40,9 @@ define([
             this.on('click', {
                 findPathButtonSelector: this.onFindPathButton
             });
-
-            this.on('popoverInitialize', this.onFindPath);
         });
 
-        this.onFindPath = function() {
+        this.popoverInitialize = function() {
             this.trigger('defocusPaths');
 
             var self = this,
@@ -180,7 +178,7 @@ define([
             $target.closest('li').addClass('disabled');
 
             this.attr.hops = newHops;
-            this.onFindPath();
+            this.popoverInitialize();
         };
     }
 });

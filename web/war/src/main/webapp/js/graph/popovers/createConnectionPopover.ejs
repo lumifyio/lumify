@@ -1,6 +1,7 @@
 <div class="popover connect-dialog top">
   <div class="popover-title">
-    <%= cy.getElementById(edge.data('source')).data('truncatedTitle') %>
+    <button class="btn btn-link">Invert</button>
+    <span class="title"><%= cy.getElementById(edge.data('source')).data('truncatedTitle') %></span>
   </div>
   <div class="arrow"></div>
   <div class="popover-content">

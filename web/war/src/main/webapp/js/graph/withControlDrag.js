@@ -100,11 +100,17 @@ define([], function() {
                     });
                 }
 
-            require(['graph/popovers/withVertexPopover'], function(withVertexPopover) {
+            require(['graph/popovers/withVertexPopover', 'flight/lib/registry'], function(withVertexPopover, registry) {
                 var popovers = self.$node.lookupAllComponentsWithMixin(withVertexPopover);
                 if (popovers.length === 0 || popovers[0].attr.teardownOnTap !== false) {
                     resetCytoscape();
-                    _.invoke(popovers, 'teardown');
+                    _.delay(function() {
+                        popovers.forEach(function(p) {
+                            if (registry.findInstanceInfo(p)) {
+                                p.teardown();
+                            }
+                        })
+                    }, 500)
                 }
             });
         };
@@ -126,15 +132,14 @@ define([], function() {
         this.onEndVertexConnection = function(event, data) {
             var self = this;
 
-            state = STATE_CONNECTED;
-
             this.cytoscapeReady(function(cy) {
                 cy.off('mousemove', this.mouseDragHandler);
                 cy.nodes().unlock();
                 startControlDragTarget = null;
 
                 var edge = currentEdgeId && cy.getElementById(currentEdgeId),
-                    target = edge && cy.getElementById(edge.data('target'));
+                    target = edge && cy.getElementById(edge.data('target')),
+                    other = edge && cy.getElementById(edge.data('source'));
 
                 if (!target || target.hasClass('temp')) {
                     return this.trigger('finishedVertexConnection');
@@ -150,11 +155,13 @@ define([], function() {
                     Popover.attachTo(self.$node, {
                         cy: cy,
                         cyNode: target,
+                        otherCyNode: other,
                         edge: edge,
                         sourceVertexId: self.fromCyId(edge.data('source')),
                         targetVertexId: self.fromCyId(edge.data('target')),
                         connectionData: connectionData
                     });
+                    state = STATE_CONNECTED;
                 });
             });
         };

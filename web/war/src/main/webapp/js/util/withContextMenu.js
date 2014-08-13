@@ -22,6 +22,10 @@ define([], function() {
                 func = functionName && this[functionName],
                 args = target.data('args');
 
+            if (target.closest('li.disabled').length) {
+                event.stopPropagation();
+                return;
+            }
             if (func) {
                 if (!args) {
                     args = [];

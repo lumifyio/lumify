@@ -8,15 +8,22 @@ define([
 
     function withVertexPopover() {
 
-        this.after('teardown', function() {
-            this.dialog.remove();
+        this.before('teardown', function() {
             this.attr.cy.off('pan zoom position', this.onViewportChanges);
             this.attr.cy.off('tap', this.onTap);
+        });
+
+        this.after('teardown', function() {
+            if (this.dialog) {
+                this.dialog.remove();
+            }
         })
 
         this.after('initialize', function() {
-            if (!this.attr.cy) throw 'cy attr required';
-            if (!this.attr.cyNode || this.attr.cyNode.length !== 1) throw 'cyNode attr required: ' + this.attr.cyNode;
+            if (!this.attr.cy) throw new Error('cy attr required');
+            if (!this.attr.cyNode || this.attr.cyNode.length !== 1) {
+                throw new Error('cyNode attr required: ' + this.attr.cyNode);
+            }
 
             this.onViewportChanges = _.throttle(this.onViewportChanges.bind(this), 1000 / 30);
             this.onTap = this.onTap.bind(this);
@@ -38,7 +45,9 @@ define([
             this.onViewportChanges();
 
             this.positionDialog();
-            this.trigger('popoverInitialize');
+            if (this.popoverInitialize) {
+                this.popoverInitialize();
+            }
         };
 
         this.onTap = function() {
@@ -48,9 +57,11 @@ define([
         };
 
         this.onViewportChanges = function() {
-            this.dialogPosition = retina.pixelsToPoints(this.attr.cyNode.renderedPosition());
-            this.dialogPosition.y -= this.attr.cyNode.height() / 2 * this.attr.cy.zoom();
-            this.positionDialog();
+            if (!this.ignoreViewportChanges) {
+                this.dialogPosition = retina.pixelsToPoints(this.attr.cyNode.renderedPosition());
+                this.dialogPosition.y -= this.attr.cyNode.height() / 2 * this.attr.cy.zoom();
+                this.positionDialog();
+            }
         };
 
         this.positionDialog = function() {
