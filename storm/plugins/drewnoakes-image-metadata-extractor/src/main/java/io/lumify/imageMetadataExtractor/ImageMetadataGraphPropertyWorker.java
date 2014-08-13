@@ -61,16 +61,6 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                     Ontology.HEADING.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
                 }
 
-                Integer imageWidth = DimensionsExtractor.getWidth(metadata);
-                if (imageWidth != null){
-                    Ontology.WIDTH.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageWidth, data.getVisibility(), getAuthorizations());
-                }
-
-                Integer imageHeight = DimensionsExtractor.getHeight(metadata);
-                if (imageHeight != null){
-                    Ontology.HEIGHT.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageHeight, data.getVisibility(), getAuthorizations());
-                }
-
                 double fileSize = imageFile.length();
                 if (fileSize != 0){
                     Ontology.FILE_SIZE.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, fileSize, data.getVisibility(), getAuthorizations());
@@ -85,6 +75,33 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                     }
                 }
             }
+
+            Integer imageWidth = null;
+            if (metadata != null) {
+                imageWidth = DimensionsExtractor.getWidthViaMetadata(metadata);
+            }
+            if (imageWidth != null){
+                imageWidth = DimensionsExtractor.getWidthViaBufferedImage(imageFile);
+            }
+            if (imageWidth != null) {
+                Ontology.WIDTH.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageWidth, data.getVisibility(), getAuthorizations());
+            }
+
+            Integer imageHeight = null;
+            if (metadata != null) {
+                imageHeight = DimensionsExtractor.getHeightViaMetadata(metadata);
+            }
+            if (imageHeight != null){
+                imageHeight = DimensionsExtractor.getHeightViaBufferedImage(imageFile);
+            }
+            if (imageHeight != null) {
+                Ontology.HEIGHT.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageHeight, data.getVisibility(), getAuthorizations());
+            }
+
+
+
+
+
         }
 
     }

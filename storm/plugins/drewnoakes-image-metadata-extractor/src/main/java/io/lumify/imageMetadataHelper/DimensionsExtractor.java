@@ -3,8 +3,17 @@ package io.lumify.imageMetadataHelper;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class DimensionsExtractor {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DimensionsExtractor.class);
+
     private static enum Dimension {
         WIDTH, HEIGHT
     }
@@ -16,8 +25,8 @@ public class DimensionsExtractor {
      * @param metadata
      * @return
      */
-    public static Integer getWidth(Metadata metadata) {
-        return getDimension(metadata, Dimension.WIDTH);
+    public static Integer getWidthViaMetadata(Metadata metadata) {
+        return getDimensionViaMetadata(metadata, Dimension.WIDTH);
     }
 
     /**
@@ -27,12 +36,12 @@ public class DimensionsExtractor {
      * @param metadata
      * @return
      */
-    public static Integer getHeight(Metadata metadata) {
-        return getDimension(metadata, Dimension.HEIGHT);
+    public static Integer getHeightViaMetadata(Metadata metadata) {
+        return getDimensionViaMetadata(metadata, Dimension.HEIGHT);
     }
 
 
-    private static Integer getDimension(Metadata metadata, DimensionsExtractor.Dimension dimensionType) {
+    private static Integer getDimensionViaMetadata(Metadata metadata, DimensionsExtractor.Dimension dimensionType) {
         if (dimensionType == null ){
             return null;
         }
@@ -68,4 +77,39 @@ public class DimensionsExtractor {
 
         return null;
     }
+
+    /**
+     * Get the width of the image file by loading the file as a buffered image.
+     * @return
+     */
+    public static Integer getWidthViaBufferedImage(File imageFile){
+        try {
+            BufferedImage bufImage = ImageIO.read(imageFile);
+            int width = bufImage.getWidth();
+            return width;
+        } catch (IOException e){
+            if (imageFile != null) {
+                LOGGER.debug("Could not read imageFile: " + imageFile.getName());
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the height of the image file by loading a buffered image.
+     * @return
+     */
+    public static Integer getHeightViaBufferedImage(File imageFile){
+        try {
+            BufferedImage bufImage = ImageIO.read(imageFile);
+            int height = bufImage.getHeight();
+            return height;
+        } catch (IOException e){
+            if (imageFile != null) {
+                LOGGER.debug("Could not read imageFile: " + imageFile.getName());
+            }
+        }
+        return null;
+    }
+
 }
