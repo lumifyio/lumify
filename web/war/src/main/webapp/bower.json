@@ -27,7 +27,7 @@
     "requirejs-promise": "~1.1.0",
     "requirejs-text": "~2.0.10",
     "sf": "git://github.com/joeferner/node-sf.git",
-    "threejs": "*",
+    "threejs": "git://github.com/mrdoob/three.js/#r67",
     "underscore": "~1.6.0",
     "video.js": "4.5.2",
     "bootstrap-timepicker": "~0.2.6",
