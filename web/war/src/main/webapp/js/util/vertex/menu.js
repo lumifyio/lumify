@@ -190,10 +190,12 @@ define([
 
             this.positionMenu(this.attr.position);
 
-            $(document).off('.vertexMenu').on('click.vertexMenu', function() {
-                $(document).off('.vertexMenu');
-                self.teardown();
-            });
+            _.defer(function() {
+                $(document).off('.vertexMenu').on('click.vertexMenu', function() {
+                    $(document).off('.vertexMenu');
+                    self.teardown();
+                });
+            })
         }
 
         this.positionMenu = function(position) {
