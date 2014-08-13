@@ -789,6 +789,7 @@ define([
                             };
                         });
                         self.trigger(document, 'updateVertices', { vertices: updates });
+                        self.fit(cy);
                     }
                 }, LAYOUT_OPTIONS[layout] || {});
 
