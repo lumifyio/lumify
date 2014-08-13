@@ -56,7 +56,7 @@ public class SqlWorkspace implements Workspace {
         this.sqlWorkspaceUserList = sqlWorkspaceUserList;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workspace")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workspace", cascade = CascadeType.ALL)
     public List<SqlWorkspaceVertex> getSqlWorkspaceVertices() {
         return sqlWorkspaceVertices;
     }
