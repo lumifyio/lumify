@@ -4,9 +4,7 @@ import com.google.inject.Inject;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.OntologyRepositoryBase;
-import io.lumify.core.model.properties.types.DoubleLumifyProperty;
-import io.lumify.core.model.properties.types.GeoPointLumifyProperty;
-import io.lumify.core.model.properties.types.StringLumifyProperty;
+import io.lumify.core.model.properties.types.*;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -108,10 +106,14 @@ public class OwlToJava extends CommandLineBase {
         String type;
         if ("http://www.w3.org/2001/XMLSchema#double".equals(rangeIri)) {
             type = DoubleLumifyProperty.class.getSimpleName();
+        } else if ("http://www.w3.org/2001/XMLSchema#int".equals(rangeIri)) {
+            type = IntegerLumifyProperty.class.getSimpleName();
         } else if ("http://lumify.io#geolocation".equals(rangeIri)) {
             type = GeoPointLumifyProperty.class.getSimpleName();
         } else if ("http://www.w3.org/2001/XMLSchema#string".equals(rangeIri)) {
             type = StringLumifyProperty.class.getSimpleName();
+        } else if ("http://www.w3.org/2001/XMLSchema#dateTime".equals(rangeIri)) {
+            type = DateLumifyProperty.class.getSimpleName();
         } else {
             throw new LumifyException("Could not map range type " + rangeIri);
         }

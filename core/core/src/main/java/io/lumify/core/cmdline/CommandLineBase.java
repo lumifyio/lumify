@@ -19,7 +19,6 @@ import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 
 import java.net.URI;
-import java.util.HashMap;
 
 public abstract class CommandLineBase {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(CommandLineBase.class);

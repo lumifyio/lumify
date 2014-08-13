@@ -20,5 +20,6 @@
         <module>twitter</module>
         <module>world-factbook</module>
         <module>gdelt</module>
+        <module>the-movie-db</module>
     </modules>
 </project>
