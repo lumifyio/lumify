@@ -16,7 +16,9 @@ import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.type.GeoPoint;
 
+import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -126,154 +128,92 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         boolean isAudio = mimeType.startsWith("audio");
-
-        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        Double duration = null;
-        if (json != null) {
-            duration = DurationUtil.extractDurationFromJSON(json);
-        }
+        File localFile = data.getLocalFile();
 
         Map<String, Object> metadata = data.createPropertyMetadata();
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
+        ArrayList<String> propertiesToQueue = new ArrayList<String>();
 
-        String durationIri = isAudio ? audioDurationIri : videoDurationIri;
-        if (duration != null) {
-            m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
-        }
-
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         if (json != null) {
-            int videoRotation = 0;
-            Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
-            if (nullableRotation != null) {
-                videoRotation = nullableRotation;
+
+            String durationIri = isAudio ? audioDurationIri : videoDurationIri;
+            Double duration = DurationUtil.extractDurationFromJSON(json);
+            if (duration != null) {
+                m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
+                propertiesToQueue.add(durationIri);
             }
-            data.getElement().addPropertyValue(
-                    PROPERTY_KEY,
-                    videoRotationIri,
-                    videoRotation,
-                    data.getVisibility(),
-                    getAuthorizations());
 
-
-            GeoPoint geoPoint = GeoLocationUtil.extractGeoLocationFromJSON(json);
-            if (geoPoint != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        geoLocationIri,
-                        geoPoint,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
+            GeoPoint geoLocation = GeoLocationUtil.extractGeoLocationFromJSON(json);
+            if (geoLocation != null) {
+                m.addPropertyValue(PROPERTY_KEY, geoLocationIri, geoLocation, metadata, data.getVisibility());
+                propertiesToQueue.add(geoLocationIri);
             }
 
             Date lastModifyDate = DateUtil.extractLastModifyDateFromJSON(json);
             if (lastModifyDate != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        lastModifyDateIri,
-                        lastModifyDate,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
+                m.addPropertyValue(PROPERTY_KEY, lastModifyDateIri, lastModifyDate, metadata, data.getVisibility());
+                propertiesToQueue.add(lastModifyDateIri);
             }
 
             Date dateTaken = DateUtil.extractDateTakenFromJSON(json);
             if (dateTaken != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        dateTakenIri,
-                        dateTaken,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
+                m.addPropertyValue(PROPERTY_KEY, dateTakenIri, dateTaken, metadata, data.getVisibility());
+                propertiesToQueue.add(dateTakenIri);
             }
 
             String deviceMake = MakeAndModelUtil.extractMakeFromJSON(json);
             if (deviceMake != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        deviceMakeIri,
-                        deviceMake,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
+                m.addPropertyValue(PROPERTY_KEY, deviceMakeIri, deviceMake, metadata, data.getVisibility());
+                propertiesToQueue.add(deviceMakeIri);
             }
 
             String deviceModel = MakeAndModelUtil.extractModelFromJSON(json);
             if (deviceModel != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        deviceModelIri,
-                        deviceModel,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
+                m.addPropertyValue(PROPERTY_KEY, deviceModelIri, deviceModel, metadata, data.getVisibility());
+                propertiesToQueue.add(deviceModelIri);
             }
 
             Integer width = DimensionsUtil.extractWidthFromJSON(json);
             if (width != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        widthIri,
-                        width,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
+                m.addPropertyValue(PROPERTY_KEY, widthIri, width, metadata, data.getVisibility());
+                propertiesToQueue.add(widthIri);
             }
 
             Integer height = DimensionsUtil.extractHeightFromJSON(json);
             if (height != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        heightIri,
-                        height,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
+                m.addPropertyValue(PROPERTY_KEY, heightIri, height, metadata, data.getVisibility());
+                propertiesToQueue.add(heightIri);
             }
-
-            Integer fileSize = FileSizeUtil.extractFileSizeFromJSON(json);
-            if (fileSize != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        fileSizeIri,
-                        fileSize,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-            }
-
-            String format = FileFormatUtil.extractFileFormatFromJSON(json);
-            if (format != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        formatIri,
-                        format,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-            }
-
 
             String videoMetadataJSONString = json.toString();
             if (videoMetadataJSONString != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        metadataIri,
-                        videoMetadataJSONString,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-
-
+                m.addPropertyValue(PROPERTY_KEY, metadataIri, videoMetadataJSONString, metadata, data.getVisibility());
+                propertiesToQueue.add(metadataIri);
             }
+        }
 
-            m.save(getAuthorizations());
-            getGraph().flush();
-
-            if (duration != null) {
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, durationIri);
+        //Always add a videoRotation property, regardless of whether there is a json or not.
+        int videoRotation = 0;
+        if (json != null) {
+            Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
+            if (nullableRotation != null) {
+                videoRotation = nullableRotation;
             }
+        }
+        m.addPropertyValue(PROPERTY_KEY, videoRotationIri, videoRotation, metadata, data.getVisibility());
+        propertiesToQueue.add(videoRotationIri);
+
+        Integer fileSize = FileSizeUtil.extractFileSize(localFile);
+        if (fileSize != null) {
+            m.addPropertyValue(PROPERTY_KEY, fileSizeIri, fileSize, metadata, data.getVisibility());
+            propertiesToQueue.add(fileSizeIri);
+        }
+
+        m.save(getAuthorizations());
+        getGraph().flush();
+        for (String propertyName : propertiesToQueue) {
+            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, propertyName);
         }
     }
 

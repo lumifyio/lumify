@@ -4,8 +4,12 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.PostMimeTypeWorker;
 import io.lumify.imageMetadataHelper.ImageTransformExtractor;
 import org.securegraph.Authorizations;
+import org.securegraph.Vertex;
+import org.securegraph.mutation.ExistingElementMutation;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
     private static final String MULTI_VALUE_PROPERTY_KEY = ImageOrientationPostMimeTypeWorker.class.getName();
@@ -17,26 +21,24 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
         }
 
         File localFile = getLocalFileForRaw(data.getElement());
+        Map<String, Object> metadata = data.createPropertyMetadata();
+        ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
+        ArrayList<String> propertiesToQueue = new ArrayList<String>();
+
         ImageTransform imageTransform = ImageTransformExtractor.getImageTransform(localFile);
         if (imageTransform != null) {
-            data.getElement().addPropertyValue(
-                    MULTI_VALUE_PROPERTY_KEY,
-                    Ontology.Y_AXIS_FLIP_NEEDED.getPropertyName(),
-                    imageTransform.isYAxisFlipNeeded(),
-                    data.getVisibility(),
-                    authorizations);
+            boolean yAxisFlipNeeded = imageTransform.isYAxisFlipNeeded();
+            m.addPropertyValue(MULTI_VALUE_PROPERTY_KEY, Ontology.yAxisFlipNeededIri, yAxisFlipNeeded, metadata, data.getVisibility());
+            propertiesToQueue.add(Ontology.yAxisFlipNeededIri);
 
-            data.getElement().addPropertyValue(
-                    MULTI_VALUE_PROPERTY_KEY,
-                    Ontology.CW_ROTATION_NEEDED.getPropertyName(),
-                    imageTransform.getCWRotationNeeded(),
-                    data.getVisibility(),
-                    authorizations);
+            int cwRotationNeeded = imageTransform.getCWRotationNeeded();
+            m.addPropertyValue(MULTI_VALUE_PROPERTY_KEY, Ontology.cwRotationNeededIri, cwRotationNeeded, metadata, data.getVisibility());
+            propertiesToQueue.add(Ontology.cwRotationNeededIri);
 
             getGraph().flush();
-
-            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY, Ontology.Y_AXIS_FLIP_NEEDED.getPropertyName());
-            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY, Ontology.CW_ROTATION_NEEDED.getPropertyName());
+            for (String propertyName : propertiesToQueue) {
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY, propertyName);
+            }
         }
     }
 

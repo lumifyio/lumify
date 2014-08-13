@@ -15,6 +15,8 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Element;
 import org.securegraph.Property;
+import org.securegraph.Vertex;
+import org.securegraph.mutation.ExistingElementMutation;
 
 import java.io.InputStream;
 import java.util.List;
@@ -41,17 +43,13 @@ public class SentimentAnalysisGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+        ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         String text = IOUtils.toString(in, "UTF-8");
         Double sentiment = calculateSentimentForText(pipeline, text);
 
         if (sentiment != null) {
-            data.getElement().addPropertyValue(
-                    MULTI_VALUE_KEY,
-                    sentimentIri,
-                    sentiment,
-                    data.getVisibility(),
-                    getAuthorizations()
-            );
+            m.addPropertyValue(MULTI_VALUE_KEY, sentimentIri, sentiment, data.getVisibility());
+            m.save(getAuthorizations());
             getGraph().flush();
             getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_KEY, sentimentIri);
         }

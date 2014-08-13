@@ -10,15 +10,20 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.imageMetadataHelper.*;
+import io.lumify.storm.util.FileSizeUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
+import org.securegraph.Vertex;
+import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.type.GeoPoint;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
@@ -37,80 +42,96 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+        Map<String, Object> metadata = data.createPropertyMetadata();
+        ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
+        ArrayList<String> propertiesToQueue = new ArrayList<String>();
         File imageFile = data.getLocalFile();
         if (imageFile != null) {
-            Metadata metadata = null;
+            Metadata imageMetadata = null;
             try {
-                metadata = ImageMetadataReader.readMetadata(imageFile);
+                imageMetadata = ImageMetadataReader.readMetadata(imageFile);
             } catch (ImageProcessingException e) {
                 LOGGER.debug("Could not read metadata from imageFile");
             } catch (IOException e) {
                 LOGGER.debug("Could not read metadata from imageFile");
             }
-            if (metadata != null) {
-                Date date = DateExtractor.getDateDefault(metadata);
-                if (date != null) {
-                    Ontology.DATE_TAKEN.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, date, data.getVisibility(), getAuthorizations());
+            if (imageMetadata != null) {
+                Date dateTaken = DateExtractor.getDateDefault(imageMetadata);
+                if (dateTaken != null) {
+                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.dateTakenIri, dateTaken, metadata, data.getVisibility());
+                    propertiesToQueue.add(Ontology.dateTakenIri);
                 }
 
-                String deviceMake = MakeExtractor.getMake(metadata);
+                String deviceMake = MakeExtractor.getMake(imageMetadata);
                 if (deviceMake != null) {
-                    Ontology.DEVICE_MAKE.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, deviceMake, data.getVisibility(), getAuthorizations());
+                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.deviceMakeIri, deviceMake, metadata, data.getVisibility());
+                    propertiesToQueue.add(Ontology.deviceMakeIri);
                 }
 
-                String deviceModel = ModelExtractor.getModel(metadata);
+                String deviceModel = ModelExtractor.getModel(imageMetadata);
                 if (deviceModel != null) {
-                    Ontology.DEVICE_MODEL.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, deviceModel, data.getVisibility(), getAuthorizations());
+                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.deviceModelIri, deviceModel, metadata, data.getVisibility());
+                    propertiesToQueue.add(Ontology.deviceModelIri);
                 }
 
-                GeoPoint imageLocation = GeoPointExtractor.getGeoPoint(metadata);
-                if (imageLocation != null) {
-                    Ontology.GEO_LOCATION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageLocation, data.getVisibility(), getAuthorizations());
+                GeoPoint geoLocation = GeoPointExtractor.getGeoPoint(imageMetadata);
+                if (geoLocation != null) {
+                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.geoLocationIri, geoLocation, metadata, data.getVisibility());
+                    propertiesToQueue.add(Ontology.geoLocationIri);
                 }
 
-                Double imageFacingDirection = HeadingExtractor.getImageHeading(metadata);
-                if (imageFacingDirection != null) {
-                    Ontology.HEADING.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
+                Double heading = HeadingExtractor.getImageHeading(imageMetadata);
+                if (heading != null) {
+                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.headingIri, heading, metadata, data.getVisibility());
+                    propertiesToQueue.add(Ontology.headingIri);
                 }
 
-                double fileSize = imageFile.length();
-                if (fileSize != 0) {
-                    Ontology.FILE_SIZE.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, fileSize, data.getVisibility(), getAuthorizations());
-                }
-
-
-                JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(metadata);
+                JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(imageMetadata);
                 if (imageMetadataJSON != null) {
                     String imageMetadataJSONString = imageMetadataJSON.toString();
                     if (imageMetadataJSONString != null) {
-                        Ontology.METADATA.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageMetadataJSONString, data.getVisibility(), getAuthorizations());
+                        m.addPropertyValue(MULTI_VALUE_KEY, Ontology.metadataIri, imageMetadataJSONString, metadata, data.getVisibility());
+                        propertiesToQueue.add(Ontology.metadataIri);
                     }
                 }
             }
 
-            Integer imageWidth = null;
-            if (metadata != null) {
-                imageWidth = DimensionsExtractor.getWidthViaMetadata(metadata);
+            Integer width = null;
+            if (imageMetadata != null) {
+                width = DimensionsExtractor.getWidthViaMetadata(imageMetadata);
             }
-            if (imageWidth != null) {
-                imageWidth = DimensionsExtractor.getWidthViaBufferedImage(imageFile);
+            if (width != null) {
+                width = DimensionsExtractor.getWidthViaBufferedImage(imageFile);
             }
-            if (imageWidth != null) {
-                Ontology.WIDTH.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageWidth, data.getVisibility(), getAuthorizations());
-            }
-
-            Integer imageHeight = null;
-            if (metadata != null) {
-                imageHeight = DimensionsExtractor.getHeightViaMetadata(metadata);
-            }
-            if (imageHeight != null) {
-                imageHeight = DimensionsExtractor.getHeightViaBufferedImage(imageFile);
-            }
-            if (imageHeight != null) {
-                Ontology.HEIGHT.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageHeight, data.getVisibility(), getAuthorizations());
+            if (width != null) {
+                m.addPropertyValue(MULTI_VALUE_KEY, Ontology.widthIri, width, metadata, data.getVisibility());
+                propertiesToQueue.add(Ontology.widthIri);
             }
 
+            Integer height = null;
+            if (imageMetadata != null) {
+                height = DimensionsExtractor.getHeightViaMetadata(imageMetadata);
+            }
+            if (height != null) {
+                height = DimensionsExtractor.getHeightViaBufferedImage(imageFile);
+            }
+            if (height != null) {
+                m.addPropertyValue(MULTI_VALUE_KEY, Ontology.heightIri, height, metadata, data.getVisibility());
+                propertiesToQueue.add(Ontology.heightIri);
+            }
 
+            Integer fileSize = FileSizeUtil.extractFileSize(imageFile);
+            if (fileSize != null) {
+                m.addPropertyValue(MULTI_VALUE_KEY, Ontology.fileSizeIri, fileSize, metadata, data.getVisibility());
+                propertiesToQueue.add(Ontology.fileSizeIri);
+            }
+
+        }
+
+        m.save(getAuthorizations());
+        getGraph().flush();
+        for (String propertyName : propertiesToQueue) {
+            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_KEY, propertyName);
         }
     }
 
