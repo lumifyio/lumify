@@ -233,7 +233,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             }
 
             Integer fileSize = FileSizeUtil.extractFileSizeFromJSON(json);
-            if (fileSize != null){
+            if (fileSize != null) {
                 data.getElement().addPropertyValue(
                         PROPERTY_KEY,
                         fileSizeIri,
@@ -244,7 +244,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             }
 
             String format = FileFormatUtil.extractFileFormatFromJSON(json);
-            if (format != null){
+            if (format != null) {
                 data.getElement().addPropertyValue(
                         PROPERTY_KEY,
                         formatIri,
@@ -254,27 +254,26 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                 );
             }
 
-            JSONObject videoMetadataJSON = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-            if (videoMetadataJSON != null){
-                String videoMetadataJSONString = videoMetadataJSON.toString();
-                if (videoMetadataJSONString != null){
-                    data.getElement().addPropertyValue(
-                            PROPERTY_KEY,
-                            metadataIri,
-                            videoMetadataJSONString,
-                            data.getVisibility(),
-                            getAuthorizations()
-                    );
-                }
+
+            String videoMetadataJSONString = json.toString();
+            if (videoMetadataJSONString != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        metadataIri,
+                        videoMetadataJSONString,
+                        data.getVisibility(),
+                        getAuthorizations()
+                );
+
+
             }
 
-        }
+            m.save(getAuthorizations());
+            getGraph().flush();
 
-        m.save(getAuthorizations());
-        getGraph().flush();
-
-        if (duration != null) {
-            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, durationIri);
+            if (duration != null) {
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, durationIri);
+            }
         }
     }
 
