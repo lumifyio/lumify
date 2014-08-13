@@ -95,7 +95,7 @@ public class DateUtil {
             Date parsedDate = format.parse(dateTaken);
             return parsedDate;
         } catch (ParseException e) {
-            LOGGER.error("ParseException: could not parse dateTaken: " + dateTaken + " with date format: " + dateFormat);
+            LOGGER.debug("ParseException: could not parse dateTaken: " + dateTaken + " with date format: " + dateFormat);
         }
 
         return null;
@@ -109,7 +109,7 @@ public class DateUtil {
             Date parsedDate = format.parse(lastModifyDateInUTC);
             return parsedDate;
         } catch (ParseException e) {
-            LOGGER.error("ParseException: could not parse lastModifyDate: " + lastModifyDate + " with date format: " + dateFormat);
+            LOGGER.debug("ParseException: could not parse lastModifyDate: " + lastModifyDate + " with date format: " + dateFormat);
         }
 
         return null;
