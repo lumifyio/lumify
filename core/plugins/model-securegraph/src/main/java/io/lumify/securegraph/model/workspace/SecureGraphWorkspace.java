@@ -19,7 +19,7 @@ public class SecureGraphWorkspace implements Workspace {
     }
 
     @Override
-    public String getId() {
+    public String getWorkspaceId() {
         return workspaceId;
     }
 
@@ -30,7 +30,7 @@ public class SecureGraphWorkspace implements Workspace {
 
     public Vertex getVertex(Graph graph, Authorizations authorizations) {
         if (this.workspaceVertex == null) {
-            this.workspaceVertex = graph.getVertex(getId(), authorizations);
+            this.workspaceVertex = graph.getVertex(getWorkspaceId(), authorizations);
         }
         return this.workspaceVertex;
     }

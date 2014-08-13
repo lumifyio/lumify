@@ -13,7 +13,6 @@ import io.lumify.core.model.workspace.WorkspaceUser;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
-import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.junit.After;
@@ -22,12 +21,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.inmemory.InMemoryGraph;
 import org.securegraph.util.IterableUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -42,6 +41,7 @@ public class SqlWorkspaceRepositoryTest {
 
     @Mock
     private AuthorizationRepository authorizationRepository;
+    private InMemoryGraph graph;
 
     @Mock
     private UserListenerUtil userListenerUtil;
@@ -49,14 +49,15 @@ public class SqlWorkspaceRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
+        graph = new InMemoryGraph();
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionManager = new HibernateSessionManager(configuration.buildSessionFactory(serviceRegistryBuilder));
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, sessionManager, authorizationRepository, userListenerUtil);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository(sqlUserRepository, sessionManager);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, sessionManager, authorizationRepository, userListenerUtil, graph);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository(sqlUserRepository, sessionManager, graph);
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, null, new String[0]);
     }
 
@@ -78,14 +79,14 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", testUser);
 
         SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(2);
+        sqlUser.setUserId("2");
         sqlWorkspaceRepository.delete(workspace, sqlUser);
     }
 
     @Test
     public void testDeleteWhenUsersHaveCurrentWorkspaceReference() {
         SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", testUser);
-        sqlUserRepository.setCurrentWorkspace(testUser.getUserId(), workspace.getId());
+        sqlUserRepository.setCurrentWorkspace(testUser.getUserId(), workspace.getWorkspaceId());
         sqlWorkspaceRepository.delete(workspace, testUser);
 
         sessionManager.getSession().refresh(testUser);
@@ -95,22 +96,22 @@ public class SqlWorkspaceRepositoryTest {
     @Test
     public void testAdd() throws Exception {
         SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace", testUser);
-        assertEquals("1", workspace.getWorkspaceCreator().getUserId());
+        assertEquals(testUser.getUserId(), workspace.getWorkspaceCreator().getUserId());
         assertEquals("test workspace", workspace.getDisplayTitle());
         assertEquals(1, workspace.getSqlWorkspaceUserList().size());
 
         SqlWorkspaceUser sqlWorkspaceUser = workspace.getSqlWorkspaceUserList().iterator().next();
         assertEquals(WorkspaceAccess.WRITE.toString(), sqlWorkspaceUser.getWorkspaceAccess());
-        assertEquals("1", sqlWorkspaceUser.getWorkspace().getId());
+        assertEquals(workspace.getWorkspaceId(), sqlWorkspaceUser.getWorkspace().getWorkspaceId());
     }
 
     @Test
-    public void testFindById () throws Exception {
-        SqlWorkspace workspace = (SqlWorkspace)sqlWorkspaceRepository.add("test workspace", testUser);
-        SqlWorkspace workspace2 = (SqlWorkspace)sqlWorkspaceRepository.add("test workspace 2", testUser);
+    public void testFindById() throws Exception {
+        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace", testUser);
+        SqlWorkspace workspace2 = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 2", testUser);
 
-        SqlWorkspace testWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace.getId(), testUser);
-        SqlWorkspace testWorkspace2 = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace2.getId(), testUser);
+        SqlWorkspace testWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace.getWorkspaceId(), testUser);
+        SqlWorkspace testWorkspace2 = (SqlWorkspace) sqlWorkspaceRepository.findById(workspace2.getWorkspaceId(), testUser);
 
         assertEquals(workspace.getWorkspaceCreator().getUserId(), testWorkspace.getWorkspaceCreator().getUserId());
         assertEquals(workspace2.getWorkspaceCreator().getUserId(), testWorkspace2.getWorkspaceCreator().getUserId());
@@ -134,7 +135,7 @@ public class SqlWorkspaceRepositoryTest {
 
         assertEquals("test", sqlWorkspace.getDisplayTitle());
         sqlWorkspaceRepository.setTitle(sqlWorkspace, "changed title", testUser);
-        SqlWorkspace modifiedWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
+        SqlWorkspace modifiedWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(sqlWorkspace.getWorkspaceId(), testUser);
         assertEquals("changed title", modifiedWorkspace.getDisplayTitle());
     }
 
@@ -148,7 +149,7 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         SqlUser sqlUser1 = new SqlUser();
-        sqlUser1.setId(2);
+        sqlUser1.setUserId("2");
         sqlWorkspaceRepository.setTitle(sqlWorkspace, "test", sqlUser1);
     }
 
@@ -157,9 +158,9 @@ public class SqlWorkspaceRepositoryTest {
     public void testFindUsersWithAccess() throws Exception {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
-        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser);
+        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getWorkspaceId(), testUser);
         assertFalse(workspaceUsers.isEmpty());
-        assertEquals("1", workspaceUsers.get(0).getUserId());
+        assertEquals(testUser.getUserId(), workspaceUsers.get(0).getUserId());
         assertTrue(workspaceUsers.get(0).isCreator());
     }
 
@@ -168,27 +169,27 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(2);
-        sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), sqlUser);
+        sqlUser.setUserId("2");
+        sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getWorkspaceId(), sqlUser);
     }
 
     @Test(expected = LumifyAccessDeniedException.class)
     public void testUpdateUserOnWorkspace() throws Exception {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
-        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.WRITE, testUser);
-        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser);
+        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, testUser.getUserId(), WorkspaceAccess.WRITE, testUser);
+        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getWorkspaceId(), testUser);
         assertTrue(workspaceUsers.size() == 1);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.WRITE);
 
         SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", null, "", new String[0]);
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.READ, testUser2);
-        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser2);
+        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getWorkspaceId(), testUser2);
         assertTrue(workspaceUsers.size() == 2);
         assertEquals(workspaceUsers.get(1).getWorkspaceAccess(), WorkspaceAccess.READ);
 
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.NONE, testUser);
-        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser);
+        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getWorkspaceId(), testUser);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.NONE);
     }
 
@@ -197,7 +198,7 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(2);
+        sqlUser.setUserId("2");
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.WRITE, sqlUser);
     }
 
@@ -207,13 +208,15 @@ public class SqlWorkspaceRepositoryTest {
         String vertexId = "1234";
 
         sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, 0, 0, testUser);
-        List<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);;
+        List<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
+        ;
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertTrue(sqlWorkspaceVertex.isVisible());
 
         sqlWorkspaceRepository.softDeleteEntityFromWorkspace(sqlWorkspace, "1234", testUser);
-        sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);;
+        sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
+        ;
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertFalse(sqlWorkspaceVertex.isVisible());
@@ -263,7 +266,7 @@ public class SqlWorkspaceRepositoryTest {
         assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAll(testUser)) == 1);
 
         sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, 0, 0, testUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
+        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(sqlWorkspace.getWorkspaceId(), testUser);
 
         SqlWorkspace copySqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.copy(sqlWorkspace, testUser);
         assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAll(testUser)) == 2);

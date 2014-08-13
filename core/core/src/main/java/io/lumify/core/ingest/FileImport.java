@@ -119,7 +119,7 @@ public class FileImport {
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
             rawValue.searchIndex(false);
 
-            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getId());
+            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
             Map<String, Object> propertyMetadata = new HashMap<String, Object>();
@@ -193,7 +193,7 @@ public class FileImport {
         this.workQueueRepository.pushElement(vertex);
         if (workspace != null) {
             this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY,
-                    LumifyProperties.RAW.getPropertyName(), workspace.getId(), visibilitySource);
+                    LumifyProperties.RAW.getPropertyName(), workspace.getWorkspaceId(), visibilitySource);
         } else {
             this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
         }

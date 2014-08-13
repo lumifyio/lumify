@@ -67,14 +67,14 @@ public class WorkspaceUpdate extends BaseRequestHandler {
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {
-        LOGGER.debug("setting title (%s): %s", workspace.getId(), title);
+        LOGGER.debug("setting title (%s): %s", workspace.getWorkspaceId(), title);
         workspaceRepository.setTitle(workspace, title, authUser);
     }
 
     private void deleteUsers(Workspace workspace, JSONArray userDeletes, User authUser) {
         for (int i = 0; i < userDeletes.length(); i++) {
             String userId = userDeletes.getString(i);
-            LOGGER.debug("user delete (%s): %s", workspace.getId(), userId);
+            LOGGER.debug("user delete (%s): %s", workspace.getWorkspaceId(), userId);
             workspaceRepository.deleteUserFromWorkspace(workspace, userId, authUser);
         }
     }
@@ -82,7 +82,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
     private void updateUsers(Workspace workspace, JSONArray userUpdates, User authUser) {
         for (int i = 0; i < userUpdates.length(); i++) {
             JSONObject update = userUpdates.getJSONObject(i);
-            LOGGER.debug("user update (%s): %s", workspace.getId(), update.toString());
+            LOGGER.debug("user update (%s): %s", workspace.getWorkspaceId(), update.toString());
             String userId = update.getString("userId");
             WorkspaceAccess workspaceAccess = WorkspaceAccess.valueOf(update.getString("access"));
             workspaceRepository.updateUserOnWorkspace(workspace, userId, workspaceAccess, authUser);
@@ -92,7 +92,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
     private void deleteEntities(Workspace workspace, JSONArray entityDeletes, User authUser) {
         for (int i = 0; i < entityDeletes.length(); i++) {
             String entityId = entityDeletes.getString(i);
-            LOGGER.debug("workspace delete (%s): %s", workspace.getId(), entityId);
+            LOGGER.debug("workspace delete (%s): %s", workspace.getWorkspaceId(), entityId);
             workspaceRepository.softDeleteEntityFromWorkspace(workspace, entityId, authUser);
         }
     }
@@ -100,7 +100,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
     private void updateEntities(Workspace workspace, JSONArray entityUpdates, User authUser) {
         for (int i = 0; i < entityUpdates.length(); i++) {
             JSONObject update = entityUpdates.getJSONObject(i);
-            LOGGER.debug("workspace update (%s): %s", workspace.getId(), update.toString());
+            LOGGER.debug("workspace update (%s): %s", workspace.getWorkspaceId(), update.toString());
             String entityId = update.getString("vertexId");
             JSONObject graphPosition = update.optJSONObject("graphPosition");
             Integer graphPositionX = null;

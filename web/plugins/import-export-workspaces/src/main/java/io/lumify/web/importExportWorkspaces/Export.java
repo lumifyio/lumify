@@ -51,15 +51,15 @@ public class Export extends BaseRequestHandler {
             return;
         }
 
-        Authorizations authorizations = getUserRepository().getAuthorizations(user, UserRepository.VISIBILITY_STRING, WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = getUserRepository().getAuthorizations(user, UserRepository.VISIBILITY_STRING, WorkspaceRepository.VISIBILITY_STRING, workspace.getWorkspaceId());
 
         List<String> workspaceEntityIds = toList(getWorkspaceEntityIds(user, workspace));
 
         // create this array so that we get the relationships from workspace to entities
         ArrayList<String> workspaceEntityIdsAndWorkspaceId = new ArrayList<String>(workspaceEntityIds);
-        workspaceEntityIdsAndWorkspaceId.add(workspace.getId());
+        workspaceEntityIdsAndWorkspaceId.add(workspace.getWorkspaceId());
 
-        Vertex workspaceVertex = this.workspaceRepository.getVertex(workspace.getId(), user);
+        Vertex workspaceVertex = this.workspaceRepository.getVertex(workspace.getWorkspaceId(), user);
         Iterable<Vertex> vertices = graph.getVertices(workspaceEntityIds, authorizations);
         Iterable<Edge> edges = graph.getEdges(graph.findRelatedEdges(workspaceEntityIdsAndWorkspaceId, authorizations), authorizations);
 

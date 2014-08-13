@@ -15,6 +15,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.json.JSONObject;
+import org.securegraph.Graph;
 
 import java.util.*;
 
@@ -26,16 +27,19 @@ public class SqlUserRepository extends UserRepository {
     private final AuthorizationRepository authorizationRepository;
     private final UserListenerUtil userListenerUtil;
     private final HibernateSessionManager sessionManager;
+    private final Graph graph;
 
     @Inject
     public SqlUserRepository(final Configuration configuration,
                              final HibernateSessionManager sessionManager,
                              final AuthorizationRepository authorizationRepository,
-                             final UserListenerUtil userListenerUtil) {
+                             final UserListenerUtil userListenerUtil,
+                             final Graph graph) {
         super(configuration);
         this.sessionManager = sessionManager;
         this.authorizationRepository = authorizationRepository;
         this.userListenerUtil = userListenerUtil;
+        this.graph = graph;
     }
 
     @Override
@@ -66,8 +70,8 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public User findById(String userId) {
         Session session = sessionManager.getSession();
-        List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.id=:id")
-                .setParameter("id", Integer.parseInt(userId))
+        List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.userId=:id")
+                .setParameter("id", userId)
                 .list();
         if (users.size() == 0) {
             return null;
@@ -90,6 +94,8 @@ public class SqlUserRepository extends UserRepository {
         try {
             transaction = session.beginTransaction();
             newUser = new SqlUser();
+            String id = "USER_" + graph.getIdGenerator().nextId().toString();
+            newUser.setUserId (id);
             newUser.setUsername(username);
             newUser.setDisplayName(displayName);
             newUser.setCreateDate(new Date());
@@ -144,7 +150,7 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public boolean isPasswordValid(User user, String password) {
         checkNotNull(password);
-        if (user == null || (user.getUserId() != null && findById(user.getUserId()) == null)) {
+        if (user == null || user.getUserId() == null|| (user.getUserId() != null && findById(user.getUserId()) == null)) {
             throw new LumifyException("User is not valid");
         }
 
@@ -201,7 +207,7 @@ public class SqlUserRepository extends UserRepository {
             }
             List<SqlWorkspace> workspaces = session.createQuery
                     ("select workspace from " + SqlWorkspace.class.getSimpleName() + " as workspace where workspace.workspaceId=:id")
-                    .setParameter("id", Integer.parseInt(workspaceId))
+                    .setParameter("id", workspaceId)
                     .list();
             if (workspaces.size() == 0) {
                 throw new LumifyException("Could not find workspace with id: " + workspaceId);
@@ -230,7 +236,7 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            return sqlUser.getCurrentWorkspace() == null ? null : sqlUser.getCurrentWorkspace().getId();
+            return sqlUser.getCurrentWorkspace() == null ? null : sqlUser.getCurrentWorkspace().getWorkspaceId();
         } catch (HibernateException e) {
             throw new LumifyException("HibernateException while getting current workspace", e);
         }
