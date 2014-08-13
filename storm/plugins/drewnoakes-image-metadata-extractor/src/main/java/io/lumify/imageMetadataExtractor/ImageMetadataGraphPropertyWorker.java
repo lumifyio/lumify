@@ -56,9 +56,9 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                     Ontology.GEO_LOCATION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageLocation, data.getVisibility(), getAuthorizations());
                 }
 
-                Double imageFacingDirection = DirectionExtractor.getImageFacingDirection(metadata);
+                Double imageFacingDirection = HeadingExtractor.getImageHeading(metadata);
                 if (imageFacingDirection != null) {
-                    Ontology.DIRECTION.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
+                    Ontology.HEADING.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageFacingDirection, data.getVisibility(), getAuthorizations());
                 }
 
                 Integer imageWidth = DimensionsExtractor.getWidth(metadata);
@@ -71,9 +71,8 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
                     Ontology.HEIGHT.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, imageHeight, data.getVisibility(), getAuthorizations());
                 }
 
-
                 double fileSize = imageFile.length();
-                if (fileSize != 0L){
+                if (fileSize != 0){
                     Ontology.FILE_SIZE.addPropertyValue(data.getElement(), MULTI_VALUE_KEY, fileSize, data.getVisibility(), getAuthorizations());
                 }
 

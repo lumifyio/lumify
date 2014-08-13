@@ -53,10 +53,10 @@
 
 
 
-    <!-- http://lumify.io/exif#direction -->
+    <!-- http://lumify.io/exif#heading -->
 
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#direction">
-            <rdfs:label xml:lang="en">Direction</rdfs:label>
+        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#heading">
+            <rdfs:label xml:lang="en">Heading</rdfs:label>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
             <rdfs:range rdf:resource="&xsd;double"/>
         </owl:DatatypeProperty>

@@ -5,7 +5,7 @@ The drew-noakes-image-metadata-extractor module requires the following ontology 
     File: /lumify/storm/plugins/drewnoakes-image-metadata-extractor/ontology/exif.owl:
         Property: yAxisFlipNeeded
         Property: cwRotationNeeded
-        Property: direction
+        Property: heading
         
     File: /lumify/examples/ontology-dev/dev.owl:
         Property: geoLocation
