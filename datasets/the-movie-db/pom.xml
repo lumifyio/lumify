@@ -72,7 +72,7 @@
                     <descriptor>src/main/assembly/descriptor.xml</descriptor>
                     <archive>
                         <manifest>
-                            <mainClass>io.lumify.friendster.ImportMR</mainClass>
+                            <mainClass>io.lumify.themoviedb.TheMovieDbImport</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

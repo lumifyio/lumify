@@ -297,12 +297,12 @@ public class TheMovieDbImport extends CommandLineBase {
         }
 
         String overview = movieJson.optString("overview");
-        if (overview != null) {
+        if (overview != null && overview.length() > 0) {
             TheMovieDbOntology.OVERVIEW.addPropertyValue(m, MULTI_VALUE_KEY, overview, visibility);
         }
 
         String tagLine = movieJson.optString("tagline");
-        if (tagLine != null) {
+        if (tagLine != null && tagLine.length() > 0) {
             TheMovieDbOntology.TAG_LINE.addPropertyValue(m, MULTI_VALUE_KEY, tagLine, visibility);
         }
 
@@ -422,19 +422,20 @@ public class TheMovieDbImport extends CommandLineBase {
         JSONArray cast = combinedCredits.getJSONArray("cast");
         for (int i = 0; i < cast.length(); i++) {
             JSONObject movieJson = cast.getJSONObject(i);
-            int movieId = movieJson.getInt("id");
-            Vertex movieVertex = null;
-            if (movieVertex == null) {
-                VertexBuilder movieMutation = getGraph().prepareVertex(TheMovieDbOntology.getMovieVertexId(movieId), visibility);
-                LumifyProperties.CONCEPT_TYPE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_MOVIE, visibility);
-                LumifyProperties.SOURCE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, THE_MOVIE_DB_SOURCE, visibility);
-                String title = movieJson.optString("title");
-                if (title != null && title.length() > 0) {
-                    LumifyProperties.TITLE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, title, visibility);
-                }
-                movieVertex = movieMutation.save(getAuthorizations());
-                queueMovieDownload(movieId);
+            String mediaType = movieJson.getString("media_type");
+            if (!mediaType.equals("movie")) {
+                continue;
             }
+            int movieId = movieJson.getInt("id");
+            VertexBuilder movieMutation = getGraph().prepareVertex(TheMovieDbOntology.getMovieVertexId(movieId), visibility);
+            LumifyProperties.CONCEPT_TYPE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_MOVIE, visibility);
+            LumifyProperties.SOURCE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, THE_MOVIE_DB_SOURCE, visibility);
+            String title = movieJson.optString("title");
+            if (title != null && title.length() > 0) {
+                LumifyProperties.TITLE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, title, visibility);
+            }
+            Vertex movieVertex = movieMutation.save(getAuthorizations());
+            queueMovieDownload(movieId);
 
             getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, getAuthorizations());
         }
