@@ -23,7 +23,6 @@ import java.util.Date;
 
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImageMetadataGraphPropertyWorker.class);
-
     private static final String MULTI_VALUE_KEY = ImageMetadataGraphPropertyWorker.class.getName();
 
     @Override
@@ -113,7 +112,6 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
 
 
         }
-
     }
 
     @Override
