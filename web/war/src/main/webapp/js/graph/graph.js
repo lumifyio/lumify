@@ -1286,6 +1286,8 @@ define([
                     $this.text(F.string.shortcut($this.text()));
                 });
 
+                self.bindContextMenuClickEvent();
+
                 Controls.attachTo(self.select('graphToolsSelector'));
 
                 stylesheet(function(style) {
