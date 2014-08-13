@@ -703,7 +703,7 @@
         <rdfs:label xml:lang="en">File Size</rdfs:label>
         <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
-        <rdfs:range rdf:resource="&xsd;integer"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
     </owl:DatatypeProperty>
 
 
