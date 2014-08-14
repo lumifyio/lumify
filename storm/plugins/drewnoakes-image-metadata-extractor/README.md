@@ -8,6 +8,7 @@ The drew-noakes-image-metadata-extractor module requires the following ontology 
         Property: heading
         
     File: /lumify/examples/ontology-dev/dev.owl:
+        Property: image
         Property: geoLocation
         Property: dateTaken
         Property: deviceMake
