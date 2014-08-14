@@ -96,7 +96,7 @@ public class DimensionsExtractor {
     }
 
     /**
-     * Get the height of the image file by loading a buffered image.
+     * Get the height of the image file by loading the file as a buffered image.
      * @return
      */
     public static Integer getHeightViaBufferedImage(File imageFile){
