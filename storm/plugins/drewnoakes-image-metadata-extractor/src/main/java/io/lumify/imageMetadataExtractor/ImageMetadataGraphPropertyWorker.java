@@ -51,9 +51,9 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             try {
                 imageMetadata = ImageMetadataReader.readMetadata(imageFile);
             } catch (ImageProcessingException e) {
-                LOGGER.debug("Could not read metadata from imageFile");
+                LOGGER.debug("Could not read metadata from imageFile.");
             } catch (IOException e) {
-                LOGGER.debug("Could not read metadata from imageFile");
+                LOGGER.debug("Could not read metadata from imageFile.");
             }
             if (imageMetadata != null) {
                 Date dateTaken = DateExtractor.getDateDefault(imageMetadata);
@@ -145,8 +145,8 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
         if (mimeType == null) {
             return false;
         }
-        //TODO. Checking for jpg only so far. Need to support other file types.
-        if (mimeType.startsWith("image/jpeg")) {
+
+        if (mimeType.startsWith("image")) {
             return true;
         } else {
             return false;
