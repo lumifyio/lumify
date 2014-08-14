@@ -16,12 +16,8 @@ The drew-noakes-image-metadata-extractor module requires the following ontology 
         Property: height
         Property: fileSize
         Property: metadata
-     
-Or to create your own ontologies, edit the file:
- /lumify/storm/plugins/drewnoakes-image-metadata-extractor/src/main/java/io/lumify/imageMetadataExtractor/Ontology.java
- 
- 
- Please make sure the following are in your /opt/lumify/lumify.properties file:
+
+Please make sure the following are in your /opt/lumify/lumify.properties file:
      # Ontology
      ontology.iri.image=http://lumify.io/dev#image
      ontology.iri.geoLocation=http://lumify.io/dev#geolocation
@@ -32,3 +28,12 @@ Or to create your own ontologies, edit the file:
      ontology.iri.width=http://lumify.io/dev#width
      ontology.iri.height=http://lumify.io/dev#height
      ontology.iri.fileSize=http://lumify.io/dev#fileSize
+
+
+
+Or to create your own ontologies, edit the file:
+ /lumify/storm/plugins/drewnoakes-image-metadata-extractor/src/main/java/io/lumify/imageMetadataExtractor/Ontology.java
+ and the lumify.properties file.
+ 
+ 
+ 
