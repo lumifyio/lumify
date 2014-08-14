@@ -15,7 +15,6 @@ The drew-noakes-image-metadata-extractor module requires the following ontology 
         Property: width
         Property: height
         Property: fileSize
-        Property: format
         Property: metadata
      
 Or to create your own ontologies, edit the file:
@@ -30,8 +29,6 @@ Or to create your own ontologies, edit the file:
      ontology.iri.dateTaken=http://lumify.io/dev#dateTaken
      ontology.iri.deviceMake=http://lumify.io/dev#deviceMake
      ontology.iri.deviceModel=http://lumify.io/dev#deviceModel
-     ontology.iri.sentiment=http://lumify.io/dev#sentiment
      ontology.iri.width=http://lumify.io/dev#width
      ontology.iri.height=http://lumify.io/dev#height
      ontology.iri.fileSize=http://lumify.io/dev#fileSize
-     ontology.iri.format=http://lumify.io/dev#format
