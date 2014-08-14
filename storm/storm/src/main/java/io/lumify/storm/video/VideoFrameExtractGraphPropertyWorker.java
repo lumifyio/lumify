@@ -46,7 +46,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             videoRotation = nullableRotation;
         }
 
-        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 1.0);
+        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 0.1);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
