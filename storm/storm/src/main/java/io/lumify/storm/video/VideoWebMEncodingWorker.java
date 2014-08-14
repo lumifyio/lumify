@@ -59,8 +59,9 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File webmFile) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
-        if (videoRotation == null)
+        if (videoRotation == null) {
             videoRotation = 0;
+        }
         String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();

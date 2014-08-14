@@ -89,7 +89,6 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("rawvideo");
 
         //Scale.
-        //Scale.
         //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
         if (videoRotation == 0 || videoRotation == 180) {
             ffmpegOptionsList.add("-s");
