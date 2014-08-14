@@ -22,11 +22,13 @@ public class ImageTransformExtractor {
         try {
             //Attempt to retrieve the metadata from the image.
             Metadata metadata = ImageMetadataReader.readMetadata(localFile);
-            ExifIFD0Directory exifDir = metadata.getDirectory(ExifIFD0Directory.class);
-            if (exifDir != null) {
-                Integer orientationInteger = exifDir.getInteger(ExifIFD0Directory.TAG_ORIENTATION);
-                if (orientationInteger != null) {
-                    imageTransform = convertOrientationToTransform(orientationInteger);
+            if (metadata != null) {
+                ExifIFD0Directory exifDir = metadata.getDirectory(ExifIFD0Directory.class);
+                if (exifDir != null) {
+                    Integer orientationInteger = exifDir.getInteger(ExifIFD0Directory.TAG_ORIENTATION);
+                    if (orientationInteger != null) {
+                        imageTransform = convertOrientationToTransform(orientationInteger);
+                    }
                 }
             }
         } catch (ImageProcessingException e) {
