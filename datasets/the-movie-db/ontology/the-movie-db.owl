@@ -105,15 +105,6 @@
 
 
 
-    <!-- http://lumify.io/themoviedb#biography -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/themoviedb#biography">
-        <rdfs:label xml:lang="en">Biography</rdfs:label>
-        <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-
-
 
     <!-- http://lumify.io/themoviedb#birthdate -->
 
@@ -153,15 +144,6 @@
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
 
-
-
-    <!-- http://lumify.io/themoviedb#overview -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/themoviedb#overview">
-        <rdfs:label xml:lang="en">Overview</rdfs:label>
-        <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
 
 
 

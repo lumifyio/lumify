@@ -27,17 +27,11 @@ public class TheMovieDbOntology {
     public static final StringLumifyProperty TAG_LINE = new StringLumifyProperty("http://lumify.io/themoviedb#tagLine");
     public static final DateLumifyProperty DEATH_DATE = new DateLumifyProperty("http://lumify.io/themoviedb#deathdate");
     public static final IntegerLumifyProperty BUDGET = new IntegerLumifyProperty("http://lumify.io/themoviedb#budge");
-    public static final StringLumifyProperty OVERVIEW = new StringLumifyProperty("http://lumify.io/themoviedb#overview");
     public static final StringLumifyProperty ALSO_KNOWN_AS = new StringLumifyProperty("http://lumify.io/themoviedb#aka");
     public static final DateLumifyProperty RELEASE_DATE = new DateLumifyProperty("http://lumify.io/themoviedb#releaseDate");
-    public static final StringLumifyProperty BIOGRAPHY = new StringLumifyProperty("http://lumify.io/themoviedb#biography");
 
-    public static String getPersonHasProfileImageEdgeId(int personId, String profileImagePath) {
-        return "MOVIEDB_PERSON_HAS_PROFILE_IMAGE_" + personId + "_" + profileImagePath;
-    }
-
-    public static String getProfileImageVertexId(String profileImagePath) {
-        return "MOVIEDB_PROFILE_IMAGE_" + profileImagePath;
+    public static String getImageVertexId(String imagePath) {
+        return "MOVIEDB_IMAGE_" + imagePath;
     }
 
     public static String getStarredInEdgeId(int personId, int movieId) {
@@ -52,14 +46,6 @@ public class TheMovieDbOntology {
         return "MOVIEDB_PERSON_" + personId;
     }
 
-    public static String getPosterImageVertexId(String posterImagePath) {
-        return "MOVIEDB_POSTER_IMAGE_" + posterImagePath;
-    }
-
-    public static String getMovieHasPosterImageEdgeId(int movieId, String posterImagePath) {
-        return "MOVIEDB_MOVIE_HAS_POSTER_IMAGE_" + movieId + "_" + posterImagePath;
-    }
-
     public static String getProductionCompanyVertexId(int productionCompanyId) {
         return "MOVIEDB_PRODCO_" + productionCompanyId;
     }
@@ -68,11 +54,7 @@ public class TheMovieDbOntology {
         return "MOVIEDB_PRODCO_PRODUCED_" + productionCompanyId + "_" + movieId;
     }
 
-    public static String getProductionCompanyImageVertexId(String logoImagePath) {
-        return "MOVIEDB_LOGO_" + logoImagePath;
-    }
-
-    public static String getProductionCompanyHasLogoEdgeId(int productionCompanyId, String logoImagePath) {
-        return "MOVIEDB_PRODCO_HAS_LOGO_" + productionCompanyId + "_" + logoImagePath;
+    public static String getHasImageEdgeId(int id, String imagePath) {
+        return "MOVIEDB_HAS_IMAGE_" + id + "_" + imagePath;
     }
 }

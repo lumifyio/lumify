@@ -1,4 +1,4 @@
-package io.lumify.themoviedb;
+package io.lumify.themoviedb.download;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;

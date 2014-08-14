@@ -1,4 +1,4 @@
-package io.lumify.themoviedb;
+package io.lumify.themoviedb.download;
 
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -16,13 +16,13 @@ public class MovieDownloadWorkItem extends WorkItem {
     }
 
     @Override
-    public boolean process(TheMovieDbImport theMovieDbImport) throws IOException, ParseException {
-        if (theMovieDbImport.hasMovieInCache(movieId)) {
+    public boolean process(TheMovieDbDownload theMovieDbDownload) throws IOException, ParseException {
+        if (theMovieDbDownload.hasMovieInCache(movieId)) {
             return false;
         }
         LOGGER.debug("Downloading movie: %d", movieId);
-        JSONObject movieJson = theMovieDbImport.getTheMovieDb().getMovieInfo(movieId);
-        theMovieDbImport.writeMovie(movieId, movieJson);
+        JSONObject movieJson = theMovieDbDownload.getTheMovieDb().getMovieInfo(movieId);
+        theMovieDbDownload.writeMovie(movieId, movieJson);
         return true;
     }
 

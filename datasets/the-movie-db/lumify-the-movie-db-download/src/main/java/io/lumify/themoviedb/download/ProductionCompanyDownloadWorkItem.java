@@ -1,4 +1,4 @@
-package io.lumify.themoviedb;
+package io.lumify.themoviedb.download;
 
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -13,13 +13,13 @@ public class ProductionCompanyDownloadWorkItem extends WorkItem {
     }
 
     @Override
-    public boolean process(TheMovieDbImport theMovieDbImport) throws Exception {
-        if (theMovieDbImport.hasProductionCompanyInCache(productionCompanyId)) {
+    public boolean process(TheMovieDbDownload theMovieDbDownload) throws Exception {
+        if (theMovieDbDownload.hasProductionCompanyInCache(productionCompanyId)) {
             return false;
         }
         LOGGER.debug("Downloading production company: %d", productionCompanyId);
-        JSONObject productionCompanyJson = theMovieDbImport.getTheMovieDb().getProductionCompanyInfo(productionCompanyId);
-        theMovieDbImport.writeProductionCompany(productionCompanyId, productionCompanyJson);
+        JSONObject productionCompanyJson = theMovieDbDownload.getTheMovieDb().getProductionCompanyInfo(productionCompanyId);
+        theMovieDbDownload.writeProductionCompany(productionCompanyId, productionCompanyJson);
         return true;
     }
 }
