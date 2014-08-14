@@ -55,7 +55,7 @@ public class UserList extends BaseRequestHandler {
         Map<String, String> result = new HashMap<String, String>();
         for (Workspace workspace : getWorkspaceRepository().findByIds(workspaceIds, user)) {
             if (workspace != null) {
-                result.put(workspace.getId(), workspace.getDisplayTitle());
+                result.put(workspace.getWorkspaceId(), workspace.getDisplayTitle());
             }
         }
         return result;

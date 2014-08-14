@@ -56,7 +56,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             outputResultToTermMention(termMentions, searchResult, data.getProperty().getKey(), data.getVisibility());
             getGraph().flush();
         }
-        saveTermMentions((Vertex) data.getElement(), termMentions);
+        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
     }
 
     private void outputResultToTermMention(List<TermMention> termMentions, SearchResult<Match> searchResult, String propertyKey, Visibility visibility) {

@@ -57,7 +57,8 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         dictionaryPath = getClass().getResource(".").getPath();
         extractor = new KnownEntityExtractorGraphPropertyWorker() {
             @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) {
+            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
+                                                                        String workspaceId, String visibilitySource) {
                 KnownEntityExtractorGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
                 return null;
             }
@@ -86,7 +87,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
 
         in = getClass().getResourceAsStream("bffls.txt");
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         extractor.execute(in, workData);
         assertEquals(3, termMentions.size());
         for (TermMention termMention : termMentions) {

@@ -114,14 +114,22 @@ define([
         });
 
         this.after('initialize', function() {
-            appData
-                .getVertexTitle(this.attr.vertexId)
-                .done(this.setupMenu.bind(this));
+            this.on(document, 'closeVertexMenu', function() {
+                this.teardown();
+            });
 
             this.on('click', {
                 menuSelector: this.onMenuItemClick
             });
+
+            appData
+                .getVertexTitle(this.attr.vertexId)
+                .done(this.setupMenu.bind(this));
         });
+
+        this.onClose = function() {
+            this.teardown();
+        };
 
         this.onMenuItemClick = function(event) {
             event.preventDefault();
@@ -129,6 +137,10 @@ define([
             var anchor = $(event.target).closest('a'),
                 args = anchor.data('args'),
                 eventName = anchor.data('event');
+
+            if (anchor.closest('li.disabled').length) {
+                return;
+            }
 
             this.trigger(this.attr.element, eventName,
                 _.extend({ vertexId: this.attr.vertexId }, args)
@@ -152,19 +164,12 @@ define([
                 vertex: appData.vertex(this.attr.vertexId),
                 shouldDisable: function(item) {
                     var currentSelection = appData.selectedVertexIds,
-                        thisVertex = self.attr.vertexId,
-                        multi = item.selection !== 1;
+                        shouldDisable = _.isFunction(item.shouldDisable) ? item.shouldDisable(
+                            currentSelection,
+                            self.attr.vertexId,
+                            self.attr.element) : false;
 
-                    if (!multi &&
-                        currentSelection.length &&
-                        !_.isEqual(currentSelection, [thisVertex])) {
-                        return true;
-                    }
-
-                    return _.isFunction(item.shouldDisable) ? item.shouldDisable(
-                        currentSelection,
-                        self.attr.vertexId,
-                        self.attr.element) : false;
+                    return shouldDisable;
                 },
                 processLabel: function(item) {
                     return _.template(item.label)({
@@ -185,10 +190,12 @@ define([
 
             this.positionMenu(this.attr.position);
 
-            $(document).off('.vertexMenu').on('click.vertexMenu', function() {
-                $(document).off('.vertexMenu');
-                self.teardown();
-            });
+            _.defer(function() {
+                $(document).off('.vertexMenu').on('click.vertexMenu', function() {
+                    $(document).off('.vertexMenu');
+                    self.teardown();
+                });
+            })
         }
 
         this.positionMenu = function(position) {

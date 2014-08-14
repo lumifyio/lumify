@@ -64,7 +64,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
             getGraph().flush();
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }
-        saveTermMentions((Vertex) data.getElement(), termMenitons);
+        saveTermMentions((Vertex) data.getElement(), termMenitons, data.getWorkspaceId(), data.getVisibilitySource());
 
         untokenizedLineStream.close();
         LOGGER.debug("Stream processing completed");

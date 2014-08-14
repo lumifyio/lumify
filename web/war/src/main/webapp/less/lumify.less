@@ -306,6 +306,16 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
   text-shadow: 0 1px 0 fadeout(white, 60%);
 }
 
+.context-menu-warning {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  .translate(-50%, 0);
+  margin: auto;
+  z-index: @graph-zIndex;
+  .opacity(90);
+}
+
 .dropdown-menu li.disabled:hover > a > span {
   color: #777;
 }

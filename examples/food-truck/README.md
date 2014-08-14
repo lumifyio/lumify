@@ -10,7 +10,7 @@ Getting Started
    - [GuaposFoodTruck](https://twitter.com/GuaposFoodTruck)
    - [DCSLIDERSTRUCK](https://twitter.com/DCSLIDERSTRUCK)
 1. Run the Twitter Storm topology to ingest some Tweets.
-1. If you search for a particular food truck you should be able to add them to your graph.
+1. If you search for a particular food truck twitter account you should be able to add them to your graph.
 1. For each food truck Twitter account you will need to associate it with a "Food Truck" entity.
    This can be accomplished by finding some text with the food truck name and resolving it as a new
    "Food Truck".

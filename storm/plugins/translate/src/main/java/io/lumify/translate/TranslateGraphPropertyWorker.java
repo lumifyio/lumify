@@ -85,7 +85,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
 
         if (translated) {
             getGraph().flush();
-            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), translatedTextPropertyKey, data.getProperty().getName());
+            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), translatedTextPropertyKey, data.getProperty().getName(), data.getWorkspaceId(), data.getVisibilitySource());
         }
     }
 

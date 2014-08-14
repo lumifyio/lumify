@@ -27,7 +27,7 @@ public class WorkspaceDiff {
     }
 
     public List<DiffItem> diff(Workspace workspace, List<WorkspaceEntity> workspaceEntities, List<Edge> workspaceEdges, User user) {
-        Authorizations authorizations = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspace.getWorkspaceId());
 
         List<DiffItem> result = new ArrayList<DiffItem>();
         for (WorkspaceEntity workspaceEntity : workspaceEntities) {
@@ -50,7 +50,7 @@ public class WorkspaceDiff {
     private List<DiffItem> diffEdge(Workspace workspace, Edge edge) {
         List<DiffItem> result = new ArrayList<DiffItem>();
 
-        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getId());
+        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getWorkspaceId());
         if (sandboxStatus != SandboxStatus.PUBLIC) {
             result.add(new EdgeDiffItem(edge, sandboxStatus));
         }
@@ -70,7 +70,7 @@ public class WorkspaceDiff {
             return null;
         }
 
-        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(entityVertex, workspace.getId());
+        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(entityVertex, workspace.getWorkspaceId());
         if (sandboxStatus != SandboxStatus.PUBLIC) {
             result.add(new VertexDiffItem(entityVertex, sandboxStatus, workspaceEntity.isVisible()));
         }
@@ -82,7 +82,7 @@ public class WorkspaceDiff {
 
     private void diffProperties(Workspace workspace, Element element, List<DiffItem> result) {
         List<Property> properties = toList(element.getProperties());
-        SandboxStatus[] propertyStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspace.getId());
+        SandboxStatus[] propertyStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspace.getWorkspaceId());
         for (int i = 0; i < properties.size(); i++) {
             if (propertyStatuses[i] != SandboxStatus.PUBLIC) {
                 Property property = properties.get(i);

@@ -97,7 +97,7 @@ public class FileImport {
         if (vertex != null) {
             LOGGER.warn("vertex already exists with hash %s", hash);
             if (queueDuplicates) {
-                pushOnQueue(vertex);
+                pushOnQueue(vertex, workspace, visibilitySource);
             }
             return vertex;
         }
@@ -119,7 +119,7 @@ public class FileImport {
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
             rawValue.searchIndex(false);
 
-            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getId());
+            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
             Map<String, Object> propertyMetadata = new HashMap<String, Object>();
@@ -155,7 +155,7 @@ public class FileImport {
             }
 
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());
-            pushOnQueue(vertex);
+            pushOnQueue(vertex, workspace, visibilitySource);
             return vertex;
         } finally {
             fileInputStream.close();
@@ -188,10 +188,15 @@ public class FileImport {
         }
     }
 
-    private void pushOnQueue(Vertex vertex) {
+    private void pushOnQueue(Vertex vertex, Workspace workspace, String visibilitySource) {
         LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
         this.workQueueRepository.pushElement(vertex);
-        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
+        if (workspace != null) {
+            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY,
+                    LumifyProperties.RAW.getPropertyName(), workspace.getWorkspaceId(), visibilitySource);
+        } else {
+            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
+        }
     }
 
     private Vertex findExistingVertexWithHash(String hash, Authorizations authorizations) {

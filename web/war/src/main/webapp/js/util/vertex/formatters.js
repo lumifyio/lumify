@@ -47,8 +47,9 @@ define([
                     require(['service/user'], function(UserService) {
                         new UserService().userInfo(userId)
                             .fail(d.reject)
-                            .done(function(user) {
-                                el.textContent = user.displayName;
+                            .done(function(result) {
+                                var user = result.users[userId];
+                                el.textContent = user && user.displayName || i18n('user.unknown.displayName');
                                 d.resolve();
                             });
                     })
@@ -206,6 +207,19 @@ define([
                     return _.partition(vertices, function(v) {
                         var queryMatch = query && query !== '*' ?
                                 _.chain(v.properties)
+                                    .map(function(p) {
+                                        var ontologyProperty = ontology.propertiesByTitle[p.name];
+                                        if (p.value &&
+                                            ontologyProperty &&
+                                            ontologyProperty.possibleValues &&
+                                            ontologyProperty.possibleValues[p.value]) {
+
+                                            return $.extend({}, p, {
+                                                value: ontologyProperty.possibleValues[p.value]
+                                            });
+                                        }
+                                        return p;
+                                    })
                                     .pluck('value')
                                     .compact()
                                     .value()
@@ -252,7 +266,8 @@ define([
                     switch (property.dataType) {
                         case 'date':
                             if (property.displayTime) {
-                                transformFunction = F.date.utc;
+                                vertexProperty = F.date.utc(vertexProperty).getTime();
+                                transformFunction = F.date.local;
                             } else {
                                 transformFunction = function(v, i) {
                                     if (_.isUndefined(i)) {

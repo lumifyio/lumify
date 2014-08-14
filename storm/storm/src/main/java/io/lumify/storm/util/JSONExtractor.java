@@ -1,5 +1,6 @@
 package io.lumify.storm.util;
 
+import io.lumify.core.exception.LumifyJsonParseException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
@@ -15,7 +16,7 @@ public class JSONExtractor {
 
     public static JSONObject retrieveJSONObjectUsingFFPROBE(ProcessRunner processRunner, GraphPropertyWorkData data) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-
+        String outString = null;
         try {
             processRunner.execute(
                     "ffprobe",
@@ -29,9 +30,12 @@ public class JSONExtractor {
                     out,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
-            String outString = new String(out.toByteArray());
+            outString = new String(out.toByteArray());
             JSONObject json = JSONUtil.parse(outString);
             return json;
+        } catch (LumifyJsonParseException e) {
+            LOGGER.error("outstring, " + outString + ", is not a valid json");
+            return null;
         } catch (IOException e) {
             LOGGER.debug("IOException occurred. Could not retrieve JSONObject using ffprobe.");
             return null;

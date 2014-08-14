@@ -688,7 +688,6 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <addClasspath>true</addClasspath>
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>

@@ -96,7 +96,8 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         graph.flush();
 
         this.workQueueRepository.pushEdgeDeletion(edge);
-        this.workQueueRepository.pushGraphPropertyQueue(artifactVertex, multiValueKey, LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId);
+        this.workQueueRepository.pushGraphPropertyQueue(artifactVertex, multiValueKey,
+                LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getString("source"));
 
         auditRepository.auditVertex(AuditAction.UNRESOLVE, resolvedVertex.getId(), "", "", user, lumifyVisibility.getVisibility());
 

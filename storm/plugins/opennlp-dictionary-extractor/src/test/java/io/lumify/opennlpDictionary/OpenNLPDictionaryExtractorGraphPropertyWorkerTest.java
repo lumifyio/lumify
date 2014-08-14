@@ -75,7 +75,8 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
             }
 
             @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) {
+            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
+                                                                        String workspaceId, String visibilitySource) {
                 OpenNLPDictionaryExtractorGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
                 return null;
             }
@@ -99,7 +100,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
                 .setProperty("text", "none", new Visibility(""))
                 .save(new InMemoryAuthorizations());
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"));
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
         assertEquals(3, termMentions.size());
 

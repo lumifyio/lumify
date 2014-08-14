@@ -61,7 +61,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
             TermMention termMention = createTerm(phoneNumber, data.getProperty().getKey(), data.getVisibility());
             termMentions.add(termMention);
         }
-        saveTermMentions((Vertex) data.getElement(), termMentions);
+        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
         getGraph().flush();
 
         LOGGER.debug("Number of phone numbers extracted: %d", count(phoneNumbers));

@@ -1,5 +1,6 @@
 package io.lumify.core.ingest.graphProperty;
 
+import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -11,11 +12,15 @@ import java.util.Map;
 public class GraphPropertyWorkData {
     private final Element element;
     private final Property property;
+    private final String workspaceId;
+    private final String visibilitySource;
     private File localFile;
 
-    public GraphPropertyWorkData(Element element, Property property) {
+    public GraphPropertyWorkData(Element element, Property property, String workspaceId, String visibilitySource) {
         this.element = element;
         this.property = property;
+        this.workspaceId = workspaceId;
+        this.visibilitySource = visibilitySource;
     }
 
     public Element getElement() {
@@ -37,6 +42,10 @@ public class GraphPropertyWorkData {
     public Visibility getVisibility() {
         return getElement().getVisibility();
     }
+
+    public String getWorkspaceId () { return workspaceId; }
+
+    public String getVisibilitySource () { return visibilitySource; }
 
     public Map<String, Object> createPropertyMetadata() {
         Map<String, Object> metadata = new HashMap<String, Object>();

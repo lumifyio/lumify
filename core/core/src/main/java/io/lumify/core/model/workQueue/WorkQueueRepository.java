@@ -4,8 +4,10 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.metrics.PausableTimerContext;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.user.UserStatus;
+import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
@@ -32,6 +34,10 @@ public abstract class WorkQueueRepository {
         pushGraphPropertyQueue(element, property.getKey(), property.getName());
     }
 
+    public void pushGraphPropertyQueue(final Element element, final Property property, String workspaceId, String visibilitySource) {
+        pushGraphPropertyQueue(element, property.getKey(), property.getName(), workspaceId, visibilitySource);
+    }
+
     public void pushElementImageQueue(final Element element, final Property property) {
         pushElementImageQueue(element, property.getKey(), property.getName());
     }
@@ -55,10 +61,11 @@ public abstract class WorkQueueRepository {
     }
 
     public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName) {
-        pushGraphPropertyQueue(element, propertyKey, propertyName, null);
+        pushGraphPropertyQueue(element, propertyKey, propertyName, null, null);
     }
 
-    public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName, String workspaceId) {
+    public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName,
+                                       String workspaceId, String visibilitySource) {
         getGraph().flush();
         checkNotNull(element);
         JSONObject data = new JSONObject();
@@ -68,6 +75,11 @@ public abstract class WorkQueueRepository {
             data.put("graphEdgeId", element.getId());
         } else {
             throw new LumifyException("Unexpected element type: " + element.getClass().getName());
+        }
+
+        if (workspaceId != null && !workspaceId.equals("")) {
+            data.put("workspaceId", workspaceId);
+            data.put("visibilitySource", visibilitySource);
         }
         data.put("propertyKey", propertyKey);
         data.put("propertyName", propertyName);

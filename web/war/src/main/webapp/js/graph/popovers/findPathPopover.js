@@ -40,11 +40,9 @@ define([
             this.on('click', {
                 findPathButtonSelector: this.onFindPathButton
             });
-
-            this.on('popoverInitialize', this.onFindPath);
         });
 
-        this.onFindPath = function() {
+        this.popoverInitialize = function() {
             this.trigger('defocusPaths');
 
             var self = this,
@@ -78,7 +76,7 @@ define([
                         notInWorkspace = vertices.filter(function(v) {
                             return !appData.workspaceVertices[v.id];
                         }),
-                        pathsFoundText = i18n('popovers.find_path.' + (
+                        pathsFoundText = i18n('popovers.find_path.found.' + (
                             paths.length === 0 ? 'none' :
                             paths.length === 1 ? 'one' : 'some'
                         ), paths.length);
@@ -180,7 +178,7 @@ define([
             $target.closest('li').addClass('disabled');
 
             this.attr.hops = newHops;
-            this.onFindPath();
+            this.popoverInitialize();
         };
     }
 });

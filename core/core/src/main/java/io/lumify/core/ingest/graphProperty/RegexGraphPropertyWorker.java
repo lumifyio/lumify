@@ -50,7 +50,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
         }
         Vertex v = (Vertex)data.getElement();
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
-        saveTermMentions((Vertex) data.getElement(), termMentions);
+        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
     }
 
     private TermMention createTerm(final Matcher matched, String propertyKey, Visibility visibility) {

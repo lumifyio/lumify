@@ -10,26 +10,20 @@ import java.util.List;
 @Entity
 @Table(name = "workspace")
 public class SqlWorkspace implements Workspace {
-    private int workspaceId;
+    private String workspaceId;
     private String displayTitle;
     private SqlUser workspaceCreator;
     private List<SqlWorkspaceUser> sqlWorkspaceUserList = new ArrayList<SqlWorkspaceUser>();
     private List<SqlWorkspaceVertex> sqlWorkspaceVertices = new ArrayList<SqlWorkspaceVertex>();
 
     @Override
-    @Transient
-    public String getId() {
-        return Integer.toString(workspaceId);
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "workspace_id", unique = true)
-    public int getWorkspaceId() {
+    public String getWorkspaceId() {
         return workspaceId;
     }
 
-    public void setWorkspaceId(int workspaceId) {
+    public void setWorkspaceId(String workspaceId) {
         this.workspaceId = workspaceId;
     }
 
@@ -62,7 +56,7 @@ public class SqlWorkspace implements Workspace {
         this.sqlWorkspaceUserList = sqlWorkspaceUserList;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workspace")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workspace", cascade = CascadeType.ALL)
     public List<SqlWorkspaceVertex> getSqlWorkspaceVertices() {
         return sqlWorkspaceVertices;
     }

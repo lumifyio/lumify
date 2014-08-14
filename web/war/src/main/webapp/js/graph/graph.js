@@ -789,6 +789,7 @@ define([
                             };
                         });
                         self.trigger(document, 'updateVertices', { vertices: updates });
+                        self.fit(cy);
                     }
                 }, LAYOUT_OPTIONS[layout] || {});
 
@@ -803,12 +804,14 @@ define([
         });
 
         this.graphContextTap = function(event) {
-            var menu;
+            var self = this,
+                menu;
 
             if (event.cyTarget == event.cy){
                 menu = this.select ('contextMenuSelector');
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
                 this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
+                this.trigger('closeVertexMenu');
             } else if (event.cyTarget.group ('edges') == 'edges') {
 
                 if (Privileges.canEDIT) {
@@ -827,8 +830,11 @@ define([
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
             } else {
+                this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
+                this.select('contextMenuSelector').blur().parent().removeClass('open');
+
                 var originalEvent = event.originalEvent;
-                this.trigger(originalEvent.target, 'showVertexContextMenu', {
+                this.trigger(this.select('cytoscapeContainerSelector')[0], 'showVertexContextMenu', {
                     vertexId: fromCyId(event.cyTarget.id()),
                     position: {
                         x: originalEvent.pageX,
@@ -1188,6 +1194,33 @@ define([
             });
         };
 
+        this.onShowMenu = function(event, data) {
+            var self = this;
+
+            this.cytoscapeReady()
+                .done(function(cy) {
+                    var offset = self.$node.offset(),
+                        r = cy.renderer(),
+                        pos = r.projectIntoViewport(
+                            data.pageX,// - offset.left,
+                            data.pageY// - offset.top
+                        ),
+                        near = r.findNearestElement(pos[0], pos[1], true);
+
+                    self.graphContextTap({
+                        cyTarget: near || cy,
+                        cy: cy,
+                        originalEvent: _.pick(data, 'pageX', 'pageY')
+                    })
+                });
+        };
+
+        this.onHideMenu = function(event) {
+            this.trigger(document, 'closeVertexMenu');
+            this.select('contextMenuSelector').blur().parent().removeClass('open');
+            this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
+        }
+
         this.after('teardown', function() {
             this.$node.empty();
         });
@@ -1221,6 +1254,11 @@ define([
             this.on('unregisterForPositionChanges', this.onUnregisterForPositionChanges);
             this.on('showPanel', this.onShowPanel);
             this.on('hidePanel', this.onHidePanel);
+            this.on('showMenu', this.onShowMenu);
+            this.on('hideMenu', this.onHideMenu);
+            this.on('contextmenu', function(e) {
+                e.preventDefault();
+            });
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: i18n('graph.help.scope'),
@@ -1247,6 +1285,8 @@ define([
                     var $this = $(this), command = $this.text();
                     $this.text(F.string.shortcut($this.text()));
                 });
+
+                self.bindContextMenuClickEvent();
 
                 Controls.attachTo(self.select('graphToolsSelector'));
 
@@ -1277,7 +1317,6 @@ define([
 
                     cy.on({
                         tap: self.graphTap.bind(self),
-                        cxttap: self.graphContextTap.bind(self),
                         select: self.graphSelect.bind(self),
                         unselect: self.graphUnselect.bind(self),
                         grab: self.graphGrab.bind(self),
@@ -1285,8 +1324,6 @@ define([
                         mouseover: self.graphMouseOver.bind(self),
                         mouseout: self.graphMouseOut.bind(self)
                     });
-
-                    self.bindContextMenuClickEvent();
 
                     self.on('pan', function(e, data) {
                         e.stopPropagation();

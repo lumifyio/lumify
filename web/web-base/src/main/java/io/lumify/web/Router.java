@@ -2,7 +2,6 @@ package io.lumify.web;
 
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.handlers.StaticFileHandler;
-import com.altamiracorp.miniweb.handlers.StaticResourceHandler;
 import com.google.inject.Injector;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
@@ -45,6 +44,8 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class Router extends HttpServlet {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Router.class);
+    private static final LumifyLogger LOGGER_ACCESS = LumifyLoggerFactory.getLogger(Router.class.getName() + "-ACCESS");
+
     /**
      * Copied from org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT.
      * TODO: Examine why this is necessary and how it can be abstracted to any servlet container.
@@ -156,6 +157,7 @@ public class Router extends HttpServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse resp) throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
         try {
             if (req.getContentType() != null && req.getContentType().startsWith("multipart/form-data")) {
                 req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
@@ -166,6 +168,14 @@ public class Router extends HttpServlet {
             app.handle((HttpServletRequest) req, httpResponse);
         } catch (Exception e) {
             throw new ServletException(e);
+        } finally {
+            long endTime = System.currentTimeMillis();
+            if (req instanceof HttpServletRequest) {
+                HttpServletRequest r = (HttpServletRequest) req;
+                LOGGER_ACCESS.info(r.getRequestURL().toString() + " (time: %dms)", endTime - startTime);
+            } else {
+                LOGGER_ACCESS.info("non-http request (time: %dms)", endTime - startTime);
+            }
         }
     }
 }

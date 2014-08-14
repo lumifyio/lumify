@@ -54,6 +54,9 @@ public class ReindexMRMapper extends Mapper<String, Element, Object, Element> {
 
     @Override
     protected void map(String rowKey, Element element, Context context) throws IOException, InterruptedException {
+        if (element == null) {
+            return;
+        }
         context.setStatus("Element Id: " + element.getId());
         elementCache.add(element);
         if (elementCache.size() >= BATCH_SIZE) {

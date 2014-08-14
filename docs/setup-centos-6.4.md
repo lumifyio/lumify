@@ -344,20 +344,22 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
 
 ## Build and Deploy Lumify
 
-### build and deploy the Lumify web application and authentication plugin
+### build and deploy the Lumify web application, authentication, and dev-tools plugins
 
 *as the lumify user:*
 
         cd ~/lumify
         mvn package -P web-war -pl web/war -am
         mvn package -pl web/plugins/auth-username-only -am
+        mvn package -pl web/plugins/dev-tools -am
 
         sudo cp web/war/target/lumify-web-war-0.4.0-SNAPSHOT.war /opt/jetty/webapps/ROOT.war
         sudo cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-0.4.0-SNAPSHOT.jar /opt/lumify/lib
+        sudo cp web/plugins/dev-tools/target/lumify-web-dev-tools-0.4.0-SNAPSHOT.jar /opt/lumify/lib
 
         sudo /opt/jetty/bin/jetty.sh restart
 
-1. browse to https://localhost:8443
+1. browse to [https://localhost:8443](https://localhost:8443)
 1. login by entering any username (if using the `lumify-web-auth-username-only` plugin)
 
 
@@ -368,7 +370,7 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
         cd ~/lumify/examples
         zip -r ontology-dev.zip ontology-dev
 
-1. browse to https://localhost:8443/admin/uploadOntology.html
+1. browse to [https://localhost:8443/#admin=ontology:upload](https://localhost:8443/#admin=ontology:upload)
 1. enter `http://lumify.io/dev` as the Document IRI
 1. choose `ontology-dev.zip` as the OWL File
 1. click Submit

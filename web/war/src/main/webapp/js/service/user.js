@@ -16,11 +16,12 @@ define([
         });
     })
 
+    var userCache = {};
+
     function UserService() {
         ServiceBase.call(this);
 
         var toMemoize = [
-            'userInfo',
         ];
 
         this.serviceName = 'user';
@@ -147,12 +148,29 @@ define([
     };
 
     UserService.prototype.userInfo = function(userId) {
-        return this._ajaxGet({
-            url: 'user/info',
-            data: {
-                userId: userId
-            }
-        });
+        var deferred = $.Deferred(),
+            userIds = _.isArray(userId) ? userId : [userId],
+            partitioned = _.partition(userIds, function(userId) {
+                return userId in userCache;
+            }),
+            hasCache = partitioned[0],
+            needsRequest = partitioned[1];
+
+        if (needsRequest.length) {
+            this._ajaxGet({
+                url: 'user/info',
+                data: {
+                    userIds: needsRequest
+                }
+            }).done(function(result) {
+                $.extend(userCache, result.users);
+                deferred.resolve({ users: $.extend({}, result.users, _.pick(userCache, hasCache)) });
+            });
+        } else {
+            deferred.resolve({ users: _.pick(userCache, hasCache) });
+        }
+
+        return deferred.promise();
     };
 
     UserService.prototype.clearLocalStorage = function() {

@@ -46,7 +46,7 @@ public class QueueVertices extends BaseRequestHandler {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                LOGGER.info("requeue all vertices");
+                LOGGER.info("requeue all vertices (property: %s)", finalPropertyName);
                 Iterable<Vertex> vertices = graph.getVertices(authorizations);
                 for (Vertex vertex : vertices) {
                     if (finalPropertyName == null) {

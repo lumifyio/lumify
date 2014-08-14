@@ -63,7 +63,8 @@ public class PhoneNumberGraphPropertyWorkerTest {
 
         extractor = new PhoneNumberGraphPropertyWorker() {
             @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) {
+            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
+                                                                        String workspaceId, String visibilitySource) {
                 PhoneNumberGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
                 return null;
             }
@@ -91,7 +92,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         in = asStream(PHONE_TEXT);
         extractor.execute(in, workData);
 
@@ -116,7 +117,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         in = asStream(PHONE_NEW_LINES);
         extractor.execute(in, workData);
 
@@ -141,7 +142,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         in = asStream(PHONE_MISSING);
         extractor.execute(in, workData);
 

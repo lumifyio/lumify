@@ -75,7 +75,8 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
 
         this.graph.flush();
 
-        this.workQueueRepository.pushGraphPropertyQueue(graphEdge, null, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), workspaceId);
+        this.workQueueRepository.pushGraphPropertyQueue(graphEdge, null,
+                LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), workspaceId, visibilitySource);
 
         JSONObject json = JsonSerializer.toJson(graphEdge, workspaceId, authorizations);
         respondWithJson(response, json);

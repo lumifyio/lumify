@@ -42,7 +42,7 @@ public class WorkspaceNew extends BaseRequestHandler {
         }
         workspace = workspaceRepository.add(title, authUser);
 
-        LOGGER.info("Created workspace: %s, title: %s", workspace.getId(), workspace.getDisplayTitle());
+        LOGGER.info("Created workspace: %s, title: %s", workspace.getWorkspaceId(), workspace.getDisplayTitle());
 
         respondWithJson(response, workspaceRepository.toJson(workspace, user, true));
     }

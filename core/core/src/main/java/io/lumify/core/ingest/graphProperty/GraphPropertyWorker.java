@@ -19,9 +19,13 @@ import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.RowKeyHelper;
@@ -45,6 +49,7 @@ public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
+    private WorkspaceRepository workspaceRepository;
     private OntologyRepository ontologyRepository;
     private AuditRepository auditRepository;
     private TermMentionRepository termMentionRepository;
@@ -54,6 +59,7 @@ public abstract class GraphPropertyWorker {
     private String locationIri;
     private String organizationIri;
     private String personIri;
+    private VisibilityTranslator visibilityTranslator;
 
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         this.workerPrepareData = workerPrepareData;
@@ -108,6 +114,11 @@ public abstract class GraphPropertyWorker {
         this.workQueueRepository = workQueueRepository;
     }
 
+    @Inject
+    public final void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
+    }
+
     protected WorkQueueRepository getWorkQueueRepository() {
         return workQueueRepository;
     }
@@ -129,6 +140,9 @@ public abstract class GraphPropertyWorker {
     public final void setAuditRepository(AuditRepository auditRepository) {
         this.auditRepository = auditRepository;
     }
+
+    @Inject
+    public final void setVisibilityTranslatory (VisibilityTranslator visibilityTranslator) { this.visibilityTranslator = visibilityTranslator; }
 
     protected TermMentionRepository getTermMentionRepository() {
         return termMentionRepository;
@@ -200,8 +214,10 @@ public abstract class GraphPropertyWorker {
         return propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + startTime + RowKeyHelper.MINOR_FIELD_SEPARATOR + endTime;
     }
 
-    protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult) {
-        List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex, termExtractionResult.getTermMentions());
+    protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult,
+                                            String workspaceId, String visibilitySource) {
+        List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex,
+                termExtractionResult.getTermMentions(), workspaceId, visibilitySource);
         saveRelationships(termExtractionResult.getRelationships(), termMentionsResults);
         saveVertexRelationships(termExtractionResult.getVertexRelationships(), termMentionsResults);
     }
@@ -268,7 +284,8 @@ public abstract class GraphPropertyWorker {
         return null;
     }
 
-    protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) {
+    protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
+                                                                String workspaceId, String visibilitySource) {
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(),
                 getUser(), artifactGraphVertex.getVisibility());
         for (TermMentionFilter termMentionFilter : this.workerPrepareData.getTermMentionFilters()) {
@@ -281,19 +298,39 @@ public abstract class GraphPropertyWorker {
 
         List<TermMentionWithGraphVertex> results = new ArrayList<TermMentionWithGraphVertex>();
         for (TermMention termMention : termMentions) {
-            results.add(saveTermMention(artifactGraphVertex, termMention));
+            results.add(saveTermMention(artifactGraphVertex, termMention, workspaceId, visibilitySource));
         }
         return results;
     }
 
-    private TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention) {
+    private TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention,
+                                                       String workspaceId, String visibilitySource) {
         LOGGER.debug("Saving term mention '%s':%s:%s (%d:%d)", termMention.getSign(), termMention.getOntologyClassUri(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd());
         Vertex vertex = null;
-        TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd()));
-        termMentionModel.getMetadata().setSign(termMention.getSign(), termMention.getVisibility());
-        termMentionModel.getMetadata().setOntologyClassUri(termMention.getOntologyClassUri(), termMention.getVisibility());
+        if (visibilitySource == null) {
+            visibilitySource = termMention.getVisibility().getVisibilityString();
+        }
+
+        JSONObject visibilityJson = new JSONObject();
+        visibilityJson.put(VisibilityTranslator.JSON_SOURCE, visibilitySource);
+        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson).getVisibility();
+
+        Visibility visibilityWithWorkspaceId;
+        JSONObject visibilityJsonWithWorkspaceId;
+        if (!workspaceId.equals("")) {
+            visibilityJsonWithWorkspaceId = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null ,visibilitySource, workspaceId);
+            visibilityWithWorkspaceId = visibilityTranslator.toVisibility(visibilityJsonWithWorkspaceId).getVisibility();
+        } else {
+            visibilityWithWorkspaceId = visibility;
+            visibilityJsonWithWorkspaceId = visibilityJson;
+        }
+
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd());
+        TermMentionModel termMentionModel = new TermMentionModel(termMentionRowKey);
+        termMentionModel.getMetadata().setSign(termMention.getSign(), visibility);
+        termMentionModel.getMetadata().setOntologyClassUri(termMention.getOntologyClassUri(), visibility);
         if (termMention.getProcess() != null && !termMention.getProcess().equals("")) {
-            termMentionModel.getMetadata().setAnalyticProcess(termMention.getProcess(), termMention.getVisibility());
+            termMentionModel.getMetadata().setAnalyticProcess(termMention.getProcess(), visibility);
         }
 
         Concept concept = ontologyRepository.getConceptByIRI(termMention.getOntologyClassUri());
@@ -301,7 +338,7 @@ public abstract class GraphPropertyWorker {
             LOGGER.error("Could not find ontology graph vertex '%s'", termMention.getOntologyClassUri());
             return null;
         }
-        termMentionModel.getMetadata().setConceptGraphVertexId(concept.getTitle(), termMention.getVisibility());
+        termMentionModel.getMetadata().setConceptGraphVertexId(concept.getTitle(), visibility);
 
         if (termMention.isResolved()) {
             String title = termMention.getSign();
@@ -317,46 +354,54 @@ public abstract class GraphPropertyWorker {
                             .vertices(), null);
                 }
             }
-            JSONObject visibilityJson = new JSONObject();
-            visibilityJson.put(VisibilityTranslator.JSON_SOURCE, termMention.getVisibility().toString());
 
             Map<String, Object> metadata = new HashMap<String, Object>();
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJsonWithWorkspaceId);
 
             if (vertex == null) {
                 if (termMention.getId() != null) {
-                    vertexElementMutation = graph.prepareVertex(termMention.getId(), termMention.getVisibility());
+                    vertexElementMutation = graph.prepareVertex(termMention.getId(), visibilityWithWorkspaceId);
                 } else {
-                    vertexElementMutation = graph.prepareVertex(termMention.getVisibility());
+                    vertexElementMutation = graph.prepareVertex(visibilityWithWorkspaceId);
                 }
-                LumifyProperties.TITLE.setProperty(vertexElementMutation, title, metadata, termMention.getVisibility());
-                LumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), metadata, termMention.getVisibility());
+                LumifyProperties.TITLE.setProperty(vertexElementMutation, title, metadata, visibilityWithWorkspaceId);
+                LumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), metadata, visibilityWithWorkspaceId);
             } else {
                 vertexElementMutation = vertex.prepareMutation();
             }
 
             for (TermMention.TermMentionProperty termMentionProperty : termMention.getNewProperties()) {
-                vertexElementMutation.addPropertyValue(termMentionProperty.getKey(), termMentionProperty.getName(), termMentionProperty.getValue(), metadata, termMention.getVisibility());
+                vertexElementMutation.addPropertyValue(termMentionProperty.getKey(), termMentionProperty.getName(), termMentionProperty.getValue(), metadata, visibilityWithWorkspaceId);
             }
+
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJsonWithWorkspaceId, metadata, visibilityWithWorkspaceId);
+            vertexElementMutation.addPropertyValue(graph.getIdGenerator().nextId(), LumifyProperties.ROW_KEY.getPropertyName(), termMentionRowKey.toString(), metadata, visibilityWithWorkspaceId);
 
             if (!(vertexElementMutation instanceof ExistingElementMutation)) {
                 vertex = vertexElementMutation.save(getAuthorizations());
-                auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), termMention.getVisibility());
+                auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), visibilityWithWorkspaceId);
             } else {
-                auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), termMention.getVisibility());
+                auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), visibilityWithWorkspaceId);
                 vertex = vertexElementMutation.save(getAuthorizations());
             }
 
             // TODO: a better way to check if the same edge exists instead of looking it up every time?
             Edge edge = singleOrDefault(artifactGraphVertex.getEdges(vertex, Direction.OUT, artifactHasEntityIri, getAuthorizations()), null);
             if (edge == null) {
-                edge = graph.addEdge(artifactGraphVertex, vertex, artifactHasEntityIri, termMention.getVisibility(), getAuthorizations());
-                auditRepository.auditRelationship(AuditAction.CREATE, artifactGraphVertex, vertex, edge, termMention.getProcess(), "", getUser(), termMention.getVisibility());
+                edge = graph.addEdge(artifactGraphVertex, vertex, artifactHasEntityIri, visibility, getAuthorizations());
+                LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJsonWithWorkspaceId, metadata, visibilityWithWorkspaceId, getAuthorizations());
+                auditRepository.auditRelationship(AuditAction.CREATE, artifactGraphVertex, vertex, edge, termMention.getProcess(), "", getUser(), visibilityWithWorkspaceId);
+            }
+
+            graph.flush();
+            if (workspaceId != null && !workspaceId.equals("")) {
+                Workspace workspace = workspaceRepository.findById(workspaceId, getUser());
+                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, null, getUser());
             }
 
             termMentionModel.getMetadata()
-                    .setVertexId(vertex.getId().toString(), termMention.getVisibility())
-                    .setEdgeId(edge.getId().toString(), termMention.getVisibility());
+                    .setVertexId(vertex.getId().toString(), visibility)
+                    .setEdgeId(edge.getId().toString(), visibility);
         }
 
         getTermMentionRepository().save(termMentionModel, FlushFlag.NO_FLUSH);

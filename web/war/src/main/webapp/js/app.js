@@ -17,6 +17,9 @@ define([
     'help/help',
     'util/mouseOverlay',
     'util/withFileDrop',
+    'util/vertex/menu',
+    'util/contextMenu',
+    'util/privileges',
     'service/user',
     'service/vertex'
 ], function(
@@ -37,6 +40,9 @@ define([
     Help,
     MouseOverlay,
     withFileDrop,
+    VertexMenu,
+    ContextMenu,
+    Privileges,
     UserService,
     VertexService) {
     'use strict';
@@ -122,6 +128,7 @@ define([
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
+            this.on(document, 'hideMenu', this.onHideMenu);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
@@ -166,6 +173,7 @@ define([
             resizable(adminPane, 'e', 190, 250, this.onPaneResize.bind(this));
             resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
 
+            ContextMenu.attachTo(document);
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
             MouseOverlay.attachTo(document);
             Sync.attachTo(window);
@@ -212,6 +220,10 @@ define([
                 if (self.attr.addVertexIds) {
                     self.handleAddToWorkspace(self.attr.addVertexIds);
                 }
+                if (self.attr.openAdminTool && Privileges.canADMIN) {
+                    self.trigger('menubarToggleDisplay', { name: 'admin' });
+                    self.trigger('showAdminPlugin', self.attr.openAdminTool);
+                }
             }, 500);
         });
 
@@ -235,6 +247,25 @@ define([
                 self.trigger(event.target, 'positionChanged', {
                     position: position
                 });
+            }
+        };
+
+        this.onHideMenu = function() {
+            var key = 'hideContextMenuWarning' + window.currentUser.displayName,
+                shouldWithholdWarning = false;
+
+            try {
+                shouldWithholdWarning = sessionStorage.getItem(key);
+            } catch(e) { }
+
+            if (shouldWithholdWarning !== 'true') {
+                try {
+                    sessionStorage.setItem(key, true);
+                } catch(e) { }
+                var warning = this.$node.find('.context-menu-warning').show();
+                _.delay(function() {
+                    warning.hide();
+                }, 5000)
             }
         };
 
@@ -311,10 +342,8 @@ define([
         this.onShowVertexContextMenu = function(event, data) {
             data.element = event.target;
 
-            require(['util/vertex/menu'], function(VertexMenu) {
-                VertexMenu.teardownAll();
-                VertexMenu.attachTo(document.body, data);
-            })
+            VertexMenu.teardownAll();
+            VertexMenu.attachTo(document.body, data);
         };
 
         this.onMapAction = function(event, data) {

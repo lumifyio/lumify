@@ -41,10 +41,10 @@ define([
         });
     };
 
-    AdminService.prototype.queueVertices = function(parameterName) {
+    AdminService.prototype.queueVertices = function(propertyName) {
         var data = {};
-        if (parameterName) {
-            data.parameterName = parameterName;
+        if (propertyName) {
+            data.propertyName = propertyName;
         }
         return this._ajaxPost({
             url: 'admin/queueVertices',

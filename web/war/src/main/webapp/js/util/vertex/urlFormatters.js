@@ -6,7 +6,8 @@ define([
 
     var URL_TYPES = {
             FULLSCREEN: 'v',
-            ADD: 'add'
+            ADD: 'add',
+            ADMIN: 'admin'
         },
         V = {
             url: function(vertices, workspaceId) {
@@ -32,9 +33,22 @@ define([
 
             parametersInUrl: function(url) {
                 var type = _.invert(URL_TYPES),
-                    match = url.match(/#(v|add)=(.+?)(?:&w=(.*))?$/);
+                    match = url.match(/#(v|add|admin)=(.+?)(?:&w=(.*))?$/);
 
                 if (match && match.length === 4) {
+                    if (match[1] === URL_TYPES.ADMIN) {
+                        var tool = match[2].split(':');
+                        if (tool.length !== 2) {
+                            return null;
+                        }
+
+                        return {
+                            section: tool[0],
+                            name: tool[1],
+                            type: type[match[1]]
+                        };
+                    }
+
                     return {
                         vertexIds: _.map(match[2].split(','), function(v) {
                             return decodeURIComponent(v);

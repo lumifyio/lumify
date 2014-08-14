@@ -155,7 +155,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
 
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTIVALUE_KEY, LumifyProperties.TEXT.getPropertyName());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTIVALUE_KEY,
+                LumifyProperties.TEXT.getPropertyName(), data.getWorkspaceId(), data.getVisibilitySource());
     }
 
     private String extractText(InputStream in, String mimeType, Metadata metadata) throws IOException, SAXException, TikaException, BoilerpipeProcessingException {

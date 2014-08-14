@@ -75,7 +75,7 @@ public abstract class WorkspaceRepository {
     public abstract List<DiffItem> getDiff(Workspace workspace, User user);
 
     public String getCreatorUserId(Workspace workspace, User user) {
-        for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getId(), user)) {
+        for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
             if (workspaceUser.isCreator()) {
                 return workspaceUser.getUserId();
             }
@@ -101,7 +101,7 @@ public abstract class WorkspaceRepository {
 
         try {
             JSONObject workspaceJson = new JSONObject();
-            workspaceJson.put("workspaceId", workspace.getId());
+            workspaceJson.put("workspaceId", workspace.getWorkspaceId());
             workspaceJson.put("title", workspace.getDisplayTitle());
 
             String creatorUserId = getCreatorUserId(workspace, user);
@@ -109,10 +109,10 @@ public abstract class WorkspaceRepository {
                 workspaceJson.put("createdBy", creatorUserId);
                 workspaceJson.put("isSharedToUser", !creatorUserId.equals(user.getUserId()));
             }
-            workspaceJson.put("isEditable", hasWritePermissions(workspace.getId(), user));
+            workspaceJson.put("isEditable", hasWritePermissions(workspace.getWorkspaceId(), user));
 
             JSONArray usersJson = new JSONArray();
-            for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getId(), user)) {
+            for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
                 String userId = workspaceUser.getUserId();
                 JSONObject userJson = new JSONObject();
                 userJson.put("userId", userId);
