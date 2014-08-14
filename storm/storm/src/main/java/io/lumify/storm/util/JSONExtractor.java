@@ -1,6 +1,7 @@
 package io.lumify.storm.util;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
+import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
@@ -29,13 +30,13 @@ public class JSONExtractor {
                     data.getLocalFile().getAbsolutePath() + ": "
             );
             String outString = new String(out.toByteArray());
-            JSONObject json = new JSONObject(outString);
+            JSONObject json = JSONUtil.parse(outString);
             return json;
         } catch (IOException e) {
-            LOGGER.error("IOException occurred. Could not retrieve JSONObject using ffprobe.");
+            LOGGER.debug("IOException occurred. Could not retrieve JSONObject using ffprobe.");
             return null;
         } catch (InterruptedException e) {
-            LOGGER.error("InterruptedException occurred. Could not retrieve JSONObject using ffprobe.");
+            LOGGER.debug("InterruptedException occurred. Could not retrieve JSONObject using ffprobe.");
             return null;
         }
 
