@@ -1,8 +1,7 @@
 # TheMovieDb.org Dataset
-### [TheMovieDb.org](http://www.themoviedb.org/) is an online user contributed movie database.
 
-With an API key you can use the REST API which this module takes advantage of to download the movie catalog for ingest
-into Lumify.
+[TheMovieDb.org](http://www.themoviedb.org/) is an online user contributed movie database. With an API key you can use the 
+REST API which this module takes advantage of to download the movie catalog for ingest into Lumify.
 
 Downloading Data
 ----------------
