@@ -86,11 +86,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptor>src/main/assembly/descriptor.xml</descriptor>
-                    <archive>
-                        <manifest>
-                            <mainClass>io.lumify.themoviedb.ImportJsonMR</mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
                 <executions>
                     <execution>
