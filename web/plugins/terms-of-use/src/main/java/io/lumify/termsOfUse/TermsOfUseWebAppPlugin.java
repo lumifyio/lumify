@@ -1,0 +1,19 @@
+package io.lumify.termsOfUse;
+
+import com.altamiracorp.miniweb.Handler;
+import io.lumify.web.WebApp;
+import io.lumify.web.WebAppPlugin;
+
+import javax.servlet.ServletContext;
+
+public class TermsOfUseWebAppPlugin implements WebAppPlugin {
+    public static final String TERMS_OF_USE_PATH = "/terms";
+
+    @Override
+    public void init(WebApp app, ServletContext servletContext, Handler authenticationHandler) {
+        app.registerJavaScript("/io/lumify/termsOfUse/terms-of-use-plugin.js");
+        app.registerResourceBundle("/io/lumify/termsOfUse/messages.properties");
+        app.get(TERMS_OF_USE_PATH, TermsOfUse.class);
+        app.post(TERMS_OF_USE_PATH, TermsOfUse.class);
+    }
+}

@@ -19,9 +19,10 @@
         <module>auth-username-password</module>
         <module>auth-x509</module>
         <module>dev-tools</module>
+        <module>geocoder-bing</module>
         <module>google-analytics</module>
         <module>import-export-workspaces</module>
         <module>opennlp-dictionary-extractor</module>
-        <module>geocoder-bing</module>
+        <module>terms-of-use</module>
     </modules>
 </project>

@@ -250,10 +250,10 @@ public abstract class BaseRequestHandler implements Handler {
     public static String generateETag(byte[] data) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] sha = digest.digest(data);
-            return Hex.encodeHexString(sha);
+            byte[] md5 = digest.digest(data);
+            return Hex.encodeHexString(md5);
         } catch (NoSuchAlgorithmException e) {
-            throw new LumifyException("Could not find SHA-256", e);
+            throw new LumifyException("Could not find MD5", e);
         }
     }
 
