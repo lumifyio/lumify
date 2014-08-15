@@ -160,9 +160,9 @@ public class TheMovieDbDownload extends CommandLineBase {
     private void loadCacheDir() {
         LOGGER.debug("Loading: %s", getCacheDir().getAbsolutePath());
 
-        loadMoviesCacheDir(getMoviesDir());
-        loadPersonsCacheDir(getPersonsDir());
         loadProductionCompaniesCacheDir(getProductionCompanyDir());
+        loadPersonsCacheDir(getPersonsDir());
+        loadMoviesCacheDir(getMoviesDir());
     }
 
     private void loadMoviesCacheDir(File moviesDir) {
