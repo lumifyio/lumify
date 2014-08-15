@@ -1,7 +1,6 @@
 package io.lumify.core.model.user;
 
 import com.google.inject.Inject;
-import io.lumify.core.model.lock.Lock;
 import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -20,80 +19,73 @@ import static org.securegraph.util.IterableUtils.toArray;
 
 public class AccumuloAuthorizationRepository implements AuthorizationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AccumuloAuthorizationRepository.class);
-    public static final String LOCK_NAME = "AccumuloAuthorizationRepository";
-    private final Object lock = new Object();
+    public static final String LOCK_NAME = AccumuloAuthorizationRepository.class.getName();
     private Graph graph;
     private LockRepository lockRepository;
 
     public void addAuthorizationToGraph(final String auth) {
         LOGGER.info("adding authorization [%s] for secure graph user", auth);
-        synchronized (lock) {
-            Lock lock = this.lockRepository.createLock(LOCK_NAME);
-            lock.run(new Runnable() {
-                @Override
-                public void run() {
-                    LOGGER.debug("got lock to add authorization [%s] for secure graph user", auth);
-                    if (graph instanceof AccumuloGraph) {
-                        try {
-                            AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
-                            String principal = accumuloGraph.getConnector().whoami();
-                            Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
-                            if (currentAuthorizations.contains(auth)) {
-                                return;
-                            }
-                            List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
-                            for (byte[] currentAuth : currentAuthorizations) {
-                                newAuthorizationsArray.add(currentAuth);
-                            }
-                            newAuthorizationsArray.add(auth.getBytes(Constants.UTF8));
-                            Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
-                            accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
-                        } catch (Exception ex) {
-                            throw new RuntimeException("Could not update authorizations in accumulo", ex);
+        lockRepository.lock(LOCK_NAME, new Runnable() {
+            @Override
+            public void run() {
+                LOGGER.debug("got lock to add authorization [%s] for secure graph user", auth);
+                if (graph instanceof AccumuloGraph) {
+                    try {
+                        AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
+                        String principal = accumuloGraph.getConnector().whoami();
+                        Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
+                        if (currentAuthorizations.contains(auth)) {
+                            return;
                         }
-                    } else {
-                        throw new RuntimeException("graph type not supported to add authorizations.");
+                        List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
+                        for (byte[] currentAuth : currentAuthorizations) {
+                            newAuthorizationsArray.add(currentAuth);
+                        }
+                        newAuthorizationsArray.add(auth.getBytes(Constants.UTF8));
+                        Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
+                        accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
+                    } catch (Exception ex) {
+                        throw new RuntimeException("Could not update authorizations in accumulo", ex);
                     }
+                } else {
+                    throw new RuntimeException("graph type not supported to add authorizations.");
                 }
-            });
-        }
+            }
+        });
     }
 
     public void removeAuthorizationFromGraph(final String auth) {
         LOGGER.info("removing authorization to graph user %s", auth);
-        synchronized (lock) {
-            Lock lock = this.lockRepository.createLock(LOCK_NAME);
-            lock.run(new Runnable() {
-                @Override
-                public void run() {
-                    LOGGER.debug("got lock removing authorization to graph user %s", auth);
-                    if (graph instanceof AccumuloGraph) {
-                        try {
-                            AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
-                            String principal = accumuloGraph.getConnector().whoami();
-                            Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
-                            if (!currentAuthorizations.contains(auth)) {
-                                return;
-                            }
-                            byte[] authBytes = auth.getBytes(Constants.UTF8);
-                            List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
-                            for (byte[] currentAuth : currentAuthorizations) {
-                                if (Arrays.equals(currentAuth, authBytes)) {
-                                    continue;
-                                }
-                                newAuthorizationsArray.add(currentAuth);
-                            }
-                            Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
-                            accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
-                        } catch (Exception ex) {
-                            throw new RuntimeException("Could not update authorizations in accumulo", ex);
+        lockRepository.lock(LOCK_NAME, new Runnable() {
+            @Override
+            public void run() {
+                LOGGER.debug("got lock removing authorization to graph user %s", auth);
+                if (graph instanceof AccumuloGraph) {
+                    try {
+                        AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
+                        String principal = accumuloGraph.getConnector().whoami();
+                        Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
+                        if (!currentAuthorizations.contains(auth)) {
+                            return;
                         }
-                    } else {
-                        throw new RuntimeException("graph type not supported to add authorizations.");
+                        byte[] authBytes = auth.getBytes(Constants.UTF8);
+                        List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
+                        for (byte[] currentAuth : currentAuthorizations) {
+                            if (Arrays.equals(currentAuth, authBytes)) {
+                                continue;
+                            }
+                            newAuthorizationsArray.add(currentAuth);
+                        }
+                        Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
+                        accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
+                    } catch (Exception ex) {
+                        throw new RuntimeException("Could not update authorizations in accumulo", ex);
                     }
+                } else {
+                    throw new RuntimeException("graph type not supported to add authorizations.");
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override

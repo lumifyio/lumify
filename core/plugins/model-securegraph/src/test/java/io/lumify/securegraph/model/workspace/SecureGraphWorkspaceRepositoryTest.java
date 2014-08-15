@@ -3,6 +3,8 @@ package io.lumify.securegraph.model.workspace;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
+import io.lumify.core.model.lock.LocalLockRepository;
+import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.Relationship;
@@ -75,6 +77,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         Visibility visibility = new Visibility("");
         Authorizations authorizations = new InMemoryAuthorizations();
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
+        LockRepository lockRepository = new LocalLockRepository();
         idGenerator = new QueueIdGenerator();
         graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
@@ -98,7 +101,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         when(workspaceToUserRelationship.getIRI()).thenReturn("workspaceToUserRelationshipId");
         when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
 
-        workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff);
+        workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 
         String entity1VertexId = "entity1Id";
         entity1Vertex = graph.addVertex(entity1VertexId, new LumifyVisibility().getVisibility(), new InMemoryAuthorizations());
