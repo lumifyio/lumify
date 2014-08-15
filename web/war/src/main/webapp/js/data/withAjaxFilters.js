@@ -18,6 +18,8 @@ define([], function() {
             /^workspace\/publish/,
             /^workspace\/undo/,
             /^map\/geocode/,
+            /^terms$/,
+            /^logout$/,
             /^admin/,
             /^login/,
             /^vertex\/removeRelationship/,
