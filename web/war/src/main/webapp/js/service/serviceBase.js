@@ -60,6 +60,10 @@ define(['atmosphere'],
             var self = this;
 
             require(['util/offlineOverlay'], function(Overlay) {
+                if (window.DEBUG) {
+                    DEBUG.socketMessages = DEBUG.socketMessages || false;
+                }
+
                 var req = {
                         url: 'messaging',
                         transport: 'websocket',
@@ -86,6 +90,10 @@ define(['atmosphere'],
                         onMessage: function(response) {
                             var body = response.responseBody,
                                 data = JSON.parse(body);
+
+                            if (window.DEBUG && DEBUG.socketMessages) {
+                                console.info(data);
+                            }
 
                             if (data && data.sourceId == document.subSocketId) {
                                 return;

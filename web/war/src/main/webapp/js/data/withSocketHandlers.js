@@ -16,7 +16,6 @@ define([], function() {
             switch (message.type) {
                 case 'propertiesChange':
 
-                    // TODO: create edgesUpdated events
                     if (message.data && message.data.vertex && !message.data.vertex.sourceVertexId) {
                         if (self.cachedVertices[message.data.vertex.id]) {
                             updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
@@ -53,6 +52,9 @@ define([], function() {
                                     originalEvent: message.type
                                 }
                             });
+                            if (vertices.length === 2) {
+                                self.trigger('refreshRelationships');
+                            }
                         }
                     }
                     break;

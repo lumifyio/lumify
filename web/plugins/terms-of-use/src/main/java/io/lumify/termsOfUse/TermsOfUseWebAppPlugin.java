@@ -1,6 +1,7 @@
 package io.lumify.termsOfUse;
 
 import com.altamiracorp.miniweb.Handler;
+import com.altamiracorp.miniweb.handlers.StaticResourceHandler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 
@@ -11,6 +12,10 @@ public class TermsOfUseWebAppPlugin implements WebAppPlugin {
 
     @Override
     public void init(WebApp app, ServletContext servletContext, Handler authenticationHandler) {
+
+        app.get("/jsc/io/lumify/termsOfUse/terms-of-use.hbs",
+                new StaticResourceHandler(getClass(), "/io/lumify/termsOfUse/terms-of-use.hbs", "text/html"));
+
         app.registerJavaScript("/io/lumify/termsOfUse/terms-of-use-plugin.js");
         app.registerResourceBundle("/io/lumify/termsOfUse/messages.properties");
         app.get(TERMS_OF_USE_PATH, TermsOfUse.class);
