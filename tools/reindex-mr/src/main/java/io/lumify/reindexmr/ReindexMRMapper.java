@@ -62,6 +62,7 @@ public class ReindexMRMapper extends Mapper<String, Element, Object, Element> {
         if (elementCache.size() >= BATCH_SIZE) {
             writeCache();
         }
+        context.getCounter(ReindexCounters.ELEMENTS_PROCESSED).increment(1);
     }
 
     private void writeCache() {

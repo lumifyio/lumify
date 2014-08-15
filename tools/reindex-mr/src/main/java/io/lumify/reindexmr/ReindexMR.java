@@ -13,6 +13,8 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.mapreduce.Counter;
+import org.apache.hadoop.mapreduce.CounterGroup;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.hadoop.util.Tool;
@@ -67,7 +69,21 @@ public class ReindexMR extends Configured implements Tool {
         jobEdges.setInputFormatClass(AccumuloEdgeInputFormat.class);
         jobEdges.setNumReduceTasks(0);
 
-        return (jobVertices.waitForCompletion(true) && jobEdges.waitForCompletion(true)) ? 0 : 1;
+        int ret = (jobVertices.waitForCompletion(true) && jobEdges.waitForCompletion(true)) ? 0 : 1;
+
+        CounterGroup groupCounters = jobVertices.getCounters().getGroup(ReindexCounters.class.getName());
+        System.out.println("Vertex Counters");
+        for (Counter counter : groupCounters) {
+            System.out.println("  " + counter.getDisplayName() + ": " + counter.getValue());
+        }
+
+        System.out.println("Edge Counters");
+        groupCounters = jobEdges.getCounters().getGroup(ReindexCounters.class.getName());
+        for (Counter counter : groupCounters) {
+            System.out.println("  " + counter.getDisplayName() + ": " + counter.getValue());
+        }
+
+        return ret;
     }
 
     private Configuration getConfiguration(String[] args, io.lumify.core.config.Configuration lumifyConfig) {

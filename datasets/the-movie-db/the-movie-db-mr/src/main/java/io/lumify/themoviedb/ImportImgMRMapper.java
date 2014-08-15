@@ -111,6 +111,8 @@ public class ImportImgMRMapper extends ElementMapper<SequenceFileKey, BytesWrita
 
         graph.addEdge(edgeId, sourceVertex, profileImageVertex, edgeLabel, visibility, authorizations);
         LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(sourceVertex, MULTI_VALUE_KEY, profileImageVertex.getId(), visibility, authorizations);
+
+        context.getCounter(TheMovieDbImportCounters.IMAGES_PROCESSED).increment(1);
     }
 
     @Override

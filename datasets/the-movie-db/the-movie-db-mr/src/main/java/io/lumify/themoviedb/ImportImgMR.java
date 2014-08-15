@@ -36,10 +36,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class ImportImgMR extends Configured implements Tool {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImportImgMR.class);
@@ -137,6 +134,10 @@ public class ImportImgMR extends Configured implements Tool {
         LOGGER.info("Using config:\n" + lumifyConfig);
 
         Configuration hadoopConfig = lumifyConfig.toHadoopConfiguration();
+        Configuration toolConf = getConf();
+        for (Map.Entry<String, String> toolConfItem : toolConf) {
+            hadoopConfig.set(toolConfItem.getKey(), toolConfItem.getValue());
+        }
         hadoopConfig.set(ElementMapper.GRAPH_CONFIG_PREFIX, "graph.");
         LOGGER.info("inFileName: %s", inFileName);
         hadoopConfig.set("in", inFileName);
