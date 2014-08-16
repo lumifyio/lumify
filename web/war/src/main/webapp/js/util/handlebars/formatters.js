@@ -8,6 +8,10 @@ define([
         return F.date.dateTimeString(date);
     });
 
+    Handlebars.registerHelper('dateonly', function(date) {
+        return F.date.dateString(date);
+    });
+
     Handlebars.registerHelper('relativedate', function(date) {
         return F.date.relativeToNow(F.date.utc(date));
     });
