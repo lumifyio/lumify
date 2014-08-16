@@ -32,7 +32,6 @@ public class TermsOfUse extends BaseRequestHandler {
     public static final String DEFAULT_HTML = "<p>These are the terms to which you must agree before using Lumify:</p><p>With great power comes great responsibility. Please use Lumify responsibly.</p>";
     public static final String DATE_PROPERTY = "termsOfUse.date";
     public static final String DATE_PROPERTY_FORMAT = "yyyy-MM-dd";
-    public static final Date DEFAULT_DATE = new Date(0);
 
     private static final String UI_PREFERENCE_KEY = "termsOfUse";
     private static final String UI_PREFERENCE_HASH_SUBKEY = "hash";
@@ -45,7 +44,7 @@ public class TermsOfUse extends BaseRequestHandler {
         String title = configuration.get(TITLE_PROPERTY, DEFAULT_TITLE);
         String html = configuration.get(HTML_PROPERTY, DEFAULT_HTML);
         termsHash = hash(html);
-        Date date;
+        Date date = null;
         String dateString = configuration.getOrNull(DATE_PROPERTY);
         if (dateString != null) {
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_PROPERTY_FORMAT);
@@ -54,15 +53,15 @@ public class TermsOfUse extends BaseRequestHandler {
             } catch (ParseException e) {
                 throw new LumifyException("unable to parse " + DATE_PROPERTY + " property with format " + DATE_PROPERTY_FORMAT, e);
             }
-        } else {
-            date = DEFAULT_DATE;
         }
 
         termsJson = new JSONObject();
         termsJson.put("title", title);
         termsJson.put("html", html);
         termsJson.put("hash", termsHash);
-        termsJson.put("date", date);
+        if (date != null) {
+            termsJson.put("date", date);
+        }
     }
 
     @Override

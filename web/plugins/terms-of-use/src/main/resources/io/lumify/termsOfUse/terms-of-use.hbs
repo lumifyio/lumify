@@ -7,6 +7,9 @@
     <div class="modal-body">
         <div class="term-body">
             <p>{{{ terms.html }}}</p>
+            {{#if terms.date }}
+                <p style="text-align:right; font-style:italic">{{ dateonly terms.date }}</p>
+            {{/if}}
         </div>
     </div>
     <div class="modal-footer">
