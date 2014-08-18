@@ -19,7 +19,7 @@ public class FoodTruckHasTwitterAccountOnCreateGraphPropertyWorker extends Graph
 
         String imageVertexId = LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyValue(twitterUserVertex);
         if (imageVertexId != null && imageVertexId.length() > 0) {
-            LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(foodTruckVertex, MULTI_VALUE_KEY, imageVertexId, data.getVisibility(), getAuthorizations());
+            LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(foodTruckVertex, MULTI_VALUE_KEY, imageVertexId, new Visibility(data.getVisibilitySource()), getAuthorizations());
             getGraph().flush();
             getWorkQueueRepository().pushGraphPropertyQueue(foodTruckVertex, MULTI_VALUE_KEY, LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
         }
