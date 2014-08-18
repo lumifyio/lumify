@@ -55,7 +55,7 @@ Proceed if you are not using the Pre-built VM provided by [Lumify](https://lumif
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_create_new_app.png)
 <br/>
 <br/>
-4. Once completed, scroll down and select **Create my access token**.
+4. Once completed, click on the **API Keys** tab. Scroll down and select **Create my access token**.
 <br/>
 <br/>
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_access_token.png)
