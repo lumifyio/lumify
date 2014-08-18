@@ -207,11 +207,6 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-stanford-nlp</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
             <artifactId>lumify-food-truck</artifactId>
             <version>${project.version}</version>
         </dependency>

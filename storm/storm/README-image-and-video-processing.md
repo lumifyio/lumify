@@ -1,7 +1,5 @@
 
-
-
-Storm - Video Processing Readme:
+# Image and Video Processing
 
 The video processing aspects of this module requires the following ontology properties located in the following files:
     File: /lumify/examples/ontology-dev/dev.owl:
@@ -31,10 +29,7 @@ Please make sure the following are in your /opt/lumify/lumify.properties file:
      ontology.iri.height=http://lumify.io/dev#height
      ontology.iri.fileSize=http://lumify.io/dev#fileSize
 
-
-
 Or to create your own ontologies, edit the file:
  /lumify/storm/plugins/drewnoakes-image-metadata-extractor/src/main/java/io/lumify/imageMetadataExtractor/Ontology.java
  and the lumify.properties file.
- 
  
