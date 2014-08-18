@@ -6,6 +6,8 @@ import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.model.properties.types.StringLumifyProperty;
 
 public class TheMovieDbOntology {
+    public static final String EDGE_LABEL_PLAYED = "http://lumify.io/themoviedb#played";
+    public static final String EDGE_LABEL_HAS_ROLE = "http://lumify.io/themoviedb#hasRole";
     public static final String EDGE_LABEL_PRODUCED = "http://lumify.io/themoviedb#produced";
     public static final String EDGE_LABEL_HAS_PROFILE_IMAGE = "http://lumify.io/themoviedb#hasProfileImage";
     public static final String EDGE_LABEL_HAS_POSTER_IMAGE = "http://lumify.io/themoviedb#hasPosterImage";
@@ -17,6 +19,7 @@ public class TheMovieDbOntology {
     public static final String CONCEPT_TYPE_PROFILE_IMAGE = "http://lumify.io/themoviedb#profileimage";
     public static final String CONCEPT_TYPE_MOVIE = "http://lumify.io/themoviedb#movie";
     public static final String CONCEPT_TYPE_LOGO = "http://lumify.io/themoviedb#logo";
+    public static final String CONCEPT_TYPE_ROLE = "http://lumify.io/themoviedb#role";
     public static final String CONCEPT_TYPE_PRODUCTION_COMPANY = "http://lumify.io/themoviedb#productionCompany";
     public static final String CONCEPT_TYPE_POSTER_IMAGE = "http://lumify.io/themoviedb#posterImage";
 
@@ -56,5 +59,21 @@ public class TheMovieDbOntology {
 
     public static String getHasImageEdgeId(int id, String imagePath) {
         return "MOVIEDB_HAS_IMAGE_" + id + "_" + imagePath;
+    }
+
+    public static String getRoleId(int personId, int movieId) {
+        return personId + "-" + movieId;
+    }
+
+    public static String getRoleVertexId(String roleId) {
+        return "MOVIEDB_ROLE_" + roleId;
+    }
+
+    public static String getPlayedEdgeId(int personId, String roleId) {
+        return "MOVIEDB_PLAYED_" + personId + "_" + roleId;
+    }
+
+    public static String getHasRoleEdgeId(int movieId, String roleId) {
+        return "MOVIEDB_HAS_ROLE_" + movieId + "_" + roleId;
     }
 }

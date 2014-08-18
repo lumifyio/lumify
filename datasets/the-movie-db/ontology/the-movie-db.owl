@@ -20,7 +20,7 @@
     <owl:Ontology rdf:about="http://lumify.io/themoviedb">
         <owl:imports rdf:resource="http://lumify.io"/>
     </owl:Ontology>
-
+    
 
 
     <!-- 
@@ -31,7 +31,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-
+    
 
 
     <!-- http://lumify.io/themoviedb#hasLogo -->
@@ -41,7 +41,7 @@
         <rdfs:range rdf:resource="http://lumify.io/themoviedb#logo"/>
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#productionCompany"/>
     </owl:ObjectProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#hasPosterImage -->
@@ -51,7 +51,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="http://lumify.io/themoviedb#posterImage"/>
     </owl:ObjectProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#hasProfileImage -->
@@ -61,7 +61,27 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
         <rdfs:range rdf:resource="http://lumify.io/themoviedb#profileimage"/>
     </owl:ObjectProperty>
+    
 
+
+    <!-- http://lumify.io/themoviedb#hasRole -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/themoviedb#hasRole">
+        <rdfs:label xml:lang="en">Has Role</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
+        <rdfs:range rdf:resource="http://lumify.io/themoviedb#role"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/themoviedb#played -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/themoviedb#played">
+        <rdfs:label xml:lang="en">Played</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
+        <rdfs:range rdf:resource="http://lumify.io/themoviedb#role"/>
+    </owl:ObjectProperty>
+    
 
 
     <!-- http://lumify.io/themoviedb#produced -->
@@ -71,7 +91,7 @@
         <rdfs:range rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#productionCompany"/>
     </owl:ObjectProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#starredin -->
@@ -81,7 +101,7 @@
         <rdfs:range rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
     </owl:ObjectProperty>
-
+    
 
 
     <!-- 
@@ -92,7 +112,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-
+    
 
 
     <!-- http://lumify.io/themoviedb#aka -->
@@ -102,8 +122,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-
-
+    
 
 
     <!-- http://lumify.io/themoviedb#birthdate -->
@@ -113,7 +132,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#budge -->
@@ -123,7 +142,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#deathdate -->
@@ -133,7 +152,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#genre -->
@@ -143,8 +162,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-
-
+    
 
 
     <!-- http://lumify.io/themoviedb#releaseDate -->
@@ -154,7 +172,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#revenue -->
@@ -164,7 +182,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#runtime -->
@@ -174,7 +192,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="&xsd;double"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#tagLine -->
@@ -184,7 +202,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- 
@@ -195,7 +213,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-
+    
 
 
     <!-- http://lumify.io/themoviedb#logo -->
@@ -205,7 +223,7 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/themoviedb#the-movie-db-root"/>
         <lumify:displayType xml:lang="en">image</lumify:displayType>
     </owl:Class>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#movie -->
@@ -216,7 +234,7 @@
         <lumify:glyphIconFileName xml:lang="en">movie.png</lumify:glyphIconFileName>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/themoviedb#releaseDate&apos;) || &apos;&apos;</lumify:timeFormula>
     </owl:Class>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#person -->
@@ -227,7 +245,7 @@
         <lumify:glyphIconFileName xml:lang="en">person.png</lumify:glyphIconFileName>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/themoviedb#birthdate&apos;) || &apos;&apos;</lumify:timeFormula>
     </owl:Class>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#posterImage -->
@@ -237,7 +255,7 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/themoviedb#the-movie-db-root"/>
         <lumify:displayType xml:lang="en">image</lumify:displayType>
     </owl:Class>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#productionCompany -->
@@ -247,7 +265,7 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/themoviedb#the-movie-db-root"/>
         <lumify:glyphIconFileName xml:lang="en">productionCompany.png</lumify:glyphIconFileName>
     </owl:Class>
-
+    
 
 
     <!-- http://lumify.io/themoviedb#profileimage -->
@@ -257,7 +275,16 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/themoviedb#the-movie-db-root"/>
         <lumify:displayType xml:lang="en">image</lumify:displayType>
     </owl:Class>
+    
 
+
+    <!-- http://lumify.io/themoviedb#role -->
+
+    <owl:Class rdf:about="http://lumify.io/themoviedb#role">
+        <rdfs:label xml:lang="en">Role</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/themoviedb#the-movie-db-root"/>
+    </owl:Class>
+    
 
 
     <!-- http://lumify.io/themoviedb#the-movie-db-root -->

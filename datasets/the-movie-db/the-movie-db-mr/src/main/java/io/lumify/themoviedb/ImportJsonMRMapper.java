@@ -112,6 +112,12 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
 
         Vertex personVertex = m.save(authorizations);
 
+        processPersonCredits(personId, personJson, personVertex);
+
+        context.getCounter(TheMovieDbImportCounters.PERSONS_PROCESSED).increment(1);
+    }
+
+    private void processPersonCredits(int personId, JSONObject personJson, Vertex personVertex) {
         JSONObject combinedCredits = personJson.getJSONObject("combined_credits");
         JSONArray cast = combinedCredits.getJSONArray("cast");
         for (int i = 0; i < cast.length(); i++) {
@@ -132,8 +138,6 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
 
             getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
         }
-
-        context.getCounter(TheMovieDbImportCounters.PERSONS_PROCESSED).increment(1);
     }
 
     private void mapMovie(int movieId, JSONObject movieJson, Context context) throws ParseException {
@@ -242,6 +246,19 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
             }
             Vertex personVertex = personMutation.save(authorizations);
             getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
+
+            String character = castJson.optString("character");
+            if (character != null && character.length() > 0) {
+                String roleId = TheMovieDbOntology.getRoleId(personId, movieId);
+                VertexBuilder roleMutation = getGraph().prepareVertex(TheMovieDbOntology.getRoleVertexId(roleId), visibility);
+                LumifyProperties.CONCEPT_TYPE.addPropertyValue(roleMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_ROLE, visibility);
+                LumifyProperties.SOURCE.addPropertyValue(roleMutation, MULTI_VALUE_KEY, SOURCE, visibility);
+                LumifyProperties.TITLE.addPropertyValue(roleMutation, MULTI_VALUE_KEY, character, visibility);
+                Vertex roleVertex = roleMutation.save(authorizations);
+
+                getGraph().addEdge(TheMovieDbOntology.getPlayedEdgeId(personId, roleId), personVertex, roleVertex, TheMovieDbOntology.EDGE_LABEL_PLAYED, visibility, authorizations);
+                getGraph().addEdge(TheMovieDbOntology.getHasRoleEdgeId(movieId, roleId), movieVertex, roleVertex, TheMovieDbOntology.EDGE_LABEL_HAS_ROLE, visibility, authorizations);
+            }
         }
     }
 
