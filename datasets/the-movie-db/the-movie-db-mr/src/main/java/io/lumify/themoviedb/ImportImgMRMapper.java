@@ -67,10 +67,11 @@ public class ImportImgMRMapper extends LumifyElementMapperBase<SequenceFileKey, 
         LumifyProperties.TITLE.addPropertyValue(m, MULTI_VALUE_KEY, "Image of " + title, visibility);
         Vertex profileImageVertex = m.save(authorizations);
 
-        Vertex sourceVertex = prepareVertex(sourceVertexId, visibility).save(authorizations);
+        VertexBuilder sourceVertexMutation = prepareVertex(sourceVertexId, visibility);
+        LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(sourceVertexMutation, MULTI_VALUE_KEY, profileImageVertex.getId(), visibility);
+        Vertex sourceVertex = sourceVertexMutation.save(authorizations);
 
         addEdge(edgeId, sourceVertex, profileImageVertex, edgeLabel, visibility, authorizations);
-        LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(sourceVertex, MULTI_VALUE_KEY, profileImageVertex.getId(), visibility, authorizations);
 
         context.getCounter(TheMovieDbImportCounters.IMAGES_PROCESSED).increment(1);
     }
