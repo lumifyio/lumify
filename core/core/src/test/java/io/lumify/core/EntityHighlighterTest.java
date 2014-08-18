@@ -127,6 +127,17 @@ public class EntityHighlighterTest {
         );
     }
 
+    @Test
+    public void testGetHighlightedTextWithAccentedCharacters() throws Exception {
+        when(graph.getVertices((Iterable<String>) any(), eq(authorizations))).thenReturn(new ArrayList<Vertex>());
+
+        ArrayList<TermMentionModel> terms = new ArrayList<TermMentionModel>();
+        terms.add(createTermMention("US", 48, 50, "1"));
+        List<OffsetItem> termAndTermMetadata = new EntityHighlighter().convertTermMentionsToOffsetItems(terms, "");
+        String highlightText = EntityHighlighter.getHighlightedText("Ejército de Liberación Nacional® partnered with US on peace treaty", termAndTermMetadata);
+        assertEquals("Ej&eacute;rcito de Liberaci&oacute;n Nacional&reg; partnered with <span class=\"entity\" title=\"US\" data-info=\"{&quot;title&quot;:&quot;US&quot;,&quot;sandboxStatus&quot;:&quot;PUBLIC&quot;,&quot;start&quot;:48,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;http://lumify.io#rowKey&quot;:&quot;1\\u001e\\u001e0000000000000050\\u001e0000000000000048&quot;,&quot;end&quot;:50}\">US</span> on peace treaty", highlightText);
+    }
+
     private List<String> asList(String[] strings) {
         List<String> results = new ArrayList<String>();
         for (String s : strings) {

@@ -26,6 +26,8 @@ public abstract class OffsetItem implements Comparable {
 
     public abstract String getRowKey();
 
+    public abstract String getProcess();
+
     public String getGraphVertexId() {
         return null;
     }
@@ -48,6 +50,7 @@ public abstract class OffsetItem implements Comparable {
                 infoJson.put("edgeId", getEdgeId());
             }
             infoJson.put("type", getType());
+            infoJson.put("process", getProcess());
             return infoJson;
         } catch (JSONException e) {
             throw new RuntimeException(e);

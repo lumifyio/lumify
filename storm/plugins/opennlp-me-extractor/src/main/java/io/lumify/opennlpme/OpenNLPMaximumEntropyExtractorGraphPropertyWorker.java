@@ -52,7 +52,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        ObjectStream<String> untokenizedLineStream = new PlainTextByLineStream(new InputStreamReader(in));
+        ObjectStream<String> untokenizedLineStream = new PlainTextByLineStream(in, "UTF-8");
         String line;
         int charOffset = 0;
 

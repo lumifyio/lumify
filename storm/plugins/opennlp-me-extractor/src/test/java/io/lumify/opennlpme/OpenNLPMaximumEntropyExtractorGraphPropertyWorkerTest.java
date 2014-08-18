@@ -41,7 +41,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
 
     @Mock
     private User user;
-    private String text = "This is a sentence, written by Bob Robertson, who currently makes 2 million "
+    private String text = "This is a sentenc®, written by Bob Robertson, who curréntly makes 2 million "
             + "a year. If by 1:30, you don't know what you are doing, you should go watch CNN and see "
             + "what the latest is on the Benghazi nonsense. I'm 47% sure that this test will pass, but will it?";
 

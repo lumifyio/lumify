@@ -75,4 +75,8 @@ public class TermMentionMetadata extends ColumnFamily {
         set(ANALYTIC_PROCESS, analyticProcess, visibility.getVisibilityString());
         return this;
     }
+
+    public String getAnalyticProcess() {
+        return Value.toString(get(ANALYTIC_PROCESS));
+    }
 }
