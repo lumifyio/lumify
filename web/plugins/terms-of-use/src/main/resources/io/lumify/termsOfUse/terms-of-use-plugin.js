@@ -10,6 +10,9 @@ require([
         $.get("terms")
             .done(function(json) {
                 var terms = json.terms;
+                if (terms.date) {
+                    terms.date = new Date(terms.date);
+                }
 
                 if (json.status.current != true) {
                     require([

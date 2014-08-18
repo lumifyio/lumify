@@ -13,9 +13,8 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MimeTypes;
 import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +30,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.Normalizer;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -94,7 +94,9 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         checkNotNull(mimeType, LumifyProperties.MIME_TYPE.getPropertyName() + " is a required metadata field");
 
+        Charset charset = Charset.forName("UTF-8");
         Metadata metadata = new Metadata();
+        metadata.set(Metadata.CONTENT_TYPE, mimeType);
         String text = extractText(in, mimeType, metadata);
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
@@ -120,7 +122,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
                 text = new JSONObject(customImageMetadataJson.get("description").toString()).get("_content") +
                         "\n" + customImageMetadataJson.get("tags").toString();
-                StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes()), String.class);
+                StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes(charset)), String.class);
                 LumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
 
                 Date lastupdate = GenericDateExtractor
@@ -136,7 +138,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
                 LOGGER.warn("Image returned invalid custom metadata");
             }
         } else {
-            StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes()), String.class);
+            StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes(charset)), String.class);
             LumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
 
             LumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
@@ -160,30 +162,32 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private String extractText(InputStream in, String mimeType, Metadata metadata) throws IOException, SAXException, TikaException, BoilerpipeProcessingException {
-        Parser parser = new AutoDetectParser(); // TODO: the content type should already be detected. To speed this up we should be able to grab the parser from content type.
-        ParseContext ctx = new ParseContext();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.copy(in, out);
+        byte[] textBytes = out.toByteArray();
         String text;
 
-        //todo use a stream that supports reset rather than copying data to memory
-        byte[] input = IOUtils.toByteArray(in);
-        // since we are using the AutoDetectParser, it is safe to assume that
-        //the Content-Type metadata key will always return a value
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Charset charset = Charset.forName("UTF-8");
-        Writer writer = new OutputStreamWriter(out, charset);
-        ContentHandler handler = new BodyContentHandler(writer);
-        parser.parse(new ByteArrayInputStream(input), handler, metadata, ctx);
-        String bodyContent = new String(out.toByteArray(), charset);
+        String bodyContent = extractTextWithTika(textBytes, metadata);
 
         if (isHtml(mimeType)) {
-            text = extractTextFromHtml(IOUtils.toString(new ByteArrayInputStream(input), "UTF-8"));
+            text = extractTextFromHtml(IOUtils.toString(textBytes, "UTF-8"));
             if (text == null || text.length() == 0) {
                 text = cleanExtractedText(bodyContent);
             }
         } else {
             text = cleanExtractedText(bodyContent);
         }
-        return text;
+
+        return Normalizer.normalize(text, Normalizer.Form.NFC);
+    }
+
+    private String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
+        AutoDetectParser parser = new AutoDetectParser(new MimeTypes());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
+        ContentHandler handler = new BodyContentHandler(writer);
+        parser.parse(new ByteArrayInputStream(textBytes), handler, metadata);
+        return IOUtils.toString(baos.toByteArray(), "UTF-8");
     }
 
     private String extractTextFromHtml(String text) throws BoilerpipeProcessingException {
@@ -191,12 +195,12 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
         text = cleanHtml(text);
 
-        extractedText = NumWordsRulesExtractor.INSTANCE.getText(text);
+        extractedText = NumWordsRulesExtractor.getInstance().getText(text);
         if (extractedText != null && extractedText.length() > 0) {
             return extractedText;
         }
 
-        extractedText = ArticleExtractor.INSTANCE.getText(text);
+        extractedText = ArticleExtractor.getInstance().getText(text);
         if (extractedText != null && extractedText.length() > 0) {
             return extractedText;
         }
@@ -317,3 +321,4 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         return true;
     }
 }
+

@@ -43,6 +43,11 @@ public class TermMentionOffsetItem extends OffsetItem {
     }
 
     @Override
+    public String getProcess() {
+        return termMention.getMetadata().getAnalyticProcess();
+    }
+
+    @Override
     public String getGraphVertexId() {
         return termMention.getMetadata().getGraphVertexId();
     }

@@ -3,8 +3,10 @@ package io.lumify.core.util;
 import io.lumify.core.exception.LumifyException;
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,20 +45,21 @@ public class ServiceLoaderUtil {
 
     public static <T> Collection<T> loadFile(URL config) throws IOException {
         List<T> services = new ArrayList<T>();
-        InputStream in = config.openStream();
+        LOGGER.debug("loadFile(%s)", config);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(config.openStream()));
+
         try {
-            String fileContents = IOUtils.toString(in);
-            LOGGER.debug("%s:\n%s", config.toString(), fileContents);
-            String[] classNames = fileContents.split("\n");
-            for (String className : classNames) {
+            String className;
+            while ((className = reader.readLine()) != null) {
                 if (className.trim().length() == 0) {
                     continue;
                 }
-                services.add(ServiceLoaderUtil.<T>loadClass(config, className));
+                services.add(ServiceLoaderUtil.<T>loadClass(config, className.trim()));
             }
         } finally {
-            in.close();
+            reader.close();
         }
+
         return services;
     }
 

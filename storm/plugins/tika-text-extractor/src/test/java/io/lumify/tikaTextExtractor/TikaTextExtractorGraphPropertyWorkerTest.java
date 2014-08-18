@@ -19,6 +19,8 @@ import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,9 +95,9 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         assertEquals(new Date(1357063760000L), LumifyProperties.CREATE_DATE.getPropertyValue(vertex));
     }
 
-    private void createVertex(String data, String mimeType) {
+    private void createVertex(String data, String mimeType) throws UnsupportedEncodingException {
         VertexBuilder v = graph.prepareVertex("v1", visibility);
-        StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(data.getBytes()), byte[].class);
+        StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(data.getBytes("UTF-8")), byte[].class);
         textValue.searchIndex(false);
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
@@ -155,17 +157,21 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
 
     @Test
     public void testExtractTextWithAccentCharacters() throws Exception {
-        String data = "Anorí, Antioquia";
-        createVertex(data, "text/plain");
+        String data = "the Quita Suena\u0301 bank";
+        createVertex(data, "text/plain; charset=utf-8");
 
-        InputStream in = new ByteArrayInputStream(data.getBytes());
+        InputStream in = new ByteArrayInputStream(data.getBytes("UTF-8"));
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
-        assertEquals(data + "\n", IOUtils.toString(LumifyProperties.TEXT.getPropertyValue(vertex).getInputStream(), "UTF-8"));
+        String expected = "the Quita Suená bank\n";
+        String actual = IOUtils.toString(LumifyProperties.TEXT.getPropertyValue(vertex).getInputStream(), "UTF-8");
+        assertEquals(21, expected.length());
+        assertEquals(expected, actual);
+        assertEquals(expected.length(), actual.length());
     }
 
     //todo : add test with image metadata
