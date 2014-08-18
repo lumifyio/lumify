@@ -40,25 +40,25 @@ Proceed if you are not using the Pre-built VM provided by [Lumify](https://lumif
 1. Sign In to [Twitter Developers site](https://dev.twitter.com/user/login?destination=home) using your Twitter credentials.
 <br/>
 <br/>
-![ScreenShot](https://raw.github.com/altamiracorp/lumify-twitter/master/docs/screenshots/twitter_sign_in.png)
+![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_sign_in.png)
 <br/>
 <br/>
 2. In the top right corner hover over your Twitter Handler’s picture and select **My Applications** from the drop-down menu.
 <br/>
 <br/>
-![ScreenShot](https://raw.github.com/altamiracorp/lumify-twitter/master/docs/screenshots/twitter_my_app.png)
+![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_my_app.png)
 <br/>
 <br/>
 3. Select **Create a new application** and fill out the form.
 <br/>
 <br/>
-![ScreenShot](https://raw.github.com/altamiracorp/lumify-twitter/master/docs/screenshots/twitter_create_new_app.png)
+![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_create_new_app.png)
 <br/>
 <br/>
 4. Once completed, scroll down and select **Create my access token**.
 <br/>
 <br/>
-![ScreenShot](https://raw.github.com/altamiracorp/lumify-twitter/master/docs/screenshots/twitter_access_token.png)
+![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_access_token.png)
 <br/>
 <br/>
 5. Refresh the page until you see Access Token, Access Token Secret, and Access Level under **Your Access Token**.
