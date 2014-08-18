@@ -38,5 +38,6 @@
         <module>java-code</module>
         <module>csv-structured-ingest</module>
         <module>mime-type-ontology-mapper</module>
+        <module>stanford-nlp</module>
     </modules>
 </project>

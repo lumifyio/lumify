@@ -2,7 +2,6 @@ package io.lumify.storm.video;
 
 import com.google.common.io.Files;
 import com.google.inject.Inject;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
@@ -47,7 +46,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             videoRotation = nullableRotation;
         }
 
-        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data);
+        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 0.1);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
@@ -245,20 +244,20 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         return results;
     }
 
-    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data) {
+    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data, double defaultFPSToExtract) {
         int numberOfFrames = 20;
         JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        if (outJson == null) {
-            throw new LumifyException("Could not get JSON from ffprobe");
+        Double duration = null;
+        if (outJson != null) {
+            duration = DurationUtil.extractDurationFromJSON(outJson);
+            if (duration != null && duration != 0){
+                double framesPerSecondToExtract = numberOfFrames / duration;
+                return framesPerSecondToExtract;
+            }
         }
 
-        Double duration = DurationUtil.extractDurationFromJSON(outJson);
-        if (duration == null) {
-            throw new LumifyException("Could not find duration in json:\n" + outJson.toString(2));
-        }
-
-        double framesPerSecondToExtract = numberOfFrames / duration;
-        return framesPerSecondToExtract;
+        //Upon failure to calculate FPS, return defaultFPS.
+        return defaultFPSToExtract;
     }
 
 

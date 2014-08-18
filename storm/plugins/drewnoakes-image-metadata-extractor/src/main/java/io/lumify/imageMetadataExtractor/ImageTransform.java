@@ -5,9 +5,8 @@ package io.lumify.imageMetadataExtractor;
  * Transformations must be done in this order.
  */
 public class ImageTransform {
-    private boolean yAxisFlipNeeded;
-    private int cwRotationNeeded;
-
+    private final boolean yAxisFlipNeeded;
+    private final int cwRotationNeeded;
 
     public ImageTransform(boolean yAxisFlipNeeded, int cwRotationNeeded) {
         this.yAxisFlipNeeded = yAxisFlipNeeded;

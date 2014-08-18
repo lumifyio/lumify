@@ -37,10 +37,10 @@ public class JSONExtractor {
             LOGGER.error("outstring, " + outString + ", is not a valid json");
             return null;
         } catch (IOException e) {
-            LOGGER.error("IOException occurred. Could not retrieve JSONObject using ffprobe.");
+            LOGGER.debug("IOException occurred. Could not retrieve JSONObject using ffprobe.");
             return null;
         } catch (InterruptedException e) {
-            LOGGER.error("InterruptedException occurred. Could not retrieve JSONObject using ffprobe.");
+            LOGGER.debug("InterruptedException occurred. Could not retrieve JSONObject using ffprobe.");
             return null;
         }
 

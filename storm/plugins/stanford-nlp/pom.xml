@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-drewnoakes-image-metadata-extractor</artifactId>
-    <name>Lumify: Storm: Plugin: Drew Noakes Image Metadata Extractor</name>
+    <artifactId>lumify-stanford-nlp</artifactId>
+    <name>Lumify: Storm: Plugin: Stanford NLP</name>
 
     <dependencies>
         <dependency>
@@ -20,19 +20,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.lumify</groupId>
-            <artifactId>lumify-storm</artifactId>
-            <version>${project.version}</version>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.4</version>
         </dependency>
         <dependency>
-            <groupId>com.drewnoakes</groupId>
-            <artifactId>metadata-extractor</artifactId>
-            <version>2.6.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.xmp</groupId>
-            <artifactId>xmpcore</artifactId>
-            <version>5.1.2</version>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.4</version>
+            <classifier>models</classifier>
         </dependency>
     </dependencies>
 
@@ -76,4 +72,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

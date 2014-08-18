@@ -38,7 +38,7 @@ public class MakeAndModelUtil {
             }
         }
 
-        LOGGER.debug("Could not extract " + firstSearchString + " or " + secondSearchString + "from json.");
+        LOGGER.debug("Could not extract " + firstSearchString + " or " + secondSearchString + " from json.");
         return null;
     }
 }
