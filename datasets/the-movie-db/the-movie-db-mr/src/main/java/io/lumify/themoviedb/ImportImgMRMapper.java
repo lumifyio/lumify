@@ -117,17 +117,17 @@ public class ImportImgMRMapper extends ElementMapper<SequenceFileKey, BytesWrita
 
     @Override
     protected void saveDataMutation(Context context, Text dataTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(ImportJsonMR.getKey(dataTableName.toString(), m.getRow()), m);
+        context.write(ImportImgMR.getKey(dataTableName.toString(), m.getRow()), m);
     }
 
     @Override
     protected void saveEdgeMutation(Context context, Text edgesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(ImportJsonMR.getKey(edgesTableName.toString(), m.getRow()), m);
+        context.write(ImportImgMR.getKey(edgesTableName.toString(), m.getRow()), m);
     }
 
     @Override
     protected void saveVertexMutation(Context context, Text verticesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(ImportJsonMR.getKey(verticesTableName.toString(), m.getRow()), m);
+        context.write(ImportImgMR.getKey(verticesTableName.toString(), m.getRow()), m);
     }
 
     @Override

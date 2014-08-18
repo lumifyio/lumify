@@ -214,6 +214,15 @@ public final class Configuration {
         return conf;
     }
 
+    public org.apache.hadoop.conf.Configuration toHadoopConfiguration(org.apache.hadoop.conf.Configuration additionalConfiguration) {
+        org.apache.hadoop.conf.Configuration hadoopConfig = toHadoopConfiguration();
+        hadoopConfig.setBoolean("mapred.used.genericoptionsparser", true); // eliminates warning on our version of hadoop
+        for (Map.Entry<String, String> toolConfItem : additionalConfiguration) {
+            hadoopConfig.set(toolConfItem.getKey(), toolConfItem.getValue());
+        }
+        return hadoopConfig;
+    }
+
     public File resolveFileName(String fileName) {
         return this.configurationLoader.resolveFileName(fileName);
     }

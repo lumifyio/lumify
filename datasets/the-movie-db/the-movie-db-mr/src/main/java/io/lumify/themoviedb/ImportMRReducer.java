@@ -23,7 +23,7 @@ public class ImportMRReducer extends Reducer<Text, Mutation, Text, Mutation> {
     private void safeReduce(Text keyText, Iterable<Mutation> values, Context context) throws IOException, InterruptedException {
         String key = keyText.toString();
         context.setStatus(key);
-        int keySplitLocation = key.indexOf(ImportJsonMR.KEY_SPLIT);
+        int keySplitLocation = key.indexOf(ImportImgMR.KEY_SPLIT);
         if (keySplitLocation < 0) {
             throw new IOException("Invalid key: " + keyText);
         }
