@@ -11,6 +11,7 @@ import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
@@ -105,7 +106,9 @@ public class WorkspaceHelper {
         return json;
     }
 
-    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String imageRelationshipLabel, User user, Authorizations authorizations) {
+    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex,
+                                 String imageRelationshipLabel, User user, String workspaceId,
+                                 Authorizations authorizations) {
         graph.removeEdge(edge, authorizations);
 
         if (edge.getLabel().equals(imageRelationshipLabel)) {
@@ -119,6 +122,16 @@ public class WorkspaceHelper {
             if (termMentionModel != null && termMentionModel.getMetadata().getEdgeId().equals(edge.getId())) {
                 termMentionRepository.delete(termMentionModel.getRowKey());
                 workQueueRepository.pushTextUpdated(sourceVertex.getId().toString());
+            } else {
+                String multiValueKey = rowKeyProperty.getValue().toString();
+                // remove property
+                JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(destVertex);
+                LumifyProperties.DETECTED_OBJECT.removeProperty(sourceVertex, multiValueKey, authorizations);
+                graph.removeEdge(edge, authorizations);
+                auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, new LumifyVisibility().getVisibility());
+                this.workQueueRepository.pushEdgeDeletion(edge);
+                this.workQueueRepository.pushGraphPropertyQueue(sourceVertex, multiValueKey,
+                        LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getString("source"));
             }
         }
 
