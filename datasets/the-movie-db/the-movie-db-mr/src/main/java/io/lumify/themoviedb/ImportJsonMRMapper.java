@@ -1,23 +1,15 @@
 package io.lumify.themoviedb;
 
+import io.lumify.core.mapreduce.LumifyElementMapperBase;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
-import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.io.Text;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.securegraph.GraphFactory;
 import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
 import org.securegraph.accumulo.AccumuloAuthorizations;
-import org.securegraph.accumulo.AccumuloGraph;
-import org.securegraph.accumulo.mapreduce.ElementMapper;
-import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
-import org.securegraph.id.IdGenerator;
 import org.securegraph.property.StreamingPropertyValue;
-import org.securegraph.util.MapUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,36 +19,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Text, Mutation> {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImportJsonMRMapper.class);
+public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey, Text> {
     public static final String MULTI_VALUE_KEY = ImportJsonMR.class.getName();
     public static final String SOURCE = "TheMovieDb.org";
-    public static final String CONFIG_SOURCE_FILE_NAME = "sourceFileName";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat DATE_YEAR_FORMAT = new SimpleDateFormat("yyyy");
-    private AccumuloGraph graph;
     private Visibility visibility;
     private AccumuloAuthorizations authorizations;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
-        this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
         this.visibility = new Visibility("");
         this.authorizations = new AccumuloAuthorizations();
     }
 
     @Override
-    protected void map(SequenceFileKey key, Text line, Context context) throws IOException, InterruptedException {
-        try {
-            safeMap(key, line, context);
-        } catch (Exception ex) {
-            LOGGER.error("failed mapping " + key, ex);
-        }
-    }
-
-    private void safeMap(SequenceFileKey key, Text line, Context context) throws IOException, InterruptedException, ParseException {
+    protected void safeMap(SequenceFileKey key, Text line, Context context) throws IOException, InterruptedException, ParseException {
         String lineString = line.toString();
         JSONObject json = new JSONObject(lineString);
         int id = json.getInt("id");
@@ -77,7 +56,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
     }
 
     private void mapProductionCompany(int productionCompanyId, JSONObject json, Context context) {
-        VertexBuilder productionCompanyMutation = graph.prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
+        VertexBuilder productionCompanyMutation = getGraph().prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PRODUCTION_COMPANY, visibility);
         LumifyProperties.SOURCE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, SOURCE, visibility);
         String name = json.optString("name");
@@ -93,7 +72,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
         String name = personJson.getString("name");
         String vertexId = TheMovieDbOntology.getPersonVertexId(personId);
 
-        VertexBuilder m = graph.prepareVertex(vertexId, visibility);
+        VertexBuilder m = getGraph().prepareVertex(vertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(m, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PERSON, visibility);
         LumifyProperties.SOURCE.addPropertyValue(m, MULTI_VALUE_KEY, SOURCE, visibility);
         StreamingPropertyValue rawValue = new StreamingPropertyValue(new ByteArrayInputStream(personJson.toString().getBytes()), byte[].class);
@@ -142,7 +121,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
                 continue;
             }
             int movieId = movieJson.getInt("id");
-            VertexBuilder movieMutation = graph.prepareVertex(TheMovieDbOntology.getMovieVertexId(movieId), visibility);
+            VertexBuilder movieMutation = getGraph().prepareVertex(TheMovieDbOntology.getMovieVertexId(movieId), visibility);
             LumifyProperties.CONCEPT_TYPE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_MOVIE, visibility);
             LumifyProperties.SOURCE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, SOURCE, visibility);
             String title = movieJson.optString("title");
@@ -151,7 +130,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
             }
             Vertex movieVertex = movieMutation.save(authorizations);
 
-            graph.addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
+            getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
         }
 
         context.getCounter(TheMovieDbImportCounters.PERSONS_PROCESSED).increment(1);
@@ -162,7 +141,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
         String vertexId = TheMovieDbOntology.getMovieVertexId(movieId);
         String sourceUrl = "http://www.themoviedb.org/movie/" + movieId;
 
-        VertexBuilder m = graph.prepareVertex(vertexId, visibility);
+        VertexBuilder m = getGraph().prepareVertex(vertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(m, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_MOVIE, visibility);
         LumifyProperties.SOURCE.addPropertyValue(m, MULTI_VALUE_KEY, SOURCE, visibility);
         LumifyProperties.SOURCE_URL.addPropertyValue(m, MULTI_VALUE_KEY, sourceUrl, visibility);
@@ -232,7 +211,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
                 JSONObject productionCompany = productionCompanies.getJSONObject(i);
                 int productionCompanyId = productionCompany.getInt("id");
                 String sourceUrl = "http://www.themoviedb.org/company/" + productionCompanyId;
-                VertexBuilder productionCompanyMutation = graph.prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
+                VertexBuilder productionCompanyMutation = getGraph().prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
                 LumifyProperties.CONCEPT_TYPE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PRODUCTION_COMPANY, visibility);
                 LumifyProperties.SOURCE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, SOURCE, visibility);
                 LumifyProperties.SOURCE_URL.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, sourceUrl, visibility);
@@ -241,7 +220,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
                     LumifyProperties.TITLE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, name, visibility);
                 }
                 Vertex productionCompanyVertex = productionCompanyMutation.save(authorizations);
-                graph.addEdge(TheMovieDbOntology.getProductionCompanyProducedEdgeId(productionCompanyId, movieId), productionCompanyVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_PRODUCED, visibility, authorizations);
+                getGraph().addEdge(TheMovieDbOntology.getProductionCompanyProducedEdgeId(productionCompanyId, movieId), productionCompanyVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_PRODUCED, visibility, authorizations);
             }
         }
     }
@@ -253,7 +232,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
             JSONObject castJson = cast.getJSONObject(i);
             int personId = castJson.getInt("id");
             String sourceUrl = "http://www.themoviedb.org/person/" + personId;
-            VertexBuilder personMutation = graph.prepareVertex(TheMovieDbOntology.getPersonVertexId(personId), visibility);
+            VertexBuilder personMutation = getGraph().prepareVertex(TheMovieDbOntology.getPersonVertexId(personId), visibility);
             LumifyProperties.CONCEPT_TYPE.addPropertyValue(personMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PERSON, visibility);
             LumifyProperties.SOURCE.addPropertyValue(personMutation, MULTI_VALUE_KEY, SOURCE, visibility);
             LumifyProperties.SOURCE_URL.addPropertyValue(personMutation, MULTI_VALUE_KEY, sourceUrl, visibility);
@@ -262,7 +241,7 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
                 LumifyProperties.TITLE.addPropertyValue(personMutation, MULTI_VALUE_KEY, name, visibility);
             }
             Vertex personVertex = personMutation.save(authorizations);
-            graph.addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
+            getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
         }
     }
 
@@ -272,25 +251,5 @@ public class ImportJsonMRMapper extends ElementMapper<SequenceFileKey, Text, Tex
         } catch (ParseException p) {
             return DATE_YEAR_FORMAT.parse(str);
         }
-    }
-
-    @Override
-    protected void saveDataMutation(Context context, Text dataTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(dataTableName, m);
-    }
-
-    @Override
-    protected void saveEdgeMutation(Context context, Text edgesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(edgesTableName, m);
-    }
-
-    @Override
-    protected void saveVertexMutation(Context context, Text verticesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(verticesTableName, m);
-    }
-
-    @Override
-    protected IdGenerator getIdGenerator() {
-        return this.graph.getIdGenerator();
     }
 }
