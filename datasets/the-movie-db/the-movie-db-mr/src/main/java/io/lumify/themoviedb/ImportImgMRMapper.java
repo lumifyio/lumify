@@ -32,6 +32,8 @@ public class ImportImgMRMapper extends LumifyElementMapperBase<SequenceFileKey, 
         String sourceVertexId;
         String edgeLabel;
 
+        context.setStatus(key.getRecordType() + ":" + key.getId());
+
         switch (key.getRecordType()) {
             case PERSON:
                 conceptType = TheMovieDbOntology.CONCEPT_TYPE_PROFILE_IMAGE;
@@ -55,7 +57,7 @@ public class ImportImgMRMapper extends LumifyElementMapperBase<SequenceFileKey, 
         String edgeId = TheMovieDbOntology.getHasImageEdgeId(key.getId(), key.getImagePath());
         String title = key.getTitle();
         String vertexId = TheMovieDbOntology.getImageVertexId(key.getImagePath());
-        VertexBuilder m = getGraph().prepareVertex(vertexId, visibility);
+        VertexBuilder m = prepareVertex(vertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(m, MULTI_VALUE_KEY, conceptType, visibility);
         LumifyProperties.SOURCE.addPropertyValue(m, MULTI_VALUE_KEY, SOURCE, visibility);
         StreamingPropertyValue rawValue = new StreamingPropertyValue(new ByteArrayInputStream(value.getBytes()), byte[].class);
@@ -65,9 +67,9 @@ public class ImportImgMRMapper extends LumifyElementMapperBase<SequenceFileKey, 
         LumifyProperties.TITLE.addPropertyValue(m, MULTI_VALUE_KEY, "Image of " + title, visibility);
         Vertex profileImageVertex = m.save(authorizations);
 
-        Vertex sourceVertex = getGraph().addVertex(sourceVertexId, visibility, authorizations);
+        Vertex sourceVertex = prepareVertex(sourceVertexId, visibility).save(authorizations);
 
-        getGraph().addEdge(edgeId, sourceVertex, profileImageVertex, edgeLabel, visibility, authorizations);
+        addEdge(edgeId, sourceVertex, profileImageVertex, edgeLabel, visibility, authorizations);
         LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(sourceVertex, MULTI_VALUE_KEY, profileImageVertex.getId(), visibility, authorizations);
 
         context.getCounter(TheMovieDbImportCounters.IMAGES_PROCESSED).increment(1);

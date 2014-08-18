@@ -56,7 +56,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
     }
 
     private void mapProductionCompany(int productionCompanyId, JSONObject json, Context context) {
-        VertexBuilder productionCompanyMutation = getGraph().prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
+        VertexBuilder productionCompanyMutation = prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PRODUCTION_COMPANY, visibility);
         LumifyProperties.SOURCE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, SOURCE, visibility);
         String name = json.optString("name");
@@ -72,7 +72,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
         String name = personJson.getString("name");
         String vertexId = TheMovieDbOntology.getPersonVertexId(personId);
 
-        VertexBuilder m = getGraph().prepareVertex(vertexId, visibility);
+        VertexBuilder m = prepareVertex(vertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(m, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PERSON, visibility);
         LumifyProperties.SOURCE.addPropertyValue(m, MULTI_VALUE_KEY, SOURCE, visibility);
         StreamingPropertyValue rawValue = new StreamingPropertyValue(new ByteArrayInputStream(personJson.toString().getBytes()), byte[].class);
@@ -127,7 +127,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
                 continue;
             }
             int movieId = movieJson.getInt("id");
-            VertexBuilder movieMutation = getGraph().prepareVertex(TheMovieDbOntology.getMovieVertexId(movieId), visibility);
+            VertexBuilder movieMutation = prepareVertex(TheMovieDbOntology.getMovieVertexId(movieId), visibility);
             LumifyProperties.CONCEPT_TYPE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_MOVIE, visibility);
             LumifyProperties.SOURCE.addPropertyValue(movieMutation, MULTI_VALUE_KEY, SOURCE, visibility);
             String title = movieJson.optString("title");
@@ -136,7 +136,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
             }
             Vertex movieVertex = movieMutation.save(authorizations);
 
-            getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
+            addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
         }
     }
 
@@ -145,7 +145,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
         String vertexId = TheMovieDbOntology.getMovieVertexId(movieId);
         String sourceUrl = "http://www.themoviedb.org/movie/" + movieId;
 
-        VertexBuilder m = getGraph().prepareVertex(vertexId, visibility);
+        VertexBuilder m = prepareVertex(vertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(m, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_MOVIE, visibility);
         LumifyProperties.SOURCE.addPropertyValue(m, MULTI_VALUE_KEY, SOURCE, visibility);
         LumifyProperties.SOURCE_URL.addPropertyValue(m, MULTI_VALUE_KEY, sourceUrl, visibility);
@@ -215,7 +215,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
                 JSONObject productionCompany = productionCompanies.getJSONObject(i);
                 int productionCompanyId = productionCompany.getInt("id");
                 String sourceUrl = "http://www.themoviedb.org/company/" + productionCompanyId;
-                VertexBuilder productionCompanyMutation = getGraph().prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
+                VertexBuilder productionCompanyMutation = prepareVertex(TheMovieDbOntology.getProductionCompanyVertexId(productionCompanyId), visibility);
                 LumifyProperties.CONCEPT_TYPE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PRODUCTION_COMPANY, visibility);
                 LumifyProperties.SOURCE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, SOURCE, visibility);
                 LumifyProperties.SOURCE_URL.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, sourceUrl, visibility);
@@ -224,7 +224,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
                     LumifyProperties.TITLE.addPropertyValue(productionCompanyMutation, MULTI_VALUE_KEY, name, visibility);
                 }
                 Vertex productionCompanyVertex = productionCompanyMutation.save(authorizations);
-                getGraph().addEdge(TheMovieDbOntology.getProductionCompanyProducedEdgeId(productionCompanyId, movieId), productionCompanyVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_PRODUCED, visibility, authorizations);
+                addEdge(TheMovieDbOntology.getProductionCompanyProducedEdgeId(productionCompanyId, movieId), productionCompanyVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_PRODUCED, visibility, authorizations);
             }
         }
     }
@@ -236,7 +236,7 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
             JSONObject castJson = cast.getJSONObject(i);
             int personId = castJson.getInt("id");
             String sourceUrl = "http://www.themoviedb.org/person/" + personId;
-            VertexBuilder personMutation = getGraph().prepareVertex(TheMovieDbOntology.getPersonVertexId(personId), visibility);
+            VertexBuilder personMutation = prepareVertex(TheMovieDbOntology.getPersonVertexId(personId), visibility);
             LumifyProperties.CONCEPT_TYPE.addPropertyValue(personMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_PERSON, visibility);
             LumifyProperties.SOURCE.addPropertyValue(personMutation, MULTI_VALUE_KEY, SOURCE, visibility);
             LumifyProperties.SOURCE_URL.addPropertyValue(personMutation, MULTI_VALUE_KEY, sourceUrl, visibility);
@@ -245,19 +245,19 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
                 LumifyProperties.TITLE.addPropertyValue(personMutation, MULTI_VALUE_KEY, name, visibility);
             }
             Vertex personVertex = personMutation.save(authorizations);
-            getGraph().addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
+            addEdge(TheMovieDbOntology.getStarredInEdgeId(personId, movieId), personVertex, movieVertex, TheMovieDbOntology.EDGE_LABEL_STARRED_IN, visibility, authorizations);
 
             String character = castJson.optString("character");
             if (character != null && character.length() > 0) {
                 String roleId = TheMovieDbOntology.getRoleId(personId, movieId);
-                VertexBuilder roleMutation = getGraph().prepareVertex(TheMovieDbOntology.getRoleVertexId(roleId), visibility);
+                VertexBuilder roleMutation = prepareVertex(TheMovieDbOntology.getRoleVertexId(roleId), visibility);
                 LumifyProperties.CONCEPT_TYPE.addPropertyValue(roleMutation, MULTI_VALUE_KEY, TheMovieDbOntology.CONCEPT_TYPE_ROLE, visibility);
                 LumifyProperties.SOURCE.addPropertyValue(roleMutation, MULTI_VALUE_KEY, SOURCE, visibility);
                 LumifyProperties.TITLE.addPropertyValue(roleMutation, MULTI_VALUE_KEY, character, visibility);
                 Vertex roleVertex = roleMutation.save(authorizations);
 
-                getGraph().addEdge(TheMovieDbOntology.getPlayedEdgeId(personId, roleId), personVertex, roleVertex, TheMovieDbOntology.EDGE_LABEL_PLAYED, visibility, authorizations);
-                getGraph().addEdge(TheMovieDbOntology.getHasRoleEdgeId(movieId, roleId), movieVertex, roleVertex, TheMovieDbOntology.EDGE_LABEL_HAS_ROLE, visibility, authorizations);
+                addEdge(TheMovieDbOntology.getPlayedEdgeId(personId, roleId), personVertex, roleVertex, TheMovieDbOntology.EDGE_LABEL_PLAYED, visibility, authorizations);
+                addEdge(TheMovieDbOntology.getHasRoleEdgeId(movieId, roleId), movieVertex, roleVertex, TheMovieDbOntology.EDGE_LABEL_HAS_ROLE, visibility, authorizations);
             }
         }
     }
