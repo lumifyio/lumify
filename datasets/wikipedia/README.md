@@ -26,6 +26,8 @@
 
 1. Wait for the MR job to complete
 
+1. [Re-index the data](https://github.com/lumifyio/lumify/tree/master/tools/reindex-mr)
+
 ## Running inside an IDE
 
 1. Run format
