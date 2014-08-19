@@ -35,6 +35,7 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
             m.addPropertyValue(MULTI_VALUE_PROPERTY_KEY, Ontology.cwRotationNeededIri, cwRotationNeeded, metadata, data.getVisibility());
             propertiesToQueue.add(Ontology.cwRotationNeededIri);
 
+            m.save(authorizations);
             getGraph().flush();
             for (String propertyName : propertiesToQueue) {
                 getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY, propertyName);

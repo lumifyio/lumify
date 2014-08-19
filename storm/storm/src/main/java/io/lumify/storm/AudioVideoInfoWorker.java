@@ -119,6 +119,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+        LOGGER.debug("BEGIN executing worker for element %s", data.getElement().getId());
         String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         boolean isAudio = mimeType.startsWith("audio");
         File localFile = data.getLocalFile();
@@ -184,6 +185,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
                 m.addPropertyValue(PROPERTY_KEY, metadataIri, videoMetadataJSONString, metadata, data.getVisibility());
                 propertiesToQueue.add(metadataIri);
             }
+            LOGGER.debug("END executing worker for element %s", data.getElement().getId());
         }
 
         //Always add a videoRotation property, regardless of whether there is a json or not.
@@ -233,6 +235,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             return false;
         }
 
+        LOGGER.debug("handling element %s, property %s", element.getId(), property.getName());
         return true;
     }
 

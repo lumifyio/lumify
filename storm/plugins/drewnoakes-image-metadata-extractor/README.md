@@ -1,25 +1,31 @@
+# drew-noakes-image-metadata-extractor
 
+This module extracts metadata contained in image files and create Lumify properties with those values. It also detects
+if images need to be rotated and/or flipped in order to be displayed in the correct orientation.
 
+The module depends on the following Ontology properties:
 
-The drew-noakes-image-metadata-extractor module requires the following ontology properties located in the following files:
-    File: /lumify/storm/plugins/drewnoakes-image-metadata-extractor/ontology/exif.owl:
-        Property: yAxisFlipNeeded
-        Property: cwRotationNeeded
-        Property: heading
-        
-    File: /lumify/examples/ontology-dev/dev.owl:
-        Property: image
-        Property: geoLocation
-        Property: dateTaken
-        Property: deviceMake
-        Property: deviceModel
-        Property: width
-        Property: height
-        Property: fileSize
-        Property: metadata
+        # storm/plugins/drewnoakes-image-metadata-extractor/ontology/exif.owl
+        yAxisFlipNeeded
+        cwRotationNeeded
+        heading
 
-Please make sure the following are in your /opt/lumify/lumify.properties file:
-     # Ontology
+        # examples/ontology-dev/dev.owl
+        image
+        geoLocation
+        dateTaken
+        deviceMake
+        deviceModel
+        width
+        height
+        fileSize
+        metadata
+
+And the following Lumify properties configured:
+
+     ontology.iri.yAxisFlipNeeded=http://lumify.io/exif#yAxisFlipNeeded
+     ontology.iri.cwRotationNeeded=http://lumify.io/exif#cwRotationNeeded
+
      ontology.iri.image=http://lumify.io/dev#image
      ontology.iri.geoLocation=http://lumify.io/dev#geolocation
      ontology.iri.metadata=http://lumify.io/dev#metadata
@@ -29,12 +35,6 @@ Please make sure the following are in your /opt/lumify/lumify.properties file:
      ontology.iri.width=http://lumify.io/dev#width
      ontology.iri.height=http://lumify.io/dev#height
      ontology.iri.fileSize=http://lumify.io/dev#fileSize
+     ontology.iri.metadata=http://lumify.io/dev#metadata
 
-
-
-Or to create your own ontologies, edit the file:
- /lumify/storm/plugins/drewnoakes-image-metadata-extractor/src/main/java/io/lumify/imageMetadataExtractor/Ontology.java
- and the lumify.properties file.
- 
- 
- 
+    # see storm/plugins/drewnoakes-image-metadata-extractor/src/main/java/io/lumify/imageMetadataExtractor/Ontology.java
