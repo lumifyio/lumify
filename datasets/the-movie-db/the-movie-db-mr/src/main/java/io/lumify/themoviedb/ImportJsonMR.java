@@ -1,18 +1,21 @@
 package io.lumify.themoviedb;
 
 import io.lumify.core.mapreduce.LumifyMRBase;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.Counter;
-import org.apache.hadoop.mapreduce.CounterGroup;
+import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.util.ToolRunner;
 import org.securegraph.accumulo.mapreduce.AccumuloElementOutputFormat;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ImportJsonMR extends LumifyMRBase {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImportJsonMR.class);
     private static final String JOB_NAME = "theMovieDbJsonImport";
 
     @Override
@@ -21,7 +24,7 @@ public class ImportJsonMR extends LumifyMRBase {
     }
 
     @Override
-    protected int run(Job job) throws InterruptedException, IOException, ClassNotFoundException {
+    protected void setupJob(Job job) throws InterruptedException, IOException, ClassNotFoundException {
         job.setMapperClass(ImportJsonMRMapper.class);
         job.setMapOutputValueClass(Mutation.class);
         job.setNumReduceTasks(0);
@@ -29,15 +32,17 @@ public class ImportJsonMR extends LumifyMRBase {
         job.setOutputFormatClass(AccumuloElementOutputFormat.class);
 
         SequenceFileInputFormat.addInputPath(job, new Path(getConf().get("in")));
+    }
 
-        int returnCode = job.waitForCompletion(true) ? 0 : 1;
-
-        CounterGroup groupCounters = job.getCounters().getGroup(TheMovieDbImportCounters.class.getName());
-        for (Counter counter : groupCounters) {
-            System.out.println(counter.getDisplayName() + ": " + counter.getValue());
+    @Override
+    protected void parseArgs(JobConf conf, String[] args) {
+        if (args.length != 1) {
+            throw new RuntimeException("Required arguments <inputFileName>");
         }
-
-        return returnCode;
+        String inFileName = args[0];
+        conf.set("in", inFileName);
+        conf.set(CONFIG_SOURCE_FILE_NAME, new File(inFileName).getName());
+        LOGGER.info("inFileName: %s", inFileName);
     }
 
     public static void main(String[] args) throws Exception {
