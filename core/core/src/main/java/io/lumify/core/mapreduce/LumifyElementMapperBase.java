@@ -38,25 +38,25 @@ public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMap
 
     @Override
     protected void saveDataMutation(Context context, Text dataTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(dataTableName, m);
+        context.write(getKey(context, dataTableName, m), m);
     }
 
     @Override
     protected void saveEdgeMutation(Context context, Text edgesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(edgesTableName, m);
+        context.write(getKey(context, edgesTableName, m), m);
     }
 
     @Override
     protected void saveVertexMutation(Context context, Text verticesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(verticesTableName, m);
+        context.write(getKey(context, verticesTableName, m), m);
+    }
+
+    protected Text getKey(Context context, Text tableName, Mutation m) {
+        return tableName;
     }
 
     @Override
     protected IdGenerator getIdGenerator() {
         return this.graph.getIdGenerator();
-    }
-
-    protected AccumuloGraph getGraph() {
-        return graph;
     }
 }

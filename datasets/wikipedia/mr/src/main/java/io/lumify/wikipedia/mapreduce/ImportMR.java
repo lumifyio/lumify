@@ -1,9 +1,7 @@
 package io.lumify.wikipedia.mapreduce;
 
 import com.google.inject.Inject;
-import io.lumify.core.bootstrap.InjectHelper;
-import io.lumify.core.bootstrap.LumifyBootstrap;
-import io.lumify.core.config.ConfigurationLoader;
+import io.lumify.core.mapreduce.LumifyMRBase;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.Relationship;
@@ -15,28 +13,22 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.mapreduce.lib.partition.RangePartitioner;
-import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.util.TextUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Counter;
-import org.apache.hadoop.mapreduce.CounterGroup;
+import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.accumulo.AccumuloGraph;
-import org.securegraph.accumulo.AccumuloGraphConfiguration;
 import org.securegraph.accumulo.mapreduce.AccumuloElementOutputFormat;
-import org.securegraph.accumulo.mapreduce.ElementMapper;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -47,7 +39,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class ImportMR extends Configured implements Tool {
+public class ImportMR extends LumifyMRBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImportMR.class);
     public static final String WIKIPEDIA_MIME_TYPE = "text/plain";
     public static final String WIKIPEDIA_SOURCE = "Wikipedia";
@@ -72,29 +64,14 @@ public class ImportMR extends Configured implements Tool {
     }
 
     @Override
-    public int run(String[] args) throws Exception {
-        io.lumify.core.config.Configuration lumifyConfig = ConfigurationLoader.load();
-        Configuration conf = getConfiguration(args, lumifyConfig);
-        AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));
-
+    protected void setupJob(Job job) throws Exception {
         verifyWikipediaPageConcept(ontologyRepository);
         verifyWikipediaPageInternalLinkWikipediaPageRelationship(ontologyRepository);
 
-        Job job = new Job(conf, "wikipediaImport");
-
-        String instanceName = accumuloGraphConfiguration.getAccumuloInstanceName();
-        String zooKeepers = accumuloGraphConfiguration.getZookeeperServers();
-        String principal = accumuloGraphConfiguration.getAccumuloUsername();
-        AuthenticationToken authorizationToken = accumuloGraphConfiguration.getAuthenticationToken();
-        AccumuloElementOutputFormat.setOutputInfo(job, instanceName, zooKeepers, principal, authorizationToken);
-
         List<Text> splits = getSplits((AccumuloGraph) graph);
-        Path splitFile = writeSplitsFile(conf, splits);
+        Path splitFile = writeSplitsFile(getConf(), splits);
 
-        if (job.getConfiguration().get("mapred.job.tracker").equals("local")) {
-            LOGGER.warn("!!!!!! Running in local mode !!!!!!");
-        } else {
+        if (!isLocal()) {
             job.setPartitionerClass(RangePartitioner.class);
             RangePartitioner.setSplitFile(job, splitFile.toString());
             job.setNumReduceTasks(splits.size() + 1);
@@ -102,20 +79,16 @@ public class ImportMR extends Configured implements Tool {
 
         job.setJarByClass(ImportMR.class);
         job.setMapperClass(ImportMRMapper.class);
-        job.setMapOutputValueClass(Mutation.class);
         job.setReducerClass(ImportMRReducer.class);
+        job.setMapOutputValueClass(Mutation.class);
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(AccumuloElementOutputFormat.class);
-        FileInputFormat.addInputPath(job, new Path(conf.get("in")));
+        FileInputFormat.addInputPath(job, new Path(getConf().get("in")));
+    }
 
-        int returnCode = job.waitForCompletion(true) ? 0 : 1;
-
-        CounterGroup groupCounters = job.getCounters().getGroup(WikipediaImportCounters.class.getName());
-        for (Counter counter : groupCounters) {
-            System.out.println(counter.getDisplayName() + ": " + counter.getValue());
-        }
-
-        return returnCode;
+    @Override
+    protected String getJobName() {
+        return "wikipediaImport";
     }
 
     private Path writeSplitsFile(Configuration conf, List<Text> splits) throws IOException {
@@ -170,20 +143,15 @@ public class ImportMR extends Configured implements Tool {
         }
     }
 
-    private Configuration getConfiguration(String[] args, io.lumify.core.config.Configuration lumifyConfig) {
+    @Override
+    protected void parseArgs(JobConf conf, String[] args) {
         if (args.length != 1) {
             throw new RuntimeException("Required arguments <inputFileName>");
         }
         String inFileName = args[0];
-        LOGGER.info("Using config:\n" + lumifyConfig);
-
-        Configuration hadoopConfig = lumifyConfig.toHadoopConfiguration();
-        hadoopConfig.set(ElementMapper.GRAPH_CONFIG_PREFIX, "graph.");
         LOGGER.info("inFileName: %s", inFileName);
-        hadoopConfig.set("in", inFileName);
-        hadoopConfig.set(ImportMRMapper.CONFIG_SOURCE_FILE_NAME, new File(inFileName).getName());
-        this.setConf(hadoopConfig);
-        return hadoopConfig;
+        conf.set("in", inFileName);
+        conf.set(ImportMRMapper.CONFIG_SOURCE_FILE_NAME, new File(inFileName).getName());
     }
 
     public static void main(String[] args) throws Exception {

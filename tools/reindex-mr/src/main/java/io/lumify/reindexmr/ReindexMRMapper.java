@@ -3,6 +3,7 @@ package io.lumify.reindexmr;
 
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.securegraph.Authorizations;
 import org.securegraph.Element;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ReindexMRMapper extends Mapper<String, Element, Object, Element> {
+public class ReindexMRMapper extends Mapper<Text, Element, Object, Element> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReindexMRMapper.class);
     private static final int BATCH_SIZE = 100;
     private AccumuloGraph graph;
@@ -53,7 +54,7 @@ public class ReindexMRMapper extends Mapper<String, Element, Object, Element> {
     }
 
     @Override
-    protected void map(String rowKey, Element element, Context context) throws IOException, InterruptedException {
+    protected void map(Text rowKey, Element element, Context context) throws IOException, InterruptedException {
         if (element == null) {
             return;
         }

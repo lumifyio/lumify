@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.accumulo.AccumuloSession;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
+import io.lumify.core.mapreduce.LumifyElementMapperBase;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -29,20 +30,18 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.securegraph.*;
 import org.securegraph.accumulo.AccumuloAuthorizations;
-import org.securegraph.accumulo.AccumuloGraph;
-import org.securegraph.accumulo.mapreduce.ElementMapper;
 import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
-import org.securegraph.id.IdGenerator;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.ConvertingIterable;
 import org.securegraph.util.JoinIterable;
-import org.securegraph.util.MapUtils;
+import org.sweble.wikitext.engine.EngineException;
 import org.sweble.wikitext.engine.PageId;
 import org.sweble.wikitext.engine.PageTitle;
 import org.sweble.wikitext.engine.WtEngineImpl;
 import org.sweble.wikitext.engine.config.WikiConfigImpl;
 import org.sweble.wikitext.engine.nodes.EngProcessedPage;
 import org.sweble.wikitext.engine.utils.DefaultConfigEnWp;
+import org.sweble.wikitext.parser.parser.LinkTargetException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -52,7 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
+class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImportMRMapper.class);
     public static final String TEXT_XPATH = "/page/revision/text/text()";
     public static final String TITLE_XPATH = "/page/title/text()";
@@ -67,11 +66,11 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
     private Authorizations authorizations;
     private WikiConfigImpl config;
     private WtEngineImpl compiler;
-    private AccumuloGraph graph;
     private User user;
     private SecureGraphAuditRepository auditRepository;
     private UserRepository userRepository;
     private String sourceFileName;
+    private TextConverter textConverter;
 
     public ImportMRMapper() {
         this.textXPath = XPathFactory.instance().compile(TEXT_XPATH, Filters.text());
@@ -83,7 +82,6 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
-        this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
         this.visibility = new Visibility("");
         this.authorizations = new AccumuloAuthorizations();
         this.user = new SystemUser(null);
@@ -98,70 +96,46 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
         } catch (Exception ex) {
             throw new IOException("Could not configure sweble", ex);
         }
+
+        textConverter = new TextConverter(config);
     }
 
     @Override
-    protected IdGenerator getIdGenerator() {
-        return this.graph.getIdGenerator();
-    }
-
-    @Override
-    protected void map(LongWritable filePosition, Text line, Context context) throws IOException, InterruptedException {
-        try {
-            safeMap(filePosition, line, context);
-        } catch (Exception ex) {
-            LOGGER.error("failed mapping " + filePosition, ex);
-        }
-    }
-
-    private void safeMap(LongWritable filePosition, Text line, Context context) throws IOException, InterruptedException {
-        String wikitext;
-        String pageTitle;
-        String sourceUrl;
-        Date revisionTimestamp = null;
+    protected void safeMap(LongWritable filePosition, Text line, Context context) throws IOException, InterruptedException {
+        ParsePage parsePage;
         String pageString = line.toString().replaceAll("\\\\n", "\n");
         try {
-            SAXBuilder builder = new SAXBuilder();
-            Document doc = builder.build(new ByteArrayInputStream(pageString.getBytes()));
-            pageTitle = textToString(titleXPath.evaluateFirst(doc));
-            wikitext = textToString(textXPath.evaluate(doc));
-            sourceUrl = "http://en.wikipedia.org/wiki/" + pageTitle;
-            String revisionTimestampString = textToString(revisionTimestampXPath.evaluateFirst(doc));
-            try {
-                revisionTimestamp = ISO8601DATEFORMAT.parse(revisionTimestampString);
-            } catch (Exception ex) {
-                LOGGER.error("Could not parse revision timestamp %s", revisionTimestampString, ex);
-            }
+            parsePage = new ParsePage(pageString).invoke();
         } catch (JDOMException e) {
             LOGGER.error("Could not parse XML: " + filePosition + ":\n" + pageString, e);
             context.getCounter(WikipediaImportCounters.XML_PARSE_ERRORS).increment(1);
             return;
         }
 
-        String wikipediaPageVertexId = ImportMR.getWikipediaPageVertexId(pageTitle);
+        String wikipediaPageVertexId = ImportMR.getWikipediaPageVertexId(parsePage.getPageTitle());
         context.setStatus(wikipediaPageVertexId);
 
-        TextConverter textConverter;
         try {
-            String fileTitle = wikipediaPageVertexId;
-            PageId pageId = new PageId(PageTitle.make(config, fileTitle), -1);
-            EngProcessedPage compiledPage = compiler.postprocess(pageId, wikitext, null);
-            textConverter = new TextConverter(config);
-            String text = (String) textConverter.go(compiledPage.getPage());
-            if (text.length() > 0) {
-                wikitext = text;
-            }
+            String wikitext = getPageText(parsePage.getWikitext(), wikipediaPageVertexId);
+            parsePage.setWikitext(wikitext);
         } catch (Exception ex) {
-            LOGGER.error("Could not process wikipedia text: " + filePosition + ":\n" + wikitext, ex);
+            LOGGER.error("Could not process wikipedia text: " + filePosition + ":\n" + parsePage.getWikitext(), ex);
             context.getCounter(WikipediaImportCounters.WIKI_TEXT_PARSE_ERRORS).increment(1);
             return;
         }
 
+        Vertex pageVertex = savePage(context, wikipediaPageVertexId, parsePage, pageString);
+        savePageLinks(context, pageVertex);
+
+        context.getCounter(WikipediaImportCounters.PAGES_PROCESSED).increment(1);
+    }
+
+    private Vertex savePage(Context context, String wikipediaPageVertexId, ParsePage parsePage, String pageString) throws IOException, InterruptedException {
         StreamingPropertyValue rawPropertyValue = new StreamingPropertyValue(new ByteArrayInputStream(pageString.getBytes()), byte[].class);
         rawPropertyValue.store(true);
         rawPropertyValue.searchIndex(false);
 
-        StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(new ByteArrayInputStream(wikitext.getBytes()), String.class);
+        StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(new ByteArrayInputStream(parsePage.getWikitext().getBytes()), String.class);
 
         VertexBuilder pageVertexBuilder = prepareVertex(wikipediaPageVertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
@@ -169,14 +143,14 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
 
         Map<String, Object> titleMetadata = new HashMap<String, Object>();
         LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4);
-        LumifyProperties.TITLE.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, pageTitle, titleMetadata, visibility);
+        LumifyProperties.TITLE.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, parsePage.getPageTitle(), titleMetadata, visibility);
 
         LumifyProperties.MIME_TYPE.setProperty(pageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
         LumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
         LumifyProperties.SOURCE.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.WIKIPEDIA_SOURCE, visibility);
-        LumifyProperties.SOURCE_URL.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, sourceUrl, visibility);
-        if (revisionTimestamp != null) {
-            LumifyProperties.PUBLISHED_DATE.setProperty(pageVertexBuilder, revisionTimestamp, visibility);
+        LumifyProperties.SOURCE_URL.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, parsePage.getSourceUrl(), visibility);
+        if (parsePage.getRevisionTimestamp() != null) {
+            LumifyProperties.PUBLISHED_DATE.setProperty(pageVertexBuilder, parsePage.getRevisionTimestamp(), visibility);
         }
         Map<String, Object> textMetadata = new HashMap<String, Object>();
         textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text");
@@ -191,42 +165,58 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
         // because save above will cause the StreamingPropertyValue to be read we need to reset the position to 0 for search indexing
         rawPropertyValue.getInputStream().reset();
         textPropertyValue.getInputStream().reset();
+        return pageVertex;
+    }
 
-        for (LinkWithOffsets link : getLinks(textConverter)) {
-            String linkTarget = link.getLinkTargetWithoutHash();
-            String linkVertexId = ImportMR.getWikipediaPageVertexId(linkTarget);
-            VertexBuilder linkedPageVertexBuilder = prepareVertex(linkVertexId, visibility);
-            LumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
-            LumifyProperties.MIME_TYPE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
-            LumifyProperties.SOURCE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.WIKIPEDIA_SOURCE, visibility);
-
-            titleMetadata = new HashMap<String, Object>();
-            LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1);
-            String linkTargetHash = Base64.encodeBase64String(linkTarget.trim().toLowerCase().getBytes());
-            LumifyProperties.TITLE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY + "#" + linkTargetHash, linkTarget, titleMetadata, visibility);
-            LumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
-
-            Vertex linkedPageVertex = linkedPageVertexBuilder.save(authorizations);
-            Edge edge = addEdge(ImportMR.getWikipediaPageToPageEdgeId(pageVertex, linkedPageVertex),
-                    pageVertex,
-                    linkedPageVertex,
-                    WikipediaConstants.WIKIPEDIA_PAGE_INTERNAL_LINK_WIKIPEDIA_PAGE_CONCEPT_URI,
-                    visibility,
-                    authorizations);
-
-            TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId(), "", link.getStartOffset(),
-                    link.getEndOffset()));
-            termMention.getMetadata()
-                    .setConceptGraphVertexId(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility)
-                    .setSign(linkTarget, visibility)
-                    .setVertexId(linkedPageVertex.getId(), visibility)
-                    .setEdgeId(edge.getId(), visibility)
-                    .setOntologyClassUri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
-            key = ImportMR.getKey(TermMentionModel.TABLE_NAME, termMention.getRowKey().toString().getBytes());
-            context.write(key, AccumuloSession.createMutationFromRow(termMention));
+    private String getPageText(String wikitext, String wikipediaPageVertexId) throws LinkTargetException, EngineException {
+        String fileTitle = wikipediaPageVertexId;
+        PageId pageId = new PageId(PageTitle.make(config, fileTitle), -1);
+        EngProcessedPage compiledPage = compiler.postprocess(pageId, wikitext, null);
+        String text = (String) textConverter.go(compiledPage.getPage());
+        if (text.length() > 0) {
+            wikitext = text;
         }
+        return wikitext;
+    }
 
-        context.getCounter(WikipediaImportCounters.PAGES_PROCESSED).increment(1);
+    private void savePageLinks(Context context, Vertex pageVertex) throws IOException, InterruptedException {
+        for (LinkWithOffsets link : getLinks(textConverter)) {
+            savePageLink(context, pageVertex, link);
+        }
+    }
+
+    private void savePageLink(Context context, Vertex pageVertex, LinkWithOffsets link) throws IOException, InterruptedException {
+        String linkTarget = link.getLinkTargetWithoutHash();
+        String linkVertexId = ImportMR.getWikipediaPageVertexId(linkTarget);
+        VertexBuilder linkedPageVertexBuilder = prepareVertex(linkVertexId, visibility);
+        LumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
+        LumifyProperties.MIME_TYPE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
+        LumifyProperties.SOURCE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.WIKIPEDIA_SOURCE, visibility);
+
+        Map<String, Object> titleMetadata = new HashMap<String, Object>();
+        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1);
+        String linkTargetHash = Base64.encodeBase64String(linkTarget.trim().toLowerCase().getBytes());
+        LumifyProperties.TITLE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY + "#" + linkTargetHash, linkTarget, titleMetadata, visibility);
+        LumifyProperties.FILE_NAME.setProperty(linkedPageVertexBuilder, sourceFileName, visibility);
+
+        Vertex linkedPageVertex = linkedPageVertexBuilder.save(authorizations);
+        Edge edge = addEdge(ImportMR.getWikipediaPageToPageEdgeId(pageVertex, linkedPageVertex),
+                pageVertex,
+                linkedPageVertex,
+                WikipediaConstants.WIKIPEDIA_PAGE_INTERNAL_LINK_WIKIPEDIA_PAGE_CONCEPT_URI,
+                visibility,
+                authorizations);
+
+        TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId(), "", link.getStartOffset(),
+                link.getEndOffset()));
+        termMention.getMetadata()
+                .setConceptGraphVertexId(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility)
+                .setSign(linkTarget, visibility)
+                .setVertexId(linkedPageVertex.getId(), visibility)
+                .setEdgeId(edge.getId(), visibility)
+                .setOntologyClassUri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
+        Text key = ImportMR.getKey(TermMentionModel.TABLE_NAME, termMention.getRowKey().toString().getBytes());
+        context.write(key, AccumuloSession.createMutationFromRow(termMention));
     }
 
     private Iterable<LinkWithOffsets> getLinks(TextConverter textConverter) {
@@ -246,38 +236,76 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
         );
     }
 
-    private String textToString(org.jdom2.Text text) {
-        if (text == null) {
-            return "";
-        }
-        return text.getText();
-    }
-
-    private String textToString(List<org.jdom2.Text> texts) {
-        StringBuilder sb = new StringBuilder();
-        for (org.jdom2.Text t : texts) {
-            sb.append(textToString(t));
-        }
-        return sb.toString();
-    }
-
-    @Override
-    protected void saveDataMutation(Context context, Text dataTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(ImportMR.getKey(dataTableName.toString(), m.getRow()), m);
-    }
-
-    @Override
-    protected void saveEdgeMutation(Context context, Text edgesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(ImportMR.getKey(edgesTableName.toString(), m.getRow()), m);
-    }
-
-    @Override
-    protected void saveVertexMutation(Context context, Text verticesTableName, Mutation m) throws IOException, InterruptedException {
-        context.write(ImportMR.getKey(verticesTableName.toString(), m.getRow()), m);
-    }
-
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Override
+    protected Text getKey(Context context, Text tableName, Mutation m) {
+        return ImportMR.getKey(tableName.toString(), m.getRow());
+    }
+
+    private class ParsePage {
+        private String pageString;
+        private String wikitext;
+        private String pageTitle;
+        private String sourceUrl;
+        private Date revisionTimestamp;
+
+        public ParsePage(String pageString) {
+            this.pageString = pageString;
+        }
+
+        public String getWikitext() {
+            return wikitext;
+        }
+
+        public String getPageTitle() {
+            return pageTitle;
+        }
+
+        public String getSourceUrl() {
+            return sourceUrl;
+        }
+
+        public Date getRevisionTimestamp() {
+            return revisionTimestamp;
+        }
+
+        public ParsePage invoke() throws JDOMException, IOException {
+            SAXBuilder builder = new SAXBuilder();
+            Document doc = builder.build(new ByteArrayInputStream(pageString.getBytes()));
+            pageTitle = textToString(titleXPath.evaluateFirst(doc));
+            wikitext = textToString(textXPath.evaluate(doc));
+            sourceUrl = "http://en.wikipedia.org/wiki/" + pageTitle;
+            String revisionTimestampString = textToString(revisionTimestampXPath.evaluateFirst(doc));
+            revisionTimestamp = null;
+            try {
+                revisionTimestamp = ISO8601DATEFORMAT.parse(revisionTimestampString);
+            } catch (Exception ex) {
+                LOGGER.error("Could not parse revision timestamp %s", revisionTimestampString, ex);
+            }
+            return this;
+        }
+
+        private String textToString(List<org.jdom2.Text> texts) {
+            StringBuilder sb = new StringBuilder();
+            for (org.jdom2.Text t : texts) {
+                sb.append(textToString(t));
+            }
+            return sb.toString();
+        }
+
+        private String textToString(org.jdom2.Text text) {
+            if (text == null) {
+                return "";
+            }
+            return text.getText();
+        }
+
+        public void setWikitext(String wikitext) {
+            this.wikitext = wikitext;
+        }
     }
 }
