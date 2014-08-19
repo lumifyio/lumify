@@ -42,7 +42,6 @@ public class OwlImport extends CommandLineBase {
                 OptionBuilder
                         .withLongOpt("iri")
                         .withDescription("The document IRI (URI used for prefixing concepts)")
-                        .isRequired()
                         .hasArg(true)
                         .withArgName("uri")
                         .create()
@@ -61,7 +60,13 @@ public class OwlImport extends CommandLineBase {
     @Override
     protected int run(CommandLine cmd) throws Exception {
         File inFile = new File(this.inFileName);
-        IRI documentIRI = IRI.create(this.documentIRIString);
+        IRI documentIRI;
+        if (this.documentIRIString == null) {
+            String guessedIri = ontologyRepository.guessDocumentIRIFromPackage(inFile);
+            documentIRI = IRI.create(guessedIri);
+        } else {
+            documentIRI = IRI.create(this.documentIRIString);
+        }
         ontologyRepository.importFile(inFile, documentIRI, getAuthorizations());
         getGraph().flush();
         ontologyRepository.clearCache();
