@@ -371,7 +371,6 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
         zip -r ontology-dev.zip ontology-dev
 
 1. browse to [https://localhost:8443/#admin=ontology:upload](https://localhost:8443/#admin=ontology:upload)
-1. enter `http://lumify.io/dev` as the Document IRI
 1. choose `ontology-dev.zip` as the OWL File
 1. click Submit
 
