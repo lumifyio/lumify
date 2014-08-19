@@ -41,7 +41,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
 
     @Mock
     private User user;
-    private String text = "This is a sentenc®, written by Bob Robertson, who curréntly makes 2 million "
+    private String text = "This is a sentenc®, written by Bob Robértson, who curréntly makes 2 million "
             + "a year. If by 1:30, you don't know what you are doing, you should go watch CNN and see "
             + "what the latest is on the Benghazi nonsense. I'm 47% sure that this test will pass, but will it?";
 
@@ -90,13 +90,13 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
                 .save(new InMemoryAuthorizations());
 
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
-        extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
+        extractor.execute(new ByteArrayInputStream(text.getBytes("UTF-8")), workData);
         HashMap<String, TermMention> extractedTerms = new HashMap<String, TermMention>();
         for (TermMention term : termMentions) {
             extractedTerms.put(term.getSign() + "-" + term.getOntologyClassUri(), term);
         }
-        assertTrue("A person wasn't found", extractedTerms.containsKey("Bob Robertson-http://lumify.io/test#person"));
-        TermMention bobRobertsonMentions = extractedTerms.get("Bob Robertson-http://lumify.io/test#person");
+        assertTrue("A person wasn't found", extractedTerms.containsKey("Bob Robértson-http://lumify.io/test#person"));
+        TermMention bobRobertsonMentions = extractedTerms.get("Bob Robértson-http://lumify.io/test#person");
         assertEquals(31, bobRobertsonMentions.getStart());
         assertEquals(44, bobRobertsonMentions.getEnd());
 
