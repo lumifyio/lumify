@@ -24,12 +24,89 @@ define([
     F) {
     'use strict';
 
-    var NO_HISTOGRAM_DATATYPES = [
-        // Would need to bin these intelligently to make useful
-        'geoLocation', 'date'
-    ];
+    var HISTOGRAM_STYLE = 'max', // max or sum
+        BAR_HEIGHT = 25,
+        PADDING = 5,
+        BINABLE_TYPES = 'double date currency'.split(' '), // TODO: heading
+        SCALE_COLOR_BASED_ON_WIDTH = false,
+        SCALE_COLOR_BASED_ON_WIDTH_RANGE = ['#00A1F8', '#0088cc'],
+        SCALE_OPACITY_BASED_ON_WIDTH = true,
+        SCALE_OPACITY_BASED_ON_WIDTH_RANGE = [50, 90],
+        NO_HISTOGRAM_DATATYPES = [
+            'geoLocation'
+        ],
+        HIDE_IF_ALL_UNIQUE_AND_BINS = 5;
 
     return defineComponent(Multiple, withTypeContent);
+
+    function propertyDisplayName(properties, pair) {
+        var o = properties.byTitle[pair[0]];
+
+        return o && o.displayName || o;
+    }
+
+    function propertyValueDisplay(concepts, properties, bin) {
+        var propertyValue = bin[0],
+            propertyName = bin.name,
+            display = propertyValue;
+
+        if (propertyName == 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
+            display = concepts.byId[propertyValue].displayName;
+        } else if (properties.byTitle[propertyName]) {
+            if ('dx' in bin) {
+                display =
+                    F.vertex.displayProp({
+                        name: propertyName,
+                        value: bin.x
+                    }) + ' – ' +
+                    F.vertex.displayProp({
+                        name: propertyName,
+                        value: bin.x + bin.dx
+                    });
+            } else {
+                display = F.vertex.displayProp({
+                    name: propertyName,
+                    value: propertyValue
+                });
+            }
+        }
+        if (display === '') return '[ blank ]';
+        return display;
+    }
+
+    function shouldDisplayProperty(properties, property) {
+        var propertyName = property.name;
+
+        if (propertyName == 'http://lumify.io#conceptType') {
+            return true;
+        } else {
+            var ontology = properties.byTitle[propertyName];
+            if (ontology && ~NO_HISTOGRAM_DATATYPES.indexOf(ontology.dataType)) {
+                return false;
+            }
+            return !!(ontology && ontology.userVisible);
+        }
+    }
+
+    function positionTextNumber() {
+        var t = this.previousSibling,
+            tX = t.x.baseVal[0].value,
+            w = t.offsetWidth,
+            barRect = this.parentNode.nextSibling,
+            barWidthVal = barRect.width.baseVal,
+            barWidth = barWidthVal.value,
+            remainingBarWidth = barWidth - w - tX - PADDING;
+
+        if (remainingBarWidth <= this.offsetWidth) {
+            this.setAttribute('x', Math.max(barWidth, tX + w) + PADDING);
+            this.setAttribute('text-anchor', 'start');
+            this.setAttribute('dx', 0);
+        } else {
+            this.setAttribute('x', barWidthVal.valueAsString);
+            this.setAttribute('dx', -PADDING);
+            this.setAttribute('text-anchor', 'end');
+        }
+    }
 
     function Multiple() {
         var d3;
@@ -38,8 +115,13 @@ define([
 
         this.defaultAttrs({
             histogramSelector: '.multiple .histogram',
-            histogramListSelector: '.multiple .nav-bar',
-            vertexListSelector: '.multiple .vertices-list'
+            histogramListSelector: '.multiple .histograms',
+            vertexListSelector: '.multiple .vertices-list',
+            histogramBarSelector: 'g.histogram-bar'
+        });
+
+        this.before('teardown', function() {
+            this.$node.off('mouseenter mouseleave');
         });
 
         this.after('initialize', function() {
@@ -47,13 +129,23 @@ define([
                 vertices = _.reject(this.attr.data, F.vertex.isEdge),
                 ids = _.pluck(vertices, 'id');
 
+            this.displayingVertexIds = ids;
+
             this.$node.html(template({
                 getClasses: this.classesForVertex,
                 vertices: vertices,
                 fullscreenButton: self.fullscreenButton(ids)
             }));
 
+            this.on('click', {
+                histogramBarSelector: this.histogramClick
+            })
+            this.$node.on('mouseenter mouseleave', '.histogram-bar', this.histogramHover.bind(this));
+
             this.on('selectObjects', this.onSelectObjects);
+            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+            this.onGraphPaddingUpdated = _.debounce(this.onGraphPaddingUpdated.bind(this), 100);
+            this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
             var d3Deferred = $.Deferred();
             require(['d3'], d3Deferred.resolve);
@@ -69,11 +161,32 @@ define([
                     vertices: vertices
                 });
 
+                self.drawHistograms = _.partial(self.renderHistograms, _, concepts, properties);
                 self.select('histogramSelector').remove();
-                self.drawHistograms(vertices, concepts, properties);
+                self.drawHistograms(vertices);
             });
 
         });
+
+        this.onVerticesUpdated = function(event, data) {
+            if (data && data.vertices) {
+                var intersection = _.intersection(this.displayingVertexIds, _.pluck(data.vertices, 'id'));
+                if (intersection.length) {
+                    appData.refresh(this.displayingVertexIds)
+                        .done(this.drawHistograms.bind(this));
+                }
+            }
+        };
+
+        this.onGraphPaddingUpdated = function(event, data) {
+            if (d3 && !this.previousPaddingRight ||
+                data.padding.r != this.previousPaddingRight) {
+                this.previousPaddingRight = data.padding.r;
+
+                d3.selectAll('defs .text-number')
+                    .each(positionTextNumber);
+            }
+        };
 
         this.onSelectObjects = function(event, data) {
             event.stopPropagation();
@@ -125,193 +238,371 @@ define([
             });
         };
 
-        this.drawHistograms = function(vertices, concepts, properties) {
+        this.renderHistograms = function(vertices, concepts, properties) {
             var self = this,
-                byProperty = calculateByProperty(vertices),
-                fn = {
-                    getPropertyDisplayName: getPropertyDisplayName.bind(null, properties),
-                    getPropertyValueDisplay: getPropertyValueDisplay.bind(null, concepts, properties),
-                    sortPropertyValues: sortPropertyValues.bind(null, properties, byProperty)
-                };
+                opacityScale = d3.scale.linear().domain([0, 100]).range(SCALE_OPACITY_BASED_ON_WIDTH_RANGE);
+                colorScale = d3.scale.linear().domain([0, 100]).range(SCALE_COLOR_BASED_ON_WIDTH_RANGE);
 
-            Object.keys(byProperty).filter(shouldDisplay.bind(null, properties)).forEach(function(name) {
+            if (!concepts || !properties) {
+                return;
+            }
 
-                var template = histogramTemplate({
-                        displayName: fn.getPropertyDisplayName(name)
-                    }),
-                    container = self.select('histogramListSelector')
-                        .append(template)
-                        .find('.svg-container')
-                        .last()
-                        .on('mouseenter mouseleave', 'g', self.histogramHover.bind(self))
-                        .on('click', 'g', self.histogramClick.bind(self)),
-                    data = Object.keys(byProperty[name])
-                        .map(function(key) {
-                            return {
-                                key: key,
-                                number: byProperty[name][key].length,
-                                vertexIds: _.pluck(byProperty[name][key], 'id')
-                            };
-                        }),
-                    width = container.width(),
-                    height = data.length * 30,
-                    x = d3.scale.linear()
-                        .domain([0, d3.sum(data, function(d) {
-                            return d.number;
-                        })])
-                        .range([0, 100]),
-                    y = d3.scale.ordinal()
-                        .domain(data.map(function(v) {
-                            return v.key;
-                        }))
-                        .rangeRoundBands([0, height], 0.1),
-                    svg = d3.select(container[0]).append('svg')
-                        .attr('width', '100%')
-                        .attr('height', height)
-                        .selectAll('.bar')
-                        .data(data)
-                        .enter()
-                        .append('g')
-                        .attr('data-info', function(d) {
-                            return JSON.stringify($.extend({ property: name }, d));
+            var propertySections = _.chain(vertices)
+                    .map(function(vertex) {
+                        return vertex.properties.map(function(p) {
+                            return $.extend({ vertexId: vertex.id }, p);
                         });
-
-                svg.append('rect')
-                    .attr('class', 'bar')
-                    .attr('x', 0)
-                    .attr('y', function(d, i) {
-                        return y(d.key);
                     })
-                    .attr('width', function(d) {
-                        return x(d.number) + '%';
-                    })
-                    .attr('height', function(d) {
-                        return y.rangeBand();
-                    });
-
-                svg.append('text')
-                    .attr('class', 'text')
-                    .text(function(d) {
-                        return fn.getPropertyValueDisplay(name, d.key);
-                    })
-                    .each(function() {
-                        var height = this.getBBox().height;
-                        this.setAttribute('dy', y.rangeBand() / 2 + height / 4 + 'px');
-                    })
-                .attr('x', 0)
-                    .attr('y', function(d, i) {
-                        return y(d.key);
-                    })
-                    .attr('dx','10px')
-                    .attr('fill', '#fff')
-                    .attr('text-anchor', 'start');
-
-                svg.append('text')
-                    .attr('class', 'text-number')
-                    .attr('text-anchor', 'end')
-                    .attr('x', function(d) {
-                        return x(d.number) + '%';
-                    })
-                    .attr('y', function(d, i) {
-                        return y(d.key);
-                    })
-                    .text(function(d) {
-                        return d.number;
-                    })
-                    .each(function() {
-                        var height = this.getBBox().height;
-                        this.setAttribute('dy', y.rangeBand() / 2 + height / 4 + 'px');
-
-                        var text = this.previousSibling.getBBox(),
-                            minX = text.width + text.x + 10,
-                            x = this.getBBox().x;
-                        if (x < minX) {
-                            this.setAttribute('dx', minX - x);
-                        } else this.setAttribute('dx', '-10px');
-                    });
-            });
-
-            function shouldDisplay(properties, propertyName) {
-                if (propertyName == 'http://lumify.io#conceptType') {
-                    return true;
-                } else {
-                    var ontology = properties.byTitle[propertyName];
-                    if (ontology && ~NO_HISTOGRAM_DATATYPES.indexOf(ontology.dataType)) {
-                        return false;
-                    }
-                    if (propertyName === 'http://lumify.io#title') {
-                        return false;
-                    }
-                    return !!(ontology && ontology.userVisible);
-                }
-            }
-
-            function sortPropertyValues(properties, byProperty, propertyName, a, b) {
-                return genericCompare(byProperty[propertyName][a].length, byProperty[propertyName][b].length);
-            }
-
-            function genericCompare(a, b) {
-                if (a == b) {
-                    return 0;
-                }
-                return a > b ? -1 : 1;
-            }
-
-            function getPropertyDisplayName(properties, propertyName) {
-                var propertyNameDisplay = propertyName;
-                if (properties.byTitle[propertyNameDisplay]) {
-                    propertyNameDisplay = properties.byTitle[propertyNameDisplay].displayName;
-                }
-                return propertyNameDisplay;
-            }
-
-            function getPropertyValueDisplay(concepts, properties, propertyName, propertyValue) {
-                var propertyValueDisplay = propertyValue;
-                if (propertyName == 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
-                    propertyValueDisplay = concepts.byId[propertyValue].displayName;
-                } else if (properties.byTitle[propertyName]) {
-                    propertyValueDisplay = F.vertex.displayProp({
-                        name: propertyName,
-                        value: propertyValue
-                    });
-                }
-                if (propertyValueDisplay === '') return '[ blank ]';
-                return propertyValueDisplay;
-            }
-
-            function calculateByProperty(vertices) {
-                var byProperty = {};
-                vertices.forEach(function(v) {
-                    v.properties.forEach(function(property) {
-                        if (!byProperty[property.name]) {
-                            byProperty[property.name] = {};
+                    .flatten()
+                    .filter(_.partial(shouldDisplayProperty, properties))
+                    .groupBy('name')
+                    .pairs()
+                    .filter(function(pair) {
+                        var ontologyProperty = properties.byTitle[pair[0]];
+                        if (ontologyProperty && ~BINABLE_TYPES.indexOf(ontologyProperty.dataType)) {
+                            return true;
                         }
-                        appendBin(byProperty[property.name], property.value, v);
-                    });
-                });
-                return byProperty;
-            }
+                        if (ontologyProperty && ontologyProperty.possibleValues) {
+                            return true;
+                        }
 
-            function appendBin(hash, binName, val) {
-                if (!hash[binName]) {
-                    hash[binName] = [];
-                }
-                hash[binName].push(val);
-            }
+                        var values = _.chain(pair[1])
+                            .countBy('value')
+                            .values()
+                            .value();
+
+                        return values.length < HIDE_IF_ALL_UNIQUE_AND_BINS ||
+                             !_.every(values, function(v) {
+                                 return v === 1;
+                             });
+                    })
+                    .sortBy(function(pair) {
+                        var ontologyProperty = properties.byTitle[pair[0]],
+                            value = pair[0];
+
+                        if (value === 'http://lumify.io#conceptType') {
+                            return '0';
+                        }
+
+                        if (ontologyProperty && ontologyProperty.displayName) {
+                            value = ontologyProperty.displayName;
+                        }
+
+                        return '1' + value.toLowerCase();
+                    })
+                    .value(),
+                container = this.select('histogramListSelector');
+
+                width = container.width();
+
+            d3.select(container.get(0))
+                    .selectAll('li.property-section')
+                    .data(propertySections)
+                    .call(function() {
+                        this.enter()
+                            .append('li').attr('class', 'property-section')
+                            .call(function() {
+                                this.append('div').attr('class', 'nav-header')
+                                this.append('svg').attr('width', '100%')
+                            });
+                        this.exit().remove();
+
+                        this.order()
+                            .call(function() {
+                                this.select('.nav-header')
+                                    .text(_.partial(propertyDisplayName, properties));
+                                this.select('svg')
+                                    .attr('height', function(d) {
+                                        var ontologyProperty = properties.byTitle[d[0]],
+                                            values = _.pluck(d[1], 'value');
+
+                                        d.values = values;
+
+                                        if (ontologyProperty && ~BINABLE_TYPES.indexOf(ontologyProperty.dataType)) {
+
+                                            var bins = _.reject(
+                                                d3.layout.histogram().value(_.property('value'))
+                                                (d[1]), function(bin) {
+                                                return bin.length === 0;
+                                            });
+
+                                            d.bins = bins;
+                                            return bins.length * BAR_HEIGHT;
+                                        }
+
+                                        if ('bins' in d) {
+                                            delete d.bins;
+                                        }
+
+                                        return _.unique(_.pluck(d[1], 'value')).length * BAR_HEIGHT;
+                                    })
+                                    .selectAll('.histogram-bar')
+                                    .data(function(d) {
+                                        var xScale, yScale,
+                                            bins,
+                                            values = d.values;
+
+                                        if ('bins' in d) {
+                                            bins = d.bins;
+
+                                            xScale = d3.scale.linear().range([0, 100]);
+                                            yScale = d3.scale.ordinal();
+
+                                            bins = bins.map(function(bin) {
+                                                    bin.xScale = xScale;
+                                                    bin.yScale = yScale;
+                                                    bin.name = d[0];
+                                                    bin.vertexIds = _.pluck(bin, 'vertexId');
+                                                    for (var i = 0; i < bin.length; i++) {
+                                                        bin[i] = bin[i].value;
+                                                    }
+                                                    return bin;
+                                                });
+                                            yScale.domain(_.compact(_.pluck(bins, '0')));
+                                            yScale.rangeRoundBands([0, bins.length * BAR_HEIGHT], 0.1);
+                                            xScale.domain([0, d3[HISTOGRAM_STYLE](bins, function(d) {
+                                                return d.length
+                                            })]);
+
+                                            return bins;
+                                        }
+
+                                        xScale = d3.scale.linear()
+                                            .range([0, 100]);
+
+                                        var groupedByValue = _.groupBy(d[1], 'value'),
+                                            displayValue = _.partial(propertyValueDisplay, concepts, properties);
+                                        yScale = d3.scale.ordinal()
+                                            .domain(
+                                                _.chain(values)
+                                                .unique()
+                                                .sortBy(function(f) {
+                                                    var bin = [f];
+                                                    bin.name = d[0];
+                                                    return (100 - groupedByValue[f].length) +
+                                                        displayValue(bin);
+                                                })
+                                                .value()
+                                            );
+
+                                        bins = _.chain(groupedByValue)
+                                                .pairs()
+                                                .map(function(bin) {
+                                                    bin.xScale = xScale;
+                                                    bin.yScale = yScale;
+                                                    bin.name = d[0];
+                                                    bin.vertexIds = _.pluck(bin[1], 'vertexId');
+                                                    bin[1] = bin[1].length;
+                                                    return bin;
+                                                })
+                                                .value();
+
+                                        yScale.rangeRoundBands([0, bins.length * BAR_HEIGHT], 0.1)
+                                        xScale.domain([0, d3[HISTOGRAM_STYLE](bins, function(d) {
+                                            return d[1];
+                                        })]);
+
+                                        return bins;
+                                    })
+                                    .call(function() {
+                                        this.enter()
+                                            .append('g')
+                                                .attr('class', 'histogram-bar')
+                                                .call(function() {
+                                                    this.append('defs')
+                                                        .call(function() {
+                                                            this.call(createMask);
+                                                            this.call(createMask);
+                                                            this.append('text')
+                                                                .attr('class', 'text')
+                                                                .attr('x', PADDING)
+                                                                .attr('text-anchor', 'start');
+                                                            this.append('text')
+                                                                .attr('class', 'text-number');
+
+                                                            function createMask() {
+                                                                this.append('mask')
+                                                                    .attr('maskUnits', 'userSpaceOnUse')
+                                                                    .attr('y', 0)
+                                                                    .append('rect')
+                                                                        .attr('x', 0)
+                                                                        .attr('y', 0)
+                                                                        .attr('fill', 'white')
+                                                            }
+                                                        })
+                                                    this.append('rect').attr('class', 'bar-background');
+                                                    this.append('rect')
+                                                        .attr('width', '100%')
+                                                        .attr('class', 'click-target')
+                                                        .attr('height', barHeight)
+                                                    this.append('use').attr('class', 'on-bar-text');
+                                                    this.append('use').attr('class', 'off-bar-text');
+                                                    this.append('use').attr('class', 'on-number-bar-text');
+                                                    this.append('use').attr('class', 'off-number-bar-text');
+                                                })
+                                        this.exit().remove();
+
+                                        this.order()
+                                            .attr('data-vertex-ids', function(d) {
+                                                return JSON.stringify(d.vertexIds || []);
+                                            })
+                                            .attr('transform', function(d) {
+                                                return 'translate(0,' + d.yScale(d[0]) + ')';
+                                            })
+
+                                        this.select('rect.bar-background')
+                                            .attr('width', _.compose(toPercent, barWidth))
+                                            .style('fill-opacity', _.compose(toPercent, barOpacity, barWidth))
+                                            .style('fill', _.compose(barColor, barWidth))
+                                            .attr('height', barHeight);
+
+                                        this.select('defs')
+                                            .call(function() {
+                                                this.select('mask:first-child')
+                                                    .attr('id', _.compose(append('_0'), maskId))
+                                                    .attr('height', barHeight)
+                                                    .attr('width', _.compose(toPercent, maskWidth(0)))
+                                                    .attr('x', _.compose(toPercent, maskX(0)))
+                                                    .select('rect')
+                                                        .attr('width', '500%')
+                                                        .attr('height', barHeight)
+                                                this.select('mask:nth-child(2)')
+                                                    .attr('id', _.compose(append('_1'), maskId))
+                                                    .attr('height', barHeight)
+                                                    .attr('width', _.compose(toPercent, maskWidth(1)))
+                                                    .attr('x', _.compose(toPercent, maskX(1)))
+                                                    .select('rect')
+                                                        .attr('width', '500%')
+                                                        .attr('height', barHeight)
+
+                                                this.select('.text')
+                                                    .attr('id', textId)
+                                                    .text(_.partial(propertyValueDisplay, concepts, properties))
+                                                    .each(setTextY(0.15));
+
+                                                this.select('.text-number')
+                                                    .attr('id', textNumberId)
+                                                    .text(textNumberValue)
+                                                    .attr('x', textNumberX)
+                                                    .attr('dx', PADDING * -1)
+                                                    .attr('text-anchor', 'end')
+                                                    .each(positionTextNumber)
+                                                    .each(setTextY(0.2));
+                                            });
+
+                                        this.select('use.on-bar-text')
+                                            .attr('xlink:href', _.compose(toRefId, textId))
+                                            .attr('mask', _.compose(toUrlId, append('_0'), maskId));
+                                        this.select('use.off-bar-text')
+                                            .attr('xlink:href', _.compose(toRefId, textId))
+                                            .attr('mask', _.compose(toUrlId, append('_1'), maskId));
+                                        this.select('use.on-number-bar-text')
+                                            .attr('xlink:href', _.compose(toRefId, textNumberId))
+                                            .attr('mask', _.compose(toUrlId, append('_0'), maskId));
+                                        this.select('use.off-number-bar-text')
+                                            .attr('xlink:href', _.compose(toRefId, textNumberId))
+                                            .attr('mask', _.compose(toUrlId, append('_1'), maskId));
+
+                                    })
+
+                                function append(toAppend) {
+                                    return function(str) {
+                                        return str + toAppend;
+                                    }
+                                }
+
+                                function setTextY(k) {
+                                    return function() {
+                                        var height = this.getBBox().height;
+                                        this.setAttribute('y', (BAR_HEIGHT / 2 + height * k) + 'px');
+                                    };
+                                }
+                                function maskId(d, i, barIndex) {
+                                    return 'section_' + barIndex + '_bar_' + i + '_mask';
+                                }
+                                function textId(d, i, barIndex) {
+                                    return 'section_' + barIndex + '_bar_' + i + '_text';
+                                }
+                                function textNumberId(d, i, barIndex) {
+                                    return 'section_' + barIndex + '_bar_' + i + '_textnumber';
+                                }
+                                function textNumberValue(d, i, barIndex) {
+                                    return barNumber(d);
+                                }
+                                function textNumberX(d, i, barIndex) {
+                                    return toPercent(barWidth(d, i, barIndex));
+                                }
+                                function toRefId(id) {
+                                    return '#' + id;
+                                }
+                                function toUrlId(id) {
+                                    return 'url(#' + id + ')';
+                                }
+                                function maskX(i) {
+                                    return function(d, ignored, barIndex) {
+                                        if (i === 0) {
+                                            return '0';
+                                        }
+
+                                        return barWidth(d, i, barIndex);
+                                    }
+                                }
+                                function maskWidth(i) {
+                                    return function(d, ignored, barIndex) {
+                                        var width = barWidth(d, i, barIndex);
+                                        if (i === 0) {
+                                            return width;
+                                        }
+
+                                        return 100 - width;
+                                    }
+                                }
+                                function barHeight(d) {
+                                    return d.yScale.rangeBand();
+                                }
+                                function barNumber(d) {
+                                    if ('dx' in d) {
+                                        return d.y;
+                                    }
+                                    return d[1];
+                                }
+                                function barWidth(d) {
+                                    return d.xScale(barNumber(d));
+                                }
+                                function barColor(percent) {
+                                    if (SCALE_COLOR_BASED_ON_WIDTH) {
+                                        return colorScale(percent);
+                                    }
+                                    return undefined;
+                                }
+                                function barOpacity(percent) {
+                                    if (SCALE_OPACITY_BASED_ON_WIDTH) {
+                                        return opacityScale(percent);
+                                    }
+                                    return 100;
+                                }
+                                function toPercent(number) {
+                                    return number + '%';
+                                }
+                            });
+
+                        this.exit().remove();
+                    })
         };
 
         this.histogramHover = function(event, object) {
-            var data = $(event.target).closest('g').data('info'),
+            var vertexIds = $(event.target).closest('g').data('vertexIds'),
                 eventName = event.type === 'mouseenter' ? 'focus' : 'defocus';
 
-            this.trigger(document, eventName + 'Vertices', { vertexIds: data.vertexIds });
+            this.trigger(document, eventName + 'Vertices', { vertexIds: vertexIds });
         };
 
         this.histogramClick = function(event, object) {
-            var data = $(event.target).closest('g').data('info');
+            var vertexIds = $(event.target).closest('g').data('vertexIds');
 
-            this.trigger(document, 'selectObjects', { vertices: appData.vertices(data.vertexIds) });
-            this.trigger(document, 'defocusVertices', { vertexIds: data.vertexIds });
+            this.trigger(document, 'selectObjects', { vertices: appData.vertices(vertexIds) });
+            this.trigger(document, 'defocusVertices', { vertexIds: vertexIds });
         };
+
     }
 });
