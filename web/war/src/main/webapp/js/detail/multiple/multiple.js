@@ -27,6 +27,7 @@ define([
     var HISTOGRAM_STYLE = 'max', // max or sum
         BAR_HEIGHT = 25,
         PADDING = 5,
+        ANIMATION_DURATION = 400,
         BINABLE_TYPES = 'double date currency'.split(' '), // TODO: heading
         SCALE_COLOR_BASED_ON_WIDTH = false,
         SCALE_COLOR_BASED_ON_WIDTH_RANGE = ['#00A1F8', '#0088cc'],
@@ -163,7 +164,7 @@ define([
 
                 self.drawHistograms = _.partial(self.renderHistograms, _, concepts, properties);
                 self.select('histogramSelector').remove();
-                self.drawHistograms(vertices);
+                self.drawHistograms(vertices, { duration: 0 });
             });
 
         });
@@ -238,10 +239,11 @@ define([
             });
         };
 
-        this.renderHistograms = function(vertices, concepts, properties) {
+        this.renderHistograms = function(vertices, concepts, properties, options) {
             var self = this,
-                opacityScale = d3.scale.linear().domain([0, 100]).range(SCALE_OPACITY_BASED_ON_WIDTH_RANGE);
-                colorScale = d3.scale.linear().domain([0, 100]).range(SCALE_COLOR_BASED_ON_WIDTH_RANGE);
+                opacityScale = d3.scale.linear().domain([0, 100]).range(SCALE_OPACITY_BASED_ON_WIDTH_RANGE),
+                colorScale = d3.scale.linear().domain([0, 100]).range(SCALE_COLOR_BASED_ON_WIDTH_RANGE),
+                animationDuration = (options && _.isNumber(options.duration)) || ANIMATION_DURATION;
 
             if (!concepts || !properties) {
                 return;
@@ -297,7 +299,9 @@ define([
 
             d3.select(container.get(0))
                     .selectAll('li.property-section')
-                    .data(propertySections)
+                    .data(propertySections, function(d) {
+                        return d[0];
+                    })
                     .call(function() {
                         this.enter()
                             .append('li').attr('class', 'property-section')
@@ -312,29 +316,34 @@ define([
                                 this.select('.nav-header')
                                     .text(_.partial(propertyDisplayName, properties));
                                 this.select('svg')
-                                    .attr('height', function(d) {
-                                        var ontologyProperty = properties.byTitle[d[0]],
-                                            values = _.pluck(d[1], 'value');
+                                    .call(function() {
+                                        this.transition()
+                                            .duration(animationDuration)
+                                            .attr('height', function(d) {
+                                                var ontologyProperty = properties.byTitle[d[0]],
+                                                    values = _.pluck(d[1], 'value');
 
-                                        d.values = values;
+                                                d.values = values;
 
-                                        if (ontologyProperty && ~BINABLE_TYPES.indexOf(ontologyProperty.dataType)) {
+                                                if (ontologyProperty &&
+                                                    ~BINABLE_TYPES.indexOf(ontologyProperty.dataType)) {
 
-                                            var bins = _.reject(
-                                                d3.layout.histogram().value(_.property('value'))
-                                                (d[1]), function(bin) {
-                                                return bin.length === 0;
-                                            });
+                                                    var bins = _.reject(
+                                                        d3.layout.histogram().value(_.property('value'))
+                                                        (d[1]), function(bin) {
+                                                        return bin.length === 0;
+                                                    });
 
-                                            d.bins = bins;
-                                            return bins.length * BAR_HEIGHT;
-                                        }
+                                                    d.bins = bins;
+                                                    return bins.length * BAR_HEIGHT;
+                                                }
 
-                                        if ('bins' in d) {
-                                            delete d.bins;
-                                        }
+                                                if ('bins' in d) {
+                                                    delete d.bins;
+                                                }
 
-                                        return _.unique(_.pluck(d[1], 'value')).length * BAR_HEIGHT;
+                                                return _.unique(_.pluck(d[1], 'value')).length * BAR_HEIGHT;
+                                            })
                                     })
                                     .selectAll('.histogram-bar')
                                     .data(function(d) {
@@ -440,21 +449,27 @@ define([
                                                     this.append('use').attr('class', 'on-number-bar-text');
                                                     this.append('use').attr('class', 'off-number-bar-text');
                                                 })
-                                        this.exit().remove();
+                                        this.exit()
+                                            .transition()
+                                            .duration(animationDuration)
+                                            .style('opacity', 0)
+                                            .remove();
 
                                         this.order()
                                             .attr('data-vertex-ids', function(d) {
                                                 return JSON.stringify(d.vertexIds || []);
                                             })
+                                            .transition()
+                                            .duration(animationDuration)
                                             .attr('transform', function(d) {
                                                 return 'translate(0,' + d.yScale(d[0]) + ')';
                                             })
 
                                         this.select('rect.bar-background')
-                                            .attr('width', _.compose(toPercent, barWidth))
                                             .style('fill-opacity', _.compose(toPercent, barOpacity, barWidth))
                                             .style('fill', _.compose(barColor, barWidth))
-                                            .attr('height', barHeight);
+                                            .attr('height', barHeight)
+                                            .attr('width', _.compose(toPercent, barWidth));
 
                                         this.select('defs')
                                             .call(function() {
@@ -585,8 +600,6 @@ define([
                                     return number + '%';
                                 }
                             });
-
-                        this.exit().remove();
                     })
         };
 
