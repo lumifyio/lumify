@@ -58,16 +58,25 @@ public abstract class LumifyMRBase extends Configured implements Tool {
             startPeriodicCounterOutputThread(job);
         }
 
+        LOGGER.info("Starting job");
+        long startTime = System.currentTimeMillis();
         int result = job.waitForCompletion(true) ? 0 : 1;
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("Job complete");
 
         if (periodicCounterOutputTimer != null) {
             periodicCounterOutputTimer.cancel();
         }
 
         printCounters(job);
+        LOGGER.info("Time: %,.2f minutes", ((double) (endTime - startTime) / 1000.0 / 60.0));
         LOGGER.info("Return code: " + result);
 
         return result;
+    }
+
+    public boolean isLocal() {
+        return local;
     }
 
     protected void printCounters(Job job) {
