@@ -22,6 +22,7 @@ import org.apache.accumulo.core.data.Mutation;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Counter;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
@@ -70,7 +71,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private SecureGraphAuditRepository auditRepository;
     private UserRepository userRepository;
     private String sourceFileName;
-    private TextConverter textConverter;
+    private Counter pagesProcessedCounter;
 
     public ImportMRMapper() {
         this.textXPath = XPathFactory.instance().compile(TEXT_XPATH, Filters.text());
@@ -97,12 +98,15 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
             throw new IOException("Could not configure sweble", ex);
         }
 
-        textConverter = new TextConverter(config);
+        pagesProcessedCounter = context.getCounter(WikipediaImportCounters.PAGES_PROCESSED);
     }
 
     @Override
     protected void safeMap(LongWritable filePosition, Text line, Context context) throws IOException, InterruptedException {
         ParsePage parsePage;
+
+        TextConverter textConverter = new TextConverter(config);
+
         String pageString = line.toString().replaceAll("\\\\n", "\n");
         try {
             parsePage = new ParsePage(pageString).invoke();
@@ -116,7 +120,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         context.setStatus(wikipediaPageVertexId);
 
         try {
-            String wikitext = getPageText(parsePage.getWikitext(), wikipediaPageVertexId);
+            String wikitext = getPageText(parsePage.getWikitext(), wikipediaPageVertexId, textConverter);
             parsePage.setWikitext(wikitext);
         } catch (Exception ex) {
             LOGGER.error("Could not process wikipedia text: " + filePosition + ":\n" + parsePage.getWikitext(), ex);
@@ -125,9 +129,9 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         }
 
         Vertex pageVertex = savePage(context, wikipediaPageVertexId, parsePage, pageString);
-        savePageLinks(context, pageVertex);
+        savePageLinks(context, pageVertex, textConverter);
 
-        context.getCounter(WikipediaImportCounters.PAGES_PROCESSED).increment(1);
+        pagesProcessedCounter.increment(1);
     }
 
     private Vertex savePage(Context context, String wikipediaPageVertexId, ParsePage parsePage, String pageString) throws IOException, InterruptedException {
@@ -168,7 +172,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         return pageVertex;
     }
 
-    private String getPageText(String wikitext, String wikipediaPageVertexId) throws LinkTargetException, EngineException {
+    private String getPageText(String wikitext, String wikipediaPageVertexId, TextConverter textConverter) throws LinkTargetException, EngineException {
         String fileTitle = wikipediaPageVertexId;
         PageId pageId = new PageId(PageTitle.make(config, fileTitle), -1);
         EngProcessedPage compiledPage = compiler.postprocess(pageId, wikitext, null);
@@ -179,7 +183,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         return wikitext;
     }
 
-    private void savePageLinks(Context context, Vertex pageVertex) throws IOException, InterruptedException {
+    private void savePageLinks(Context context, Vertex pageVertex, TextConverter textConverter) throws IOException, InterruptedException {
         for (LinkWithOffsets link : getLinks(textConverter)) {
             savePageLink(context, pageVertex, link);
         }
