@@ -17,6 +17,7 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.securegraph.*;
 
@@ -54,6 +55,13 @@ public class VertexNew extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
         Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
+
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
+            respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"), visibilitySource);
+            chain.next(request, response);
+            return;
+        }
 
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);

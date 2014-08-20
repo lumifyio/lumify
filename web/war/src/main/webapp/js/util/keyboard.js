@@ -25,6 +25,7 @@ define([
             this.on('keydown', this.onKeyDown);
             this.on('keyup', this.onKeyUp);
             this.on('click', this.onClick);
+            this.on('mousemove', this.onMouseMove);
             this.on('didToggleDisplay', this.onToggleDisplay);
             this.on('focusLostByClipboard', this.onFocusLostByClipboard);
             this.on('focusComponent', this.onFocus);
@@ -104,6 +105,13 @@ define([
                 return this.shortcuts['CTRL-' + w] || this.shortcuts['META-' + w];
             }
             if (event.altKey) {
+
+                // ALT+N keyCode is 229 instead of 78
+                if (w === 229) {
+                    return this.shortcuts['ALT-' + w] ||
+                        this.shortcuts['ALT-' + 78];
+                }
+
                 return this.shortcuts['ALT-' + w];
             }
             if (event.shiftKey) {
@@ -145,6 +153,11 @@ define([
             }
         }
 
+        this.onMouseMove = function(e) {
+            this.mousePageX = e.pageX;
+            this.mousePageY = e.pageY;
+        }
+
         this.pushToStackIfNotLast = function(el) {
             if (!this.focusElementStack.length || this.focusElementStack[this.focusElementStack.length - 1] !== el) {
                 this.focusElementStack.push(el);
@@ -170,6 +183,8 @@ define([
 
         this.fireEvent = function(name, data) {
             var te = this.getTriggerElement();
+            data.pageX = this.mousePageX || 0;
+            data.pageY = this.mousePageY || 0;
             this.trigger(te, name, data);
         }
     }

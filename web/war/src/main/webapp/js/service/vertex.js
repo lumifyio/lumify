@@ -85,6 +85,16 @@ define([
         });
     };
 
+    VertexService.prototype.createVertex = function(conceptType, visibilitySource) {
+        return this._ajaxPost({
+            url: 'vertex',
+            data: {
+                conceptType: conceptType,
+                visibilitySource: visibilitySource
+            }
+        })
+    };
+
     VertexService.prototype.importFiles = function(files, visibilitySource) {
         var formData = new FormData(),
             pluralString = F.string.plural(files.length, 'file');

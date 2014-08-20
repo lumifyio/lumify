@@ -556,6 +556,11 @@ define([
             this.fit();
         };
 
+        this.onContextMenuCreateVertex = function() {
+            var menu = this.select('contextMenuSelector');
+            this.createVertex(menu.offset());
+        }
+
         this.updateEdgeOptions = function(cy) {
             cy.renderer().hideEdgesOnViewport = cy.edges().length > SHOW_EDGES_ON_ZOOM_THRESHOLD;
         };
@@ -1219,7 +1224,28 @@ define([
             this.trigger(document, 'closeVertexMenu');
             this.select('contextMenuSelector').blur().parent().removeClass('open');
             this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
-        }
+        };
+
+        this.createVertex = function(offset) {
+            var self = this;
+            require(['util/popovers/createVertex/createVertex'], function(CreateVertex) {
+                CreateVertex.attachTo(self.$node, {
+                    anchorTo: {
+                        page: {
+                            x: offset.left,
+                            y: offset.top
+                        }
+                    }
+                });
+            });
+        };
+
+        this.onCreateVertex = function(e, data) {
+            this.createVertex({
+                left: data && data.pageX || 0,
+                top: data && data.pageY || 0
+            })
+        };
 
         this.after('teardown', function() {
             this.$node.empty();
@@ -1256,6 +1282,7 @@ define([
             this.on('hidePanel', this.onHidePanel);
             this.on('showMenu', this.onShowMenu);
             this.on('hideMenu', this.onHideMenu);
+            this.on('createVertex', this.onCreateVertex);
             this.on('contextmenu', function(e) {
                 e.preventDefault();
             });
@@ -1266,6 +1293,7 @@ define([
                     '-': { fire: 'zoomOut', desc: i18n('graph.help.zoom_out') },
                     '=': { fire: 'zoomIn', desc: i18n('graph.help.zoom_in') },
                     'alt-f': { fire: 'fit', desc: i18n('graph.help.fit') },
+                    'alt-n': { fire: 'createVertex', desc: i18n('graph.help.create_vertex') }
                 }
             });
 
