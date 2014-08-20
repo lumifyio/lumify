@@ -5,7 +5,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;

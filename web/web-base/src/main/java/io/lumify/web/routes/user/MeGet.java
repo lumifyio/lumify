@@ -1,7 +1,7 @@
 package io.lumify.web.routes.user;
 
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.handlers.CSRFHandler;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.miniweb.handlers.CSRFHandler;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;

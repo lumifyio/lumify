@@ -1,6 +1,6 @@
 package io.lumify.geocoder.bing;
 
-import com.altamiracorp.miniweb.Handler;
+import io.lumify.miniweb.Handler;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.web.WebApp;

@@ -1,7 +1,7 @@
 package io.lumify.termsOfUse;
 
-import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.handlers.StaticResourceHandler;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.handlers.StaticResourceHandler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 

@@ -1,6 +1,6 @@
 package io.lumify.web;
 
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;

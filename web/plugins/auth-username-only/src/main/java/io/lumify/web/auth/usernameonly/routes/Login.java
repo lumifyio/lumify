@@ -1,7 +1,7 @@
 package io.lumify.web.auth.usernameonly.routes;
 
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.utils.UrlUtils;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;

@@ -1,6 +1,6 @@
 package io.lumify.web;
 
-import com.altamiracorp.miniweb.Handler;
+import io.lumify.miniweb.Handler;
 
 import javax.servlet.ServletContext;
 

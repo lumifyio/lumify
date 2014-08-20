@@ -1,6 +1,6 @@
 package io.lumify.web.privilegeFilters;
 
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
