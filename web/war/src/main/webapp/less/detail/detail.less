@@ -20,7 +20,7 @@
         color: #ddd;
         content: 'Loading';
         display: block;
-        font-family: "HelveticaNeue-Thin", Arial, sans-serif;
+        font-family: @light-font;
         font-size: 150%;
         left: 0;
         margin-top: 4.5em;
@@ -364,8 +364,7 @@
         display:block; 
         .box-sizing(border-box);
       }
-      .vertices-list {
-        border-top: 1px solid #e0e0e0;
+      .vertices-list {      
         position: absolute;
         height: 200px;
         bottom: 0;
@@ -402,25 +401,60 @@
       }
     }
 
-    .svg-container {
-      margin: -1em 0;
+    svg, .svg-container {
 
-      .bar {
-        fill: #ddd;
-        cursor: pointer;
+      .histogram-bar {
+        rect.bar-background {
+          fill: fadeOut(@blue-color, 10%);
+          cursor: pointer;
+        }
+        rect.click-target {                    
+          fill-opacity: 0%;
+          cursor: pointer;
+        }
+        .on-bar-text, .on-number-bar-text,
+        .off-bar-text, .off-number-bar-text {
+          font-size: 90%;
+          cursor: pointer;
+          pointer-events: none;
+        }
+        .on-bar-text, .on-number-bar-text {
+          fill: white;
+        }
+        .off-bar-text, .off-number-bar-text {
+          fill: fadeOut(@blue-color, 10%);
+        }
+        .on-number-bar-text, .off-number-bar-text {
+          font-family: @light-font;
+          font-size: 105%;
+          .opacity(75);
+        }
       }
-      .text, .text-number {
-        font-size: 85%;
-        cursor: pointer;
-      }
-      .text {
-        fill: #555;
-      }
-      .text-number {
-        fill: #888;
+    }
+    
+    &:not(.viewing-vertex) {          
+      .vertex-list {
+        .active a {
+          color: #0088cc;        
+          text-shadow: none;
+          background: inherit;
+          .source, .date {
+            color: #555;
+          }
+
+          ul li.graph button {
+            background-image: url(../img/glyphicons/glyphicons_326_share@2x.png);
+          }
+          ul li.map button {
+            background-image: url(../img/glyphicons/glyphicons_242_google_maps@2x.png);
+          }
+        }
       }
     }
 
+    .vertices-list {
+       border-top: 1px solid #eee;
+    }
     .multi-select {
       margin: 0;
       padding-left: 16px;
@@ -433,6 +467,11 @@
       li {
         padding: 0;
         margin: 1em 0;
+      }
+
+      .property-section .nav-header {
+        margin: 0;
+        padding: 0;
       }
     }
   }
