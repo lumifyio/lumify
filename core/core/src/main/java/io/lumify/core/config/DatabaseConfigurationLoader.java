@@ -1,6 +1,7 @@
 package io.lumify.core.config;
 
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.util.ClassUtil;
 
 import java.io.*;
 import java.sql.*;
@@ -15,7 +16,8 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
     public static final String BOOTSTRAP_PREFIX = "databaseConfigurationLoader";
 
     private DatabaseConfigurationLoaderConfig config = new DatabaseConfigurationLoaderConfig();
-    private Map<String, String> configuration;
+    private Map<String, String> files;
+    private Map<String, String> properties;
 
     public static void main(String[] args) {
         DatabaseConfigurationLoader databaseConfigurationLoader = new DatabaseConfigurationLoader(new HashMap());
@@ -33,13 +35,25 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
         Configuration bootstrapConfiguration = new Configuration(this, bootstrapProperties);
         bootstrapConfiguration.setConfigurables(config, BOOTSTRAP_PREFIX);
 
-        configuration = getDatabaseProperties();
-        configuration.putAll(bootstrapProperties);
+        Map<String, String> databaseValues = selectDatabaseValues();
+        files = new HashMap<String, String>();
+        properties = new HashMap<String, String>();
+
+        for (Map.Entry entry : databaseValues.entrySet()) {
+            String key = (String) entry.getKey();
+            if (key.contains(config.configurationKeyFileIndicator)) {
+                files.put(key.replaceFirst(config.configurationKeyFileIndicator + ".", ""), (String) entry.getValue());
+            } else {
+                properties.put(key, (String) entry.getValue());
+            }
+        }
+
+        properties.putAll(bootstrapProperties);
     }
 
     @Override
     public Configuration createConfiguration() {
-        return new Configuration(this, configuration);
+        return new Configuration(this, properties);
     }
 
     /**
@@ -55,13 +69,13 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
             }
         }
 
-        if (configuration.containsKey(fileName)) {
+        if (files.containsKey(fileName)) {
             try {
                 File tempFile = File.createTempFile(DatabaseConfigurationLoader.class.getName() + "-", "-" + fileName);
                 tempFile.deleteOnExit();
 
                 FileOutputStream fos = new FileOutputStream(tempFile);
-                fos.write(configuration.get(fileName).getBytes());
+                fos.write(files.get(fileName).getBytes());
                 fos.close();
 
                 return tempFile;
@@ -128,22 +142,25 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
         return map;
     }
 
-    private Map<String, String> getDatabaseProperties() {
-        String query = String.format("select %s, %s from %s where %s like ? and %s = ?",
+    private Map<String, String> selectDatabaseValues() {
+        String query = String.format("select %s, %s from %s where %s = ? and %s = ? and %s like ?",
                 config.configurationKeyColumn,
                 config.configurationValueColumn,
                 config.configurationTable,
-                config.configurationKeyColumn,
-                config.configurationVersionColumn);
+                config.configurationEnvironmentColumn,
+                config.configurationVersionColumn,
+                config.configurationKeyColumn);
         Map<String, String> map = new HashMap<String, String>();
 
         try {
+            Class.forName(config.databaseDriverClass); // this shouldn't be required
             Connection conn = DriverManager.getConnection(config.databaseUrl, config.databaseUsername, config.databasePassword);
             try {
                 PreparedStatement statement = conn.prepareStatement(query);
                 try {
-                    statement.setString(1, config.configurationKeyPrefix + ".%");
+                    statement.setString(1, config.configurationEnvironment);
                     statement.setString(2, config.configurationVersion);
+                    statement.setString(3, config.configurationKeyPrefix + ".%");
 
                     ResultSet resultSet = statement.executeQuery();
                     while (resultSet.next()) {
@@ -159,6 +176,9 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
             }
         } catch (SQLException se) {
             throw new LumifyException("error selecting values from the database", se);
+        } catch (ClassNotFoundException cnfe) {
+            ClassUtil.logClasspath(this.getClass().getClassLoader());
+            throw new LumifyException("error loading database driver class: " + config.databaseDriverClass, cnfe);
         }
         return map;
     }
