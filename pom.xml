@@ -634,10 +634,6 @@
                             <version>${plugin.maven.surefire.version}</version>
                         </dependency>
                     </dependencies>
-                    <configuration>
-                        <forkMode>once</forkMode>
-                        <argLine>-Djava.library.path=/usr/local/lib/</argLine>
-                    </configuration>
                 </plugin>
 
                 <plugin>
