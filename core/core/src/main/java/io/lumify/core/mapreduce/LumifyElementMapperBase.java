@@ -26,10 +26,10 @@ public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMap
     }
 
     @Override
-    protected void map(KEYIN key, VALUEIN line, Context context) throws IOException, InterruptedException {
+    protected void map(KEYIN key, VALUEIN line, Context context) {
         try {
             safeMap(key, line, context);
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             LOGGER.error("failed mapping " + key, ex);
         }
     }
