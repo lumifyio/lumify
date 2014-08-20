@@ -1,6 +1,6 @@
 package io.lumify.web.routes.ontology;
 
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.Concept;

@@ -53,7 +53,7 @@
         <!-- Dependency Versions -->
         <accumulo.version>1.5.0</accumulo.version>
         <altamira.bigtable.version>0.4.0-SNAPSHOT</altamira.bigtable.version>
-        <altamira.miniweb.version>0.4.1-SNAPSHOT</altamira.miniweb.version>
+        <miniweb.version>0.5.0</miniweb.version>
         <ant.version>1.4.1</ant.version>
         <atmosphere.version>2.1.1</atmosphere.version>
         <commons.beanutils.version>1.9.1</commons.beanutils.version>
@@ -228,9 +228,9 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>com.altamiracorp.miniweb</groupId>
+                <groupId>io.lumify</groupId>
                 <artifactId>miniweb</artifactId>
-                <version>${altamira.miniweb.version}</version>
+                <version>${miniweb.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.codahale.metrics</groupId>

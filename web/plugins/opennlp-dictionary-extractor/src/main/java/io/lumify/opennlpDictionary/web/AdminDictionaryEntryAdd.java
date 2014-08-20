@@ -7,7 +7,7 @@ import io.lumify.core.user.User;
 import io.lumify.opennlpDictionary.model.DictionaryEntry;
 import io.lumify.opennlpDictionary.model.DictionaryEntryRepository;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 

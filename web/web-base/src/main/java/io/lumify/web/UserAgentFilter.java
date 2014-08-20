@@ -1,7 +1,7 @@
 package io.lumify.web;
 
-import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.HandlerChain;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.lumify.core.util.LumifyLogger;

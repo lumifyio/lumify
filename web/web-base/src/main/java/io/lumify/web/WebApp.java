@@ -1,7 +1,7 @@
 package io.lumify.web;
 
-import com.altamiracorp.miniweb.App;
-import com.altamiracorp.miniweb.Handler;
+import io.lumify.miniweb.App;
+import io.lumify.miniweb.Handler;
 import com.google.inject.Injector;
 import io.lumify.core.config.LumifyResourceBundleManager;
 import io.lumify.core.exception.LumifyException;

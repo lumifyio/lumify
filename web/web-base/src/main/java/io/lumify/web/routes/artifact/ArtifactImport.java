@@ -1,6 +1,6 @@
 package io.lumify.web.routes.artifact;
 
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;

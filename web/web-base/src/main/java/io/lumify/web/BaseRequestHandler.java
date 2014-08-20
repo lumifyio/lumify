@@ -1,8 +1,8 @@
 package io.lumify.web;
 
-import com.altamiracorp.miniweb.App;
-import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.App;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.HandlerChain;
 import com.google.common.base.Preconditions;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyAccessDeniedException;

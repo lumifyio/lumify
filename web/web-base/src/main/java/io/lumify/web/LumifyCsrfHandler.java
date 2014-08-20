@@ -1,6 +1,6 @@
 package io.lumify.web;
 
-import com.altamiracorp.miniweb.handlers.CSRFHandler;
+import io.lumify.miniweb.handlers.CSRFHandler;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 

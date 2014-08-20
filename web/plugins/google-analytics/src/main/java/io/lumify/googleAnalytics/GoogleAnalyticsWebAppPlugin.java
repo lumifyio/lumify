@@ -1,6 +1,6 @@
 package io.lumify.googleAnalytics;
 
-import com.altamiracorp.miniweb.Handler;
+import io.lumify.miniweb.Handler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 
