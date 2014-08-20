@@ -1228,16 +1228,18 @@ define([
 
         this.createVertex = function(offset) {
             var self = this;
-            require(['util/popovers/createVertex/createVertex'], function(CreateVertex) {
-                CreateVertex.attachTo(self.$node, {
-                    anchorTo: {
-                        page: {
-                            x: offset.left,
-                            y: offset.top
+            if (Privileges.canEDIT) {
+                require(['util/popovers/createVertex/createVertex'], function(CreateVertex) {
+                    CreateVertex.attachTo(self.$node, {
+                        anchorTo: {
+                            page: {
+                                x: offset.left,
+                                y: offset.top
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            }
         };
 
         this.onCreateVertex = function(e, data) {
