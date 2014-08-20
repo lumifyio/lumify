@@ -115,6 +115,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
             context.getCounter(WikipediaImportCounters.XML_PARSE_ERRORS).increment(1);
             return;
         }
+        context.progress();
 
         String wikipediaPageVertexId = ImportMR.getWikipediaPageVertexId(parsePage.getPageTitle());
         context.setStatus(wikipediaPageVertexId);
@@ -127,8 +128,11 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
             context.getCounter(WikipediaImportCounters.WIKI_TEXT_PARSE_ERRORS).increment(1);
             return;
         }
+        context.progress();
 
         Vertex pageVertex = savePage(context, wikipediaPageVertexId, parsePage, pageString);
+        context.progress();
+
         savePageLinks(context, pageVertex, textConverter);
 
         pagesProcessedCounter.increment(1);
@@ -186,6 +190,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private void savePageLinks(Context context, Vertex pageVertex, TextConverter textConverter) throws IOException, InterruptedException {
         for (LinkWithOffsets link : getLinks(textConverter)) {
             savePageLink(context, pageVertex, link);
+            context.progress();
         }
     }
 
