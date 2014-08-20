@@ -763,32 +763,6 @@ define([
             var self = this,
                 warningText = i18n('detail.text.none_available');
 
-            // Looks like JSON ?
-            if (/^\s*{/.test(text)) {
-                var json;
-                try {
-                    json = JSON.parse(text);
-                } catch(e) { }
-
-                if (json && !_.isEmpty(json.entries)) {
-                    this.currentTranscript = json;
-                    return transcriptEntriesTemplate({
-                        entries: _.map(json.entries, function(e) {
-                            return {
-                                millis: e.start || e.end,
-                                time: (_.isUndefined(e.start) ? '' : self.formatTimeOffset(e.start)) +
-                                        ' - ' +
-                                      (_.isUndefined(e.end) ? '' : self.formatTimeOffset(e.end)),
-                                text: e.text
-                            };
-                        })
-                    });
-                } else if (json) {
-                    text = null;
-                    warningText = i18n('detail.transcript.none_available');
-                }
-            }
-
             return !text ?  alertTemplate({ warning: warningText }) : text.replace(/(\n+)/g, '<br><br>$1');
         }
 
