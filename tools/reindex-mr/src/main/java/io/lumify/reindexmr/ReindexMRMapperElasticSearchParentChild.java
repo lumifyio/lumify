@@ -63,6 +63,7 @@ public class ReindexMRMapperElasticSearchParentChild extends Mapper<Text, Elemen
         JSONObject source = new JSONObject(propertyDocumentIndexRequest.source().toUtf8());
         source.put(ReindexMRElasticSearchParentChild.ES_ID_PROPERTY, propertyDocumentIndexRequest.id());
         source.put(ReindexMRElasticSearchParentChild.ES_ELEMENT_TYPE_PROPERTY, ElasticSearchParentChildSearchIndex.PROPERTY_TYPE);
+        source.put(ReindexMRElasticSearchParentChild.ES_PARENT_PROPERTY, propertyDocumentIndexRequest.parent());
         context.write(NullWritable.get(), source.toString().getBytes());
     }
 
@@ -71,6 +72,7 @@ public class ReindexMRMapperElasticSearchParentChild extends Mapper<Text, Elemen
         JSONObject source = new JSONObject(parentDocumentIndexRequest.source().toUtf8());
         source.put(ReindexMRElasticSearchParentChild.ES_ID_PROPERTY, parentDocumentIndexRequest.id());
         source.put(ReindexMRElasticSearchParentChild.ES_ELEMENT_TYPE_PROPERTY, ElasticSearchSearchIndexBase.ELEMENT_TYPE);
+        source.put(ReindexMRElasticSearchParentChild.ES_PARENT_PROPERTY, "");
         context.write(NullWritable.get(), source.toString().getBytes());
         context.progress();
     }

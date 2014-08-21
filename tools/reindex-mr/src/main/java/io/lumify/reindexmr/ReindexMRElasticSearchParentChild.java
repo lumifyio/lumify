@@ -12,6 +12,7 @@ public class ReindexMRElasticSearchParentChild extends ReindexMRBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReindexMRElasticSearchParentChild.class);
     public static final String ES_ELEMENT_TYPE_PROPERTY = "_estype";
     public static final String ES_ID_PROPERTY = "_id";
+    public static final String ES_PARENT_PROPERTY = "_parent";
 
     public static void main(String[] args) throws Exception {
         int res = ToolRunner.run(new Configuration(), new ReindexMRElasticSearchParentChild(), args);
@@ -34,6 +35,7 @@ public class ReindexMRElasticSearchParentChild extends ReindexMRBase {
         conf.set("es.nodes", conf.get("graph.search.locations"));
         conf.set("es.mapping.id", ES_ID_PROPERTY);
         conf.set("es.resource.write", conf.get("graph.search.indexName") + "/{" + ES_ELEMENT_TYPE_PROPERTY + "}");
+        conf.set("es.mapping.parent", ES_PARENT_PROPERTY);
 
         return conf;
     }
