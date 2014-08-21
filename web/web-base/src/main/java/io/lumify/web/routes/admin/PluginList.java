@@ -1,6 +1,6 @@
 package io.lumify.web.routes.admin;
 
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.lib.LibLoader;
 import io.lumify.core.config.Configuration;

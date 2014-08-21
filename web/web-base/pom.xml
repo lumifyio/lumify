@@ -63,7 +63,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.altamiracorp.miniweb</groupId>
+            <groupId>io.lumify</groupId>
             <artifactId>miniweb</artifactId>
         </dependency>
         <dependency>

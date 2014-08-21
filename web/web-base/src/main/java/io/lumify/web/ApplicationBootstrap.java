@@ -29,12 +29,11 @@ public final class ApplicationBootstrap implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         final ServletContext context = sce.getServletContext();
 
-        LOGGER = LumifyLoggerFactory.getLogger(ApplicationBootstrap.class);
-
-        LOGGER.info("Servlet context initialized...");
+        System.out.println("Servlet context initialized...");
         try {
             if (context != null) {
-                final Configuration config = fetchApplicationConfiguration(context);
+                final Configuration config = ConfigurationLoader.load(context.getInitParameter(APP_CONFIG_LOADER), getInitParametersAsMap(context));
+                LOGGER = LumifyLoggerFactory.getLogger(ApplicationBootstrap.class);
                 LOGGER.info("Running application with configuration:\n%s", config);
 
                 InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config));
@@ -49,10 +48,12 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
                 LOGGER.warn("JavaScript / Less modifications will not be reflected on server. Run `grunt watch` from webapp directory in development");
             } else {
-                LOGGER.error("Servlet context could not be acquired!");
+                System.out.println("Servlet context could not be acquired!");
             }
         } catch (Exception ex) {
-            LOGGER.error("Failed to initialize context", ex);
+            if (LOGGER != null) {
+                LOGGER.error("Failed to initialize context", ex);
+            }
             throw new RuntimeException("Failed to initialize context", ex);
         }
     }
@@ -62,18 +63,6 @@ public final class ApplicationBootstrap implements ServletContextListener {
         if (LOGGER != null) {
             LOGGER.info("Servlet context destroyed...");
         }
-    }
-
-    private Configuration fetchApplicationConfiguration(final ServletContext context) throws ClassNotFoundException {
-        Map<String, String> initParameters = getInitParametersAsMap(context);
-        final String configLoaderName = context.getInitParameter(APP_CONFIG_LOADER);
-        Class configLoader;
-        if (configLoaderName == null) {
-            configLoader = FileConfigurationLoader.class;
-        } else {
-            configLoader = Class.forName(configLoaderName);
-        }
-        return ConfigurationLoader.load(configLoader, initParameters);
     }
 
     private Map<String, String> getInitParametersAsMap(ServletContext context) {

@@ -1,16 +1,23 @@
 package io.lumify.core.config;
 
 public class DatabaseConfigurationLoaderConfig {
+    String databaseDriverClass;
     String databaseUrl;
     String databaseUsername;
     String databasePassword;
     int databaseConnectionTimeout;
     String configurationTable;
+    String configurationEnvironmentColumn;
+    String configurationVersionColumn;
     String configurationKeyColumn;
     String configurationValueColumn;
-    String configurationVersionColumn;
-    String configurationKeyPrefix;
+    String configurationEnvironment;
     String configurationVersion;
+    String configurationKeyPrefix;
+    String configurationKeyFileIndicator;
+
+    @Configurable(name = "databaseDriverClass")
+    public void setDatabaseDriverClass(String databaseDriverClass) { this.databaseDriverClass = databaseDriverClass; }
 
     @Configurable(name = "databaseUrl")
     public void setDatabaseUrl(String databaseUrl) {
@@ -32,24 +39,39 @@ public class DatabaseConfigurationLoaderConfig {
         this.databaseConnectionTimeout = Integer.parseInt(databaseConnectionTimeout);
     }
 
-    @Configurable(name = "configurationTable")
+    @Configurable(name = "configurationTable", defaultValue = "configuration")
     public void setConfigurationTable(String configurationTable) {
-        this.configurationTable = configurationTable.replaceAll("[^0-9a-zA-Z$_]", "");
+        this.configurationTable = whitelistSqlIdentifier(configurationTable);
     }
 
-    @Configurable(name = "configurationKeyColumn", defaultValue = "k")
-    public void setConfigurationKeyColumn(String configurationKeyColumn) {
-        this.configurationKeyColumn = configurationKeyColumn.replaceAll("[^0-9a-zA-Z$_]", "");
-    }
-
-    @Configurable(name = "configurationValueColumn", defaultValue = "v")
-    public void setConfigurationValueColumn(String configurationValueColumn) {
-        this.configurationValueColumn = configurationValueColumn.replaceAll("[^0-9a-zA-Z$_]", "");
+    @Configurable(name = "configurationEnvironmentColumn", defaultValue = "environment")
+    public void setConfigurationEnvironmentColumn(String configurationEnvironmentColumn) {
+        this.configurationEnvironmentColumn = whitelistSqlIdentifier(configurationEnvironmentColumn);
     }
 
     @Configurable(name = "configurationVersionColumn", defaultValue = "version")
     public void setConfigurationVersionColumn(String configurationVersionColumn) {
-        this.configurationVersionColumn = configurationVersionColumn.replaceAll("[^0-9a-zA-Z$_]", "");
+        this.configurationVersionColumn = whitelistSqlIdentifier(configurationVersionColumn);
+    }
+
+    @Configurable(name = "configurationKeyColumn", defaultValue = "k")
+    public void setConfigurationKeyColumn(String configurationKeyColumn) {
+        this.configurationKeyColumn = whitelistSqlIdentifier(configurationKeyColumn);
+    }
+
+    @Configurable(name = "configurationValueColumn", defaultValue = "v")
+    public void setConfigurationValueColumn(String configurationValueColumn) {
+        this.configurationValueColumn = whitelistSqlIdentifier(configurationValueColumn);
+    }
+
+    @Configurable(name = "configurationEnvironment")
+    public void setConfigurationEnvironment(String configurationEnvironment) {
+        this.configurationEnvironment = configurationEnvironment;
+    }
+
+    @Configurable(name = "configurationVersion")
+    public void setConfigurationVersion(String configurationVersion) {
+        this.configurationVersion = configurationVersion;
     }
 
     @Configurable(name = "configurationKeyPrefix")
@@ -57,8 +79,12 @@ public class DatabaseConfigurationLoaderConfig {
         this.configurationKeyPrefix = configurationKeyPrefix;
     }
 
-    @Configurable(name = "configurationVersion")
-    public void setConfigurationVersion(String configurationVersion) {
-        this.configurationVersion = configurationVersion;
+    @Configurable(name = "configurationKeyFileIndicator", defaultValue = "FILE")
+    public void setConfigurationKeyFileIndicator(String configurationKeyFileIndicator) {
+        this.configurationKeyFileIndicator = configurationKeyFileIndicator;
+    }
+
+    private String whitelistSqlIdentifier(String string) {
+        return string.replaceAll("[^0-9a-zA-Z$_]", "");
     }
 }

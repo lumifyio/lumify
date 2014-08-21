@@ -1,6 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.security.LumifyVisibility;
+import net.lingala.zip4j.exception.ZipException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -63,4 +65,6 @@ public interface OntologyRepository {
     void writePackage(File file, IRI documentIRI, Authorizations authorizations) throws Exception;
 
     JSONObject getJson();
+
+    String guessDocumentIRIFromPackage(File inFile) throws Exception;
 }

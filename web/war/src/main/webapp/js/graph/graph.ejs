@@ -8,9 +8,11 @@
   <li><a tabindex="-1" href="#">Redo</a></li>
   <li class="divider"></li>
   -->
-  <li><a class="has-shortcut" data-func="fitToWindow" tabindex="-1" href="#"><%= i18n('graph.contextmenu.fit_to_window') %><span class="shortcut">alt+f</span></a></li>
+  <li class="requires-EDIT"><a class="has-shortcut" data-func="createVertex" tabindex="-1" href="#"><%= i18n('graph.contextmenu.create_vertex') %><span class="shortcut">alt+n</span></a></li>
 
-  <li class="divider"></li>
+  <li class="divider requires-EDIT"></li>
+
+  <li><a class="has-shortcut" data-func="fitToWindow" tabindex="-1" href="#"><%= i18n('graph.contextmenu.fit_to_window') %><span class="shortcut">alt+f</span></a></li>
 
   <li class="dropdown-submenu">
     <a tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout') %></a>

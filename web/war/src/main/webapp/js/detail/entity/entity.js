@@ -52,9 +52,8 @@ define([
         this.defaultAttrs({
             glyphIconSelector: '.entity-glyphIcon',
             propertiesSelector: '.properties',
-            relationshipsSelector: 'section .relationships',
             titleSelector: '.entity-title',
-            relationshipsHeaderSelector: 'section.collapsible h1',
+            relationshipsHeaderSelector: '.relationships section.collapsible h1',
             relationshipsPagingButtonsSelector: 'section.collapsible .paging button'
         });
 
@@ -212,6 +211,7 @@ define([
 
                    self.updateRelationships();
                    self.updateEntityAndArtifactDraggables();
+                   self.updateText();
                 });
         };
 
@@ -241,7 +241,7 @@ define([
                         return relation;
                     });
 
-                d3.select(self.$node.find('.nav-with-background').get(0))
+                d3.select(self.$node.find('.nav-with-background .relationships').get(0))
                     .selectAll('section.collapsible')
                     .data(relations, _.property('label'))
                     .call(function() {

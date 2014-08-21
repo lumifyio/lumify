@@ -7,7 +7,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.DiffItem;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;

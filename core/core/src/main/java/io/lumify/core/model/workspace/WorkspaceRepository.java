@@ -14,12 +14,12 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class WorkspaceRepository {
-    public static String VISIBILITY_STRING = "workspace";
-    public static LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
-    public static String WORKSPACE_CONCEPT_NAME = "http://lumify.io/workspace";
-    public static String WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME = "http://lumify.io/workspace/toEntity";
-    public static String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
-    public static String WORKSPACE_ID_PREFIX = "WORKSPACE_";
+    public static final String VISIBILITY_STRING = "workspace";
+    public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
+    public static final String WORKSPACE_CONCEPT_NAME = "http://lumify.io/workspace";
+    public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME = "http://lumify.io/workspace/toEntity";
+    public static final String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
+    public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
 
     public abstract void delete(Workspace workspace, User user);
 

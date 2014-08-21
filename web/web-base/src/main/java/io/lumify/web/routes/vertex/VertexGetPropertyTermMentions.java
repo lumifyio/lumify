@@ -1,7 +1,7 @@
 package io.lumify.web.routes.vertex;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.termMention.TermMentionModel;

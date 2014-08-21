@@ -1,7 +1,7 @@
 package io.lumify.web.auth.oauth.routes;
 
-import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;

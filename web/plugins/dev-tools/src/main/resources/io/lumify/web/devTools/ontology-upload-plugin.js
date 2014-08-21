@@ -48,7 +48,7 @@ require([
                 importButton = this.select('uploadSelector');
 
             this.handleSubmitButton(importButton,
-                this.adminService.ontologyUpload(this.documentIri, this.ontologyFile)
+                this.adminService.ontologyUpload(this.documentIri || '', this.ontologyFile)
                     .fail(this.showError.bind(this, 'Upload failed'))
                     .done(this.showSuccess.bind(this, 'Upload successful'))
                     .done(function() {
@@ -61,15 +61,15 @@ require([
         this.onFileChanged = function(event, data) {
             this.ontologyFile = data.file;
             this.checkValid();
-        }
+        };
 
         this.onChange = function() {
             this.documentIri = $.trim(this.$node.find('.documentIri').val());
             this.checkValid();
-        }
+        };
 
         this.checkValid = function() {
-            if (this.ontologyFile && this.documentIri && this.documentIri.length > 0) {
+            if (this.ontologyFile) {
                 this.select('uploadSelector').removeAttr('disabled');
             } else {
                 this.select('uploadSelector').attr('disabled', true);

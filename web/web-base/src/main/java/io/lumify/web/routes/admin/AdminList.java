@@ -4,9 +4,9 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.App;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.Route;
+import io.lumify.miniweb.App;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.miniweb.Route;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;

@@ -152,7 +152,7 @@ define([
 
             var self = this,
                 button = this.popover.find('.btn-primary')
-                    .text('Importing...')
+                    .text(i18n('popovers.file_import.importing'))
                     .attr('disabled', true),
                 cancelButton = this.popover.find('.btn-default').show(),
                 collapsed = this.isVisibilityCollapsed(),

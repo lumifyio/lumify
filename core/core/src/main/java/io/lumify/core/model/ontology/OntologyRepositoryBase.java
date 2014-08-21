@@ -6,6 +6,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.coode.owlapi.rdf.rdfxml.RDFXMLRenderer;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -85,6 +88,44 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 return false;
             }
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String guessDocumentIRIFromPackage(File file) throws IOException, ZipException {
+        ZipFile zipped = new ZipFile(file);
+        if (zipped.isValidZipFile()) {
+            File tempDir = Files.createTempDir();
+            try {
+                LOGGER.info("Extracting: %s to %s", file.getAbsoluteFile(), tempDir.getAbsolutePath());
+                zipped.extractAll(tempDir.getAbsolutePath());
+
+                File owlFile = findOwlFile(tempDir);
+                return guessDocumentIRIFromFile(owlFile);
+            } finally {
+                FileUtils.deleteDirectory(tempDir);
+            }
+        } else {
+            if (file.isDirectory()) {
+                file = findOwlFile(file);
+            }
+            return guessDocumentIRIFromFile(file);
+        }
+    }
+
+    public String guessDocumentIRIFromFile(File owlFile) throws IOException {
+        FileInputStream owlFileIn = new FileInputStream(owlFile);
+        try {
+            String owlContents = IOUtils.toString(owlFileIn);
+
+            Pattern iriRegex = Pattern.compile("<owl:Ontology rdf:about=\"(.*?)\">");
+            Matcher m = iriRegex.matcher(owlContents);
+            if (m.find()) {
+                return m.group(1);
+            }
+            return null;
+        } finally {
+            owlFileIn.close();
         }
     }
 
@@ -508,7 +549,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return new JSONObject(val);
     }
 
-    protected  String getAddRelatedConceptWhiteList(OWLOntology o, OWLEntity owlEntity) {
+    protected String getAddRelatedConceptWhiteList(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName());
         if (val == null || val.trim().length() == 0) {
             return null;

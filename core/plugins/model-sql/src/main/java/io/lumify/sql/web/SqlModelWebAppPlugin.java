@@ -1,6 +1,6 @@
 package io.lumify.sql.web;
 
-import com.altamiracorp.miniweb.Handler;
+import io.lumify.miniweb.Handler;
 import com.google.inject.Inject;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.web.WebApp;

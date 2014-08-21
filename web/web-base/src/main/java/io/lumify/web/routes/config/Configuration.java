@@ -3,7 +3,7 @@ package io.lumify.web.routes.config;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.web.WebApp;
 import org.json.JSONObject;

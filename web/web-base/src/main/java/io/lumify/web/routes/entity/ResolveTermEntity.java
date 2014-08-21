@@ -1,7 +1,7 @@
 package io.lumify.web.routes.entity;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;

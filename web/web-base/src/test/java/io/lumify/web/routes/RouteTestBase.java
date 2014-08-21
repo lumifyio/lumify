@@ -1,6 +1,6 @@
 package io.lumify.web.routes;
 
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.CurrentUser;

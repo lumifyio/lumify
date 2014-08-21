@@ -1,6 +1,6 @@
 package io.lumify.web.routes.admin;
 
-import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -43,7 +43,7 @@ public class AdminUploadOntology extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String documentIRIString = getRequiredParameter(request, "documentIRI");
+        String documentIRIString = getOptionalParameter(request, "documentIRI");
 
         List<Part> files = toList(getFiles(request));
         if (files.size() != 1) {
@@ -53,6 +53,10 @@ public class AdminUploadOntology extends BaseRequestHandler {
 
         File tempFile = File.createTempFile("ontologyUpload", ".bin");
         writeToTempFile(file, tempFile);
+
+        if (documentIRIString == null || documentIRIString.length() == 0) {
+            documentIRIString = ontologyRepository.guessDocumentIRIFromPackage(tempFile);
+        }
 
         IRI documentIRI = IRI.create(documentIRIString);
 
