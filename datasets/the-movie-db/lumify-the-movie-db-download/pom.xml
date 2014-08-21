@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>lumify-the-movie-db-download</artifactId>
+    <name>Lumify: Datasets: TheMovieDb Download</name>
 
     <dependencies>
         <dependency>
