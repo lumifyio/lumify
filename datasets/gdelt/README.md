@@ -1,9 +1,6 @@
 ## GDELT Import via Map Reduce
 
-1. build the GDELT MR and re-index MR jars:
-
-        mvn package -pl datasets/gdelt/lumify-gdelt-mr -am
-        mvn package -pl tools/reindex-mr -am
+All commands listed in the steps below are assumed to be run from the root directory of the lumify project.
 
 1. import the GDELT ontology:
 
@@ -12,7 +9,12 @@
 1. copy the GDELT data file(s) to HDFS:
 
         hadoop fs -mkdir -p /lumify/gdelt
-        hadoop fs -put data/small.export.txt /lumify/gdelt
+        hadoop fs -put datasets/gdelt/data/small.export.txt /lumify/gdelt
+
+1. build the GDELT MR and re-index MR jars:
+
+        mvn package -pl datasets/gdelt/lumify-gdelt-mr -am
+        mvn package -pl tools/reindex-mr -am
 
 1. submit the GDELT MR job:
 
@@ -22,6 +24,6 @@
 
 1. submit the re-index MR job:
 
-        hadoop jar tools/reindex-mr/target/lumify-reindex-mr-*-jar-with-dependencies.jar
+        hadoop jar tools/reindex-mr/target/lumify-reindex-mr-*-jar-with-dependencies.jar vertex
 
 1. search results will be incrementally available as the re-index MR job runs
