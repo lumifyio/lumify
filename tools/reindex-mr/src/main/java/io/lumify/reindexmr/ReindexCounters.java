@@ -1,5 +1,5 @@
 package io.lumify.reindexmr;
 
 public enum ReindexCounters {
-    ELEMENTS_PROCESSED
+    PROPERTIES_PROCESSED, ELEMENTS_PROCESSED
 }
