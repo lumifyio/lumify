@@ -349,22 +349,35 @@ require([
                                             .call(function() {
                                                 var isJustification = display[d[0]] === display._justificationMetadata,
                                                     isMetadata = d[0] === 'metadata' || isJustification,
+                                                    displayAsJson = _.isObject(d[1]),
                                                     value = d[0] === 'http://lumify.io#visibilityJson' ?
                                                         d[1].source :
-                                                        _.isObject(d[1]) ?  JSON.stringify(d[1], null, 4) : d[1];
+                                                        displayAsJson ?  JSON.stringify(d[1], null, 4) : d[1];
 
                                                 this.append('span')
                                                     .call(function() {
+                                                        var cls = [];
+
                                                         if (isMetadata) {
-                                                            this.attr(
-                                                                'class',
-                                                                'metadata' + (isJustification ? ' justification' : '')
-                                                            );
+                                                            cls.push('metadata');
                                                         }
+                                                        if (isJustification) {
+                                                            cls.push('justification');
+                                                        }
+                                                        if (displayAsJson) {
+                                                            cls.push('display-as-json');
+                                                        }
+                                                        if (d[0] === 'key') {
+                                                            cls.push('is-key');
+                                                        }
+                                                        if (cls.length) {
+                                                            this.attr('class', cls.join(' '));
+                                                        }
+
                                                         this.text(value);
                                                     });
 
-                                                if (isMetadata) {
+                                                if (isMetadata || displayAsJson) {
                                                     this.append('textarea')
                                                         .attr('name', d[0])
                                                         .text(value)
