@@ -2,6 +2,7 @@ package io.lumify.core.util;
 
 import io.lumify.core.exception.LumifyException;
 
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -30,10 +31,18 @@ public class ClassUtil {
     }
 
     public static void logClasspath(ClassLoader classLoader) {
-        logClasspath(classLoader, null);
+        logClasspath(classLoader, System.out);
+    }
+
+    public static void logClasspath(ClassLoader classLoader, PrintStream printStream) {
+        outputClasspath(classLoader, printStream);
     }
 
     public static void logClasspath(ClassLoader classLoader, LumifyLogger lumifyLogger) {
+        outputClasspath(classLoader, lumifyLogger);
+    }
+
+    private static void outputClasspath(ClassLoader classLoader, Object outputObject) {
         StringBuilder sb = new StringBuilder();
 
         if (classLoader instanceof URLClassLoader) {
@@ -45,15 +54,17 @@ public class ClassUtil {
             sb.append("unable to enumerate entries for ").append(classLoader.getClass().getName());
         }
 
-        if (lumifyLogger != null) {
-            lumifyLogger.debug(sb.toString());
+        if (outputObject instanceof PrintStream) {
+            ((PrintStream) outputObject).println(sb.toString());
+        } else if (outputObject instanceof LumifyLogger) {
+            ((LumifyLogger) outputObject).debug(sb.toString());
         } else {
-            System.out.println(sb.toString());
+            throw new LumifyException("unexpected outputObject");
         }
 
         ClassLoader parentClassLoader = classLoader.getParent();
         if (parentClassLoader != null) {
-            logClasspath(parentClassLoader, lumifyLogger);
+            outputClasspath(parentClassLoader, outputObject);
         }
     }
 
