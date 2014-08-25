@@ -69,6 +69,7 @@ public class ReindexMRMapper extends Mapper<Text, Element, Object, Element> {
         context.setStatus("Element Id: " + element.getId());
         elementCache.add(element);
         if (elementCache.size() >= BATCH_SIZE) {
+            context.setStatus("Submitting batch: " + elementCache.size());
             writeCache();
         }
         context.getCounter(ReindexCounters.ELEMENTS_PROCESSED).increment(1);
