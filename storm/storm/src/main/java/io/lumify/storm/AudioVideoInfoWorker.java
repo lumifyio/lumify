@@ -51,18 +51,18 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
         JSONObject json = FFprobeExecutor.getJson(processRunner, data);
         if (json != null) {
-            setProperty(config.getDurationIri(), DurationUtil.extractDurationFromJSON(json), mutation, metadata, data, properties);
-            setProperty(config.getGeoLocationIri(), GeoLocationUtil.extractGeoLocationFromJSON(json), mutation, metadata, data, properties);
-            setProperty(config.getDateTakenIri(), DateUtil.extractDateTakenFromJSON(json), mutation, metadata, data, properties);
-            setProperty(config.getDeviceMakeIri(), MakeAndModelUtil.extractMakeFromJSON(json), mutation, metadata, data, properties);
-            setProperty(config.getDeviceModelIri(), MakeAndModelUtil.extractModelFromJSON(json), mutation, metadata, data, properties);
-            setProperty(config.getWidthIri(), DimensionsUtil.extractWidthFromJSON(json), mutation, metadata, data, properties);
-            setProperty(config.getHeightIri(), DimensionsUtil.extractHeightFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getDurationIri(), FFprobeDurationUtil.getDuration(json), mutation, metadata, data, properties);
+            setProperty(config.getGeoLocationIri(), FFprobeGeoLocationUtil.getGeoPoint(json), mutation, metadata, data, properties);
+            setProperty(config.getDateTakenIri(), FFprobeDateUtil.getDateTaken(json), mutation, metadata, data, properties);
+            setProperty(config.getDeviceMakeIri(), FFprobeMakeAndModelUtil.getMake(json), mutation, metadata, data, properties);
+            setProperty(config.getDeviceModelIri(), FFprobeMakeAndModelUtil.getModel(json), mutation, metadata, data, properties);
+            setProperty(config.getWidthIri(), FFprobeDimensionsUtil.getWidth(json), mutation, metadata, data, properties);
+            setProperty(config.getHeightIri(), FFprobeDimensionsUtil.getHeight(json), mutation, metadata, data, properties);
             setProperty(config.getMetadataIri(), json.toString(), mutation, metadata, data, properties);
-            setProperty(config.getClockwiseRotationIri(), VideoRotationUtil.extractRotationFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getClockwiseRotationIri(), FFprobeRotationUtil.getRotation(json), mutation, metadata, data, properties);
         }
 
-        setProperty(config.getFileSizeIri(), FileSizeUtil.extractFileSize(localFile), mutation, metadata, data, properties);
+        setProperty(config.getFileSizeIri(), FileSizeUtil.getSize(localFile), mutation, metadata, data, properties);
 
         mutation.save(getAuthorizations());
         getGraph().flush();

@@ -10,9 +10,9 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.util.DurationUtil;
+import io.lumify.storm.util.FFprobeDurationUtil;
 import io.lumify.storm.util.FFprobeExecutor;
-import io.lumify.storm.util.VideoRotationUtil;
+import io.lumify.storm.util.FFprobeRotationUtil;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -40,7 +40,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         JSONObject json = FFprobeExecutor.getJson(processRunner, data);
-        int videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        int videoRotation = FFprobeRotationUtil.getRotation(json);
 
         double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 0.1);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
@@ -118,7 +118,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         //Rotate.
-        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        String[] ffmpegRotationOptions = FFprobeRotationUtil.createFFMPEGRotationOptions(videoRotation);
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);
             ffmpegOptionsList.add(ffmpegRotationOptions[1]);
@@ -245,7 +245,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         JSONObject outJson = FFprobeExecutor.getJson(processRunner, data);
         Double duration = null;
         if (outJson != null) {
-            duration = DurationUtil.extractDurationFromJSON(outJson);
+            duration = FFprobeDurationUtil.getDuration(outJson);
             if (duration != null && duration != 0){
                 double framesPerSecondToExtract = numberOfFrames / duration;
                 return framesPerSecondToExtract;

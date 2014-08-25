@@ -5,10 +5,10 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class VideoRotationUtil {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotationUtil.class);
+public class FFprobeRotationUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeRotationUtil.class);
 
-    public static Integer extractRotationFromJSON(JSONObject json) {
+    public static Integer getRotation(JSONObject json) {
         if (json == null) {
             return 0;
         }

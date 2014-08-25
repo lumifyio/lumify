@@ -7,7 +7,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.FFprobeExecutor;
-import io.lumify.storm.util.VideoRotationUtil;
+import io.lumify.storm.util.FFprobeRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -58,8 +58,8 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
 
     private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File webmFile) {
         JSONObject json = FFprobeExecutor.getJson(processRunner, data);
-        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
-        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        Integer videoRotation = FFprobeRotationUtil.getRotation(json);
+        String[] ffmpegRotationOptions = FFprobeRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");

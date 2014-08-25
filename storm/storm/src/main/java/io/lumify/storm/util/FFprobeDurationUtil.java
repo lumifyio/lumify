@@ -4,10 +4,10 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
 
-public class DurationUtil {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DurationUtil.class);
+public class FFprobeDurationUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeDurationUtil.class);
 
-    public static Double extractDurationFromJSON(JSONObject json) {
+    public static Double getDuration(JSONObject json) {
         if (json == null) {
             return null;
         }

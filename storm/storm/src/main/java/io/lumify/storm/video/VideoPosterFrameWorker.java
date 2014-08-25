@@ -6,9 +6,9 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.util.DurationUtil;
+import io.lumify.storm.util.FFprobeDurationUtil;
 import io.lumify.storm.util.FFprobeExecutor;
-import io.lumify.storm.util.VideoRotationUtil;
+import io.lumify.storm.util.FFprobeRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -64,11 +64,11 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
 
     private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File videoPosterFrameFile) {
         JSONObject json = FFprobeExecutor.getJson(processRunner, data);
-        int videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        int videoRotation = FFprobeRotationUtil.getRotation(json);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         //Add the time offset for where the poster frame will be taken.
-        Double duration = DurationUtil.extractDurationFromJSON(json);
+        Double duration = FFprobeDurationUtil.getDuration(json);
         if (duration != null) {
             ffmpegOptionsList.add("-itsoffset");
             ffmpegOptionsList.add("-" + (duration / 3.0));
@@ -95,7 +95,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
         }
 
         //Rotation.
-        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        String[] ffmpegRotationOptions = FFprobeRotationUtil.createFFMPEGRotationOptions(videoRotation);
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);
             ffmpegOptionsList.add(ffmpegRotationOptions[1]);

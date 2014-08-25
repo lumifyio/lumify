@@ -4,15 +4,14 @@ import java.io.File;
 
 public class FileSizeUtil {
 
-    public static Integer extractFileSize(File file){
+    public static Integer getSize(File file){
         if (file == null){
             return null;
         }
 
-        Long fileSizeLong = file.length();
-        if (fileSizeLong != null && fileSizeLong > 0 && fileSizeLong < Integer.MAX_VALUE) {
-            Integer fileSize = fileSizeLong.intValue();
-            return fileSize;
+        Long length = file.length();
+        if (length <= Integer.MAX_VALUE) {
+            return length.intValue();
         }
 
         return null;

@@ -7,10 +7,10 @@ import org.securegraph.type.GeoPoint;
 
 import java.util.ArrayList;
 
-public class GeoLocationUtil {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GeoLocationUtil.class);
+public class FFprobeGeoLocationUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeGeoLocationUtil.class);
 
-    public static GeoPoint extractGeoLocationFromJSON(JSONObject json) {
+    public static GeoPoint getGeoPoint(JSONObject json) {
         if (json == null) {
             return null;
         }

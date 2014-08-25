@@ -76,7 +76,7 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             Integer height = imageMetadata != null ? DimensionsExtractor.getHeightViaMetadata(imageMetadata) : DimensionsExtractor.getHeightViaBufferedImage(imageFile);
             setProperty(config.getHeightIri(), height, mutation, metadata, data, properties);
 
-            setProperty(config.getFileSizeIri(), FileSizeUtil.extractFileSize(imageFile), mutation, metadata, data, properties);
+            setProperty(config.getFileSizeIri(), FileSizeUtil.getSize(imageFile), mutation, metadata, data, properties);
         }
 
         mutation.save(getAuthorizations());
