@@ -18,7 +18,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.version.VersionService;
 import io.lumify.securegraph.model.audit.SecureGraphAuditRepository;
 import io.lumify.wikipedia.*;
-import org.apache.accumulo.core.data.Mutation;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -72,6 +71,8 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private UserRepository userRepository;
     private String sourceFileName;
     private Counter pagesProcessedCounter;
+    private Text auditTableNameText;
+    private Text termMentionTableText;
 
     public ImportMRMapper() {
         this.textXPath = XPathFactory.instance().compile(TEXT_XPATH, Filters.text());
@@ -99,6 +100,8 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         }
 
         pagesProcessedCounter = context.getCounter(WikipediaImportCounters.PAGES_PROCESSED);
+        auditTableNameText = new Text(Audit.TABLE_NAME);
+        termMentionTableText = new Text(TermMentionModel.TABLE_NAME);
     }
 
     @Override
@@ -166,9 +169,8 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         Vertex pageVertex = pageVertexBuilder.save(authorizations);
 
         // audit vertex
-        Text key = ImportMR.getKey(Audit.TABLE_NAME, pageVertex.getId().getBytes());
         Audit audit = auditRepository.createAudit(AuditAction.CREATE, pageVertex.getId(), "Wikipedia MR", "", user, visibility);
-        context.write(key, AccumuloSession.createMutationFromRow(audit));
+        context.write(auditTableNameText, AccumuloSession.createMutationFromRow(audit));
 
         // because save above will cause the StreamingPropertyValue to be read we need to reset the position to 0 for search indexing
         rawPropertyValue.getInputStream().reset();
@@ -224,8 +226,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
                 .setVertexId(linkedPageVertex.getId(), visibility)
                 .setEdgeId(edge.getId(), visibility)
                 .setOntologyClassUri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
-        Text key = ImportMR.getKey(TermMentionModel.TABLE_NAME, termMention.getRowKey().toString().getBytes());
-        context.write(key, AccumuloSession.createMutationFromRow(termMention));
+        context.write(termMentionTableText, AccumuloSession.createMutationFromRow(termMention));
     }
 
     private Iterable<LinkWithOffsets> getLinks(TextConverter textConverter) {
@@ -248,11 +249,6 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Override
-    protected Text getKey(Context context, Text tableName, Mutation m) {
-        return ImportMR.getKey(tableName.toString(), m.getRow());
     }
 
     private class ParsePage {

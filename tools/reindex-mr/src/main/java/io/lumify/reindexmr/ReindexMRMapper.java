@@ -55,6 +55,14 @@ public class ReindexMRMapper extends Mapper<Text, Element, Object, Element> {
 
     @Override
     protected void map(Text rowKey, Element element, Context context) throws IOException, InterruptedException {
+        try {
+            safeMap(element, context);
+        } catch (Throwable ex) {
+            LOGGER.error("Failed to process element", ex);
+        }
+    }
+
+    private void safeMap(Element element, Context context) {
         if (element == null) {
             return;
         }

@@ -68,18 +68,9 @@ public class ImportMR extends LumifyMRBase {
         verifyWikipediaPageConcept(ontologyRepository);
         verifyWikipediaPageInternalLinkWikipediaPageRelationship(ontologyRepository);
 
-        List<Text> splits = getSplits((AccumuloGraph) graph);
-        Path splitFile = writeSplitsFile(getConf(), splits);
-
-        if (!isLocal()) {
-            job.setPartitionerClass(RangePartitioner.class);
-            RangePartitioner.setSplitFile(job, splitFile.toString());
-            job.setNumReduceTasks(splits.size() + 1);
-        }
-
         job.setJarByClass(ImportMR.class);
         job.setMapperClass(ImportMRMapper.class);
-        job.setReducerClass(ImportMRReducer.class);
+        job.setNumReduceTasks(0);
         job.setMapOutputValueClass(Mutation.class);
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(AccumuloElementOutputFormat.class);
@@ -89,44 +80,6 @@ public class ImportMR extends LumifyMRBase {
     @Override
     protected String getJobName() {
         return "wikipediaImport";
-    }
-
-    private Path writeSplitsFile(Configuration conf, List<Text> splits) throws IOException {
-        Path splitFile = new Path("/tmp/wikipediaImport_splits.txt");
-        FileSystem fs = FileSystem.get(conf);
-        PrintStream out = new PrintStream(new BufferedOutputStream(fs.create(splitFile)));
-        for (Text split : splits) {
-            out.println(new String(Base64.encodeBase64(TextUtil.getBytes(split))));
-        }
-        out.close();
-        return splitFile;
-    }
-
-    private List<Text> getSplits(AccumuloGraph graph) throws TableNotFoundException, AccumuloSecurityException, AccumuloException {
-        List<Text> splits = new ArrayList<Text>();
-        splits.addAll(getSplits(graph, graph.getVerticesTableName()));
-        splits.addAll(getSplits(graph, graph.getEdgesTableName()));
-        splits.addAll(getSplits(graph, graph.getDataTableName()));
-        splits.addAll(getSplits(graph, TermMentionModel.TABLE_NAME));
-        Collections.sort(splits);
-        return splits;
-    }
-
-    private Collection<Text> getSplits(AccumuloGraph graph, String tableName) throws TableNotFoundException, AccumuloSecurityException, AccumuloException {
-        List<Text> tableNamePrefixedSplits = new ArrayList<Text>();
-        Collection<Text> splits = graph.getConnector().tableOperations().listSplits(tableName, 100);
-        if (splits.size() == 0) {
-            return tableNamePrefixedSplits;
-        }
-        for (Text split : splits) {
-            Text splitName = getKey(tableName, TextUtil.getBytes(split));
-            tableNamePrefixedSplits.add(splitName);
-        }
-        return tableNamePrefixedSplits;
-    }
-
-    static Text getKey(String tableName, byte[] key) {
-        return new Text(tableName + KEY_SPLIT + new String(Base64.encodeBase64(key)));
     }
 
     private void verifyWikipediaPageInternalLinkWikipediaPageRelationship(OntologyRepository ontologyRepository) {
