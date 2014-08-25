@@ -32,4 +32,17 @@ Please make sure the following are in your /opt/lumify/lumify.properties file:
 Or to create your own ontologies, edit the file:
  /lumify/storm/plugins/drewnoakes-image-metadata-extractor/src/main/java/io/lumify/imageMetadataExtractor/Ontology.java
  and the lumify.properties file.
- 
+
+
+ private static final String AUDIO_DURATION_IRI = "ontology.iri.audioDuration";
+     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
+     private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
+     private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
+     private static final String LAST_MODIFY_DATE_IRI = "ontology.iri.lastModifyDate";
+     private static final String DATE_TAKEN_IRI = "ontology.iri.dateTaken";
+     private static final String DEVICE_MAKE_IRI = "ontology.iri.deviceMake";
+     private static final String DEVICE_MODEL_IRI = "ontology.iri.deviceModel";
+     private static final String METADATA_IRI = "ontology.iri.metadata";
+     private static final String WIDTH_IRI = "ontology.iri.width";
+     private static final String HEIGHT_IRI = "ontology.iri.height";
+     private static final String FILE_SIZE_IRI = "ontology.iri.fileSize";

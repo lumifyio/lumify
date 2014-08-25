@@ -11,7 +11,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.DurationUtil;
-import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.FFprobeExecutor;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -39,12 +39,8 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        int videoRotation = 0;
-        Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
-        if (nullableRotation != null) {
-            videoRotation = nullableRotation;
-        }
+        JSONObject json = FFprobeExecutor.getJson(processRunner, data);
+        int videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
 
         double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 0.1);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
@@ -246,7 +242,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
 
     private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data, double defaultFPSToExtract) {
         int numberOfFrames = 20;
-        JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        JSONObject outJson = FFprobeExecutor.getJson(processRunner, data);
         Double duration = null;
         if (outJson != null) {
             duration = DurationUtil.extractDurationFromJSON(outJson);

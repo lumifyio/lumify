@@ -11,10 +11,10 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class JSONExtractor {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(JSONExtractor.class);
+public class FFprobeExecutor {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeExecutor.class);
 
-    public static JSONObject retrieveJSONObjectUsingFFPROBE(ProcessRunner processRunner, GraphPropertyWorkData data) {
+    public static JSONObject getJson(ProcessRunner processRunner, GraphPropertyWorkData data) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         String outString = null;
         try {

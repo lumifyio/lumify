@@ -7,7 +7,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.DurationUtil;
-import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.FFprobeExecutor;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -63,12 +63,8 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
     }
 
     private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File videoPosterFrameFile) {
-        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        int videoRotation = 0;
-        Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
-        if (nullableRotation != null) {
-            videoRotation = nullableRotation;
-        }
+        JSONObject json = FFprobeExecutor.getJson(processRunner, data);
+        int videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         //Add the time offset for where the poster frame will be taken.

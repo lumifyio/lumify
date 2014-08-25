@@ -10,7 +10,7 @@ public class VideoRotationUtil {
 
     public static Integer extractRotationFromJSON(JSONObject json) {
         if (json == null) {
-            return null;
+            return 0;
         }
 
         JSONArray streamsJson = json.optJSONArray("streams");
@@ -31,7 +31,7 @@ public class VideoRotationUtil {
         }
 
         LOGGER.debug("Could not retrieve a \"rotate\" value from the JSON object.");
-        return null;
+        return 0;
     }
 
     /**
