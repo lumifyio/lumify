@@ -90,6 +90,7 @@
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&audioIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#metadata">
