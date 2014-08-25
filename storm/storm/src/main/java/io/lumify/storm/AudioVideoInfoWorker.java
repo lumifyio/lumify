@@ -14,12 +14,11 @@ import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
-import org.securegraph.type.GeoPoint;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class AudioVideoInfoWorker extends GraphPropertyWorker {
@@ -31,10 +30,10 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        getConfiguration().setConfigurables(config, "ontology.iri");
+        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
     }
 
-    private void setProperty(ExistingElementMutation<Vertex> mutation, ArrayList<String> properties, String iri, Object value, Map<String, Object> metadata, GraphPropertyWorkData data) {
+    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Map<String, Object> metadata, GraphPropertyWorkData data, List<String> properties) {
         if (iri != null && value != null) {
             mutation.addPropertyValue(PROPERTY_KEY, iri, value, metadata, data.getVisibility());
             properties.add(iri);
@@ -48,22 +47,22 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
         Map<String, Object> metadata = data.createPropertyMetadata();
         ExistingElementMutation<Vertex> mutation = data.getElement().prepareMutation();
-        ArrayList<String> properties = new ArrayList<String>();
+        List<String> properties = new ArrayList<String>();
 
         JSONObject json = FFprobeExecutor.getJson(processRunner, data);
         if (json != null) {
-            setProperty(mutation, properties, config.getDurationIri(), DurationUtil.extractDurationFromJSON(json), metadata, data);
-            setProperty(mutation, properties, config.getGeoLocationIri(), GeoLocationUtil.extractGeoLocationFromJSON(json), metadata, data);
-            setProperty(mutation, properties, config.getDateTakenIri(), DateUtil.extractDateTakenFromJSON(json), metadata, data);
-            setProperty(mutation, properties, config.getDeviceMakeIri(), MakeAndModelUtil.extractMakeFromJSON(json), metadata, data);
-            setProperty(mutation, properties, config.getDeviceModelIri(), MakeAndModelUtil.extractModelFromJSON(json), metadata, data);
-            setProperty(mutation, properties, config.getWidthIri(), DimensionsUtil.extractWidthFromJSON(json), metadata, data);
-            setProperty(mutation, properties, config.getHeightIri(), DimensionsUtil.extractHeightFromJSON(json), metadata, data);
-            setProperty(mutation, properties, config.getMetadataIri(), json.toString(), metadata, data);
-            setProperty(mutation, properties, config.getVideoRotationIri(), VideoRotationUtil.extractRotationFromJSON(json), metadata, data);
+            setProperty(config.getDurationIri(), DurationUtil.extractDurationFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getGeoLocationIri(), GeoLocationUtil.extractGeoLocationFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getDateTakenIri(), DateUtil.extractDateTakenFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getDeviceMakeIri(), MakeAndModelUtil.extractMakeFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getDeviceModelIri(), MakeAndModelUtil.extractModelFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getWidthIri(), DimensionsUtil.extractWidthFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getHeightIri(), DimensionsUtil.extractHeightFromJSON(json), mutation, metadata, data, properties);
+            setProperty(config.getMetadataIri(), json.toString(), mutation, metadata, data, properties);
+            setProperty(config.getClockwiseRotationIri(), VideoRotationUtil.extractRotationFromJSON(json), mutation, metadata, data, properties);
         }
 
-        setProperty(mutation, properties, config.getFileSizeIri(), FileSizeUtil.extractFileSize(localFile), metadata, data);
+        setProperty(config.getFileSizeIri(), FileSizeUtil.extractFileSize(localFile), mutation, metadata, data, properties);
 
         mutation.save(getAuthorizations());
         getGraph().flush();

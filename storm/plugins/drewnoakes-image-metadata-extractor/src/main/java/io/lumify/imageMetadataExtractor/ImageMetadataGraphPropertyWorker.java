@@ -1,7 +1,6 @@
 package io.lumify.imageMetadataExtractor;
 
 import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -10,25 +9,24 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.imageMetadataHelper.*;
+import io.lumify.storm.MediaPropertyConfiguration;
 import io.lumify.storm.util.FileSizeUtil;
-import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
-import org.securegraph.type.GeoPoint;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImageMetadataGraphPropertyWorker.class);
     private static final String MULTI_VALUE_KEY = ImageMetadataGraphPropertyWorker.class.getName();
+    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
 
     @Override
     public boolean isLocalFileRequired() {
@@ -38,99 +36,52 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
+        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+    }
+
+    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Map<String, Object> metadata, GraphPropertyWorkData data, List<String> properties) {
+        if (iri != null && value != null) {
+            mutation.addPropertyValue(MULTI_VALUE_KEY, iri, value, metadata, data.getVisibility());
+            properties.add(iri);
+        }
     }
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         Map<String, Object> metadata = data.createPropertyMetadata();
-        ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
-        ArrayList<String> propertiesToQueue = new ArrayList<String>();
+        ExistingElementMutation<Vertex> mutation = data.getElement().prepareMutation();
+        List<String> properties = new ArrayList<String>();
+
         File imageFile = data.getLocalFile();
         if (imageFile != null) {
             Metadata imageMetadata = null;
             try {
                 imageMetadata = ImageMetadataReader.readMetadata(imageFile);
-            } catch (ImageProcessingException e) {
-                LOGGER.debug("Could not read metadata from imageFile.");
-            } catch (IOException e) {
-                LOGGER.debug("Could not read metadata from imageFile.");
+            } catch (Exception e) {
+                LOGGER.debug("Could not read metadata from imageFile.", e);
             }
+
             if (imageMetadata != null) {
-                Date dateTaken = DateExtractor.getDateDefault(imageMetadata);
-                if (dateTaken != null) {
-                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.dateTakenIri, dateTaken, metadata, data.getVisibility());
-                    propertiesToQueue.add(Ontology.dateTakenIri);
-                }
-
-                String deviceMake = MakeExtractor.getMake(imageMetadata);
-                if (deviceMake != null) {
-                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.deviceMakeIri, deviceMake, metadata, data.getVisibility());
-                    propertiesToQueue.add(Ontology.deviceMakeIri);
-                }
-
-                String deviceModel = ModelExtractor.getModel(imageMetadata);
-                if (deviceModel != null) {
-                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.deviceModelIri, deviceModel, metadata, data.getVisibility());
-                    propertiesToQueue.add(Ontology.deviceModelIri);
-                }
-
-                GeoPoint geoLocation = GeoPointExtractor.getGeoPoint(imageMetadata);
-                if (geoLocation != null) {
-                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.geoLocationIri, geoLocation, metadata, data.getVisibility());
-                    propertiesToQueue.add(Ontology.geoLocationIri);
-                }
-
-                Double heading = HeadingExtractor.getImageHeading(imageMetadata);
-                if (heading != null) {
-                    m.addPropertyValue(MULTI_VALUE_KEY, Ontology.headingIri, heading, metadata, data.getVisibility());
-                    propertiesToQueue.add(Ontology.headingIri);
-                }
-
-                JSONObject imageMetadataJSON = LeftoverMetadataExtractor.getAsJSON(imageMetadata);
-                if (imageMetadataJSON != null) {
-                    String imageMetadataJSONString = imageMetadataJSON.toString();
-                    if (imageMetadataJSONString != null) {
-                        m.addPropertyValue(MULTI_VALUE_KEY, Ontology.metadataIri, imageMetadataJSONString, metadata, data.getVisibility());
-                        propertiesToQueue.add(Ontology.metadataIri);
-                    }
-                }
+                setProperty(config.getDateTakenIri(), DateExtractor.getDateDefault(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.getDeviceMakeIri(), MakeExtractor.getMake(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.getDeviceModelIri(), ModelExtractor.getModel(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.getGeoLocationIri(), GeoPointExtractor.getGeoPoint(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.getHeadingIri(), HeadingExtractor.getImageHeading(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.getMetadataIri(), LeftoverMetadataExtractor.getAsJSON(imageMetadata).toString(), mutation, metadata, data, properties);
             }
 
-            Integer width = null;
-            if (imageMetadata != null) {
-                width = DimensionsExtractor.getWidthViaMetadata(imageMetadata);
-            }
-            if (width != null) {
-                width = DimensionsExtractor.getWidthViaBufferedImage(imageFile);
-            }
-            if (width != null) {
-                m.addPropertyValue(MULTI_VALUE_KEY, Ontology.widthIri, width, metadata, data.getVisibility());
-                propertiesToQueue.add(Ontology.widthIri);
-            }
+            Integer width = imageMetadata != null ? DimensionsExtractor.getWidthViaMetadata(imageMetadata) : DimensionsExtractor.getWidthViaBufferedImage(imageFile);
+            setProperty(config.getWidthIri(), width, mutation, metadata, data, properties);
 
-            Integer height = null;
-            if (imageMetadata != null) {
-                height = DimensionsExtractor.getHeightViaMetadata(imageMetadata);
-            }
-            if (height != null) {
-                height = DimensionsExtractor.getHeightViaBufferedImage(imageFile);
-            }
-            if (height != null) {
-                m.addPropertyValue(MULTI_VALUE_KEY, Ontology.heightIri, height, metadata, data.getVisibility());
-                propertiesToQueue.add(Ontology.heightIri);
-            }
+            Integer height = imageMetadata != null ? DimensionsExtractor.getHeightViaMetadata(imageMetadata) : DimensionsExtractor.getHeightViaBufferedImage(imageFile);
+            setProperty(config.getHeightIri(), height, mutation, metadata, data, properties);
 
-            Integer fileSize = FileSizeUtil.extractFileSize(imageFile);
-            if (fileSize != null) {
-                m.addPropertyValue(MULTI_VALUE_KEY, Ontology.fileSizeIri, fileSize, metadata, data.getVisibility());
-                propertiesToQueue.add(Ontology.fileSizeIri);
-            }
-
+            setProperty(config.getFileSizeIri(), FileSizeUtil.extractFileSize(imageFile), mutation, metadata, data, properties);
         }
 
-        m.save(getAuthorizations());
+        mutation.save(getAuthorizations());
         getGraph().flush();
-        for (String propertyName : propertiesToQueue) {
+        for (String propertyName : properties) {
             getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_KEY, propertyName);
         }
     }
@@ -142,15 +93,10 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
-        if (mimeType == null) {
-            return false;
-        }
-
-        if (mimeType.startsWith("image")) {
+        if (mimeType != null && mimeType.startsWith("image")) {
             return true;
-        } else {
-            return false;
         }
-    }
 
+        return false;
+    }
 }

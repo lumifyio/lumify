@@ -15,8 +15,8 @@ public class FFprobeExecutor {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeExecutor.class);
 
     public static JSONObject getJson(ProcessRunner processRunner, GraphPropertyWorkData data) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        String outString = null;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        String output = null;
         try {
             processRunner.execute(
                     "ffprobe",
@@ -27,22 +27,17 @@ public class FFprobeExecutor {
                             "-show_streams",
                             data.getLocalFile().getAbsolutePath()
                     },
-                    out,
+                    byteArrayOutputStream,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
-            outString = new String(out.toByteArray());
-            JSONObject json = JSONUtil.parse(outString);
-            return json;
+            output = new String(byteArrayOutputStream.toByteArray());
+            return JSONUtil.parse(output);
         } catch (LumifyJsonParseException e) {
-            LOGGER.error("outstring, " + outString + ", is not a valid json");
-            return null;
-        } catch (IOException e) {
-            LOGGER.debug("IOException occurred. Could not retrieve JSONObject using ffprobe.");
-            return null;
-        } catch (InterruptedException e) {
-            LOGGER.debug("InterruptedException occurred. Could not retrieve JSONObject using ffprobe.");
-            return null;
+            LOGGER.error("unable to parse ffprobe output: [%s]", output);
+        } catch (Exception e) {
+            LOGGER.error("exception running ffprobe", e);
         }
 
+        return null;
     }
 }

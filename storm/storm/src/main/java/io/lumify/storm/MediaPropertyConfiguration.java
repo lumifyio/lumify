@@ -3,33 +3,31 @@ package io.lumify.storm;
 import io.lumify.core.config.Configurable;
 
 public class MediaPropertyConfiguration {
-    private String durationIri;
-    private String videoRotationIri;
-    private String yAxisFlipNeededIri;
-    private String cwRotationNeededIri;
+    public static final String PROPERTY_NAME_PREFIX = "ontology.iri.media";
+
+    private String yAxisFlippedIri;
+    private String clockwiseRotationIri;
+    private String geoLocationIri;
     private String headingIri;
     private String dateTakenIri;
     private String deviceMakeIri;
     private String deviceModelIri;
     private String widthIri;
     private String heightIri;
+    private String durationIri;
     private String fileSizeIri;
     private String metadataIri;
-    private String geoLocationIri;
 
-    @Configurable(name = "durationIri", required = false)
-    public void setDurationIri(String durationIri) { this.durationIri = durationIri; }
-
-    @Configurable(name = "videoRotationIri", required = false)
-    public void setVideoRotationIri(String videoRotationIri) { this.videoRotationIri = videoRotationIri; }
-
-    @Configurable(name = "yAxisFlipNeededIri", required = false)
-    public void setYAxisFlipNeededIri(String yAxisFlipNeededIri) {
-        this.yAxisFlipNeededIri = yAxisFlipNeededIri;
+    @Configurable(name = "yAxisFlippedIri", required = false)
+    public void setYAxisFlippedIri(String yAxisFlippedIri) {
+        this.yAxisFlippedIri = yAxisFlippedIri;
     }
 
-    @Configurable(name = "cwRotationNeededIri", required = false)
-    public void setCwRotationNeededIri(String cwRotationNeededIri) { this.cwRotationNeededIri = cwRotationNeededIri; }
+    @Configurable(name = "clockwiseRotationIri", required = false)
+    public void setClockwiseRotationIri(String clockwiseRotationIri) { this.clockwiseRotationIri = clockwiseRotationIri; }
+
+    @Configurable(name = "geoLocationIri", required = false)
+    public void setGeoLocationIri(String geoLocationIri) { this.geoLocationIri = geoLocationIri; }
 
     @Configurable(name = "headingIri", required = false)
     public void setHeadingIri(String headingIri) { this.headingIri = headingIri; }
@@ -49,29 +47,29 @@ public class MediaPropertyConfiguration {
     @Configurable(name = "heightIri", required = false)
     public void setHeightIri(String heightIri) { this.heightIri = heightIri; }
 
+    @Configurable(name = "durationIri", required = false)
+    public void setDurationIri(String durationIri) { this.durationIri = durationIri; }
+
     @Configurable(name = "fileSizeIri", required = false)
     public void setFileSizeIri(String fileSizeIri) { this.fileSizeIri = fileSizeIri; }
 
     @Configurable(name = "metadataIri", required = false)
     public void setMetadataIri(String metadataIri) { this.metadataIri = metadataIri; }
 
-    @Configurable(name = "geoLocationIri", required = false)
-    public void setGeoLocationIri(String geoLocationIri) { this.geoLocationIri = geoLocationIri; }
-
     public String getDurationIri() {
         return durationIri;
     }
 
-    public String getVideoRotationIri() {
-        return videoRotationIri;
+    public String getYAxisFlippedIri() {
+        return yAxisFlippedIri;
     }
 
-    public String getyAxisFlipNeededIri() {
-        return yAxisFlipNeededIri;
+    public String getClockwiseRotationIri() {
+        return clockwiseRotationIri;
     }
 
-    public String getCwRotationNeededIri() {
-        return cwRotationNeededIri;
+    public String getGeoLocationIri() {
+        return geoLocationIri;
     }
 
     public String getHeadingIri() {
@@ -104,9 +102,5 @@ public class MediaPropertyConfiguration {
 
     public String getMetadataIri() {
         return metadataIri;
-    }
-
-    public String getGeoLocationIri() {
-        return geoLocationIri;
     }
 }

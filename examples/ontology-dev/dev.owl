@@ -610,17 +610,6 @@
 
 
 
-    <!-- http://lumify.io/dev#videoRotation -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#videoRotation">
-        <rdfs:label xml:lang="en">Video Rotation</rdfs:label>
-        <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
-        <rdfs:range rdf:resource="&xsd;integer"/>
-    </owl:DatatypeProperty>
-
-
-
     <!-- http://lumify.io/dev#lastModifyDate -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#lastModifyDate">
