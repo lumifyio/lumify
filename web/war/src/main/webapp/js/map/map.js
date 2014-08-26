@@ -277,7 +277,7 @@ define([
                         .value(),
                 conceptType = F.vertex.prop(vertex, 'conceptType'),
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
-                iconUrl =  '/map/marker/image?' + $.param({
+                iconUrl =  'map/marker/image?' + $.param({
                     type: conceptType,
                     scale: retina.devicePixelRatio > 1 ? '2' : '1'
                 }),
