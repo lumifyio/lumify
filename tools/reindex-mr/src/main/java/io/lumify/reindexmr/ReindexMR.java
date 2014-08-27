@@ -39,6 +39,9 @@ public class ReindexMR extends LumifyMRBase {
                 WorkspaceRepository.VISIBILITY_STRING
         };
 
+        job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);
+        job.getConfiguration().setBoolean("mapred.reduce.tasks.speculative.execution", false);
+
         AccumuloVertexInputFormat.setInputInfo(job, graph, getInstanceName(), getZooKeepers(), getPrincipal(), getAuthorizationToken(), authorizations);
         job.setJarByClass(ReindexMR.class);
         job.setMapperClass(ReindexMRMapper.class);
