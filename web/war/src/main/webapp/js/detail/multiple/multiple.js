@@ -528,7 +528,11 @@ define([
 
                                 function setTextY(k) {
                                     return function() {
-                                        var height = this.getBBox().height;
+                                        // Firefox exception here
+                                        var height = 22;
+                                        try {
+                                            height = this.getBBox().height;
+                                        } catch(e) { }
                                         this.setAttribute('y', (BAR_HEIGHT / 2 + height * k) + 'px');
                                     };
                                 }
