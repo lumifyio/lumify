@@ -47,14 +47,17 @@ public abstract class LumifyMRBase extends Configured implements Tool {
         authorizationToken = accumuloGraphConfiguration.getAuthenticationToken();
         AccumuloElementOutputFormat.setOutputInfo(job, instanceName, zooKeepers, principal, authorizationToken);
 
+        boolean periodicCounterOutput = conf.getBoolean("lumify.periodic.counter.output.enabled", false);
+
         if (job.getConfiguration().get("mapred.job.tracker").equals("local")) {
             LOGGER.warn("!!!!!! Running in local mode !!!!!!");
             local = true;
+            periodicCounterOutput = true;
         }
 
         setupJob(job);
 
-        if (local) {
+        if (periodicCounterOutput) {
             startPeriodicCounterOutputThread(job);
         }
 
