@@ -723,7 +723,8 @@ define([
             } else if (configProperties['map.provider'] == 'ArcGIS93Rest') {
                 var arcgisURL = configProperties['map.provider.ArcGIS93Rest.url'];
                 base = new ol.Layer.ArcGIS93Rest('ArcGIS93Rest', arcgisURL, {
-                   layers: '0,1,2'
+                    layers: '0,1,2',
+                    format: 'png24'
                 });
             } else {
               console.error('Unknown map provider type: ', configProperties['map.provider']);

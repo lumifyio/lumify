@@ -318,7 +318,7 @@ define([
                         apply({
                             rawClassName: 'artifact',
                             color: 'rgb(255,0,0)',
-                            glyphIconHref: '/img/glyphicons/glyphicons_036_file@2x.png'
+                            glyphIconHref: '../img/glyphicons/glyphicons_036_file@2x.png'
                         });
 
                         style.styleApplied = true;
