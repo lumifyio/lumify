@@ -12,4 +12,4 @@ don't find what you're looking for, post a new message.
 * Visit the [Lumify blog](http://lumify.io/blog). We regularly post examples of using Lumify and announcing new features.
 * Search for a bug on the [issue tracker](https://github.com/lumifyio/lumify/issues). Create a new one if you don't
 find an existing report of your problem.
-* Read the [source code](https://github.com/lumifyio/lumify). Yes it's tedious, but it's also undeniably authoritative.
+* Read the [source code](source-code.md). Yes it's tedious, but it's also undeniably authoritative.

@@ -20,7 +20,7 @@ less likely to get out of sync than this document.
 
 ## Example Installation on CentOS 6.4
 
-For step-by-step instructions on installing Lumify and all it's dependencies on CentOS 6.4, please see [setup-centos-6.5.md](setup-centos-6.5.md).
+For step-by-step instructions on installing Lumify and all it's dependencies on CentOS 6.4, please see [setup-centos-6.4.md](setup-centos-6.4.md).
 
 ## Lumify Dependencies by Feature
 

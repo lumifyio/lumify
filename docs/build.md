@@ -50,4 +50,4 @@ expose the plugin to all web servers. The Lumify web application will automatica
 hadoop fs -put <path_to_plugin_jar> /lumify/libcache
 ```
 
-To learn more about extending Lumify with plugins, please [read this](web/war/src/main/webapp/README.md).
+To learn more about extending Lumify with plugins, please [read this](../web/war/src/main/webapp/README.md).
