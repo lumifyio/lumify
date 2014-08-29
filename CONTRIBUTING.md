@@ -16,7 +16,7 @@ please include a test.
 
 5. Push to your fork and submit a pull request.
 
-At this point you're waiting on one of the primary developers. This is a fairly
+At this point you're waiting on one of the primary developers. This is an
 active project so you should get a response in a reasonable amount of time. 
 We may suggest some changes or improvements or alternatives
 at that time. Please don't consider the feedback as a lack of
