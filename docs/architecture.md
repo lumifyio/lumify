@@ -10,13 +10,13 @@ these layers, but is not shown in the diagram. There are numerous other librarie
 [POM file](../pom.xml) or run `mvn dependency:tree` to get a feel for all the libraries involved.
 
     /---------+--------+--------+-----------+------------+--------+---------\
-    | OpenNLP | CLAVIN | OpenCV | tesseract | CMU Sphinx | ffmpeg | more... |
+    | OpenNLP | CLAVIN | OpenCV | tesseract | CMU Sphinx | FFmpeg | more... |
     +---------+--------+--------+-----------+------------+--------+---------+
     |                               Storm                                   |
     +------------------------------------------------------+----------------+
     |                   Secure Graph                       |                |
     +----------------------------------+-------------------+                |
-    |            Accumulo              |                   |    Rabbit MQ   |
+    |            Accumulo              |                   |    RabbitMQ    |
     +----------------------------------+   Elasticsearch   |                |
     |           Hadoop CDH             |                   |                |
     \----------------------------------+-------------------+----------------/
