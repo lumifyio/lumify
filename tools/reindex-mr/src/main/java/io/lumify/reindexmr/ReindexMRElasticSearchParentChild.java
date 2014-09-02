@@ -29,9 +29,9 @@ public class ReindexMRElasticSearchParentChild extends ReindexMRBase {
     protected JobConf getConfiguration(String[] args, io.lumify.core.config.Configuration lumifyConfig) {
         JobConf conf = super.getConfiguration(args, lumifyConfig);
 
+        conf.setSpeculativeExecution(false);
+        conf.set("es.index.auto.create", "no");
         conf.set("es.input.json", "yes");
-        conf.setBoolean("mapred.map.tasks.speculative.execution", false);
-        conf.setBoolean("mapred.reduce.tasks.speculative.execution", false);
         conf.set("es.nodes", conf.get("graph.search.locations"));
         conf.set("es.mapping.id", ES_ID_PROPERTY);
         conf.set("es.resource.write", conf.get("graph.search.indexName") + "/{" + ES_ELEMENT_TYPE_PROPERTY + "}");
