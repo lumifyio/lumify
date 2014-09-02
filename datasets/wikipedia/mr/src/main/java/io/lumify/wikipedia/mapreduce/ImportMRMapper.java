@@ -73,6 +73,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private Counter pagesProcessedCounter;
     private Text auditTableNameText;
     private Text termMentionTableText;
+    private Counter pagesSkippedCounter;
 
     public ImportMRMapper() {
         this.textXPath = XPathFactory.instance().compile(TEXT_XPATH, Filters.text());
@@ -100,6 +101,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         }
 
         pagesProcessedCounter = context.getCounter(WikipediaImportCounters.PAGES_PROCESSED);
+        pagesSkippedCounter = context.getCounter(WikipediaImportCounters.PAGES_SKIPPED);
         auditTableNameText = new Text(Audit.TABLE_NAME);
         termMentionTableText = new Text(TermMentionModel.TABLE_NAME);
     }
@@ -121,6 +123,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         context.progress();
 
         if (shouldSkip(parsePage)) {
+            pagesSkippedCounter.increment(1);
             return;
         }
 
