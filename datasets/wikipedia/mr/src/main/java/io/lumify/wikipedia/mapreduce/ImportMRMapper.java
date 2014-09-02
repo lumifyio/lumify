@@ -120,6 +120,10 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         }
         context.progress();
 
+        if (shouldSkip(parsePage)) {
+            return;
+        }
+
         String wikipediaPageVertexId = ImportMR.getWikipediaPageVertexId(parsePage.getPageTitle());
         context.setStatus(wikipediaPageVertexId);
 
@@ -139,6 +143,14 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         savePageLinks(context, pageVertex, textConverter);
 
         pagesProcessedCounter.increment(1);
+    }
+
+    private boolean shouldSkip(ParsePage parsePage) {
+        String lowerCaseTitle = parsePage.getPageTitle().toLowerCase();
+        if (lowerCaseTitle.startsWith("wikipedia:")) {
+            return true;
+        }
+        return false;
     }
 
     private Vertex savePage(Context context, String wikipediaPageVertexId, ParsePage parsePage, String pageString) throws IOException, InterruptedException {
@@ -199,6 +211,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private void savePageLink(Context context, Vertex pageVertex, LinkWithOffsets link) throws IOException, InterruptedException {
         String linkTarget = link.getLinkTargetWithoutHash();
         String linkVertexId = ImportMR.getWikipediaPageVertexId(linkTarget);
+        context.setStatus(pageVertex.getId() + " [" + linkVertexId + "]");
         VertexBuilder linkedPageVertexBuilder = prepareVertex(linkVertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
         LumifyProperties.MIME_TYPE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
