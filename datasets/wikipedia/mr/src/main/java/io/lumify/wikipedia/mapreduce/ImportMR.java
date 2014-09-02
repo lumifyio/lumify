@@ -47,12 +47,10 @@ public class ImportMR extends LumifyMRBase {
     public static final String WIKIPEDIA_LINK_ID_PREFIX = "WIKIPEDIA_LINK_";
     public static final String MULTI_VALUE_KEY = ImportMR.class.getName();
 
-    static final char KEY_SPLIT = '\u001f';
     private OntologyRepository ontologyRepository;
-    private Graph graph;
 
     static String getWikipediaPageVertexId(String pageTitle) {
-        return WIKIPEDIA_ID_PREFIX + pageTitle.trim();
+        return WIKIPEDIA_ID_PREFIX + pageTitle.trim().toLowerCase();
     }
 
     static String getWikipediaPageToPageEdgeId(Vertex pageVertex, Vertex linkedPageVertex) {
@@ -115,10 +113,5 @@ public class ImportMR extends LumifyMRBase {
     @Inject
     public void setOntologyRepository(OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
     }
 }
