@@ -14,7 +14,7 @@ import java.io.IOException;
 public class FFprobeExecutor {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeExecutor.class);
 
-    public static JSONObject getJson(ProcessRunner processRunner, GraphPropertyWorkData data) {
+    public static JSONObject getJson(ProcessRunner processRunner, String absolutePath) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         String output = null;
         try {
@@ -25,10 +25,10 @@ public class FFprobeExecutor {
                             "-print_format", "json",
                             "-show_format",
                             "-show_streams",
-                            data.getLocalFile().getAbsolutePath()
+                            absolutePath
                     },
                     byteArrayOutputStream,
-                    data.getLocalFile().getAbsolutePath() + ": "
+                    absolutePath + ": "
             );
             output = new String(byteArrayOutputStream.toByteArray());
             return JSONUtil.parse(output);
