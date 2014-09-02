@@ -5,12 +5,12 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class VideoRotationUtil {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotationUtil.class);
+public class FFprobeRotationUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeRotationUtil.class);
 
-    public static Integer extractRotationFromJSON(JSONObject json) {
+    public static Integer getRotation(JSONObject json) {
         if (json == null) {
-            return null;
+            return 0;
         }
 
         JSONArray streamsJson = json.optJSONArray("streams");
@@ -31,7 +31,7 @@ public class VideoRotationUtil {
         }
 
         LOGGER.debug("Could not retrieve a \"rotate\" value from the JSON object.");
-        return null;
+        return 0;
     }
 
     /**

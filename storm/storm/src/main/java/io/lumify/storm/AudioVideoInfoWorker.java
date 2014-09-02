@@ -14,195 +14,60 @@ import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
-import org.securegraph.type.GeoPoint;
 
+import java.io.File;
 import java.io.InputStream;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AudioVideoInfoWorker.class);
     private static final String PROPERTY_KEY = AudioVideoInfoWorker.class.getName();
     private ProcessRunner processRunner;
-    private static final String AUDIO_DURATION_IRI = "ontology.iri.audioDuration";
-    private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
-    private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
-    private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
-    private static final String LAST_MODIFY_DATE_IRI = "ontology.iri.lastModifyDate";
-    private static final String DATE_TAKEN_IRI = "ontology.iri.dateTaken";
-    private static final String DEVICE_MAKE_IRI = "ontology.iri.deviceMake";
-    private static final String DEVICE_MODEL_IRI = "ontology.iri.deviceModel";
-    private static final String METADATA_IRI = "ontology.iri.metadata";
-    private String audioDurationIri;
-    private String videoDurationIri;
-    private String videoRotationIri;
-    private String geoLocationIri;
-    private String lastModifyDateIri;
-    private String dateTakenIri;
-    private String deviceMakeIri;
-    private String deviceModelIri;
-    private String metadataIri;
+    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
+        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+    }
 
-        audioDurationIri = (String) workerPrepareData.getStormConf().get(AUDIO_DURATION_IRI);
-        if (audioDurationIri == null || audioDurationIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + AUDIO_DURATION_IRI + ": skipping audio duration extraction.");
+    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Map<String, Object> metadata, GraphPropertyWorkData data, List<String> properties) {
+        if (iri != null && value != null) {
+            mutation.addPropertyValue(PROPERTY_KEY, iri, value, metadata, data.getVisibility());
+            properties.add(iri);
         }
-
-        videoDurationIri = (String) workerPrepareData.getStormConf().get(VIDEO_DURATION_IRI);
-        if (videoDurationIri == null || videoDurationIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + VIDEO_DURATION_IRI + ": skipping video duration extraction.");
-        }
-
-        videoRotationIri = (String) workerPrepareData.getStormConf().get(VIDEO_ROTATION_IRI);
-        if (videoRotationIri == null || videoRotationIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + VIDEO_ROTATION_IRI + ": skipping setting the videoRotation property.");
-        }
-
-        geoLocationIri = (String) workerPrepareData.getStormConf().get(CONFIG_GEO_LOCATION_IRI);
-        if (geoLocationIri == null || geoLocationIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + CONFIG_GEO_LOCATION_IRI + ": skipping setting the geoLocation property.");
-        }
-
-        lastModifyDateIri = (String) workerPrepareData.getStormConf().get(LAST_MODIFY_DATE_IRI);
-        if (lastModifyDateIri == null || lastModifyDateIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + LAST_MODIFY_DATE_IRI + ": skipping setting the lastModifyDate property.");
-        }
-
-        dateTakenIri = (String) workerPrepareData.getStormConf().get(DATE_TAKEN_IRI);
-        if (dateTakenIri == null || dateTakenIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + DATE_TAKEN_IRI + ": skipping setting the dateTaken property.");
-        }
-
-        deviceMakeIri = (String) workerPrepareData.getStormConf().get(DEVICE_MAKE_IRI);
-        if (deviceMakeIri == null || deviceMakeIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + DEVICE_MAKE_IRI + ": skipping setting the deviceMake property.");
-        }
-
-        deviceModelIri = (String) workerPrepareData.getStormConf().get(DEVICE_MODEL_IRI);
-        if (deviceModelIri == null || deviceModelIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + DEVICE_MODEL_IRI + ": skipping setting the deviceModel property.");
-        }
-
-        metadataIri = (String) workerPrepareData.getStormConf().get(METADATA_IRI);
-        if (metadataIri == null || metadataIri.length() == 0) {
-            LOGGER.warn("Could not find config: " + METADATA_IRI + ": skipping setting the metadata property.");
-        }
-
     }
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
-        boolean isAudio = mimeType.startsWith("audio");
-
-        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        Double duration = null;
-        if (json != null) {
-            duration = DurationUtil.extractDurationFromJSON(json);
-        }
+        LOGGER.debug("BEGIN executing worker for element %s", data.getElement().getId());
+        File localFile = data.getLocalFile();
 
         Map<String, Object> metadata = data.createPropertyMetadata();
-        ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
+        ExistingElementMutation<Vertex> mutation = data.getElement().prepareMutation();
+        List<String> properties = new ArrayList<String>();
 
-        String durationIri = isAudio ? audioDurationIri : videoDurationIri;
-        if (duration != null) {
-            m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
-        }
-
+        JSONObject json = FFprobeExecutor.getJson(processRunner, data);
         if (json != null) {
-            int videoRotation = 0;
-            Integer nullableRotation = VideoRotationUtil.extractRotationFromJSON(json);
-            if (nullableRotation != null) {
-                videoRotation = nullableRotation;
-            }
-            data.getElement().addPropertyValue(
-                    PROPERTY_KEY,
-                    videoRotationIri,
-                    videoRotation,
-                    data.getVisibility(),
-                    getAuthorizations());
-
-
-            GeoPoint geoPoint = GeoLocationUtil.extractGeoLocationFromJSON(json);
-            if (geoPoint != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        geoLocationIri,
-                        geoPoint,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-            }
-
-            Date lastModifyDate = DateUtil.extractLastModifyDateFromJSON(json);
-            if (lastModifyDate != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        lastModifyDateIri,
-                        lastModifyDate,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-            }
-
-            Date dateTaken = DateUtil.extractDateTakenFromJSON(json);
-            if (dateTaken != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        dateTakenIri,
-                        dateTaken,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-            }
-
-            String deviceMake = MakeAndModelUtil.extractMakeFromJSON(json);
-            if (deviceMake != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        deviceMakeIri,
-                        deviceMake,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-            }
-
-            String deviceModel = MakeAndModelUtil.extractModelFromJSON(json);
-            if (deviceModel != null) {
-                data.getElement().addPropertyValue(
-                        PROPERTY_KEY,
-                        deviceModelIri,
-                        deviceModel,
-                        data.getVisibility(),
-                        getAuthorizations()
-                );
-            }
-
-            JSONObject videoMetadataJSON = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-            if (videoMetadataJSON != null){
-                String videoMetadataJSONString = videoMetadataJSON.toString();
-                if (videoMetadataJSONString != null){
-                    data.getElement().addPropertyValue(
-                            PROPERTY_KEY,
-                            metadataIri,
-                            videoMetadataJSONString,
-                            data.getVisibility(),
-                            getAuthorizations()
-                    );
-                }
-            }
-
+            setProperty(config.durationIri, FFprobeDurationUtil.getDuration(json), mutation, metadata, data, properties);
+            setProperty(config.geoLocationIri, FFprobeGeoLocationUtil.getGeoPoint(json), mutation, metadata, data, properties);
+            setProperty(config.dateTakenIri, FFprobeDateUtil.getDateTaken(json), mutation, metadata, data, properties);
+            setProperty(config.deviceMakeIri, FFprobeMakeAndModelUtil.getMake(json), mutation, metadata, data, properties);
+            setProperty(config.deviceModelIri, FFprobeMakeAndModelUtil.getModel(json), mutation, metadata, data, properties);
+            setProperty(config.widthIri, FFprobeDimensionsUtil.getWidth(json), mutation, metadata, data, properties);
+            setProperty(config.heightIri, FFprobeDimensionsUtil.getHeight(json), mutation, metadata, data, properties);
+            setProperty(config.metadataIri, json.toString(), mutation, metadata, data, properties);
+            setProperty(config.clockwiseRotationIri, FFprobeRotationUtil.getRotation(json), mutation, metadata, data, properties);
         }
 
-        m.save(getAuthorizations());
-        getGraph().flush();
+        setProperty(config.fileSizeIri, FileSizeUtil.getSize(localFile), mutation, metadata, data, properties);
 
-        if (duration != null) {
-            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, durationIri);
+        mutation.save(getAuthorizations());
+        getGraph().flush();
+        for (String propertyName : properties) {
+            getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, propertyName);
         }
     }
 
@@ -221,14 +86,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (mimeType.startsWith("video") && videoDurationIri == null) {
-            return false;
-        }
-
-        if (mimeType.startsWith("audio") && audioDurationIri == null) {
-            return false;
-        }
-
+        LOGGER.debug("handling element %s, property %s", element.getId(), property.getName());
         return true;
     }
 
@@ -238,7 +96,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     }
 
     @Inject
-    public void setProcessRunner(ProcessRunner ffmpeg) {
-        this.processRunner = ffmpeg;
+    public void setProcessRunner(ProcessRunner processRunner) {
+        this.processRunner = processRunner;
     }
 }

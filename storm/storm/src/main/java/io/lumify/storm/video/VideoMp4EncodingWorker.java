@@ -5,11 +5,9 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.util.JSONExtractor;
-import io.lumify.storm.util.VideoRotationUtil;
+import io.lumify.storm.util.FFprobeExecutor;
+import io.lumify.storm.util.FFprobeRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -26,7 +24,6 @@ import java.util.Map;
 
 public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoMp4EncodingWorker.class);
     private ProcessRunner processRunner;
 
     @Override
@@ -72,11 +69,9 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     }
 
     public String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File mp4File) {
-        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
-        if (videoRotation == null)
-            videoRotation = 0;
-        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        JSONObject json = FFprobeExecutor.getJson(processRunner, data);
+        Integer videoRotation = FFprobeRotationUtil.getRotation(json);
+        String[] ffmpegRotationOptions = FFprobeRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
