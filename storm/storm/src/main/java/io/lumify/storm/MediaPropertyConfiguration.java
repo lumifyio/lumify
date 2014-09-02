@@ -5,102 +5,76 @@ import io.lumify.core.config.Configurable;
 public class MediaPropertyConfiguration {
     public static final String PROPERTY_NAME_PREFIX = "ontology.iri.media";
 
-    private String yAxisFlippedIri;
-    private String clockwiseRotationIri;
-    private String geoLocationIri;
-    private String headingIri;
-    private String dateTakenIri;
-    private String deviceMakeIri;
-    private String deviceModelIri;
-    private String widthIri;
-    private String heightIri;
-    private String durationIri;
-    private String fileSizeIri;
-    private String metadataIri;
+    public String yAxisFlippedIri;
+    public String clockwiseRotationIri;
+    public String geoLocationIri;
+    public String headingIri;
+    public String dateTakenIri;
+    public String deviceMakeIri;
+    public String deviceModelIri;
+    public String widthIri;
+    public String heightIri;
+    public String durationIri;
+    public String fileSizeIri;
+    public String metadataIri;
 
-    @Configurable(name = "yAxisFlippedIri", required = false)
+    @Configurable(name = "yAxisFlipped", required = false)
     public void setYAxisFlippedIri(String yAxisFlippedIri) {
         this.yAxisFlippedIri = yAxisFlippedIri;
     }
 
-    @Configurable(name = "clockwiseRotationIri", required = false)
-    public void setClockwiseRotationIri(String clockwiseRotationIri) { this.clockwiseRotationIri = clockwiseRotationIri; }
-
-    @Configurable(name = "geoLocationIri", required = false)
-    public void setGeoLocationIri(String geoLocationIri) { this.geoLocationIri = geoLocationIri; }
-
-    @Configurable(name = "headingIri", required = false)
-    public void setHeadingIri(String headingIri) { this.headingIri = headingIri; }
-
-    @Configurable(name = "dateTakenIri", required = false)
-    public void setDateTakenIri(String dateTakenIri) { this.dateTakenIri = dateTakenIri; }
-
-    @Configurable(name = "deviceMakeIri", required = false)
-    public void setDeviceMakeIri(String deviceMakeIri) { this.deviceMakeIri = deviceMakeIri; }
-
-    @Configurable(name = "deviceModelIri", required = false)
-    public void setDeviceModelIri(String deviceModelIri) { this.deviceModelIri = deviceModelIri; }
-
-    @Configurable(name = "widthIri", required = false)
-    public void setWidthIri(String widthIri) { this.widthIri = widthIri; }
-
-    @Configurable(name = "heightIri", required = false)
-    public void setHeightIri(String heightIri) { this.heightIri = heightIri; }
-
-    @Configurable(name = "durationIri", required = false)
-    public void setDurationIri(String durationIri) { this.durationIri = durationIri; }
-
-    @Configurable(name = "fileSizeIri", required = false)
-    public void setFileSizeIri(String fileSizeIri) { this.fileSizeIri = fileSizeIri; }
-
-    @Configurable(name = "metadataIri", required = false)
-    public void setMetadataIri(String metadataIri) { this.metadataIri = metadataIri; }
-
-    public String getDurationIri() {
-        return durationIri;
+    @Configurable(name = "clockwiseRotation", required = false)
+    public void setClockwiseRotationIri(String clockwiseRotationIri) {
+        this.clockwiseRotationIri = clockwiseRotationIri;
     }
 
-    public String getYAxisFlippedIri() {
-        return yAxisFlippedIri;
+    @Configurable(name = "geoLocation", required = false)
+    public void setGeoLocationIri(String geoLocationIri) {
+        this.geoLocationIri = geoLocationIri;
     }
 
-    public String getClockwiseRotationIri() {
-        return clockwiseRotationIri;
+    @Configurable(name = "imageHeading", required = false)
+    public void setHeadingIri(String headingIri) {
+        this.headingIri = headingIri;
     }
 
-    public String getGeoLocationIri() {
-        return geoLocationIri;
+    @Configurable(name = "dateTaken", required = false)
+    public void setDateTakenIri(String dateTakenIri) {
+        this.dateTakenIri = dateTakenIri;
     }
 
-    public String getHeadingIri() {
-        return headingIri;
+    @Configurable(name = "deviceMake", required = false)
+    public void setDeviceMakeIri(String deviceMakeIri) {
+        this.deviceMakeIri = deviceMakeIri;
     }
 
-    public String getDateTakenIri() {
-        return dateTakenIri;
+    @Configurable(name = "deviceModel", required = false)
+    public void setDeviceModelIri(String deviceModelIri) {
+        this.deviceModelIri = deviceModelIri;
     }
 
-    public String getDeviceMakeIri() {
-        return deviceMakeIri;
+    @Configurable(name = "width", required = false)
+    public void setWidthIri(String widthIri) {
+        this.widthIri = widthIri;
     }
 
-    public String getDeviceModelIri() {
-        return deviceModelIri;
+    @Configurable(name = "height", required = false)
+    public void setHeightIri(String heightIri) {
+        this.heightIri = heightIri;
     }
 
-    public String getWidthIri() {
-        return widthIri;
+    @Configurable(name = "duration", required = false)
+    public void setDurationIri(String durationIri) {
+        this.durationIri = durationIri;
     }
 
-    public String getHeightIri() {
-        return heightIri;
+    @Configurable(name = "fileSize", required = false)
+    public void setFileSizeIri(String fileSizeIri) {
+        this.fileSizeIri = fileSizeIri;
     }
 
-    public String getFileSizeIri() {
-        return fileSizeIri;
-    }
-
-    public String getMetadataIri() {
-        return metadataIri;
+    @Configurable(name = "metadata", required = false)
+    public void setMetadataIri(String metadataIri) {
+        this.metadataIri = metadataIri;
     }
 }

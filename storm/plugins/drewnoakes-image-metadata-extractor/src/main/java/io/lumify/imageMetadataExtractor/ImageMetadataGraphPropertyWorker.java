@@ -62,21 +62,21 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             }
 
             if (imageMetadata != null) {
-                setProperty(config.getDateTakenIri(), DateExtractor.getDateDefault(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.getDeviceMakeIri(), MakeExtractor.getMake(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.getDeviceModelIri(), ModelExtractor.getModel(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.getGeoLocationIri(), GeoPointExtractor.getGeoPoint(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.getHeadingIri(), HeadingExtractor.getImageHeading(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.getMetadataIri(), LeftoverMetadataExtractor.getAsJSON(imageMetadata).toString(), mutation, metadata, data, properties);
+                setProperty(config.dateTakenIri, DateExtractor.getDateDefault(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.deviceMakeIri, MakeExtractor.getMake(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.deviceModelIri, ModelExtractor.getModel(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.geoLocationIri, GeoPointExtractor.getGeoPoint(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.headingIri, HeadingExtractor.getImageHeading(imageMetadata), mutation, metadata, data, properties);
+                setProperty(config.metadataIri, LeftoverMetadataExtractor.getAsJSON(imageMetadata).toString(), mutation, metadata, data, properties);
             }
 
             Integer width = imageMetadata != null ? DimensionsExtractor.getWidthViaMetadata(imageMetadata) : DimensionsExtractor.getWidthViaBufferedImage(imageFile);
-            setProperty(config.getWidthIri(), width, mutation, metadata, data, properties);
+            setProperty(config.widthIri, width, mutation, metadata, data, properties);
 
             Integer height = imageMetadata != null ? DimensionsExtractor.getHeightViaMetadata(imageMetadata) : DimensionsExtractor.getHeightViaBufferedImage(imageFile);
-            setProperty(config.getHeightIri(), height, mutation, metadata, data, properties);
+            setProperty(config.heightIri, height, mutation, metadata, data, properties);
 
-            setProperty(config.getFileSizeIri(), FileSizeUtil.getSize(imageFile), mutation, metadata, data, properties);
+            setProperty(config.fileSizeIri, FileSizeUtil.getSize(imageFile), mutation, metadata, data, properties);
         }
 
         mutation.save(getAuthorizations());

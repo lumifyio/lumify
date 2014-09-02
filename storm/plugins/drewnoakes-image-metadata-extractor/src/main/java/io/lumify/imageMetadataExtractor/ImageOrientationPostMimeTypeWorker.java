@@ -39,8 +39,8 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
 
         ImageTransform imageTransform = ImageTransformExtractor.getImageTransform(localFile);
         if (imageTransform != null) {
-            setProperty(config.getYAxisFlippedIri(), imageTransform.isYAxisFlipNeeded(), mutation, metadata, data, properties);
-            setProperty(config.getClockwiseRotationIri(), imageTransform.getCWRotationNeeded(), mutation, metadata, data, properties);
+            setProperty(config.yAxisFlippedIri, imageTransform.isYAxisFlipNeeded(), mutation, metadata, data, properties);
+            setProperty(config.clockwiseRotationIri, imageTransform.getCWRotationNeeded(), mutation, metadata, data, properties);
 
             mutation.save(authorizations);
             getGraph().flush();
