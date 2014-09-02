@@ -42,7 +42,6 @@ public class ReindexMR extends LumifyMRBase {
         job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);
         job.getConfiguration().setBoolean("mapred.reduce.tasks.speculative.execution", false);
 
-        AccumuloVertexInputFormat.setInputInfo(job, graph, getInstanceName(), getZooKeepers(), getPrincipal(), getAuthorizationToken(), authorizations);
         job.setJarByClass(ReindexMR.class);
         job.setMapperClass(ReindexMRMapper.class);
         job.setOutputFormatClass(NullOutputFormat.class);
@@ -50,8 +49,10 @@ public class ReindexMR extends LumifyMRBase {
 
         if (elementType == ElementType.VERTEX) {
             job.setInputFormatClass(AccumuloVertexInputFormat.class);
+            AccumuloVertexInputFormat.setInputInfo(job, graph, getInstanceName(), getZooKeepers(), getPrincipal(), getAuthorizationToken(), authorizations);
         } else if (elementType == ElementType.EDGE) {
             job.setInputFormatClass(AccumuloEdgeInputFormat.class);
+            AccumuloEdgeInputFormat.setInputInfo(job, graph, getInstanceName(), getZooKeepers(), getPrincipal(), getAuthorizationToken(), authorizations);
         } else {
             throw new LumifyException("Unhandled element type: " + elementType);
         }
