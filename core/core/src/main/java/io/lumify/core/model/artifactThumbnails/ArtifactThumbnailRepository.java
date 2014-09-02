@@ -22,13 +22,13 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
     public static int FRAMES_PER_PREVIEW = 20;
     public static int PREVIEW_FRAME_WIDTH = 360;
     public static int PREVIEW_FRAME_HEIGHT = 240;
-    private final String yAxisFlipNeededPropertyIri;
-    private final String cwRotationNeededPropertyIri;
+    private final String yAxisFlippedIri;
+    private final String clockwiseRotationIri;
 
     public ArtifactThumbnailRepository(ModelSession modelSession, final Configuration configuration) {
         super(modelSession);
-        this.yAxisFlipNeededPropertyIri = configuration.get("ontology.iri.yAxisFlipNeeded", null);
-        this.cwRotationNeededPropertyIri = configuration.get("ontology.iri.cwRotationNeeded", null);
+        this.yAxisFlippedIri = configuration.get("ontology.iri.media.yAxisFlipped", null);
+        this.clockwiseRotationIri = configuration.get("ontology.iri.media.clockwiseRotation", null);
     }
 
     public abstract BigTableArtifactThumbnail fromRow(Row row);
@@ -53,15 +53,15 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             format = ImageUtils.thumbnailFormat(originalImage);
 
             int cwRotationNeeded = 0;
-            if (cwRotationNeededPropertyIri != null) {
-                Integer nullable = (Integer) artifactVertex.getPropertyValue(cwRotationNeededPropertyIri);
+            if (clockwiseRotationIri != null) {
+                Integer nullable = (Integer) artifactVertex.getPropertyValue(clockwiseRotationIri);
                 if (nullable != null) {
                     cwRotationNeeded = nullable;
                 }
             }
             boolean yAxisFlipNeeded = false;
-            if (yAxisFlipNeededPropertyIri != null) {
-                Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlipNeededPropertyIri);
+            if (yAxisFlippedIri != null) {
+                Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlippedIri);
                 if (nullable != null) {
                     yAxisFlipNeeded = nullable;
                 }
