@@ -140,10 +140,12 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         }
         context.progress();
 
-        Vertex pageVertex = savePage(context, wikipediaPageVertexId, parsePage, pageString);
+        String multiKey = ImportMR.MULTI_VALUE_KEY + '#' + parsePage.getPageTitle();
+
+        Vertex pageVertex = savePage(context, wikipediaPageVertexId, parsePage, pageString, multiKey);
         context.progress();
 
-        savePageLinks(context, pageVertex, textConverter);
+        savePageLinks(context, pageVertex, textConverter, multiKey);
 
         pagesProcessedCounter.increment(1);
     }
@@ -156,8 +158,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         return false;
     }
 
-    private Vertex savePage(Context context, String wikipediaPageVertexId, ParsePage parsePage, String pageString) throws IOException, InterruptedException {
-        String multiKey = ImportMR.MULTI_VALUE_KEY + '#' + parsePage.getPageTitle();
+    private Vertex savePage(Context context, String wikipediaPageVertexId, ParsePage parsePage, String pageString, String multiKey) throws IOException, InterruptedException {
         boolean isRedirect = parsePage.getWikitext().startsWith("REDIRECT:");
 
         StreamingPropertyValue rawPropertyValue = new StreamingPropertyValue(new ByteArrayInputStream(pageString.getBytes()), byte[].class);
@@ -219,14 +220,14 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         return wikitext;
     }
 
-    private void savePageLinks(Context context, Vertex pageVertex, TextConverter textConverter) throws IOException, InterruptedException {
+    private void savePageLinks(Context context, Vertex pageVertex, TextConverter textConverter, String pageTextKey) throws IOException, InterruptedException {
         for (LinkWithOffsets link : getLinks(textConverter)) {
-            savePageLink(context, pageVertex, link);
+            savePageLink(context, pageVertex, link, pageTextKey);
             context.progress();
         }
     }
 
-    private void savePageLink(Context context, Vertex pageVertex, LinkWithOffsets link) throws IOException, InterruptedException {
+    private void savePageLink(Context context, Vertex pageVertex, LinkWithOffsets link, String pageTextKey) throws IOException, InterruptedException {
         String linkTarget = link.getLinkTargetWithoutHash();
         String linkVertexId = ImportMR.getWikipediaPageVertexId(linkTarget);
         context.setStatus(pageVertex.getId() + " [" + linkVertexId + "]");
@@ -249,7 +250,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
                 visibility,
                 authorizations);
 
-        TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId(), "", link.getStartOffset(),
+        TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId(), pageTextKey, link.getStartOffset(),
                 link.getEndOffset()));
         termMention.getMetadata()
                 .setConceptGraphVertexId(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility)
