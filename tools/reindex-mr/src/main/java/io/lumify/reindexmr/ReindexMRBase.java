@@ -52,10 +52,10 @@ public abstract class ReindexMRBase extends LumifyMRBase {
 
     @Override
     protected void parseArgs(JobConf conf, String[] args) {
-        if (args.length < 1) {
+        if (args.length == 1) {
             throw new RuntimeException("Required arguments <vertex|edge>");
         }
-        elementType = ElementType.valueOf(args[args.length - 1].toUpperCase());
+        elementType = ElementType.valueOf(args[0].toUpperCase());
         LOGGER.info("Element type: " + elementType);
     }
 
