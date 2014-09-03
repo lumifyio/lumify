@@ -16,6 +16,8 @@ import java.util.*;
  */
 public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_SOURCE_DIRECTORY = "hdfsLibcache.sourceDirectory";
     public static final String LIB_DIRECTORY = "lib-directory";
@@ -194,11 +196,18 @@ public final class Configuration {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         SortedSet<String> keys = new TreeSet<String>(this.config.keySet());
+
+        boolean first = true;
         for (String key : keys) {
-            if (key.toLowerCase().contains("password")) {
-                sb.append(key).append(": ********\n");
+            if (first) {
+                first = false;
             } else {
-                sb.append(key).append(": ").append(get(key)).append("\n");
+                sb.append(LINE_SEPARATOR);
+            }
+            if (key.toLowerCase().contains("password")) {
+                sb.append(key).append(": ********");
+            } else {
+                sb.append(key).append(": ").append(get(key));
             }
         }
 

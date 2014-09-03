@@ -1,7 +1,7 @@
 # Lumify Features
 
-The following Lumify features are executed within Strom and do not require the installation of additional dependencies.
-Also see [Lumify Dependencies by Feature](dependencies-by-feature.md).
+The following Lumify features are executed within Storm and do not require the installation of additional dependencies.
+Also see [Lumify Dependencies by Feature](dependencies.md#lumify-dependencies-by-feature).
 
 | Category | Feature                                                                              | Lumify Storm Plugins                    | Notes |
 | -------- | ------------------------------------------------------------------------------------ | --------------------------------------- | ----- |

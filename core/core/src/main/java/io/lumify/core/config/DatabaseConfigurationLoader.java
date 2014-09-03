@@ -22,7 +22,14 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
     public static void main(String[] args) {
         DatabaseConfigurationLoader databaseConfigurationLoader = new DatabaseConfigurationLoader(new HashMap());
         Configuration configuration = databaseConfigurationLoader.createConfiguration();
+
+        System.out.println("PROPERTIES:");
         System.out.println(configuration);
+
+        System.out.println("FILES:");
+        for (String fileName : databaseConfigurationLoader.getFileNames()) {
+            System.out.println(fileName);
+        }
     }
 
     /**
@@ -85,6 +92,10 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
         }
 
         return null;
+    }
+
+    private Set<String> getFileNames() {
+        return files.keySet();
     }
 
     private File getBootstrapLocation() {
@@ -177,7 +188,7 @@ public class DatabaseConfigurationLoader extends ConfigurationLoader {
         } catch (SQLException se) {
             throw new LumifyException("error selecting values from the database", se);
         } catch (ClassNotFoundException cnfe) {
-            ClassUtil.logClasspath(this.getClass().getClassLoader());
+            ClassUtil.logClasspath(this.getClass().getClassLoader(), System.err);
             throw new LumifyException("error loading database driver class: " + config.databaseDriverClass, cnfe);
         }
         return map;

@@ -34,8 +34,8 @@ public class ReindexMRElasticSearchParentChild extends ReindexMRBase {
         conf.set("es.input.json", "yes");
         conf.set("es.nodes", conf.get("graph.search.locations"));
         conf.set("es.mapping.id", ES_ID_PROPERTY);
-        conf.set("es.resource.write", conf.get("graph.search.indexName") + "/{" + ES_ELEMENT_TYPE_PROPERTY + "}");
         conf.set("es.mapping.parent", ES_PARENT_PROPERTY);
+        conf.set("es.resource.write", conf.get("graph.search.indexName") + "/{" + ES_ELEMENT_TYPE_PROPERTY + "}");
 
         return conf;
     }

@@ -28,7 +28,7 @@ public abstract class PostMimeTypeWorker {
         StreamingPropertyValue rawValue = LumifyProperties.RAW.getPropertyValue(element);
         InputStream in = rawValue.getInputStream();
         try {
-            File f = File.createTempFile("imageOrientation", "image");
+            File f = File.createTempFile(PostMimeTypeWorker.class.getName() + "-", "-" + element.getId());
             FileOutputStream out = new FileOutputStream(f);
             try {
                 IOUtils.copy(in, out);

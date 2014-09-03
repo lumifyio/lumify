@@ -34,14 +34,15 @@ public abstract class ReindexMRBase extends LumifyMRBase {
                 WorkspaceRepository.VISIBILITY_STRING
         };
 
-        AccumuloVertexInputFormat.setInputInfo(job, graph, getInstanceName(), getZooKeepers(), getPrincipal(), getAuthorizationToken(), authorizations);
         job.setJarByClass(ReindexMRBase.class);
         setupJobMapper(job);
         job.setNumReduceTasks(0);
 
         if (elementType == ElementType.VERTEX) {
+            AccumuloVertexInputFormat.setInputInfo(job, graph, getInstanceName(), getZooKeepers(), getPrincipal(), getAuthorizationToken(), authorizations);
             job.setInputFormatClass(AccumuloVertexInputFormat.class);
         } else if (elementType == ElementType.EDGE) {
+            AccumuloEdgeInputFormat.setInputInfo(job, graph, getInstanceName(), getZooKeepers(), getPrincipal(), getAuthorizationToken(), authorizations);
             job.setInputFormatClass(AccumuloEdgeInputFormat.class);
         } else {
             throw new LumifyException("Unhandled element type: " + elementType);

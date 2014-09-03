@@ -4,15 +4,14 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
 
-public class MakeAndModelUtil {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MakeAndModelUtil.class);
+public class FFprobeMakeAndModelUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FFprobeMakeAndModelUtil.class);
 
-
-    public static String extractMakeFromJSON(JSONObject json) {
+    public static String getMake(JSONObject json) {
         return extractMakeAndModelFromJSON(json, "make", "make-eng");
     }
 
-    public static String extractModelFromJSON(JSONObject json) {
+    public static String getModel(JSONObject json) {
         return extractMakeAndModelFromJSON(json, "model", "model-eng");
     }
 
@@ -38,7 +37,7 @@ public class MakeAndModelUtil {
             }
         }
 
-        LOGGER.debug("Could not extract " + firstSearchString + " or " + secondSearchString + "from json.");
+        LOGGER.debug("Could not extract " + firstSearchString + " or " + secondSearchString + " from json.");
         return null;
     }
 }

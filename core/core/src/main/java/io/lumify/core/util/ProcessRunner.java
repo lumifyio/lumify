@@ -58,6 +58,11 @@ public class ProcessRunner {
             pipe = new Pipe().pipe(proc.getInputStream(), out, statusHandler);
         }
 
+        // Pipe will ensure to some degree that we have started reading but if the process exits at
+        //  just the right time (after threadStarted = true but before the in.read occurs) we could miss the output
+        //  this sleep should be enough to prevent this happening.
+        Thread.sleep(100);
+
         proc.waitFor();
 
         errStreamHelper.join(10000);

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>lumify-gdelt</artifactId>
-    <name>Lumify GDELT</name>
+    <name>Lumify: Datasets: GDELT</name>
 
     <properties>
         <!-- Dependency Versions -->

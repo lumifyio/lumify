@@ -277,7 +277,7 @@ define([
                         .value(),
                 conceptType = F.vertex.prop(vertex, 'conceptType'),
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
-                iconUrl =  '/map/marker/image?' + $.param({
+                iconUrl =  'map/marker/image?' + $.param({
                     type: conceptType,
                     scale: retina.devicePixelRatio > 1 ? '2' : '1'
                 }),
@@ -723,7 +723,8 @@ define([
             } else if (configProperties['map.provider'] == 'ArcGIS93Rest') {
                 var arcgisURL = configProperties['map.provider.ArcGIS93Rest.url'];
                 base = new ol.Layer.ArcGIS93Rest('ArcGIS93Rest', arcgisURL, {
-                   layers: '0,1,2'
+                    layers: '0,1,2',
+                    format: 'png24'
                 });
             } else {
               console.error('Unknown map provider type: ', configProperties['map.provider']);

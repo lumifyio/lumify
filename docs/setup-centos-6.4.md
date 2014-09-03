@@ -22,7 +22,7 @@
 
 ## Install Dependencies
 
-See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional optional dependencies.
+See [Lumify Dependencies by Feature](dependencies.md) for additional optional dependencies.
 
 ### Java 6
 
@@ -390,9 +390,9 @@ See [Lumify Dependencies by Feature](dependencies-by-feature.md) for additional 
         mvn package -pl storm/storm -am
 
         # exclude plugins that require optional dependencies that these instructions have not installed
-        # see https://github.com/lumifyio/lumify/blob/master/docs/dependencies-by-feature.md
+        # see https://github.com/lumifyio/lumify/blob/master/docs/dependencies.md
         #
-        excluded_plugins=$(cat docs/dependencies-by-feature.md | awk -F '|' '$2 ~ /text|media/ && $4 !~ /n\/a/ {print $4}' | sed -e 's/^ *//' -e 's/ *$//' -e 's| *<br */> *| |')
+        excluded_plugins=$(cat docs/dependencies.md | awk -F '|' '$2 ~ /text|media/ && $4 !~ /n\/a/ {print $4}' | sed -e 's/^ *//' -e 's/ *$//' -e 's| *<br */> *| |')
         find_opts=$(echo $(echo $excluded_plugins) | sed -E 's/^| / ! -name /g')
         plugins=$(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ${find_opts} ) | sed -e 's/ /,/g')
 

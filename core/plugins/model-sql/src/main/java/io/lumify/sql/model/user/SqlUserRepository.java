@@ -6,6 +6,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.*;
 import io.lumify.core.user.Privilege;
+import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -244,14 +245,15 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void setUiPreferences(User user, JSONObject preferences) {
+        SqlUser sqlUser = sqlUser(user);
         Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
 
-            ((SqlUser) user).setUiPreferences(preferences);
+            sqlUser.setUiPreferences(preferences);
 
-            session.update(user);
+            session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -348,6 +350,14 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while setting privileges", e);
+        }
+    }
+
+    private SqlUser sqlUser(User user) {
+        if (user instanceof ProxyUser) {
+            return (SqlUser) ((ProxyUser) user).getProxiedUser();
+        } else {
+            return (SqlUser) user;
         }
     }
 }

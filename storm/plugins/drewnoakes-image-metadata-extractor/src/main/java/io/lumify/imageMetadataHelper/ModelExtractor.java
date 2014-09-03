@@ -4,9 +4,6 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.xmp.XmpDirectory;
 
-/**
- * Created by jon.hellmann on 6/20/14.
- */
 public class ModelExtractor {
 
     /**

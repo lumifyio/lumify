@@ -20,16 +20,19 @@ import java.util.Map;
 
 public class ReindexMRMapper extends Mapper<Text, Element, Object, Element> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReindexMRMapper.class);
-    private static final int BATCH_SIZE = 100;
+    private static final int DEFAULT_BATCH_SIZE = 100;
     private AccumuloGraph graph;
     private Authorizations authorizations;
-    private List<Element> elementCache = new ArrayList<Element>(BATCH_SIZE);
+    private List<Element> elementCache;
+    private int batchSize;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
         LOGGER.info("setup: " + toString(context.getInputSplit().getLocations()));
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
+        batchSize = context.getConfiguration().getInt("reindex.batchsize", DEFAULT_BATCH_SIZE);
+        elementCache = new ArrayList<Element>(batchSize);
         this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
         this.authorizations = new AccumuloAuthorizations(context.getConfiguration().getStrings(SecureGraphMRUtils.CONFIG_AUTHORIZATIONS));
     }
@@ -55,12 +58,21 @@ public class ReindexMRMapper extends Mapper<Text, Element, Object, Element> {
 
     @Override
     protected void map(Text rowKey, Element element, Context context) throws IOException, InterruptedException {
+        try {
+            safeMap(element, context);
+        } catch (Throwable ex) {
+            LOGGER.error("Failed to process element", ex);
+        }
+    }
+
+    private void safeMap(Element element, Context context) {
         if (element == null) {
             return;
         }
         context.setStatus("Element Id: " + element.getId());
         elementCache.add(element);
-        if (elementCache.size() >= BATCH_SIZE) {
+        if (elementCache.size() >= batchSize) {
+            context.setStatus("Submitting batch: " + elementCache.size());
             writeCache();
         }
         context.getCounter(ReindexCounters.ELEMENTS_PROCESSED).increment(1);

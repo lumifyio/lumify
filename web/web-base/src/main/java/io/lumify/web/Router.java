@@ -158,7 +158,6 @@ public class Router extends HttpServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse resp) throws ServletException, IOException {
-        long startTime = System.currentTimeMillis();
         try {
             if (req.getContentType() != null && req.getContentType().startsWith("multipart/form-data")) {
                 req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
@@ -169,14 +168,6 @@ public class Router extends HttpServlet {
             app.handle((HttpServletRequest) req, httpResponse);
         } catch (Exception e) {
             throw new ServletException(e);
-        } finally {
-            long endTime = System.currentTimeMillis();
-            if (req instanceof HttpServletRequest) {
-                HttpServletRequest r = (HttpServletRequest) req;
-                LOGGER_ACCESS.info(r.getRequestURL().toString() + " (time: %dms)", endTime - startTime);
-            } else {
-                LOGGER_ACCESS.info("non-http request (time: %dms)", endTime - startTime);
-            }
         }
     }
 }
