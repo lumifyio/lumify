@@ -38,6 +38,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     public static final String ID_PREFIX_PROPERTY = ID_PREFIX + "prop_";
     public static final String ID_PREFIX_RELATIONSHIP = ID_PREFIX + "rel_";
     public static final String ID_PREFIX_CONCEPT = ID_PREFIX + "concept_";
+    private static final int QUERY_LIMIT = 10000;
     private Graph graph;
     private Authorizations authorizations;
     private Cache<String, List<Concept>> allConceptsWithPropertiesCache = CacheBuilder.newBuilder()
@@ -160,7 +161,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                 public List<Relationship> callWithTime() throws Exception {
                     Iterable<Vertex> vertices = graph.query(getAuthorizations())
                             .has(CONCEPT_TYPE.getPropertyName(), TYPE_RELATIONSHIP)
-                            .limit(10000)
+                            .limit(QUERY_LIMIT)
                             .vertices();
 
                     return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
@@ -217,6 +218,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                 public List<OntologyProperty> callWithTime() throws Exception {
                     return toList(new ConvertingIterable<Vertex, OntologyProperty>(graph.query(getAuthorizations())
                             .has(CONCEPT_TYPE.getPropertyName(), TYPE_PROPERTY)
+                            .limit(QUERY_LIMIT)
                             .vertices()) {
                         @Override
                         protected OntologyProperty convert(Vertex vertex) {
@@ -236,6 +238,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Vertex propVertex = singleOrDefault(graph.query(getAuthorizations())
                     .has(CONCEPT_TYPE.getPropertyName(), TYPE_PROPERTY)
                     .has(ONTOLOGY_TITLE.getPropertyName(), propertyIRI)
+                    .limit(QUERY_LIMIT)
                     .vertices(), null);
             return propVertex != null ? new SecureGraphOntologyProperty(propVertex) : null;
         } catch (IllegalArgumentException iae) {
@@ -248,6 +251,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         Vertex relationshipVertex = singleOrDefault(graph.query(getAuthorizations())
                 .has(CONCEPT_TYPE.getPropertyName(), TYPE_RELATIONSHIP)
                 .has(ONTOLOGY_TITLE.getPropertyName(), relationshipIRI)
+                .limit(QUERY_LIMIT)
                 .vertices(), null);
         if (relationshipVertex == null) {
             return null;
@@ -290,6 +294,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Iterable<Concept> getConcepts(final boolean withProperties) {
         return new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
                 .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
+                .limit(QUERY_LIMIT)
                 .vertices()) {
             @Override
             protected Concept convert(Vertex vertex) {
@@ -343,6 +348,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         Vertex conceptVertex = singleOrDefault(graph.query(getAuthorizations())
                 .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
                 .has(ONTOLOGY_TITLE.getPropertyName(), conceptIRI)
+                .limit(QUERY_LIMIT)
                 .vertices(), null);
         return conceptVertex != null ? new SecureGraphConcept(conceptVertex) : null;
     }

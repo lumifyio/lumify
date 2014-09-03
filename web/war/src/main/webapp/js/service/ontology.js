@@ -81,7 +81,7 @@ define([
                         }
                         findChildrenForNode(child);
                     });
-                }
+                };
 
             findChildrenForNode(root);
 
@@ -94,6 +94,11 @@ define([
 
             while (parentConceptId) {
                 currentParentConcept = conceptsById[parentConceptId];
+                if (!currentParentConcept) {
+                    console.error('Could not trace concept\'s lineage to ' + PARENT_CONCEPT +
+                        ' could not find ' + parentConceptId, concept);
+                    return false;
+                }
                 if (currentParentConcept.id === PARENT_CONCEPT) {
                     return true;
                 }

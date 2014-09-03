@@ -394,10 +394,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     private Iterable<Concept> getRangesConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
-        if (objectProperty.getRanges(o).size() == 0) {
-            throw new LumifyException("Invalid number of range properties on " + uri);
-        }
-
         List<Concept> ranges = new ArrayList<Concept>();
         for (OWLClassExpression rangeClassExpr : objectProperty.getRanges(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
@@ -411,13 +407,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     private Iterable<Concept> getDomainsConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
-        if (objectProperty.getDomains(o).size() == 0) {
-            throw new LumifyException("Invalid number of domain properties on " + uri);
-        }
-
         List<Concept> domains = new ArrayList<Concept>();
-        for (OWLClassExpression rangeClassExpr : objectProperty.getDomains(o)) {
-            OWLClass rangeClass = rangeClassExpr.asOWLClass();
+        for (OWLClassExpression domainClassExpr : objectProperty.getDomains(o)) {
+            OWLClass rangeClass = domainClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
             Concept ontologyClass = getConceptByIRI(rangeClassUri);
             checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
@@ -450,10 +442,22 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         if ("http://www.w3.org/2001/XMLSchema#dateTime".equals(iri)) {
             return PropertyType.DATE;
         }
+        if ("http://www.w3.org/2001/XMLSchema#date".equals(iri)) {
+            return PropertyType.DATE;
+        }
+        if ("http://www.w3.org/2001/XMLSchema#gYear".equals(iri)) {
+            return PropertyType.DATE;
+        }
+        if ("http://www.w3.org/2001/XMLSchema#gYearMonth".equals(iri)) {
+            return PropertyType.DATE;
+        }
         if ("http://www.w3.org/2001/XMLSchema#int".equals(iri)) {
             return PropertyType.DOUBLE;
         }
         if ("http://www.w3.org/2001/XMLSchema#double".equals(iri)) {
+            return PropertyType.DOUBLE;
+        }
+        if ("http://www.w3.org/2001/XMLSchema#float".equals(iri)) {
             return PropertyType.DOUBLE;
         }
         if ("http://lumify.io#geolocation".equals(iri)) {
@@ -474,17 +478,27 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         if ("http://www.w3.org/2001/XMLSchema#integer".equals(iri)) {
             return PropertyType.INTEGER;
         }
+        if ("http://www.w3.org/2001/XMLSchema#nonNegativeInteger".equals(iri)) {
+            return PropertyType.INTEGER;
+        }
+        if ("http://www.w3.org/2001/XMLSchema#positiveInteger".equals(iri)) {
+            return PropertyType.INTEGER;
+        }
         throw new LumifyException("Unhandled property type " + iri);
     }
 
     public static String getLabel(OWLOntology o, OWLEntity owlEntity) {
+        String bestLabel = owlEntity.getIRI().toString();
         for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
             if (annotation.getProperty().isLabel()) {
                 OWLLiteral value = (OWLLiteral) annotation.getValue();
-                return value.getLiteral();
+                bestLabel = value.getLiteral();
+                if (value.getLang() != null && value.getLang().equals("en")) {
+                    return bestLabel;
+                }
             }
         }
-        return owlEntity.getIRI().toString();
+        return bestLabel;
     }
 
     protected String getColor(OWLOntology o, OWLEntity owlEntity) {
