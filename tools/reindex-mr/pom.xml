@@ -88,11 +88,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptor>src/main/assembly/descriptor.xml</descriptor>
-                    <archive>
-                        <manifest>
-                            <mainClass>io.lumify.reindexmr.ReindexMR</mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
                 <executions>
                     <execution>
