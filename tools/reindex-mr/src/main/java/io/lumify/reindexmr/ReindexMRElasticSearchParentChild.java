@@ -30,7 +30,7 @@ public class ReindexMRElasticSearchParentChild extends ReindexMRBase {
         JobConf conf = super.getConfiguration(args, lumifyConfig);
 
         conf.setSpeculativeExecution(false);
-        conf.set("es.index.auto.create", "no");
+        conf.set("es.index.auto.create", "yes"); // this is required to be 'yes' because of a bug in ES hadoop code not handling URIs correctly.
         conf.set("es.input.json", "yes");
         conf.set("es.nodes", conf.get("graph.search.locations"));
         conf.set("es.mapping.id", ES_ID_PROPERTY);
