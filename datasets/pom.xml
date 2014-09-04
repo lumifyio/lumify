@@ -21,5 +21,6 @@
         <module>world-factbook</module>
         <module>gdelt</module>
         <module>the-movie-db</module>
+        <module>dbpedia</module>
     </modules>
 </project>

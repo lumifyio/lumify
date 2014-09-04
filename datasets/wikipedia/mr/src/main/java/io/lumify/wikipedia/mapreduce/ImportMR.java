@@ -42,24 +42,9 @@ import java.util.List;
 public class ImportMR extends LumifyMRBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImportMR.class);
     public static final String WIKIPEDIA_MIME_TYPE = "text/plain";
-    public static final String WIKIPEDIA_SOURCE = "Wikipedia";
-    public static final String WIKIPEDIA_ID_PREFIX = "WIKIPEDIA_";
-    public static final String WIKIPEDIA_LINK_ID_PREFIX = "WIKIPEDIA_LINK_";
     public static final String MULTI_VALUE_KEY = ImportMR.class.getName();
 
     private OntologyRepository ontologyRepository;
-
-    static String getWikipediaPageVertexId(String pageTitle) {
-        return WIKIPEDIA_ID_PREFIX + pageTitle.trim().toLowerCase();
-    }
-
-    static String getWikipediaPageToPageEdgeId(Vertex pageVertex, Vertex linkedPageVertex) {
-        return WIKIPEDIA_LINK_ID_PREFIX + getWikipediaPageTitleFromId(pageVertex.getId()) + "_" + getWikipediaPageTitleFromId(linkedPageVertex.getId());
-    }
-
-    static String getWikipediaPageTitleFromId(Object id) {
-        return id.toString().substring(WIKIPEDIA_ID_PREFIX.length());
-    }
 
     @Override
     protected void setupJob(Job job) throws Exception {

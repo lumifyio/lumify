@@ -127,7 +127,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
             return;
         }
 
-        String wikipediaPageVertexId = ImportMR.getWikipediaPageVertexId(parsePage.getPageTitle());
+        String wikipediaPageVertexId = WikipediaConstants.getWikipediaPageVertexId(parsePage.getPageTitle());
         context.setStatus(wikipediaPageVertexId);
 
         try {
@@ -171,7 +171,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         LumifyProperties.CONCEPT_TYPE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
         LumifyProperties.MIME_TYPE.setProperty(pageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
         LumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
-        LumifyProperties.SOURCE.setProperty(pageVertexBuilder, ImportMR.WIKIPEDIA_SOURCE, visibility);
+        LumifyProperties.SOURCE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_SOURCE, visibility);
 
         Map<String, Object> rawMetadata = new HashMap<String, Object>();
         LumifyProperties.CONFIDENCE.setMetadata(rawMetadata, isRedirect ? 0.3 : 0.4);
@@ -229,12 +229,12 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
 
     private void savePageLink(Context context, Vertex pageVertex, LinkWithOffsets link, String pageTextKey) throws IOException, InterruptedException {
         String linkTarget = link.getLinkTargetWithoutHash();
-        String linkVertexId = ImportMR.getWikipediaPageVertexId(linkTarget);
+        String linkVertexId = WikipediaConstants.getWikipediaPageVertexId(linkTarget);
         context.setStatus(pageVertex.getId() + " [" + linkVertexId + "]");
         VertexBuilder linkedPageVertexBuilder = prepareVertex(linkVertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
         LumifyProperties.MIME_TYPE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
-        LumifyProperties.SOURCE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_SOURCE, visibility);
+        LumifyProperties.SOURCE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_SOURCE, visibility);
         LumifyProperties.FILE_NAME.setProperty(linkedPageVertexBuilder, sourceFileName, visibility);
 
         Map<String, Object> titleMetadata = new HashMap<String, Object>();
@@ -243,7 +243,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         LumifyProperties.TITLE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY + "#" + linkTargetHash, linkTarget, titleMetadata, visibility);
 
         Vertex linkedPageVertex = linkedPageVertexBuilder.save(authorizations);
-        Edge edge = addEdge(ImportMR.getWikipediaPageToPageEdgeId(pageVertex, linkedPageVertex),
+        Edge edge = addEdge(WikipediaConstants.getWikipediaPageToPageEdgeId(pageVertex, linkedPageVertex),
                 pageVertex,
                 linkedPageVertex,
                 WikipediaConstants.WIKIPEDIA_PAGE_INTERNAL_LINK_WIKIPEDIA_PAGE_CONCEPT_URI,
