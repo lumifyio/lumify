@@ -59,4 +59,8 @@ public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMap
     protected IdGenerator getIdGenerator() {
         return this.graph.getIdGenerator();
     }
+
+    public AccumuloGraph getGraph() {
+        return graph;
+    }
 }
