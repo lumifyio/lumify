@@ -7,6 +7,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -120,6 +121,7 @@ public final class Configuration {
 
     public void setConfigurables(Object o, Map<String, String> config) {
         ConvertUtilsBean convertUtilsBean = new ConvertUtilsBean();
+        Map<Method, PostConfigurationValidator> validatorMap = new HashMap<Method, PostConfigurationValidator>();
 
         for (Method m : o.getClass().getMethods()) {
             Configurable configurableAnnotation = m.getAnnotation(Configurable.class);
@@ -161,6 +163,31 @@ public final class Configuration {
                 } catch (Exception ex) {
                     throw new LumifyException("Could not set property " + m.getName() + " on " + o.getClass().getName());
                 }
+            }
+
+            PostConfigurationValidator validatorAnnotation = m.getAnnotation(PostConfigurationValidator.class);
+            if (validatorAnnotation != null) {
+                if (m.getParameterTypes().length != 0) {
+                    throw new LumifyException("Invalid validator method " + o.getClass().getName() + "." + m.getName() + "(). Expected 0 arguments. Found " + m.getParameterTypes().length + " arguments");
+                }
+                if (m.getReturnType() != Boolean.TYPE) {
+                    throw new LumifyException("Invalid validator method " + o.getClass().getName() + "." + m.getName() + "(). Expected Boolean return type. Found " + m.getReturnType());
+                }
+                validatorMap.put(m, validatorAnnotation);
+            }
+        }
+
+        for (Method method : validatorMap.keySet()) {
+            try {
+                if (!(Boolean) method.invoke(o)) {
+                    String description = validatorMap.get(method).description();
+                    description = description.equals("") ? "()" : "(" + description + ")";
+                    throw new LumifyException(o.getClass().getName() + "." + method.getName() + description + " returned false");
+                }
+            } catch (InvocationTargetException e) {
+                throw new LumifyException("InvocationTargetException invoking validator " + o.getClass().getName() + "." + method.getName(), e);
+            } catch (IllegalAccessException e) {
+                throw new LumifyException("IllegalAccessException invoking validator " + o.getClass().getName() + "." + method.getName(), e);
             }
         }
     }
