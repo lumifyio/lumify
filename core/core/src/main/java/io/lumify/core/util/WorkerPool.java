@@ -15,7 +15,7 @@ public class WorkerPool {
     public WorkerPool(int nThreads) {
         LOGGER.debug("initializing worker pool with %d threads", nThreads);
 
-        executorService = Executors.newFixedThreadPool(nThreads);
+        executorService = LOGGER.isDebugEnabled() ? new MetricReportingExecutorService(LOGGER, nThreads) : Executors.newFixedThreadPool(nThreads);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -53,7 +53,7 @@ public class WorkerPool {
      * @return the return values of each {@link Callable}s mapped by their input key
      */
     public <K, V> Map<K, V> invokeAll(Map<K, Callable<V>> tasks) {
-        String caller = LOGGER.isDebugEnabled() ? Thread.currentThread().getStackTrace()[2].toString() : "caller unavailable";
+        String caller = LOGGER.isDebugEnabled() ? Thread.currentThread().getStackTrace()[2].toString() : "n/a";
         LOGGER.debug("[%s] is invoking %d mapped tasks", caller, tasks.size());
 
         List<K> orderedKeys = new ArrayList<K>(tasks.size());
@@ -90,7 +90,7 @@ public class WorkerPool {
      * @return the ordered return values
      */
     public <T> List<T> invokeAll(List<Callable<T>> tasks) {
-        String caller = LOGGER.isDebugEnabled() ? Thread.currentThread().getStackTrace()[2].toString() : "caller unavailable";
+        String caller = LOGGER.isDebugEnabled() ? Thread.currentThread().getStackTrace()[2].toString() : "n/a";
         LOGGER.debug("[%s] is invoking %d listed tasks", caller, tasks.size());
 
         try {
