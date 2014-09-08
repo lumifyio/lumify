@@ -25,6 +25,10 @@ public class VideoPostMimeTypeWorker extends PostMimeTypeWorker {
 
     @Override
     public void execute(String mimeType, GraphPropertyWorkData data, Authorizations authorizations) throws Exception {
+        if (!mimeType.startsWith("video")) {
+            return;
+        }
+
         File localFile = getLocalFileForRaw(data.getElement());
         JSONObject videoMetadata = FFprobeExecutor.getJson(processRunner, localFile.getAbsolutePath());
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
