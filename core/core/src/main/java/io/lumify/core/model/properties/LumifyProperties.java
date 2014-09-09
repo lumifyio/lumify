@@ -1,7 +1,6 @@
 package io.lumify.core.model.properties;
 
 import io.lumify.core.model.properties.types.*;
-import org.apache.avro.data.Json;
 
 public class LumifyProperties {
     public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
@@ -21,6 +20,7 @@ public class LumifyProperties {
     public static final DoubleLumifyProperty CONFIDENCE = new DoubleLumifyProperty("http://lumify.io#confidence");
 
     public static final JsonLumifyProperty POSSIBLE_VALUES = new JsonLumifyProperty("http://lumify.io#possibleValues");
+    public static final JsonLumifyProperty VISIBILITY_SOURCE = new JsonLumifyProperty("http://lumify.io#visibilitySource");
 
     public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#glyphIcon");
     public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#mapGlyphIcon");
@@ -56,7 +56,15 @@ public class LumifyProperties {
     public static final StringLumifyProperty TIME_FORMULA = new StringLumifyProperty("http://lumify.io#timeFormula");
     public static final StringLumifyProperty TITLE = new StringLumifyProperty("http://lumify.io#title");
     public static final StringLumifyProperty TITLE_FORMULA = new StringLumifyProperty("http://lumify.io#titleFormula");
+
     public static final DetectedObjectProperty DETECTED_OBJECT = new DetectedObjectProperty("http://lumify.io#detectedObject");
+
+    public static final IntegerLumifyProperty TERM_MENTION_START_OFFSET = new IntegerLumifyProperty("http://lumify.io/termMention#startOffset");
+    public static final IntegerLumifyProperty TERM_MENTION_END_OFFSET = new IntegerLumifyProperty("http://lumify.io/termMention#endOffset");
+    public static final StringLumifyProperty TERM_MENTION_PROCESS = new StringLumifyProperty("http://lumify.io/termMention#process");
+    public static final StringLumifyProperty TERM_MENTION_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/termMention#propertyKey");
+    public static final String TERM_MENTION_LABEL_HAS_TERM_MENTION = "http://lumify.io/termMention#hasTermMention";
+    public static final String TERM_MENTION_LABEL_RESOLVED_TO = "http://lumify.io/termMention#resolvedTo";
 
     private LumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import io.lumify.core.ingest.term.extraction.TermExtractionResult;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import org.apache.commons.io.IOUtils;
@@ -54,8 +53,7 @@ public class DocumentMappingGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private void executeTermExtraction(InputStream in, GraphPropertyWorkData data, DocumentMapping mapping) throws IOException {
-        TermExtractionResult termExtractionResult = mapping.mapDocument(new InputStreamReader(in), getClass().getName(), data.getProperty().getKey(), data.getVisibility());
-        saveTermExtractionResult((Vertex) data.getElement(), termExtractionResult, data.getWorkspaceId(), data.getVisibilitySource());
+        throw new RuntimeException("not implemented");
     }
 
     @Override

@@ -6,8 +6,9 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
-import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import org.apache.hadoop.fs.FileSystem;
 import org.junit.Before;
@@ -15,10 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
-import org.securegraph.VertexBuilder;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 import org.securegraph.inmemory.InMemoryGraph;
 import org.securegraph.property.StreamingPropertyValue;
@@ -47,8 +45,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
     private InMemoryAuthorizations authorizations;
     private InMemoryGraph graph;
     private Visibility visibility;
-    private List<TermMention> termMentions;
-
+    private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
 
     @Before
     public void setUp() throws Exception {
@@ -59,17 +56,11 @@ public class PhoneNumberGraphPropertyWorkerTest {
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         config.put(PhoneNumberGraphPropertyWorker.CONFIG_PHONE_NUMBER_IRI, "http://lumify.io/test#phoneNumber");
-        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();;
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
-        extractor = new PhoneNumberGraphPropertyWorker() {
-            @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
-                                                                        String workspaceId, String visibilitySource) {
-                PhoneNumberGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
-                return null;
-            }
-        };
+        extractor = new PhoneNumberGraphPropertyWorker();
         extractor.setConfiguration(configuration);
+        extractor.setVisibilityTranslator(visibilityTranslator);
 
         FileSystem hdfsFileSystem = null;
         authorizations = new InMemoryAuthorizations();
@@ -96,16 +87,26 @@ public class PhoneNumberGraphPropertyWorkerTest {
         in = asStream(PHONE_TEXT);
         extractor.execute(in, workData);
 
-        assertEquals("Incorrect number of phone numbers extracted", 2, termMentions.size());
-        TermMention firstTerm = termMentions.get(0);
-        assertEquals("First phone number not correctly extracted", "+14106782230", firstTerm.getSign());
-        assertEquals(33, firstTerm.getStart());
-        assertEquals(45, firstTerm.getEnd());
+        List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizations));
 
-        TermMention secondTerm = termMentions.get(1);
-        assertEquals("Second phone number not correctly extracted", "+442074370478", secondTerm.getSign());
-        assertEquals(84, secondTerm.getStart());
-        assertEquals(103, secondTerm.getEnd());
+        assertEquals("Incorrect number of phone numbers extracted", 2, termMentions.size());
+
+        boolean foundFirst = false;
+        boolean foundSecond = false;
+        for (Vertex term : termMentions) {
+            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            if (title.equals("+14106782230")) {
+                foundFirst = true;
+                assertEquals(33, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));
+                assertEquals(45, LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(term, 0));
+            } else if (title.equals("+442074370478")) {
+                foundSecond = true;
+                assertEquals(84, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));
+                assertEquals(103, LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(term, 0));
+            }
+        }
+        assertTrue("+14106782230 not found", foundFirst);
+        assertTrue("+442074370478 not found", foundSecond);
     }
 
     @Test
@@ -121,16 +122,26 @@ public class PhoneNumberGraphPropertyWorkerTest {
         in = asStream(PHONE_NEW_LINES);
         extractor.execute(in, workData);
 
-        assertEquals("Incorrect number of phone numbers extracted", 2, termMentions.size());
-        TermMention firstTerm = termMentions.get(0);
-        assertEquals("First phone number not correctly extracted", "+14106782230", firstTerm.getSign());
-        assertEquals(34, firstTerm.getStart());
-        assertEquals(46, firstTerm.getEnd());
+        List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizations));
 
-        TermMention secondTerm = termMentions.get(1);
-        assertEquals("Second phone number not correctly extracted", "+442074370478", secondTerm.getSign());
-        assertEquals(86, secondTerm.getStart());
-        assertEquals(105, secondTerm.getEnd());
+        assertEquals("Incorrect number of phone numbers extracted", 2, termMentions.size());
+
+        boolean foundFirst = false;
+        boolean foundSecond = false;
+        for (Vertex term : termMentions) {
+            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            if (title.equals("+14106782230")) {
+                foundFirst = true;
+                assertEquals(34, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));
+                assertEquals(46, LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(term, 0));
+            } else if (title.equals("+442074370478")) {
+                foundSecond = true;
+                assertEquals(86, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));
+                assertEquals(105, LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(term, 0));
+            }
+        }
+        assertTrue("+14106782230 not found", foundFirst);
+        assertTrue("+442074370478 not found", foundSecond);
     }
 
     @Test
@@ -145,6 +156,8 @@ public class PhoneNumberGraphPropertyWorkerTest {
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         in = asStream(PHONE_MISSING);
         extractor.execute(in, workData);
+
+        List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizations));
 
         assertTrue("Phone number extracted when there were no phone numbers", termMentions.isEmpty());
     }

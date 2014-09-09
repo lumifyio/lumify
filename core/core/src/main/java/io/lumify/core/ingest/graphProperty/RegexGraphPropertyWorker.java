@@ -2,7 +2,7 @@ package io.lumify.core.ingest.graphProperty;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.TermMentionBuilder;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
@@ -10,12 +10,9 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import org.securegraph.Visibility;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,26 +40,18 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         final Matcher matcher = pattern.matcher(text);
 
-        List<TermMention> termMentions = new ArrayList<TermMention>();
+        Vertex v = (Vertex) data.getElement();
+
         while (matcher.find()) {
-            TermMention termMention = createTerm(matcher, data.getProperty().getKey(), data.getVisibility());
-            termMentions.add(termMention);
+            final String patternGroup = matcher.group();
+            int start = matcher.start();
+            int end = matcher.end();
+
+            new TermMentionBuilder(v, data.getProperty().getKey(), start, end, patternGroup, getOntologyClassUri(), data.getVisibilitySource())
+                    .process(getClass().getName())
+                    .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
         }
-        Vertex v = (Vertex)data.getElement();
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
-        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
-    }
-
-    private TermMention createTerm(final Matcher matched, String propertyKey, Visibility visibility) {
-        final String patternGroup = matched.group();
-        int start = matched.start();
-        int end = matched.end();
-
-        return new TermMention.Builder(start, end, patternGroup, getOntologyClassUri(), propertyKey, visibility)
-                .resolved(false)
-                .useExisting(true)
-                .process(getClass().getName())
-                .build();
     }
 
     @Override

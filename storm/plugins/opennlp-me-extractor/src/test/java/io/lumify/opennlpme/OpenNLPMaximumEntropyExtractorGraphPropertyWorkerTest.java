@@ -5,7 +5,9 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
-import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -15,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.Direction;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.inmemory.InMemoryAuthorizations;
@@ -45,10 +48,9 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
             + "a year. If by 1:30, you don't know what you are doing, you should go watch CNN and see "
             + "what the latest is on the Benghazi nonsense. I'm 47% sure that this test will pass, but will it?";
 
-    List<TermMention> termMentions;
-
     private InMemoryAuthorizations authorizations;
     private InMemoryGraph graph;
+    private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
 
     @Before
     public void setUp() throws Exception {
@@ -58,14 +60,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
-        extractor = new OpenNLPMaximumEntropyExtractorGraphPropertyWorker() {
-            @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
-                                                                        String workspaceId, String visibilitySource) {
-                OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
-                return null;
-            }
-        };
+        extractor = new OpenNLPMaximumEntropyExtractorGraphPropertyWorker();
         extractor.setConfiguration(configuration);
         extractor.setGraph(graph);
 
@@ -90,25 +85,42 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
                 .save(new InMemoryAuthorizations());
 
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
+        extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.execute(new ByteArrayInputStream(text.getBytes("UTF-8")), workData);
-        HashMap<String, TermMention> extractedTerms = new HashMap<String, TermMention>();
-        for (TermMention term : termMentions) {
-            extractedTerms.put(term.getSign() + "-" + term.getOntologyClassUri(), term);
+
+        List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizations));
+
+        assertEquals(3, termMentions.size());
+
+        boolean foundBobRobertson = false;
+        boolean foundBenghazi = false;
+        boolean foundCnn = false;
+        for (Vertex termMention : termMentions) {
+            String title = LumifyProperties.TITLE.getPropertyValue(termMention);
+
+            int start = LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention);
+            int end = LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(termMention);
+            String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention);
+
+            if (title.equals("Bob Robértson")) {
+                foundBobRobertson = true;
+                assertEquals("http://lumify.io/test#person", conceptType);
+                assertEquals(31, start);
+                assertEquals(44, end);
+            } else if (title.equals("Benghazi")) {
+                foundBenghazi = true;
+                assertEquals("http://lumify.io/test#location", conceptType);
+                assertEquals(189, start);
+                assertEquals(197, end);
+            } else if (title.equals("CNN")) {
+                foundCnn = true;
+                assertEquals("http://lumify.io/test#organization", conceptType);
+                assertEquals(151, start);
+                assertEquals(154, end);
+            }
         }
-        assertTrue("A person wasn't found", extractedTerms.containsKey("Bob Robértson-http://lumify.io/test#person"));
-        TermMention bobRobertsonMentions = extractedTerms.get("Bob Robértson-http://lumify.io/test#person");
-        assertEquals(31, bobRobertsonMentions.getStart());
-        assertEquals(44, bobRobertsonMentions.getEnd());
-
-
-        assertTrue("A location wasn't found", extractedTerms.containsKey("Benghazi-http://lumify.io/test#location"));
-        TermMention benghaziMentions = extractedTerms.get("Benghazi-http://lumify.io/test#location");
-        assertEquals(189, benghaziMentions.getStart());
-        assertEquals(197, benghaziMentions.getEnd());
-
-        assertTrue("An organization wasn't found", extractedTerms.containsKey("CNN-http://lumify.io/test#organization"));
-        TermMention cnnMentions = extractedTerms.get("CNN-http://lumify.io/test#organization");
-        assertEquals(151, cnnMentions.getStart());
-        assertEquals(154, cnnMentions.getEnd());
+        assertTrue("could not find bob robertson", foundBobRobertson);
+        assertTrue("could not find benghazi", foundBenghazi);
+        assertTrue("could not find cnn", foundCnn);
     }
 }

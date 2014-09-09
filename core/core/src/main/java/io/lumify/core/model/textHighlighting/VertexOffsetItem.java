@@ -1,31 +1,38 @@
 package io.lumify.core.model.textHighlighting;
 
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.termMention.TermMentionModel;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.Authorizations;
+import org.securegraph.Direction;
+import org.securegraph.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TermMentionOffsetItem extends OffsetItem {
-    private final TermMentionModel termMention;
-    private final SandboxStatus sandboxStatus;
+import static org.securegraph.util.IterableUtils.singleOrDefault;
 
-    public TermMentionOffsetItem(TermMentionModel termMention, SandboxStatus sandboxStatus) {
+public class VertexOffsetItem extends OffsetItem {
+    private final Vertex termMention;
+    private final SandboxStatus sandboxStatus;
+    private final Authorizations authorizations;
+
+    public VertexOffsetItem(Vertex termMention, SandboxStatus sandboxStatus, Authorizations authorizations) {
         this.termMention = termMention;
         this.sandboxStatus = sandboxStatus;
+        this.authorizations = authorizations;
     }
 
     @Override
     public long getStart() {
-        return termMention.getRowKey().getStartOffset();
+        return LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention, 0);
     }
 
     @Override
     public long getEnd() {
-        return termMention.getRowKey().getEndOffset();
+        return LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(termMention, 0);
     }
 
     @Override
@@ -33,28 +40,28 @@ public class TermMentionOffsetItem extends OffsetItem {
         return OntologyRepository.ENTITY_CONCEPT_IRI;
     }
 
-    public String getConceptGraphVertexId() {
-        return termMention.getMetadata().getConceptGraphVertexId();
+    public String getConceptIri() {
+        return LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention);
     }
 
     @Override
-    public String getRowKey() {
-        return termMention.getRowKey().toString();
+    public String getId() {
+        return termMention.getId();
     }
 
     @Override
     public String getProcess() {
-        return termMention.getMetadata().getAnalyticProcess();
+        return LumifyProperties.TERM_MENTION_PROCESS.getPropertyValue(termMention);
     }
 
     @Override
-    public String getGraphVertexId() {
-        return termMention.getMetadata().getGraphVertexId();
+    public String getSourceVertexId() {
+        return singleOrDefault(termMention.getVertexIds(Direction.IN, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, this.authorizations), null);
     }
 
     @Override
-    public String getEdgeId() {
-        return termMention.getMetadata().getEdgeId();
+    public String getResolvedToVertexId() {
+        return singleOrDefault(termMention.getVertexIds(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, this.authorizations), null);
     }
 
     @Override
@@ -63,7 +70,7 @@ public class TermMentionOffsetItem extends OffsetItem {
     }
 
     public String getTitle() {
-        return termMention.getMetadata().getSign();
+        return LumifyProperties.TITLE.getPropertyValue(termMention);
     }
 
     @Override
@@ -81,8 +88,8 @@ public class TermMentionOffsetItem extends OffsetItem {
             infoJson.put("title", getTitle());
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
-            if (getConceptGraphVertexId() != null) {
-                infoJson.put("http://lumify.io#conceptType", getConceptGraphVertexId());
+            if (getConceptIri() != null) {
+                infoJson.put("http://lumify.io#conceptType", getConceptIri());
             }
             return infoJson;
         } catch (JSONException e) {
@@ -94,7 +101,7 @@ public class TermMentionOffsetItem extends OffsetItem {
     public List<String> getCssClasses() {
         List<String> classes = new ArrayList<String>();
         classes.add("entity");
-        if (getGraphVertexId() != null && !getGraphVertexId().equals("")) {
+        if (getResolvedToVertexId() != null) {
             classes.add("resolved");
         }
         return classes;

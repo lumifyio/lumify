@@ -3,9 +3,11 @@ package io.lumify.zipCodeResolver;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
-import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
+import org.securegraph.Authorizations;
 import org.securegraph.Vertex;
+import org.securegraph.Visibility;
 import org.securegraph.type.GeoPoint;
 import org.securegraph.util.ConvertingIterable;
 import org.supercsv.io.CsvListReader;
@@ -69,15 +71,15 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     }
 
     @Override
-    public Iterable<TermMention> apply(Vertex artifactGraphVertex, final Iterable<TermMention> termMentions) throws Exception {
-        return new ConvertingIterable<TermMention, TermMention>(termMentions) {
+    public Iterable<Vertex> apply(Vertex artifactGraphVertex, final Iterable<Vertex> termMentions, final Authorizations authorizations) throws Exception {
+        return new ConvertingIterable<Vertex, Vertex>(termMentions) {
             @Override
-            protected TermMention convert(TermMention termMention) {
-                if (!zipCodeIri.equals(termMention.getOntologyClassUri())) {
+            protected Vertex convert(Vertex termMention) {
+                if (!zipCodeIri.equals(LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention))) {
                     return termMention;
                 }
 
-                String text = termMention.getSign();
+                String text = LumifyProperties.TITLE.getPropertyValue(termMention);
                 if (text.indexOf('-') > 0) {
                     text = text.substring(0, text.indexOf('-'));
                 }
@@ -87,19 +89,20 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                     return termMention;
                 }
 
+                Visibility visibility = new Visibility("");
                 String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
                 String sign = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
                 GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
-                return new TermMention.Builder(termMention)
-                        .id(id)
-                        .resolved(true)
-                        .useExisting(true)
-                        .sign(sign)
-                        .ontologyClassUri(zipCodeIri)
-                        .addProperty(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint)
-                        .addProperty(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver")
+                Vertex zipCodeVertex = getGraph().prepareVertex(id, visibility)
+                        .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, visibility)
+                        .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver", visibility)
+                        .save(authorizations);
+
+                return new TermMentionBuilder(termMention, zipCodeVertex)
+                        .title(sign)
+                        .conceptIri(zipCodeIri)
                         .process(getClass().getName())
-                        .build();
+                        .save(getGraph(), authorizations);
             }
         };
     }

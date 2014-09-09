@@ -8,19 +8,16 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import org.securegraph.Visibility;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.securegraph.util.IterableUtils.count;
 
@@ -55,28 +52,20 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
 
         final String text = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
 
+        Vertex sourceVertex = (Vertex) data.getElement();
         final Iterable<PhoneNumberMatch> phoneNumbers = phoneNumberUtil.findNumbers(text, defaultRegionCode);
-        List<TermMention> termMentions = new ArrayList<TermMention>();
         for (final PhoneNumberMatch phoneNumber : phoneNumbers) {
-            TermMention termMention = createTerm(phoneNumber, data.getProperty().getKey(), data.getVisibility());
-            termMentions.add(termMention);
+            final String formattedNumber = phoneNumberUtil.format(phoneNumber.number(), PhoneNumberUtil.PhoneNumberFormat.E164);
+            int start = phoneNumber.start();
+            int end = phoneNumber.end();
+
+            new TermMentionBuilder(sourceVertex, data.getProperty().getKey(), start, end, formattedNumber, entityType, data.getVisibilitySource())
+                    .process(getClass().getName())
+                    .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
         }
-        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
         getGraph().flush();
 
         LOGGER.debug("Number of phone numbers extracted: %d", count(phoneNumbers));
-    }
-
-    private TermMention createTerm(final PhoneNumberMatch phoneNumber, String propertyKey, Visibility visibility) {
-        final String formattedNumber = phoneNumberUtil.format(phoneNumber.number(), PhoneNumberUtil.PhoneNumberFormat.E164);
-        int start = phoneNumber.start();
-        int end = phoneNumber.end();
-
-        return new TermMention.Builder(start, end, formattedNumber, entityType, propertyKey, visibility)
-                .resolved(false)
-                .useExisting(true)
-                .process(getClass().getName())
-                .build();
     }
 
     @Override
