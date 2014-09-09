@@ -1,11 +1,15 @@
 package io.lumify.storm.video;
 
 import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
+import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.MediaPropertyConfiguration;
 import io.lumify.storm.util.FFprobeExecutor;
 import io.lumify.storm.util.FFprobeRotationUtil;
 import org.json.JSONObject;
@@ -24,7 +28,14 @@ import java.util.Map;
 
 public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
+    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
     private ProcessRunner processRunner;
+
+    @Override
+    public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
+        super.prepare(workerPrepareData);
+        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+    }
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
@@ -69,11 +80,8 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     }
 
     public String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File mp4File) {
-        JSONObject json = FFprobeExecutor.getJson(processRunner, data);
-        Integer videoRotation = FFprobeRotationUtil.getRotation(json);
-        String[] ffmpegRotationOptions = FFprobeRotationUtil.createFFMPEGRotationOptions(videoRotation);
-
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+
         ffmpegOptionsList.add("-y");
         ffmpegOptionsList.add("-i");
         ffmpegOptionsList.add(data.getLocalFile().getAbsolutePath());
@@ -95,10 +103,15 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-vf");
         ffmpegOptionsList.add("scale=720:480");
 
-        //Rotate.
-        if (ffmpegRotationOptions != null) {
-            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
-            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        IntegerLumifyProperty videoRotationProperty = new IntegerLumifyProperty(config.clockwiseRotationIri);
+        Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement(), 0);
+        if (videoRotation != null) {
+            String[] ffmpegRotationOptions = FFprobeRotationUtil.createFFMPEGRotationOptions(videoRotation);
+            //Rotate
+            if (ffmpegRotationOptions != null) {
+                ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+                ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+            }
         }
 
         ffmpegOptionsList.add("-threads");

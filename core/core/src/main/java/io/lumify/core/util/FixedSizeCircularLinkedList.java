@@ -14,7 +14,7 @@ public class FixedSizeCircularLinkedList<T> {
             head = new Node<T>(i, head, type);
         }
         head.setNext(first.setPrevious(head));
-        rotateForward();
+        head = first;
     }
 
     public T head() {
