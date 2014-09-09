@@ -16,7 +16,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class HdfsLibCacheLoader extends LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsLibCacheLoader.class);
-    private File hdfsLibCacheTempDirectory;
 
     @Override
     public void loadLibs(Configuration configuration) {
@@ -28,11 +27,9 @@ public class HdfsLibCacheLoader extends LibLoader {
             return;
         }
 
-        setHdfsLibCacheTempDirectory(configuration);
-
+        File libCacheDirectory = getLocalHdfsLibCacheDirectory(configuration);
         String hdfsLibCacheUser = getHdfsLibCacheUser(configuration);
         FileSystem hdfsFileSystem = getFileSystem(configuration, hdfsLibCacheUser);
-        File libCacheDirectory = ensureLocalLibCacheDirectory();
 
         try {
             syncLibCache(hdfsFileSystem, new Path(hdfsLibCacheDirectory), libCacheDirectory);
@@ -41,14 +38,23 @@ public class HdfsLibCacheLoader extends LibLoader {
         }
     }
 
-    private void setHdfsLibCacheTempDirectory(Configuration configuration) {
+    private File getLocalHdfsLibCacheDirectory(Configuration configuration) {
         String hdfsLibCacheTempDirectoryString = configuration.get(Configuration.HDFS_LIB_CACHE_TEMP_DIRECTORY, null);
+        File libCacheDirectory = null;
         if (hdfsLibCacheTempDirectoryString == null) {
             File baseDir = new File(System.getProperty("java.io.tmpdir"));
-            hdfsLibCacheTempDirectory = new File(baseDir, "lumify-hdfslibcache");
+            libCacheDirectory = new File(baseDir, "lumify-hdfslibcache");
+            LOGGER.info("Configuration parameter %s was not set; defaulting local libcache dir to %s", Configuration.HDFS_LIB_CACHE_TEMP_DIRECTORY, libCacheDirectory.getAbsolutePath());
         } else {
-            hdfsLibCacheTempDirectory = new File(hdfsLibCacheTempDirectoryString);
+            libCacheDirectory = new File(hdfsLibCacheTempDirectoryString);
+            LOGGER.info("Using local lib cache directory: %s", libCacheDirectory.getAbsolutePath());
         }
+
+        if (!libCacheDirectory.exists()) {
+            libCacheDirectory.mkdirs();
+        }
+
+        return libCacheDirectory;
     }
 
     private String getHdfsLibCacheUser(Configuration configuration) {
@@ -60,12 +66,6 @@ public class HdfsLibCacheLoader extends LibLoader {
             LOGGER.info("Connecting to HDFS as user '%s'", hdfsLibCacheUser);
         }
         return hdfsLibCacheUser;
-    }
-
-    private File ensureLocalLibCacheDirectory() {
-        LOGGER.debug("Using local lib cache directory: %s", hdfsLibCacheTempDirectory.getAbsolutePath());
-        hdfsLibCacheTempDirectory.mkdirs();
-        return hdfsLibCacheTempDirectory;
     }
 
     private FileSystem getFileSystem(Configuration configuration, String user) {
