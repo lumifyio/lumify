@@ -4,6 +4,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import org.securegraph.Element;
 import org.securegraph.GraphBase;
+import org.securegraph.GraphBaseWithSearchIndex;
 import org.securegraph.Property;
 import org.securegraph.search.SearchIndex;
 
@@ -13,7 +14,7 @@ public class ReIndexGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         if (getGraph() instanceof GraphBase) {
-            SearchIndex searchIndex = ((GraphBase) getGraph()).getSearchIndex();
+            SearchIndex searchIndex = ((GraphBaseWithSearchIndex) getGraph()).getSearchIndex();
             searchIndex.addElement(getGraph(), data.getElement(), data.getElement().getAuthorizations());
         }
     }
