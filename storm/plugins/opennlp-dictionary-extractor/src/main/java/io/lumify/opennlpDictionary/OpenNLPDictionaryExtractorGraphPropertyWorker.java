@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -25,7 +25,6 @@ import org.apache.hadoop.fs.Path;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import org.securegraph.Visibility;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,44 +65,39 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
         int charOffset = 0;
 
         LOGGER.debug("Processing artifact content stream");
-        List<TermMention> termMentions = new ArrayList<TermMention>();
+        Vertex sourceVertex = (Vertex) data.getElement();
         while ((line = untokenizedLineStream.read()) != null) {
-            ArrayList<TermMention> newTermMentions = processLine(line, charOffset, data.getProperty().getKey(), data.getVisibility());
-            termMentions.addAll(newTermMentions);
+            processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, data.getVisibilitySource());
             getGraph().flush();
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }
-        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
 
         untokenizedLineStream.close();
         LOGGER.debug("Stream processing completed");
     }
 
-    private ArrayList<TermMention> processLine(String line, int charOffset, String propertyKey, Visibility visibility) {
-        ArrayList<TermMention> termMentions = new ArrayList<TermMention>();
+    private void processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, String visibilitySource) {
         String tokenList[] = tokenizer.tokenize(line);
         Span[] tokenListPositions = tokenizer.tokenizePos(line);
         for (TokenNameFinder finder : finders) {
             Span[] foundSpans = finder.find(tokenList);
             for (Span span : foundSpans) {
-                TermMention termMention = createTermMention(charOffset, span, tokenList, tokenListPositions, propertyKey, visibility);
-                termMentions.add(termMention);
+                createTermMention(sourceVertex, propertyKey, charOffset, span, tokenList, tokenListPositions, visibilitySource);
             }
             finder.clearAdaptiveData();
         }
-        return termMentions;
     }
 
-    private TermMention createTermMention(int charOffset, Span foundName, String[] tokens, Span[] tokenListPositions, String propertyKey, Visibility visibility) {
+    private Vertex createTermMention(Vertex sourceVertex, String propertyKey, int charOffset, Span foundName, String[] tokens, Span[] tokenListPositions, String visibilitySource) {
         String name = Span.spansToStrings(new Span[]{foundName}, tokens)[0];
         int start = charOffset + tokenListPositions[foundName.getStart()].getStart();
         int end = charOffset + tokenListPositions[foundName.getEnd() - 1].getEnd();
-        String ontologyClassUri = foundName.getType();
-        return new TermMention.Builder(start, end, name, ontologyClassUri, propertyKey, visibility)
-                .resolved(false)
-                .useExisting(true)
+        String type = foundName.getType();
+        String ontologyClassUri = mapToOntologyIri(type);
+
+        return new TermMentionBuilder(sourceVertex, propertyKey, start, end, name, ontologyClassUri, visibilitySource)
                 .process(getClass().getName())
-                .build();
+                .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
     }
 
     @Override

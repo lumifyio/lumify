@@ -5,12 +5,13 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.mapreduce.LumifyElementMapperBase;
+import io.lumify.core.model.TermMentionBuilder;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionModel;
-import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -28,6 +29,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.accumulo.AccumuloAuthorizations;
 import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
@@ -58,6 +60,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     public static final String REVISION_TIMESTAMP_XPATH = "/page/revision/timestamp/text()";
     public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     public static final String CONFIG_SOURCE_FILE_NAME = "sourceFileName";
+    private static final String WIKIPEDIA_PROCESS = ImportMR.class.getName();
 
     private XPathExpression<org.jdom2.Text> textXPath;
     private XPathExpression<org.jdom2.Text> titleXPath;
@@ -72,8 +75,9 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private String sourceFileName;
     private Counter pagesProcessedCounter;
     private Text auditTableNameText;
-    private Text termMentionTableText;
     private Counter pagesSkippedCounter;
+    private JSONObject visibilitySource;
+    private VisibilityTranslator visibilityTranslator;
 
     public ImportMRMapper() {
         this.textXPath = XPathFactory.instance().compile(TEXT_XPATH, Filters.text());
@@ -86,11 +90,13 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         super.setup(context);
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
         this.visibility = new Visibility("");
+        this.visibilitySource = new JSONObject();
         this.authorizations = new AccumuloAuthorizations();
         this.user = new SystemUser(null);
         VersionService versionService = new VersionService();
         Configuration configuration = new HashMapConfigurationLoader(configurationMap).createConfiguration();
         this.auditRepository = new SecureGraphAuditRepository(null, versionService, configuration, null, userRepository);
+        this.visibilityTranslator = new DirectVisibilityTranslator();
         this.sourceFileName = context.getConfiguration().get(CONFIG_SOURCE_FILE_NAME);
 
         try {
@@ -103,7 +109,6 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         pagesProcessedCounter = context.getCounter(WikipediaImportCounters.PAGES_PROCESSED);
         pagesSkippedCounter = context.getCounter(WikipediaImportCounters.PAGES_SKIPPED);
         auditTableNameText = new Text(Audit.TABLE_NAME);
-        termMentionTableText = new Text(TermMentionModel.TABLE_NAME);
     }
 
     @Override
@@ -250,15 +255,10 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
                 visibility,
                 authorizations);
 
-        TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId(), pageTextKey, link.getStartOffset(),
-                link.getEndOffset()));
-        termMention.getMetadata()
-                .setConceptGraphVertexId(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility)
-                .setSign(linkTarget, visibility)
-                .setVertexId(linkedPageVertex.getId(), visibility)
-                .setEdgeId(edge.getId(), visibility)
-                .setOntologyClassUri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
-        context.write(termMentionTableText, AccumuloSession.createMutationFromRow(termMention));
+        new TermMentionBuilder(pageVertex, pageTextKey, link.getStartOffset(), link.getEndOffset(), linkTarget, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibilitySource)
+                .process(WIKIPEDIA_PROCESS)
+                .resolvedTo(linkedPageVertex, edge)
+                .save(getGraph(), visibilityTranslator, authorizations);
     }
 
     private Iterable<LinkWithOffsets> getLinks(TextConverter textConverter) {

@@ -56,7 +56,7 @@ public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMap
     }
 
     @Override
-    protected IdGenerator getIdGenerator() {
+    public IdGenerator getIdGenerator() {
         return this.graph.getIdGenerator();
     }
 

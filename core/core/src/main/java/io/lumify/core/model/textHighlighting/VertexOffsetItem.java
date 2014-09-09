@@ -65,6 +65,11 @@ public class VertexOffsetItem extends OffsetItem {
     }
 
     @Override
+    public String getResolvedToEdgeId() {
+        return LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.getPropertyValue(termMention);
+    }
+
+    @Override
     public SandboxStatus getSandboxStatus() {
         return sandboxStatus;
     }
@@ -86,8 +91,6 @@ public class VertexOffsetItem extends OffsetItem {
         try {
             JSONObject infoJson = super.getInfoJson();
             infoJson.put("title", getTitle());
-            infoJson.put("start", getStart());
-            infoJson.put("end", getEnd());
             if (getConceptIri() != null) {
                 infoJson.put("http://lumify.io#conceptType", getConceptIri());
             }

@@ -34,6 +34,10 @@ public abstract class OffsetItem implements Comparable {
         return null;
     }
 
+    public String getResolvedToEdgeId() {
+        return null;
+    }
+
     public abstract SandboxStatus getSandboxStatus();
 
     public JSONObject getInfoJson() {
@@ -46,6 +50,9 @@ public abstract class OffsetItem implements Comparable {
             infoJson.put("sandboxStatus", getSandboxStatus().toString());
             if (getResolvedToVertexId() != null) {
                 infoJson.put("resolvedToVertexId", getResolvedToVertexId());
+            }
+            if (getResolvedToEdgeId() != null) {
+                infoJson.put("resolvedToEdgeId", getResolvedToEdgeId());
             }
             infoJson.put("type", getType());
             infoJson.put("process", getProcess());

@@ -102,7 +102,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                         .title(sign)
                         .conceptIri(zipCodeIri)
                         .process(getClass().getName())
-                        .save(getGraph(), authorizations);
+                        .save(getGraph(), getVisibilityTranslator(), authorizations);
             }
         };
     }

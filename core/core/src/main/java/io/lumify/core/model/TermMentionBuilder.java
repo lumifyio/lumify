@@ -16,6 +16,7 @@ public class TermMentionBuilder {
     private final JSONObject visibilitySource;
     private String process;
     private Vertex resolvedToVertex;
+    private Edge resolvedEdge;
 
     public TermMentionBuilder(Vertex sourceVertex, String propertyKey, int start, int end, String title, String conceptIri, String visibilitySource) {
         this(sourceVertex, propertyKey, start, end, title, conceptIri, visibilitySourceToJson(visibilitySource));
@@ -51,8 +52,9 @@ public class TermMentionBuilder {
         this.visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(existingTermMention, "");
     }
 
-    public TermMentionBuilder resolvedTo(Vertex resolvedToVertex) {
+    public TermMentionBuilder resolvedTo(Vertex resolvedToVertex, Edge resolvedEdge) {
         this.resolvedToVertex = resolvedToVertex;
+        this.resolvedEdge = resolvedEdge;
         return this;
     }
 
@@ -89,6 +91,9 @@ public class TermMentionBuilder {
         }
         if (this.propertyKey != null) {
             LumifyProperties.TERM_MENTION_PROPERTY_KEY.setProperty(vertexBuilder, this.propertyKey, visibility);
+        }
+        if (this.resolvedEdge != null) {
+            LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.setProperty(vertexBuilder, this.resolvedEdge.getId(), visibility);
         }
         Vertex termMentionVertex = vertexBuilder.save(authorizations);
 

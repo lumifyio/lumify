@@ -5,7 +5,9 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
-import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.opennlpDictionary.model.DictionaryEntryRepository;
 import opennlp.tools.dictionary.Dictionary;
@@ -19,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.Direction;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.inmemory.InMemoryAuthorizations;
@@ -52,8 +55,8 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
     @Mock
     private DictionaryEntryRepository dictionaryEntryRepository;
 
-    List<TermMention> termMentions;
     private InMemoryGraph graph;
+    private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
 
     @Before
     public void setUp() throws Exception {
@@ -64,7 +67,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_LOCATION, "http://lumify.io/test#location");
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
-        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();;
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
         graph = new InMemoryGraph();
 
@@ -73,16 +76,10 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
             protected List<TokenNameFinder> loadFinders() throws IOException {
                 return finders;
             }
-
-            @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
-                                                                        String workspaceId, String visibilitySource) {
-                OpenNLPDictionaryExtractorGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
-                return null;
-            }
         };
         extractor.setConfiguration(configuration);
         extractor.setDictionaryEntryRepository(dictionaryEntryRepository);
+        extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setGraph(graph);
 
         config.put(OpenNLPDictionaryExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
@@ -102,22 +99,27 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
+
+        List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizations));
+
         assertEquals(3, termMentions.size());
 
         boolean found = false;
-        for (TermMention term : termMentions) {
-            if (term.getSign().equals("Bob Robertson")) {
+        for (Vertex term : termMentions) {
+            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            if (title.equals("Bob Robertson")) {
                 found = true;
-                assertEquals(63, term.getStart());
-                assertEquals(76, term.getEnd());
+                assertEquals(63, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));
+                assertEquals(76, LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(term, 0));
                 break;
             }
         }
         assertTrue("Expected name not found!", found);
 
         ArrayList<String> signs = new ArrayList<String>();
-        for (TermMention term : termMentions) {
-            signs.add(term.getSign());
+        for (Vertex term : termMentions) {
+            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            signs.add(title);
         }
 
         assertTrue("Bob Robertson not found", signs.contains("Bob Robertson"));
