@@ -12,7 +12,6 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -151,7 +150,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(vertex);
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 

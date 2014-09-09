@@ -3,7 +3,6 @@ package io.lumify.core.ingest;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.util.GraphUtil;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -75,7 +74,7 @@ public class MetadataGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, GraphUtil.updateVisibilitySource(null, visibilitySource));
+        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, GraphUtil.updateVisibilitySource(null, visibilitySource));
 
         data.getElement().addPropertyValue(propertyKey, propertyName, propertyValue, metadata, visibility, getAuthorizations());
     }

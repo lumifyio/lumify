@@ -1,6 +1,5 @@
 package io.lumify.web.routes.entity;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.ArtifactDetectedObject;
@@ -12,13 +11,13 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.json.JSONObject;
@@ -78,10 +77,10 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
 
         JSONObject visibilityJson;
         if (vertexSandboxStatus == SandboxStatus.PUBLIC) {
-            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(edge);
+            visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(edge);
             visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
         } else {
-            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(resolvedVertex);
+            visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(resolvedVertex);
             visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);

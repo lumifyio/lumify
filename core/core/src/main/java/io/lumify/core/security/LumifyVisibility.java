@@ -26,4 +26,11 @@ public class LumifyVisibility {
     public String toString() {
         return getVisibility().toString();
     }
+
+    public static Visibility and(Visibility visibility, String additionalVisibility) {
+        if (visibility.getVisibilityString().length() == 0) {
+            return new Visibility(additionalVisibility);
+        }
+        return new Visibility("(" + visibility.getVisibilityString() + ")&(" + additionalVisibility + ")");
+    }
 }

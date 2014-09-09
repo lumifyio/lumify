@@ -6,7 +6,6 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import org.json.JSONArray;
@@ -22,7 +21,7 @@ import java.util.Map;
 
 public class GraphUtil {
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(element);
         return getSandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
     }
 
@@ -54,7 +53,7 @@ public class GraphUtil {
         SandboxStatus[] sandboxStatuses = new SandboxStatus[properties.size()];
         for (int i = 0; i < properties.size(); i++) {
             Property property = properties.get(i);
-            JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(property.getMetadata());
+            JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getMetadataValue(property.getMetadata());
             sandboxStatuses[i] = getSandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
         }
 
@@ -100,20 +99,20 @@ public class GraphUtil {
     }
 
     public static <T extends Element> VisibilityAndElementMutation<T> updateElementVisibilitySource(VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId, Authorizations authorizations) {
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(element);
         visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJson, visibilitySource);
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         ExistingElementMutation m = element.prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
-        if (LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element) != null) {
-            Property visibilityJsonProperty = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getProperty(element);
-            m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), lumifyVisibility.getVisibility());
+        if (LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(element) != null) {
+            Property visibilityJsonProperty = LumifyProperties.VISIBILITY_SOURCE.getProperty(element);
+            m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyProperties.VISIBILITY_SOURCE.getPropertyName(), lumifyVisibility.getVisibility());
         }
         Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), visibilityJson.toString());
+        metadata.put(LumifyProperties.VISIBILITY_SOURCE.getPropertyName(), visibilityJson.toString());
 
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(m, visibilityJson, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_SOURCE.setProperty(m, visibilityJson, metadata, lumifyVisibility.getVisibility());
         m.save(authorizations);
         return new VisibilityAndElementMutation<T>(lumifyVisibility, m);
     }
@@ -148,9 +147,9 @@ public class GraphUtil {
 
         ExistingElementMutation<T> elementMutation = element.prepareMutation();
 
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(propertyMetadata);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getMetadataValue(propertyMetadata);
         visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
+        LumifyProperties.VISIBILITY_SOURCE.setMetadata(propertyMetadata, visibilityJson);
         LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, new Date());
         LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId());
 
@@ -206,7 +205,7 @@ public class GraphUtil {
         JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementBuilder<Edge> edgeBuilder = graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility());
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_SOURCE.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
         LumifyProperties.CONCEPT_TYPE.setProperty(edgeBuilder, OntologyRepository.TYPE_RELATIONSHIP, lumifyVisibility.getVisibility());
 
         addJustificationToMutation(edgeBuilder, justificationText, sourceInfo, lumifyVisibility);

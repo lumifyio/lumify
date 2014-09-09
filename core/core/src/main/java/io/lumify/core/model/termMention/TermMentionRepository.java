@@ -8,6 +8,7 @@ import org.securegraph.util.FilterIterable;
 import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public class TermMentionRepository {
+    public static final String VISIBILITY = "termMention";
     private final Graph graph;
 
     public TermMentionRepository(Graph graph) {

@@ -1,6 +1,5 @@
 package io.lumify.web.routes.graph;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -15,10 +14,10 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -118,7 +117,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
 
         String title = String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex));
         ElementBuilder<Vertex> artifactVertexBuilder = convertToArtifact(file, title, visibilityJson, metadata, lumifyVisibility, authorizations);
@@ -135,7 +134,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         List<Edge> existingEdges = toList(entityVertex.getEdges(artifactVertex, Direction.BOTH, entityHasImageIri, authorizations));
         if (existingEdges.size() == 0) {
             EdgeBuilder edgeBuilder = graph.prepareEdge(entityVertex, artifactVertex, entityHasImageIri, lumifyVisibility.getVisibility());
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
+            LumifyProperties.VISIBILITY_SOURCE.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
             Edge edge = edgeBuilder.save(authorizations);
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
@@ -151,7 +150,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     }
 
     private JSONObject getLumifyVisibility(Vertex entityVertex, String workspaceId) {
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(entityVertex);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(entityVertex);
         if (visibilityJson == null) {
             visibilityJson = new JSONObject();
         }
@@ -182,7 +181,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.store(true);
 
         ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility());
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
         LumifyProperties.TITLE.setProperty(vertexBuilder, title, metadata, lumifyVisibility.getVisibility());
         LumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(), metadata, lumifyVisibility.getVisibility());
         LumifyProperties.FILE_NAME.setProperty(vertexBuilder, fileName, metadata, lumifyVisibility.getVisibility());

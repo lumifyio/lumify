@@ -5,8 +5,11 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
-import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -15,10 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
-import org.securegraph.VertexBuilder;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 import org.securegraph.inmemory.InMemoryGraph;
 import org.securegraph.property.StreamingPropertyValue;
@@ -39,11 +39,16 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
 
     @Mock
     private User user;
+
+    @Mock
+    private AuditRepository auditRepostiory;
+
     String dictionaryPath;
-    List<TermMention> termMentions;
     private InMemoryAuthorizations authorizations;
+    private InMemoryAuthorizations termMentionAuthorizations;
     private InMemoryGraph graph;
     private Visibility visibility;
+    private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
 
     @Before
     public void setup() throws Exception {
@@ -55,19 +60,15 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
         dictionaryPath = getClass().getResource(".").getPath();
-        extractor = new KnownEntityExtractorGraphPropertyWorker() {
-            @Override
-            protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions,
-                                                                        String workspaceId, String visibilitySource) {
-                KnownEntityExtractorGraphPropertyWorkerTest.this.termMentions = toList(termMentions);
-                return null;
-            }
-        };
+        extractor = new KnownEntityExtractorGraphPropertyWorker();
+        extractor.setAuditRepository(auditRepostiory);
+        extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setConfiguration(configuration);
 
         config.put(KnownEntityExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file://" + dictionaryPath);
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
         authorizations = new InMemoryAuthorizations();
+        termMentionAuthorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
@@ -89,11 +90,14 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
         extractor.execute(in, workData);
+
+        List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, termMentionAuthorizations));
+
         assertEquals(3, termMentions.size());
-        for (TermMention termMention : termMentions) {
-            assertTrue(termMention.isResolved());
-            assertEquals("http://lumify.io/test#person", termMention.getOntologyClassUri());
-            assertEquals("Joe Ferner", termMention.getSign());
+        for (Vertex termMention : termMentions) {
+            assertTrue(LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.getPropertyValue(termMention) != null);
+            assertEquals("http://lumify.io/test#person", LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention));
+            assertEquals("Joe Ferner", LumifyProperties.TITLE.getPropertyValue(termMention));
         }
     }
 }

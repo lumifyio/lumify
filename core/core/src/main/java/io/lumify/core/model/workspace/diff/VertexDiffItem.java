@@ -1,7 +1,6 @@
 package io.lumify.core.model.workspace.diff;
 
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.util.JsonSerializer;
 import org.json.JSONObject;
 import org.securegraph.Vertex;
@@ -24,7 +23,7 @@ public class VertexDiffItem extends DiffItem {
         json.put("vertexId", vertex.getId());
         json.put("title", title);
         json.put("visible", visible);
-        json.put("visibilityJson", JsonSerializer.toJsonProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getProperty(vertex)));
+        json.put("visibilityJson", JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_SOURCE.getProperty(vertex)));
         return json;
     }
 }

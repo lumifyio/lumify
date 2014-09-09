@@ -1,6 +1,5 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -9,15 +8,14 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.securegraph.*;
 
@@ -68,9 +66,9 @@ public class VertexNew extends BaseRequestHandler {
         Visibility visibility = lumifyVisibility.getVisibility();
 
         VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexBuilder, visibilityJson, visibility);
+        LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexBuilder, visibilityJson, visibility);
         Map<String, Object> propertyMetadata = new HashMap<String, Object>();
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
+        LumifyProperties.VISIBILITY_SOURCE.setMetadata(propertyMetadata, visibilityJson);
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptType, propertyMetadata, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
         this.graph.flush();

@@ -15,7 +15,6 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -112,7 +111,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
         ElementMutation<Vertex> vertexMutation;
         Vertex vertex;
         if (resolvedVertexId != null) {
@@ -129,7 +128,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
 
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             this.graph.flush();
 
@@ -138,7 +137,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = graph.addEdge(artifactVertex, vertex, this.artifactHasEntityIri, lumifyVisibility.getVisibility(), authorizations);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
+        LumifyProperties.VISIBILITY_SOURCE.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 

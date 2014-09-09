@@ -1,20 +1,20 @@
 package io.lumify.web.routes.relationship;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -76,7 +76,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
         this.graph.flush();
 
         this.workQueueRepository.pushGraphPropertyQueue(graphEdge, null,
-                LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), workspaceId, visibilitySource);
+                LumifyProperties.VISIBILITY_SOURCE.getPropertyName(), workspaceId, visibilitySource);
 
         JSONObject json = JsonSerializer.toJson(graphEdge, workspaceId, authorizations);
         respondWithJson(response, json);

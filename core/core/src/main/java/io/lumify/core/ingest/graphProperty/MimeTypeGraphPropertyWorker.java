@@ -4,7 +4,6 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
@@ -60,9 +59,9 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         Map<String, Object> mimeTypeMetadata = data.createPropertyMetadata();
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(data.getElement());
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(data.getElement());
         if (visibilityJson != null) {
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(mimeTypeMetadata, visibilityJson);
+            LumifyProperties.VISIBILITY_SOURCE.setMetadata(mimeTypeMetadata, visibilityJson);
         }
         LumifyProperties.MIME_TYPE.setProperty(m, mimeType, mimeTypeMetadata, data.getVisibility());
         m.alterPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);

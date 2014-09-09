@@ -7,7 +7,6 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
@@ -124,7 +123,7 @@ public class FileImport {
             Visibility visibility = lumifyVisibility.getVisibility();
             Map<String, Object> propertyMetadata = new HashMap<String, Object>();
             LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1);
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
+            LumifyProperties.VISIBILITY_SOURCE.setMetadata(propertyMetadata, visibilityJson);
 
             VertexBuilder vertexBuilder;
             if (predefinedId == null) {
@@ -132,7 +131,7 @@ public class FileImport {
             } else {
                 vertexBuilder = this.graph.prepareVertex(predefinedId, visibility);
             }
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, visibilityJson, visibility);
+            LumifyProperties.VISIBILITY_SOURCE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, visibilityJson, visibility);
             LumifyProperties.RAW.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, rawValue, propertyMetadata, visibility);
             LumifyProperties.TITLE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
             LumifyProperties.CONTENT_HASH.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);

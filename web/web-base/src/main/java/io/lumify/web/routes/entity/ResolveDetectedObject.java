@@ -1,6 +1,5 @@
 package io.lumify.web.routes.entity;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -15,13 +14,13 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -105,7 +104,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         ElementMutation<Vertex> resolvedVertexMutation;
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
 
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
@@ -121,7 +120,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             resolvedVertex = resolvedVertexMutation.save(authorizations);
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(resolvedVertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.VISIBILITY_SOURCE.setProperty(resolvedVertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             graph.flush();
 
@@ -132,7 +131,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         }
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, artifactContainsImageOfEntityIri, lumifyVisibility.getVisibility(), authorizations);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
+        LumifyProperties.VISIBILITY_SOURCE.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
         ArtifactDetectedObject artifactDetectedObject = new ArtifactDetectedObject(

@@ -1,6 +1,6 @@
 package io.lumify.core.ingest.graphProperty;
 
-import io.lumify.core.security.LumifyVisibilityProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.json.JSONObject;
 import org.securegraph.*;
 
@@ -50,26 +50,33 @@ public class GraphPropertyWorkData {
         return visibilitySource;
     }
 
+    public JSONObject getVisibilitySourceJson() {
+        if (getVisibilitySource() == null || getVisibilitySource().length() == 0) {
+            return new JSONObject();
+        }
+        return new JSONObject(getVisibilitySource());
+    }
+
     public Map<String, Object> createPropertyMetadata() {
         Map<String, Object> metadata = new HashMap<String, Object>();
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(getElement());
         if (visibilityJson != null) {
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+            LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
         }
         return metadata;
     }
 
     public void setVisibilityJsonOnElement(ElementBuilder builder) {
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(getElement());
         if (visibilityJson != null) {
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(builder, visibilityJson, getVisibility());
+            LumifyProperties.VISIBILITY_SOURCE.setProperty(builder, visibilityJson, getVisibility());
         }
     }
 
     public void setVisibilityJsonOnElement(Element element, Authorizations authorizations) {
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(getElement());
         if (visibilityJson != null) {
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(element, visibilityJson, getVisibility(), authorizations);
+            LumifyProperties.VISIBILITY_SOURCE.setProperty(element, visibilityJson, getVisibility(), authorizations);
         }
     }
 }

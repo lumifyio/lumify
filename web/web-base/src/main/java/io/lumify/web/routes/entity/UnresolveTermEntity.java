@@ -8,7 +8,6 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -88,10 +87,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
 
         JSONObject visibilityJson;
         if (vertexSandboxStatus == SandboxStatus.PUBLIC) {
-            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(edge);
+            visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(edge);
             visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
         } else {
-            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(resolvedVertex);
+            visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(resolvedVertex);
             visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);

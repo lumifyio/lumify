@@ -1,6 +1,7 @@
 package io.lumify.core.model.termMention;
 
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -80,7 +81,7 @@ public class TermMentionBuilder {
 
     public Vertex save(Graph graph, VisibilityTranslator visibilityTranslator, Authorizations authorizations) {
         String vertexId = createVertexId();
-        Visibility visibility = visibilityTranslator.toVisibility(this.visibilitySource).getVisibility();
+        Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilitySource).getVisibility(), TermMentionRepository.VISIBILITY);
         VertexBuilder vertexBuilder = graph.prepareVertex(vertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, this.conceptIri, visibility);
         LumifyProperties.TITLE.setProperty(vertexBuilder, this.title, visibility);
