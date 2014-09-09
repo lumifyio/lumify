@@ -8,15 +8,16 @@ public class MetricReportingExecutorService extends ThreadPoolExecutor {
     private LumifyLogger logger;
     private ScheduledExecutorService scheduledExecutorService;
     private FixedSizeCircularLinkedList<AtomicInteger> activity;
+    private AtomicInteger maxActiveCount;
+    private AtomicInteger maxWaitingCount;
 
     public MetricReportingExecutorService(LumifyLogger logger, int nThreads) {
         super(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
         this.logger = logger;
 
         activity = new FixedSizeCircularLinkedList<AtomicInteger>(16, AtomicInteger.class);
-
-        // TODO: max executing concurrently
-        // TODO: max waiting (via ref to queue?)
+        maxActiveCount = new AtomicInteger(0);
+        maxWaitingCount = new AtomicInteger(0);
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -36,7 +37,20 @@ public class MetricReportingExecutorService extends ThreadPoolExecutor {
     @Override
     protected void beforeExecute(Thread t, Runnable r) {
         super.beforeExecute(t, r);
+
         activity.head().incrementAndGet();
+
+        int active = getActiveCount();
+        int maxActive = maxActiveCount.get();
+        if (active > maxActive) {
+            maxActiveCount.set(active);
+        }
+
+        int waiting = getQueue().size();
+        int maxWaiting = maxWaitingCount.get();
+        if (waiting > maxWaiting) {
+            maxWaitingCount.set(waiting);
+        }
     }
 
     @Override
@@ -61,7 +75,8 @@ public class MetricReportingExecutorService extends ThreadPoolExecutor {
             }
             fifteen += value;
         }
-        logger.debug("%d / %.2f / %.2f / %s", one, five / 5.0, fifteen / 15.0, activity.toString());
+        logger.debug("%d / %.2f / %.2f [%s]", one, five / 5.0, fifteen / 15.0, activity.toString());
+        logger.debug("active: %d / %d, max active: %d, max waiting: %d", getActiveCount(), getPoolSize(), maxActiveCount.get(), maxWaitingCount.get());
     }
 
     @Override

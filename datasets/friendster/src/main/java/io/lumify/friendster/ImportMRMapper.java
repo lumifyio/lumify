@@ -128,7 +128,7 @@ public class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Muta
     }
 
     @Override
-    protected IdGenerator getIdGenerator() {
+    public IdGenerator getIdGenerator() {
         return this.graph.getIdGenerator();
     }
 

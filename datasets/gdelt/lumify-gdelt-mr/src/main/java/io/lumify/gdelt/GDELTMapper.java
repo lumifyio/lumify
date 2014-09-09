@@ -236,7 +236,7 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
     }
 
     @Override
-    protected IdGenerator getIdGenerator() {
+    public IdGenerator getIdGenerator() {
         return this.graph.getIdGenerator();
     }
 }

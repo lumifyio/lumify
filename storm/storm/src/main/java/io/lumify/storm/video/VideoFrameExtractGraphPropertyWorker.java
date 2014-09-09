@@ -4,13 +4,16 @@ import com.google.common.io.Files;
 import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
+import io.lumify.core.model.properties.types.DoubleLumifyProperty;
+import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.util.FFprobeDurationUtil;
+import io.lumify.storm.MediaPropertyConfiguration;
 import io.lumify.storm.util.FFprobeExecutor;
 import io.lumify.storm.util.FFprobeRotationUtil;
 import org.apache.commons.io.FileUtils;
@@ -35,12 +38,19 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoFrameExtractGraphPropertyWorker.class);
+    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
     private ProcessRunner processRunner;
 
     @Override
+    public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
+        super.prepare(workerPrepareData);
+        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+    }
+
+    @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        JSONObject json = FFprobeExecutor.getJson(processRunner, data);
-        int videoRotation = FFprobeRotationUtil.getRotation(json);
+        IntegerLumifyProperty videoRotationProperty = new IntegerLumifyProperty(config.clockwiseRotationIri);
+        Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement(), 0);
 
         double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 0.1);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
@@ -242,14 +252,11 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
 
     private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data, double defaultFPSToExtract) {
         int numberOfFrames = 20;
-        JSONObject outJson = FFprobeExecutor.getJson(processRunner, data);
-        Double duration = null;
-        if (outJson != null) {
-            duration = FFprobeDurationUtil.getDuration(outJson);
-            if (duration != null && duration != 0){
-                double framesPerSecondToExtract = numberOfFrames / duration;
-                return framesPerSecondToExtract;
-            }
+        DoubleLumifyProperty durationProperty = new DoubleLumifyProperty(config.durationIri);
+        Double duration = durationProperty.getPropertyValue(data.getElement(), 0);
+        if (duration != null && duration != 0) {
+            double framesPerSecondToExtract = numberOfFrames / duration;
+            return framesPerSecondToExtract;
         }
 
         //Upon failure to calculate FPS, return defaultFPS.
