@@ -3,8 +3,8 @@ package io.lumify.knownEntity;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.FilenameUtils;
@@ -14,10 +14,10 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.arabidopsis.ahocorasick.AhoCorasick;
 import org.arabidopsis.ahocorasick.SearchResult;
+import org.securegraph.Edge;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import org.securegraph.Visibility;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.prefs.CsvPreference;
 
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,26 +49,28 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         String text = IOUtils.toString(in, "UTF-8"); // TODO convert AhoCorasick to use InputStream
         Iterator<SearchResult<Match>> searchResults = tree.search(text.toCharArray());
-        List<TermMention> termMentions = new ArrayList<TermMention>();
+        Vertex sourceVertex = (Vertex) data.getElement();
         while (searchResults.hasNext()) {
             SearchResult searchResult = searchResults.next();
-            outputResultToTermMention(termMentions, searchResult, data.getProperty().getKey(), data.getVisibility());
+            outputResultToTermMention(sourceVertex, searchResult, data.getProperty().getKey(), data.getVisibilitySource());
             getGraph().flush();
         }
-        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
     }
 
-    private void outputResultToTermMention(List<TermMention> termMentions, SearchResult<Match> searchResult, String propertyKey, Visibility visibility) {
+    private void outputResultToTermMention(Vertex sourceVertex, SearchResult<Match> searchResult, String propertyKey, String visibilitySource) {
         for (Match match : searchResult.getOutputs()) {
             int start = searchResult.getLastIndex() - match.getMatchText().length();
             int end = searchResult.getLastIndex();
             String sign = match.getEntityTitle();
             String ontologyClassUri = mapToOntologyIri(match.getConceptTitle());
-            termMentions.add(new TermMention.Builder(start, end, sign, ontologyClassUri, propertyKey, visibility)
-                    .resolved(true)
-                    .useExisting(true)
+
+            Vertex resolvedToVertex; // TODO find entity by sign
+            Edge resolvedEdge;
+
+            new TermMentionBuilder(sourceVertex, propertyKey, start, end, sign, ontologyClassUri, visibilitySource)
                     .process(getClass().getName())
-                    .build());
+                    .resolvedTo(resolvedToVertex, resolvedEdge)
+                    .save(getGraph(), getAuthorizations());
         }
     }
 

@@ -1,17 +1,12 @@
 package io.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -23,6 +18,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -121,8 +117,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex,
-                        entityHasImageIri, user, workspaceId, authorizations));
+                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations));
                 successArray.put(responseResult);
             } else if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
@@ -156,7 +151,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
@@ -186,12 +180,8 @@ public class WorkspaceUndo extends BaseRequestHandler {
             }
         }
 
-        for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
-            if (termMentionModel != null) {
-                TermMentionRowKey termMentionRowKey = new TermMentionRowKey(rowKeyProperty.getValue().toString());
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
-            }
+        for (Vertex termMention : termMentionRepository.findResolvedTo(vertex, authorizations)) {
+            unresolved.put(workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations));
         }
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);

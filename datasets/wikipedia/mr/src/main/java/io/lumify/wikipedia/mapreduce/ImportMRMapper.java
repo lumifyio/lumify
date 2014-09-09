@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.mapreduce.LumifyElementMapperBase;
-import io.lumify.core.model.TermMentionBuilder;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;

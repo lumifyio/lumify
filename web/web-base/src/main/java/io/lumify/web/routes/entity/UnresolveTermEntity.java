@@ -1,12 +1,9 @@
 package io.lumify.web.routes.entity;
 
-import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.termMention.TermMentionModel;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
@@ -17,23 +14,22 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public class UnresolveTermEntity extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UnresolveTermEntity.class);
     private final TermMentionRepository termMentionRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
-    private final UserRepository userRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
@@ -49,37 +45,37 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
-        this.userRepository = userRepository;
         this.workspaceHelper = workspaceHelper;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // required parameters
-        final String graphVertexId = getRequiredParameter(request, "graphVertexId");
-        final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
-        final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
-        final String sign = getRequiredParameter(request, "sign");
-        final String conceptId = getRequiredParameter(request, "conceptId");
-        final String edgeId = getRequiredParameter(request, "edgeId");
-        final String rowKey = getOptionalParameter(request, "rowKey");
+        final String termMentionId = getRequiredParameter(request, "termMentionId");
 
-        LOGGER.debug(
-                "UnresolveTermEntity (graphVertexId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
-                graphVertexId,
-                mentionStart,
-                mentionEnd,
-                sign,
-                conceptId,
-                graphVertexId);
+        LOGGER.debug("UnresolveTermEntity (termMentionId: %s)", termMentionId);
 
         String workspaceId = getActiveWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
-        Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
+        Vertex termMention = termMentionRepository.findById(termMentionId, authorizations);
+        if (termMention == null) {
+            respondWithNotFound(response, "Could not find term mention with id: " + termMentionId);
+            return;
+        }
+
+        Vertex resolvedVertex = singleOrDefault(termMention.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizations), null);
+        if (resolvedVertex == null) {
+            respondWithNotFound(response, "Could not find resolved vertex from term mention: " + termMentionId);
+            return;
+        }
+
+        String edgeId = LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.getPropertyValue(termMention);
         Edge edge = graph.getEdge(edgeId, authorizations);
+        if (edge == null) {
+            respondWithNotFound(response, "Could not find edge " + edgeId + " from term mention: " + termMentionId);
+            return;
+        }
 
         SandboxStatus vertexSandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
         SandboxStatus edgeSandboxStatus = GraphUtil.getSandboxStatus(edge, workspaceId);
@@ -100,16 +96,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        String propertyKey = "";
-        TermMentionModel termMention;
-        if (rowKey != null) {
-            termMention = termMentionRepository.findByRowKey(rowKey, modelUserContext);
-        } else {
-            TermMentionRowKey termMentionRowKey = new TermMentionRowKey(graphVertexId, propertyKey, mentionStart, mentionEnd, edgeId);
-            termMention = termMentionRepository.findByRowKey(termMentionRowKey.getRowKey(), modelUserContext);
-        }
-
-        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, lumifyVisibility, modelUserContext, user, authorizations);
+        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, user, authorizations);
 
         respondWithJson(response, result);
     }

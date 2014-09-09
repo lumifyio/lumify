@@ -1,7 +1,5 @@
 package io.lumify.web.routes.entity;
 
-import com.altamiracorp.bigtable.model.FlushFlag;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -10,9 +8,8 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionModel;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -24,6 +21,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
@@ -144,17 +142,10 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId());
-        TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
-        termMention.getMetadata()
-                .setSign(title, lumifyVisibility.getVisibility())
-                .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
-                .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
-                .setVertexId(vertex.getId(), lumifyVisibility.getVisibility())
-                .setEdgeId(edge.getId(), lumifyVisibility.getVisibility());
-        termMentionRepository.save(termMention, FlushFlag.FLUSH);
+        new TermMentionBuilder(artifactVertex, propertyKey, mentionStart, mentionEnd, title, concept.getIRI(), visibilityJson)
+                .resolvedTo(vertex, edge)
+                .save(this.graph, visibilityTranslator, authorizations);
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId(), LumifyProperties.ROW_KEY.getPropertyName(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         vertexMutation.save(authorizations);
 
         this.graph.flush();

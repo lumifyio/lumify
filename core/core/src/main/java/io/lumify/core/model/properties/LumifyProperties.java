@@ -59,8 +59,8 @@ public class LumifyProperties {
 
     public static final DetectedObjectProperty DETECTED_OBJECT = new DetectedObjectProperty("http://lumify.io#detectedObject");
 
-    public static final IntegerLumifyProperty TERM_MENTION_START_OFFSET = new IntegerLumifyProperty("http://lumify.io/termMention#startOffset");
-    public static final IntegerLumifyProperty TERM_MENTION_END_OFFSET = new IntegerLumifyProperty("http://lumify.io/termMention#endOffset");
+    public static final LongLumifyProperty TERM_MENTION_START_OFFSET = new LongLumifyProperty("http://lumify.io/termMention#startOffset");
+    public static final LongLumifyProperty TERM_MENTION_END_OFFSET = new LongLumifyProperty("http://lumify.io/termMention#endOffset");
     public static final StringLumifyProperty TERM_MENTION_PROCESS = new StringLumifyProperty("http://lumify.io/termMention#process");
     public static final StringLumifyProperty TERM_MENTION_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/termMention#propertyKey");
     public static final StringLumifyProperty TERM_MENTION_RESOLVED_EDGE_ID = new StringLumifyProperty("http://lumify.io/termMention#resolvedEdgeId");

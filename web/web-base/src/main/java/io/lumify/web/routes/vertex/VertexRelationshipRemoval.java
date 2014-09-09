@@ -1,6 +1,5 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -11,6 +10,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.securegraph.Authorizations;
@@ -66,6 +66,6 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
             return;
         }
 
-        respondWithJson(response, workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, workspaceId, authorizations));
+        respondWithJson(response, workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations));
     }
 }

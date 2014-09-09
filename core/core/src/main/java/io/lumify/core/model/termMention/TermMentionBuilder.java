@@ -1,4 +1,4 @@
-package io.lumify.core.model;
+package io.lumify.core.model.termMention;
 
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.VisibilityTranslator;
@@ -9,8 +9,8 @@ public class TermMentionBuilder {
     private static final String TERM_MENTION_VERTEX_ID_PREFIX = "TM_";
     private Vertex sourceVertex;
     private final String propertyKey;
-    private final int start;
-    private final int end;
+    private final long start;
+    private final long end;
     private String title;
     private String conceptIri;
     private final JSONObject visibilitySource;
@@ -18,7 +18,7 @@ public class TermMentionBuilder {
     private Vertex resolvedToVertex;
     private Edge resolvedEdge;
 
-    public TermMentionBuilder(Vertex sourceVertex, String propertyKey, int start, int end, String title, String conceptIri, String visibilitySource) {
+    public TermMentionBuilder(Vertex sourceVertex, String propertyKey, long start, long end, String title, String conceptIri, String visibilitySource) {
         this(sourceVertex, propertyKey, start, end, title, conceptIri, visibilitySourceToJson(visibilitySource));
     }
 
@@ -32,7 +32,7 @@ public class TermMentionBuilder {
         return new JSONObject(visibilitySource);
     }
 
-    public TermMentionBuilder(Vertex sourceVertex, String propertyKey, int start, int end, String title, String conceptIri, JSONObject visibilitySource) {
+    public TermMentionBuilder(Vertex sourceVertex, String propertyKey, long start, long end, String title, String conceptIri, JSONObject visibilitySource) {
         this.sourceVertex = sourceVertex;
         this.propertyKey = propertyKey;
         this.start = start;

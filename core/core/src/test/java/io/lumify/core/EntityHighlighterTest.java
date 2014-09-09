@@ -1,6 +1,6 @@
 package io.lumify.core;
 
-import io.lumify.core.model.TermMentionBuilder;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.textHighlighting.OffsetItem;
 import io.lumify.core.model.textHighlighting.VertexOffsetItem;
 import io.lumify.core.security.DirectVisibilityTranslator;

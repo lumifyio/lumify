@@ -29,7 +29,7 @@ public class DictionaryEntry extends Row<DictionaryEntryRowKey> {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
 
-        json.put(LumifyProperties.ROW_KEY.getPropertyName(), getRowKey().toString());
+        json.put("rowKey", getRowKey().toString());
         json.put("concept", getMetadata().getConcept());
         json.put("tokens", getMetadata().getTokens());
         if (getMetadata().getResolvedName() != null) {

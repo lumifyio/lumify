@@ -3,7 +3,7 @@ package io.lumify.zipCodeResolver;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
-import io.lumify.core.model.TermMentionBuilder;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.Authorizations;
 import org.securegraph.Vertex;

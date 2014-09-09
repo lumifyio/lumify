@@ -13,11 +13,10 @@ import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionModel;
-import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.termMention.TermMentionRowKey;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,7 +39,7 @@ public class TweetProcessorBolt extends BaseRichBolt {
     private UserRepository userRepository;
     private Authorizations authorizations;
     private WorkQueueRepository workQueueRepository;
-    private TermMentionRepository termMentionRepository;
+    private VisibilityTranslator visibilityTranslator;
     private Cache<String, Vertex> userVertexCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.MINUTES)
             .build();
@@ -64,8 +63,6 @@ public class TweetProcessorBolt extends BaseRichBolt {
         JSONObject json = new JSONObject(jsonString);
 
         createTweetVertex(jsonString, json);
-
-        termMentionRepository.flush();
     }
 
     private Vertex createTweetVertex(String jsonString, JSONObject json) {
@@ -346,19 +343,14 @@ public class TweetProcessorBolt extends BaseRichBolt {
     }
 
     private void createTermMention(Vertex tweetVertex, Vertex vertex, Edge edge, String conceptUri, JSONArray offsets) {
-        Visibility visibility = new Visibility("");
+        JSONObject visibilitySource = new JSONObject();
         long startOffset = offsets.getInt(0);
         long endOffset = offsets.getInt(1);
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(tweetVertex.getId().toString(), "", startOffset, endOffset);
-        TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         String title = LumifyProperties.TITLE.getPropertyValue(vertex);
-        termMention.getMetadata()
-                .setConceptGraphVertexId(conceptUri, visibility)
-                .setSign(title, visibility)
-                .setVertexId(vertex.getId().toString(), visibility)
-                .setEdgeId(edge.getId().toString(), visibility)
-                .setOntologyClassUri(conceptUri, visibility);
-        termMentionRepository.save(termMention);
+
+        new TermMentionBuilder(tweetVertex, MULTI_VALUE_KEY, startOffset, endOffset, title, conceptUri, visibilitySource)
+                .resolvedTo(vertex, edge)
+                .save(graph, visibilityTranslator, authorizations);
     }
 
     @Inject
@@ -377,7 +369,7 @@ public class TweetProcessorBolt extends BaseRichBolt {
     }
 
     @Inject
-    public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
-        this.termMentionRepository = termMentionRepository;
+    public void setVisibilityTranslator(VisibilityTranslator visibilityTranslator) {
+        this.visibilityTranslator = visibilityTranslator;
     }
 }

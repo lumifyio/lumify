@@ -2,7 +2,7 @@ package io.lumify.core.ingest.graphProperty;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import io.lumify.core.model.TermMentionBuilder;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;

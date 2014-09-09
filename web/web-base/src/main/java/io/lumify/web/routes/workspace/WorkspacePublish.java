@@ -1,8 +1,6 @@
 package io.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -12,7 +10,6 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -26,6 +23,7 @@ import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -157,7 +155,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
                 if (sourceVertex != null && destVertex != null && GraphUtil.getSandboxStatus(sourceVertex, workspaceId) != SandboxStatus.PUBLIC &&
                         GraphUtil.getSandboxStatus(destVertex, workspaceId) != SandboxStatus.PUBLIC) {
-                    String error_msg = "Cannot publish edge, " + edge.getId().toString() + ", because either source and/or dest vertex are not public";
+                    String error_msg = "Cannot publish edge, " + edge.getId() + ", because either source and/or dest vertex are not public";
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
@@ -199,7 +197,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 }
 
                 if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
-                    String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId().toString();
+                    String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId();
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
@@ -222,7 +220,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             return;
         }
 
-        LOGGER.debug("publishing vertex %s(%s)", vertex.getId().toString(), vertex.getVisibility().toString());
+        LOGGER.debug("publishing vertex %s(%s)", vertex.getId(), vertex.getVisibility().toString());
         Visibility originalVertexVisibility = vertex.getVisibility();
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
         JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
@@ -252,7 +250,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         auditRepository.auditVertex(AuditAction.PUBLISH, vertex.getId(), "", "", user, lumifyVisibility.getVisibility());
 
         ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
-        for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemModelUser)) {
+        for (Audit row : auditRepository.findByRowStartsWith(vertex.getId(), systemModelUser)) {
             auditRepository.updateColumnVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString());
         }
     }
@@ -307,7 +305,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             return;
         }
 
-        LOGGER.debug("publishing edge %s(%s)", edge.getId().toString(), edge.getVisibility().toString());
+        LOGGER.debug("publishing edge %s(%s)", edge.getId(), edge.getVisibility().toString());
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(edge);
         JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
         if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
@@ -339,15 +337,12 @@ public class WorkspacePublish extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());
 
         ModelUserContext systemUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
-        for (Audit row : auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser)) {
+        for (Audit row : auditRepository.findByRowStartsWith(edge.getId(), systemUser)) {
             auditRepository.updateColumnVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString());
         }
 
-        for (Property rowKeyProperty : destVertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
-            if (termMentionModel != null) {
-                termMentionRepository.updateColumnVisibility(termMentionModel, originalEdgeVisibility.getVisibilityString(), lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-            }
+        for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex, authorizations)) {
+            termMentionRepository.updateVisibility(termMention, originalEdgeVisibility, lumifyVisibility.getVisibility(), authorizations);
         }
     }
 
