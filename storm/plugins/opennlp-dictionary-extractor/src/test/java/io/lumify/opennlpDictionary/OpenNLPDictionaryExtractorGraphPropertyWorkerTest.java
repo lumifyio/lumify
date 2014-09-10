@@ -6,6 +6,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -26,6 +27,7 @@ import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 import org.securegraph.inmemory.InMemoryGraph;
+import org.securegraph.inmemory.InMemoryVertex;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -84,7 +86,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
         config.put(OpenNLPDictionaryExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
-        authorizations = new InMemoryAuthorizations();
+        authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
@@ -93,9 +95,10 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
     @Test
     public void testEntityExtraction() throws Exception {
-        Vertex vertex = graph.prepareVertex("v1", new Visibility(""))
+        InMemoryVertex vertex = (InMemoryVertex) graph.prepareVertex("v1", new Visibility(""))
                 .setProperty("text", "none", new Visibility(""))
                 .save(new InMemoryAuthorizations());
+        graph.flush();
 
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
