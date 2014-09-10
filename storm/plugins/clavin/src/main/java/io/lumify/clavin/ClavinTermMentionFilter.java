@@ -11,7 +11,6 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
-import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -23,6 +22,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.securegraph.Authorizations;
 import org.securegraph.Vertex;
 import org.securegraph.type.GeoPoint;
 
@@ -191,14 +191,14 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     @Override
-    public Iterable<TermMention> apply(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) throws IOException, ParseException {
+    public void apply(Vertex artifactGraphVertex, Iterable<Vertex> termMentions, Authorizations authorizations) throws IOException, ParseException {
         List<LocationOccurrence> locationOccurrences = getLocationOccurrencesFromTermMentions(termMentions);
         LOGGER.info("Found %d Locations in %d terms.", locationOccurrences.size(), count(termMentions));
         List<ResolvedLocation> resolvedLocationNames = resolver.resolveLocations(locationOccurrences, fuzzy);
         LOGGER.info("Resolved %d Locations", resolvedLocationNames.size());
 
         if (resolvedLocationNames.isEmpty()) {
-            return termMentions;
+            return;
         }
 
         Map<Integer, ResolvedLocation> resolvedLocationOffsetMap = new HashMap<Integer, ResolvedLocation>();
@@ -209,9 +209,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
 
         ResolvedLocation loc;
         String processId = getClass().getName();
-        TermMention resolvedMention;
-        List<TermMention> results = new ArrayList<TermMention>();
-        for (TermMention termMention : termMentions) {
+        for (Vertex termMention : termMentions) {
             loc = resolvedLocationOffsetMap.get(termMention.getStart());
             if (isLocation(termMention) && loc != null) {
                 String id = String.format("CLAVIN-%d", loc.getGeoname().getGeonameID());
@@ -232,9 +230,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 results.add(termMention);
             }
         }
-        auditRepository.auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(),
-                user, artifactGraphVertex.getVisibility());
-        return results;
+        auditRepository.auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(), user, artifactGraphVertex.getVisibility());
     }
 
     private String toSign(final ResolvedLocation location) {
@@ -242,16 +238,16 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
         return String.format("%s (%s, %s)", geoname.getName(), geoname.getPrimaryCountryCode(), geoname.getAdmin1Code());
     }
 
-    private boolean isLocation(final TermMention mention) {
-        return targetConcepts.contains(mention.getOntologyClassUri());
+    private boolean isLocation(final Vertex mention) {
+        return targetConcepts.contains(LumifyProperties.CONCEPT_TYPE.getPropertyValue(mention));
     }
 
-    private List<LocationOccurrence> getLocationOccurrencesFromTermMentions(final Iterable<TermMention> termMentions) {
+    private List<LocationOccurrence> getLocationOccurrencesFromTermMentions(final Iterable<Vertex> termMentions) {
         List<LocationOccurrence> locationOccurrences = new ArrayList<LocationOccurrence>();
 
-        for (TermMention termMention : termMentions) {
+        for (Vertex termMention : termMentions) {
             if (isLocation(termMention)) {
-                locationOccurrences.add(new LocationOccurrence(termMention.getSign(), termMention.getStart()));
+                locationOccurrences.add(new LocationOccurrence(LumifyProperties.TITLE.getPropertyValue(termMention), (int) LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention, 0)));
             }
         }
         return locationOccurrences;

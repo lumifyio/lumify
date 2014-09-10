@@ -36,7 +36,6 @@
         <module>clavin</module>
         <module>drewnoakes-image-metadata-extractor</module>
         <module>java-code</module>
-        <module>csv-structured-ingest</module>
         <module>mime-type-ontology-mapper</module>
     </modules>
 </project>

@@ -15,7 +15,7 @@ public abstract class TermMentionFilter {
     public void prepare(TermMentionFilterPrepareData termMentionFilterPrepareData) throws Exception {
     }
 
-    public abstract Iterable<Vertex> apply(Vertex artifactGraphVertex, Iterable<Vertex> termMentions, Authorizations authorizations) throws Exception;
+    public abstract void apply(Vertex artifactGraphVertex, Iterable<Vertex> termMentions, Authorizations authorizations) throws Exception;
 
     @Inject
     public final void setConfiguration(Configuration configuration) {

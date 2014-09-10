@@ -3,13 +3,12 @@ package io.lumify.zipCodeResolver;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
-import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import org.securegraph.Authorizations;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.type.GeoPoint;
-import org.securegraph.util.ConvertingIterable;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.prefs.CsvPreference;
 
@@ -71,40 +70,37 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     }
 
     @Override
-    public Iterable<Vertex> apply(Vertex artifactGraphVertex, final Iterable<Vertex> termMentions, final Authorizations authorizations) throws Exception {
-        return new ConvertingIterable<Vertex, Vertex>(termMentions) {
-            @Override
-            protected Vertex convert(Vertex termMention) {
-                if (!zipCodeIri.equals(LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention))) {
-                    return termMention;
-                }
-
-                String text = LumifyProperties.TITLE.getPropertyValue(termMention);
-                if (text.indexOf('-') > 0) {
-                    text = text.substring(0, text.indexOf('-'));
-                }
-
-                ZipCodeEntry zipCodeEntry = zipCodesByZipCode.get(text);
-                if (zipCodeEntry == null) {
-                    return termMention;
-                }
-
-                Visibility visibility = new Visibility("");
-                String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
-                String sign = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
-                GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
-                Vertex zipCodeVertex = getGraph().prepareVertex(id, visibility)
-                        .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, visibility)
-                        .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver", visibility)
-                        .save(authorizations);
-
-                return new TermMentionBuilder(termMention, zipCodeVertex)
-                        .title(sign)
-                        .conceptIri(zipCodeIri)
-                        .process(getClass().getName())
-                        .save(getGraph(), getVisibilityTranslator(), authorizations);
+    public void apply(Vertex artifactGraphVertex, final Iterable<Vertex> termMentions, final Authorizations authorizations) throws Exception {
+        for (Vertex termMention : termMentions) {
+            if (!zipCodeIri.equals(LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention))) {
+                continue;
             }
-        };
+
+            String text = LumifyProperties.TITLE.getPropertyValue(termMention);
+            if (text.indexOf('-') > 0) {
+                text = text.substring(0, text.indexOf('-'));
+            }
+
+            ZipCodeEntry zipCodeEntry = zipCodesByZipCode.get(text);
+            if (zipCodeEntry == null) {
+                continue;
+            }
+
+            Visibility visibility = new Visibility("");
+            String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
+            String sign = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
+            GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
+            Vertex zipCodeVertex = getGraph().prepareVertex(id, visibility)
+                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, visibility)
+                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver", visibility)
+                    .save(authorizations);
+
+            new TermMentionBuilder(termMention, zipCodeVertex)
+                    .title(sign)
+                    .conceptIri(zipCodeIri)
+                    .process(getClass().getName())
+                    .save(getGraph(), getVisibilityTranslator(), authorizations);
+        }
     }
 
     private static class ZipCodeEntry {
