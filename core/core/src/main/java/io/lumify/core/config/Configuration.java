@@ -21,6 +21,8 @@ public final class Configuration {
 
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_SOURCE_DIRECTORY = "hdfsLibcache.sourceDirectory";
+    public static final String HDFS_LIB_CACHE_TEMP_DIRECTORY = "hdfsLibcache.tempDirectory";
+    public static final String HDFS_LIB_CACHE_HDFS_USER = "hdfsLibcache.user";
     public static final String LIB_DIRECTORY = "lib-directory";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";

@@ -8,7 +8,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,37 +51,23 @@ public abstract class LibLoader {
         if (!f.isFile()) {
             throw new LumifyException(String.format("Could not add lib %s. Not a file.", f.getAbsolutePath()));
         }
-
         LOGGER.info("adding lib: %s", f.getAbsolutePath());
-
-        // TODO: Make this work for JAR files loaded by remote URL
         loadedLibFiles.add(f);
-
-        try {
-            addLibFile(f.toURI().toURL());
-        } catch (MalformedURLException e) {
-            throw new LumifyException("Could not add file to classloader");
-        }
-    }
-
-    protected static void addLibFile(URL url) {
-        LOGGER.info("adding lib: %s", url);
 
         ClassLoader classLoader = LibLoader.class.getClassLoader();
         while (classLoader != null) {
-            if (tryAddUrl(classLoader, url)) {
+            if (tryAddUrl(classLoader, f)) {
                 return;
             }
             classLoader = classLoader.getParent();
         }
-        if (tryAddUrl(ClassLoader.getSystemClassLoader(), url)) {
+        if (tryAddUrl(ClassLoader.getSystemClassLoader(), f)) {
             return;
         }
-
-        throw new LumifyException("Could not add URL to classloader");
+        throw new LumifyException("Could not add file to classloader");
     }
 
-    private static boolean tryAddUrl(ClassLoader classLoader, URL url) {
+    private static boolean tryAddUrl(ClassLoader classLoader, File f) {
         Class<? extends ClassLoader> classLoaderClass = classLoader.getClass();
         try {
             Class[] parameters = new Class[]{URL.class};
@@ -92,11 +77,11 @@ public abstract class LibLoader {
                 return false;
             }
             method.setAccessible(true);
-            method.invoke(classLoader, url);
-            LOGGER.debug("added %s to classLoader %s", url, classLoader.getClass().getName());
+            method.invoke(classLoader, f.toURI().toURL());
+            LOGGER.debug("added %s to classLoader %s", f.getAbsolutePath(), classLoader.getClass().getName());
             return true;
         } catch (Throwable t) {
-            LOGGER.error("Error, could not add URL " + url + " to classloader: " + classLoaderClass.getName(), t);
+            LOGGER.error("Error, could not add URL " + f.getAbsolutePath() + " to classloader: " + classLoaderClass.getName(), t);
             return false;
         }
     }
