@@ -1,5 +1,6 @@
 package io.lumify.web.routes.graph;
 
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -22,8 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
 
 public class GraphRelatedVertices extends BaseRequestHandler {
     private final Graph graph;
@@ -86,7 +85,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
     }
 
     private boolean isLimited(Set<String> limitConceptIds, Vertex vertex) {
-        String conceptId = CONCEPT_TYPE.getPropertyValue(vertex);
+        String conceptId = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
         return !limitConceptIds.contains(conceptId);
     }
 }

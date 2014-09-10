@@ -31,9 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
-import static io.lumify.core.model.properties.LumifyProperties.TITLE;
-
 public class ResolveDetectedObject extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveDetectedObject.class);
     private static final String MULTI_VALUE_KEY_PREFIX = ResolveDetectedObject.class.getName();
@@ -110,8 +107,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility());
 
-            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
-            TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());

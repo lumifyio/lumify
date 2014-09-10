@@ -97,11 +97,11 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         boolean foundBenghazi = false;
         boolean foundCnn = false;
         for (Vertex termMention : termMentions) {
-            String title = LumifyProperties.TITLE.getPropertyValue(termMention);
+            String title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(termMention);
 
             long start = LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention);
             long end = LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(termMention);
-            String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention);
+            String conceptType = LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(termMention);
 
             if (title.equals("Bob Robértson")) {
                 foundBobRobertson = true;

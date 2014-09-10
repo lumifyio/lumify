@@ -1,6 +1,5 @@
 package io.lumify.web.routes.graph;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -8,12 +7,14 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.PropertyType;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchPhaseExecutionException;
@@ -28,8 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.*;
-
-import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
 
 public class GraphVertexSearch extends BaseRequestHandler {
     private final int DEFAULT_RESULT_COUNT = 100;
@@ -107,10 +106,10 @@ public class GraphVertexSearch extends BaseRequestHandler {
                         conceptIds[count] = c.getTitle();
                         count++;
                     }
-                    graphQuery.has(CONCEPT_TYPE.getPropertyName(), Compare.IN, conceptIds);
+                    graphQuery.has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), Compare.IN, conceptIds);
                 }
             } else {
-                graphQuery.has(CONCEPT_TYPE.getPropertyName(), conceptType);
+                graphQuery.has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), conceptType);
             }
         }
 

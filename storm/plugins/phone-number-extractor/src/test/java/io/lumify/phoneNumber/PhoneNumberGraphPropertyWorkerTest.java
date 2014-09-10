@@ -95,7 +95,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         boolean foundFirst = false;
         boolean foundSecond = false;
         for (Vertex term : termMentions) {
-            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            String title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(term);
             if (title.equals("+14106782230")) {
                 foundFirst = true;
                 assertEquals(33, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));
@@ -130,7 +130,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         boolean foundFirst = false;
         boolean foundSecond = false;
         for (Vertex term : termMentions) {
-            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            String title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(term);
             if (title.equals("+14106782230")) {
                 foundFirst = true;
                 assertEquals(34, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));

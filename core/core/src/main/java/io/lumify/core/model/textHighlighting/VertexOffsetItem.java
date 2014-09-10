@@ -52,7 +52,7 @@ public class VertexOffsetItem extends OffsetItem {
     }
 
     public String getConceptIri() {
-        return LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention);
+        return LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(termMention);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class VertexOffsetItem extends OffsetItem {
     }
 
     public String getTitle() {
-        return LumifyProperties.TITLE.getPropertyValue(termMention);
+        return LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(termMention);
     }
 
     @Override

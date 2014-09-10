@@ -114,7 +114,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
         boolean found = false;
         for (Vertex term : termMentions) {
-            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            String title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(term);
             if (title.equals("Bob Robertson")) {
                 found = true;
                 assertEquals(63, LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(term, 0));
@@ -126,7 +126,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
         ArrayList<String> signs = new ArrayList<String>();
         for (Vertex term : termMentions) {
-            String title = LumifyProperties.TITLE.getPropertyValue(term);
+            String title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(term);
             signs.add(title);
         }
 

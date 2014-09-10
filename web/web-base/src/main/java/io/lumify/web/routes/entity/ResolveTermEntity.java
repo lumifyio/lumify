@@ -34,9 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.lumify.core.model.properties.LumifyProperties.CONCEPT_TYPE;
-import static io.lumify.core.model.properties.LumifyProperties.TITLE;
-
 public class ResolveTermEntity extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveTermEntity.class);
     private static final String MULTI_VALUE_KEY = ResolveTermEntity.class.getName();
@@ -120,8 +117,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
             vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility());
             GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
-            CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
-            TITLE.addPropertyValue(vertexMutation, MULTI_VALUE_KEY, title, metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.TITLE.addPropertyValue(vertexMutation, MULTI_VALUE_KEY, title, metadata, lumifyVisibility.getVisibility());
 
             vertex = vertexMutation.save(authorizations);
 

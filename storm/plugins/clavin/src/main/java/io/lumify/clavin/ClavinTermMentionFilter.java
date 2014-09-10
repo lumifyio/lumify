@@ -222,9 +222,9 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
             loc = resolvedLocationOffsetMap.get((int) LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention, 0));
             if (isLocation(termMention) && loc != null) {
                 String id = String.format("CLAVIN-%d", loc.getGeoname().getGeonameID());
-                GeoPoint geoPoint = new GeoPoint(loc.getGeoname().getLatitude(), loc.getGeoname().getLongitude(), LumifyProperties.TITLE.getPropertyValue(termMention));
+                GeoPoint geoPoint = new GeoPoint(loc.getGeoname().getLatitude(), loc.getGeoname().getLongitude(), LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(termMention));
                 String title = toSign(loc);
-                String termMentionConceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention);
+                String termMentionConceptType = LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(termMention);
                 String conceptType = getOntologyClassUri(loc, termMentionConceptType);
 
                 ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
@@ -242,7 +242,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                         .title(title)
                         .conceptIri(conceptType)
                         .process(processId)
-                        .visibilitySource(LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(termMention))
+                        .visibilitySource(LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.getPropertyValue(termMention))
                         .save(getGraph(), getVisibilityTranslator(), authorizations);
 
                 LOGGER.debug("Replacing original location [%s] with resolved location [%s]", termMention.getId(), resolvedMention.getId());
@@ -257,7 +257,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     private boolean isLocation(final Vertex mention) {
-        return targetConcepts.contains(LumifyProperties.CONCEPT_TYPE.getPropertyValue(mention));
+        return targetConcepts.contains(LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(mention));
     }
 
     private List<LocationOccurrence> getLocationOccurrencesFromTermMentions(final Iterable<Vertex> termMentions) {
@@ -265,7 +265,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
 
         for (Vertex termMention : termMentions) {
             if (isLocation(termMention)) {
-                locationOccurrences.add(new LocationOccurrence(LumifyProperties.TITLE.getPropertyValue(termMention), (int) LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention, 0)));
+                locationOccurrences.add(new LocationOccurrence(LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(termMention), (int) LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention, 0)));
             }
         }
         return locationOccurrences;

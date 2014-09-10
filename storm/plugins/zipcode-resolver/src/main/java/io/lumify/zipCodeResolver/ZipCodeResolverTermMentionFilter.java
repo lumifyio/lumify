@@ -80,11 +80,11 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     @Override
     public void apply(Vertex sourceVertex, final Iterable<Vertex> termMentions, final Authorizations authorizations) throws Exception {
         for (Vertex termMention : termMentions) {
-            if (!zipCodeIri.equals(LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention))) {
+            if (!zipCodeIri.equals(LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(termMention))) {
                 continue;
             }
 
-            String text = LumifyProperties.TITLE.getPropertyValue(termMention);
+            String text = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(termMention);
             if (text.indexOf('-') > 0) {
                 text = text.substring(0, text.indexOf('-'));
             }
@@ -112,7 +112,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                     .title(sign)
                     .conceptIri(zipCodeIri)
                     .process(getClass().getName())
-                    .visibilitySource(LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(termMention))
+                    .visibilitySource(LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.getPropertyValue(termMention))
                     .save(getGraph(), getVisibilityTranslator(), authorizations);
         }
     }

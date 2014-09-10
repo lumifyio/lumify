@@ -42,9 +42,9 @@ public class TermMentionBuilder {
         this.propertyKey = LumifyProperties.TERM_MENTION_PROPERTY_KEY.getPropertyValue(existingTermMention);
         this.start = LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(existingTermMention, 0);
         this.end = LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(existingTermMention, 0);
-        this.title = LumifyProperties.TITLE.getPropertyValue(existingTermMention, "");
-        this.conceptIri = LumifyProperties.CONCEPT_TYPE.getPropertyValue(existingTermMention, "");
-        this.visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(existingTermMention, "");
+        this.title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(existingTermMention, "");
+        this.conceptIri = LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(existingTermMention, "");
+        this.visibilitySource = LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.getPropertyValue(existingTermMention, "");
     }
 
     /**
@@ -169,9 +169,9 @@ public class TermMentionBuilder {
         String vertexId = createVertexId();
         Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilitySource).getVisibility(), TermMentionRepository.VISIBILITY);
         VertexBuilder vertexBuilder = graph.prepareVertex(vertexId, visibility);
-        LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexBuilder, this.visibilitySource, visibility);
-        LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, this.conceptIri, visibility);
-        LumifyProperties.TITLE.setProperty(vertexBuilder, this.title, visibility);
+        LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.setProperty(vertexBuilder, this.visibilitySource, visibility);
+        LumifyProperties.TERM_MENTION_CONCEPT_TYPE.setProperty(vertexBuilder, this.conceptIri, visibility);
+        LumifyProperties.TERM_MENTION_TITLE.setProperty(vertexBuilder, this.title, visibility);
         LumifyProperties.TERM_MENTION_START_OFFSET.setProperty(vertexBuilder, this.start, visibility);
         LumifyProperties.TERM_MENTION_END_OFFSET.setProperty(vertexBuilder, this.end, visibility);
         if (this.process != null) {
