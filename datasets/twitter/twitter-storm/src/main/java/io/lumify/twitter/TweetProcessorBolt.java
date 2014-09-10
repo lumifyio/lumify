@@ -348,7 +348,14 @@ public class TweetProcessorBolt extends BaseRichBolt {
         long endOffset = offsets.getInt(1);
         String title = LumifyProperties.TITLE.getPropertyValue(vertex);
 
-        new TermMentionBuilder(tweetVertex, MULTI_VALUE_KEY, startOffset, endOffset, title, conceptUri, visibilitySource)
+        new TermMentionBuilder()
+                .sourceVertex(tweetVertex)
+                .propertyKey(MULTI_VALUE_KEY)
+                .start(startOffset)
+                .end(endOffset)
+                .title(title)
+                .conceptIri(conceptUri)
+                .visibilitySource(visibilitySource)
                 .resolvedTo(vertex, edge)
                 .save(graph, visibilityTranslator, authorizations);
     }

@@ -60,12 +60,26 @@ public class EntityHighlighterTest {
     }
 
     private Vertex createTermMention(Vertex sourceVertex, String sign, int start, int end) {
-        return new TermMentionBuilder(sourceVertex, PROPERTY_KEY, start, end, sign, "", "")
+        return new TermMentionBuilder()
+                .sourceVertex(sourceVertex)
+                .propertyKey(PROPERTY_KEY)
+                .start(start)
+                .end(end)
+                .title(sign)
+                .conceptIri("")
+                .visibilitySource("")
                 .save(graph, visibilityTranslator, authorizations);
     }
 
     private Vertex createTermMention(Vertex sourceVertex, String sign, int start, int end, String process) {
-        return new TermMentionBuilder(sourceVertex, PROPERTY_KEY, start, end, sign, "", "")
+        return new TermMentionBuilder()
+                .sourceVertex(sourceVertex)
+                .propertyKey(PROPERTY_KEY)
+                .start(start)
+                .end(end)
+                .title(sign)
+                .conceptIri("")
+                .visibilitySource("")
                 .process(process)
                 .save(graph, visibilityTranslator, authorizations);
     }

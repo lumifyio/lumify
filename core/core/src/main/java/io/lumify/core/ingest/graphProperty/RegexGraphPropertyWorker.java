@@ -2,9 +2,9 @@ package io.lumify.core.ingest.graphProperty;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Element;
@@ -47,7 +47,14 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
             int start = matcher.start();
             int end = matcher.end();
 
-            new TermMentionBuilder(v, data.getProperty().getKey(), start, end, patternGroup, getOntologyClassUri(), data.getVisibilitySource())
+            new TermMentionBuilder()
+                    .sourceVertex(v)
+                    .propertyKey(data.getProperty().getKey())
+                    .start(start)
+                    .end(end)
+                    .title(patternGroup)
+                    .conceptIri(getOntologyClassUri())
+                    .visibilitySource(data.getVisibilitySource())
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
         }

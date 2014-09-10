@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.opennlpDictionary.model.DictionaryEntry;
@@ -95,7 +95,14 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
         String type = foundName.getType();
         String ontologyClassUri = mapToOntologyIri(type);
 
-        return new TermMentionBuilder(sourceVertex, propertyKey, start, end, name, ontologyClassUri, visibilitySource)
+        return new TermMentionBuilder()
+                .sourceVertex(sourceVertex)
+                .propertyKey(propertyKey)
+                .start(start)
+                .end(end)
+                .title(name)
+                .conceptIri(ontologyClassUri)
+                .visibilitySource(visibilitySource)
                 .process(getClass().getName())
                 .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
     }

@@ -5,10 +5,10 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.mapreduce.LumifyElementMapperBase;
-import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
@@ -255,7 +255,14 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
                 visibility,
                 authorizations);
 
-        new TermMentionBuilder(pageVertex, pageTextKey, link.getStartOffset(), link.getEndOffset(), linkTarget, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibilitySource)
+        new TermMentionBuilder()
+                .sourceVertex(pageVertex)
+                .propertyKey(pageTextKey)
+                .start(link.getStartOffset())
+                .end(link.getEndOffset())
+                .title(linkTarget)
+                .conceptIri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI)
+                .visibilitySource(visibilitySource)
                 .process(WIKIPEDIA_PROCESS)
                 .resolvedTo(linkedPageVertex, edge)
                 .save(getGraph(), visibilityTranslator, authorizations);

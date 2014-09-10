@@ -6,41 +6,24 @@ import io.lumify.core.security.VisibilityTranslator;
 import org.json.JSONObject;
 import org.securegraph.*;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class TermMentionBuilder {
     private static final String TERM_MENTION_VERTEX_ID_PREFIX = "TM_";
     private Vertex sourceVertex;
-    private final String propertyKey;
-    private final long start;
-    private final long end;
+    private String propertyKey;
+    private long start = -1;
+    private long end = -1;
     private String title;
     private String conceptIri;
-    private final JSONObject visibilitySource;
+    private JSONObject visibilitySource;
     private String process;
     private Vertex resolvedToVertex;
     private Edge resolvedEdge;
 
-    public TermMentionBuilder(Vertex sourceVertex, String propertyKey, long start, long end, String title, String conceptIri, String visibilitySource) {
-        this(sourceVertex, propertyKey, start, end, title, conceptIri, visibilitySourceToJson(visibilitySource));
-    }
+    public TermMentionBuilder() {
 
-    private static JSONObject visibilitySourceToJson(String visibilitySource) {
-        if (visibilitySource == null) {
-            return new JSONObject();
-        }
-        if (visibilitySource.length() == 0) {
-            return new JSONObject();
-        }
-        return new JSONObject(visibilitySource);
-    }
-
-    public TermMentionBuilder(Vertex sourceVertex, String propertyKey, long start, long end, String title, String conceptIri, JSONObject visibilitySource) {
-        this.sourceVertex = sourceVertex;
-        this.propertyKey = propertyKey;
-        this.start = start;
-        this.end = end;
-        this.title = title;
-        this.conceptIri = conceptIri;
-        this.visibilitySource = visibilitySource;
     }
 
     public TermMentionBuilder(Vertex existingTermMention, Vertex sourceVertex) {
@@ -51,6 +34,40 @@ public class TermMentionBuilder {
         this.title = LumifyProperties.TITLE.getPropertyValue(existingTermMention, "");
         this.conceptIri = LumifyProperties.CONCEPT_TYPE.getPropertyValue(existingTermMention, "");
         this.visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(existingTermMention, "");
+    }
+
+    public TermMentionBuilder start(long start) {
+        this.start = start;
+        return this;
+    }
+
+    public TermMentionBuilder end(long end) {
+        this.end = end;
+        return this;
+    }
+
+    public TermMentionBuilder propertyKey(String propertyKey) {
+        this.propertyKey = propertyKey;
+        return this;
+    }
+
+    public TermMentionBuilder visibilitySource(String visibilitySource) {
+        return visibilitySource(visibilitySourceStringToJson(visibilitySource));
+    }
+
+    public TermMentionBuilder visibilitySource(JSONObject visibilitySource) {
+        this.visibilitySource = visibilitySource;
+        return this;
+    }
+
+    private static JSONObject visibilitySourceStringToJson(String visibilitySource) {
+        if (visibilitySource == null) {
+            return new JSONObject();
+        }
+        if (visibilitySource.length() == 0) {
+            return new JSONObject();
+        }
+        return new JSONObject(visibilitySource);
     }
 
     public TermMentionBuilder resolvedTo(Vertex resolvedToVertex, Edge resolvedEdge) {
@@ -80,6 +97,15 @@ public class TermMentionBuilder {
     }
 
     public Vertex save(Graph graph, VisibilityTranslator visibilityTranslator, Authorizations authorizations) {
+        checkNotNull(sourceVertex, "sourceVertex cannot be null");
+        checkNotNull(propertyKey, "propertyKey cannot be null");
+        checkNotNull(title, "title cannot be null");
+        checkNotNull(conceptIri, "conceptIri cannot be null");
+        checkNotNull(visibilitySource, "visibilitySource cannot be null");
+        checkNotNull(process, "visibilitySource cannot be null");
+        checkArgument(start >= 0, "start must be greater than or equal to 0");
+        checkArgument(end >= 0, "start must be greater than or equal to 0");
+
         String vertexId = createVertexId();
         Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilitySource).getVisibility(), TermMentionRepository.VISIBILITY);
         VertexBuilder vertexBuilder = graph.prepareVertex(vertexId, visibility);

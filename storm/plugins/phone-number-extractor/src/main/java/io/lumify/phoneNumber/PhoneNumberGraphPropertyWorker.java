@@ -8,8 +8,8 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Element;
@@ -59,7 +59,14 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
             int start = phoneNumber.start();
             int end = phoneNumber.end();
 
-            new TermMentionBuilder(sourceVertex, data.getProperty().getKey(), start, end, formattedNumber, entityType, data.getVisibilitySource())
+            new TermMentionBuilder()
+                    .sourceVertex(sourceVertex)
+                    .propertyKey(data.getProperty().getKey())
+                    .start(start)
+                    .end(end)
+                    .title(formattedNumber)
+                    .conceptIri(entityType)
+                    .visibilitySource(data.getVisibilitySource())
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
         }

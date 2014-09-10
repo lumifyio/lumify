@@ -141,7 +141,14 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        new TermMentionBuilder(artifactVertex, propertyKey, mentionStart, mentionEnd, title, concept.getIRI(), visibilityJson)
+        new TermMentionBuilder()
+                .sourceVertex(artifactVertex)
+                .propertyKey(propertyKey)
+                .start(mentionStart)
+                .end(mentionEnd)
+                .title(title)
+                .conceptIri(concept.getIRI())
+                .visibilitySource(visibilityJson)
                 .resolvedTo(vertex, edge)
                 .save(this.graph, visibilityTranslator, authorizations);
 

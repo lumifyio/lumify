@@ -78,7 +78,14 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             Vertex resolvedToVertex = findOrAddEntity(title, ontologyClassUri, visibility);
             Edge resolvedEdge = findOrAddEdge(sourceVertex, resolvedToVertex, visibilitySource, visibility);
 
-            new TermMentionBuilder(sourceVertex, propertyKey, start, end, title, ontologyClassUri, visibilitySource)
+            new TermMentionBuilder()
+                    .sourceVertex(sourceVertex)
+                    .propertyKey(propertyKey)
+                    .start(start)
+                    .end(end)
+                    .title(title)
+                    .conceptIri(ontologyClassUri)
+                    .visibilitySource(visibilitySource)
                     .process(PROCESS)
                     .resolvedTo(resolvedToVertex, resolvedEdge)
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());

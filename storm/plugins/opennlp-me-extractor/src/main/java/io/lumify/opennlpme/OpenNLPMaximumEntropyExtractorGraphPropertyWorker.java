@@ -3,8 +3,8 @@ package io.lumify.opennlpme;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
-import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import opennlp.tools.namefind.NameFinderME;
@@ -85,7 +85,14 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
         String type = foundName.getType();
         String ontologyClassUri = mapToOntologyIri(type);
 
-        return new TermMentionBuilder(sourceVertex, propertyKey, start, end, name, ontologyClassUri, visibilitySource)
+        return new TermMentionBuilder()
+                .sourceVertex(sourceVertex)
+                .propertyKey(propertyKey)
+                .start(start)
+                .end(end)
+                .title(name)
+                .conceptIri(ontologyClassUri)
+                .visibilitySource(visibilitySource)
                 .process(getClass().getName())
                 .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
     }
