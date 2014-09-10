@@ -13,6 +13,8 @@ import org.securegraph.Vertex;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,15 +42,16 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         final Matcher matcher = pattern.matcher(text);
 
-        Vertex v = (Vertex) data.getElement();
+        Vertex sourceVertex = (Vertex) data.getElement();
 
+        List<Vertex> termMentions = new ArrayList<Vertex>();
         while (matcher.find()) {
             final String patternGroup = matcher.group();
             int start = matcher.start();
             int end = matcher.end();
 
-            new TermMentionBuilder()
-                    .sourceVertex(v)
+            Vertex termMention = new TermMentionBuilder()
+                    .sourceVertex(sourceVertex)
                     .propertyKey(data.getProperty().getKey())
                     .start(start)
                     .end(end)
@@ -57,8 +60,10 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
                     .visibilitySource(data.getVisibilitySource())
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
+            termMentions.add(termMention);
         }
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
+        applyTermMentionFilters(sourceVertex, termMentions);
+        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, sourceVertex, getClass().getSimpleName(), getUser(), sourceVertex.getVisibility());
     }
 
     @Override

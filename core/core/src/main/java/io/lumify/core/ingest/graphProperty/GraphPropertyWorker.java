@@ -11,6 +11,8 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.RowKeyHelper;
 import org.securegraph.*;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -21,6 +23,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 public abstract class GraphPropertyWorker {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
     private Graph graph;
     private VisibilityTranslator visibilityTranslator;
     private WorkQueueRepository workQueueRepository;
@@ -48,6 +51,16 @@ public abstract class GraphPropertyWorker {
         this.personIri = (String) workerPrepareData.getStormConf().get(Configuration.ONTOLOGY_IRI_PERSON);
         if (this.personIri == null || this.personIri.length() == 0) {
             throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
+        }
+    }
+
+    protected void applyTermMentionFilters(Vertex sourceVertex, Iterable<Vertex> termMentions) {
+        for (TermMentionFilter termMentionFilter : this.workerPrepareData.getTermMentionFilters()) {
+            try {
+                termMentionFilter.apply(sourceVertex, termMentions, this.workerPrepareData.getAuthorizations());
+            } catch (Exception e) {
+                LOGGER.error("Could not apply term mention filter", e);
+            }
         }
     }
 

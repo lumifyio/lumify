@@ -56,26 +56,30 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
 
         LOGGER.debug("Processing artifact content stream");
         Vertex sourceVertex = (Vertex) data.getElement();
+        List<Vertex> termMentions = new ArrayList<Vertex>();
         while ((line = untokenizedLineStream.read()) != null) {
-            processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, data.getVisibilitySource());
+            termMentions.addAll(processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, data.getVisibilitySource()));
             getGraph().flush();
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }
+        applyTermMentionFilters(sourceVertex, termMentions);
 
         untokenizedLineStream.close();
         LOGGER.debug("Stream processing completed");
     }
 
-    private void processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, String visibilitySource) {
+    private List<Vertex> processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, String visibilitySource) {
+        List<Vertex> termMentions = new ArrayList<Vertex>();
         String tokenList[] = tokenizer.tokenize(line);
         Span[] tokenListPositions = tokenizer.tokenizePos(line);
         for (TokenNameFinder finder : finders) {
             Span[] foundSpans = finder.find(tokenList);
             for (Span span : foundSpans) {
-                createTermMention(sourceVertex, propertyKey, charOffset, span, tokenList, tokenListPositions, visibilitySource);
+                termMentions.add(createTermMention(sourceVertex, propertyKey, charOffset, span, tokenList, tokenListPositions, visibilitySource));
             }
             finder.clearAdaptiveData();
         }
+        return termMentions;
     }
 
     private Vertex createTermMention(Vertex sourceVertex, String propertyKey, int charOffset, Span foundName, String[] tokens, Span[] tokenListPositions, String visibilitySource) {

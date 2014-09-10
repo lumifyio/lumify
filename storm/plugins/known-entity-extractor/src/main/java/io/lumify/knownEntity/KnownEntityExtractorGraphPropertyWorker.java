@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,15 +61,19 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
         String text = IOUtils.toString(in, "UTF-8"); // TODO convert AhoCorasick to use InputStream
         Iterator<SearchResult<Match>> searchResults = tree.search(text.toCharArray());
         Vertex sourceVertex = (Vertex) data.getElement();
+        List<Vertex> termMentions = new ArrayList<Vertex>();
         while (searchResults.hasNext()) {
             SearchResult searchResult = searchResults.next();
             JSONObject visibilitySource = data.getVisibilitySourceJson();
-            outputResultToTermMention(sourceVertex, searchResult, data.getProperty().getKey(), visibilitySource, data.getVisibility());
+            List<Vertex> newTermMentions = outputResultToTermMention(sourceVertex, searchResult, data.getProperty().getKey(), visibilitySource, data.getVisibility());
+            termMentions.addAll(newTermMentions);
             getGraph().flush();
         }
+        applyTermMentionFilters(sourceVertex, termMentions);
     }
 
-    private void outputResultToTermMention(Vertex sourceVertex, SearchResult<Match> searchResult, String propertyKey, JSONObject visibilitySource, Visibility visibility) {
+    private List<Vertex> outputResultToTermMention(Vertex sourceVertex, SearchResult<Match> searchResult, String propertyKey, JSONObject visibilitySource, Visibility visibility) {
+        List<Vertex> termMentions = new ArrayList<Vertex>();
         for (Match match : searchResult.getOutputs()) {
             int start = searchResult.getLastIndex() - match.getMatchText().length();
             int end = searchResult.getLastIndex();
@@ -78,7 +83,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             Vertex resolvedToVertex = findOrAddEntity(title, ontologyClassUri, visibility);
             Edge resolvedEdge = findOrAddEdge(sourceVertex, resolvedToVertex, visibilitySource, visibility);
 
-            new TermMentionBuilder()
+            Vertex termMention = new TermMentionBuilder()
                     .sourceVertex(sourceVertex)
                     .propertyKey(propertyKey)
                     .start(start)
@@ -89,7 +94,9 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
                     .process(PROCESS)
                     .resolvedTo(resolvedToVertex, resolvedEdge)
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
+            termMentions.add(termMention);
         }
+        return termMentions;
     }
 
     private Edge findOrAddEdge(Vertex sourceVertex, Vertex resolvedToVertex, JSONObject visibilitySource, Visibility visibility) {

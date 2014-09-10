@@ -18,6 +18,8 @@ import org.securegraph.Vertex;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.securegraph.util.IterableUtils.count;
 
@@ -54,12 +56,13 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
 
         Vertex sourceVertex = (Vertex) data.getElement();
         final Iterable<PhoneNumberMatch> phoneNumbers = phoneNumberUtil.findNumbers(text, defaultRegionCode);
+        List<Vertex> termMentions = new ArrayList<Vertex>();
         for (final PhoneNumberMatch phoneNumber : phoneNumbers) {
             final String formattedNumber = phoneNumberUtil.format(phoneNumber.number(), PhoneNumberUtil.PhoneNumberFormat.E164);
             int start = phoneNumber.start();
             int end = phoneNumber.end();
 
-            new TermMentionBuilder()
+            Vertex termMention = new TermMentionBuilder()
                     .sourceVertex(sourceVertex)
                     .propertyKey(data.getProperty().getKey())
                     .start(start)
@@ -69,8 +72,10 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
                     .visibilitySource(data.getVisibilitySource())
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
+            termMentions.add(termMention);
         }
         getGraph().flush();
+        applyTermMentionFilters(sourceVertex, termMentions);
 
         LOGGER.debug("Number of phone numbers extracted: %d", count(phoneNumbers));
     }
