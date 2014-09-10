@@ -99,6 +99,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
             ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
                     .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, zipCodeIri, sourceVertex.getVisibility());
             LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, "Zip Code Resolver", sourceVertex.getVisibility());
             LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, sign, sourceVertex.getVisibility());
             Vertex zipCodeVertex = resolvedToVertexBuilder.save(authorizations);
@@ -106,7 +107,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + zipCodeVertex.getId();
             Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, zipCodeVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
 
-            new TermMentionBuilder(termMention, zipCodeVertex)
+            new TermMentionBuilder(termMention, sourceVertex)
                     .resolvedTo(zipCodeVertex, resolvedEdge)
                     .title(sign)
                     .conceptIri(zipCodeIri)
