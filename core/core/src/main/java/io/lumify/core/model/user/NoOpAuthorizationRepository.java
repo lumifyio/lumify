@@ -3,9 +3,7 @@ package io.lumify.core.model.user;
 import org.securegraph.Authorizations;
 import org.securegraph.Visibility;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class NoOpAuthorizationRepository implements AuthorizationRepository {
     @Override
@@ -41,5 +39,13 @@ public class NoOpAuthorizationRepository implements AuthorizationRepository {
                 return authorizations.getAuthorizations().length == 0;
             }
         };
+    }
+
+    @Override
+    public Authorizations createAuthorizations(Authorizations authorizations, String... additionalAuthorizations) {
+        Set<String> authList = new HashSet<String>();
+        Collections.addAll(authList, authorizations.getAuthorizations());
+        Collections.addAll(authList, additionalAuthorizations);
+        return createAuthorizations(authList);
     }
 }

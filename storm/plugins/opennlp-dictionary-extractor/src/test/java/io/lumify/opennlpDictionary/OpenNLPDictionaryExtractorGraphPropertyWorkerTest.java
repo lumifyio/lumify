@@ -7,6 +7,8 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.model.user.InMemoryAuthorizationRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -22,7 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.securegraph.Direction;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.inmemory.InMemoryAuthorizations;
@@ -59,6 +60,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
     private InMemoryGraph graph;
     private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
+    private TermMentionRepository termMentionRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -84,9 +86,12 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setGraph(graph);
 
+        AuthorizationRepository authorizationRepository = new InMemoryAuthorizationRepository();
+        termMentionRepository = new TermMentionRepository(graph, authorizationRepository);
+
         config.put(OpenNLPDictionaryExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
-        authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
+        authorizations = new InMemoryAuthorizations();
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
@@ -103,7 +108,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
 
-        List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizations));
+        List<Vertex> termMentions = toList(termMentionRepository.findBySourceGraphVertex(vertex, authorizations));
 
         assertEquals(3, termMentions.size());
 
