@@ -225,10 +225,11 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 GeoPoint geoPoint = new GeoPoint(loc.getGeoname().getLatitude(), loc.getGeoname().getLongitude(), LumifyProperties.TITLE.getPropertyValue(termMention));
                 String title = toSign(loc);
                 String termMentionConceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention);
+                String conceptType = getOntologyClassUri(loc, termMentionConceptType);
 
                 ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
                         .addPropertyValue(MULTI_VALUE_PROERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
-                LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, termMentionConceptType, sourceVertex.getVisibility());
+                LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, conceptType, sourceVertex.getVisibility());
                 LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, "CLAVIN", sourceVertex.getVisibility());
                 LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, title, sourceVertex.getVisibility());
                 Vertex resolvedToVertex = resolvedToVertexBuilder.save(authorizations);
@@ -239,7 +240,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 Vertex resolvedMention = new TermMentionBuilder(termMention, sourceVertex)
                         .resolvedTo(resolvedToVertex, resolvedEdge)
                         .title(title)
-                        .conceptIri(getOntologyClassUri(loc, termMentionConceptType))
+                        .conceptIri(conceptType)
                         .process(processId)
                         .visibilitySource(LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(termMention))
                         .save(getGraph(), getVisibilityTranslator(), authorizations);
