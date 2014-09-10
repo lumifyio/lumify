@@ -1,7 +1,5 @@
 package io.lumify.core;
 
-import io.lumify.core.ingest.video.VideoFrameInfo;
-import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.textHighlighting.OffsetItem;
 import io.lumify.core.model.textHighlighting.VertexOffsetItem;
