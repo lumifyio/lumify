@@ -116,7 +116,6 @@ public class TermMentionBuilder {
         checkNotNull(title, "title cannot be null");
         checkNotNull(conceptIri, "conceptIri cannot be null");
         checkNotNull(visibilitySource, "visibilitySource cannot be null");
-        checkNotNull(process, "visibilitySource cannot be null");
         checkArgument(start >= 0, "start must be greater than or equal to 0");
         checkArgument(end >= 0, "start must be greater than or equal to 0");
 
