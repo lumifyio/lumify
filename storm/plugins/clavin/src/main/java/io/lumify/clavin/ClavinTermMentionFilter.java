@@ -18,11 +18,13 @@ import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.PropertyType;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.securegraph.Authorizations;
+import org.securegraph.Edge;
 import org.securegraph.Vertex;
 import org.securegraph.type.GeoPoint;
 
@@ -92,6 +94,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     private String geoLocationIri;
     private AuditRepository auditRepository;
     private User user;
+    private String artifactHasEntityIri;
 
     @Override
     public void prepare(TermMentionFilterPrepareData termMentionFilterPrepareData) throws Exception {
@@ -169,6 +172,11 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     public void prepareIris(TermMentionFilterPrepareData termMentionFilterPrepareData) {
+        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        if (this.artifactHasEntityIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        }
+
         stateIri = (String) termMentionFilterPrepareData.getStormConf().get(CONFIG_STATE_IRI);
         if (stateIri == null || stateIri.length() == 0) {
             throw new LumifyException("Could not find config: " + CONFIG_STATE_IRI);
@@ -191,7 +199,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     @Override
-    public void apply(Vertex artifactGraphVertex, Iterable<Vertex> termMentions, Authorizations authorizations) throws IOException, ParseException {
+    public void apply(Vertex sourceVertex, Iterable<Vertex> termMentions, Authorizations authorizations) throws IOException, ParseException {
         List<LocationOccurrence> locationOccurrences = getLocationOccurrencesFromTermMentions(termMentions);
         LOGGER.info("Found %d Locations in %d terms.", locationOccurrences.size(), count(termMentions));
         List<ResolvedLocation> resolvedLocationNames = resolver.resolveLocations(locationOccurrences, fuzzy);
@@ -210,27 +218,30 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
         ResolvedLocation loc;
         String processId = getClass().getName();
         for (Vertex termMention : termMentions) {
-            loc = resolvedLocationOffsetMap.get(termMention.getStart());
+            loc = resolvedLocationOffsetMap.get((int) LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention, 0));
             if (isLocation(termMention) && loc != null) {
                 String id = String.format("CLAVIN-%d", loc.getGeoname().getGeonameID());
-                GeoPoint geoPoint = new GeoPoint(loc.getGeoname().getLatitude(), loc.getGeoname().getLongitude(), termMention.getSign());
-                resolvedMention = new TermMention.Builder(termMention)
-                        .id(id)
-                        .resolved(true)
-                        .useExisting(true)
-                        .sign(toSign(loc))
-                        .ontologyClassUri(getOntologyClassUri(loc, termMention.getOntologyClassUri()))
-                        .addProperty(MULTI_VALUE_PROERTY_KEY, geoLocationIri, geoPoint)
-                        .addProperty(MULTI_VALUE_PROERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "CLAVIN")
+                GeoPoint geoPoint = new GeoPoint(loc.getGeoname().getLatitude(), loc.getGeoname().getLongitude(), LumifyProperties.TITLE.getPropertyValue(termMention));
+
+                Vertex resolvedToVertex = getGraph().prepareVertex(id, termMention.getVisibility())
+                        .addPropertyValue(MULTI_VALUE_PROERTY_KEY, geoLocationIri, geoPoint, termMention.getVisibility())
+                        .addPropertyValue(MULTI_VALUE_PROERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "CLAVIN", termMention.getVisibility())
+                        .save(authorizations);
+
+                String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + resolvedToVertex.getId();
+                Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, resolvedToVertex, artifactHasEntityIri, termMention.getVisibility()).save(authorizations);
+
+                Vertex resolvedMention = new TermMentionBuilder(termMention, sourceVertex)
+                        .resolvedTo(resolvedToVertex, resolvedEdge)
+                        .title(toSign(loc))
+                        .conceptIri(getOntologyClassUri(loc, LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention)))
                         .process(processId)
-                        .build();
-                LOGGER.debug("Replacing original location [%s] with resolved location [%s]", termMention, resolvedMention);
-                results.add(resolvedMention);
-            } else {
-                results.add(termMention);
+                        .save(getGraph(), getVisibilityTranslator(), authorizations);
+
+                LOGGER.debug("Replacing original location [%s] with resolved location [%s]", termMention.getId(), resolvedMention.getId());
             }
         }
-        auditRepository.auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(), user, artifactGraphVertex.getVisibility());
+        auditRepository.auditAnalyzedBy(AuditAction.ANALYZED_BY, sourceVertex, getClass().getSimpleName(), user, sourceVertex.getVisibility());
     }
 
     private String toSign(final ResolvedLocation location) {
