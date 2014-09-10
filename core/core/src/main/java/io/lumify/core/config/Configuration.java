@@ -26,7 +26,6 @@ public final class Configuration {
     public static final String LIB_DIRECTORY = "lib-directory";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
-    public static final String FILESYSTEM_PROVIDER = "fs.provider";
     public static final String USER_REPOSITORY = "repository.user";
     public static final String WORKSPACE_REPOSITORY = "repository.workspace";
     public static final String AUTHORIZATION_REPOSITORY = "repository.authorization";
