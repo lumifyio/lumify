@@ -28,8 +28,9 @@ public class TermMentionBuilder {
 
     /**
      * Copy an existing term mention.
+     *
      * @param existingTermMention The term mention you would like to copy.
-     * @param sourceVertex The vertex that contains this term mention (ie Document, Html page, etc).
+     * @param sourceVertex        The vertex that contains this term mention (ie Document, Html page, etc).
      */
     public TermMentionBuilder(Vertex existingTermMention, Vertex sourceVertex) {
         this.sourceVertex = sourceVertex;
@@ -65,10 +66,16 @@ public class TermMentionBuilder {
         return this;
     }
 
+    /**
+     * Visibility source JSON string. This will be applied to the newly created term.
+     */
     public TermMentionBuilder visibilitySource(String visibilitySource) {
         return visibilitySource(visibilitySourceStringToJson(visibilitySource));
     }
 
+    /**
+     * Visibility source JSON object. This will be applied to the newly created term.
+     */
     public TermMentionBuilder visibilitySource(JSONObject visibilitySource) {
         this.visibilitySource = visibilitySource;
         return this;
@@ -84,38 +91,73 @@ public class TermMentionBuilder {
         return new JSONObject(visibilitySource);
     }
 
+    /**
+     * If this is a resolved term mention. This allows setting that information.
+     *
+     * @param resolvedToVertex The vertex this term mention resolves to.
+     * @param resolvedEdge     The edge that links the source vertex to the resolved vertex.
+     */
     public TermMentionBuilder resolvedTo(Vertex resolvedToVertex, Edge resolvedEdge) {
         this.resolvedToVertex = resolvedToVertex;
         this.resolvedEdge = resolvedEdge;
         return this;
     }
 
+    /**
+     * The process that created this term mention.
+     */
     public TermMentionBuilder process(String process) {
         this.process = process;
         return this;
     }
 
+    /**
+     * The vertex that contains this term mention (ie Document, Html page, etc).
+     */
     public TermMentionBuilder sourceVertex(Vertex sourceVertex) {
         this.sourceVertex = sourceVertex;
         return this;
     }
 
+    /**
+     * The title/text of this term mention. (ie Job Ferner, Paris, etc).
+     */
     public TermMentionBuilder title(String title) {
         this.title = title;
         return this;
     }
 
+    /**
+     * The concept type of this term mention.
+     */
     public TermMentionBuilder conceptIri(String conceptIri) {
         this.conceptIri = conceptIri;
         return this;
     }
 
+    /**
+     * Saves the term mention to the graph.
+     * <p/>
+     * The resulting graph for non-resolved terms will be:
+     * <p/>
+     * Source  -- Has --> Term
+     * Vertex             Mention
+     * <p/>
+     * The resulting graph for resolved terms will be:
+     * <p/>
+     * Source  -- Has --> Term    -- Resolved To --> Resolved
+     * Vertex             Mention                    Vertex
+     */
     public Vertex save(Graph graph, VisibilityTranslator visibilityTranslator, Authorizations authorizations) {
         checkNotNull(sourceVertex, "sourceVertex cannot be null");
         checkNotNull(propertyKey, "propertyKey cannot be null");
         checkNotNull(title, "title cannot be null");
+        checkArgument(title.length() > 0, "title cannot be an empty string");
         checkNotNull(conceptIri, "conceptIri cannot be null");
+        checkArgument(conceptIri.length() > 0, "conceptIri cannot be an empty string");
         checkNotNull(visibilitySource, "visibilitySource cannot be null");
+        checkNotNull(process, "process cannot be null");
+        checkArgument(process.length() > 0, "process cannot be an empty string");
         checkArgument(start >= 0, "start must be greater than or equal to 0");
         checkArgument(end >= 0, "start must be greater than or equal to 0");
 
