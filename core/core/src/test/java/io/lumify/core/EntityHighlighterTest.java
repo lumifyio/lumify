@@ -28,6 +28,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class EntityHighlighterTest {
     private static final String PROPERTY_KEY = "";
+    private static final String PERSON_IRI = "http://lumify.io/test/person";
+    private static final String LOCATION_IRI = "http://lumify.io/test/location";
 
     InMemoryGraph graph;
 
@@ -52,34 +54,35 @@ public class EntityHighlighterTest {
         Vertex sourceVertex = graph.addVertex("1", visibility, authorizations);
 
         ArrayList<Vertex> terms = new ArrayList<Vertex>();
-        terms.add(createTermMention(sourceVertex, "joe ferner", 18, 28));
-        terms.add(createTermMention(sourceVertex, "jeff kunkle", 33, 44, "uniq1"));
+        terms.add(createTermMention(sourceVertex, "joe ferner", PERSON_IRI, 18, 28));
+        terms.add(createTermMention(sourceVertex, "jeff kunkle", PERSON_IRI, 33, 44, "uniq1"));
         List<OffsetItem> termAndTermMetadata = new EntityHighlighter().convertTermMentionsToOffsetItems(terms, "", authorizations);
         String highlightText = EntityHighlighter.getHighlightedText("Test highlight of Joe Ferner and Jeff Kunkle.", termAndTermMetadata);
-        assertEquals("Test highlight of <span class=\"entity\" title=\"joe ferner\" data-info=\"{&quot;id&quot;:&quot;TM_--18-28-null&quot;,&quot;title&quot;:&quot;joe ferner&quot;,&quot;sandboxStatus&quot;:&quot;PRIVATE&quot;,&quot;http://lumify.io#conceptType&quot;:&quot;&quot;,&quot;start&quot;:18,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;end&quot;:28}\">Joe Ferner</span> and <span class=\"entity\" title=\"jeff kunkle\" data-info=\"{&quot;process&quot;:&quot;uniq1&quot;,&quot;id&quot;:&quot;TM_--33-44-uniq1&quot;,&quot;title&quot;:&quot;jeff kunkle&quot;,&quot;sandboxStatus&quot;:&quot;PRIVATE&quot;,&quot;http://lumify.io#conceptType&quot;:&quot;&quot;,&quot;start&quot;:33,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;end&quot;:44}\">Jeff Kunkle</span>.",
+        assertEquals("Test highlight of <span class=\"entity\" title=\"joe ferner\" data-info=\"{&quot;process&quot;:&quot;EntityHighlighterTest&quot;,&quot;id&quot;:&quot;TM_--18-28-EntityHighlighterTest&quot;,&quot;title&quot;:&quot;joe ferner&quot;,&quot;sandboxStatus&quot;:&quot;PRIVATE&quot;,&quot;http://lumify.io#conceptType&quot;:&quot;http://lumify.io/test/person&quot;,&quot;start&quot;:18,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;end&quot;:28}\">Joe Ferner</span> and <span class=\"entity\" title=\"jeff kunkle\" data-info=\"{&quot;process&quot;:&quot;uniq1&quot;,&quot;id&quot;:&quot;TM_--33-44-uniq1&quot;,&quot;title&quot;:&quot;jeff kunkle&quot;,&quot;sandboxStatus&quot;:&quot;PRIVATE&quot;,&quot;http://lumify.io#conceptType&quot;:&quot;http://lumify.io/test/person&quot;,&quot;start&quot;:33,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;end&quot;:44}\">Jeff Kunkle</span>.",
                 highlightText);
     }
 
-    private Vertex createTermMention(Vertex sourceVertex, String sign, int start, int end) {
+    private Vertex createTermMention(Vertex sourceVertex, String sign, String conceptIri, int start, int end) {
         return new TermMentionBuilder()
                 .sourceVertex(sourceVertex)
                 .propertyKey(PROPERTY_KEY)
+                .conceptIri(conceptIri)
                 .start(start)
                 .end(end)
                 .title(sign)
-                .conceptIri("")
                 .visibilitySource("")
+                .process(getClass().getSimpleName())
                 .save(graph, visibilityTranslator, authorizations);
     }
 
-    private Vertex createTermMention(Vertex sourceVertex, String sign, int start, int end, String process) {
+    private Vertex createTermMention(Vertex sourceVertex, String sign, String conceptIri, int start, int end, String process) {
         return new TermMentionBuilder()
                 .sourceVertex(sourceVertex)
                 .propertyKey(PROPERTY_KEY)
+                .conceptIri(conceptIri)
                 .start(start)
                 .end(end)
                 .title(sign)
-                .conceptIri("")
                 .visibilitySource("")
                 .process(process)
                 .save(graph, visibilityTranslator, authorizations);
@@ -89,8 +92,8 @@ public class EntityHighlighterTest {
         Vertex sourceVertex = graph.addVertex("1", visibility, authorizations);
 
         ArrayList<Vertex> terms = new ArrayList<Vertex>();
-        terms.add(createTermMention(sourceVertex, "joe ferner", 18, 28));
-        terms.add(createTermMention(sourceVertex, "jeff kunkle", 18, 21));
+        terms.add(createTermMention(sourceVertex, "joe ferner", PERSON_IRI, 18, 28));
+        terms.add(createTermMention(sourceVertex, "jeff kunkle", PERSON_IRI, 18, 21));
         List<OffsetItem> termAndTermMetadata = new EntityHighlighter().convertTermMentionsToOffsetItems(terms, "", authorizations);
         String highlightText = EntityHighlighter.getHighlightedText("Test highlight of Joe Ferner.", termAndTermMetadata);
         assertEquals("Test highlight of <span class=\"entity person\" term-key=\"joe ferner\\x1Fee\\x1Fperson\"><span class=\"entity person\" term-key=\"joe\\x1Fee\\x1Fperson\">Joe</span> Ferner</span>.", highlightText);
@@ -156,10 +159,10 @@ public class EntityHighlighterTest {
         Vertex sourceVertex = graph.addVertex("1", visibility, authorizations);
 
         ArrayList<Vertex> terms = new ArrayList<Vertex>();
-        terms.add(createTermMention(sourceVertex, "US", 48, 50));
+        terms.add(createTermMention(sourceVertex, "US", LOCATION_IRI, 48, 50));
         List<OffsetItem> termAndTermMetadata = new EntityHighlighter().convertTermMentionsToOffsetItems(terms, "", authorizations);
         String highlightText = EntityHighlighter.getHighlightedText("Ejército de Liberación Nacional® partnered with US on peace treaty", termAndTermMetadata);
-        assertEquals("Ej&eacute;rcito de Liberaci&oacute;n Nacional&reg; partnered with <span class=\"entity\" title=\"US\" data-info=\"{&quot;id&quot;:&quot;TM_--48-50-null&quot;,&quot;title&quot;:&quot;US&quot;,&quot;sandboxStatus&quot;:&quot;PRIVATE&quot;,&quot;http://lumify.io#conceptType&quot;:&quot;&quot;,&quot;start&quot;:48,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;end&quot;:50}\">US</span> on peace treaty", highlightText);
+        assertEquals("Ej&eacute;rcito de Liberaci&oacute;n Nacional&reg; partnered with <span class=\"entity\" title=\"US\" data-info=\"{&quot;process&quot;:&quot;EntityHighlighterTest&quot;,&quot;id&quot;:&quot;TM_--48-50-EntityHighlighterTest&quot;,&quot;title&quot;:&quot;US&quot;,&quot;sandboxStatus&quot;:&quot;PRIVATE&quot;,&quot;http://lumify.io#conceptType&quot;:&quot;http://lumify.io/test/location&quot;,&quot;start&quot;:48,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;end&quot;:50}\">US</span> on peace treaty", highlightText);
     }
 
     private List<String> asList(String[] strings) {
