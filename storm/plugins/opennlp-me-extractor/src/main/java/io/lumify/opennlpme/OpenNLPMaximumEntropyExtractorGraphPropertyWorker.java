@@ -18,6 +18,7 @@ import opennlp.tools.util.PlainTextByLineStream;
 import opennlp.tools.util.Span;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -58,7 +59,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
         Vertex sourceVertex = (Vertex) data.getElement();
         List<Vertex> termMentions = new ArrayList<Vertex>();
         while ((line = untokenizedLineStream.read()) != null) {
-            termMentions.addAll(processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, data.getVisibilitySource()));
+            termMentions.addAll(processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(sourceVertex)));
             getGraph().flush();
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }
@@ -68,7 +69,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
         LOGGER.debug("Stream processing completed");
     }
 
-    private List<Vertex> processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, String visibilitySource) {
+    private List<Vertex> processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, JSONObject visibilitySource) {
         List<Vertex> termMentions = new ArrayList<Vertex>();
         String tokenList[] = tokenizer.tokenize(line);
         Span[] tokenListPositions = tokenizer.tokenizePos(line);
@@ -82,7 +83,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
         return termMentions;
     }
 
-    private Vertex createTermMention(Vertex sourceVertex, String propertyKey, int charOffset, Span foundName, String[] tokens, Span[] tokenListPositions, String visibilitySource) {
+    private Vertex createTermMention(Vertex sourceVertex, String propertyKey, int charOffset, Span foundName, String[] tokens, Span[] tokenListPositions, JSONObject visibilitySource) {
         String name = Span.spansToStrings(new Span[]{foundName}, tokens)[0];
         int start = charOffset + tokenListPositions[foundName.getStart()].getStart();
         int end = charOffset + tokenListPositions[foundName.getEnd() - 1].getEnd();

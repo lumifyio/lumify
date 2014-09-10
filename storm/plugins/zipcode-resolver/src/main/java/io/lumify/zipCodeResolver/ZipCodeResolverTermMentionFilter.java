@@ -86,19 +86,20 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                 continue;
             }
 
-            Visibility visibility = new Visibility("");
+            Visibility termMentionVisibility = termMention.getVisibility();
             String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
             String sign = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
             GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
-            Vertex zipCodeVertex = getGraph().prepareVertex(id, visibility)
-                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, visibility)
-                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver", visibility)
+            Vertex zipCodeVertex = getGraph().prepareVertex(id, termMentionVisibility)
+                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, termMentionVisibility)
+                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver", termMentionVisibility)
                     .save(authorizations);
 
             new TermMentionBuilder(termMention, zipCodeVertex)
                     .title(sign)
                     .conceptIri(zipCodeIri)
                     .process(getClass().getName())
+                    .visibilitySource(LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(termMention))
                     .save(getGraph(), getVisibilityTranslator(), authorizations);
         }
     }

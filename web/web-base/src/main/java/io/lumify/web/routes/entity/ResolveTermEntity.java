@@ -148,7 +148,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
                 .end(mentionEnd)
                 .title(title)
                 .conceptIri(concept.getIRI())
-                .visibilitySource(visibilityJson)
+                .visibilitySource(visibilityJson.getJSONObject("source"))
                 .resolvedTo(vertex, edge)
                 .save(this.graph, visibilityTranslator, authorizations);
 

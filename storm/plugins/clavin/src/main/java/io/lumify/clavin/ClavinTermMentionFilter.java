@@ -236,6 +236,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                         .title(toSign(loc))
                         .conceptIri(getOntologyClassUri(loc, LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention)))
                         .process(processId)
+                        .visibilitySource(LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(termMention))
                         .save(getGraph(), getVisibilityTranslator(), authorizations);
 
                 LOGGER.debug("Replacing original location [%s] with resolved location [%s]", termMention.getId(), resolvedMention.getId());

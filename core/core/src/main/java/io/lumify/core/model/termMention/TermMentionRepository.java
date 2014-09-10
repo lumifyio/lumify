@@ -18,10 +18,12 @@ public class TermMentionRepository {
     public TermMentionRepository(Graph graph, AuthorizationRepository authorizationRepository) {
         this.graph = graph;
         this.authorizationRepository = authorizationRepository;
+        authorizationRepository.addAuthorizationToGraph(TermMentionRepository.VISIBILITY);
     }
 
     public Iterable<Vertex> findBySourceGraphVertexAndPropertyKey(Vertex sourceVertex, final String propertyKey, Authorizations authorizations) {
-        return new FilterIterable<Vertex>(findBySourceGraphVertex(sourceVertex, authorizations)) {
+        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        return new FilterIterable<Vertex>(findBySourceGraphVertex(sourceVertex, authorizationsWithTermMention)) {
             @Override
             protected boolean isIncluded(Vertex v) {
                 String vertexPropertyKey = LumifyProperties.TERM_MENTION_PROPERTY_KEY.getPropertyValue(v);

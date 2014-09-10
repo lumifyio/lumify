@@ -3,13 +3,18 @@ package io.lumify.core.model.termMention;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
 import org.securegraph.*;
+
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TermMentionBuilder {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TermMentionBuilder.class);
     private static final String TERM_MENTION_VERTEX_ID_PREFIX = "TM_";
     private Vertex sourceVertex;
     private String propertyKey;
@@ -164,6 +169,7 @@ public class TermMentionBuilder {
         String vertexId = createVertexId();
         Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilitySource).getVisibility(), TermMentionRepository.VISIBILITY);
         VertexBuilder vertexBuilder = graph.prepareVertex(vertexId, visibility);
+        LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexBuilder, this.visibilitySource, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, this.conceptIri, visibility);
         LumifyProperties.TITLE.setProperty(vertexBuilder, this.title, visibility);
         LumifyProperties.TERM_MENTION_START_OFFSET.setProperty(vertexBuilder, this.start, visibility);
