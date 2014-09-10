@@ -96,7 +96,7 @@ public class WorkspaceHelper {
             this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
         }
 
-        for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex, edge.getId(), authorizations)) {
+        for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
             termMentionRepository.delete(termMention, authorizations);
             workQueueRepository.pushTextUpdated(sourceVertex.getId());
         }

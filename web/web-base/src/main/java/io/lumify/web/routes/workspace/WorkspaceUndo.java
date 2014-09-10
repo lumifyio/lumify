@@ -179,7 +179,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
             }
         }
 
-        for (Vertex termMention : termMentionRepository.findResolvedTo(vertex, authorizations)) {
+        for (Vertex termMention : termMentionRepository.findResolvedTo(vertex.getId(), authorizations)) {
             unresolved.put(workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations));
         }
 

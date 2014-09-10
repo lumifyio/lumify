@@ -108,7 +108,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
 
-        List<Vertex> termMentions = toList(termMentionRepository.findBySourceGraphVertex(vertex, authorizations));
+        List<Vertex> termMentions = toList(termMentionRepository.findBySourceGraphVertex(vertex.getId(), authorizations));
 
         assertEquals(3, termMentions.size());
 

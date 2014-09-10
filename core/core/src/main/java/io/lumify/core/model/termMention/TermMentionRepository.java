@@ -21,9 +21,8 @@ public class TermMentionRepository {
         authorizationRepository.addAuthorizationToGraph(TermMentionRepository.VISIBILITY);
     }
 
-    public Iterable<Vertex> findBySourceGraphVertexAndPropertyKey(Vertex sourceVertex, final String propertyKey, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
-        return new FilterIterable<Vertex>(findBySourceGraphVertex(sourceVertex, authorizationsWithTermMention)) {
+    public Iterable<Vertex> findBySourceGraphVertexAndPropertyKey(String sourceVertexId, final String propertyKey, Authorizations authorizations) {
+        return new FilterIterable<Vertex>(findBySourceGraphVertex(sourceVertexId, authorizations)) {
             @Override
             protected boolean isIncluded(Vertex v) {
                 String vertexPropertyKey = LumifyProperties.TERM_MENTION_PROPERTY_KEY.getPropertyValue(v);
@@ -32,8 +31,9 @@ public class TermMentionRepository {
         };
     }
 
-    public Iterable<Vertex> findBySourceGraphVertex(Vertex sourceVertex, Authorizations authorizations) {
+    public Iterable<Vertex> findBySourceGraphVertex(String sourceVertexId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Vertex sourceVertex = graph.getVertex(sourceVertexId, authorizationsWithTermMention);
         return sourceVertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizationsWithTermMention);
     }
 
@@ -49,8 +49,9 @@ public class TermMentionRepository {
         m.save(authorizationsWithTermMention);
     }
 
-    public Iterable<Vertex> findResolvedTo(Vertex destVertex, Authorizations authorizations) {
+    public Iterable<Vertex> findResolvedTo(String destVertexId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Vertex destVertex = graph.getVertex(destVertexId, authorizationsWithTermMention);
         return destVertex.getVertices(Direction.IN, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizationsWithTermMention);
     }
 
@@ -59,8 +60,9 @@ public class TermMentionRepository {
         graph.removeVertex(termMention, authorizationsWithTermMention);
     }
 
-    public Iterable<Vertex> findByEdgeId(Vertex sourceVertex, final String edgeId, Authorizations authorizations) {
+    public Iterable<Vertex> findByEdgeId(String sourceVertexId, final String edgeId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Vertex sourceVertex = graph.getVertex(sourceVertexId, authorizationsWithTermMention);
         return new FilterIterable<Vertex>(sourceVertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizationsWithTermMention)) {
             @Override
             protected boolean isIncluded(Vertex v) {

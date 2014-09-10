@@ -340,7 +340,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             auditRepository.updateColumnVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString());
         }
 
-        for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex, authorizations)) {
+        for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex.getId(), authorizations)) {
             termMentionRepository.updateVisibility(termMention, originalEdgeVisibility, lumifyVisibility.getVisibility(), authorizations);
         }
     }

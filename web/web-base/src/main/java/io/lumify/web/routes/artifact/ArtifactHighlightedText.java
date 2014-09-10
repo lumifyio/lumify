@@ -67,7 +67,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             if (text == null) {
                 highlightedText = "";
             } else {
-                Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex, propertyKey, authorizations);
+                Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex.getId(), propertyKey, authorizations);
                 highlightedText = entityHighlighter.getHighlightedText(text, termMentions, workspaceId, authorizations);
             }
 
@@ -78,7 +78,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         VideoTranscript videoTranscript = MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyValue(artifactVertex, propertyKey);
         if (videoTranscript != null) {
             LOGGER.debug("returning video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
-            Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex, propertyKey, authorizations);
+            Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex.getId(), propertyKey, authorizations);
             VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions, workspaceId, authorizations);
             respondWithJson(response, highlightedVideoTranscript.toJson());
             return;
