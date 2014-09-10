@@ -1,5 +1,6 @@
 package io.lumify.core.model.termMention;
 
+import com.google.inject.Inject;
 import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.*;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -11,6 +12,7 @@ public class TermMentionRepository {
     public static final String VISIBILITY = "termMention";
     private final Graph graph;
 
+    @Inject
     public TermMentionRepository(Graph graph) {
         this.graph = graph;
     }
