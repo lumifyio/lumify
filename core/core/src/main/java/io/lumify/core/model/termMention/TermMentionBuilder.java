@@ -26,6 +26,11 @@ public class TermMentionBuilder {
 
     }
 
+    /**
+     * Copy an existing term mention.
+     * @param existingTermMention The term mention you would like to copy.
+     * @param sourceVertex The vertex that contains this term mention (ie Document, Html page, etc).
+     */
     public TermMentionBuilder(Vertex existingTermMention, Vertex sourceVertex) {
         this.sourceVertex = sourceVertex;
         this.propertyKey = LumifyProperties.TERM_MENTION_PROPERTY_KEY.getPropertyValue(existingTermMention);
@@ -36,16 +41,25 @@ public class TermMentionBuilder {
         this.visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(existingTermMention, "");
     }
 
+    /**
+     * The start offset within the property text that this term mention appears.
+     */
     public TermMentionBuilder start(long start) {
         this.start = start;
         return this;
     }
 
+    /**
+     * The end offset within the property text that this term mention appears.
+     */
     public TermMentionBuilder end(long end) {
         this.end = end;
         return this;
     }
 
+    /**
+     * The property key of the {@link io.lumify.core.model.properties.LumifyProperties#TEXT} that this term mention references.
+     */
     public TermMentionBuilder propertyKey(String propertyKey) {
         this.propertyKey = propertyKey;
         return this;
