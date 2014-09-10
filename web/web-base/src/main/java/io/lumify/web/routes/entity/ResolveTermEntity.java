@@ -87,7 +87,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String resolvedVertexId = getOptionalParameter(request, "resolvedVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
-        String termMentionRowKeyString = getOptionalParameter(request, "rowKey");
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);

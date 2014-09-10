@@ -187,14 +187,12 @@ define([
                 $mentionNode = $(this.attr.mentionNode),
                 newObjectSign = $.trim(this.select('objectSignSelector').val()),
                 mentionStart,
-                mentionEnd,
-                rowKey;
+                mentionEnd;
 
             if (this.attr.existing) {
                 var dataInfo = $mentionNode.data('info');
                 mentionStart = dataInfo.start;
                 mentionEnd = dataInfo.end;
-                rowKey = dataInfo['http://lumify.io#rowKey'];
             } else {
                 mentionStart = this.selectedStart;
                 mentionEnd = this.selectedEnd;
@@ -206,8 +204,7 @@ define([
                 mentionStart: mentionStart,
                 mentionEnd: mentionEnd,
                 artifactId: this.attr.artifactId,
-                visibilitySource: this.visibilitySource || '',
-                rowKey: rowKey
+                visibilitySource: this.visibilitySource || ''
             };
 
             if (this.currentGraphVertexId) {
