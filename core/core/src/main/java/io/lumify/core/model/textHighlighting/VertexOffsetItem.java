@@ -2,6 +2,7 @@ package io.lumify.core.model.textHighlighting;
 
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import org.securegraph.Vertex;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public class VertexOffsetItem extends OffsetItem {
@@ -23,6 +25,15 @@ public class VertexOffsetItem extends OffsetItem {
         this.termMention = termMention;
         this.sandboxStatus = sandboxStatus;
         this.authorizations = authorizations;
+
+        String[] authArray = this.authorizations.getAuthorizations();
+        boolean hasTermMentionAuth = false;
+        for (String auth : authArray) {
+            if (TermMentionRepository.VISIBILITY.equals(auth)) {
+                hasTermMentionAuth = true;
+            }
+        }
+        checkArgument(hasTermMentionAuth, TermMentionRepository.VISIBILITY + " is a required auth");
     }
 
     @Override

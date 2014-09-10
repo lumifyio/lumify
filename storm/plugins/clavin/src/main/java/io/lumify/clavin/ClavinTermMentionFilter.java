@@ -25,6 +25,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
+import org.securegraph.ElementBuilder;
 import org.securegraph.Vertex;
 import org.securegraph.type.GeoPoint;
 
@@ -222,18 +223,20 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
             if (isLocation(termMention) && loc != null) {
                 String id = String.format("CLAVIN-%d", loc.getGeoname().getGeonameID());
                 GeoPoint geoPoint = new GeoPoint(loc.getGeoname().getLatitude(), loc.getGeoname().getLongitude(), LumifyProperties.TITLE.getPropertyValue(termMention));
+                String title = toSign(loc);
 
-                Vertex resolvedToVertex = getGraph().prepareVertex(id, termMention.getVisibility())
-                        .addPropertyValue(MULTI_VALUE_PROERTY_KEY, geoLocationIri, geoPoint, termMention.getVisibility())
-                        .addPropertyValue(MULTI_VALUE_PROERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "CLAVIN", termMention.getVisibility())
-                        .save(authorizations);
+                ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
+                        .addPropertyValue(MULTI_VALUE_PROERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
+                LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, "CLAVIN", sourceVertex.getVisibility());
+                LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, title, sourceVertex.getVisibility());
+                Vertex resolvedToVertex = resolvedToVertexBuilder.save(authorizations);
 
                 String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + resolvedToVertex.getId();
-                Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, resolvedToVertex, artifactHasEntityIri, termMention.getVisibility()).save(authorizations);
+                Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, resolvedToVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
 
                 Vertex resolvedMention = new TermMentionBuilder(termMention, sourceVertex)
                         .resolvedTo(resolvedToVertex, resolvedEdge)
-                        .title(toSign(loc))
+                        .title(title)
                         .conceptIri(getOntologyClassUri(loc, LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention)))
                         .process(processId)
                         .visibilitySource(LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(termMention))

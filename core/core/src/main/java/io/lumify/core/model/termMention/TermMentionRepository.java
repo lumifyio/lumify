@@ -32,36 +32,36 @@ public class TermMentionRepository {
     }
 
     public Iterable<Vertex> findBySourceGraphVertex(String sourceVertexId, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         Vertex sourceVertex = graph.getVertex(sourceVertexId, authorizationsWithTermMention);
         return sourceVertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizationsWithTermMention);
     }
 
     public Vertex findById(String termMentionId, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         return graph.getVertex(termMentionId, authorizationsWithTermMention);
     }
 
     public void updateVisibility(Vertex termMention, Visibility originalVisibility, Visibility newVisibility, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         ExistingElementMutation<Vertex> m = termMention.prepareMutation();
         m.alterElementVisibility(newVisibility);
         m.save(authorizationsWithTermMention);
     }
 
     public Iterable<Vertex> findResolvedTo(String destVertexId, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         Vertex destVertex = graph.getVertex(destVertexId, authorizationsWithTermMention);
         return destVertex.getVertices(Direction.IN, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizationsWithTermMention);
     }
 
     public void delete(Vertex termMention, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         graph.removeVertex(termMention, authorizationsWithTermMention);
     }
 
     public Iterable<Vertex> findByEdgeId(String sourceVertexId, final String edgeId, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         Vertex sourceVertex = graph.getVertex(sourceVertexId, authorizationsWithTermMention);
         return new FilterIterable<Vertex>(sourceVertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizationsWithTermMention)) {
             @Override
@@ -73,7 +73,11 @@ public class TermMentionRepository {
     }
 
     public Vertex findSourceVertex(Vertex termMention, Authorizations authorizations) {
-        Authorizations authorizationsWithTermMention = authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         return singleOrDefault(termMention.getVertices(Direction.IN, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizationsWithTermMention), null);
+    }
+
+    public Authorizations getAuthorizations(Authorizations authorizations) {
+        return authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
     }
 }

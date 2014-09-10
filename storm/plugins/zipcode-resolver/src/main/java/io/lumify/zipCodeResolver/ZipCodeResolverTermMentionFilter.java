@@ -1,13 +1,15 @@
 package io.lumify.zipCodeResolver;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import org.securegraph.Authorizations;
+import org.securegraph.Edge;
+import org.securegraph.ElementBuilder;
 import org.securegraph.Vertex;
-import org.securegraph.Visibility;
 import org.securegraph.type.GeoPoint;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.prefs.CsvPreference;
@@ -25,6 +27,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     private String zipCodeIri;
     private String geoLocationIri;
     private Map<String, ZipCodeEntry> zipCodesByZipCode = new HashMap<String, ZipCodeEntry>();
+    private String artifactHasEntityIri;
 
     @Override
     public void prepare(TermMentionFilterPrepareData termMentionFilterPrepareData) throws Exception {
@@ -67,10 +70,15 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
         if (geoLocationIri == null || geoLocationIri.length() == 0) {
             throw new LumifyException("Could not find config: " + CONFIG_GEO_LOCATION_IRI);
         }
+
+        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        if (this.artifactHasEntityIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        }
     }
 
     @Override
-    public void apply(Vertex artifactGraphVertex, final Iterable<Vertex> termMentions, final Authorizations authorizations) throws Exception {
+    public void apply(Vertex sourceVertex, final Iterable<Vertex> termMentions, final Authorizations authorizations) throws Exception {
         for (Vertex termMention : termMentions) {
             if (!zipCodeIri.equals(LumifyProperties.CONCEPT_TYPE.getPropertyValue(termMention))) {
                 continue;
@@ -86,16 +94,20 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                 continue;
             }
 
-            Visibility termMentionVisibility = termMention.getVisibility();
             String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
             String sign = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
             GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
-            Vertex zipCodeVertex = getGraph().prepareVertex(id, termMentionVisibility)
-                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, termMentionVisibility)
-                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver", termMentionVisibility)
-                    .save(authorizations);
+            ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
+                    .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
+            LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, "Zip Code Resolver", sourceVertex.getVisibility());
+            LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, sign, sourceVertex.getVisibility());
+            Vertex zipCodeVertex = resolvedToVertexBuilder.save(authorizations);
+
+            String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + zipCodeVertex.getId();
+            Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, zipCodeVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
 
             new TermMentionBuilder(termMention, zipCodeVertex)
+                    .resolvedTo(zipCodeVertex, resolvedEdge)
                     .title(sign)
                     .conceptIri(zipCodeIri)
                     .process(getClass().getName())

@@ -62,6 +62,7 @@ public abstract class GraphPropertyWorker {
                 LOGGER.error("Could not apply term mention filter", e);
             }
         }
+        getGraph().flush();
     }
 
     public abstract void execute(InputStream in, GraphPropertyWorkData data) throws Exception;

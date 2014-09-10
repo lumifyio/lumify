@@ -47,7 +47,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Authorizations authorizations = getAuthorizations(request, user);
+        Authorizations authorizations = termMentionRepository.getAuthorizations(getAuthorizations(request, user));
         String workspaceId = getActiveWorkspaceId(request);
 
         String graphVertexId = getRequiredParameter(request, "graphVertexId");
