@@ -7,6 +7,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -63,7 +64,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         extractor.setVisibilityTranslator(visibilityTranslator);
 
         FileSystem hdfsFileSystem = null;
-        authorizations = new InMemoryAuthorizations();
+        authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
