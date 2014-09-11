@@ -18,7 +18,7 @@ public class TermMentionRepository {
     public TermMentionRepository(Graph graph, AuthorizationRepository authorizationRepository) {
         this.graph = graph;
         this.authorizationRepository = authorizationRepository;
-        authorizationRepository.addAuthorizationToGraph(TermMentionRepository.VISIBILITY);
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY);
     }
 
     public Iterable<Vertex> findBySourceGraphVertexAndPropertyKey(String sourceVertexId, final String propertyKey, Authorizations authorizations) {
