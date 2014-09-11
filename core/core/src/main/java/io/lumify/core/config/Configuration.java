@@ -49,6 +49,7 @@ public final class Configuration {
     public static final String DEFAULT_PRIVILEGES = "newuser.privileges";
     public static final String WEB_PROPERTIES_PREFIX = "web.ui.";
     public static final String WEB_GEOCODER_ENABLED = WEB_PROPERTIES_PREFIX + "geocoder.enabled";
+    public static final String DEFAULT_SEARCH_RESULT_COUNT = "search.defaultSearchCount";
     private final ConfigurationLoader configurationLoader;
 
     private Map<String, String> config = new HashMap<String, String>();
