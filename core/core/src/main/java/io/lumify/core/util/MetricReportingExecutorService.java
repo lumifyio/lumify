@@ -7,17 +7,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MetricReportingExecutorService extends ThreadPoolExecutor {
     private LumifyLogger logger;
     private ScheduledExecutorService scheduledExecutorService;
-    private FixedSizeCircularLinkedList<AtomicInteger> activity;
-    private AtomicInteger maxActiveCount;
-    private AtomicInteger maxWaitingCount;
+    private FixedSizeCircularLinkedList<AtomicInteger> executionCount;
+    private FixedSizeCircularLinkedList<AtomicInteger> maxActive;
+    private FixedSizeCircularLinkedList<AtomicInteger> maxWaiting;
 
     public MetricReportingExecutorService(LumifyLogger logger, int nThreads) {
         super(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
         this.logger = logger;
 
-        activity = new FixedSizeCircularLinkedList<AtomicInteger>(16, AtomicInteger.class);
-        maxActiveCount = new AtomicInteger(0);
-        maxWaitingCount = new AtomicInteger(0);
+        executionCount = new FixedSizeCircularLinkedList<AtomicInteger>(16, AtomicInteger.class);
+        maxActive = new FixedSizeCircularLinkedList<AtomicInteger>(16, AtomicInteger.class);
+        maxWaiting = new FixedSizeCircularLinkedList<AtomicInteger>(16, AtomicInteger.class);
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -38,18 +38,18 @@ public class MetricReportingExecutorService extends ThreadPoolExecutor {
     protected void beforeExecute(Thread t, Runnable r) {
         super.beforeExecute(t, r);
 
-        activity.head().incrementAndGet();
+        executionCount.head().incrementAndGet();
 
         int active = getActiveCount();
-        int maxActive = maxActiveCount.get();
-        if (active > maxActive) {
-            maxActiveCount.set(active);
+        int currentMaxActive = maxActive.head().get();
+        if (active > currentMaxActive) {
+            maxActive.head().set(active);
         }
 
         int waiting = getQueue().size();
-        int maxWaiting = maxWaitingCount.get();
-        if (waiting > maxWaiting) {
-            maxWaitingCount.set(waiting);
+        int currentMaxWaiting = maxWaiting.head().get();
+        if (waiting > currentMaxWaiting) {
+            maxWaiting.head().set(waiting);
         }
     }
 
@@ -59,12 +59,26 @@ public class MetricReportingExecutorService extends ThreadPoolExecutor {
     }
 
     public void tick() {
-        activity.rotateForward();
-        activity.head().set(0);
+        executionCount.rotateForward();
+        executionCount.head().set(0);
+
+        maxActive.rotateForward();
+        maxActive.head().set(0);
+
+        maxWaiting.rotateForward();
+        maxWaiting.head().set(0);
     }
 
     public void report() {
-        List<AtomicInteger> list = activity.readBackward(15);
+        List<AtomicInteger> executionCountList = executionCount.readBackward(15);
+        List<AtomicInteger> maxActiveList = maxActive.readBackward(15);
+        List<AtomicInteger> maxWaitingList = maxWaiting.readBackward(15);
+        report("executions: ", executionCountList);
+        report("max active: ", maxActiveList);
+        report("max waiting:", maxWaitingList);
+    }
+
+    private void report(String label, List<AtomicInteger> list) {
         int one = list.get(0).get();
         int five = 0;
         int fifteen = 0;
@@ -75,8 +89,7 @@ public class MetricReportingExecutorService extends ThreadPoolExecutor {
             }
             fifteen += value;
         }
-        logger.debug("%d / %.2f / %.2f [%s]", one, five / 5.0, fifteen / 15.0, activity.toString());
-        logger.debug("active: %d / %d, max active: %d, max waiting: %d", getActiveCount(), getPoolSize(), maxActiveCount.get(), maxWaitingCount.get());
+        logger.debug("%s %3d / %6.2f / %6.2f", label, one, five / 5.0, fifteen / 15.0);
     }
 
     @Override

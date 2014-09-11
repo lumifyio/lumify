@@ -31,11 +31,10 @@ import java.text.ParseException;
 import java.util.*;
 
 public class GraphVertexSearch extends BaseRequestHandler {
-    private final int DEFAULT_RESULT_COUNT = 100;
-
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
+    private int defaultSearchResultCount;
 
     @Inject
     public GraphVertexSearch(
@@ -47,6 +46,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
+        defaultSearchResultCount = configuration.getInt(Configuration.DEFAULT_SEARCH_RESULT_COUNT, 100);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         final String query;
         final String filter = getRequiredParameter(request, "filter");
         final int offset = (int) getOptionalParameterLong(request, "offset", 0);
-        final int size = (int) getOptionalParameterLong(request, "size", DEFAULT_RESULT_COUNT);
+        final int size = (int) getOptionalParameterLong(request, "size", defaultSearchResultCount);
         final String conceptType = getOptionalParameter(request, "conceptType");
         final String getLeafNodes = getOptionalParameter(request, "leafNodes");
         final String relatedToVertexId = getOptionalParameter(request, "relatedToVertexId");

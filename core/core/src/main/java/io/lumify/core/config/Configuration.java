@@ -26,7 +26,6 @@ public final class Configuration {
     public static final String LIB_DIRECTORY = "lib-directory";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
-    public static final String FILESYSTEM_PROVIDER = "fs.provider";
     public static final String USER_REPOSITORY = "repository.user";
     public static final String WORKSPACE_REPOSITORY = "repository.workspace";
     public static final String AUTHORIZATION_REPOSITORY = "repository.authorization";
@@ -50,6 +49,7 @@ public final class Configuration {
     public static final String DEFAULT_PRIVILEGES = "newuser.privileges";
     public static final String WEB_PROPERTIES_PREFIX = "web.ui.";
     public static final String WEB_GEOCODER_ENABLED = WEB_PROPERTIES_PREFIX + "geocoder.enabled";
+    public static final String DEFAULT_SEARCH_RESULT_COUNT = "search.defaultSearchCount";
     private final ConfigurationLoader configurationLoader;
 
     private Map<String, String> config = new HashMap<String, String>();
