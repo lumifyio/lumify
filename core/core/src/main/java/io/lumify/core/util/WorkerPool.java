@@ -116,6 +116,10 @@ public class WorkerPool {
         mapExample(workerPool);
         listExample(workerPool);
         slowExample(workerPool, 5);
+        if (LOGGER.isDebugEnabled()) {
+            ((MetricReportingExecutorService) workerPool.executorService).tick();
+            ((MetricReportingExecutorService) workerPool.executorService).report();
+        }
         System.exit(0);
     }
 
