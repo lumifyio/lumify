@@ -150,7 +150,7 @@
         <repository>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>interval:60</updatePolicy>
             </snapshots>
             <id>lumify-snapshots</id>
             <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
@@ -162,7 +162,7 @@
         <repository>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>interval:60</updatePolicy>
             </snapshots>
             <id>sonatype-snapshots</id>
             <url>http://oss.sonatype.org/content/repositories/snapshots/</url>
