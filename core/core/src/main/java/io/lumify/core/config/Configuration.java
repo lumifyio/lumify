@@ -45,7 +45,6 @@ public final class Configuration {
     public static final String ONTOLOGY_IRI_PERSON = ONTOLOGY_IRI_PREFIX + "person";
     public static final String GRAPH_PROVIDER = "graph";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
-    public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
     public static final String DEFAULT_PRIVILEGES = "newuser.privileges";
     public static final String WEB_PROPERTIES_PREFIX = "web.ui.";
     public static final String WEB_GEOCODER_ENABLED = WEB_PROPERTIES_PREFIX + "geocoder.enabled";
