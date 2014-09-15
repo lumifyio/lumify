@@ -177,6 +177,10 @@ function(jQuery,
             // Is this the default lumify application?
             mainApp = !popoutDetails;
 
+        if (event && isAddUrl(event.oldURL) && isMainApp(event.newURL)) {
+            return;
+        }
+
         if (event && isPopoutUrl(event.oldURL) && isPopoutUrl(event.newURL)) {
             return $('#app').trigger('vertexUrlChanged', {
                 graphVertexIds: ids,
@@ -262,6 +266,14 @@ function(jQuery,
 
     function isPopoutUrl(url) {
         return F.vertexUrl.isFullscreenUrl(url);
+    }
+
+    function isAddUrl(url) {
+        return /#add=/.test(url);
+    }
+
+    function isMainApp(url) {
+        return /#\s*$/.test(url) || url.indexOf('#') === -1;
     }
 
 });
