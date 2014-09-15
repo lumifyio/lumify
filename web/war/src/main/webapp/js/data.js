@@ -320,7 +320,7 @@ define([
                 }
             }).done(function(config, verticesResponse) {
                 var vertices = verticesResponse[0].vertices,
-                    count = vertices.length,
+                    count = verticesResponse[0].count,
                     eventOptions = {
                         options: {
                             addingVerticesRelatedTo: data.vertexId
