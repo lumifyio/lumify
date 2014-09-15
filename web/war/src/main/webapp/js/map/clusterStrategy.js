@@ -33,11 +33,12 @@ define(['openlayers'], function(OpenLayers) {
             var sf = this.selectedFeatures;
 
             if (event.feature) {
-                delete sf[event.feature.id];
                 if (event.feature.cluster) {
                     event.feature.cluster.forEach(function(f) {
-                        delete sf[f.id];
+                        delete sf[f.data.vertex.id];
                     });
+                } else {
+                    delete sf[event.feature.data.vertex.id];
                 }
             } else {
                 this.selectedFeatures = {};
@@ -46,7 +47,7 @@ define(['openlayers'], function(OpenLayers) {
 
         addToCluster: function(cluster, feature) {
             OpenLayers.Strategy.Cluster.prototype.addToCluster.apply(this, arguments);
-            if (this.selectedFeatures[feature.id]) {
+            if (this.selectedFeatures[feature.data.vertex.id]) {
                 cluster.renderIntent = 'select';
             }
         },
@@ -119,7 +120,7 @@ define(['openlayers'], function(OpenLayers) {
                     if (feature.cluster) {
                         var some = false, all = true;
                         feature.cluster.forEach(function(f) {
-                            var selected = ~selectedIds.indexOf(f.id);
+                            var selected = ~selectedIds.indexOf(f.data.vertex.id);
                             some = some || selected;
                             all = all && selected;
                         });

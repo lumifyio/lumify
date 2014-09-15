@@ -236,7 +236,7 @@ define([
                         return;
                     }
 
-                    if (!~selectedIds.indexOf(feature.id)) {
+                    if (!~selectedIds.indexOf(feature.data.vertex.id)) {
                         if (feature.data.inWorkspace) {
                             feature.style.externalGraphic = feature.style.externalGraphic.replace(/&selected/, '');
                         } else {
@@ -251,7 +251,7 @@ define([
 
                 // Create new features for new selections
                 vertices.forEach(function(vertex) {
-                    self.findOrCreateMarker(map, vertex);
+                    self.findOrCreateMarkers(map, vertex);
                 });
 
                 var sf = this.clusterStrategy.selectedFeatures = {};
@@ -263,17 +263,19 @@ define([
             });
         };
 
-        this.findOrCreateMarker = function(map, vertex) {
+        this.findOrCreateMarkers = function(map, vertex) {
             var self = this,
-                feature = map.featuresLayer.getFeatureById(vertex.id),
-                geoLocations = this.ontologyProperties.byDataType.geoLocation,
-                geoLocation = geoLocations &&
-                    _.chain(geoLocations)
+                geoLocationProperties = this.ontologyProperties.byDataType.geoLocation,
+                geoLocations = geoLocationProperties &&
+                    _.chain(geoLocationProperties)
                         .map(function(geoLocationProperty) {
-                            return F.vertex.prop(vertex, geoLocationProperty.title);
+                            return F.vertex.props(vertex, geoLocationProperty.title);
                         })
                         .compact()
-                        .first()
+                        .flatten()
+                        .filter(function(g) {
+                            return g.value && g.value.latitude && g.value.longitude;
+                        })
                         .value(),
                 conceptType = F.vertex.prop(vertex, 'conceptType'),
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
@@ -283,43 +285,47 @@ define([
                 }),
                 heading = F.vertex.heading(vertex);
 
-            if (!geoLocation || !geoLocation.latitude || !geoLocation.longitude) return;
-
+            if (!geoLocations || geoLocations.length === 0) return;
             if (selected) iconUrl += '&selected';
 
-            if (!feature) {
-                map.featuresLayer.features.forEach(function(f) {
-                    if (!feature && f.cluster) {
-                        feature = _.findWhere(f.cluster, { id: vertex.id });
-                    }
-                });
-            }
+            return geoLocations.map(function(geoLocation) {
+                var featureId = vertex.id + geoLocation.key,
+                    feature = map.featuresLayer.getFeatureById(featureId);
 
-            if (!feature) {
-                feature = new ol.Feature.Vector(
-                    point(geoLocation.latitude, geoLocation.longitude),
-                    { vertex: vertex },
-                    {
-                        graphic: true,
-                        externalGraphic: iconUrl,
-                        graphicWidth: 22,
-                        graphicHeight: 40,
-                        graphicXOffset: -11,
-                        graphicYOffset: -40,
-                        rotation: heading,
-                        cursor: 'pointer'
-                    }
-                );
-                feature.id = vertex.id;
-                map.featuresLayer.addFeatures(feature);
-            } else {
-                if (feature.style.externalGraphic !== iconUrl) {
-                    feature.style.externalGraphic = iconUrl;
+                if (!feature) {
+                    map.featuresLayer.features.forEach(function(f) {
+                        if (!feature && f.cluster) {
+                            feature = _.findWhere(f.cluster, { id: featureId });
+                        }
+                    });
                 }
-                feature.move(latLon(geoLocation.latitude, geoLocation.longitude));
-            }
 
-            return feature;
+                if (!feature) {
+                    feature = new ol.Feature.Vector(
+                        point(geoLocation.value.latitude, geoLocation.value.longitude),
+                        { vertex: vertex },
+                        {
+                            graphic: true,
+                            externalGraphic: iconUrl,
+                            graphicWidth: 22,
+                            graphicHeight: 40,
+                            graphicXOffset: -11,
+                            graphicYOffset: -40,
+                            rotation: heading,
+                            cursor: 'pointer'
+                        }
+                    );
+                    feature.id = featureId;
+                    map.featuresLayer.addFeatures(feature);
+                } else {
+                    if (feature.style.externalGraphic !== iconUrl) {
+                        feature.style.externalGraphic = iconUrl;
+                    }
+                    feature.move(latLon(geoLocation.value.latitude, geoLocation.value.longitude));
+                }
+
+                return feature;
+            })
         };
 
         this.updateOrAddVertices = function(vertices, options) {
@@ -331,21 +337,33 @@ define([
             this.mapReady(function(map) {
                 vertices.forEach(function(vertex) {
                     var inWorkspace = appData.inWorkspace(vertex),
-                        marker;
+                        markers = [];
 
                     if (!adding && !inWorkspace) {
+
                         // Only update marker if it exists
-                        marker = map.featuresLayer.getFeatureById(vertex.id);
-                        if (marker) {
-                            marker = self.findOrCreateMarker(map, vertex);
+                        map.featuresLayer.features.forEach(function(f) {
+                            if (f.cluster) {
+                                markers.push(_.find(f.cluster, function(f) {
+                                    return f.data.vertex.id === vertex.id;
+                                }))
+                            } else if (f.data.vertex.id === vertex.id) {
+                                markers.push(f);
+                            }
+                        });
+
+                        if (markers.length) {
+                            markers = self.findOrCreateMarkers(map, vertex);
                         }
                     } else {
-                        marker = self.findOrCreateMarker(map, vertex);
+                        markers = self.findOrCreateMarkers(map, vertex);
                     }
 
-                    if (marker) {
-                        validAddition = true;
-                        marker.data.inWorkspace = inWorkspace;
+                    if (markers && markers.length) {
+                        markers.forEach(function(m) {
+                            validAddition = true;
+                            m.data.inWorkspace = inWorkspace;
+                        });
                     }
                 });
 
