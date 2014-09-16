@@ -1211,19 +1211,20 @@ define([
                     if (!id) {
 
                         // Highlighted entities (legacy info)
-                        var info = a.data('info') || a.closest('li').data('info');
-                        if (info && (info.graphVertexId || info.id)) {
+                        var info = a.data('info') || a.closest('li').data('info'),
+                            vertexId = info && (info.resolvedToVertexId || info.graphVertexId || info.id);
 
+                        if (vertexId) {
                             var properties = [
                                 { name: 'http://lumify.io#title', value: info.title },
                                 { name: 'http://lumify.io#conceptType', value: info['http://lumify.io#conceptType'] },
                             ];
 
                             self.updateCacheWithVertex({
-                                id: info.graphVertexId || info.id,
+                                id: vertexId,
                                 properties: properties
                             });
-                            id = info.graphVertexId || info.id;
+                            id = vertexId;
                         }
 
                         // Detected objects
