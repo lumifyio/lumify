@@ -56,8 +56,7 @@ public abstract class LumifyWebClient {
             for (PublishItem publishItem : publishItems) {
                 json.put(publishItem.getJson());
             }
-            ByteArrayInputStream content = new ByteArrayInputStream(("publishData=" + URLEncoder.encode(json.toString(), "UTF8")).getBytes());
-            response = new WorkspacePublishResponse(httpPostJson("/workspace/publish", content));
+            response = new WorkspacePublishResponse(httpPostJson("/workspace/publish", createPostContent("publishData", json.toString())));
         } catch (Exception ex) {
             throw new LumifyClientApiException("Could not publish workspace", ex);
         }
@@ -108,8 +107,7 @@ public abstract class LumifyWebClient {
                     throw new LumifyClientApiException("Unhandled workspace update item type: " + workspaceUpdateItem.getClass().getName());
                 }
             }
-            ByteArrayInputStream content = new ByteArrayInputStream(("data=" + URLEncoder.encode(json.toString(), "UTF8")).getBytes());
-            return new WorkspaceUpdateResponse(httpPostJson("/workspace/update", content));
+            return new WorkspaceUpdateResponse(httpPostJson("/workspace/update", createPostContent("data", json.toString())));
         } catch (Exception ex) {
             throw new LumifyClientApiException("Could not update workspace", ex);
         }
@@ -147,6 +145,55 @@ public abstract class LumifyWebClient {
 
     public void logOut() {
         httpPostJson("/logout");
+    }
+
+    public String artifactHighlightedText(String vertexId, String propertyKey) {
+        try {
+            HttpResponse response = httpGet("/artifact/highlightedText?graphVertexId=" + URLEncoder.encode(vertexId, "UTF8") + "&propertyKey=" + URLEncoder.encode(propertyKey, "UTF8"));
+            return IOUtils.toString(response.getInputStream());
+        } catch (IOException e) {
+            throw new LumifyClientApiException("Could not get artifact highlighted text", e);
+        }
+    }
+
+    public void entityResolveTerm(String vertexId, String propertyKey, int start, int end, String sign, String conceptIri, String visibilitySource) {
+        try {
+            Map<String, String> parameters = new HashMap<String, String>();
+            parameters.put("artifactId", vertexId);
+            parameters.put("propertyKey", propertyKey);
+            parameters.put("mentionStart", Integer.toString(start));
+            parameters.put("mentionEnd", Integer.toString(end));
+            parameters.put("sign", sign);
+            parameters.put("conceptId", conceptIri);
+            parameters.put("visibilitySource", visibilitySource);
+            InputStream content = createPostContent(parameters);
+            httpPostJson("/entity/resolveTerm", content);
+        } catch (Exception ex) {
+            throw new LumifyClientApiException("Could not resolve term", ex);
+        }
+    }
+
+    private InputStream createPostContent(String... parameters) throws IOException {
+        Map<String, String> map = new HashMap<String, String>();
+        for (int i = 0; i < parameters.length; i += 2) {
+            map.put(parameters[i], parameters[i + 1]);
+        }
+        return createPostContent(map);
+    }
+
+    private InputStream createPostContent(Map<String, String> parameters) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        boolean first = true;
+        for (Map.Entry<String, String> parameter : parameters.entrySet()) {
+            if (!first) {
+                buffer.write("&".getBytes());
+            }
+            buffer.write(parameter.getKey().getBytes());
+            buffer.write("=".getBytes());
+            buffer.write(URLEncoder.encode(parameter.getValue(), "UTF8").getBytes());
+            first = false;
+        }
+        return new ByteArrayInputStream(buffer.toByteArray());
     }
 
     private void appendMulipartFormData(OutputStream buffer, String boundary, String fieldName, String fileName, InputStream fieldData, boolean lastPart) throws IOException {

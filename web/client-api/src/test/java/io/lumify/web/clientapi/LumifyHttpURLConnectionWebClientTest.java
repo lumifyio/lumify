@@ -74,8 +74,26 @@ public class LumifyHttpURLConnectionWebClientTest {
         WorkspaceVerticesResponse workspaceVerticesResponse = client.workspaceVertices();
         System.out.println("workspaceVerticesResponse: " + workspaceVerticesResponse);
         for (WorkspaceVertex workspaceVertex : workspaceVerticesResponse.getVertices()) {
-            System.out.println("workspaceVertex: " + workspaceVertex);
+            System.out.println("  workspaceVertex: " + workspaceVertex);
+            for (WorkspaceVertexProperty property : workspaceVertex.getProperties()) {
+                String propertyName = property.getName();
+                String propertyKey = property.getKey();
+                Object propertyValue = property.getValue();
+                System.out.println("    property: " + propertyName + " " + propertyKey + " " + propertyValue);
+            }
         }
+
+        String highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
+        System.out.println("highlightedText\n" + highlightedText + "\n\n");
+
+        client.entityResolveTerm(
+                artifactImportResponse.getVertexIds()[0],
+                "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker",
+                0, 3, "Joe", "http://lumify.io/dev#person", ""
+        );
+
+        highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
+        System.out.println("highlightedText\n" + highlightedText + "\n\n");
 
         client.logOut();
     }

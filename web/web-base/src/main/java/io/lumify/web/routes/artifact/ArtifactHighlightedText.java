@@ -74,7 +74,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             if (text == null) {
                 highlightedText = "";
             } else {
-                Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
+                Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId(), propertyKey, modelUserContext);
                 highlightedText = entityHighlighter.getHighlightedText(text, termMentions, workspaceId);
             }
 
@@ -85,7 +85,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         VideoTranscript videoTranscript = MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyValue(artifactVertex, propertyKey);
         if (videoTranscript != null) {
             LOGGER.debug("returning video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
-            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId(), propertyKey, modelUserContext);
             VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions, workspaceId);
             respondWithJson(response, highlightedVideoTranscript.toJson());
             return;
@@ -94,8 +94,8 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         videoTranscript = JsonSerializer.getSynthesisedVideoTranscription(artifactVertex, propertyKey);
         if (videoTranscript != null) {
             LOGGER.debug("returning synthesised video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
-            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
-            Iterable<TermMentionModel> frameTermMentions = termMentionRepository.findByRowStartsWith(artifactVertex.getId().toString() + RowKeyHelper.MAJOR_FIELD_SEPARATOR + propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR, modelUserContext);
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId(), propertyKey, modelUserContext);
+            Iterable<TermMentionModel> frameTermMentions = termMentionRepository.findByRowStartsWith(artifactVertex.getId() + RowKeyHelper.MAJOR_FIELD_SEPARATOR + propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR, modelUserContext);
             JoinIterable<TermMentionModel> allTermMentions = new JoinIterable<TermMentionModel>(termMentions, frameTermMentions);
             VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, allTermMentions, workspaceId);
             respondWithJson(response, highlightedVideoTranscript.toJson());

@@ -1,5 +1,6 @@
 package io.lumify.web.clientapi.model;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class WorkspaceVertex {
@@ -15,6 +16,15 @@ public class WorkspaceVertex {
 
     public SandboxStatus getSandboxStatus() {
         return SandboxStatus.valueOf(this.json.getString("sandboxStatus"));
+    }
+
+    public WorkspaceVertexProperty[] getProperties() {
+        JSONArray properties = this.json.getJSONArray("properties");
+        WorkspaceVertexProperty[] results = new WorkspaceVertexProperty[properties.length()];
+        for (int i = 0; i < properties.length(); i++) {
+            results[i] = new WorkspaceVertexProperty(properties.getJSONObject(i));
+        }
+        return results;
     }
 
     @Override
