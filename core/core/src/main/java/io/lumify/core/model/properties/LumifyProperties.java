@@ -67,7 +67,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty TERM_MENTION_RESOLVED_EDGE_ID = new StringLumifyProperty("http://lumify.io/termMention#resolvedEdgeId");
     public static final StringLumifyProperty TERM_MENTION_TITLE = new StringLumifyProperty("http://lumify.io/termMention#title");
     public static final StringLumifyProperty TERM_MENTION_CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io/termMention#conceptType");
-    public static final JsonLumifyProperty TERM_MENTION_VISIBILITY_SOURCE = new JsonLumifyProperty("http://lumify.io/termMention#visibilitySource");
+    public static final JsonLumifyProperty TERM_MENTION_VISIBILITY_JSON = new JsonLumifyProperty("http://lumify.io/termMention#visibilityJson");
     public static final String TERM_MENTION_LABEL_HAS_TERM_MENTION = "http://lumify.io/termMention#hasTermMention";
     public static final String TERM_MENTION_LABEL_RESOLVED_TO = "http://lumify.io/termMention#resolvedTo";
 

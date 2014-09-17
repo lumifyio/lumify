@@ -8,8 +8,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
 import org.securegraph.*;
 
-import java.util.logging.Logger;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -22,7 +20,7 @@ public class TermMentionBuilder {
     private long end = -1;
     private String title;
     private String conceptIri;
-    private JSONObject visibilitySource;
+    private JSONObject visibilityJson;
     private String process;
     private Vertex resolvedToVertex;
     private Edge resolvedEdge;
@@ -44,7 +42,7 @@ public class TermMentionBuilder {
         this.end = LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(existingTermMention, 0);
         this.title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(existingTermMention, "");
         this.conceptIri = LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(existingTermMention, "");
-        this.visibilitySource = LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.getPropertyValue(existingTermMention, "");
+        this.visibilityJson = LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(existingTermMention, "");
     }
 
     /**
@@ -72,28 +70,28 @@ public class TermMentionBuilder {
     }
 
     /**
-     * Visibility source JSON string. This will be applied to the newly created term.
+     * Visibility JSON string. This will be applied to the newly created term.
      */
-    public TermMentionBuilder visibilitySource(String visibilitySource) {
-        return visibilitySource(visibilitySourceStringToJson(visibilitySource));
+    public TermMentionBuilder visibilityJson(String visibilityJsonString) {
+        return visibilityJson(visibilityJsonStringToJson(visibilityJsonString));
     }
 
     /**
-     * Visibility source JSON object. This will be applied to the newly created term.
+     * Visibility JSON object. This will be applied to the newly created term.
      */
-    public TermMentionBuilder visibilitySource(JSONObject visibilitySource) {
-        this.visibilitySource = visibilitySource;
+    public TermMentionBuilder visibilityJson(JSONObject visibilitySource) {
+        this.visibilityJson = visibilitySource;
         return this;
     }
 
-    private static JSONObject visibilitySourceStringToJson(String visibilitySource) {
-        if (visibilitySource == null) {
+    private static JSONObject visibilityJsonStringToJson(String visibilityJsonString) {
+        if (visibilityJsonString == null) {
             return new JSONObject();
         }
-        if (visibilitySource.length() == 0) {
+        if (visibilityJsonString.length() == 0) {
             return new JSONObject();
         }
-        return new JSONObject(visibilitySource);
+        return new JSONObject(visibilityJsonString);
     }
 
     /**
@@ -160,16 +158,16 @@ public class TermMentionBuilder {
         checkArgument(title.length() > 0, "title cannot be an empty string");
         checkNotNull(conceptIri, "conceptIri cannot be null");
         checkArgument(conceptIri.length() > 0, "conceptIri cannot be an empty string");
-        checkNotNull(visibilitySource, "visibilitySource cannot be null");
+        checkNotNull(visibilityJson, "visibilityJson cannot be null");
         checkNotNull(process, "process cannot be null");
         checkArgument(process.length() > 0, "process cannot be an empty string");
         checkArgument(start >= 0, "start must be greater than or equal to 0");
         checkArgument(end >= 0, "start must be greater than or equal to 0");
 
         String vertexId = createVertexId();
-        Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilitySource).getVisibility(), TermMentionRepository.VISIBILITY);
+        Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilityJson).getVisibility(), TermMentionRepository.VISIBILITY);
         VertexBuilder vertexBuilder = graph.prepareVertex(vertexId, visibility);
-        LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.setProperty(vertexBuilder, this.visibilitySource, visibility);
+        LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(vertexBuilder, this.visibilityJson, visibility);
         LumifyProperties.TERM_MENTION_CONCEPT_TYPE.setProperty(vertexBuilder, this.conceptIri, visibility);
         LumifyProperties.TERM_MENTION_TITLE.setProperty(vertexBuilder, this.title, visibility);
         LumifyProperties.TERM_MENTION_START_OFFSET.setProperty(vertexBuilder, this.start, visibility);

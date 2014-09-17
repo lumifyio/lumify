@@ -97,7 +97,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
                 .end(end)
                 .title(name)
                 .conceptIri(ontologyClassUri)
-                .visibilitySource(visibilitySource)
+                .visibilityJson(visibilitySource)
                 .process(getClass().getName())
                 .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
     }

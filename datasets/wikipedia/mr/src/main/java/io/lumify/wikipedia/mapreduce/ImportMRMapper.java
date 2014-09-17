@@ -262,7 +262,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
                 .end(link.getEndOffset())
                 .title(linkTarget)
                 .conceptIri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI)
-                .visibilitySource(visibilitySource)
+                .visibilityJson(visibilitySource)
                 .process(WIKIPEDIA_PROCESS)
                 .resolvedTo(linkedPageVertex, edge)
                 .save(getGraph(), visibilityTranslator, authorizations);
