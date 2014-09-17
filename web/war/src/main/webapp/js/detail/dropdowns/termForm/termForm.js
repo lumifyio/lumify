@@ -208,8 +208,7 @@ define([
             };
 
             if (this.currentGraphVertexId) {
-                parameters.resolvedVertexId =
-                    parameters.graphVertexId = this.currentGraphVertexId;
+                parameters.resolvedVertexId = this.currentGraphVertexId;
                 parameters.edgeId = $mentionNode.data('info') ? $mentionNode.data('info').edgeId : null;
             }
 
@@ -343,7 +342,7 @@ define([
                 var mentionVertex = $(this.attr.mentionNode);
                 data = mentionVertex.data('info');
                 existingEntity = this.attr.existing ? mentionVertex.addClass('focused').hasClass('resolved') : false;
-                graphVertexId = data && (data.id || data.graphVertexId);
+                graphVertexId = data && data.resolvedToVertexId,
                 title = $.trim(data && data.title || '');
 
                 if (this.attr.selection && !existingEntity) {
@@ -369,7 +368,7 @@ define([
                 data = this.attr.dataInfo;
                 objectSign = data && data.title;
                 existingEntity = this.attr.existing;
-                graphVertexId = data && data.resolvedVertexId;
+                graphVertexId = data && data.resolvedToVertexId;
                 this.unresolve = graphVertexId && graphVertexId !== '';
             }
 

@@ -449,7 +449,7 @@ define([
 
         this.onResolvedContextClick = function(event) {
             var $target = $(event.target).closest('span'),
-                vertexId = $target.data('info').graphVertexId;
+                vertexId = $target.data('info').resolvedToVertexId;
 
             range.clearSelection();
 
@@ -495,7 +495,7 @@ define([
                             self.trigger('selectObjects', {
                                 vertices: [
                                     {
-                                        id: $target.data('info').graphVertexId
+                                        id: $target.data('info').resolvedToVertexId
                                     }
                                 ]
                             });
