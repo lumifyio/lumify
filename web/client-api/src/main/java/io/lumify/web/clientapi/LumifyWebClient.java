@@ -86,6 +86,35 @@ public abstract class LumifyWebClient {
         }
     }
 
+    public WorkspaceVerticesResponse workspaceVertices() {
+        return new WorkspaceVerticesResponse(httpGetJsonArray("/workspace/vertices"));
+    }
+
+    public WorkspaceUpdateResponse workspaceUpdate(List<WorkspaceUpdateItem> workspaceUpdateItems) {
+        try {
+            JSONObject json = new JSONObject();
+            JSONArray entityUpdates = new JSONArray();
+            json.put("entityUpdates", entityUpdates);
+            JSONArray entityDeletes = new JSONArray();
+            json.put("entityDeletes", entityDeletes);
+            JSONArray userUpdates = new JSONArray();
+            json.put("userUpdates", userUpdates);
+            JSONArray userDeletes = new JSONArray();
+            json.put("userDeletes", userDeletes);
+            for (WorkspaceUpdateItem workspaceUpdateItem : workspaceUpdateItems) {
+                if (workspaceUpdateItem instanceof VertexWorkspaceUpdateItem) {
+                    entityUpdates.put(workspaceUpdateItem.getJson());
+                } else {
+                    throw new LumifyClientApiException("Unhandled workspace update item type: " + workspaceUpdateItem.getClass().getName());
+                }
+            }
+            ByteArrayInputStream content = new ByteArrayInputStream(("data=" + URLEncoder.encode(json.toString(), "UTF8")).getBytes());
+            return new WorkspaceUpdateResponse(httpPostJson("/workspace/update", content));
+        } catch (Exception ex) {
+            throw new LumifyClientApiException("Could not update workspace", ex);
+        }
+    }
+
     private void appendMulipartFormData(OutputStream buffer, String boundary, String fieldName, String fileName, InputStream fieldData, boolean lastPart) throws IOException {
         buffer.write(("--" + boundary + "\r\n").getBytes());
         buffer.write(("Content-Disposition: form-data; name=\"" + fieldName + "\"" + (fileName == null ? "" : ";filename=\"" + fileName + "\"") + "\r\n").getBytes());
@@ -120,6 +149,17 @@ public abstract class LumifyWebClient {
             InputStream in = response.getInputStream();
             String str = IOUtils.toString(in);
             return new JSONObject(str);
+        } catch (Exception ex) {
+            throw new LumifyClientApiException("httpGetJson failed", ex);
+        }
+    }
+
+    protected JSONArray httpGetJsonArray(String uri) {
+        try {
+            HttpResponse response = httpGet(uri);
+            InputStream in = response.getInputStream();
+            String str = IOUtils.toString(in);
+            return new JSONArray(str);
         } catch (Exception ex) {
             throw new LumifyClientApiException("httpGetJson failed", ex);
         }
