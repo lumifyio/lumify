@@ -18,6 +18,7 @@
         <module>server</module>
         <module>war</module>
         <module>plugins</module>
+        <module>client</module>
     </modules>
 
 
