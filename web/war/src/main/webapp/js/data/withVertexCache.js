@@ -68,7 +68,7 @@ define([
             return _.values(_.pick(this.cachedVertices, ids));
         };
 
-        this.refresh = function(vertex) {
+        this.refresh = function(vertex, forceReload) {
             var self = this,
                 deferred = $.Deferred(),
                 request = null,
@@ -78,7 +78,7 @@ define([
                 var vertices = [], toRequest = [];
                 vertex.forEach(function(v) {
                     cachedVertex = self.vertex(v);
-                    if (cachedVertex) {
+                    if (forceReload !== true && cachedVertex) {
                         vertices.push(cachedVertex);
                     } else {
                         toRequest.push(v);
@@ -96,7 +96,7 @@ define([
 
             } else if (_.isString(vertex) || _.isNumber(vertex)) {
                 cachedVertex = this.vertex(vertex);
-                if (cachedVertex) {
+                if (forceReload !== true && cachedVertex) {
                     deferred.resolve(cachedVertex);
                 } else {
                     request = this.vertexService.getVertexProperties(vertex)
@@ -106,7 +106,7 @@ define([
                 }
             } else {
                 cachedVertex = this.vertex(vertex.id);
-                if (cachedVertex) {
+                if (forceReload !== true && cachedVertex) {
                     deferred.resolve(cachedVertex);
                 } else {
                     request = this.vertexService.getVertexProperties(vertex.id)
