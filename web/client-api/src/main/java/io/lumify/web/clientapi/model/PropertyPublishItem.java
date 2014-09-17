@@ -1,5 +1,6 @@
 package io.lumify.web.clientapi.model;
 
+import io.lumify.web.clientapi.LumifyClientApiException;
 import org.json.JSONObject;
 
 public class PropertyPublishItem extends PublishItem {
@@ -15,6 +16,10 @@ public class PropertyPublishItem extends PublishItem {
 
     @Override
     public JSONObject getJson() {
+        if (elementId == null) {
+            throw new LumifyClientApiException("elementId cannot be null");
+        }
+
         JSONObject json = new JSONObject();
         json.put("type", "property");
         json.put("action", "");

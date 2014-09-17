@@ -33,6 +33,11 @@ public abstract class LumifyWebClient {
         return new WorkspaceDiffResponse(httpGetJson("/workspace/diff"));
     }
 
+    public WorkspacePublishResponse workspacePublishAll() {
+        WorkspaceDiffResponse workspaceDiffResponse = workspaceDiff();
+        return workspacePublishAll(workspaceDiffResponse.getDiffs());
+    }
+
     public WorkspacePublishResponse workspacePublishAll(WorkspaceDiffItem[] diffs) {
         List<PublishItem> publishItems = new ArrayList<PublishItem>();
         for (WorkspaceDiffItem diffItem : diffs) {
@@ -42,6 +47,9 @@ public abstract class LumifyWebClient {
             } else if (diffItem instanceof PropertyDiffItem) {
                 PropertyDiffItem propertyDiffItem = (PropertyDiffItem) diffItem;
                 publishItems.add(new PropertyPublishItem(propertyDiffItem.getElementId(), propertyDiffItem.getPropertyKey(), propertyDiffItem.getPropertyName()));
+            } else if (diffItem instanceof EdgeDiffItem) {
+                EdgeDiffItem edgeDiffItem = (EdgeDiffItem) diffItem;
+                publishItems.add(new EdgePublishItem(edgeDiffItem.getEdgeId(), edgeDiffItem.getSourceVertexId(), edgeDiffItem.getDestVertexId()));
             } else {
                 throw new LumifyClientApiException("Unhandled diff item type: " + diffItem.getClass().getName());
             }
@@ -170,6 +178,17 @@ public abstract class LumifyWebClient {
             httpPostJson("/entity/resolveTerm", content);
         } catch (Exception ex) {
             throw new LumifyClientApiException("Could not resolve term", ex);
+        }
+    }
+
+    public GraphVertexSearchResponse graphVertexSearch(String query) {
+        try {
+            String q = "q=" + URLEncoder.encode(query, "UTF8");
+            String filter = "filter=" + URLEncoder.encode("[]", "UTF8");
+            JSONObject json = httpGetJson("/graph/vertex/search?" + q + "&" + filter);
+            return new GraphVertexSearchResponse(json);
+        } catch (Exception ex) {
+            throw new LumifyClientApiException("could not search", ex);
         }
     }
 

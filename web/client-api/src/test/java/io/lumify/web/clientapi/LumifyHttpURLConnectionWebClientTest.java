@@ -83,17 +83,25 @@ public class LumifyHttpURLConnectionWebClientTest {
             }
         }
 
-        String highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
-        System.out.println("highlightedText\n" + highlightedText + "\n\n");
+//        String highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
+//        System.out.println("highlightedText\n" + highlightedText + "\n\n");
+//
+//        client.entityResolveTerm(
+//                artifactImportResponse.getVertexIds()[0],
+//                "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker",
+//                0, 3, "Joe", "http://lumify.io/dev#person", ""
+//        );
+//
+//        highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
+//        System.out.println("highlightedText\n" + highlightedText + "\n\n");
+//
+//        client.workspacePublishAll();
 
-        client.entityResolveTerm(
-                artifactImportResponse.getVertexIds()[0],
-                "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker",
-                0, 3, "Joe", "http://lumify.io/dev#person", ""
-        );
-
-        highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
-        System.out.println("highlightedText\n" + highlightedText + "\n\n");
+        GraphVertexSearchResponse graphVertexSearchResponse = client.graphVertexSearch("*");
+        System.out.println("graphVertexSearchResponse: " + graphVertexSearchResponse);
+        for (GraphVertexSearchVertex vertex : graphVertexSearchResponse.getVertices()) {
+            System.out.println("  vertex: " + vertex);
+        }
 
         client.logOut();
     }

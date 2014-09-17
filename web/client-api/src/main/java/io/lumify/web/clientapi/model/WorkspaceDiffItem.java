@@ -16,6 +16,8 @@ public abstract class WorkspaceDiffItem {
             return new VertexDiffItem(diffJson);
         } else if ("PropertyDiffItem".equals(type)) {
             return new PropertyDiffItem(diffJson);
+        } else if ("EdgeDiffItem".equals(type)) {
+            return new EdgeDiffItem(diffJson);
         } else {
             throw new LumifyClientApiException("Unhandled workspace diff item type: " + type);
         }
