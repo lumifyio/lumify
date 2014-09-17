@@ -115,6 +115,40 @@ public abstract class LumifyWebClient {
         }
     }
 
+    public void logInToCurrentWorkspace() {
+        UserMeResponse userMeResponse = userMe();
+
+        WorkspacesResponse workspacesResponse = workspaces();
+
+        Workspace currentWorkspace;
+        Workspace[] workspaces = workspacesResponse.getWorkspaces();
+        if (workspaces.length == 0) {
+            WorkspaceNewResponse workspaceNewResponse = workspaceNew();
+            currentWorkspace = workspaceNewResponse.getWorkspace();
+        } else {
+            if (userMeResponse.getCurrentWorkspaceId() == null) {
+                currentWorkspace = workspaces[0];
+            } else {
+                currentWorkspace = null;
+                for (Workspace w : workspaces) {
+                    if (w.getId().equals(userMeResponse.getCurrentWorkspaceId())) {
+                        currentWorkspace = w;
+                        break;
+                    }
+                }
+                if (currentWorkspace == null) {
+                    currentWorkspace = workspaces[0];
+                }
+            }
+        }
+
+        setCurrentWorkspaceId(currentWorkspace.getId());
+    }
+
+    public void logOut() {
+        httpPostJson("/logout");
+    }
+
     private void appendMulipartFormData(OutputStream buffer, String boundary, String fieldName, String fileName, InputStream fieldData, boolean lastPart) throws IOException {
         buffer.write(("--" + boundary + "\r\n").getBytes());
         buffer.write(("Content-Disposition: form-data; name=\"" + fieldName + "\"" + (fileName == null ? "" : ";filename=\"" + fileName + "\"") + "\r\n").getBytes());

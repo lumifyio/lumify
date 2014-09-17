@@ -49,31 +49,7 @@ public class LumifyHttpURLConnectionWebClientTest {
     public void testIt() {
         LumifyHttpURLConnectionWebClient client = new UserNameOnlyAuthLumifyHttpURLConnectionWebClient("https://localhost:8889/", "testUser");
 
-        UserMeResponse userMeResponse = client.userMe();
-        System.out.println("userMeResponse: " + userMeResponse);
-
-        WorkspacesResponse workspacesResponse = client.workspaces();
-        System.out.println("workspacesResponse: " + workspacesResponse);
-        Workspace currentWorkspace;
-        Workspace[] workspaces = workspacesResponse.getWorkspaces();
-        if (workspaces.length == 0) {
-            WorkspaceNewResponse workspaceNewResponse = client.workspaceNew();
-            System.out.println("workspaceNewResponse: " + workspaceNewResponse);
-            currentWorkspace = workspaceNewResponse.getWorkspace();
-        } else {
-            currentWorkspace = null;
-            for (Workspace w : workspaces) {
-                if (userMeResponse.getCurrentWorkspaceId() == null) {
-                    currentWorkspace = w;
-                }
-                if (w.getId().equals(userMeResponse.getCurrentWorkspaceId())) {
-                    currentWorkspace = w;
-                    break;
-                }
-            }
-        }
-        client.setCurrentWorkspaceId(currentWorkspace.getId());
-        System.out.println("currentWorkspace: " + currentWorkspace);
+        client.logInToCurrentWorkspace();
 
         ArtifactImportResponse artifactImportResponse = client.artifactImport("", "test.txt", new ByteArrayInputStream("Joe and Sam".getBytes()));
         System.out.println("artifactImportResponse: " + artifactImportResponse);
@@ -100,5 +76,7 @@ public class LumifyHttpURLConnectionWebClientTest {
         for (WorkspaceVertex workspaceVertex : workspaceVerticesResponse.getVertices()) {
             System.out.println("workspaceVertex: " + workspaceVertex);
         }
+
+        client.logOut();
     }
 }
