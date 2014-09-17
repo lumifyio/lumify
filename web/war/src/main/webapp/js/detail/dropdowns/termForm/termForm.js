@@ -236,6 +236,7 @@ define([
                         _.defer(self.teardown.bind(self));
                     });
             } else {
+                parameters.termMentionId = this.termMentionId;
                 this.vertexService.unresolveTerm(parameters)
                     .fail(this.requestFailure.bind(this))
                     .done(function(data) {
@@ -342,7 +343,7 @@ define([
                 var mentionVertex = $(this.attr.mentionNode);
                 data = mentionVertex.data('info');
                 existingEntity = this.attr.existing ? mentionVertex.addClass('focused').hasClass('resolved') : false;
-                graphVertexId = data && data.resolvedToVertexId,
+                graphVertexId = data && data.resolvedToVertexId;
                 title = $.trim(data && data.title || '');
 
                 if (this.attr.selection && !existingEntity) {
@@ -361,6 +362,7 @@ define([
                 if (existingEntity && mentionVertex.hasClass('resolved')) {
                     objectSign = title;
                     this.unresolve = true;
+                    this.termMentionId = data && data.id;
                 } else {
                     objectSign = this.attr.sign || mentionVertex.text();
                 }
