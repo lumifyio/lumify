@@ -138,6 +138,15 @@ define([
         });
     };
 
+    UserService.prototype.search = function(query) {
+        return this._ajaxGet({
+            url: 'users',
+            data: {
+                q: query
+            }
+        });
+    };
+
     UserService.prototype.getUser = function(userName) {
         return this._ajaxGet({
             url: 'user',
