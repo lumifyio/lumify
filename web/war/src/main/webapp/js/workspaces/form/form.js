@@ -62,7 +62,7 @@ define([
                     }
                 });
                 UserSelect.attachTo(this.select('shareFormSelector'), {
-                    filterUserIds: [self.attr.data.createdBy],
+                    filterUserIds: _.pluck(self.attr.data.users, 'userId'),
                     placeholder: i18n('workspaces.form.sharing.placeholder')
                 });
 
@@ -310,6 +310,9 @@ define([
                 .done(function() {
                     _.defer(function() {
                         self.makePopover(badge);
+                        self.trigger(self.select('shareFormSelector'), 'updateFilterUserIds', {
+                            userIds: _.pluck(self.attr.data.users, 'userId')
+                        });
                     });
                 });
         };

@@ -23,6 +23,7 @@ define([
 
         this.after('initialize', function() {
             this.on('clearUser', this.onClearUser);
+            this.on('updateFilterUserIds', this.onUpdateFilterUserIds);
             this.on(document, 'socketMessage', this.onSocketMessage);
 
             this.$node.html(template({
@@ -44,6 +45,10 @@ define([
                     }
                 })
             }
+        };
+
+        this.onUpdateFilterUserIds = function(event, data) {
+            this.attr.filterUserIds = data.userIds;
         };
 
         this.onClearUser = function() {
