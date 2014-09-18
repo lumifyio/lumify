@@ -23,6 +23,7 @@ define([
 
         this.after('initialize', function() {
             this.on('clearUser', this.onClearUser);
+            this.on(document, 'socketMessage', this.onSocketMessage);
 
             this.$node.html(template({
                 placeholder: this.attr.placeholder || i18n('user.selection.field.placeholder'),
@@ -30,6 +31,20 @@ define([
 
             this.setupTypeahead();
         });
+
+        this.onSocketMessage = function(event, message) {
+            if (message && ~'userStatusChange'.indexOf(message.type)) {
+                var user = message.data;
+                this.$node.find('.user-row').each(function() {
+                    var $this = $(this);
+                    if ($this.data('user').id === user.id) {
+                        $this.find('.user-status')
+                            .removeClass('online offline unknown')
+                            .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                    }
+                })
+            }
+        };
 
         this.onClearUser = function() {
             var self = this;
