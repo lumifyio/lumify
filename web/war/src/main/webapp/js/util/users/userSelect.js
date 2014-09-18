@@ -69,14 +69,6 @@ define([
 
                             userMap = _.indexBy(users, 'id');
 
-                            if (users.length > 0) {
-                                users[0].email = 'jharwig@gmail.com';
-                                users[0].userName = 'firstusername';
-                            }
-
-                            if (users.length > 1)
-                            users[1].userName = 'awesomesauce';
-
                             callback(ids);
                         });
                 },
