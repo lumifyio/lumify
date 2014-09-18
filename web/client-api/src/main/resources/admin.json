@@ -1,0 +1,34 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/admin",
+    "apis": [
+        {
+            "path": "/admin/uploadOntology",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Upload ontology",
+                    "nickname": "uploadOntology",
+                    "type": "void",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "file",
+                            "description": "Ontology file",
+                            "required": true,
+                            "type": "File",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+
+    }
+}

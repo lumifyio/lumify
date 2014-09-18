@@ -7,25 +7,24 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
-public class UserNameOnlyAuthLumifyHttpURLConnectionWebClient extends LumifyHttpURLConnectionWebClient {
-    private final String username;
+public class UserNameOnlyLumifyApi extends LumifyApi {
+    public UserNameOnlyLumifyApi(String basePath, String username) {
+        super(basePath);
 
-    public UserNameOnlyAuthLumifyHttpURLConnectionWebClient(String baseUrl, String username) {
-        super(baseUrl);
-        this.username = username;
+        String sessionId = logIn(basePath, username);
+        ApiInvoker.getInstance().setJSessionId(sessionId);
     }
 
-    @Override
-    protected String logIn() {
+    private String logIn(String basePath, String username) {
         try {
-            URL url = createUrlFromUri("/login");
+            URL url = new URL(basePath + "/login");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setUseCaches(false);
             conn.setDoOutput(true);
 
             DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-            out.writeBytes("username=" + URLEncoder.encode(this.username, "UTF-8"));
+            out.writeBytes("username=" + URLEncoder.encode(username, "UTF-8"));
             out.flush();
             out.close();
 

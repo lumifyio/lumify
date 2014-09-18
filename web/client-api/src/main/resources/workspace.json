@@ -1,0 +1,71 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/workspace",
+    "apis": [
+        {
+            "path": "/workspaces",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets all workspaces",
+                    "type": "Workspaces",
+                    "nickname": "getWorkspaces"
+                }
+            ]
+        },
+        {
+            "path": "/workspace",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get a workspace",
+                    "type": "Workspace",
+                    "nickname": "getWorkspaceById",
+                    "parameters": [
+                        {
+                            "name": "workspaceId",
+                            "description": "ID of the workspace",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/new",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Create a new workspace",
+                    "type": "Workspace",
+                    "nickname": "newWorkspace"
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Workspaces": {
+            "id": "Workspaces",
+            "properties": {
+                "workspaces": {
+                    "type": "array",
+                    "items": {
+                        "type": "Workspace"
+                    }
+                }
+            }
+        },
+        "Workspace": {
+            "id": "Workspace",
+            "properties": {
+                "workspaceId": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
