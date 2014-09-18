@@ -51,6 +51,8 @@ public class LumifyHttpURLConnectionWebClientTest {
 
         client.logInToCurrentWorkspace();
 
+        client.adminUploadOntology(getClass().getResourceAsStream("test.owl"));
+
         ArtifactImportResponse artifactImportResponse = client.artifactImport("", "test.txt", new ByteArrayInputStream("Joe and Sam".getBytes()));
         System.out.println("artifactImportResponse: " + artifactImportResponse);
 

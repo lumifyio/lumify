@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 public abstract class LumifyWebClient {
+    private final String MULTIPART_BOUNDARY = "sdlfkgjmwerijlsslkdfj";
     private String csrfToken;
     private String currentWorkspaceId;
 
@@ -76,14 +77,12 @@ public abstract class LumifyWebClient {
 
     public ArtifactImportResponse artifactImport(String visibilitySource, String fileName, InputStream file) {
         try {
-            String boundary = "sdlfkgjmwerijlsslkdfj";
-
             Map<String, List<String>> headers = new HashMap<String, List<String>>();
-            headers.put("Content-Type", Arrays.asList("multipart/form-data;boundary=" + boundary));
+            headers.put("Content-Type", Arrays.asList("multipart/form-data;boundary=" + MULTIPART_BOUNDARY));
 
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            appendMulipartFormData(buffer, boundary, "visibilitySource", null, new ByteArrayInputStream(visibilitySource.getBytes()), false);
-            appendMulipartFormData(buffer, boundary, "file", fileName, file, true);
+            appendMulipartFormData(buffer, MULTIPART_BOUNDARY, "visibilitySource", null, new ByteArrayInputStream(visibilitySource.getBytes()), false);
+            appendMulipartFormData(buffer, MULTIPART_BOUNDARY, "file", fileName, file, true);
 
             InputStream content = new ByteArrayInputStream(buffer.toByteArray());
 
@@ -189,6 +188,22 @@ public abstract class LumifyWebClient {
             return new GraphVertexSearchResponse(json);
         } catch (Exception ex) {
             throw new LumifyClientApiException("could not search", ex);
+        }
+    }
+
+    public void adminUploadOntology(InputStream owlFile) {
+        try {
+            Map<String, List<String>> headers = new HashMap<String, List<String>>();
+            headers.put("Content-Type", Arrays.asList("multipart/form-data;boundary=" + MULTIPART_BOUNDARY));
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            appendMulipartFormData(buffer, MULTIPART_BOUNDARY, "file", null, owlFile, true);
+
+            InputStream content = new ByteArrayInputStream(buffer.toByteArray());
+
+            httpPostJson("/admin/uploadOntology", headers, content);
+        } catch (Exception ex) {
+            throw new LumifyClientApiException("Could not upload ontology", ex);
         }
     }
 
