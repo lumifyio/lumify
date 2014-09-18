@@ -273,7 +273,14 @@ define([
                 })
                 .done(function() {
                     row.remove();
+                    self.updateUserSelectionFilter();
                 });
+        };
+
+        this.updateUserSelectionFilter = function() {
+            this.trigger(this.select('shareFormSelector'), 'updateFilterUserIds', {
+                userIds: _.pluck(this.attr.data.users, 'userId')
+            });
         };
 
         this.onShareWorkspaceWithUser = function(event, data) {
@@ -310,9 +317,7 @@ define([
                 .done(function() {
                     _.defer(function() {
                         self.makePopover(badge);
-                        self.trigger(self.select('shareFormSelector'), 'updateFilterUserIds', {
-                            userIds: _.pluck(self.attr.data.users, 'userId')
-                        });
+                        self.updateUserSelectionFilter();
                     });
                 });
         };
