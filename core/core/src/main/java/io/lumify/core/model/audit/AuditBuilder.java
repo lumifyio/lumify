@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class AuditBuilder {
-    private static final String AUDIT_VERTEX_ID_PREFIX = "AUDIT_";
+    private static final String AUDIT_STRING = "AUDIT_STRING";
     private VersionService versionService;
     private Graph graph;
     private VisibilityTranslator visibilityTranslator;
@@ -24,13 +24,17 @@ public class AuditBuilder {
     private String scmBuildNumber;
     private AuditAction auditAction;
     private AuditType auditType;
-    private Date date;
+    private Date dateTime;
+    private Vertex vertexToAudit;
+    private Vertex sourceVertex;
+    private Vertex destVertex;
+    private Edge edgeToAudit;
 
     public AuditBuilder() {
         this.scmBuildNumber = versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "";
         this.unixBuildTime = versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L;
         this.version = versionService.getVersion() != null ? versionService.getVersion() : "";
-        this.date = new Date();
+        this.dateTime = new Date();
     }
 
     public AuditBuilder user(User user) {
@@ -48,48 +52,70 @@ public class AuditBuilder {
         return this;
     }
 
-    public AuditBuilder auditType (AuditType auditType) {
+    public AuditBuilder auditType(AuditType auditType) {
         this.auditType = auditType;
         return this;
     }
 
-    public void auditVertex(Vertex vertexToAudit, Authorizations authorizations) {
-        JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(vertexToAudit);
+    public AuditBuilder vertexToAudit(Vertex vertexToAudit) {
+        this.vertexToAudit = vertexToAudit;
+        return this;
+    }
+
+    public AuditBuilder sourceVertex(Vertex sourceVertex) {
+        this.sourceVertex = sourceVertex;
+        return this;
+    }
+
+    public AuditBuilder destVertex(Vertex destVertex) {
+        this.destVertex = destVertex;
+        return this;
+    }
+
+    public AuditBuilder edgeToAudit(Vertex edgeToVertex) {
+        this.edgeToAudit = edgeToAudit;
+        return this;
+    }
+
+    public void auditVertex(Authorizations authorizations) {
+        JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(this.vertexToAudit);
         Visibility auditVisibility = LumifyVisibility.and(visibilityTranslator.toVisibility(visibilitySource).getVisibility(), AuditRepository.AUDIT_VISIBILITY);
-        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(auditVisibility);
-        LumifyProperties.AUDITED_VERTEX_ID.setProperty(auditVertexBuilder, vertexToAudit.getId(), auditVisibility);
+        String auditVertexId = createAuditVertexId();
+        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(graph.prepareVertex(auditVertexId, auditVisibility), auditVisibility);
+        LumifyProperties.AUDITED_VERTEX_ID.setProperty(auditVertexBuilder, this.vertexToAudit.getId(), auditVisibility);
         LumifyProperties.VISIBILITY_SOURCE.setProperty(auditVertexBuilder, visibilitySource, auditVisibility);
         Vertex auditVertex = auditVertexBuilder.save(authorizations);
         createLumifyAuditRelationships(auditVertex, user, authorizations);
 
         // Creating audit vertices for all of the properties
-        Iterator properties = vertexToAudit.getProperties().iterator();
+        Iterator properties = this.vertexToAudit.getProperties().iterator();
         while (properties.hasNext()) {
-            auditProperty (vertexToAudit, null, (Property)properties.next(), authorizations);
+            auditProperty(null, (Property) properties.next(), authorizations);
         }
 
         graph.flush();
     }
 
-    public void auditRelationship (Edge edge, Authorizations authorizations) {
-        JSONObject edgeVisibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(edge);
-        Visibility auditVisibility = LumifyVisibility.and(visibilityTranslator.toVisibility(edgeVisibilitySource).getVisibility(), AuditRepository.AUDIT_VISIBILITY);
-        Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
+//    public void auditRelationship (Authorizations authorizations) {
+//        JSONObject edgeVisibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(this.edgeToAudit);
+//        Visibility auditVisibility = LumifyVisibility.and(visibilityTranslator.toVisibility(edgeVisibilitySource).getVisibility(), AuditRepository.AUDIT_VISIBILITY);
+//        Vertex sourceVertex = this.edgeToAudit.getVertex(Direction.OUT, authorizations);
+//
+//    }
+//
+//    private void auditRelationship (JSONObject visibilitySource, Visibility auditVisibility) {
+//        VertexBuilder auditSourceVertexBuilder = setupLumifyAuditVertex(auditVisibility);
+//        LumifyProperties.VISIBILITY_SOURCE.setProperty(auditSourceVertexBuilder, visibilitySource, auditVisibility);
+//        LumifyProperties.AUDIT_RELATIONSHIP_SOURCE_VERTEX_ID.setProperty(auditSourceVertexBuilder, vertexId, auditVisibility);
+//        LumifyProperties.AUDIT_RELATIONSHIP_DEST_VERTEX_ID.setProperty(auditSourceVertexBuilder, vertexId, auditVisibility);
+//    }
 
-    }
-
-    private void auditRelationship (String sourceVertexId, String destVertexId, JSONObject visibilitySource, Visibility auditVisibility) {
-        VertexBuilder auditSourceVertexBuilder = setupLumifyAuditVertex(vertexId, visibilitySource, auditVisibility);
-        LumifyProperties.VISIBILITY_SOURCE.setProperty(auditSourceVertexBuilder, visibilitySource, auditVisibility);
-        LumifyProperties.AUDIT_RELATIONSHIP_SOURCE_VERTEX_ID.setProperty(auditSourceVertexBuilder, vertexId, auditVisibility);
-        LumifyProperties.AUDIT_RELATIONSHIP_DEST_VERTEX_ID.setProperty(auditSourceVertexBuilder, vertexId, auditVisibility);
-    }
-
-    private void auditProperty (Vertex vertexToAudit, Object oldPropertyValue, Property newProperty, Authorizations authorizations) {
-        JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(vertexToAudit);
+    private void auditProperty(Object oldPropertyValue, Property newProperty, Authorizations authorizations) {
+        JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(this.vertexToAudit);
         Visibility auditVisibility = LumifyVisibility.and(visibilityTranslator.toVisibility(visibilitySource).getVisibility(), AuditRepository.AUDIT_VISIBILITY);
-        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(auditVisibility);
-        LumifyProperties.AUDITED_VERTEX_ID.setProperty(auditVertexBuilder, vertexToAudit.getId(), auditVisibility);
+        String auditVertexId = createAuditVertexPropertyId(newProperty.getKey(), newProperty.getName());
+        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(graph.prepareVertex(auditVertexId, auditVisibility), auditVisibility);
+        LumifyProperties.AUDITED_VERTEX_ID.setProperty(auditVertexBuilder, this.vertexToAudit.getId(), auditVisibility);
         LumifyProperties.VISIBILITY_SOURCE.setProperty(auditVertexBuilder, visibilitySource, auditVisibility);
         if (oldPropertyValue != null) {
             LumifyProperties.AUDIT_PROPERTY_OLD_VALUE.setProperty(auditVertexBuilder, oldPropertyValue.toString(), auditVisibility);
@@ -102,19 +128,17 @@ public class AuditBuilder {
         createLumifyAuditRelationships(auditVertex, user, authorizations);
     }
 
-    private VertexBuilder setupLumifyAuditVertex (Visibility auditVisibility) {
-        String auditVertexId = createVertexId();
-        VertexBuilder auditVertexBuilder = graph.prepareVertex(auditVertexId, auditVisibility);
+    private VertexBuilder setupLumifyAuditVertex(VertexBuilder auditVertexBuilder, Visibility auditVisibility) {
         LumifyProperties.AUDIT_SOURCE_VERSION.setProperty(auditVertexBuilder, this.version, auditVisibility);
         LumifyProperties.AUDIT_SCM_BUILD_TIME.setProperty(auditVertexBuilder, this.scmBuildNumber, auditVisibility);
         LumifyProperties.AUDIT_UNIX_BUILD_TIME.setProperty(auditVertexBuilder, this.unixBuildTime, auditVisibility);
-        LumifyProperties.AUDIT_DATE_TIME.setProperty(auditVertexBuilder, this.date, auditVisibility);
+        LumifyProperties.AUDIT_DATE_TIME.setProperty(auditVertexBuilder, this.dateTime, auditVisibility);
         LumifyProperties.AUDIT_ACTION.setProperty(auditVertexBuilder, this.auditAction.toString(), auditVisibility);
         LumifyProperties.AUDIT_ANALYZED_BY.setProperty(auditVertexBuilder, this.analyzedBy, auditVisibility);
         return auditVertexBuilder;
     }
 
-    private void createLumifyAuditRelationships (Vertex vertexToAudit, User user, Authorizations authorizations) {
+    private void createLumifyAuditRelationships(Vertex vertexToAudit, User user, Authorizations authorizations) {
         JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(vertexToAudit);
         Visibility auditVisibility = LumifyVisibility.and(visibilityTranslator.toVisibility(visibilitySource).getVisibility(), AuditRepository.AUDIT_VISIBILITY);
         String auditVertexId = vertexToAudit.getId();
@@ -127,10 +151,32 @@ public class AuditBuilder {
         }
     }
 
-    private String createVertexId() {
-        return AUDIT_VERTEX_ID_PREFIX
+    private String createAuditEdgeId() {
+        return this.edgeToAudit.getId()
                 + "-"
-                + graph.getIdGenerator().nextId();
+                + AUDIT_STRING
+                + "-"
+                + this.dateTime;
+    }
+
+    private String createAuditVertexPropertyId(String propertyKey, String propertyName) {
+        return this.vertexToAudit.getId()
+                + "-"
+                + propertyKey
+                + "-"
+                + propertyName
+                + "-"
+                + AUDIT_STRING
+                + "-"
+                + this.dateTime;
+    }
+
+    private String createAuditVertexId() {
+        return this.vertexToAudit.getId()
+                + "-"
+                + AUDIT_STRING
+                + "-"
+                + this.dateTime;
     }
 
     private String createHasAuditId(String auditVertexId) {
@@ -152,7 +198,7 @@ public class AuditBuilder {
     }
 
     @Inject
-    public void setVisibilityTranslator (VisibilityTranslator visibilityTranslator) {
+    public void setVisibilityTranslator(VisibilityTranslator visibilityTranslator) {
         this.visibilityTranslator = visibilityTranslator;
     }
 }
