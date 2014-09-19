@@ -30,6 +30,8 @@ define([
         this.after('initialize', function() {
             this.render();
 
+            this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
+
             this.on('searchRequestCompleted', function(event, data) {
                 if (data.success && data.result) {
                     var self = this,
@@ -65,6 +67,12 @@ define([
                 this.trigger(filters, 'clearfilters');
             });
         });
+
+        this.onToggleDisplay = function(event, data) {
+            if (data.name === 'search' && this.$node.closest('.visible').length === 0) {
+                this.hideSearchResults();
+            }
+        };
 
         this.render = function() {
             this.$node.html(template({}));
