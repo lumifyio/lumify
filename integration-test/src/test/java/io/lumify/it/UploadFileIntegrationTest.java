@@ -88,7 +88,7 @@ public class UploadFileIntegrationTest {
 
     @Test
     public void testIt() throws IOException, ApiException {
-        addUserAuth("auth1");
+        addUserAuth(username, "auth1");
 
         ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe knows Sam".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
@@ -96,10 +96,10 @@ public class UploadFileIntegrationTest {
         assertNotNull(artifactVertexId);
     }
 
-    public void addUserAuth(String auth1) throws ApiException {
+    public void addUserAuth(String username, String auth) throws ApiException {
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("user-name", username);
-        queryParameters.put("auth", auth1);
+        queryParameters.put("auth", auth);
         lumifyApi.invokeAPI("/user/auth/add", "POST", queryParameters, null, null, null, null);
     }
 }
