@@ -66,6 +66,18 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
         <lumify:displayType>document</lumify:displayType>
     </owl:Class>
+    
+
+
+    <!-- http://lumify.io/test#image -->
+
+    <owl:Class rdf:about="http://lumify.io/test#image"/>
+    
+
+
+    <!-- http://lumify.io/test#person -->
+
+    <owl:Class rdf:about="http://lumify.io/test#person"/>
 </rdf:RDF>
 
 
