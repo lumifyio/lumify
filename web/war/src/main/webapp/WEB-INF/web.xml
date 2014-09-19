@@ -6,10 +6,6 @@
         <listener-class>io.lumify.web.ApplicationBootstrap</listener-class>
     </listener>
 
-    <listener>
-        <listener-class>io.lumify.web.WebAppInitializer</listener-class>
-    </listener>
-
     <servlet>
         <description>AtmosphereServlet</description>
         <servlet-name>AtmosphereServlet</servlet-name>

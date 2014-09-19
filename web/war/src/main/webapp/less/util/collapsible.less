@@ -2,17 +2,19 @@
 section.collapsible {
   @color: #999;
 
-  .badge {      
-    position: absolute;
-    right: 1ex;
-    left: auto;
-    top: 0.4ex;
+  h1 {
+    .badge {      
+      position: absolute;
+      right: 1ex;
+      left: auto;
+      top: 0.4ex;
 
-    &:not(.loading) {
-      background: inherit;
-      color: @color;
-      text-shadow: 0 1px 0 white;
-      line-height: 2.8ex;
+      &:not(.loading) {
+        background: inherit;
+        color: @color;
+        text-shadow: 0 1px 0 white;
+        line-height: 2.8ex;
+      }
     }
   }
 
