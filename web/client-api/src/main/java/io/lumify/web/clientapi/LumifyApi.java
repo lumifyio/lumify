@@ -1,7 +1,8 @@
 package io.lumify.web.clientapi;
 
-import io.lumify.web.clientapi.model.UserMe;
-import io.lumify.web.clientapi.model.Workspace;
+import io.lumify.web.clientapi.codegen.*;
+import io.lumify.web.clientapi.codegen.model.UserMe;
+import io.lumify.web.clientapi.codegen.model.Workspace;
 
 import java.util.List;
 

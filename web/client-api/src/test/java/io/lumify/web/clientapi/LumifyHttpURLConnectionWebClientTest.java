@@ -1,6 +1,6 @@
 package io.lumify.web.clientapi;
 
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,12 +49,14 @@ public class LumifyHttpURLConnectionWebClientTest {
 
         lumifyApi.loginAndGetCurrentWorkspace();
 
-        lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
+        //lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
 
         ArtifactImportResponse artifactImportResponse = lumifyApi.getArtifactApi().importFile("", "test.txt", new ByteArrayInputStream("Joe and Sam".getBytes()));
         System.out.println("artifactImportResponse: " + artifactImportResponse);
 
-        System.out.println(lumifyApi.getArtifactApi().getHighlightedText("a", "b"));
+        String artifactVertexId = artifactImportResponse.getVertexIds().get(0);
+
+        System.out.println(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker"));
 
 //
 //        List<WorkspaceUpdateItem> workspaceUpdateItems = new ArrayList<WorkspaceUpdateItem>();

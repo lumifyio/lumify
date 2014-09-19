@@ -1,5 +1,7 @@
-package io.lumify.web.clientapi;
+package io.lumify.web.clientapi.codegen;
 
+import io.lumify.web.clientapi.codegen.AdminApi;
+import io.lumify.web.clientapi.codegen.ApiException;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;

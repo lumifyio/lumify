@@ -7,28 +7,31 @@ import scala.collection.immutable.List;
 import scala.runtime.AbstractFunction1;
 
 public class JavaCodeGenerator extends BasicJavaGenerator {
+
+    public static final String BASE_PACKAGE = "io.lumify.web.clientapi.codegen";
+
     public static void main(String[] args) {
         new JavaCodeGenerator().generateClient(args);
     }
 
     @Override
     public String destinationDir() {
-        return "target/generated-sources";
+        return "../client-api/src/main/java";
     }
 
     @Override
     public Some<String> apiPackage() {
-        return new Some("io.lumify.web.clientapi");
+        return new Some(BASE_PACKAGE);
     }
 
     @Override
     public Some<String> invokerPackage() {
-        return new Some("io.lumify.web.clientapi");
+        return new Some(BASE_PACKAGE);
     }
 
     @Override
     public Some<String> modelPackage() {
-        return new Some("io.lumify.web.clientapi.model");
+        return new Some(BASE_PACKAGE + ".model");
     }
 
     @Override
@@ -36,7 +39,7 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
         return (List<Tuple3<String, String, String>>) super.supportingFiles().filterNot(new AbstractFunction1<Tuple3<String, String, String>, Object>() {
             @Override
             public Object apply(Tuple3<String, String, String> item) {
-                return item._1().contains("apiInvoker");
+                return item._1().contains("apiInvoker") || item._1().contains("pom");
             }
         });
     }

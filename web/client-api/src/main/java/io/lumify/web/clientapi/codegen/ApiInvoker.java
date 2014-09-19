@@ -1,4 +1,4 @@
-package io.lumify.web.clientapi;
+package io.lumify.web.clientapi.codegen;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.sun.jersey.api.client.Client;

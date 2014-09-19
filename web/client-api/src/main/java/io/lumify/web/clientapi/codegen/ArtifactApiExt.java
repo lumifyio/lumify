@@ -1,6 +1,8 @@
-package io.lumify.web.clientapi;
+package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.codegen.ApiException;
+import io.lumify.web.clientapi.codegen.ArtifactApi;
+import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
