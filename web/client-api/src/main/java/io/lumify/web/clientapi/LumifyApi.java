@@ -7,7 +7,7 @@ import java.util.List;
 
 public class LumifyApi {
     private final UserApi userApi;
-    private final ArtifactApi artifactApi;
+    private final ArtifactApiExt artifactApi;
     private final WorkspaceApi workspaceApi;
     private final WorkspacesApi workspacesApi;
     private final AdminApiExt adminApi;
@@ -17,7 +17,7 @@ public class LumifyApi {
         userApi = new UserApi();
         userApi.setBasePath(basePath);
 
-        artifactApi = new ArtifactApi();
+        artifactApi = new ArtifactApiExt();
         artifactApi.setBasePath(basePath);
 
         workspaceApi = new WorkspaceApi();
@@ -34,7 +34,7 @@ public class LumifyApi {
         return userApi;
     }
 
-    public ArtifactApi getArtifactApi() {
+    public ArtifactApiExt getArtifactApi() {
         return artifactApi;
     }
 

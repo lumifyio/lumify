@@ -1,5 +1,6 @@
 package io.lumify.web.clientapi;
 
+import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,6 +8,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.ByteArrayInputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -49,12 +51,11 @@ public class LumifyHttpURLConnectionWebClientTest {
 
         lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
 
+        ArtifactImportResponse artifactImportResponse = lumifyApi.getArtifactApi().importFile("", "test.txt", new ByteArrayInputStream("Joe and Sam".getBytes()));
+        System.out.println("artifactImportResponse: " + artifactImportResponse);
+
         System.out.println(lumifyApi.getArtifactApi().getHighlightedText("a", "b"));
 
-//
-//
-//        ArtifactImportResponse artifactImportResponse = client.artifactImport("", "test.txt", new ByteArrayInputStream("Joe and Sam".getBytes()));
-//        System.out.println("artifactImportResponse: " + artifactImportResponse);
 //
 //        List<WorkspaceUpdateItem> workspaceUpdateItems = new ArrayList<WorkspaceUpdateItem>();
 //        for (String vertexId : artifactImportResponse.getVertexIds()) {

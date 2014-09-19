@@ -36,9 +36,49 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/artifact/import",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Import artifact",
+                    "nickname": "importFile",
+                    "type": "ArtifactImportResponse",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "visibilitySource",
+                            "description": "The visibility source",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        },
+                        {
+                            "name": "file",
+                            "description": "Artifact file",
+                            "required": true,
+                            "type": "File",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {
-
+        "ArtifactImportResponse": {
+            "id": "ArtifactImportResponse",
+            "properties": {
+                "vertexIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
     }
 }
