@@ -1,51 +1,40 @@
 package io.lumify.core.model.audit;
 
-import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.bigtable.model.Repository;
-import com.altamiracorp.bigtable.model.Row;
+import com.google.inject.Inject;
+import io.lumify.core.model.ontology.Relationship;
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import io.lumify.core.version.VersionService;
+import org.json.JSONObject;
+import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
+import org.securegraph.mutation.ExistingElementMutation;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
+import java.util.Iterator;
 
-public abstract class AuditRepository extends Repository<Audit> {
-    public AuditRepository(ModelSession modelSession) {
-        super(modelSession);
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class AuditRepository {
+    public static final String AUDIT_VISIBILITY = "audit";
+    private final Graph graph;
+    private final AuthorizationRepository authorizationRepository;
+    private final VisibilityTranslator visibilityTranslator;
+    private final VersionService versionService;
+
+    @Inject
+    public AuditRepository(Graph graph,
+                           VisibilityTranslator visibilityTranslator,
+                           AuthorizationRepository authorizationRepository,
+                           VersionService versionService) {
+        this.graph = graph;
+        this.authorizationRepository = authorizationRepository;
+        this.visibilityTranslator = visibilityTranslator;
+        this.versionService = versionService;
+        authorizationRepository.addAuthorizationToGraph(AUDIT_VISIBILITY);
     }
 
-    public abstract Audit fromRow(Row row);
-
-    public abstract Row toRow(Audit audit);
-
-    public abstract String getTableName();
-
-    public abstract Iterable<Audit> getAudits(String vertexId, String workspaceId, Authorizations authorizations);
-
-    public abstract Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, Visibility visibility);
-
-    public abstract Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue, Object newValue,
-                                              String process, String comment, Map<String, Object> metadata, User user,
-                                              Visibility visibility);
-
-    public abstract List<Audit> auditRelationship(AuditAction action, Vertex sourceVertex, Vertex destVertex, Edge edge, String process,
-                                                  String comment, User user, Visibility visibility);
-
-    public abstract List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyKey, String propertyName,
-                                                          Object oldValue, Object newValue, Edge edge, String process, String comment, User user,
-                                                          Visibility visibility);
-
-    public abstract Audit auditAnalyzedBy(AuditAction action, Vertex vertex, String process, User user, Visibility visibility);
-
-    public abstract void auditVertexElementMutation(AuditAction action, ElementMutation<Vertex> vertexElementMutation, Vertex vertex, String process,
-                                                    User user, Visibility visibility);
-
-    public abstract void auditEdgeElementMutation(AuditAction action, ElementMutation<Edge> edgeElementMutation, Edge edge, Vertex sourceVertex, Vertex destVertex, String process,
-                                                  User user, Visibility visibility);
-
-    public abstract void updateColumnVisibility(Audit audit, Visibility originalEdgeVisibility, String visibilityString);
 }
