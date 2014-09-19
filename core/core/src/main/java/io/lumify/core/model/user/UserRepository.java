@@ -78,6 +78,10 @@ public abstract class UserRepository {
         return json;
     }
 
+    protected String formatUsername(String username) {
+        return username.trim().toLowerCase();
+    }
+
     public static JSONArray toJson(Iterable<User> users) throws JSONException {
         return toJson(users, null);
     }

@@ -45,6 +45,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User findByUsername(String username) {
+        username = formatUsername(username);
         Session session = sessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.username=:username")
                 .setParameter("username", username)
@@ -85,6 +86,8 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
+        username = formatUsername(username);
+        displayName = displayName.trim();
         Session session = sessionManager.getSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -96,7 +99,7 @@ public class SqlUserRepository extends UserRepository {
             transaction = session.beginTransaction();
             newUser = new SqlUser();
             String id = "USER_" + graph.getIdGenerator().nextId().toString();
-            newUser.setUserId (id);
+            newUser.setUserId(id);
             newUser.setUsername(username);
             newUser.setDisplayName(displayName);
             newUser.setCreateDate(new Date());
@@ -151,7 +154,7 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public boolean isPasswordValid(User user, String password) {
         checkNotNull(password);
-        if (user == null || user.getUserId() == null|| (user.getUserId() != null && findById(user.getUserId()) == null)) {
+        if (user == null || user.getUserId() == null || (user.getUserId() != null && findById(user.getUserId()) == null)) {
             throw new LumifyException("User is not valid");
         }
 

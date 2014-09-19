@@ -78,7 +78,7 @@ public class SecureGraphUserRepository extends UserRepository {
             return null;
         }
 
-        String userId = (String) user.getId();
+        String userId = user.getId();
         String username = UserLumifyProperties.USERNAME.getPropertyValue(user);
         String displayName = UserLumifyProperties.DISPLAY_NAME.getPropertyValue(user);
         String emailAddress = UserLumifyProperties.EMAIL_ADDRESS.getPropertyValue(user);
@@ -101,6 +101,7 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User findByUsername(String username) {
+        username = formatUsername(username);
         return createFromVertex(singleOrDefault(graph.query(authorizations)
                 .has(UserLumifyProperties.USERNAME.getPropertyName(), username)
                 .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
@@ -132,6 +133,8 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
+        username = formatUsername(username);
+        displayName = displayName.trim();
         User existingUser = findByUsername(username);
         if (existingUser != null) {
             throw new LumifyException("duplicate username");
@@ -142,7 +145,7 @@ public class SecureGraphUserRepository extends UserRepository {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
-        String id = "USER_" + graph.getIdGenerator().nextId().toString();
+        String id = "USER_" + graph.getIdGenerator().nextId();
         VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility());
 
         LumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
