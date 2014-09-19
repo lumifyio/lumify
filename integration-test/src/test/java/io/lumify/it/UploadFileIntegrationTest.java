@@ -92,7 +92,7 @@ public class UploadFileIntegrationTest {
     public void testIt() throws IOException, ApiException {
         addUserAuth(username, "auth1");
 
-        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe knows Sam".getBytes()));
+        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         String artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);

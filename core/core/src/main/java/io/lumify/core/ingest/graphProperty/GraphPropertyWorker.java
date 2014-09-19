@@ -21,7 +21,6 @@ import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -142,7 +141,9 @@ public abstract class GraphPropertyWorker {
     }
 
     @Inject
-    public final void setVisibilityTranslatory (VisibilityTranslator visibilityTranslator) { this.visibilityTranslator = visibilityTranslator; }
+    public final void setVisibilityTranslatory(VisibilityTranslator visibilityTranslator) {
+        this.visibilityTranslator = visibilityTranslator;
+    }
 
     protected TermMentionRepository getTermMentionRepository() {
         return termMentionRepository;
@@ -317,15 +318,15 @@ public abstract class GraphPropertyWorker {
 
         Visibility visibilityWithWorkspaceId;
         JSONObject visibilityJsonWithWorkspaceId;
-        if (!workspaceId.equals("")) {
-            visibilityJsonWithWorkspaceId = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null ,visibilitySource, workspaceId);
+        if (workspaceId != null && !workspaceId.equals("")) {
+            visibilityJsonWithWorkspaceId = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
             visibilityWithWorkspaceId = visibilityTranslator.toVisibility(visibilityJsonWithWorkspaceId).getVisibility();
         } else {
             visibilityWithWorkspaceId = visibility;
             visibilityJsonWithWorkspaceId = visibilityJson;
         }
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd());
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactGraphVertex.getId(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd());
         TermMentionModel termMentionModel = new TermMentionModel(termMentionRowKey);
         termMentionModel.getMetadata().setSign(termMention.getSign(), visibility);
         termMentionModel.getMetadata().setOntologyClassUri(termMention.getOntologyClassUri(), visibility);
@@ -400,8 +401,8 @@ public abstract class GraphPropertyWorker {
             }
 
             termMentionModel.getMetadata()
-                    .setVertexId(vertex.getId().toString(), visibility)
-                    .setEdgeId(edge.getId().toString(), visibility);
+                    .setVertexId(vertex.getId(), visibility)
+                    .setEdgeId(edge.getId(), visibility);
         }
 
         getTermMentionRepository().save(termMentionModel, FlushFlag.NO_FLUSH);
