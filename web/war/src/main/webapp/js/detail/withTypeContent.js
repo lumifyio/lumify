@@ -51,20 +51,25 @@ define([
                 auditSelector: this.onAuditToggle
             });
 
+            this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
                 if (data && data.vertices) {
                     var current = _.findWhere(data.vertices, { id: this.attr.data.id });
                     if (current && current.concept && current.concept.id !== previousConcept) {
-                        self.trigger(document, 'selectObjects', {
-                            vertices: [current],
-                            options: {
-                                forceSelectEvenIfSame: true
-                            }
-                        });
+                        self.debouncedConceptTypeChange(current);
                     }
                 }
             });
         });
+
+        this.debouncedConceptTypeChange = function(vertex) {
+            this.trigger(document, 'selectObjects', {
+                vertices: [vertex],
+                options: {
+                    forceSelectEvenIfSame: true
+                }
+            });
+        };
 
         this.fullscreenButton = function(vertexIds) {
             return fullscreenButtonTemplate({

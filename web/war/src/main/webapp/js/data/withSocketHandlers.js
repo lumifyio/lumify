@@ -23,7 +23,8 @@ define([], function() {
                                 self.trigger('verticesUpdated', {
                                     vertices: [updated],
                                     options: {
-                                        originalEvent: message.type
+                                        originalEvent: message.type,
+                                        originalData: message.data
                                     }
                                 });
                             }
