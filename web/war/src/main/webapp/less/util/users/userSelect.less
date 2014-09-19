@@ -1,19 +1,28 @@
 
 .user-row {
+  padding-left: 10px;
   .user-status {
     position: absolute;
-    left: 0.5em;
+    left: 0;
+    top: 50%;
     width: 6px;
     height: 6px;
     border-radius: 3px;
     margin-top: -2px;
-    top: 1em;
+    
     &.online {
       background: rgb(60, 214, 60);
     }
     &.unknown, &.offline {
       background: #C05F5F;
     }
+  }
+}
+.typeahead .user-row {  
+  padding-left: 0;
+  .user-status {
+    left: 0.5em;
+    top: 1em;
   }
 }
 

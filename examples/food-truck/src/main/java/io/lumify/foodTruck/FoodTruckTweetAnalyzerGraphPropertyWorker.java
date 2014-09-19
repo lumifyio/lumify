@@ -39,7 +39,7 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
         findAndLinkKeywords(tweetVertex, text, data.getVisibility(), data.getVisibilitySourceJson());
     }
 
-    private void findAndLinkKeywords(Vertex tweetVertex, String text, Visibility visibility, JSONObject visibilitySource) {
+    private void findAndLinkKeywords(Vertex tweetVertex, String text, Visibility visibility, JSONObject visibilityJson) {
         List<Vertex> keywordVertices = getKeywordVertices();
         for (Vertex keywordVertex : keywordVertices) {
             Iterable<String> keywords = FoodTruckOntology.KEYWORD.getPropertyValues(keywordVertex);
@@ -50,12 +50,12 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
                 }
                 int endOffset = startOffset + keyword.length();
 
-                createTermMentionAndEdge(tweetVertex, keywordVertex, keyword, startOffset, endOffset, visibility, visibilitySource);
+                createTermMentionAndEdge(tweetVertex, keywordVertex, keyword, startOffset, endOffset, visibility, visibilityJson);
             }
         }
     }
 
-    private Edge createTermMentionAndEdge(Vertex tweetVertex, Vertex keywordVertex, String keyword, long startOffset, long endOffset, Visibility visibility, JSONObject visibilitySource) {
+    private Edge createTermMentionAndEdge(Vertex tweetVertex, Vertex keywordVertex, String keyword, long startOffset, long endOffset, Visibility visibility, JSONObject visibilityJson) {
         String conceptUri = FoodTruckOntology.CONCEPT_TYPE_LOCATION;
 
         String edgeId = tweetVertex.getId() + "_HAS_" + keywordVertex.getId();
@@ -69,7 +69,7 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
                 .end(endOffset)
                 .conceptIri(conceptUri)
                 .title(keyword)
-                .visibilitySource(visibilitySource)
+                .visibilityJson(visibilityJson)
                 .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
         getGraph().flush();
 

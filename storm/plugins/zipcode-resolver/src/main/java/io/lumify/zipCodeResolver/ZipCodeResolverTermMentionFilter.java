@@ -112,7 +112,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                     .title(sign)
                     .conceptIri(zipCodeIri)
                     .process(getClass().getName())
-                    .visibilitySource(LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.getPropertyValue(termMention))
+                    .visibilityJson(LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(termMention))
                     .save(getGraph(), getVisibilityTranslator(), authorizations);
         }
     }

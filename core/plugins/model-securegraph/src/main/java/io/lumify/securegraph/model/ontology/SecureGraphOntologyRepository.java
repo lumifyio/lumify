@@ -259,12 +259,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         String from;
         String to;
         try {
-            from = single(relationshipVertex.getVertexIds(Direction.IN, getAuthorizations()));
+            from = single(relationshipVertex.getVertexIds(Direction.IN, new String [] {LabelName.HAS_EDGE.toString()}, getAuthorizations()));
         } catch (IllegalStateException ex) {
             throw new IllegalStateException(String.format("Wrong number of 'IN' vertices for \"%s\"", relationshipIRI), ex);
         }
         try {
-            to = single(relationshipVertex.getVertexIds(Direction.OUT, getAuthorizations()));
+            to = single(relationshipVertex.getVertexIds(Direction.OUT,new String [] {LabelName.HAS_EDGE.toString()}, getAuthorizations()));
         } catch (IllegalStateException ex) {
             throw new IllegalStateException(String.format("Wrong number of 'OUT' vertices for \"%s\"", relationshipIRI), ex);
         }

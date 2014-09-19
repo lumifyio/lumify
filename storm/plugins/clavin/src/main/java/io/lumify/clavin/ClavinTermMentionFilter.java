@@ -242,7 +242,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                         .title(title)
                         .conceptIri(conceptType)
                         .process(processId)
-                        .visibilitySource(LumifyProperties.TERM_MENTION_VISIBILITY_SOURCE.getPropertyValue(termMention))
+                        .visibilityJson(LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(termMention))
                         .save(getGraph(), getVisibilityTranslator(), authorizations);
 
                 LOGGER.debug("Replacing original location [%s] with resolved location [%s]", termMention.getId(), resolvedMention.getId());

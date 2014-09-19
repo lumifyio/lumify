@@ -1211,22 +1211,20 @@ define([
                     if (!id) {
 
                         // Highlighted entities (legacy info)
-                        var info = a.data('info') || a.closest('li').data('info');
-                        if (info && (info.graphVertexId || info.id)) {
+                        var info = a.data('info') || a.closest('li').data('info'),
+                            vertexId = info && (info.resolvedToVertexId || info.graphVertexId || info.id);
 
+                        if (vertexId) {
                             var properties = [
                                 { name: 'http://lumify.io#title', value: info.title },
                                 { name: 'http://lumify.io#conceptType', value: info['http://lumify.io#conceptType'] },
                             ];
 
-                            id = info.graphVertexId || info.id;
-
-                            if (!(id in self.cachedVertices)) {
-                                // Insert stub, since this is synchronous, but
-                                // then refresh with server
-                                self.updateCacheWithVertex({ id: id, properties: properties });
-                                self.refresh([id], true);
-                            }
+                            self.updateCacheWithVertex({
+                                id: vertexId,
+                                properties: properties
+                            });
+                            id = vertexId;
                         }
 
                         // Detected objects

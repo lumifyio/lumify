@@ -107,7 +107,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
                 .end(end)
                 .title(name)
                 .conceptIri(ontologyClassUri)
-                .visibilitySource(visibilitySource)
+                .visibilityJson(visibilitySource)
                 .process(getClass().getName())
                 .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
     }

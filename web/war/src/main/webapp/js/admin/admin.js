@@ -25,12 +25,24 @@ define([
 
         this.after('initialize', function() {
             this.on(document, 'showAdminPlugin', this.onShowAdminPlugin);
+            this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
             this.on('click', {
                 pluginItemSelector: this.onClickPluginItem
             });
             this.$node.html(template({}));
             this.update();
         });
+
+        this.onToggleDisplay = function(event, data) {
+            if (data.name === 'admin' && this.$node.closest('.visible').length === 0) {
+                this.$node.find('.admin-list .active').removeClass('active');
+                this.select('formSelector')
+                    .hide()
+                    .find('.content')
+                        .teardownAllComponents()
+                        .removePrefixedClasses('admin_less_cls');
+            }
+        };
 
         this.onClickPluginItem = function(event) {
             event.preventDefault();
@@ -67,7 +79,7 @@ define([
                 .removePrefixedClasses('admin_less_cls');
             component.Component.attachTo(form);
 
-            this.trigger(document, 'paneResized');
+            this.trigger(container, 'paneResized');
         };
 
         this.update = function() {

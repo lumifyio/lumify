@@ -70,7 +70,7 @@ public class EntityHighlighterTest {
                 .start(start)
                 .end(end)
                 .title(sign)
-                .visibilitySource("")
+                .visibilityJson("")
                 .process(getClass().getSimpleName())
                 .save(graph, visibilityTranslator, authorizations);
     }
@@ -83,7 +83,7 @@ public class EntityHighlighterTest {
                 .start(start)
                 .end(end)
                 .title(sign)
-                .visibilitySource("")
+                .visibilityJson("")
                 .process(process)
                 .save(graph, visibilityTranslator, authorizations);
     }

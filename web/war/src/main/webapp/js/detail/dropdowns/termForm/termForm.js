@@ -208,8 +208,7 @@ define([
             };
 
             if (this.currentGraphVertexId) {
-                parameters.resolvedVertexId =
-                    parameters.graphVertexId = this.currentGraphVertexId;
+                parameters.resolvedVertexId = this.currentGraphVertexId;
                 parameters.edgeId = $mentionNode.data('info') ? $mentionNode.data('info').edgeId : null;
             }
 
@@ -237,6 +236,7 @@ define([
                         _.defer(self.teardown.bind(self));
                     });
             } else {
+                parameters.termMentionId = this.termMentionId;
                 this.vertexService.unresolveTerm(parameters)
                     .fail(this.requestFailure.bind(this))
                     .done(function(data) {
@@ -343,7 +343,7 @@ define([
                 var mentionVertex = $(this.attr.mentionNode);
                 data = mentionVertex.data('info');
                 existingEntity = this.attr.existing ? mentionVertex.addClass('focused').hasClass('resolved') : false;
-                graphVertexId = data && (data.id || data.graphVertexId);
+                graphVertexId = data && data.resolvedToVertexId;
                 title = $.trim(data && data.title || '');
 
                 if (this.attr.selection && !existingEntity) {
@@ -362,6 +362,7 @@ define([
                 if (existingEntity && mentionVertex.hasClass('resolved')) {
                     objectSign = title;
                     this.unresolve = true;
+                    this.termMentionId = data && data.id;
                 } else {
                     objectSign = this.attr.sign || mentionVertex.text();
                 }
@@ -369,7 +370,7 @@ define([
                 data = this.attr.dataInfo;
                 objectSign = data && data.title;
                 existingEntity = this.attr.existing;
-                graphVertexId = data && data.resolvedVertexId;
+                graphVertexId = data && data.resolvedToVertexId;
                 this.unresolve = graphVertexId && graphVertexId !== '';
             }
 

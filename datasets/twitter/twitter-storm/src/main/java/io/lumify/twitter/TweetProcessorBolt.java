@@ -355,7 +355,7 @@ public class TweetProcessorBolt extends BaseRichBolt {
                 .end(endOffset)
                 .title(title)
                 .conceptIri(conceptUri)
-                .visibilitySource(visibilitySource)
+                .visibilityJson(visibilitySource)
                 .resolvedTo(vertex, edge)
                 .save(graph, visibilityTranslator, authorizations);
     }

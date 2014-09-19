@@ -90,7 +90,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
                     .end(end)
                     .title(title)
                     .conceptIri(ontologyClassUri)
-                    .visibilitySource(visibilitySource)
+                    .visibilityJson(visibilitySource)
                     .process(PROCESS)
                     .resolvedTo(resolvedToVertex, resolvedEdge)
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());

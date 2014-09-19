@@ -42,6 +42,8 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.on(document, 'socketMessage', this.onSocketMessage);
+
             this.editable = this.attr.data.isEditable;
 
             this.$node.html(template({
@@ -61,6 +63,7 @@ define([
                         self.trigger(this.select('shareFormSelector'), 'clearUser');
                     }
                 });
+
                 UserSelect.attachTo(this.select('shareFormSelector'), {
                     filterUserIds: _.pluck(self.attr.data.users, 'userId'),
                     placeholder: i18n('workspaces.form.sharing.placeholder')
@@ -84,6 +87,20 @@ define([
                 this.select('titleSelector').on('change keyup paste', this.onChangeTitle.bind(this));
             }
         });
+
+        this.onSocketMessage = function(event, message) {
+            if (message && ~'userStatusChange'.indexOf(message.type)) {
+                var user = message.data;
+                this.$node.find('.share-list > .user-row').each(function() {
+                    var $this = $(this);
+                    if ($this.data('userId') === user.id) {
+                        $this.find('.user-status')
+                            .removeClass('online offline unknown')
+                            .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                    }
+                })
+            }
+        };
 
         var timeout;
         this.saveWorkspace = function(immediate, options) {
@@ -150,6 +167,7 @@ define([
                             write: i18n('workspaces.form.sharing.access.edit')
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,
+                        status: user.status,
                         displayName: user.displayName
                     },
                     editable: this.editable

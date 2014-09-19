@@ -71,7 +71,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
                     .end(end)
                     .title(formattedNumber)
                     .conceptIri(entityType)
-                    .visibilitySource(visibilitySource)
+                    .visibilityJson(visibilitySource)
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
             termMentions.add(termMention);
