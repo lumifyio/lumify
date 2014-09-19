@@ -120,7 +120,7 @@ define([
             this.on(document, 'toggleGraphDimensions', this.onToggleGraphDimensions);
             this.on(document, 'resizestart', this.onResizeStart);
             this.on(document, 'resizestop', this.onResizeStop);
-            this.on(document, 'windowResize', this.triggerPaneResized);
+            this.on(document, 'windowResize', this.onWindowResize);
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
 
@@ -171,7 +171,9 @@ define([
             resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this));
             resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
             resizable(adminPane, 'e', 190, 250, this.onPaneResize.bind(this));
-            resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
+            resizable(detailPane, 'w', 200, 500, this.onPaneResize.bind(this));
+
+            this.on('resizestart', this.onResizeStartHandleMaxWidths);
 
             ContextMenu.attachTo(document);
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
@@ -413,8 +415,16 @@ define([
                 });
         };
 
+        this.onChatMessage = function(e, data) {
+            if (!this.select('chatSelector').hasClass('visible')) {
+                this.trigger(document, 'menubarToggleDisplay', {
+                    name: this.select('chatSelector').data(DATA_MENUBAR_NAME)
+                });
+            }
+        };
+
         this.toggleDisplay = function(e, data) {
-            var SLIDE_OUT = 'search workspaces',
+            var SLIDE_OUT = 'search workspaces admin',
                 pane = this.select(data.name + 'Selector'),
                 isVisible = pane.is('.visible');
 
@@ -429,12 +439,14 @@ define([
             if (SLIDE_OUT.indexOf(data.name) >= 0) {
                 var self = this;
 
+                // TODO: NEED TO MOVE FURTHER LEFT TO COLLAPSE!!!!!
+
                 pane.one(TRANSITION_END, function() {
                     pane.off(TRANSITION_END);
                     if (!isVisible) {
                         self.trigger(data.name + 'PaneVisible');
                     }
-                    self.triggerPaneResized();
+                    self.triggerPaneResized(isVisible ? null : pane);
                 });
             } else this.triggerPaneResized();
 
@@ -451,22 +463,15 @@ define([
             })
         };
 
-        this.onChatMessage = function(e, data) {
-            if (!this.select('chatSelector').hasClass('visible')) {
-                this.trigger(document, 'menubarToggleDisplay', {
-                    name: this.select('chatSelector').data(DATA_MENUBAR_NAME)
-                });
-            }
-        };
-
         this.onObjectsSelected = function(e, data) {
             var detailPane = this.select('detailPaneSelector'),
                 minWidth = 100,
                 width = 0,
                 vertices = data.vertices,
-                edges = data.edges;
+                edges = data.edges,
+                makeVisible = vertices.length || edges.length;
 
-            if (vertices.length || edges.length) {
+            if (makeVisible) {
                 if (detailPane.width() < minWidth) {
                     detailPane[0].style.width = null;
                 }
@@ -476,18 +481,21 @@ define([
                 detailPane.removeClass('visible').addClass('collapsed');
             }
 
-            this.triggerPaneResized();
+            this.triggerPaneResized(makeVisible ? detailPane : null);
         };
 
-        this.onInternalPaneResize = function() {
-            this.triggerPaneResized();
+        this.onInternalPaneResize = function(event) {
+            var $target = event && $(event.target),
+                openingPane = $target && $target.length && $target.is('.ui-resizable') && $target || undefined;
+
+            this.triggerPaneResized(openingPane);
         };
 
         this.onPaneResize = function(e, ui) {
             this.triggerPaneResized();
         };
 
-        this.triggerPaneResized = function() {
+        this.triggerPaneResized = function(openingPane) {
             var PANE_BORDER_WIDTH = 1,
                 searchWidth = this.select('searchSelector')
                     .filter('.visible:not(.collapsed)')
@@ -533,7 +541,80 @@ define([
                 padding.r += PANE_BORDER_WIDTH;
             }
 
+            if (openingPane) {
+                debugger;
+                var openingPaneWidth = openingPane.width(),
+                    otherVisiblePanes = [],
+                    availableWidth = this.availablePaneWidth(openingPane, otherVisiblePanes),
+                    pixelsNeeded = openingPaneWidth - availableWidth;
+
+                if (pixelsNeeded > 0) {
+                    _.chain(otherVisiblePanes)
+
+                        // Sort otherVisiblePanes with first being not a parent of openingPane
+                        // So that the search results resizes detail first instead of search query
+                        .sortBy(function(pane) {
+                            return openingPane.closest(pane).length;
+                        })
+
+                        // We resize the opening pane if we have to
+                        .tap(function(panes) {
+                            panes.push(openingPane);
+                        })
+
+                        .each(function(pane) {
+                            // First resize otherVisiblePanes as much as needed (minWidth), then resize openingPane
+                            if (pixelsNeeded <= 0) {
+                                return;
+                            }
+
+                            var $pane = $(pane),
+                                paneWidth = $pane.width(),
+                                minWidth = $pane.resizable('option', 'minWidth'),
+                                newWidth = Math.max(minWidth, paneWidth - pixelsNeeded);
+                                pixelsCompressing = paneWidth - newWidth;
+
+                            pixelsNeeded -= pixelsCompressing;
+
+                            $pane.width(newWidth);
+                        });
+
+                    return this.triggerPaneResized();
+                }
+            }
+
             this.trigger(document, 'graphPaddingUpdated', { padding: padding });
+        };
+
+        this.availablePaneWidth = function(withoutPane, openPanesOut) {
+            var windowWidth = $(window).width(),
+                menubarWidth = $('.menubar-pane').width(),
+                workspaceOverlayWidth = $('.workspace-overlay').outerWidth(),
+                otherVisiblePanes = $('#app > .ui-resizable.visible, .ui-resizable.visible .ui-resizable:visible')
+                    .not(withoutPane).toArray(),
+                widthOfOpenPanes = _.reduce(
+                    otherVisiblePanes,
+                    function(width, el) {
+                        var $el = $(el);
+                        return width + $el.width();
+                    },
+                    0
+                ),
+                maxWidthAllowed = windowWidth - menubarWidth - widthOfOpenPanes - workspaceOverlayWidth;
+
+            // Add visible to out parameter
+            if (openPanesOut) {
+                openPanesOut.splice.apply(openPanesOut, [0, openPanesOut.length].concat(otherVisiblePanes));
+            }
+
+            return maxWidthAllowed;
+        };
+
+        this.onResizeStartHandleMaxWidths = function(event, helper) {
+            var thisPane = helper.element,
+                maxWidthAllowed = this.availablePaneWidth(thisPane);
+
+            thisPane.resizable('option', 'maxWidth', maxWidthAllowed);
         };
 
         this.onSyncStarted = function() {
@@ -581,6 +662,10 @@ define([
                     });
                 }
             });
+            this.triggerPaneResized();
+        };
+
+        this.onWindowResize = function() {
             this.triggerPaneResized();
         };
 

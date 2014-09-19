@@ -110,7 +110,7 @@ define([
                 data: data
             });
 
-            self.trigger(document, 'paneResized');
+            self.trigger(container, 'paneResized');
         };
 
         this.collapseEditForm = function() {

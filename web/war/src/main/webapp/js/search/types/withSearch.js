@@ -55,7 +55,7 @@ define([
                     });
                     this.makeResizable($searchResults);
                     $searchResults.show().find('.multi-select');
-                    this.trigger(document, 'paneResized');
+                    this.trigger($searchResults, 'paneResized');
                 }
             });
             this.on('clearSearch', function() {

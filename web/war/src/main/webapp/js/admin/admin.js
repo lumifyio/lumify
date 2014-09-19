@@ -67,7 +67,7 @@ define([
                 .removePrefixedClasses('admin_less_cls');
             component.Component.attachTo(form);
 
-            this.trigger(document, 'paneResized');
+            this.trigger(container, 'paneResized');
         };
 
         this.update = function() {
