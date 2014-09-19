@@ -1,5 +1,6 @@
 package io.lumify.web.clientapi;
 
+import io.lumify.web.clientapi.codegen.OntologyApiExt;
 import io.lumify.web.clientapi.codegen.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +50,7 @@ public class LumifyHttpURLConnectionWebClientTest {
 
         lumifyApi.loginAndGetCurrentWorkspace();
 
+        System.out.println(lumifyApi.getOntologyApi().get());
         if (lumifyApi.getOntologyApi().getConcept("http://lumify.io/test#artifact") == null) {
             lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
         }
@@ -76,14 +78,10 @@ public class LumifyHttpURLConnectionWebClientTest {
         updateData.getEntityUpdates().add(entityUpdate);
         lumifyApi.getWorkspaceApi().update(updateData);
 
-//        List<WorkspaceUpdateItem> workspaceUpdateItems = new ArrayList<WorkspaceUpdateItem>();
-//        for (String vertexId : artifactImportResponse.getVertexIds()) {
-//            workspaceUpdateItems.add(new VertexWorkspaceUpdateItem(vertexId, new GraphPosition(0, 0)));
-//        }
-//        client.workspaceUpdate(workspaceUpdateItems);
-//
-//        WorkspaceDiffResponse workspaceDiffResponse = client.workspaceDiff();
-//        System.out.println("workspaceDiffResponse: " + workspaceDiffResponse);
+        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
+        for (WorkspaceDiffItem diffItem : diff.getDiffs()) {
+            System.out.println(diffItem);
+        }
 //
 //        try {
 //            WorkspacePublishResponse workspacePublishResponse = client.workspacePublishAll(workspaceDiffResponse.getDiffs());

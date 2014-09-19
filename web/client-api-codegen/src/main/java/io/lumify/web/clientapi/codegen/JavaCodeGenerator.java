@@ -2,11 +2,14 @@ package io.lumify.web.clientapi.codegen;
 
 import com.wordnik.swagger.codegen.BasicJavaGenerator;
 import com.wordnik.swagger.codegen.model.ClientOpts;
+import org.apache.commons.io.FileUtils;
 import scala.Some;
 import scala.Tuple3;
 import scala.collection.immutable.List;
 import scala.runtime.AbstractFunction1;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,12 +18,36 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
     public static final String BASE_PACKAGE = "io.lumify.web.clientapi.codegen";
 
     public static void main(String[] args) {
-        ClientOpts opts = new ClientOpts();
-        opts.setUri("https://localhost:8889");
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put("fileMap", System.getProperty("fileMap"));
-        opts.setProperties(properties);
-        new JavaCodeGenerator().generate(opts);
+        try {
+            ClientOpts opts = new ClientOpts();
+            opts.setUri("https://localhost:8889");
+            Map<String, String> properties = new HashMap<String, String>();
+            properties.put("fileMap", System.getProperty("fileMap"));
+            opts.setProperties(properties);
+            JavaCodeGenerator generator = new JavaCodeGenerator();
+            generator.generate(opts);
+            generator.fixFiles();
+        } catch (Exception ex) {
+            throw new RuntimeException("generate fail", ex);
+        }
+    }
+
+    private void fixFiles() throws IOException {
+        File destDir = new File(destinationDir());
+
+        removeModelObjectImports(destDir);
+    }
+
+    private void removeModelObjectImports(File destDir) throws IOException {
+        for (File f : destDir.listFiles()) {
+            if (f.isDirectory()) {
+                removeModelObjectImports(f);
+            } else {
+                String fileContents = FileUtils.readFileToString(f);
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Object;", "");
+                FileUtils.write(f, fileContents);
+            }
+        }
     }
 
     @Override

@@ -81,6 +81,19 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/workspace/diff",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get a workspace diff",
+                    "type": "WorkspaceDiff",
+                    "nickname": "getDiff",
+                    "parameters": [
+                    ]
+                }
+            ]
         }
     ],
     "models": {
@@ -168,6 +181,75 @@
                     "type": "string"
                 },
                 "access": {
+                    "type": "string"
+                }
+            }
+        },
+        "WorkspaceDiff": {
+            "id": "WorkspaceDiff",
+            "properties": {
+                "diffs": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceDiffItem"
+                    }
+                }
+            }
+        },
+        "WorkspaceDiffItem": {
+            "id": "WorkspaceDiffItem",
+            "required": [
+                "type",
+                "sandboxStatus"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "sandboxStatus": {
+                    "type": "string",
+                    "enum": [
+                        "PUBLIC",
+                        "PUBLIC_CHANGED",
+                        "PRIVATE"
+                    ]
+                }
+            },
+            "subTypes": ["VertexDiffItem", "PropertyDiffItem", "EdgeDiffItem"],
+            "discriminator": "type"
+        },
+        "VertexDiffItem": {
+            "id": "VertexDiffItem",
+            "properties": {
+                "vertexId": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "visible": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "PropertyDiffItem": {
+            "id": "PropertyDiffItem",
+            "properties": {
+                "elementId": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "EdgeDiffItem": {
+            "id": "EdgeDiffItem",
+            "properties": {
+                "edgeId": {
                     "type": "string"
                 }
             }

@@ -4,6 +4,7 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ApiInvoker;
 
 import io.lumify.web.clientapi.codegen.model.WorkspaceUpdateData;
+import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
 import io.lumify.web.clientapi.codegen.model.Workspace;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
@@ -191,6 +192,47 @@ public class WorkspaceApi {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (WorkspaceUpdateData) ApiInvoker.deserialize(response, "", WorkspaceUpdateData.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public WorkspaceDiff getDiff () throws ApiException {
+    Object postBody = null;
+    // create path and map variables
+    String path = "/workspace/diff".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (WorkspaceDiff) ApiInvoker.deserialize(response, "", WorkspaceDiff.class);
       }
       else {
         return null;
