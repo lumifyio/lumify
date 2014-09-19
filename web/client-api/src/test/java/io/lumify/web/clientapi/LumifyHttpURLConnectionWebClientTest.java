@@ -1,9 +1,6 @@
 package io.lumify.web.clientapi;
 
-import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.codegen.model.Element;
-import io.lumify.web.clientapi.codegen.model.Property;
-import io.lumify.web.clientapi.codegen.model.WorkspaceUpdateData;
+import io.lumify.web.clientapi.codegen.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,6 +67,13 @@ public class LumifyHttpURLConnectionWebClientTest {
         }
 
         WorkspaceUpdateData updateData = new WorkspaceUpdateData();
+        WorkspaceEntityUpdate entityUpdate = new WorkspaceEntityUpdate();
+        entityUpdate.setVertexId(artifactVertexId);
+        GraphPosition graphPosition = new GraphPosition();
+        graphPosition.setX(1);
+        graphPosition.setY(1);
+        entityUpdate.setGraphPosition(graphPosition);
+        updateData.getEntityUpdates().add(entityUpdate);
         lumifyApi.getWorkspaceApi().update(updateData);
 
 //        List<WorkspaceUpdateItem> workspaceUpdateItems = new ArrayList<WorkspaceUpdateItem>();
