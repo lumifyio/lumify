@@ -42,6 +42,8 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.on(document, 'socketMessage', this.onSocketMessage);
+
             this.editable = this.attr.data.isEditable;
 
             this.$node.html(template({
@@ -61,7 +63,6 @@ define([
                         self.trigger(this.select('shareFormSelector'), 'clearUser');
                     }
                 });
-                this.on(document, 'socketMessage', this.onSocketMessage);
 
                 UserSelect.attachTo(this.select('shareFormSelector'), {
                     filterUserIds: _.pluck(self.attr.data.users, 'userId'),
