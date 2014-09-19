@@ -51,7 +51,9 @@ public class LumifyHttpURLConnectionWebClientTest {
 
         lumifyApi.loginAndGetCurrentWorkspace();
 
-        //lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
+        if (lumifyApi.getOntologyApi().getConcept("http://lumify.io/test#artifact") == null) {
+            lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
+        }
 
         ArtifactImportResponse artifactImportResponse = lumifyApi.getArtifactApi().importFile("", "test.txt", new ByteArrayInputStream("Joe and Sam".getBytes()));
         System.out.println("artifactImportResponse: " + artifactImportResponse);

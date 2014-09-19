@@ -22,6 +22,10 @@
         {
             "path": "/vertex.json",
             "description": "Vertex operations"
+        },
+        {
+            "path": "/ontology.json",
+            "description": "Ontology operations"
         }
     ]
 }

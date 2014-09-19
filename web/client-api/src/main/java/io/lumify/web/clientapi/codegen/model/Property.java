@@ -1,6 +1,5 @@
 package io.lumify.web.clientapi.codegen.model;
 
-
 public class Property {
   private String key = null;
   private String name = null;
