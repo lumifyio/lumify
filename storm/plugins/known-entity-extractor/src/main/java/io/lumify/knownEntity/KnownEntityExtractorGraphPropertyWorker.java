@@ -6,6 +6,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
@@ -69,6 +70,12 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             termMentions.addAll(newTermMentions);
             getGraph().flush();
         }
+        new AuditBuilder()
+                .auditAction(AuditAction.ANALYZED_BY)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(sourceVertex)
+                .auditVertex(getAuthorizations(), false);
         applyTermMentionFilters(sourceVertex, termMentions);
     }
 
@@ -105,7 +112,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             EdgeBuilder resolvedEdgeBuilder = getGraph().prepareEdge(sourceVertex, resolvedToVertex, artifactHasEntityIri, visibility);
             LumifyProperties.VISIBILITY_SOURCE.setProperty(resolvedEdgeBuilder, visibilitySource, visibility);
             resolvedEdge = resolvedEdgeBuilder.save(getAuthorizations());
-            getAuditRepository().auditRelationship(AuditAction.CREATE, sourceVertex, resolvedToVertex, resolvedEdge, PROCESS, "", getUser(), visibility);
+            //TODO AUDIT RELATIONSHIP
         }
         return resolvedEdge;
     }
@@ -123,6 +130,13 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
         LumifyProperties.TITLE.setProperty(vertexElementMutation, title, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, ontologyClassUri, visibility);
         vertex = vertexElementMutation.save(getAuthorizations());
+        new AuditBuilder()
+                .auditAction(AuditAction.CREATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(vertex)
+                .auditAction(AuditAction.CREATE)
+                .auditVertex(getAuthorizations(), true);
         getGraph().flush();
         return vertex;
     }

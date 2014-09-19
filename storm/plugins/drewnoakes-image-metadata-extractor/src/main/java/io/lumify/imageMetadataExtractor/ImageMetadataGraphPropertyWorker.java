@@ -5,6 +5,8 @@ import com.drew.metadata.Metadata;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -79,7 +81,17 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             setProperty(config.fileSizeIri, FileSizeUtil.getSize(imageFile), mutation, metadata, data, properties);
         }
 
-        mutation.save(getAuthorizations());
+        Vertex v = mutation.save(getAuthorizations());
+        // Auditing the new properties set and that this class analyzed the vertex
+        new AuditBuilder()
+                .auditAction(AuditAction.UPDATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(v)
+                .existingElementMutation(mutation)
+                .auditExisitingVertexProperties(getAuthorizations())
+                .auditAction(AuditAction.ANALYZED_BY)
+                .auditVertex(getAuthorizations(), false);
         getGraph().flush();
         for (String propertyName : properties) {
             getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_KEY, propertyName);

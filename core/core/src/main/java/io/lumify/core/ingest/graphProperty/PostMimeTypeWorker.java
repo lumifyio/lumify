@@ -3,6 +3,7 @@ package io.lumify.core.ingest.graphProperty;
 import com.google.inject.Inject;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.user.User;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Element;
@@ -17,9 +18,10 @@ import java.io.InputStream;
 public abstract class PostMimeTypeWorker {
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
+    private User user;
 
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
-
+        this.user = workerPrepareData.getUser();
     }
 
     public abstract void execute(String mimeType, GraphPropertyWorkData data, Authorizations authorizations) throws Exception;
@@ -49,6 +51,8 @@ public abstract class PostMimeTypeWorker {
     protected Graph getGraph() {
         return graph;
     }
+
+    protected User getUser () { return user;}
 
     @Inject
     public final void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {

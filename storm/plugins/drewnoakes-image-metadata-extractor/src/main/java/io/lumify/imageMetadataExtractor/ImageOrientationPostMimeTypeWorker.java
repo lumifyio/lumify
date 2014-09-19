@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.PostMimeTypeWorker;
+import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.imageMetadataHelper.ImageTransformExtractor;
 import io.lumify.storm.MediaPropertyConfiguration;
 import org.securegraph.Authorizations;
@@ -42,7 +44,17 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
             setProperty(config.yAxisFlippedIri, imageTransform.isYAxisFlipNeeded(), mutation, metadata, data, properties);
             setProperty(config.clockwiseRotationIri, imageTransform.getCWRotationNeeded(), mutation, metadata, data, properties);
 
-            mutation.save(authorizations);
+            Vertex v = mutation.save(authorizations);
+            // Auditing the new properties set and that this class analyzed the vertex
+            new AuditBuilder()
+                    .auditAction(AuditAction.UPDATE)
+                    .user(getUser())
+                    .analyzedBy(getClass().getSimpleName())
+                    .vertexToAudit(v)
+                    .existingElementMutation(mutation)
+                    .auditExisitingVertexProperties(authorizations)
+                    .auditAction(AuditAction.ANALYZED_BY)
+                    .auditVertex(authorizations, false);
             getGraph().flush();
             for (String propertyName : properties) {
                 getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTI_VALUE_PROPERTY_KEY, propertyName);

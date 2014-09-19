@@ -12,6 +12,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
@@ -234,8 +235,18 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, title, sourceVertex.getVisibility());
                 Vertex resolvedToVertex = resolvedToVertexBuilder.save(authorizations);
 
+                new AuditBuilder()
+                        .auditAction(AuditAction.CREATE)
+                        .user(user)
+                        .analyzedBy(getClass().getSimpleName())
+                        .vertexToAudit(resolvedToVertex)
+                        .auditAction(AuditAction.CREATE)
+                        .auditVertex(authorizations, true);
+
                 String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + resolvedToVertex.getId();
                 Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, resolvedToVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
+
+                //TODO: AUDIT RELATIONSHIP
 
                 Vertex resolvedMention = new TermMentionBuilder(termMention, sourceVertex)
                         .resolvedTo(resolvedToVertex, resolvedEdge)
@@ -248,7 +259,12 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 LOGGER.debug("Replacing original location [%s] with resolved location [%s]", termMention.getId(), resolvedMention.getId());
             }
         }
-        auditRepository.auditAnalyzedBy(AuditAction.ANALYZED_BY, sourceVertex, getClass().getSimpleName(), user, sourceVertex.getVisibility());
+        new AuditBuilder()
+                .auditAction(AuditAction.ANALYZED_BY)
+                .user(user)
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(sourceVertex)
+                .auditVertex(authorizations, false);
     }
 
     private String toSign(final ResolvedLocation location) {

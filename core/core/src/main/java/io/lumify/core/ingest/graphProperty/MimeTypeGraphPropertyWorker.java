@@ -69,7 +69,7 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
         m.alterPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
         Vertex v = m.save(getAuthorizations());
 
-        // Auditing the new properties set and that the MimeTypeGraphPropertyWorker analyzed the vertex
+        // Auditing the new properties set and that this class analyzed the vertex
         new AuditBuilder()
                 .auditAction(AuditAction.UPDATE)
                 .user(getUser())
