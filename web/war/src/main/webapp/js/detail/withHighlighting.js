@@ -789,7 +789,7 @@ define([
 
         this.normalizeString = function(text) {
             return text
-                .replace(/&nbsp;/g, ' ')
+                .replace(/&nbsp;/g, '      ')
                 .replace(/(\n+)/g, '<br><br>$1');
         };
 
