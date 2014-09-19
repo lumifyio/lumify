@@ -42,7 +42,7 @@ import static org.securegraph.util.IterableUtils.count;
 public class ClavinTermMentionFilter extends TermMentionFilter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ClavinTermMentionFilter.class);
 
-    private static final String MULTI_VALUE_PROERTY_KEY = ClavinTermMentionFilter.class.getName();
+    private static final String MULTI_VALUE_PROPERTY_KEY = ClavinTermMentionFilter.class.getName();
 
     /**
      * The CLAVIN index directory configuration key.
@@ -228,10 +228,10 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 String conceptType = getOntologyClassUri(loc, termMentionConceptType);
 
                 ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
-                        .addPropertyValue(MULTI_VALUE_PROERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
-                LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, conceptType, sourceVertex.getVisibility());
-                LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, "CLAVIN", sourceVertex.getVisibility());
-                LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, title, sourceVertex.getVisibility());
+                        .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
+                LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, conceptType, sourceVertex.getVisibility());
+                LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, "CLAVIN", sourceVertex.getVisibility());
+                LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, title, sourceVertex.getVisibility());
                 Vertex resolvedToVertex = resolvedToVertexBuilder.save(authorizations);
 
                 String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + resolvedToVertex.getId();
