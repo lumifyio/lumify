@@ -1,6 +1,8 @@
 package io.lumify.web.clientapi;
 
 import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.codegen.model.Element;
+import io.lumify.web.clientapi.codegen.model.Property;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,7 +58,13 @@ public class LumifyHttpURLConnectionWebClientTest {
 
         String artifactVertexId = artifactImportResponse.getVertexIds().get(0);
 
-        System.out.println(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker"));
+        Element artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        for (Property prop : artifactVertex.getProperties()) {
+            System.out.println(prop);
+            if (prop.getName().equals("http://lumify.io#text")) {
+                System.out.println(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
+            }
+        }
 
 //
 //        List<WorkspaceUpdateItem> workspaceUpdateItems = new ArrayList<WorkspaceUpdateItem>();

@@ -12,6 +12,7 @@ public class LumifyApi {
     private final WorkspaceApi workspaceApi;
     private final WorkspacesApi workspacesApi;
     private final AdminApiExt adminApi;
+    private final VertexApi vertexApi;
     private Workspace currentWorkspace;
 
     public LumifyApi(String basePath) {
@@ -29,6 +30,9 @@ public class LumifyApi {
 
         adminApi = new AdminApiExt();
         adminApi.setBasePath(basePath);
+
+        vertexApi = new VertexApi();
+        vertexApi.setBasePath(basePath);
     }
 
     public UserApi getUserApi() {
@@ -49,6 +53,10 @@ public class LumifyApi {
 
     public AdminApiExt getAdminApi() {
         return adminApi;
+    }
+
+    public VertexApi getVertexApi() {
+        return vertexApi;
     }
 
     public Workspace loginAndGetCurrentWorkspace() throws ApiException {

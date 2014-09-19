@@ -18,6 +18,10 @@
         {
             "path": "/admin.json",
             "description": "Admin operations"
+        },
+        {
+            "path": "/vertex.json",
+            "description": "Vertex operations"
         }
     ]
 }
