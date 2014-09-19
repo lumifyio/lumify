@@ -133,9 +133,6 @@ public class LumifyBootstrap extends AbstractModule {
         bind(OntologyRepository.class)
                 .toProvider(this.<OntologyRepository>getConfigurableProvider(configuration, Configuration.ONTOLOGY_REPOSITORY))
                 .in(Scopes.SINGLETON);
-        bind(AuditRepository.class)
-                .toProvider(this.<AuditRepository>getConfigurableProvider(configuration, Configuration.AUDIT_REPOSITORY))
-                .in(Scopes.SINGLETON);
         bind(ArtifactThumbnailRepository.class)
                 .toProvider(this.<ArtifactThumbnailRepository>getConfigurableProvider(configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))
                 .in(Scopes.SINGLETON);
