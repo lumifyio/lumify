@@ -763,8 +763,14 @@ define([
             var self = this,
                 warningText = i18n('detail.text.none_available');
 
-            return !text ?  alertTemplate({ warning: warningText }) : text.replace(/(\n+)/g, '<br><br>$1');
+            return !text ?  alertTemplate({ warning: warningText }) : this.normalizeString(text);
         }
+
+        this.normalizeString = function(text) {
+            return text
+                .replace(/&nbsp;/g, ' ')
+                .replace(/(\n+)/g, '<br><br>$1');
+        };
 
     }
 });
