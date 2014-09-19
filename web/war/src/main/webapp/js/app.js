@@ -542,7 +542,6 @@ define([
             }
 
             if (openingPane) {
-                debugger;
                 var openingPaneWidth = openingPane.width(),
                     otherVisiblePanes = [],
                     availableWidth = this.availablePaneWidth(openingPane, otherVisiblePanes),
