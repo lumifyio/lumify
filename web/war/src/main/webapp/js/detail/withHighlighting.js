@@ -788,9 +788,7 @@ define([
         }
 
         this.normalizeString = function(text) {
-            return text
-                .replace(/&nbsp;/g, '      ')
-                .replace(/(\n+)/g, '<br><br>$1');
+            return text.replace(/(\n+)/g, '<br><br>$1');
         };
 
     }
