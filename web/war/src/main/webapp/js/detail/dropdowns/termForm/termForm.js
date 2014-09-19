@@ -547,8 +547,20 @@ define([
                         badge.removeClass('loading');
                     })
                     .then(function(response) {
-                        return _.filter(response.vertices, function(v) {
-                            return ~F.vertex.title(v).toLowerCase().indexOf(query.toLowerCase());
+                        var splitUpString = function(str) {
+                                return F.string.normalizeAccents(str.toLowerCase())
+                                    .replace(/[^a-zA-Z0-9]/g, ' ')
+                                    .split(/\s+/);
+                            },
+                            queryParts = splitUpString(query);
+
+                        return _.reject(response.vertices, function(v) {
+                            var queryPartsMissingFromTitle = _.difference(
+                                queryParts,
+                                splitUpString(F.vertex.title(v))
+                            ).length;
+
+                            return queryPartsMissingFromTitle;
                         });
                     })
                     .fail(function() {
