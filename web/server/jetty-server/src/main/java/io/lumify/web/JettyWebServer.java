@@ -1,6 +1,8 @@
 package io.lumify.web;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -12,6 +14,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyWebServer extends WebServer {
 
+    public static final String OPT_DONT_JOIN = "dontjoin";
     private Server server;
 
     public static void main(String[] args) throws Exception {
@@ -23,6 +26,20 @@ public class JettyWebServer extends WebServer {
 
     public JettyWebServer() {
         initFramework = false;
+    }
+
+    @Override
+    protected Options getOptions() {
+        Options options = super.getOptions();
+
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(OPT_DONT_JOIN)
+                        .withDescription("Don't join the server thread and continue with exit")
+                        .create()
+        );
+
+        return options;
     }
 
     @Override
@@ -52,7 +69,9 @@ public class JettyWebServer extends WebServer {
         server.setHandler(contexts);
 
         server.start();
-        server.join();
+        if (!cmd.hasOption(OPT_DONT_JOIN)) {
+            server.join();
+        }
 
         return 0;
     }

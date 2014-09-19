@@ -2,6 +2,7 @@ package io.lumify.test;
 
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.config.LumifyTestClusterConfigurationLoader;
+import org.apache.accumulo.server.Accumulo;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -19,14 +20,7 @@ public class LumifyTestCluster {
         this.httpPort = httpPort;
         this.httpsPort = httpsPort;
 
-        String configLoaderName = System.getenv(ConfigurationLoader.ENV_CONFIGURATION_LOADER);
-        if (configLoaderName == null || !configLoaderName.equals(LumifyTestClusterConfigurationLoader.class.getName())) {
-            throw new RuntimeException("You must set an environment variable named '"
-                    + ConfigurationLoader.ENV_CONFIGURATION_LOADER
-                    + "' to the value '"
-                    + LumifyTestClusterConfigurationLoader.class.getName()
-                    + "' for the Lumify mini cluster to work.");
-        }
+        System.setProperty(ConfigurationLoader.ENV_CONFIGURATION_LOADER, LumifyTestClusterConfigurationLoader.class.getName());
     }
 
     public static void main(String[] args) {

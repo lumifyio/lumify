@@ -1,12 +1,12 @@
 package io.lumify.web.devTools.user;
 
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.miniweb.HandlerChain;
-import com.google.inject.Inject;
+import io.lumify.web.BaseRequestHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +27,7 @@ public class UserAddAuthorization extends BaseRequestHandler {
 
         User user = getUserRepository().findByUsername(userName);
         if (user == null) {
-            respondWithNotFound(response);
+            respondWithNotFound(response, "User " + userName + " not found");
             return;
         }
 

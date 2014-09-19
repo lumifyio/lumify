@@ -27,7 +27,8 @@ public class TestJettyServer extends JettyWebServer {
                 "--" + WebServer.KEY_STORE_PASSWORD_OPTION_VALUE,
                 keyStorePassword,
                 "--" + WebServer.WEB_APP_DIR_OPTION_VALUE,
-                "web/war/src/main/webapp"
+                "web/war/src/main/webapp",
+                "--dontjoin"
         };
 
         try {

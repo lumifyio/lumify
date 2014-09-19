@@ -4,7 +4,9 @@ import io.lumify.web.clientapi.codegen.*;
 import io.lumify.web.clientapi.codegen.model.UserMe;
 import io.lumify.web.clientapi.codegen.model.Workspace;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LumifyApi {
     private final UserApi userApi;
@@ -14,9 +16,12 @@ public class LumifyApi {
     private final AdminApiExt adminApi;
     private final VertexApi vertexApi;
     private final OntologyApiExt ontologyApi;
+    private final String basePath;
     private Workspace currentWorkspace;
 
     public LumifyApi(String basePath) {
+        this.basePath = basePath;
+
         userApi = new UserApi();
         userApi.setBasePath(basePath);
 
@@ -98,5 +103,18 @@ public class LumifyApi {
         ApiInvoker.getInstance().setWorkspaceId(currentWorkspace.getWorkspaceId());
 
         return currentWorkspace;
+    }
+
+    public String invokeAPI(String path, String method, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType) throws ApiException {
+        if (queryParams == null) {
+            queryParams = new HashMap<String, String>();
+        }
+        if (headerParams == null) {
+            headerParams = new HashMap<String, String>();
+        }
+        if (formParams == null) {
+            formParams = new HashMap<String, String>();
+        }
+        return ApiInvoker.getInstance().invokeAPI(this.basePath, path, method, queryParams, body, headerParams, formParams, contentType);
     }
 }

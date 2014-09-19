@@ -37,6 +37,7 @@
         <module>tools</module>
         <module>web</module>
         <module>dev</module>
+        <module>integration-test</module>
     </modules>
 
     <properties>

@@ -85,5 +85,4 @@ public class TestAccumulo {
         lumifyConfig.setProperty("bigtable.accumulo.zookeeperServerNames", accumulo.getZooKeepers());
         lumifyConfig.setProperty("graph.zookeeperServers", accumulo.getZooKeepers());
     }
-
 }
