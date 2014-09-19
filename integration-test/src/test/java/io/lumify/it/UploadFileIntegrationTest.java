@@ -5,6 +5,8 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.UserNameOnlyLumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.codegen.model.Element;
+import io.lumify.web.clientapi.codegen.model.Property;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,6 +96,20 @@ public class UploadFileIntegrationTest {
         assertEquals(1, artifact.getVertexIds().size());
         String artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
+
+        lumifyTestCluster.processGraphPropertyQueue();
+
+        Element artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        assertEquals(artifactVertexId, artifactVertex.getId());
+        assertEquals(10, artifactVertex.getProperties().size());
+
+        for (Property property : artifactVertex.getProperties()) {
+            System.out.println(property);
+        }
+
+        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
+        assertNotNull(highlightedText);
+        System.out.println(highlightedText);
     }
 
     public void addUserAuth(String username, String auth) throws ApiException {

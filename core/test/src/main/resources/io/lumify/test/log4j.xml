@@ -15,28 +15,16 @@
         </layout>
     </appender>
 
-    <appender name="log" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/lumify${logFileSuffix}.log" />
-        <param name="MaxFileSize" value="32MB" />
-        <param name="MaxBackupIndex" value="2" />
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="&pattern;" />
-        </layout>
-    </appender>
-
     <logger name="com.altamiracorp" additivity="false">
         <level value="DEBUG" />
-        <appender-ref ref="log" />
         <appender-ref ref="console" />
     </logger>
     <logger name="org.securegraph" additivity="false">
         <level value="DEBUG" />
-        <appender-ref ref="log" />
         <appender-ref ref="console" />
     </logger>
     <logger name="io.lumify" additivity="false">
         <level value="DEBUG" />
-        <appender-ref ref="log" />
         <appender-ref ref="console" />
     </logger>
 

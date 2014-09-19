@@ -1,8 +1,9 @@
-package io.lumify.core.model.workQueue;
+package io.lumify.test;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import org.json.JSONObject;
 import org.securegraph.Graph;
 
@@ -10,7 +11,7 @@ import java.util.*;
 
 public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
-    private Map<String, Queue<JSONObject>> queues = new HashMap<String, Queue<JSONObject>>();
+    private static Map<String, Queue<JSONObject>> queues = new HashMap<String, Queue<JSONObject>>();
     private List<BroadcastConsumer> consumers = new ArrayList<BroadcastConsumer>();
 
     @Inject
@@ -32,6 +33,7 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
             queue = new LinkedList();
             queues.put(queueName, queue);
         }
+        LOGGER.debug("push on queue: %s: %s", queueName, json);
         queue.add(json);
     }
 
@@ -47,7 +49,7 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void format() {
-        queues.clear();
+        clearQueue();
     }
 
     @Override
@@ -55,7 +57,11 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
         consumers.add(broadcastConsumer);
     }
 
-    public Queue<JSONObject> getQueue(String queueName) {
+    public static void clearQueue() {
+        queues.clear();
+    }
+
+    public static Queue<JSONObject> getQueue(String queueName) {
         return queues.get(queueName);
     }
 }
