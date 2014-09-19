@@ -76,8 +76,9 @@ public class LumifyProperties {
     public static final StringLumifyProperty AUDIT_SCM_BUILD_TIME = new StringLumifyProperty("http://lumify.io/audit#scmBuildTime");
     public static final StringLumifyProperty AUDIT_ACTION = new StringLumifyProperty("http://lumify.io/audit#action");
     public static final DateLumifyProperty AUDIT_DATE_TIME = new DateLumifyProperty("http://lumify.io/audit#dateTime");
-    public static final StringLumifyProperty AUDITED_VERTEX_ID = new StringLumifyProperty("http://lumify.io/audit#auditedVertexId");
     public static final StringLumifyProperty AUDIT_ANALYZED_BY = new StringLumifyProperty("http://lumify.io/audit#analyzedBy");
+    public static final StringLumifyProperty AUDIT_TYPE = new StringLumifyProperty("http://lumify.io/audit#type");
+    public static final StringLumifyProperty AUDITED_VERTEX_ID = new StringLumifyProperty("http://lumify.io/audit#auditedVertexId");
     public static final StringLumifyProperty AUDIT_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/audit#propertyKey");
     public static final StringLumifyProperty AUDIT_PROPERTY_NAME = new StringLumifyProperty("http://lumify.io/audit#propertyName");
     public static final StringLumifyProperty AUDIT_PROPERTY_OLD_VALUE = new StringLumifyProperty("http://lumify.io/audit#propertyOldValue");

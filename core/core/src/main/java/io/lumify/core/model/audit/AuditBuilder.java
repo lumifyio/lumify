@@ -135,6 +135,7 @@ public class AuditBuilder {
         LumifyProperties.AUDIT_DATE_TIME.setProperty(auditVertexBuilder, this.dateTime, auditVisibility);
         LumifyProperties.AUDIT_ACTION.setProperty(auditVertexBuilder, this.auditAction.toString(), auditVisibility);
         LumifyProperties.AUDIT_ANALYZED_BY.setProperty(auditVertexBuilder, this.analyzedBy, auditVisibility);
+        LumifyProperties.AUDIT_TYPE.setProperty(auditVertexBuilder, this.auditType.toString(), auditVisibility);
         return auditVertexBuilder;
     }
 
