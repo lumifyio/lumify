@@ -3,6 +3,8 @@ package io.lumify.core.ingest.graphProperty;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
+import io.lumify.core.model.audit.AuditType;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
@@ -63,7 +65,12 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
             termMentions.add(termMention);
         }
         applyTermMentionFilters(sourceVertex, termMentions);
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, sourceVertex, getClass().getSimpleName(), getUser(), sourceVertex.getVisibility());
+        new AuditBuilder()
+                .auditAction(AuditAction.ANALYZED_BY)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(sourceVertex)
+                .auditVertex(getAuthorizations(), false);
     }
 
     @Override

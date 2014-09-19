@@ -2,12 +2,14 @@ package io.lumify.core.model.audit;
 
 import com.google.inject.Inject;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.version.VersionService;
 import org.json.JSONObject;
 import org.securegraph.*;
+import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -23,12 +25,12 @@ public class AuditBuilder {
     private String version;
     private String scmBuildNumber;
     private AuditAction auditAction;
-    private AuditType auditType;
     private Date dateTime;
     private Vertex vertexToAudit;
     private Vertex sourceVertex;
     private Vertex destVertex;
     private Edge edgeToAudit;
+    private ExistingElementMutation<Vertex> vertexExistingElementMutation;
 
     public AuditBuilder() {
         this.scmBuildNumber = versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "";
@@ -52,11 +54,6 @@ public class AuditBuilder {
         return this;
     }
 
-    public AuditBuilder auditType(AuditType auditType) {
-        this.auditType = auditType;
-        return this;
-    }
-
     public AuditBuilder vertexToAudit(Vertex vertexToAudit) {
         this.vertexToAudit = vertexToAudit;
         return this;
@@ -72,28 +69,36 @@ public class AuditBuilder {
         return this;
     }
 
+    public AuditBuilder existingElementMutation (ExistingElementMutation<Vertex> vertexExistingElementMutation) {
+        this.vertexExistingElementMutation = vertexExistingElementMutation;
+        return this;
+    }
+
     public AuditBuilder edgeToAudit(Vertex edgeToVertex) {
         this.edgeToAudit = edgeToAudit;
         return this;
     }
 
-    public void auditVertex(Authorizations authorizations) {
+    public AuditBuilder auditVertex(Authorizations authorizations, boolean auditProperties) {
         JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(this.vertexToAudit);
         Visibility auditVisibility = LumifyVisibility.and(visibilityTranslator.toVisibility(visibilitySource).getVisibility(), AuditRepository.AUDIT_VISIBILITY);
         String auditVertexId = createAuditVertexId();
-        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(graph.prepareVertex(auditVertexId, auditVisibility), auditVisibility);
+        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(graph.prepareVertex(auditVertexId, auditVisibility), AuditType.ENTITY, auditVisibility);
         LumifyProperties.AUDITED_VERTEX_ID.setProperty(auditVertexBuilder, this.vertexToAudit.getId(), auditVisibility);
         LumifyProperties.VISIBILITY_SOURCE.setProperty(auditVertexBuilder, visibilitySource, auditVisibility);
         Vertex auditVertex = auditVertexBuilder.save(authorizations);
         createLumifyAuditRelationships(auditVertex, user, authorizations);
 
         // Creating audit vertices for all of the properties
-        Iterator properties = this.vertexToAudit.getProperties().iterator();
-        while (properties.hasNext()) {
-            auditProperty(null, (Property) properties.next(), authorizations);
+        if (auditProperties) {
+            Iterator properties = this.vertexToAudit.getProperties().iterator();
+            while (properties.hasNext()) {
+                auditProperty(null, (Property) properties.next(), authorizations);
+            }
         }
 
         graph.flush();
+        return this;
     }
 
 //    public void auditRelationship (Authorizations authorizations) {
@@ -110,13 +115,23 @@ public class AuditBuilder {
 //        LumifyProperties.AUDIT_RELATIONSHIP_DEST_VERTEX_ID.setProperty(auditSourceVertexBuilder, vertexId, auditVisibility);
 //    }
 
+    public AuditBuilder auditExisitingVertexProperties (Authorizations authorizations) {
+        Vertex oldVertex = this.vertexExistingElementMutation.getElement();
+        for (Property property : vertexExistingElementMutation.getProperties()) {
+            Object oldPropertyValue = oldVertex.getPropertyValue(property.getKey());
+            Object newPropertyValue = property.getValue();
+            if (!newPropertyValue.equals(oldPropertyValue) || !oldVertex.getVisibility().getVisibilityString().equals(property.getVisibility().getVisibilityString())) {
+                auditProperty(oldPropertyValue, property, authorizations);
+            }
+        }
+        return this;
+    }
+
     private void auditProperty(Object oldPropertyValue, Property newProperty, Authorizations authorizations) {
-        JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(this.vertexToAudit);
-        Visibility auditVisibility = LumifyVisibility.and(visibilityTranslator.toVisibility(visibilitySource).getVisibility(), AuditRepository.AUDIT_VISIBILITY);
+        Visibility auditVisibility = LumifyVisibility.and(newProperty.getVisibility(), AuditRepository.AUDIT_VISIBILITY);
         String auditVertexId = createAuditVertexPropertyId(newProperty.getKey(), newProperty.getName());
-        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(graph.prepareVertex(auditVertexId, auditVisibility), auditVisibility);
+        VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(graph.prepareVertex(auditVertexId, auditVisibility), AuditType.PROPERTY, auditVisibility);
         LumifyProperties.AUDITED_VERTEX_ID.setProperty(auditVertexBuilder, this.vertexToAudit.getId(), auditVisibility);
-        LumifyProperties.VISIBILITY_SOURCE.setProperty(auditVertexBuilder, visibilitySource, auditVisibility);
         if (oldPropertyValue != null) {
             LumifyProperties.AUDIT_PROPERTY_OLD_VALUE.setProperty(auditVertexBuilder, oldPropertyValue.toString(), auditVisibility);
         }
@@ -128,14 +143,14 @@ public class AuditBuilder {
         createLumifyAuditRelationships(auditVertex, user, authorizations);
     }
 
-    private VertexBuilder setupLumifyAuditVertex(VertexBuilder auditVertexBuilder, Visibility auditVisibility) {
+    private VertexBuilder setupLumifyAuditVertex(VertexBuilder auditVertexBuilder, AuditType auditType, Visibility auditVisibility) {
         LumifyProperties.AUDIT_SOURCE_VERSION.setProperty(auditVertexBuilder, this.version, auditVisibility);
         LumifyProperties.AUDIT_SCM_BUILD_TIME.setProperty(auditVertexBuilder, this.scmBuildNumber, auditVisibility);
         LumifyProperties.AUDIT_UNIX_BUILD_TIME.setProperty(auditVertexBuilder, this.unixBuildTime, auditVisibility);
         LumifyProperties.AUDIT_DATE_TIME.setProperty(auditVertexBuilder, this.dateTime, auditVisibility);
         LumifyProperties.AUDIT_ACTION.setProperty(auditVertexBuilder, this.auditAction.toString(), auditVisibility);
         LumifyProperties.AUDIT_ANALYZED_BY.setProperty(auditVertexBuilder, this.analyzedBy, auditVisibility);
-        LumifyProperties.AUDIT_TYPE.setProperty(auditVertexBuilder, this.auditType.toString(), auditVisibility);
+        LumifyProperties.AUDIT_TYPE.setProperty(auditVertexBuilder, auditType.toString(), auditVisibility);
         return auditVertexBuilder;
     }
 

@@ -3,6 +3,8 @@ package io.lumify.core.ingest.graphProperty;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
+import io.lumify.core.model.audit.AuditType;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -66,8 +68,17 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
         LumifyProperties.MIME_TYPE.setProperty(m, mimeType, mimeTypeMetadata, data.getVisibility());
         m.alterPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
         Vertex v = m.save(getAuthorizations());
-        getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, this.getClass().getName(), getUser(), data.getVisibility());
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
+
+        // Auditing the new properties set and that the MimeTypeGraphPropertyWorker analyzed the vertex
+        new AuditBuilder()
+                .auditAction(AuditAction.UPDATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(v)
+                .existingElementMutation(m)
+                .auditExisitingVertexProperties (getAuthorizations())
+                .auditAction(AuditAction.ANALYZED_BY)
+                .auditVertex(getAuthorizations(), false);
 
         getGraph().flush();
 
