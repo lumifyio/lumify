@@ -9,6 +9,8 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -16,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
+import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
 
@@ -53,7 +56,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
             return;
         }
 
-        ExistingElementMutation m = data.getElement().prepareMutation()
+        ExistingElementMutation<Vertex> m = data.getElement().prepareMutation()
                 .alterPropertyMetadata(data.getProperty(), LumifyProperties.META_DATA_LANGUAGE, language);
 
         boolean translated = false;
@@ -81,7 +84,18 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
             }
         }
 
-        m.save(getAuthorizations());
+        Vertex v = m.save(getAuthorizations());
+
+        // Auditing the new properties set and that this class analyzed the vertex
+        new AuditBuilder()
+                .auditAction(AuditAction.UPDATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(v)
+                .existingElementMutation(m)
+                .auditExisitingVertexProperties(getAuthorizations())
+                .auditAction(AuditAction.ANALYZED_BY)
+                .auditVertex(getAuthorizations(), false);
 
         if (translated) {
             getGraph().flush();

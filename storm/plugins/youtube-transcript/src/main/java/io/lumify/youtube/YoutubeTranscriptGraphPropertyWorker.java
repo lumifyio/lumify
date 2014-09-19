@@ -4,6 +4,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -24,8 +25,16 @@ public class YoutubeTranscriptGraphPropertyWorker extends GraphPropertyWorker {
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         addVideoTranscriptAsTextPropertiesToMutation(m, PROPERTY_KEY, videoTranscript, data.createPropertyMetadata(), data.getVisibility());
         Vertex v = m.save(getAuthorizations());
-        getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, PROPERTY_KEY, getUser(), data.getVisibility());
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
+        // Auditing the new properties set and that this class analyzed the vertex
+        new AuditBuilder()
+                .auditAction(AuditAction.UPDATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(v)
+                .existingElementMutation(m)
+                .auditExisitingVertexProperties(getAuthorizations())
+                .auditAction(AuditAction.ANALYZED_BY)
+                .auditVertex(getAuthorizations(), false);
 
         getGraph().flush();
         pushVideoTranscriptTextPropertiesOnWorkQueue(data.getElement(), PROPERTY_KEY, videoTranscript);

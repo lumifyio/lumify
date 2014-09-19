@@ -8,6 +8,8 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
@@ -78,6 +80,13 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
         }
         getGraph().flush();
         applyTermMentionFilters(sourceVertex, termMentions);
+
+        new AuditBuilder()
+                .auditAction(AuditAction.ANALYZED_BY)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(sourceVertex)
+                .auditVertex(getAuthorizations(), false);
 
         LOGGER.debug("Number of phone numbers extracted: %d", count(phoneNumbers));
     }

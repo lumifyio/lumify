@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
@@ -74,6 +76,13 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }
         applyTermMentionFilters(sourceVertex, termMentions);
+
+        new AuditBuilder()
+                .auditAction(AuditAction.ANALYZED_BY)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(sourceVertex)
+                .auditVertex(getAuthorizations(), false);
 
         untokenizedLineStream.close();
         LOGGER.debug("Stream processing completed");

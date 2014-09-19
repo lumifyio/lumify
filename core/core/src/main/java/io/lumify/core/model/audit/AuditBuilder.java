@@ -13,6 +13,7 @@ import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 
 public class AuditBuilder {
     private static final String AUDIT_STRING = "AUDIT_STRING";
@@ -127,20 +128,28 @@ public class AuditBuilder {
         return this;
     }
 
-    private void auditProperty(Object oldPropertyValue, Property newProperty, Authorizations authorizations) {
-        Visibility auditVisibility = LumifyVisibility.and(newProperty.getVisibility(), AuditRepository.AUDIT_VISIBILITY);
-        String auditVertexId = createAuditVertexPropertyId(newProperty.getKey(), newProperty.getName());
+    public AuditBuilder auditProperty (String propertyKey, String propertyName,
+                                       Object oldPropertyValue, Object newPropertyValue,
+                                       Map<String, Object> metadata,
+                                       Visibility visibility, Authorizations authorizations) {
+        Visibility auditVisibility = LumifyVisibility.and(visibility, AuditRepository.AUDIT_VISIBILITY);
+        String auditVertexId = createAuditVertexPropertyId(propertyKey, propertyName);
         VertexBuilder auditVertexBuilder = setupLumifyAuditVertex(graph.prepareVertex(auditVertexId, auditVisibility), AuditType.PROPERTY, auditVisibility);
         LumifyProperties.AUDITED_VERTEX_ID.setProperty(auditVertexBuilder, this.vertexToAudit.getId(), auditVisibility);
         if (oldPropertyValue != null) {
             LumifyProperties.AUDIT_PROPERTY_OLD_VALUE.setProperty(auditVertexBuilder, oldPropertyValue.toString(), auditVisibility);
         }
-        LumifyProperties.AUDIT_PROPERTY_KEY.setProperty(auditVertexBuilder, newProperty.getKey(), auditVisibility);
-        LumifyProperties.AUDIT_PROPERTY_NAME.setProperty(auditVertexBuilder, newProperty.getName(), auditVisibility);
-        LumifyProperties.AUDIT_PROPERTY_NEW_VALUE.setProperty(auditVertexBuilder, newProperty.getValue().toString(), auditVisibility);
-        LumifyProperties.AUDIT_PROPERTY_METADATA.setProperty(auditVertexBuilder, newProperty.getMetadata().toString(), auditVisibility);
+        LumifyProperties.AUDIT_PROPERTY_KEY.setProperty(auditVertexBuilder, propertyKey, auditVisibility);
+        LumifyProperties.AUDIT_PROPERTY_NAME.setProperty(auditVertexBuilder, propertyName, auditVisibility);
+        LumifyProperties.AUDIT_PROPERTY_NEW_VALUE.setProperty(auditVertexBuilder, newPropertyValue.toString(), auditVisibility);
+        LumifyProperties.AUDIT_PROPERTY_METADATA.setProperty(auditVertexBuilder, metadata.toString(), auditVisibility);
         Vertex auditVertex = auditVertexBuilder.save(authorizations);
         createLumifyAuditRelationships(auditVertex, user, authorizations);
+        return this;
+    }
+
+    private void auditProperty(Object oldPropertyValue, Property newProperty, Authorizations authorizations) {
+        auditProperty(newProperty.getKey(), newProperty.getName(), oldPropertyValue, newProperty.getValue(), newProperty.getMetadata(), newProperty.getVisibility(), authorizations);
     }
 
     private VertexBuilder setupLumifyAuditVertex(VertexBuilder auditVertexBuilder, AuditType auditType, Visibility auditVisibility) {

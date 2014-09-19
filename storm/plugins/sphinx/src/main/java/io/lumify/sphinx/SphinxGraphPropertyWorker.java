@@ -5,6 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import org.securegraph.Element;
@@ -38,8 +39,16 @@ public class SphinxGraphPropertyWorker extends GraphPropertyWorker {
         metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Audio Transcript");
         addVideoTranscriptAsTextPropertiesToMutation(m, MULTI_VALUE_KEY, transcript, metadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
-        getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, MULTI_VALUE_KEY, getUser(), data.getVisibility());
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
+        // Auditing the new properties set and that this class analyzed the vertex
+        new AuditBuilder()
+                .auditAction(AuditAction.UPDATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(v)
+                .existingElementMutation(m)
+                .auditExisitingVertexProperties(getAuthorizations())
+                .auditAction(AuditAction.ANALYZED_BY)
+                .auditVertex(getAuthorizations(), false);
 
         getGraph().flush();
         pushVideoTranscriptTextPropertiesOnWorkQueue(data.getElement(), MULTI_VALUE_KEY, transcript);

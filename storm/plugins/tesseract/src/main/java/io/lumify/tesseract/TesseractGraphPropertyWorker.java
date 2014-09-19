@@ -4,6 +4,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -66,8 +67,16 @@ public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
         textMetadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
         LumifyProperties.TEXT.addPropertyValue(m, textPropertyKey, textValue, textMetadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
-        getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, TEXT_PROPERTY_KEY, getUser(), data.getVisibility());
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
+        // Auditing the new properties set and that this class analyzed the vertex
+        new AuditBuilder()
+                .auditAction(AuditAction.UPDATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(v)
+                .existingElementMutation(m)
+                .auditExisitingVertexProperties(getAuthorizations())
+                .auditAction(AuditAction.ANALYZED_BY)
+                .auditVertex(getAuthorizations(), false);
 
         getGraph().flush();
         getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), textPropertyKey, LumifyProperties.TEXT.getPropertyName());

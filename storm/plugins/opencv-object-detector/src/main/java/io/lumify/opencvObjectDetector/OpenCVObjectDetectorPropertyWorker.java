@@ -7,6 +7,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditBuilder;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.util.LumifyLogger;
@@ -22,6 +23,7 @@ import org.opencv.objdetect.CascadeClassifier;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
+import org.securegraph.Visibility;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -113,8 +116,12 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
     }
 
     private void saveDetectedObjects(Vertex artifactVertex, List<ArtifactDetectedObject> detectedObjects) {
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactVertex,
-                getClass().getSimpleName(), getUser(), artifactVertex.getVisibility());
+        new AuditBuilder()
+                .auditAction(AuditAction.ANALYZED_BY)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(artifactVertex)
+                .auditVertex(getAuthorizations(), false);
         for (ArtifactDetectedObject detectedObject : detectedObjects) {
             saveDetectedObject(artifactVertex, detectedObject);
         }
@@ -122,7 +129,15 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
 
     private void saveDetectedObject(Vertex artifactVertex, ArtifactDetectedObject detectedObject) {
         String multiKey = detectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
-        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, multiKey, detectedObject, new LumifyVisibility().getVisibility(), getAuthorizations());
+        Visibility visibility = new LumifyVisibility().getVisibility();
+        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, multiKey, detectedObject, visibility, getAuthorizations());
+        new AuditBuilder()
+                .auditAction(AuditAction.CREATE)
+                .user(getUser())
+                .analyzedBy(getClass().getSimpleName())
+                .vertexToAudit(artifactVertex)
+                .auditProperty(multiKey, LumifyProperties.DETECTED_OBJECT.getPropertyName(),
+                        null, detectedObject, new HashMap<String, Object>(), visibility, getAuthorizations());
     }
 
     public List<ArtifactDetectedObject> detectObjects(BufferedImage bImage) {
