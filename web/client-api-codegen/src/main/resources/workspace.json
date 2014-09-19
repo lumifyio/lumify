@@ -11,7 +11,7 @@
                     "method": "GET",
                     "summary": "Gets all workspaces",
                     "type": "Workspaces",
-                    "nickname": "getWorkspaces"
+                    "nickname": "getAll"
                 }
             ]
         },
@@ -22,7 +22,7 @@
                     "method": "GET",
                     "summary": "Get a workspace",
                     "type": "Workspace",
-                    "nickname": "getWorkspaceById",
+                    "nickname": "getById",
                     "parameters": [
                         {
                             "name": "workspaceId",
@@ -42,7 +42,43 @@
                     "method": "POST",
                     "summary": "Create a new workspace",
                     "type": "Workspace",
-                    "nickname": "newWorkspace"
+                    "nickname": "create"
+                }
+            ]
+        },
+        {
+            "path": "/workspace/update",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Update items on a workspace",
+                    "type": "void",
+                    "nickname": "update",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "data",
+                            "description": "the update data",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/updateDummy",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Dummy method to force WorkspaceUpdateData to be generated",
+                    "type": "WorkspaceUpdateData",
+                    "nickname": "zzzUpdateDummy",
+                    "parameters": [
+                    ]
                 }
             ]
         }
@@ -63,6 +99,75 @@
             "id": "Workspace",
             "properties": {
                 "workspaceId": {
+                    "type": "string"
+                }
+            }
+        },
+        "WorkspaceUpdateData": {
+            "id": "WorkspaceUpdateData",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "entityUpdates": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceEntityUpdate"
+                    }
+                },
+                "entityDeletes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "userUpdates": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceUserUpdate"
+                    }
+                },
+                "userDeletes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "WorkspaceEntityUpdate": {
+            "id": "WorkspaceEntityUpdate",
+            "properties": {
+                "vertexId": {
+                    "type": "string"
+                },
+                "graphPosition": {
+                    "type": "GraphPosition"
+                }
+            }
+        },
+        "GraphPosition": {
+            "id": "GraphPosition",
+            "properties": {
+                "x": {
+                    "type": "integer",
+                    "format": "int32",
+                    "required": true
+                },
+                "y": {
+                    "type": "integer",
+                    "format": "int32",
+                    "required": true
+                }
+            }
+        },
+        "WorkspaceUserUpdate": {
+            "id": "WorkspaceUserUpdate",
+            "properties": {
+                "userId": {
+                    "type": "string"
+                },
+                "access": {
                     "type": "string"
                 }
             }

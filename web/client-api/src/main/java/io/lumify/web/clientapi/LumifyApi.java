@@ -9,7 +9,7 @@ import java.util.List;
 public class LumifyApi {
     private final UserApi userApi;
     private final ArtifactApiExt artifactApi;
-    private final WorkspaceApi workspaceApi;
+    private final WorkspaceApiExt workspaceApi;
     private final WorkspacesApi workspacesApi;
     private final AdminApiExt adminApi;
     private final VertexApi vertexApi;
@@ -23,7 +23,7 @@ public class LumifyApi {
         artifactApi = new ArtifactApiExt();
         artifactApi.setBasePath(basePath);
 
-        workspaceApi = new WorkspaceApi();
+        workspaceApi = new WorkspaceApiExt();
         workspaceApi.setBasePath(basePath);
 
         workspacesApi = new WorkspacesApi();
@@ -47,7 +47,7 @@ public class LumifyApi {
         return artifactApi;
     }
 
-    public WorkspaceApi getWorkspaceApi() {
+    public WorkspaceApiExt getWorkspaceApi() {
         return workspaceApi;
     }
 
@@ -75,7 +75,7 @@ public class LumifyApi {
         UserMe me = getUserApi().getMe();
         ApiInvoker.getInstance().setCsrfToken(me.getCsrfToken());
 
-        List<Workspace> workspaces = getWorkspacesApi().getWorkspaces().getWorkspaces();
+        List<Workspace> workspaces = getWorkspacesApi().getAll().getWorkspaces();
 
         currentWorkspace = null;
         if (me.getCurrentWorkspaceId() != null) {
@@ -89,7 +89,7 @@ public class LumifyApi {
 
         if (currentWorkspace == null) {
             if (workspaces.size() == 0) {
-                currentWorkspace = getWorkspaceApi().newWorkspace();
+                currentWorkspace = getWorkspaceApi().create();
             } else {
                 currentWorkspace = workspaces.get(0);
             }

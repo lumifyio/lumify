@@ -27,7 +27,7 @@ public class WorkspacesApi {
     return basePath;
   }
 
-  public Workspaces getWorkspaces () throws ApiException {
+  public Workspaces getAll () throws ApiException {
     Object postBody = null;
     // create path and map variables
     String path = "/workspaces".replaceAll("\\{format\\}","json");
