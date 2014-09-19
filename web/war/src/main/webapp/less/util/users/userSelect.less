@@ -1,0 +1,27 @@
+
+.user-row {
+  .user-status {
+    position: absolute;
+    left: 0.5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    margin-top: -2px;
+    top: 1em;
+    &.online {
+      background: rgb(60, 214, 60);
+    }
+    &.unknown, &.offline {
+      background: #C05F5F;
+    }
+  }
+}
+
+.active .user-row {
+  .online {
+    background: rgb(74, 245, 31);
+  }
+  .offline, .unknown {
+    background: rgb(255, 112, 92);
+  }
+}

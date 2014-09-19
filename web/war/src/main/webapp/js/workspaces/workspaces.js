@@ -165,7 +165,7 @@ define([
         };
 
         this.updateListItemWithData = function(data, timestamp) {
-            if (!this.usersById) return;
+            var self = this;
 
             this.currentUserReady(function(currentUser) {
                 var li = this.findWorkspaceRow(data.workspaceId);
@@ -173,31 +173,33 @@ define([
                     _.contains(_.pluck(data.users, 'userId'), currentUser.id)
                 ) {
                     li.find('.badge').removeClass('loading').hide().next().show();
-                    data = this.workspaceDataForItemRow(data);
-                    var content = $(itemTemplate({ workspace: data, selected: this.workspaceId }));
-                    if (li.length === 0) {
-                        this.$node.find('li.nav-header').eq(data.isSharedToUser ? 1 : 0).after(content);
-                    } else {
-                        li.replaceWith(content);
-                    }
+                    this.workspaceDataForItemRow(data)
+                        .done(function(data) {
+                            var content = $(itemTemplate({ workspace: data, selected: self.workspaceId }));
+                            if (li.length === 0) {
+                                self.$node.find('li.nav-header').eq(data.isSharedToUser ? 1 : 0).after(content);
+                            } else {
+                                li.replaceWith(content);
+                            }
 
-                    // Sort section because title might be renamed
-                    var lis = this.getWorkspaceListItemsInSection(data.isSharedToUser),
-                        titleGetter = function() {
-                            return $(this).data('title');
-                        },
-                        lowerCase = function(s) {
-                            return s.toLowerCase();
-                        },
-                        titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
-                        insertIndex = _.indexOf(titles, data.title),
-                        currentIndex = lis.index(content);
+                            // Sort section because title might be renamed
+                            var lis = self.getWorkspaceListItemsInSection(data.isSharedToUser),
+                                titleGetter = function() {
+                                    return $(this).data('title');
+                                },
+                                lowerCase = function(s) {
+                                    return s.toLowerCase();
+                                },
+                                titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
+                                insertIndex = _.indexOf(titles, data.title),
+                                currentIndex = lis.index(content);
 
-                    if (currentIndex < insertIndex) {
-                        content.insertAfter(lis.eq(insertIndex));
-                    } else if (currentIndex > insertIndex) {
-                        content.insertBefore(lis.eq(insertIndex));
-                    }
+                            if (currentIndex < insertIndex) {
+                                content.insertAfter(lis.eq(insertIndex));
+                            } else if (currentIndex > insertIndex) {
+                                content.insertBefore(lis.eq(insertIndex));
+                            }
+                        });
                 } else li.remove();
             });
         };
@@ -287,30 +289,34 @@ define([
                             .value(),
                         updateHtml = function() {
                             self.$node.html(workspacesTemplate({}));
-                            self.select('listSelector').html(
-                                listTemplate({
-                                    results: _.chain(workspaces)
-                                        .reject(function(workspace) {
-                                            return _.isUndefined(workspace.createdBy);
-                                        })
-                                        .map(self.workspaceDataForItemRow.bind(self))
+                            $.when.apply($, _.chain(workspaces)
+                                .reject(function(workspace) {
+                                    return _.isUndefined(workspace.createdBy);
+                                })
+                                .map(self.workspaceDataForItemRow.bind(self))
+                                .value()
+                            ).done(function() {
+                                var rows = _.chain(arguments)
                                         .sortBy(function(w) {
                                             return w.title.toLowerCase()
                                         })
                                         .groupBy(function(w) {
                                             return w.isSharedToUser ? 'shared' : 'mine';
                                         })
-                                        .value(),
-                                    selected: self.workspaceId
-                                })
-                            );
+                                        .value();
+
+                                self.select('listSelector').html(
+                                    listTemplate({
+                                        results: rows,
+                                        selected: self.workspaceId
+                                    })
+                                );
+                            });
                             self.trigger(document, 'paneResized');
                             if (switchToFirst) {
                                 self.switchToWorkspace(workspaces[0].workspaceId);
                             }
                         };
-
-                    self.usersById = self.usersById || {};
 
                     if (users.length) {
                         self.userService.userInfo(users).done(function(result) {
@@ -324,26 +330,37 @@ define([
         };
 
         this.workspaceDataForItemRow = function(w) {
-            var row = $.extend({}, w),
-                createdBy = this.usersById[row.createdBy].displayName,
-                text = row.isSharedToUser ?
-                    i18n('workspaces.shared_with_me.subtitle.prefix', createdBy) :
-                    i18n('workspaces.sharing.subtitle.prefix'),
+            var deferred = $.Deferred(),
+                row = $.extend({}, w),
                 usersNotCurrent = row.users.filter(function(u) {
                     return u.userId != window.currentUser.id;
                 }),
                 people = usersNotCurrent.length;
 
-            if (people === 1 && row.isSharedToUser) {
-                row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.only_you');
-            } else if (people === 1) {
-                row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.one_other');
-            } else if (people) {
-                row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.others', people);
+            if (row.isSharedToUser) {
+                this.userService.userInfo(row.createdBy).done(function(result) {
+                    var createdBy = result.users && result.users[row.createdBy],
+                        name = createdBy && createdBy.displayName ||
+                            i18n('workspaces.shared_with_me.subtitle.unknown_user');
+
+                    deferred.resolve(i18n('workspaces.shared_with_me.subtitle.prefix', name));
+                });
             } else {
-                row.sharingSubtitle = null;
+                deferred.resolve(i18n('workspaces.sharing.subtitle.prefix'));
             }
-            return row;
+
+            return deferred.promise().then(function(text) {
+                if (people === 1 && row.isSharedToUser) {
+                    row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.only_you');
+                } else if (people === 1) {
+                    row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.one_other');
+                } else if (people) {
+                    row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.others', people);
+                } else {
+                    row.sharingSubtitle = null;
+                }
+                return row;
+            });
         };
 
         this.onToggleMenu = function(event, data) {

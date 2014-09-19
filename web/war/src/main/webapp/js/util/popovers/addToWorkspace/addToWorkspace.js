@@ -30,6 +30,7 @@ define([
         });
 
         this.after('teardown', function() {
+            window.location.hash = '';
         });
 
         this.before('initialize', function(node, config) {

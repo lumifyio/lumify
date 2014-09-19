@@ -4,6 +4,7 @@ define([
     'tpl!./form',
     'tpl!./shareRow',
     'tpl!./permissions',
+    'util/users/userSelect',
     'service/user',
     'service/workspace'
 ], function(
@@ -11,6 +12,7 @@ define([
     template,
     shareRowTemplate,
     permissionsTemplate,
+    UserSelect,
     UserService,
     WorkspaceService) {
     'use strict';
@@ -27,7 +29,6 @@ define([
             shareListSelector: '.share-list',
             shareHeader: '.share-header',
             shareFormSelector: '.share-form',
-            userSearchSelector: '.share-form input',
             permissionsSelector: '.permissions',
             permissionsRadioSelector: '.popover input',
             deleteSelector: '.delete',
@@ -50,7 +51,21 @@ define([
             this.userService.getCurrentUsers().done(this.loadUserPermissionsList.bind(this));
 
             if (this.editable) {
-                this.setupTypeahead();
+
+                this.on('userSelected', function(event, data) {
+                    if (data && data.user) {
+                        self.trigger('shareWorkspaceWithUser', {
+                            workspace: self.attr.data,
+                            user: data.user
+                        });
+                        self.trigger(this.select('shareFormSelector'), 'clearUser');
+                    }
+                });
+                UserSelect.attachTo(this.select('shareFormSelector'), {
+                    filterUserIds: _.pluck(self.attr.data.users, 'userId'),
+                    placeholder: i18n('workspaces.form.sharing.placeholder')
+                });
+
                 $(document).on('click.permPopover', function(event) {
                     var $target = $(event.target);
 
@@ -258,7 +273,14 @@ define([
                 })
                 .done(function() {
                     row.remove();
+                    self.updateUserSelectionFilter();
                 });
+        };
+
+        this.updateUserSelectionFilter = function() {
+            this.trigger(this.select('shareFormSelector'), 'updateFilterUserIds', {
+                userIds: _.pluck(this.attr.data.users, 'userId')
+            });
         };
 
         this.onShareWorkspaceWithUser = function(event, data) {
@@ -295,46 +317,10 @@ define([
                 .done(function() {
                     _.defer(function() {
                         self.makePopover(badge);
+                        self.updateUserSelectionFilter();
                     });
                 });
         };
 
-        this.setupTypeahead = function() {
-            var self = this,
-                userMap = {};
-
-            this.select('userSearchSelector').typeahead({
-                source: function(query, callback) {
-                    // TODO: pass query to backend to scale
-                    self.userService.getCurrentUsers()
-                        .done(function(response) {
-                            var users = response.users,
-                                regex = new RegExp(query, 'i'),
-                                search = users.filter(function(user) {
-                                    userMap[user.displayName] = user;
-
-                                    // Can't share with oneself
-                                    if (user.id === self.attr.data.createdBy) return false;
-
-                                    return regex.test(user.displayName);
-                                }),
-                                names = _.pluck(search, 'displayName');
-
-                            self.currentUsers = users;
-                            callback(names);
-                        });
-                },
-                updater: function(displayName) {
-                    var user = userMap[displayName];
-                    if (user) {
-                        self.trigger('shareWorkspaceWithUser', {
-                            workspace: self.attr.data,
-                            user: user
-                        });
-                    }
-                    return '';
-                }
-            });
-        };
     }
 });
