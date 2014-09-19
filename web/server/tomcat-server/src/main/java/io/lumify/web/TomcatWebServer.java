@@ -10,8 +10,7 @@ import java.io.File;
 
 public class TomcatWebServer extends WebServer {
 
-    private String webAppDir;
-    private String contextPath;
+    private Tomcat tomcat;
 
     public static void main(String[] args) throws Exception {
         int res = new TomcatWebServer().run(args);
@@ -25,39 +24,8 @@ public class TomcatWebServer extends WebServer {
     }
 
     @Override
-    protected Options getOptions() {
-        Options options = super.getOptions();
-
-        options.addOption(
-                OptionBuilder
-                        .withLongOpt("webapp-dir")
-                        .withDescription("Path to the webapp directory")
-                        .isRequired()
-                        .hasArg(true)
-                        .create('d')
-        );
-
-        options.addOption(
-                OptionBuilder
-                        .withLongOpt("context-path")
-                        .withDescription("Context path for the webapp")
-                        .hasArg(true)
-                        .create('c')
-        );
-
-        return options;
-    }
-
-    @Override
-    protected void processOptions(CommandLine cmd) throws Exception {
-        super.processOptions(cmd);
-        this.webAppDir = cmd.getOptionValue('d');
-        this.contextPath = cmd.getOptionValue('c', "/lumify");
-    }
-
-    @Override
     protected int run(CommandLine cmd) throws Exception {
-        Tomcat tomcat = new Tomcat();
+        tomcat = new Tomcat();
 
         Connector httpsConnector = new Connector();
         httpsConnector.setPort(super.getHttpsPort());
@@ -77,12 +45,16 @@ public class TomcatWebServer extends WebServer {
         Connector defaultConnector = tomcat.getConnector();
         defaultConnector.setRedirectPort(super.getHttpsPort());
 
-        tomcat.addWebapp(this.contextPath, new File(this.webAppDir).getAbsolutePath());
-        System.out.println("configuring app with basedir: " + new File("./" + this.webAppDir).getAbsolutePath());
+        tomcat.addWebapp(this.getContextPath(), new File(this.getWebAppDir()).getAbsolutePath());
+        System.out.println("configuring app with basedir: " + new File("./" + this.getWebAppDir()).getAbsolutePath());
 
         tomcat.start();
         tomcat.getServer().await();
 
         return 0;
+    }
+
+    protected Tomcat getServer() {
+        return tomcat;
     }
 }

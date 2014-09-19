@@ -3,6 +3,7 @@ package io.lumify.web;
 import org.apache.commons.cli.CommandLine;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
@@ -10,6 +11,8 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyWebServer extends WebServer {
+
+    private Server server;
 
     public static void main(String[] args) throws Exception {
         int res = new JettyWebServer().run(args);
@@ -38,13 +41,13 @@ public class JettyWebServer extends WebServer {
         httpsConnector.setPort(super.getHttpsPort());
 
         WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/");
-        webAppContext.setWar("./web/war/src/main/webapp/");
+        webAppContext.setContextPath(this.getContextPath());
+        webAppContext.setWar(this.getWebAppDir());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[]{webAppContext});
 
-        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
+        server = new org.eclipse.jetty.server.Server();
         server.setConnectors(new Connector[]{httpConnector, httpsConnector});
         server.setHandler(contexts);
 
@@ -52,5 +55,9 @@ public class JettyWebServer extends WebServer {
         server.join();
 
         return 0;
+    }
+
+    protected org.eclipse.jetty.server.Server getServer() {
+        return server;
     }
 }

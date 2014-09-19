@@ -15,5 +15,6 @@
     <modules>
         <module>core</module>
         <module>plugins</module>
+        <module>test</module>
     </modules>
 </project>
