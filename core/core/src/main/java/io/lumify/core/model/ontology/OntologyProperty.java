@@ -88,6 +88,9 @@ public abstract class OntologyProperty {
             case DOUBLE:
                 value = Double.parseDouble(valueStr);
                 break;
+            case INTEGER:
+                value = Integer.parseInt(valueStr);
+                break;
             case BOOLEAN:
                 value = Boolean.parseBoolean(valueStr);
                 break;
