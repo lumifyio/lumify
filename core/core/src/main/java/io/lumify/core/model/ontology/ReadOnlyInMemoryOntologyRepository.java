@@ -21,7 +21,10 @@ import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -232,7 +235,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public String getDisplayNameForLabel(String relationshipIRI) {
-        return relationshipsCache.asMap().get(relationshipIRI).getDisplayName();
+        InMemoryRelationship relationship = relationshipsCache.asMap().get(relationshipIRI);
+        checkNotNull(relationship, "Could not find relationship " + relationshipIRI);
+        return relationship.getDisplayName();
     }
 
     @Override

@@ -30,6 +30,10 @@
         {
             "path": "/graph.json",
             "description": "Graph operations"
+        },
+        {
+            "path": "/entity.json",
+            "description": "Entity operations"
         }
     ]
 }

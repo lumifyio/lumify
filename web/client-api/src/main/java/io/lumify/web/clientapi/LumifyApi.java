@@ -17,6 +17,7 @@ public class LumifyApi {
     private final VertexApi vertexApi;
     private final OntologyApiExt ontologyApi;
     private final GraphApiExt graphApi;
+    private final EntityApiExt entityApi;
     private final String basePath;
     private Workspace currentWorkspace;
 
@@ -46,6 +47,9 @@ public class LumifyApi {
 
         graphApi = new GraphApiExt();
         graphApi.setBasePath(basePath);
+
+        entityApi = new EntityApiExt();
+        entityApi.setBasePath(basePath);
     }
 
     public UserApi getUserApi() {
@@ -82,6 +86,10 @@ public class LumifyApi {
 
     public GraphApiExt getGraphApi() {
         return graphApi;
+    }
+
+    public EntityApiExt getEntityApi() {
+        return entityApi;
     }
 
     public Workspace loginAndGetCurrentWorkspace() throws ApiException {

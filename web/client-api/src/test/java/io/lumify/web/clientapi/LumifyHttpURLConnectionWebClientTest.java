@@ -50,7 +50,7 @@ public class LumifyHttpURLConnectionWebClientTest {
         lumifyApi.loginAndGetCurrentWorkspace();
 
         System.out.println(lumifyApi.getOntologyApi().get());
-        if (lumifyApi.getOntologyApi().getConcept("http://lumify.io/test#artifact") == null) {
+        if (lumifyApi.getOntologyApi().getConcept("http://lumify.io/dev#artifact") == null) {
             lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
         }
 
@@ -88,12 +88,12 @@ public class LumifyHttpURLConnectionWebClientTest {
         Workspace workspace = lumifyApi.getWorkspaceApi().getById(lumifyApi.getCurrentWorkspace().getWorkspaceId());
         System.out.println(workspace);
 
-////        client.entityResolveTerm(
-////                artifactImportResponse.getVertexIds()[0],
-////                "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker",
-////                0, 3, "Joe", "http://lumify.io/dev#person", ""
-////        );
-////
+        lumifyApi.getEntityApi().resolveTerm(
+                artifactImportResponse.getVertexIds().get(0),
+                "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker",
+                0, 3, "Joe", "http://lumify.io/dev#person", ""
+        );
+
         GraphVertexSearchResult searchResults = lumifyApi.getGraphApi().vertexSearch("*");
         System.out.println(searchResults);
         System.out.println(searchResults.getVertices().get(0).getProperties().get(0).get("key"));
