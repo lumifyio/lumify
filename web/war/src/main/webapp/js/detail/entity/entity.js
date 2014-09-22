@@ -195,6 +195,7 @@ define([
             vertexRefresh
                 .done(function(vertex) {
                     self.vertex = vertex;
+                    self.attr.data = vertex;
                     self.$node.html(template({
                         vertex: vertex,
                         fullscreenButton: self.fullscreenButton([vertex.id]),
