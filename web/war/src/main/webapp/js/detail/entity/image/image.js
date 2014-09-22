@@ -39,6 +39,8 @@ define([
             this.on('filecomplete', this.onUploadComplete);
             this.on('fileerror', this.onUploadError);
             this.on(document, 'iconUpdated', this.onUpdateIcon);
+            this.updateImageBackgroundSize = _.throttle(this.updateImageBackgroundSize.bind(this), 100);
+            this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
             this.updateImageBackground();
 
@@ -66,6 +68,55 @@ define([
             }
         });
 
+        this.onGraphPaddingUpdated = function(event, data) {
+            if (data.padding.r && this.imageNaturalSize) {
+                this.updateImageBackgroundSize();
+            }
+        };
+
+        this.updateImageBackgroundSize = function() {
+            if (this.imageNaturalSize &&
+                this.imageNaturalSize[0] > 0 &&
+                this.imageNaturalSize[1] > 0) {
+                var widthViewport = this.$node.width(),
+                    heightViewport = this.$node.height(),
+                    widthImage = this.imageNaturalSize[0],
+                    heightImage = this.imageNaturalSize[1],
+                    ratioViewport = widthViewport / heightViewport,
+                    ratioImage = widthImage / heightImage,
+
+                    widthCover = ratioImage <= ratioViewport ?
+                        widthViewport : heightViewport * ratioImage,
+                    heightCover = ratioImage <= ratioViewport ?
+                        widthViewport / ratioImage : heightViewport,
+
+                    widthContain = ratioImage <= ratioViewport ?
+                        heightViewport * ratioImage : widthViewport,
+                    heightContain = ratioImage <= ratioViewport ?
+                        heightViewport : widthViewport / ratioImage,
+
+                    hiddenPercent = 1 - (ratioImage <= ratioViewport ?
+                        heightViewport / heightCover :
+                        widthViewport / widthCover
+                    ),
+
+                    // Switch to contain if cover will hide > 40%
+                    shouldUseContain =
+                        hiddenPercent > 0.4 ||
+                        widthCover > widthImage ||
+                        heightCover > heightImage;
+
+                this.$node.css('backgroundSize',
+                    shouldUseContain ?
+                            (
+                                Math.min(widthContain, widthImage) + 'px ' +
+                                Math.min(heightContain, heightImage) + 'px'
+                            ) :
+                        'cover'
+                );
+            }
+        }
+
         this.srcForGlyphIconUrl = function(url) {
             if (url === this.attr.data.imageDetailSrc) {
                 return url;
@@ -74,12 +125,22 @@ define([
         };
 
         this.updateImageBackground = function(src) {
+            var self = this,
+                imageUrl = this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc),
+                customImage = !!(src || !this.attr.data.imageSrcIsFromConcept);
+
+            if (imageUrl && customImage) {
+                var image = new Image();
+                image.onload = function() {
+                    self.imageNaturalSize = [image.naturalWidth, image.naturalHeight];
+                    self.updateImageBackgroundSize();
+                }
+                image.src = imageUrl;
+            }
             this.$node
                 .addClass('accepts-file')
-                .css({ backgroundImage: 'url("' +
-                     this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc) + '")'
-                })
-                .toggleClass('custom-image', !!(src || !this.attr.data.imageSrcIsFromConcept));
+                .css({ backgroundImage: 'url("' + imageUrl + '")' })
+                .toggleClass('custom-image', customImage);
         };
 
         this.onFileChange = function(e) {
