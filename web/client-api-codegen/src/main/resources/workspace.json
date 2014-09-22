@@ -94,6 +94,42 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/workspace/publish",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "publish diff items",
+                    "type": "PublishResponse",
+                    "nickname": "publish",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "publishData",
+                            "description": "data to publish",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/publishDummy",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Dummy method to force PublishItem to be generated",
+                    "type": "PublishItem",
+                    "nickname": "zzzPublishDummy",
+                    "parameters": [
+                    ]
+                }
+            ]
         }
     ],
     "models": {
@@ -113,6 +149,52 @@
             "properties": {
                 "workspaceId": {
                     "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
+                "isSharedToUser": {
+                    "type": "boolean"
+                },
+                "isEditable": {
+                    "type": "boolean"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceUser"
+                    }
+                },
+                "vertices": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceVertex"
+                    }
+                }
+            }
+        },
+        "WorkspaceUser": {
+            "id": "WorkspaceUser",
+            "properties": {
+                "userId": {
+                    "type": "string"
+                },
+                "access": {
+                    "type": "string"
+                }
+            }
+        },
+        "WorkspaceVertex": {
+            "id": "WorkspaceVertex",
+            "properties": {
+                "vertexId": {
+                    "type": "string"
+                },
+                "graphPosition": {
+                    "type": "GraphPosition"
                 }
             }
         },
@@ -239,6 +321,68 @@
                 },
                 "edgeId": {
                     "type": "string"
+                }
+            }
+        },
+        "PublishItem": {
+            "id": "PublishItem",
+            "required": [
+                "type",
+                "sandboxStatus"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "vertex",
+                        "relationship",
+                        "property"
+                    ]
+                },
+                "action": {
+                    "type": "string",
+                    "description": "'delete' or ''"
+                },
+                "vertexId": {
+                    "type": "string",
+                    "description": "required for vertex and property publish"
+                },
+                "edgeId": {
+                    "type": "string",
+                    "description": "required for edge publish"
+                },
+                "sourceId": {
+                    "type": "string",
+                    "description": "required for edge publish"
+                },
+                "destId": {
+                    "type": "string",
+                    "description": "required for edge publish"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "required for property publish"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "required for property publish"
+                },
+                "error_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "PublishResponse": {
+            "id": "PublishResponse",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "failures": {
+                    "type": "array",
+                    "items": {
+                        "type": "PublishItem"
+                    }
                 }
             }
         }

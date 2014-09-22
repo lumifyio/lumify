@@ -1,6 +1,5 @@
 package io.lumify.web.clientapi;
 
-import io.lumify.web.clientapi.codegen.OntologyApiExt;
 import io.lumify.web.clientapi.codegen.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,26 +81,12 @@ public class LumifyHttpURLConnectionWebClientTest {
         for (WorkspaceDiffItem diffItem : diff.getDiffs()) {
             System.out.println(diffItem);
         }
-//
-//        try {
-//            WorkspacePublishResponse workspacePublishResponse = client.workspacePublishAll(workspaceDiffResponse.getDiffs());
-//            System.out.println("workspacePublishResponse: " + workspacePublishResponse);
-//        } catch (LumifyClientApiPublishException ex) {
-//            System.out.println("workspacePublish failed: " + ex.getResponse());
-//            return;
-//        }
-//
-//        WorkspaceVerticesResponse workspaceVerticesResponse = client.workspaceVertices();
-//        System.out.println("workspaceVerticesResponse: " + workspaceVerticesResponse);
-//        for (WorkspaceVertex workspaceVertex : workspaceVerticesResponse.getVertices()) {
-//            System.out.println("  workspaceVertex: " + workspaceVertex);
-//            for (WorkspaceVertexProperty property : workspaceVertex.getProperties()) {
-//                String propertyName = property.getName();
-//                String propertyKey = property.getKey();
-//                Object propertyValue = property.getValue();
-//                System.out.println("    property: " + propertyName + " " + propertyKey + " " + propertyValue);
-//            }
-//        }
+
+        PublishResponse publishResponse = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
+        System.out.println(publishResponse);
+
+        Workspace workspace = lumifyApi.getWorkspaceApi().getById(lumifyApi.getCurrentWorkspace().getWorkspaceId());
+        System.out.println(workspace);
 //
 ////        String highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
 ////        System.out.println("highlightedText\n" + highlightedText + "\n\n");
