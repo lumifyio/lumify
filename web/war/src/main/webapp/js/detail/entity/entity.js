@@ -121,6 +121,8 @@ define([
                         return;
                     }
 
+                    $badge.text(_.isNumber(result.totalReferences) ?
+                        F.number.prettyApproximate(result.totalReferences) : '');
                     $section.data('total', result.totalReferences);
 
                     var node = $content.empty().append('<div>').find('div'),

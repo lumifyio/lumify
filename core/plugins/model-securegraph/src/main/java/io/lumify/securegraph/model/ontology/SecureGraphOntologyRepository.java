@@ -259,12 +259,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         String from;
         String to;
         try {
-            from = single(relationshipVertex.getVertexIds(Direction.IN, getAuthorizations()));
+            from = single(relationshipVertex.getVertexIds(Direction.IN, new String [] {LabelName.HAS_EDGE.toString()}, getAuthorizations()));
         } catch (IllegalStateException ex) {
             throw new IllegalStateException(String.format("Wrong number of 'IN' vertices for \"%s\"", relationshipIRI), ex);
         }
         try {
-            to = single(relationshipVertex.getVertexIds(Direction.OUT, getAuthorizations()));
+            to = single(relationshipVertex.getVertexIds(Direction.OUT,new String [] {LabelName.HAS_EDGE.toString()}, getAuthorizations()));
         } catch (IllegalStateException ex) {
             throw new IllegalStateException(String.format("Wrong number of 'OUT' vertices for \"%s\"", relationshipIRI), ex);
         }
@@ -442,9 +442,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
+            String displayType,
             Double boost) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
+        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, displayType, boost);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -503,6 +504,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
+            String displayType,
             Double boost) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
@@ -537,6 +539,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             if (possibleValues != null) {
                 POSSIBLE_VALUES.setProperty(builder, possibleValues, VISIBILITY.getVisibility());
+            }
+            if (displayType != null && !displayName.trim().isEmpty()) {
+                DISPLAY_TYPE.setProperty(builder, displayType, VISIBILITY.getVisibility());
             }
             typeProperty = new SecureGraphOntologyProperty(builder.save(getAuthorizations()));
             graph.flush();

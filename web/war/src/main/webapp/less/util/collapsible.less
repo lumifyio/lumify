@@ -1,10 +1,21 @@
 
 section.collapsible {
-  .badge {      
-    position: absolute;
-    right: 1ex;
-    left: auto;
-    top: 0.4ex;
+  @color: #999;
+
+  h1 {
+    .badge {      
+      position: absolute;
+      right: 1ex;
+      left: auto;
+      top: 0.4ex;
+
+      &:not(.loading) {
+        background: inherit;
+        color: @color;
+        text-shadow: 0 1px 0 white;
+        line-height: 2.8ex;
+      }
+    }
   }
 
   &.expanded {
@@ -44,7 +55,7 @@ section.collapsible {
     &:before, strong {
       font-size: 80%;
       font-variant: small-caps;
-      color: #999;      
+      color: @color;
       text-shadow: 0 1px 0 white;
       text-transform: uppercase;
     }

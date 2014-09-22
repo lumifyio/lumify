@@ -12,6 +12,7 @@
 @import "util/popovers/popovers";
 @import "util/vertexList/list";
 @import "util/actionbar/actionbar";
+@import "util/users/userSelect";
 @import "util/instructions";
 @import "util/jquery-ui-draggable-multiselect";
 @import "util/context-menu";
@@ -69,7 +70,7 @@ html.fullscreenDetails {
 .left-pane(@left-padding: 0) {
   .transition-transform(ease-in-out, 0.2s);
 
-  .translate3d(@pane-animation-distance * -1, 0, 0);
+  .translate3d(-100%, 0, 0);
   &.visible {
     .translate3d(@menubar-width + @left-padding, 0, 0);
   }
@@ -84,7 +85,6 @@ html.fullscreenDetails {
   .transition-transform(ease-in-out, 0.2s);
 
   &.visible {
-    max-width: 500px;
     .translate3d(0, 0, 0);
     .transition-transform(ease-in-out, 0.2s);
   }
@@ -170,7 +170,6 @@ html.fullscreenDetails {
 .admin-pane {
   .left-pane;
 
-  .translate3d(@pane-animation-distance * -1.5, 0, 0);
   @import "admin/admin";
 }
 

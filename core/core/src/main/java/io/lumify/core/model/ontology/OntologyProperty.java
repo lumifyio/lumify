@@ -40,6 +40,8 @@ public abstract class OntologyProperty {
 
     public abstract JSONObject getPossibleValues();
 
+    public abstract String getDisplayType();
+
     public static JSONArray toJsonProperties(Iterable<OntologyProperty> properties) {
         JSONArray json = new JSONArray();
         for (OntologyProperty property : properties) {
@@ -59,6 +61,7 @@ public abstract class OntologyProperty {
             json.put("userVisible", getUserVisible());
             json.put("searchable", getSearchable());
             json.put("dataType", getDataType().toString());
+            json.put("displayType", getDisplayType());
             if (getPossibleValues() != null) {
                 json.put("possibleValues", getPossibleValues());
             }
@@ -88,6 +91,9 @@ public abstract class OntologyProperty {
             case DOUBLE:
                 value = Double.parseDouble(valueStr);
                 break;
+            case INTEGER:
+                value = Integer.parseInt(valueStr);
+                break;
             case BOOLEAN:
                 value = Boolean.parseBoolean(valueStr);
                 break;
@@ -112,6 +118,8 @@ public abstract class OntologyProperty {
                 );
             case CURRENCY:
                 return new BigDecimal(values.getString(index));
+            case INTEGER:
+                return values.getInt(index);
             case DOUBLE:
                 return values.getDouble(index);
             case BOOLEAN:

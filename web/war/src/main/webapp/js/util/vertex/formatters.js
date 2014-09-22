@@ -294,6 +294,7 @@ define([
                             break;
 
                         case 'double':
+                        case 'integer':
                         case 'heading':
                         case 'currency':
                             compareFunction = predicateCompare;
@@ -362,6 +363,7 @@ define([
                     case 'heading': return F.number.heading(value);
 
                     case 'double':
+                    case 'integer':
                     case 'currency':
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);

@@ -1224,11 +1224,14 @@ define([
                                 { name: 'http://lumify.io#conceptType', value: info['http://lumify.io#conceptType'] },
                             ];
 
-                            self.updateCacheWithVertex({
-                                id: info.graphVertexId || info.id,
-                                properties: properties
-                            });
                             id = info.graphVertexId || info.id;
+
+                            if (!(id in self.cachedVertices)) {
+                                // Insert stub, since this is synchronous, but
+                                // then refresh with server
+                                self.updateCacheWithVertex({ id: id, properties: properties });
+                                self.refresh([id], true);
+                            }
                         }
 
                         // Detected objects

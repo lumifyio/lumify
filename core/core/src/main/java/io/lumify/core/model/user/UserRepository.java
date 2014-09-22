@@ -106,6 +106,7 @@ public abstract class UserRepository {
             json.put("displayName", user.getDisplayName());
             json.put("status", user.getUserStatus());
             json.put("userType", user.getUserType());
+            json.put("email", user.getEmailAddress());
             json.put("currentWorkspaceId", user.getCurrentWorkspaceId());
             if (workspaceNames != null) {
                 String workspaceName = workspaceNames.get(user.getCurrentWorkspaceId());

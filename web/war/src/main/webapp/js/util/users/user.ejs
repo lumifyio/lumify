@@ -1,0 +1,7 @@
+<div class="user-row" data-user="<%= JSON.stringify(user) %>">
+  <div class="user-status <%= user.status ? user.status.toLowerCase() : 'unknown' %>"></div>
+  <%= user.displayName %>
+  <% if (user.displayName.toLowerCase() !== (user.email || user.userName).toLowerCase()) { %>
+  <div class="subtitle"><%= user.email || user.userName %></div>
+  <% } %>
+</div>
