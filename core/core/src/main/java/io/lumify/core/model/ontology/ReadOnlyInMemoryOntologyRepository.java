@@ -148,9 +148,10 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
+            String displayType,
             Double boost) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable, displayTime, boost);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable, displayTime, displayType, boost);
         concept.getProperties().add(property);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
@@ -173,6 +174,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
+            String displayType,
             Double boost) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
@@ -183,6 +185,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setTitle(propertyName);
             property.setDisplayTime(displayTime);
             property.setBoost(boost);
+            property.setDisplayType(displayType);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }

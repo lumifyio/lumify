@@ -536,7 +536,6 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geolocation">
         <rdfs:label xml:lang="en">Geolocation</rdfs:label>
-        <lumify:displayType xml:lang="en">geoLocation</lumify:displayType>
         <rdfs:range rdf:resource="&lumify;geolocation"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
@@ -548,7 +547,6 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#netIncome">
         <rdfs:label xml:lang="en">Net Income</rdfs:label>
-        <lumify:displayType xml:lang="en">currency</lumify:displayType>
         <rdfs:range rdf:resource="&lumify;currency"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#company"/>
     </owl:DatatypeProperty>

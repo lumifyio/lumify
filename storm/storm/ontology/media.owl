@@ -91,6 +91,7 @@
         <rdfs:domain rdf:resource="&audioIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
+        <lumify:displayType xml:lang="en">filesize</lumify:displayType>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#metadata">

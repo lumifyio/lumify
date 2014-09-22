@@ -327,6 +327,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         boolean userVisible = getUserVisible(o, dataTypeProperty);
         boolean searchable = getSearchable(o, dataTypeProperty);
         Boolean displayTime = getDisplayTime(o, dataTypeProperty);
+        String displayType = getDisplayType(o, dataTypeProperty);
         Double boost = getBoost(o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
@@ -342,7 +343,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             JSONObject possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime, displayType, boost);
         }
     }
 
@@ -356,6 +357,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
+            String displayType,
             Double boost);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {

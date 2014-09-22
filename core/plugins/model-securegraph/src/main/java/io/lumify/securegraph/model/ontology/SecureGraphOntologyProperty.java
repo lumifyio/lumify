@@ -39,6 +39,10 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
         return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
     }
 
+    public String getDisplayType() {
+        return DISPLAY_TYPE.getPropertyValue(vertex);
+    }
+
     @Override
     public Double getBoost() {
         return BOOST.getPropertyValue(vertex);
