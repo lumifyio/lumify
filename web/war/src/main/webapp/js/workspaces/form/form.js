@@ -156,8 +156,8 @@ define([
             }
         };
 
-        this.shareRowDataForPermission = function(userPermission) {
-            var user = _.findWhere(this.currentUsers, { id: userPermission.userId });
+        this.shareRowDataForPermission = function(userPermission, _user) {
+            var user = _user || _.findWhere(this.currentUsers, { id: userPermission.userId });
             if (user) {
                 return {
                     user: {
@@ -309,7 +309,7 @@ define([
                     userId: data.user.id,
                     access: 'READ'
                 },
-                row = $(shareRowTemplate(this.shareRowDataForPermission(user))).insertBefore(form),
+                row = $(shareRowTemplate(this.shareRowDataForPermission(user, data.user))).insertBefore(form),
                 badge = row.find('.permissions'),
                 revert = $.extend(true, {}, this.attr.data);
 
