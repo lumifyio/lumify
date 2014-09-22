@@ -204,7 +204,12 @@
             ],
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "VertexDiffItem",
+                        "PropertyDiffItem",
+                        "EdgeDiffItem"
+                    ]
                 },
                 "sandboxStatus": {
                     "type": "string",
@@ -213,14 +218,7 @@
                         "PUBLIC_CHANGED",
                         "PRIVATE"
                     ]
-                }
-            },
-            "subTypes": ["VertexDiffItem", "PropertyDiffItem", "EdgeDiffItem"],
-            "discriminator": "type"
-        },
-        "VertexDiffItem": {
-            "id": "VertexDiffItem",
-            "properties": {
+                },
                 "vertexId": {
                     "type": "string"
                 },
@@ -229,12 +227,7 @@
                 },
                 "visible": {
                     "type": "boolean"
-                }
-            }
-        },
-        "PropertyDiffItem": {
-            "id": "PropertyDiffItem",
-            "properties": {
+                },
                 "elementId": {
                     "type": "string"
                 },
@@ -243,12 +236,7 @@
                 },
                 "key": {
                     "type": "string"
-                }
-            }
-        },
-        "EdgeDiffItem": {
-            "id": "EdgeDiffItem",
-            "properties": {
+                },
                 "edgeId": {
                     "type": "string"
                 }
