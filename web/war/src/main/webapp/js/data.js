@@ -1039,7 +1039,12 @@ define([
 
                         var serverVertices = vertexResponse[0],
                             vertices = serverVertices.map(function(vertex) {
-                                var workspaceData = workspace.entities[vertex.id] || {};
+                                var workspaceData = {};
+                                workspace.vertices.forEach(function(v) {
+                                    if (v.vertexId == vertex.id) {
+                                        workspaceData = v;
+                                    }
+                                });
                                 delete workspaceData.dropPosition;
                                 workspaceData.selected = false;
                                 vertex.workspace = workspaceData;
