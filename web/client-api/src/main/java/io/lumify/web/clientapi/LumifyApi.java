@@ -16,6 +16,7 @@ public class LumifyApi {
     private final AdminApiExt adminApi;
     private final VertexApi vertexApi;
     private final OntologyApiExt ontologyApi;
+    private final GraphApiExt graphApi;
     private final String basePath;
     private Workspace currentWorkspace;
 
@@ -42,6 +43,9 @@ public class LumifyApi {
 
         ontologyApi = new OntologyApiExt();
         ontologyApi.setBasePath(basePath);
+
+        graphApi = new GraphApiExt();
+        graphApi.setBasePath(basePath);
     }
 
     public UserApi getUserApi() {
@@ -74,6 +78,10 @@ public class LumifyApi {
 
     public Workspace getCurrentWorkspace() {
         return currentWorkspace;
+    }
+
+    public GraphApiExt getGraphApi() {
+        return graphApi;
     }
 
     public Workspace loginAndGetCurrentWorkspace() throws ApiException {
@@ -116,5 +124,9 @@ public class LumifyApi {
             formParams = new HashMap<String, String>();
         }
         return ApiInvoker.getInstance().invokeAPI(this.basePath, path, method, queryParams, body, headerParams, formParams, contentType);
+    }
+
+    public void logout() throws ApiException {
+        invokeAPI("/logout", "POST", null, null, null, null, null);
     }
 }

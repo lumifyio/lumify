@@ -26,6 +26,10 @@
         {
             "path": "/ontology.json",
             "description": "Ontology operations"
+        },
+        {
+            "path": "/graph.json",
+            "description": "Graph operations"
         }
     ]
 }

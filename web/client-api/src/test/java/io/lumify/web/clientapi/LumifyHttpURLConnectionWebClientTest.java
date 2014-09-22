@@ -87,27 +87,17 @@ public class LumifyHttpURLConnectionWebClientTest {
 
         Workspace workspace = lumifyApi.getWorkspaceApi().getById(lumifyApi.getCurrentWorkspace().getWorkspaceId());
         System.out.println(workspace);
-//
-////        String highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
-////        System.out.println("highlightedText\n" + highlightedText + "\n\n");
-////
+
 ////        client.entityResolveTerm(
 ////                artifactImportResponse.getVertexIds()[0],
 ////                "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker",
 ////                0, 3, "Joe", "http://lumify.io/dev#person", ""
 ////        );
 ////
-////        highlightedText = client.artifactHighlightedText(workspaceVerticesResponse.getVertices()[0].getId(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
-////        System.out.println("highlightedText\n" + highlightedText + "\n\n");
-////
-////        client.workspacePublishAll();
-//
-//        GraphVertexSearchResponse graphVertexSearchResponse = client.graphVertexSearch("*");
-//        System.out.println("graphVertexSearchResponse: " + graphVertexSearchResponse);
-//        for (GraphVertexSearchVertex vertex : graphVertexSearchResponse.getVertices()) {
-//            System.out.println("  vertex: " + vertex);
-//        }
-//
-//        client.logOut();
+        GraphVertexSearchResult searchResults = lumifyApi.getGraphApi().vertexSearch("*");
+        System.out.println(searchResults);
+        System.out.println(searchResults.getVertices().get(0).getProperties().get(0).get("key"));
+
+        lumifyApi.logout();
     }
 }

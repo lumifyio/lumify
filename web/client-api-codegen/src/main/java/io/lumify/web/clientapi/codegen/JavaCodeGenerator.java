@@ -45,6 +45,8 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
             } else {
                 String fileContents = FileUtils.readFileToString(f);
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Object;", "");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.LinkedHashMap;", "import java.util.Map;");
+                fileContents = fileContents.replaceAll("LinkedHashMap", "Map<String,Object>");
                 FileUtils.write(f, fileContents);
             }
         }
