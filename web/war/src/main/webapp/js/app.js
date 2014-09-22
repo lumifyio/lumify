@@ -123,6 +123,7 @@ define([
             this.on(document, 'windowResize', this.onWindowResize);
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
+            this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
 
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'escape', this.onEscapeKey);
@@ -163,7 +164,7 @@ define([
                 adminPane = content.filter('.admin-pane').data(DATA_MENUBAR_NAME, 'admin'),
                 chatPane = content.filter('.chat-pane').data(DATA_MENUBAR_NAME, 'chat'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
-                detailPane = content.filter('.detail-pane'),
+                detailPane = content.filter('.detail-pane').data(DATA_MENUBAR_NAME, 'detail'),
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
                 helpDialog = content.filter('.help-dialog');
 
@@ -174,6 +175,7 @@ define([
             resizable(detailPane, 'w', 200, 500, this.onPaneResize.bind(this));
 
             this.on('resizestart', this.onResizeStartHandleMaxWidths);
+            this.on('resizestop', this.onResizeStopSave);
 
             ContextMenu.attachTo(document);
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
@@ -227,7 +229,28 @@ define([
                     self.trigger('showAdminPlugin', self.attr.openAdminTool);
                 }
             }, 500);
+
+            if (window.currentUser) {
+                this.updatePaneSizesFromPreferences(window.currentUser.uiPreferences);
+            }
         });
+
+        this.onCurrentUserChanged = function(event, user) {
+            if (user) {
+                this.updatePaneSizesFromPreferences(user.uiPreferences);
+            }
+        };
+
+        this.updatePaneSizesFromPreferences = function(prefs) {
+            var $node = this.$node;
+
+            'search workspaces detail admin'.split(' ').forEach(function(name) {
+                var width = prefs[name + 'PaneWidth'];
+                if (width) {
+                    $node.find('.' + name + '-pane').width(parseFloat(width));
+                }
+            });
+        };
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
@@ -614,6 +637,13 @@ define([
                 maxWidthAllowed = this.availablePaneWidth(thisPane);
 
             thisPane.resizable('option', 'maxWidth', maxWidthAllowed);
+        };
+
+        this.onResizeStopSave = function(event, helper) {
+            var menubarName = helper.helper.data('menubarName');
+            if (menubarName) {
+                userService.setPreference(menubarName + 'PaneWidth', helper.element.width());
+            }
         };
 
         this.onSyncStarted = function() {

@@ -182,6 +182,25 @@ define([
         return deferred.promise();
     };
 
+    UserService.prototype.setPreferences = function(prefs) {
+        return this._ajaxPost({
+            url: 'user/ui-preferences/set',
+            data: {
+                'ui-preferences': prefs
+            }
+        });
+    };
+
+    UserService.prototype.setPreference = function(name, value) {
+        return this._ajaxPost({
+            url: 'user/ui-preferences/set',
+            data: {
+                name: name,
+                value: value
+            }
+        });
+    };
+
     UserService.prototype.clearLocalStorage = function() {
         if (window.localStorage) {
             _.keys(localStorage).forEach(function(key) {

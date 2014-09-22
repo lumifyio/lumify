@@ -126,7 +126,7 @@ public class Router extends HttpServlet {
             app.post("/workspace/undo", authenticator, csrfProtector, EditPrivilegeFilter.class, WorkspaceUndo.class);
 
             app.get("/user/me", authenticator, csrfProtector, MeGet.class);
-            app.get("/user/ui-preferences/set", authenticator, csrfProtector, UserSetUiPreferences.class);
+            app.post("/user/ui-preferences/set", authenticator, csrfProtector, UserSetUiPreferences.class);
             app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
             app.get("/users", authenticator, csrfProtector, UserList.class);
             app.get("/user/info", authenticator, csrfProtector, UserInfo.class);
