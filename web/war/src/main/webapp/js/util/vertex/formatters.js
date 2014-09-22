@@ -100,6 +100,10 @@ define([
                     anchor.appendTo(el);
                 },
 
+                byte: function(el, property) {
+                    el.textContent = F.bytes.pretty(property.value);
+                },
+
                 heading: function(el, property) {
                     var div = document.createElement('div'),
                         dim = 12,
@@ -347,6 +351,12 @@ define([
                         return foundPossibleValue;
                     } else {
                         console.warn('Unknown ontology value for key', value, ontologyProperty);
+                    }
+                }
+
+                if (ontologyProperty.displayType) {
+                    switch (ontologyProperty.displayType) {
+                        case 'byte': return F.bytes.pretty(value)
                     }
                 }
 
