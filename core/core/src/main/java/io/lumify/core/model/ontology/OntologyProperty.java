@@ -112,6 +112,8 @@ public abstract class OntologyProperty {
                 );
             case CURRENCY:
                 return new BigDecimal(values.getString(index));
+            case INTEGER:
+                return values.getInt(index);
             case DOUBLE:
                 return values.getDouble(index);
             case BOOLEAN:
