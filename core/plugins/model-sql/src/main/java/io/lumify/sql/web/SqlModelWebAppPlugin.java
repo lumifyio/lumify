@@ -28,7 +28,7 @@ public class SqlModelWebAppPlugin implements WebAppPlugin {
     public void init(WebApp app, ServletContext servletContext, Handler authenticationHandler) {
         FilterRegistration.Dynamic filter = servletContext.addFilter(FILTER_NAME, new HibernateSessionManagementFilter(sessionManager));
         addMapping(filter, ApplicationBootstrap.LUMIFY_SERVLET_NAME);
-        addMapping(filter, "AtmosphereServlet");
+        addMapping(filter, ApplicationBootstrap.ATMOSPHERE_SERVLET_NAME);
         // TODO: servletContext.getServletRegistrations().keySet() includes atmosphere but not lumify?
         filter.setAsyncSupported(true);
     }
