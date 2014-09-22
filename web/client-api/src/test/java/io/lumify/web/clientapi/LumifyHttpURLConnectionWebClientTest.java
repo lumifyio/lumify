@@ -43,7 +43,7 @@ public class LumifyHttpURLConnectionWebClientTest {
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
     }
 
-    @Test
+    //@Test
     public void testIt() throws Exception {
         LumifyApi lumifyApi = new UserNameOnlyLumifyApi("https://localhost:8889", "testUser");
 
