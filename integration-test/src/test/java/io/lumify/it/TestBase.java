@@ -35,6 +35,7 @@ public class TestBase {
     protected int httpsPort;
     protected static final String USERNAME_TEST_USER_1 = "testUser1";
     protected static final String USERNAME_TEST_USER_2 = "testUser2";
+    protected static final String USERNAME_TEST_USER_3 = "testUser3";
 
     @Before
     public void before() throws ApiException, IOException, NoSuchAlgorithmException, KeyManagementException {

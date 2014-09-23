@@ -23,6 +23,7 @@ public class UploadFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        String workspaceId = lumifyApi.getCurrentWorkspaceId();
 
         ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
@@ -43,7 +44,7 @@ public class UploadFileIntegrationTest extends TestBase {
         LinkedHashMap<String, Object> visibilityJson = new LinkedHashMap<String, Object>();
         visibilityJson.put("source", "auth1");
         ArrayList<String> visibilityJsonWorkspaces = new ArrayList<String>();
-        visibilityJsonWorkspaces.add(lumifyApi.getCurrentWorkspace().getWorkspaceId());
+        visibilityJsonWorkspaces.add(workspaceId);
         visibilityJson.put("workspaces", visibilityJsonWorkspaces);
         assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#visibilityJson", visibilityJson);
         assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#contentHash", "urn\u001Fsha256\u001F28fca952b9eb45d43663af8e3099da0572c8232243289b5d8a03eb5ea2cb066a");
@@ -62,8 +63,36 @@ public class UploadFileIntegrationTest extends TestBase {
         lumifyApi.logout();
 
         lumifyApi = login(USERNAME_TEST_USER_2);
+        addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
+        String user2Id = lumifyApi.getCurrentUserId();
+        lumifyApi.setWorkspaceId(workspaceId);
+        try {
+            lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+            assertTrue("should have failed", false);
+        } catch (ApiException ex) {
+            // expected
+        }
+        lumifyApi.logout();
+
+        lumifyApi = login(USERNAME_TEST_USER_1);
+        lumifyApi.setWorkspaceId(workspaceId);
+        lumifyApi.getWorkspaceApi().setUserAccess(user2Id, "READ");
+        lumifyApi.logout();
+
+        lumifyApi = login(USERNAME_TEST_USER_2);
+        lumifyApi.setWorkspaceId(workspaceId);
         artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
-        assertNull(artifactVertex);
+        assertNotNull(artifactVertex);
+        lumifyApi.logout();
+
+        lumifyApi = login(USERNAME_TEST_USER_3);
+        lumifyApi.setWorkspaceId(workspaceId);
+        try {
+            lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+            assertTrue("should have failed", false);
+        } catch (ApiException ex) {
+            // expected
+        }
         lumifyApi.logout();
     }
 }

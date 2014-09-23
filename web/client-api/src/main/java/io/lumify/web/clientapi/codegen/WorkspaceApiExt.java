@@ -1,10 +1,7 @@
 package io.lumify.web.clientapi.codegen;
 
 import io.lumify.web.clientapi.LumifyClientApiException;
-import io.lumify.web.clientapi.codegen.model.PublishItem;
-import io.lumify.web.clientapi.codegen.model.PublishResponse;
-import io.lumify.web.clientapi.codegen.model.WorkspaceDiffItem;
-import io.lumify.web.clientapi.codegen.model.WorkspaceUpdateData;
+import io.lumify.web.clientapi.codegen.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +41,14 @@ public class WorkspaceApiExt extends WorkspaceApi {
             throw new LumifyClientApiException("Unhandled WorkspaceDiffItem type: " + workspaceDiffItem.getType());
         }
         return publishItem;
+    }
+
+    public void setUserAccess(String userId, String access) throws ApiException {
+        WorkspaceUpdateData addUser2WorkspaceUpdate = new WorkspaceUpdateData();
+        WorkspaceUserUpdate addUser2Update = new WorkspaceUserUpdate();
+        addUser2Update.setUserId(userId);
+        addUser2Update.setAccess(access);
+        addUser2WorkspaceUpdate.getUserUpdates().add(addUser2Update);
+        update(addUser2WorkspaceUpdate);
     }
 }

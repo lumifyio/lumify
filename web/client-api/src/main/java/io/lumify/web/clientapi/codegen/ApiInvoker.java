@@ -186,6 +186,10 @@ public class ApiInvoker {
         this.workspaceId = workspaceId;
     }
 
+    public String getWorkspaceId() {
+        return workspaceId;
+    }
+
     public void setJSessionId(String jSessionId) {
         this.jSessionId = jSessionId;
     }

@@ -19,7 +19,7 @@ public class LumifyApi {
     private final GraphApiExt graphApi;
     private final EntityApiExt entityApi;
     private final String basePath;
-    private Workspace currentWorkspace;
+    private UserMe me;
 
     public LumifyApi(String basePath) {
         this.basePath = basePath;
@@ -80,8 +80,8 @@ public class LumifyApi {
         return ontologyApi;
     }
 
-    public Workspace getCurrentWorkspace() {
-        return currentWorkspace;
+    public String getCurrentWorkspaceId() {
+        return ApiInvoker.getInstance().getWorkspaceId();
     }
 
     public GraphApiExt getGraphApi() {
@@ -93,12 +93,12 @@ public class LumifyApi {
     }
 
     public Workspace loginAndGetCurrentWorkspace() throws ApiException {
-        UserMe me = getUserApi().getMe();
+        me = getUserApi().getMe();
         ApiInvoker.getInstance().setCsrfToken(me.getCsrfToken());
 
         List<Workspace> workspaces = getWorkspacesApi().getAll().getWorkspaces();
 
-        currentWorkspace = null;
+        Workspace currentWorkspace = null;
         if (me.getCurrentWorkspaceId() != null) {
             for (Workspace workspace : workspaces) {
                 if (workspace.getWorkspaceId().equals(me.getCurrentWorkspaceId())) {
@@ -136,5 +136,13 @@ public class LumifyApi {
 
     public void logout() throws ApiException {
         invokeAPI("/logout", "POST", null, null, null, null, null);
+    }
+
+    public String getCurrentUserId() {
+        return me.getId();
+    }
+
+    public void setWorkspaceId(String workspaceId) {
+        ApiInvoker.getInstance().setWorkspaceId(workspaceId);
     }
 }
