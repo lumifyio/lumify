@@ -1,11 +1,15 @@
 package io.lumify.test;
 
+import com.google.common.base.Joiner;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.JettyWebServer;
 import io.lumify.web.WebServer;
 
 import java.io.File;
 
 public class TestJettyServer extends JettyWebServer {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TestJettyServer.class);
     private final File webAppDir;
     private final String httpPort;
     private final String httpsPort;
@@ -21,7 +25,7 @@ public class TestJettyServer extends JettyWebServer {
     }
 
     public void startup() {
-        String[] args = new String[] {
+        String[] args = new String[]{
                 "--" + WebServer.PORT_OPTION_VALUE,
                 httpPort,
                 "--" + WebServer.HTTPS_PORT_OPTION_VALUE,
@@ -36,7 +40,8 @@ public class TestJettyServer extends JettyWebServer {
         };
 
         try {
-            System.out.println("Running Jetty on http port " + httpPort + ", https port " + httpsPort);
+            LOGGER.info("Running Jetty on http port " + httpPort + ", https port " + httpsPort);
+            LOGGER.info("   args: %s", Joiner.on(' ').join(args));
             int code = this.run(args);
             if (code != 0) {
                 throw new RuntimeException("Jetty failed to startup");
