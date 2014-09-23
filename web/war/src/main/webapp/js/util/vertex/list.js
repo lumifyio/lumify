@@ -294,7 +294,20 @@ define([
                             videoPreviewImageUrl: vertex.imageFramesSrc
                         });
                     } else {
-                        preview.css('background-image', 'url(' + vertex.imageSrc + ')');
+                        var conceptImage = vertex.concept.glyphIconHref,
+                            previewImage = new Image(),
+                            clsName = 'non_concept_preview',
+                            li = preview.closest('.vertex-item').removeClass(clsName);
+
+                        previewImage.onload = function() {
+                            preview.css('background-image', 'url(' + vertex.imageSrc + ')');
+                            li.toggleClass(clsName, !vertex.imageSrcIsFromConcept)
+                            previewImage = null;
+                        };
+                        preview.css('background-image', 'url(' + conceptImage + ')')
+                        _.defer(function() {
+                            previewImage.src = vertex.imageSrc;
+                        });
                     }
                 }
             });
