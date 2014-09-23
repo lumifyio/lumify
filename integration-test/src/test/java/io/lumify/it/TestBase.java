@@ -1,5 +1,6 @@
 package io.lumify.it;
 
+import io.lumify.core.config.LumifyTestClusterConfigurationLoader;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.test.LumifyTestCluster;
@@ -14,7 +15,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -28,21 +31,39 @@ import static org.junit.Assert.assertEquals;
 public class TestBase {
     protected LumifyLogger LOGGER;
     protected LumifyTestCluster lumifyTestCluster;
-    protected static final int HTTP_PORT = 10000;
-    protected static final int HTTPS_PORT = 10001;
+    protected int httpPort;
+    protected int httpsPort;
     protected static final String USERNAME_TEST_USER_1 = "testUser1";
     protected static final String USERNAME_TEST_USER_2 = "testUser2";
 
     @Before
     public void before() throws ApiException, IOException, NoSuchAlgorithmException, KeyManagementException {
+        LumifyTestClusterConfigurationLoader.set("repository.ontology.owl.1.iri", "http://lumify.io/test");
+        LumifyTestClusterConfigurationLoader.set("repository.ontology.owl.1.dir", new File(LumifyTestCluster.getLumifyRootDir(), "integration-test/src/test/resources/io/lumify/it/").getAbsolutePath());
+
         disableSSLCertChecking();
         initLumifyTestCluster();
         LOGGER = LumifyLoggerFactory.getLogger(this.getClass());
     }
 
     public void initLumifyTestCluster() {
-        lumifyTestCluster = new LumifyTestCluster(HTTP_PORT, HTTPS_PORT);
+        httpPort = findOpenPort(10080);
+        httpsPort = findOpenPort(10443);
+        lumifyTestCluster = new LumifyTestCluster(httpPort, httpsPort);
         lumifyTestCluster.startup();
+    }
+
+    private int findOpenPort(int startingPort) {
+        for (int port = startingPort; port < 65535; port++) {
+            try {
+                ServerSocket socket = new ServerSocket(port);
+                socket.close();
+                return port;
+            } catch (IOException ex) {
+                // try next port
+            }
+        }
+        throw new RuntimeException("No free ports found");
     }
 
     public void disableSSLCertChecking() throws NoSuchAlgorithmException, KeyManagementException {
@@ -85,7 +106,7 @@ public class TestBase {
     }
 
     LumifyApi login(String username) throws ApiException {
-        UserNameOnlyLumifyApi lumifyApi = new UserNameOnlyLumifyApi("https://localhost:" + HTTPS_PORT, username);
+        UserNameOnlyLumifyApi lumifyApi = new UserNameOnlyLumifyApi("https://localhost:" + httpsPort, username);
         lumifyApi.loginAndGetCurrentWorkspace();
         return lumifyApi;
     }

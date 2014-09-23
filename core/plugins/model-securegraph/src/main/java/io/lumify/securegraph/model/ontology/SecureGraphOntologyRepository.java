@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.*;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -55,8 +56,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             .build();
 
     @Inject
-    public SecureGraphOntologyRepository(final Graph graph,
-                                         final AuthorizationRepository authorizationRepository) {
+    public SecureGraphOntologyRepository(
+            final Graph graph,
+            final Configuration config,
+            final AuthorizationRepository authorizationRepository) throws Exception {
         this.graph = graph;
 
         authorizationRepository.addAuthorizationToGraph(SecureGraphOntologyRepository.VISIBILITY_STRING);
@@ -67,7 +70,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology(authorizations);
+            defineOntology(config, authorizations);
         } else {
             LOGGER.info("Base ontology already defined.");
         }
@@ -259,12 +262,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         String from;
         String to;
         try {
-            from = single(relationshipVertex.getVertexIds(Direction.IN, new String [] {LabelName.HAS_EDGE.toString()}, getAuthorizations()));
+            from = single(relationshipVertex.getVertexIds(Direction.IN, new String[]{LabelName.HAS_EDGE.toString()}, getAuthorizations()));
         } catch (IllegalStateException ex) {
             throw new IllegalStateException(String.format("Wrong number of 'IN' vertices for \"%s\"", relationshipIRI), ex);
         }
         try {
-            to = single(relationshipVertex.getVertexIds(Direction.OUT,new String [] {LabelName.HAS_EDGE.toString()}, getAuthorizations()));
+            to = single(relationshipVertex.getVertexIds(Direction.OUT, new String[]{LabelName.HAS_EDGE.toString()}, getAuthorizations()));
         } catch (IllegalStateException ex) {
             throw new IllegalStateException(String.format("Wrong number of 'OUT' vertices for \"%s\"", relationshipIRI), ex);
         }

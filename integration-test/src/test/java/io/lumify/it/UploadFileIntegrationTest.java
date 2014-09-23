@@ -21,7 +21,6 @@ public class UploadFileIntegrationTest extends TestBase {
     @Test
     public void testIt() throws IOException, ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        lumifyApi.getAdminApi().uploadOntology(getClass().getResourceAsStream("test.owl"));
 
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
@@ -57,6 +56,8 @@ public class UploadFileIntegrationTest extends TestBase {
         String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
         assertNotNull(highlightedText);
         LOGGER.info("highlightedText: %s", highlightedText);
+        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("class=\"entity\""));
+        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("http://lumify.io/test#person"));
 
         lumifyApi.logout();
 

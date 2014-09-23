@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -46,31 +45,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         owlConfig.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology(authorizations);
+            defineOntology(config, authorizations);
         } else {
             LOGGER.info("Base ontology already defined.");
-        }
-
-        for (String key : config.getKeys(Configuration.ONTOLOGY_REPOSITORY_OWL)) {
-            if (key.endsWith(".iri")) {
-                String iri = config.getOrNull(key);
-                String dir = config.getOrNull(key.replace(".iri", ".dir"));
-                String file = config.getOrNull(key.replace(".iri", ".file"));
-
-                if (iri != null) {
-                    if (dir != null) {
-                        File owlFile = findOwlFile(new File(dir));
-                        if (owlFile == null) {
-                            throw new LumifyResourceNotFoundException("could not find owl file in directory " + new File(dir).getAbsolutePath());
-                        }
-                        importFile(owlFile, IRI.create(iri), authorizations);
-                    } else if (file != null) {
-                        writePackage(new File(file), IRI.create(iri), authorizations);
-                    } else {
-                        throw new LumifyResourceNotFoundException("iri " + iri + " without matching dir or file");
-                    }
-                }
-            }
         }
     }
 

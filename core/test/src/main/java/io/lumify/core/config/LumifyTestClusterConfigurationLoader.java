@@ -42,4 +42,8 @@ public class LumifyTestClusterConfigurationLoader extends ConfigurationLoader {
     public static Properties getConfigurationProperties() {
         return props;
     }
+
+    public static void set(String key, String value) {
+        props.put(key, value);
+    }
 }

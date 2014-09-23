@@ -301,6 +301,7 @@ public abstract class GraphPropertyWorker {
         for (TermMention termMention : termMentions) {
             results.add(saveTermMention(artifactGraphVertex, termMention, workspaceId, visibilitySource));
         }
+        getTermMentionRepository().flush();
         return results;
     }
 
