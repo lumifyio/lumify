@@ -39,6 +39,9 @@ public class LumifyTestClusterConfigurationLoader extends ConfigurationLoader {
     public File resolveFileName(String fileName) {
         try {
             URL rootUrl = LumifyTestCluster.class.getResource(fileName);
+            if (rootUrl == null || rootUrl.toURI() == null) {
+                throw new RuntimeException("Could not resolve file: " + fileName);
+            }
             return new File(rootUrl.toURI());
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
