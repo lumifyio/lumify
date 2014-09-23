@@ -637,7 +637,7 @@ define([
                     },
                     prefName = nameToPref(sizePaneName || widthPaneName),
                     userPrefs = user.uiPreferences,
-                    value = prefName in userPrefs && userPrefs[prefName];
+                    value = userPrefs && prefName in userPrefs && userPrefs[prefName];
 
                 if (sizePaneName && value) {
                     var size = value.split(',');
