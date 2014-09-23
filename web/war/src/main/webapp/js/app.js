@@ -647,9 +647,9 @@ define([
                     }
                 } else if (widthPaneName && value) {
                     $pane.width(parseInt(value, 10));
-                } else if (!prefName) {
+                } else if (!prefName && !$pane.is('.facebox')) {
                     console.warn(
-                        'No data-width-preference or data-size-preference' +
+                        'No data-width-preference or data-size-preference ' +
                         'attribute for resizable pane', $pane[0]
                     );
                 }
