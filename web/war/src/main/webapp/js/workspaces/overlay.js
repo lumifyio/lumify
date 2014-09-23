@@ -291,11 +291,7 @@ define([
                                     width: '400px',
                                     height: '250px'
                                 })
-                                .resizable({
-                                    handles: 'n, e, ne',
-                                    maxWidth: self.popoverCss.maxWidth,
-                                    maxHeight: self.popoverCss.maxHeight
-                                })
+                                .data('sizePreference', 'diff')
                                 .find('.arrow').css({
                                     left: parseInt(badge.position().left - (left / 2) + 1, 10) + 'px',
                                     marginLeft: 0
@@ -307,7 +303,11 @@ define([
                                 var css = {
                                     top: (parseInt(tip.css('top')) - 10) + 'px'
                                 };
-                                tip.css({top: top});
+                                tip.resizable({
+                                    handles: 'n, e, ne',
+                                    maxWidth: self.popoverCss.maxWidth,
+                                    maxHeight: self.popoverCss.maxHeight
+                                }).css({top: top});
 
                                 self.updatePopoverSize(tip);
                             })

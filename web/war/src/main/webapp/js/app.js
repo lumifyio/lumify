@@ -176,9 +176,9 @@ define([
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
                 helpDialog = content.filter('.help-dialog');
 
-            this.on(document, 'resizecreate', this.onResizeCreateLoad);
-            this.on(document, 'resizestart', this.onResizeStartHandleMaxWidths);
-            this.on(document, 'resizestop', this.onResizeStopSave);
+            this.on('resizecreate', this.onResizeCreateLoad);
+            this.on('resizestart', this.onResizeStartHandleMaxWidths);
+            this.on('resizestop', this.onResizeStopSave);
 
             // Configure splitpane resizing
             resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
@@ -246,7 +246,6 @@ define([
                 this.currentUserMarkReady(user);
             }
         };
-
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
@@ -631,13 +630,28 @@ define([
         this.onResizeCreateLoad = function(event, ui) {
             this.currentUserReady(function(user) {
                 var $pane = $(event.target),
-                    paneName = $pane.data('sizePreference'),
-                    prefName = paneName && paneName + 'PaneWidth';
+                    sizePaneName = $pane.data('sizePreference'),
+                    widthPaneName = !sizePaneName && $pane.data('widthPreference'),
+                    nameToPref = function(name) {
+                        return name && ('pane-' + name);
+                    },
+                    prefName = nameToPref(sizePaneName || widthPaneName),
+                    userPrefs = user.uiPreferences,
+                    value = prefName in userPrefs && userPrefs[prefName];
 
-                if (prefName && prefName in user.uiPreferences) {
-                    $pane.width(parseInt(user.uiPreferences[prefName], 10));
+                if (sizePaneName && value) {
+                    var size = value.split(',');
+                    if (size.length === 2) {
+                        $pane.width(parseInt(size[0], 10));
+                        $pane.height(parseInt(size[1], 10));
+                    }
+                } else if (widthPaneName && value) {
+                    $pane.width(parseInt(value, 10));
                 } else if (!prefName) {
-                    console.warn('No data-size-preference attribute for resizable pane', $pane[0]);
+                    console.warn(
+                        'No data-width-preference or data-size-preference' +
+                        'attribute for resizable pane', $pane[0]
+                    );
                 }
             });
         };
@@ -650,9 +664,13 @@ define([
         };
 
         this.onResizeStopSave = function(event, ui) {
-            var paneName = ui.helper.data('sizePreference');
-            if (paneName) {
-                userService.setPreference(paneName + 'PaneWidth', ui.element.width());
+            var sizePaneName = ui.helper.data('sizePreference'),
+                widthPaneName = ui.helper.data('widthPreference');
+
+            if (sizePaneName) {
+                userService.setPreference('pane-' + sizePaneName, ui.element.width() + ',' + ui.element.height());
+            } else if (widthPaneName) {
+                userService.setPreference('pane-' + widthPaneName, ui.element.width());
             }
         };
 
