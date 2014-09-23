@@ -12,13 +12,13 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Queue;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class LumifyTestCluster {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyTestCluster.class);
+    private static LumifyLogger LOGGER;
     private final int httpPort;
     private final int httpsPort;
     private TestAccumulo accumulo;
@@ -30,8 +30,8 @@ public class LumifyTestCluster {
     public LumifyTestCluster(int httpPort, int httpsPort) {
         this.httpPort = httpPort;
         this.httpsPort = httpsPort;
-
         System.setProperty(ConfigurationLoader.ENV_CONFIGURATION_LOADER, LumifyTestClusterConfigurationLoader.class.getName());
+        LOGGER = LumifyLoggerFactory.getLogger(LumifyTestCluster.class);
     }
 
     public static void main(String[] args) {
@@ -117,15 +117,10 @@ public class LumifyTestCluster {
     }
 
     private void startWebServer() {
-        try {
-            URL keyStoreUrl = LumifyTestCluster.class.getResource("valid.jks");
-            String keyStorePath = keyStoreUrl.toURI().getPath();
-            File webAppDir = new File(getLumifyRootDir(), "web/war/src/main/webapp");
-            jetty = new TestJettyServer(webAppDir, Integer.toString(httpPort), Integer.toString(httpsPort), keyStorePath, "password");
-            jetty.startup();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        File keyStoreFile = new File(getLumifyRootDir(), "core/test/src/main/resources/io/lumify/test/valid.jks");
+        File webAppDir = new File(getLumifyRootDir(), "web/war/src/main/webapp");
+        jetty = new TestJettyServer(webAppDir, httpPort, httpsPort, keyStoreFile.getAbsolutePath(), "password");
+        jetty.startup();
     }
 
     public Queue<JSONObject> getGraphPropertyQueue() {
@@ -134,6 +129,7 @@ public class LumifyTestCluster {
 
     public void processGraphPropertyQueue() {
         Queue<JSONObject> graphPropertyQueue = getGraphPropertyQueue();
+        checkNotNull(graphPropertyQueue, "could not get graphPropertyQueue");
         JSONObject graphPropertyQueueItem;
         while ((graphPropertyQueueItem = graphPropertyQueue.poll()) != null) {
             processGraphPropertyQueueItem(graphPropertyQueueItem);

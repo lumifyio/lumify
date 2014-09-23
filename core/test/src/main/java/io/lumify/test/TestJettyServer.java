@@ -8,15 +8,17 @@ import io.lumify.web.WebServer;
 
 import java.io.File;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class TestJettyServer extends JettyWebServer {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TestJettyServer.class);
     private final File webAppDir;
-    private final String httpPort;
-    private final String httpsPort;
+    private final int httpPort;
+    private final int httpsPort;
     private final String keyStorePath;
     private final String keyStorePassword;
 
-    public TestJettyServer(File webAppDir, String httpPort, String httpsPort, String keyStorePath, String keyStorePassword) {
+    public TestJettyServer(File webAppDir, int httpPort, int httpsPort, String keyStorePath, String keyStorePassword) {
         this.webAppDir = webAppDir;
         this.httpPort = httpPort;
         this.httpsPort = httpsPort;
@@ -25,11 +27,15 @@ public class TestJettyServer extends JettyWebServer {
     }
 
     public void startup() {
+        checkNotNull(webAppDir, "webAppDir cannot be null");
+        checkNotNull(keyStorePath, "keyStorePath cannot be null");
+        checkNotNull(keyStorePassword, "keyStorePassword cannot be null");
+
         String[] args = new String[]{
                 "--" + WebServer.PORT_OPTION_VALUE,
-                httpPort,
+                Integer.toString(httpPort),
                 "--" + WebServer.HTTPS_PORT_OPTION_VALUE,
-                httpsPort,
+                Integer.toString(httpsPort),
                 "--" + WebServer.KEY_STORE_PATH_OPTION_VALUE,
                 keyStorePath,
                 "--" + WebServer.KEY_STORE_PASSWORD_OPTION_VALUE,
@@ -41,7 +47,7 @@ public class TestJettyServer extends JettyWebServer {
 
         try {
             LOGGER.info("Running Jetty on http port " + httpPort + ", https port " + httpsPort);
-            LOGGER.info("   args: %s", Joiner.on(' ').join(args));
+            LOGGER.info("   args: %s", Joiner.on(' ').skipNulls().join(args));
             int code = this.run(args);
             if (code != 0) {
                 throw new RuntimeException("Jetty failed to startup");

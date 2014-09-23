@@ -4,6 +4,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.test.LumifyTestCluster;
 import io.lumify.web.clientapi.LumifyApi;
+import io.lumify.web.clientapi.UserNameOnlyLumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import org.junit.After;
 import org.junit.Before;
@@ -21,20 +22,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestBase {
-    protected final LumifyLogger LOGGER;
+    protected LumifyLogger LOGGER;
     protected LumifyTestCluster lumifyTestCluster;
     protected static final int HTTP_PORT = 10000;
     protected static final int HTTPS_PORT = 10001;
-    protected String username = "testUser";
-
-    public TestBase() {
-        LOGGER = LumifyLoggerFactory.getLogger(this.getClass());
-    }
+    protected static final String USERNAME_TEST_USER_1 = "testUser1";
+    protected static final String USERNAME_TEST_USER_2 = "testUser2";
 
     @Before
     public void before() throws ApiException, IOException, NoSuchAlgorithmException, KeyManagementException {
         disableSSLCertChecking();
         initLumifyTestCluster();
+        LOGGER = LumifyLoggerFactory.getLogger(this.getClass());
     }
 
     public void initLumifyTestCluster() {
@@ -79,5 +78,11 @@ public class TestBase {
         queryParameters.put("user-name", username);
         queryParameters.put("auth", auth);
         lumifyApi.invokeAPI("/user/auth/add", "POST", queryParameters, null, null, null, null);
+    }
+
+    LumifyApi login(String username) throws ApiException {
+        UserNameOnlyLumifyApi lumifyApi = new UserNameOnlyLumifyApi("https://localhost:" + HTTPS_PORT, username);
+        lumifyApi.loginAndGetCurrentWorkspace();
+        return lumifyApi;
     }
 }

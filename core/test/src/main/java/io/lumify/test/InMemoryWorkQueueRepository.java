@@ -28,13 +28,8 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json) {
-        Queue queue = queues.get(queueName);
-        if (queue == null) {
-            queue = new LinkedList();
-            queues.put(queueName, queue);
-        }
         LOGGER.debug("push on queue: %s: %s", queueName, json);
-        queue.add(json);
+        getQueue(queueName).add(json);
     }
 
     @Override
@@ -62,6 +57,11 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
     }
 
     public static Queue<JSONObject> getQueue(String queueName) {
-        return queues.get(queueName);
+        Queue<JSONObject> queue = queues.get(queueName);
+        if (queue == null) {
+            queue = new LinkedList<JSONObject>();
+            queues.put(queueName, queue);
+        }
+        return queue;
     }
 }
