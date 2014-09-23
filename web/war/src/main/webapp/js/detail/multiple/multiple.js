@@ -28,7 +28,7 @@ define([
         BAR_HEIGHT = 25,
         PADDING = 5,
         ANIMATION_DURATION = 400,
-        BINABLE_TYPES = 'double date currency'.split(' '), // TODO: heading
+        BINABLE_TYPES = 'double date currency integer number'.split(' '), // TODO: heading
         SCALE_COLOR_BASED_ON_WIDTH = false,
         SCALE_COLOR_BASED_ON_WIDTH_RANGE = ['#00A1F8', '#0088cc'],
         SCALE_OPACITY_BASED_ON_WIDTH = true,
