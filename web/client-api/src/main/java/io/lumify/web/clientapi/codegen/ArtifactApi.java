@@ -102,7 +102,13 @@ public class ArtifactApi {
       hasFields = true;
       mp.field("visibilitySource", visibilitySource, MediaType.MULTIPART_FORM_DATA_TYPE);
       hasFields = true;
-      mp.field("file", file, MediaType.MULTIPART_FORM_DATA_TYPE);
+      com.sun.jersey.core.header.FormDataContentDisposition dispo = com.sun.jersey.core.header.FormDataContentDisposition
+        .name("file")
+        .fileName(file.getName())
+        .size(file.length())
+        .build();
+      com.sun.jersey.multipart.FormDataBodyPart bodyPart = new com.sun.jersey.multipart.FormDataBodyPart(dispo, file, MediaType.MULTIPART_FORM_DATA_TYPE);
+      mp.bodyPart(bodyPart);
       if(hasFields)
         postBody = mp;
     }

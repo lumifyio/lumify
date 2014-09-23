@@ -47,6 +47,16 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Object;", "");
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.LinkedHashMap;", "import java.util.Map;");
                 fileContents = fileContents.replaceAll("LinkedHashMap", "Map<String,Object>");
+                fileContents = fileContents.replaceAll("mp\\.field\\(\"file\", file, MediaType\\.MULTIPART_FORM_DATA_TYPE\\);",
+                        "com.sun.jersey.core.header.FormDataContentDisposition dispo = com.sun.jersey.core.header.FormDataContentDisposition\n"
+                                + "        .name(\"file\")\n"
+                                + "        .fileName(file.getName())\n"
+                                + "        .size(file.length())\n"
+                                + "        .build();\n"
+                                + "      com.sun.jersey.multipart.FormDataBodyPart bodyPart = new com.sun.jersey.multipart.FormDataBodyPart(dispo, file, MediaType.MULTIPART_FORM_DATA_TYPE);\n"
+                                + "      mp.bodyPart(bodyPart);"
+                );
+
                 FileUtils.write(f, fileContents);
             }
         }

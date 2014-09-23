@@ -6,6 +6,7 @@ import io.lumify.test.LumifyTestCluster;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.UserNameOnlyLumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
+import io.lumify.web.clientapi.codegen.model.Property;
 import org.junit.After;
 import org.junit.Before;
 
@@ -20,6 +21,9 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.mongodb.util.MyAsserts.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class TestBase {
     protected LumifyLogger LOGGER;
@@ -84,5 +88,30 @@ public class TestBase {
         UserNameOnlyLumifyApi lumifyApi = new UserNameOnlyLumifyApi("https://localhost:" + HTTPS_PORT, username);
         lumifyApi.loginAndGetCurrentWorkspace();
         return lumifyApi;
+    }
+
+    protected void assertHasProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
+        Property property = getProperty(properties, propertyKey, propertyName);
+        if (property == null) {
+            assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
+        }
+    }
+
+    private Property getProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
+        for (Property property : properties) {
+            if (propertyKey.equals(property.getKey()) && propertyName.equals(property.getName())) {
+                return property;
+            }
+        }
+        return null;
+    }
+
+    protected void assertHasProperty(Iterable<Property> properties, String propertyKey, String propertyName, Object expectedValue) {
+        Property property = getProperty(properties, propertyKey, propertyName);
+        if (property != null) {
+            assertEquals("property value does not match for property " + propertyKey + ":" + propertyName, expectedValue, property.getValue());
+        } else {
+            assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
+        }
     }
 }
