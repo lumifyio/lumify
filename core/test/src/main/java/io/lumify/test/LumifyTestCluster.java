@@ -5,6 +5,8 @@ import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.config.LumifyTestClusterConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -16,6 +18,7 @@ import java.util.Properties;
 import java.util.Queue;
 
 public class LumifyTestCluster {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyTestCluster.class);
     private final int httpPort;
     private final int httpsPort;
     private TestAccumulo accumulo;
@@ -82,7 +85,7 @@ public class LumifyTestCluster {
             if (sourceFile.isDirectory()) {
                 copyFiles(sourceFile, destFile);
             } else {
-                System.out.println("copy file " + sourceFile + " " + destFile);
+                LOGGER.info("copy file " + sourceFile + " " + destFile);
                 FileUtils.copyFile(sourceFile, destFile);
             }
         }
