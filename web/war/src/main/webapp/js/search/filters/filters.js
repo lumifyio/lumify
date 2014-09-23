@@ -192,14 +192,18 @@ define([
             this.notifyOfFilters();
         };
 
+        this.createFieldSelection = function() {
+            FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
+                properties: this.properties,
+                onlySearchable: true,
+                placeholder: i18n('search.filters.add_filter.placeholder')
+            });
+        }
+
         this.createNewRowIfNeeded = function() {
             if (this.$node.find('.newrow').length === 0) {
                 this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
-                FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
-                    properties: this.properties,
-                    onlySearchable: true,
-                    placeholder: 'Add Filter'
-                });
+                this.createFieldSelection();
             }
         };
 
@@ -247,16 +251,9 @@ define([
             var self = this;
 
             this.ontologyService.properties().done(function(properties) {
-                self.properties = _.filter(properties.list, function(p) {
-                    if (p.title === 'boundingBox') return false;
-                    if (/^_/.test(p.title)) return false;
-                    return true;
-                });
+                self.properties = properties.list;
                 self.$node.find('.prop-filter-header').after(itemTemplate({}));
-                FieldSelection.attachTo(self.select('fieldSelectionSelector'), {
-                    properties: self.properties,
-                    placeholder: i18n('search.filters.add_filter.placeholder')
-                });
+                self.createFieldSelection();
             });
         };
     }
