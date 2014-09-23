@@ -63,7 +63,7 @@ public class LumifyTestCluster {
         }
     }
 
-    public File getLumifyRootDir() {
+    public static File getLumifyRootDir() {
         File startingDir = new File(System.getProperty("user.dir"));
         File f = startingDir;
         while (f != null) {
