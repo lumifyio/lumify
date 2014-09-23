@@ -55,12 +55,24 @@ public class LumifyTestCluster {
     public void setupHdfsFiles() {
         try {
             File hdfsRoot = new File("/tmp/lumify-integration-test");
-            File localConfig = new File("./config");
+            File localConfig = new File(getLumifyRootDir(), "./config");
             File hdfsConfig = new File(hdfsRoot, "lumify/config");
             copyFiles(localConfig, hdfsConfig);
         } catch (Exception ex) {
             throw new RuntimeException("Could not setup hdfs files", ex);
         }
+    }
+
+    public File getLumifyRootDir() {
+        File startingDir = new File(System.getProperty("user.dir"));
+        File f = startingDir;
+        while (f != null) {
+            if (new File(f, "core").exists() && new File(f, "config").exists()) {
+                return f;
+            }
+            f = f.getParentFile();
+        }
+        throw new RuntimeException("Could not find lumify root starting from " + startingDir.getAbsolutePath());
     }
 
     private void copyFiles(File sourceDir, File destDir) throws IOException {
@@ -105,7 +117,8 @@ public class LumifyTestCluster {
         try {
             URL keyStoreUrl = LumifyTestCluster.class.getResource("valid.jks");
             String keyStorePath = keyStoreUrl.toURI().getPath();
-            jetty = new TestJettyServer(Integer.toString(httpPort), Integer.toString(httpsPort), keyStorePath, "password");
+            File webAppDir = new File(getLumifyRootDir(), "web/war/src/main/webapp");
+            jetty = new TestJettyServer(webAppDir, Integer.toString(httpPort), Integer.toString(httpsPort), keyStorePath, "password");
             jetty.startup();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

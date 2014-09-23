@@ -3,13 +3,17 @@ package io.lumify.test;
 import io.lumify.web.JettyWebServer;
 import io.lumify.web.WebServer;
 
+import java.io.File;
+
 public class TestJettyServer extends JettyWebServer {
+    private final File webAppDir;
     private final String httpPort;
     private final String httpsPort;
     private final String keyStorePath;
     private final String keyStorePassword;
 
-    public TestJettyServer(String httpPort, String httpsPort, String keyStorePath, String keyStorePassword) {
+    public TestJettyServer(File webAppDir, String httpPort, String httpsPort, String keyStorePath, String keyStorePassword) {
+        this.webAppDir = webAppDir;
         this.httpPort = httpPort;
         this.httpsPort = httpsPort;
         this.keyStorePath = keyStorePath;
@@ -27,7 +31,7 @@ public class TestJettyServer extends JettyWebServer {
                 "--" + WebServer.KEY_STORE_PASSWORD_OPTION_VALUE,
                 keyStorePassword,
                 "--" + WebServer.WEB_APP_DIR_OPTION_VALUE,
-                "web/war/src/main/webapp",
+                webAppDir.getAbsolutePath(),
                 "--dontjoin"
         };
 
