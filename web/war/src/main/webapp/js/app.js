@@ -20,6 +20,7 @@ define([
     'util/vertex/menu',
     'util/contextMenu',
     'util/privileges',
+    'util/withAsyncQueue',
     'service/user',
     'service/vertex'
 ], function(
@@ -43,11 +44,12 @@ define([
     VertexMenu,
     ContextMenu,
     Privileges,
+    withAsyncQueue,
     UserService,
     VertexService) {
     'use strict';
 
-    return defineComponent(App, withFileDrop);
+    return defineComponent(App, withFileDrop, withAsyncQueue);
 
     function App() {
         var Graph3D,
@@ -106,6 +108,8 @@ define([
 
             window.lumifyApp = this;
 
+            this.setupAsyncQueue('currentUser');
+
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
 
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
@@ -124,6 +128,10 @@ define([
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
             this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
+
+            if (window.currentUser) {
+                this.currentUserMarkReady(window.currentUser);
+            }
 
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'escape', this.onEscapeKey);
@@ -168,14 +176,15 @@ define([
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
                 helpDialog = content.filter('.help-dialog');
 
-            // Configure splitpane resizing
-            resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this));
-            resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
-            resizable(adminPane, 'e', 190, 250, this.onPaneResize.bind(this));
-            resizable(detailPane, 'w', 200, 500, this.onPaneResize.bind(this));
+            this.on(document, 'resizecreate', this.onResizeCreateLoad);
+            this.on(document, 'resizestart', this.onResizeStartHandleMaxWidths);
+            this.on(document, 'resizestop', this.onResizeStopSave);
 
-            this.on('resizestart', this.onResizeStartHandleMaxWidths);
-            this.on('resizestop', this.onResizeStopSave);
+            // Configure splitpane resizing
+            resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
+            resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
+            resizable(adminPane, 'e', 190, 250, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
+            resizable(detailPane, 'w', 200, 500, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
 
             ContextMenu.attachTo(document);
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
@@ -229,28 +238,15 @@ define([
                     self.trigger('showAdminPlugin', self.attr.openAdminTool);
                 }
             }, 500);
-
-            if (window.currentUser) {
-                this.updatePaneSizesFromPreferences(window.currentUser.uiPreferences);
-            }
         });
 
         this.onCurrentUserChanged = function(event, user) {
             if (user) {
-                this.updatePaneSizesFromPreferences(user.uiPreferences);
+                this.currentUserUnload();
+                this.currentUserMarkReady(user);
             }
         };
 
-        this.updatePaneSizesFromPreferences = function(prefs) {
-            var $node = this.$node;
-
-            'search workspaces detail admin'.split(' ').forEach(function(name) {
-                var width = prefs[name + 'PaneWidth'];
-                if (width) {
-                    $node.find('.' + name + '-pane').width(parseFloat(width));
-                }
-            });
-        };
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
@@ -632,17 +628,31 @@ define([
             return maxWidthAllowed;
         };
 
-        this.onResizeStartHandleMaxWidths = function(event, helper) {
-            var thisPane = helper.element,
+        this.onResizeCreateLoad = function(event, ui) {
+            this.currentUserReady(function(user) {
+                var $pane = $(event.target),
+                    paneName = $pane.data('sizePreference'),
+                    prefName = paneName && paneName + 'PaneWidth';
+
+                if (prefName && prefName in user.uiPreferences) {
+                    $pane.width(parseInt(user.uiPreferences[prefName], 10));
+                } else if (!prefName) {
+                    console.warn('No data-size-preference attribute for resizable pane', $pane[0]);
+                }
+            });
+        };
+
+        this.onResizeStartHandleMaxWidths = function(event, ui) {
+            var thisPane = ui.element,
                 maxWidthAllowed = this.availablePaneWidth(thisPane);
 
             thisPane.resizable('option', 'maxWidth', maxWidthAllowed);
         };
 
-        this.onResizeStopSave = function(event, helper) {
-            var menubarName = helper.helper.data('menubarName');
-            if (menubarName) {
-                userService.setPreference(menubarName + 'PaneWidth', helper.element.width());
+        this.onResizeStopSave = function(event, ui) {
+            var paneName = ui.helper.data('sizePreference');
+            if (paneName) {
+                userService.setPreference(paneName + 'PaneWidth', ui.element.width());
             }
         };
 
@@ -713,12 +723,13 @@ define([
         };
     }
 
-    function resizable(el, handles, minWidth, maxWidth, callback) {
+    function resizable(el, handles, minWidth, maxWidth, callback, createCallback) {
         return el.resizable({
             handles: handles,
             minWidth: minWidth || 150,
             maxWidth: maxWidth || 300,
-            resize: callback
+            resize: callback,
+            create: createCallback
         });
     }
 
