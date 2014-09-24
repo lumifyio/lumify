@@ -296,8 +296,9 @@ define([
                     } else {
                         var conceptImage = vertex.concept.glyphIconHref,
                             previewImage = new Image(),
-                            clsName = 'non_concept_preview',
-                            li = preview.closest('.vertex-item').removeClass(clsName);
+                            clsName = 'non_concept_preview';
+
+                        li.removeClass(clsName);
 
                         previewImage.onload = function() {
                             preview.css('background-image', 'url(' + vertex.imageSrc + ')');
