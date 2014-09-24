@@ -680,6 +680,22 @@
     z-index: 1;
     .box-sizing(border-box);
 
+    &.loading {
+      background: #444;
+      width: 100%;
+            
+      .entity-glyphIcon {
+        background-color: transparent;
+        background-image: url(../img/loading-large.png) !important;
+        background-size: auto 125px !important;
+        background-position: center;
+        .spin(10s);
+        .animation-play-state(running);
+        .opacity(10);
+        &:after, &:before, * {display: none; }
+      }
+    }
+
     .detail-toolbar {
       z-index: 4;
       background: transparent;

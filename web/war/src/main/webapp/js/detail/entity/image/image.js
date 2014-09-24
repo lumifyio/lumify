@@ -130,10 +130,15 @@ define([
                 customImage = !!(src || !this.attr.data.imageSrcIsFromConcept);
 
             if (imageUrl && customImage) {
+                self.$node.closest('.entity-background').addClass('loading');
                 var image = new Image();
                 image.onload = function() {
                     self.imageNaturalSize = [image.naturalWidth, image.naturalHeight];
                     self.updateImageBackgroundSize();
+                    self.$node.closest('.entity-background').removeClass('loading');
+                }
+                image.onerror = function() {
+                    self.$node.closest('.entity-background').removeClass('loading');
                 }
                 image.src = imageUrl;
             }
