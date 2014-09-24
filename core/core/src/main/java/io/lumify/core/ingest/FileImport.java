@@ -132,7 +132,7 @@ public class FileImport {
             } else {
                 vertexBuilder = this.graph.prepareVertex(predefinedId, visibility);
             }
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, visibilityJson, visibility);
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexBuilder, visibilityJson, visibility);
             LumifyProperties.RAW.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, rawValue, propertyMetadata, visibility);
             LumifyProperties.TITLE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
             LumifyProperties.CONTENT_HASH.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);

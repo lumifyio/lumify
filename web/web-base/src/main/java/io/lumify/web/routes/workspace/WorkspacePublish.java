@@ -98,6 +98,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishVertices(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN publishVertices");
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
             try {
@@ -129,10 +130,12 @@ public class WorkspacePublish extends BaseRequestHandler {
                 failures.put(data);
             }
         }
+        LOGGER.debug("END publishVertices");
         graph.flush();
     }
 
     private void publishEdges(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN publishEdges");
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
             try {
@@ -172,10 +175,12 @@ public class WorkspacePublish extends BaseRequestHandler {
                 failures.put(data);
             }
         }
+        LOGGER.debug("END publishEdges");
         graph.flush();
     }
 
     private void publishProperties(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN publishProperties");
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
             try {
@@ -225,9 +230,10 @@ public class WorkspacePublish extends BaseRequestHandler {
                 }
 
                 if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
-                    String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId();
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
+                    String errorMessage = "Cannot publish a modification of a property on a private vertex: " + vertex.getId();
+                    JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
+                    LOGGER.warn("%s: visibilityJson: %s, workspaceId: %s", errorMessage, visibilityJson.toString(), workspaceId);
+                    data.put("error_msg", errorMessage);
                     failures.put(data);
                     continue;
                 }
@@ -239,6 +245,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 failures.put(data);
             }
         }
+        LOGGER.debug("END publishProperties");
         graph.flush();
     }
 
@@ -258,8 +265,10 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.removeProperty(vertex, authorizations);
+
         ExistingElementMutation<Vertex> vertexElementMutation = vertex.prepareMutation();
-        vertex.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), authorizations);
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : vertex.getProperties()) {

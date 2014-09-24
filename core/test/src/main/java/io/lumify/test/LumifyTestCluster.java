@@ -75,6 +75,12 @@ public class LumifyTestCluster {
             }
             f = f.getParentFile();
         }
+
+        f = new File(startingDir, "lumify-public");
+        if (f.exists()) {
+            return f;
+        }
+
         throw new RuntimeException("Could not find lumify root starting from " + startingDir.getAbsolutePath());
     }
 
