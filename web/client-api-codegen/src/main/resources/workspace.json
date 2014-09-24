@@ -345,11 +345,15 @@
                 },
                 "vertexId": {
                     "type": "string",
-                    "description": "required for vertex and property publish"
+                    "description": "required for vertex publish"
                 },
                 "edgeId": {
                     "type": "string",
                     "description": "required for edge publish"
+                },
+                "elementId": {
+                    "type": "string",
+                    "description": "required for property publish"
                 },
                 "sourceId": {
                     "type": "string",

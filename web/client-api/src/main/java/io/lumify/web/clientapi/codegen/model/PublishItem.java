@@ -5,10 +5,12 @@ public class PublishItem {
   //public enum typeEnum { vertex, relationship, property, }; 
   /* 'delete' or '' */
   private String action = null;
-  /* required for vertex and property publish */
+  /* required for vertex publish */
   private String vertexId = null;
   /* required for edge publish */
   private String edgeId = null;
+  /* required for property publish */
+  private String elementId = null;
   /* required for edge publish */
   private String sourceId = null;
   /* required for edge publish */
@@ -44,6 +46,13 @@ public class PublishItem {
   }
   public void setEdgeId(String edgeId) {
     this.edgeId = edgeId;
+  }
+
+  public String getElementId() {
+    return elementId;
+  }
+  public void setElementId(String elementId) {
+    this.elementId = elementId;
   }
 
   public String getSourceId() {
@@ -89,6 +98,7 @@ public class PublishItem {
     sb.append("  action: ").append(action).append("\n");
     sb.append("  vertexId: ").append(vertexId).append("\n");
     sb.append("  edgeId: ").append(edgeId).append("\n");
+    sb.append("  elementId: ").append(elementId).append("\n");
     sb.append("  sourceId: ").append(sourceId).append("\n");
     sb.append("  destId: ").append(destId).append("\n");
     sb.append("  key: ").append(key).append("\n");

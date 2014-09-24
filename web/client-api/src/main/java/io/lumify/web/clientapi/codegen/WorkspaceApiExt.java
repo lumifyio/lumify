@@ -31,7 +31,7 @@ public class WorkspaceApiExt extends WorkspaceApi {
             publishItem.setVertexId(workspaceDiffItem.getVertexId());
         } else if ("PropertyDiffItem".equals(workspaceDiffItem.getType())) {
             publishItem.setType("property");
-            publishItem.setVertexId(workspaceDiffItem.getElementId());
+            publishItem.setElementId(workspaceDiffItem.getElementId());
             publishItem.setKey(workspaceDiffItem.getKey());
             publishItem.setName(workspaceDiffItem.getName());
         } else if ("EdgeDiffItem".equals(workspaceDiffItem.getType())) {
