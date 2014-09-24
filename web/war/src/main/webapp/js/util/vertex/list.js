@@ -298,13 +298,16 @@ define([
                             previewImage = new Image(),
                             clsName = 'non_concept_preview';
 
-                        li.removeClass(clsName);
+                        li.removeClass(clsName).addClass('loading');
 
                         previewImage.onload = function() {
                             preview.css('background-image', 'url(' + vertex.imageSrc + ')');
-                            li.toggleClass(clsName, !vertex.imageSrcIsFromConcept)
+                            li.toggleClass(clsName, !vertex.imageSrcIsFromConcept).removeClass('loading');
                             previewImage = null;
                         };
+                        previewImage.onerror = function() {
+                            li.removeClass('loading');
+                        }
                         preview.css('background-image', 'url(' + conceptImage + ')')
                         _.defer(function() {
                             previewImage.src = vertex.imageSrc;
