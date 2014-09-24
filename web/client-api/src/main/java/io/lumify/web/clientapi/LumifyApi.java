@@ -12,7 +12,6 @@ public class LumifyApi {
     private final UserApi userApi;
     private final ArtifactApiExt artifactApi;
     private final WorkspaceApiExt workspaceApi;
-    private final WorkspacesApi workspacesApi;
     private final AdminApiExt adminApi;
     private final VertexApi vertexApi;
     private final OntologyApiExt ontologyApi;
@@ -32,9 +31,6 @@ public class LumifyApi {
 
         workspaceApi = new WorkspaceApiExt();
         workspaceApi.setBasePath(basePath);
-
-        workspacesApi = new WorkspacesApi();
-        workspacesApi.setBasePath(basePath);
 
         adminApi = new AdminApiExt();
         adminApi.setBasePath(basePath);
@@ -62,10 +58,6 @@ public class LumifyApi {
 
     public WorkspaceApiExt getWorkspaceApi() {
         return workspaceApi;
-    }
-
-    public WorkspacesApi getWorkspacesApi() {
-        return workspacesApi;
     }
 
     public AdminApiExt getAdminApi() {
@@ -96,7 +88,7 @@ public class LumifyApi {
         me = getUserApi().getMe();
         ApiInvoker.getInstance().setCsrfToken(me.getCsrfToken());
 
-        List<Workspace> workspaces = getWorkspacesApi().getAll().getWorkspaces();
+        List<Workspace> workspaces = getWorkspaceApi().getAll().getWorkspaces();
 
         Workspace currentWorkspace = null;
         if (me.getCurrentWorkspaceId() != null) {

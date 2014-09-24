@@ -5,7 +5,7 @@
     "resourcePath": "/workspace",
     "apis": [
         {
-            "path": "/workspaces",
+            "path": "/workspace/all",
             "operations": [
                 {
                     "method": "GET",

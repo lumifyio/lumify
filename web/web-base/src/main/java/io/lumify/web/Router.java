@@ -113,7 +113,7 @@ public class Router extends HttpServlet {
             app.get("/graph/vertex/geoLocationSearch", authenticator, csrfProtector, ReadPrivilegeFilter.class, GraphGeoLocationSearch.class);
             app.post("/graph/vertex/uploadImage", authenticator, csrfProtector, EditPrivilegeFilter.class, GraphVertexUploadImage.class);
 
-            app.get("/workspaces", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
+            app.get("/workspace/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
             app.post("/workspace/new", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceNew.class);
             app.get("/workspace/diff", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceDiff.class);
             app.get("/workspace/relationships", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceRelationships.class);
