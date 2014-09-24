@@ -1,6 +1,5 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -16,8 +15,8 @@ import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.securegraph.*;
 
@@ -78,7 +77,7 @@ public class VertexNew extends BaseRequestHandler {
         getWorkspaceRepository().updateEntityOnWorkspace(workspace, vertex.getId(), true, null, null, user);
         this.graph.flush();
 
-        LOGGER.debug("Created new empty vertex with id: %s", vertex.getId().toString());
+        LOGGER.debug("Created new empty vertex with id: %s", vertex.getId());
 
         workQueueRepository.pushElement(vertex);
         workQueueRepository.pushGraphPropertyQueue(vertex, null, LumifyProperties.CONCEPT_TYPE.getPropertyName(), workspaceId, visibilitySource);

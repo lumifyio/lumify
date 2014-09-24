@@ -29,6 +29,102 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/new",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates a new vertex",
+                    "type": "Element",
+                    "nickname": "create",
+                    "parameters": [
+                        {
+                            "name": "conceptType",
+                            "description": "concept type of vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "visibility source of new vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/property/set",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates a new vertex",
+                    "type": "Element",
+                    "nickname": "setProperty",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "the property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "value",
+                            "description": "the property value",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "the visibility source of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "The justification text",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "source info",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "metadata",
+                            "description": "metadata",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {

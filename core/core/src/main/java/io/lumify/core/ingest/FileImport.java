@@ -26,7 +26,7 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class FileImport {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileImport.class);
-    private static final String MULTI_VALUE_KEY = FileImport.class.getName();
+    public static final String MULTI_VALUE_KEY = FileImport.class.getName();
     private final VisibilityTranslator visibilityTranslator;
     private List<FileImportSupportingFileHandler> fileImportSupportingFileHandlers;
     private Graph graph;

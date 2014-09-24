@@ -79,7 +79,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         if (propertyKey == null) {
-            propertyKey = this.graph.getIdGenerator().nextId().toString();
+            propertyKey = this.graph.getIdGenerator().nextId();
         }
 
         Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);

@@ -99,7 +99,7 @@ public class Router extends HttpServlet {
             app.get("/vertex/relationships", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexRelationships.class);
             app.post("/vertex/removeRelationship", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRelationshipRemoval.class);
             app.post("/vertex/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
-            app.post("/vertex", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
+            app.post("/vertex/new", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
 
             app.post("/relationship/property/set", authenticator, csrfProtector, EditPrivilegeFilter.class, SetRelationshipProperty.class);
             app.post("/relationship/property/delete", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteRelationshipProperty.class);

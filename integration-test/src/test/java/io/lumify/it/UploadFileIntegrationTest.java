@@ -1,5 +1,9 @@
 package io.lumify.it;
 
+import io.lumify.core.ingest.FileImport;
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.LumifyVisibilityProperties;
+import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.model.*;
@@ -127,9 +131,9 @@ public class UploadFileIntegrationTest extends TestBase {
             LOGGER.info("property: %s", property.toString());
         }
         assertEquals(10, artifactVertex.getProperties().size());
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker", "http://lumify.io#createDate");
-        assertHasProperty(artifactVertex.getProperties(), "", "http://lumify.io#mimeType", "text/plain");
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker", "http://lumify.io#text");
+        assertHasProperty(artifactVertex.getProperties(), TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.CREATE_DATE.getPropertyName());
+        assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
+        assertHasProperty(artifactVertex.getProperties(), TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
         LinkedHashMap<String, Object> visibilityJson = new LinkedHashMap<String, Object>();
         visibilityJson.put("source", "auth1");
         ArrayList<String> visibilityJsonWorkspaces = new ArrayList<String>();
@@ -137,18 +141,18 @@ public class UploadFileIntegrationTest extends TestBase {
             visibilityJsonWorkspaces.add(workspaceId);
         }
         visibilityJson.put("workspaces", visibilityJsonWorkspaces);
-        assertHasProperty(artifactVertex.getProperties(), "", "http://lumify.io#visibilityJson", visibilityJson);
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#contentHash", "urn\u001Fsha256\u001F28fca952b9eb45d43663af8e3099da0572c8232243289b5d8a03eb5ea2cb066a");
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#createDate");
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#fileName", "test.txt");
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#fileNameExtension", "txt");
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#raw");
-        assertHasProperty(artifactVertex.getProperties(), "io.lumify.core.ingest.FileImport", "http://lumify.io#title", "test.txt");
+        assertHasProperty(artifactVertex.getProperties(), "", LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), visibilityJson);
+        assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.CONTENT_HASH.getPropertyName(), "urn\u001Fsha256\u001F28fca952b9eb45d43663af8e3099da0572c8232243289b5d8a03eb5ea2cb066a");
+        assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.CREATE_DATE.getPropertyName());
+        assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.FILE_NAME.getPropertyName(), "test.txt");
+        assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.FILE_NAME_EXTENSION.getPropertyName(), "txt");
+        assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
+        assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "test.txt");
 
-        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, "io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker");
+        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         assertNotNull(highlightedText);
         LOGGER.info("highlightedText: %s", highlightedText);
         assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("class=\"entity\""));
-        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("http://lumify.io/test#person"));
+        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains(CONCEPT_TEST_PERSON));
     }
 }
