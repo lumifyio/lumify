@@ -106,6 +106,9 @@ public class UploadFileIntegrationTest extends TestBase {
         assertEquals(0, publishResults.getFailures().size());
         assertTrue(publishResults.getSuccess());
 
+        diff = lumifyApi.getWorkspaceApi().getDiff();
+        assertEquals(0, diff.getDiffs().size());
+
         lumifyApi.logout();
     }
 
@@ -130,7 +133,7 @@ public class UploadFileIntegrationTest extends TestBase {
         for (Property property : artifactVertex.getProperties()) {
             LOGGER.info("property: %s", property.toString());
         }
-        assertEquals(10, artifactVertex.getProperties().size());
+        assertEquals(11, artifactVertex.getProperties().size());
         assertHasProperty(artifactVertex.getProperties(), TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.CREATE_DATE.getPropertyName());
         assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
         assertHasProperty(artifactVertex.getProperties(), TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
@@ -148,6 +151,7 @@ public class UploadFileIntegrationTest extends TestBase {
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.FILE_NAME_EXTENSION.getPropertyName(), "txt");
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "test.txt");
+        assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.CONCEPT_TYPE.getPropertyName(), "http://lumify.io/test#document");
 
         String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         assertNotNull(highlightedText);
