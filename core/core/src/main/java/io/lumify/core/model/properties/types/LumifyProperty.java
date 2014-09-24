@@ -7,6 +7,7 @@ import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Visibility;
 import org.securegraph.mutation.ElementMutation;
+import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Collections;
 import java.util.Map;
@@ -211,6 +212,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
 
     public void removeProperty(Element element, Authorizations authorizations) {
         element.removeProperty(getPropertyName(), authorizations);
+    }
+
+    public void alterVisibility(ExistingElementMutation<?> elementMutation, Visibility newVisibility) {
+        elementMutation.alterPropertyVisibility(getPropertyName(), newVisibility);
     }
 
     /**

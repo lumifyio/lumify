@@ -266,8 +266,6 @@ public class WorkspacePublish extends BaseRequestHandler {
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.removeProperty(vertex, authorizations);
-
         ExistingElementMutation<Vertex> vertexElementMutation = vertex.prepareMutation();
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
@@ -280,6 +278,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         Map<String, Object> metadata = new HashMap<String, Object>();
+        // we need to alter the visibility of the json property, otherwise we'll have two json properties, one with the old visibility and one with the new.
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.alterVisibility(vertexElementMutation, lumifyVisibility.getVisibility());
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save(authorizations);
