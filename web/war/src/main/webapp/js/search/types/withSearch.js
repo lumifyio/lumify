@@ -49,6 +49,8 @@ define([
                                 result.totalHits === 0
                         );
 
+                    $searchResults.children('.content').scrollTop(0);
+
                     VertexList.attachTo($resultsContainer, {
                         vertices: vertices,
                         nextOffset: result.nextOffset,
