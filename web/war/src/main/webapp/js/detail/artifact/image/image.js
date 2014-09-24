@@ -21,7 +21,7 @@ define([
         this.after('initialize', function() {
             this.setupAsyncQueue('image');
 
-            this.$node.html(template({ data: this.attr.data }));
+            this.$node.addClass('loading').html(template({ data: this.attr.data }));
 
             this.setupEditingFacebox();
 
@@ -43,6 +43,8 @@ define([
                 image.on('load', this.setupEditingFacebox.bind(this));
                 return;
             }
+
+            this.$node.removeClass('loading');
 
             if (Privileges.missingEDIT) {
                 this.$node.css('cursor', 'default')
