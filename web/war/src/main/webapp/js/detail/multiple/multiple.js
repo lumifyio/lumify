@@ -36,7 +36,8 @@ define([
         NO_HISTOGRAM_DATATYPES = [
             'geoLocation'
         ],
-        HIDE_IF_ALL_UNIQUE_AND_BINS = 5;
+        MAX_BINS_FOR_NON_HISTOGRAM_TYPES = 5,
+        OTHER_PLACEHOLDER = '${OTHER-CATEGORY}';
 
     return defineComponent(Multiple, withTypeContent);
 
@@ -51,8 +52,10 @@ define([
             propertyName = bin.name,
             display = propertyValue;
 
-        if (propertyName == 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
+        if (propertyName === 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
             display = concepts.byId[propertyValue].displayName;
+        } else if (display === OTHER_PLACEHOLDER) {
+            display = i18n('detail.multiple.histogram.other');
         } else if (properties.byTitle[propertyName]) {
             if ('dx' in bin) {
                 display =
@@ -268,15 +271,57 @@ define([
                             return true;
                         }
 
-                        var values = _.chain(pair[1])
-                            .countBy('value')
-                            .values()
-                            .value();
+                        var valueCounts = _.countBy(pair[1], 'value'),
+                            values = _.chain(valueCounts)
+                                .values()
+                                .value(),
+                            len = values.length;
 
-                        return values.length < HIDE_IF_ALL_UNIQUE_AND_BINS ||
-                             !_.every(values, function(v) {
-                                 return v === 1;
-                             });
+                        if (len <= MAX_BINS_FOR_NON_HISTOGRAM_TYPES) {
+                            return true;
+                        }
+
+                        var orderedCounts = _.unique(values)
+                                .sort(function(a, b) {
+                                    return a - b;
+                                }),
+                            collapseSmallest = function(orderedCounts, valueCounts, len) {
+                                if (orderedCounts.length === 0 || len <= MAX_BINS_FOR_NON_HISTOGRAM_TYPES) {
+                                    return;
+                                }
+
+                                var moveToOtherWithCount = orderedCounts.shift(),
+                                    toMove = _.chain(valueCounts)
+                                        .pairs()
+                                        .filter(function(p) {
+                                            return p[1] === moveToOtherWithCount;
+                                        })
+                                        .value(),
+                                    toMoveNames = _.map(toMove, function(p) {
+                                            return p[0];
+                                        });
+
+                                pair[1] = _.reject(pair[1], function(p) {
+                                    return ~toMoveNames.indexOf(p.value);
+                                });
+
+                                for (var i = 0; i < toMove.length; i++) {
+                                    for (var j = 0; j < toMove[i][1]; j++) {
+                                        pair[1].push({
+                                            value: OTHER_PLACEHOLDER,
+                                        });
+                                    }
+                                }
+
+                                valueCounts = _.countBy(pair[1], 'value');
+                                len = _.values(valueCounts).length;
+
+                                collapseSmallest(orderedCounts, valueCounts, len);
+                            };
+
+                        collapseSmallest(orderedCounts, valueCounts, len);
+
+                        return true;
                     })
                     .sortBy(function(pair) {
                         var ontologyProperty = properties.byTitle[pair[0]],
@@ -386,6 +431,10 @@ define([
                                                 _.chain(values)
                                                 .unique()
                                                 .sortBy(function(f) {
+                                                    if (f === OTHER_PLACEHOLDER) {
+                                                        return 999;
+                                                    }
+
                                                     var bin = [f];
                                                     bin.name = d[0];
                                                     return (100 - groupedByValue[f].length) +
@@ -506,9 +555,11 @@ define([
                                             });
 
                                         this.select('use.on-bar-text')
+                                            .call(markOther)
                                             .attr('xlink:href', _.compose(toRefId, textId))
                                             .attr('mask', _.compose(toUrlId, append('_0'), maskId));
                                         this.select('use.off-bar-text')
+                                            .call(markOther)
                                             .attr('xlink:href', _.compose(toRefId, textId))
                                             .attr('mask', _.compose(toUrlId, append('_1'), maskId));
                                         this.select('use.on-number-bar-text')
@@ -519,6 +570,12 @@ define([
                                             .attr('mask', _.compose(toUrlId, append('_1'), maskId));
 
                                     })
+
+                                function markOther(useTag) {
+                                    useTag.classed('other', function(pair) {
+                                        return pair[0] === OTHER_PLACEHOLDER;
+                                    })
+                                }
 
                                 function append(toAppend) {
                                     return function(str) {
