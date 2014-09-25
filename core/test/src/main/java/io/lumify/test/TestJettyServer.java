@@ -58,6 +58,7 @@ public class TestJettyServer extends JettyWebServer {
     }
 
     public void shutdown() {
+        LOGGER.info("shutdown");
         try {
             if (this.getServer() != null) {
                 this.getServer().stop();

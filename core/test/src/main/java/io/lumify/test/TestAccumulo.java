@@ -50,6 +50,7 @@ public class TestAccumulo {
     }
 
     public void shutdown() {
+        LOGGER.info("shutdown");
         try {
             if (accumulo != null) {
                 accumulo.stop();

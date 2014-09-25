@@ -266,6 +266,12 @@ public class GraphPropertyRunner {
         return names;
     }
 
+    public void shutdown() {
+        for (GraphPropertyThreadedWrapper wrapper : this.workerWrappers) {
+            wrapper.stop();
+        }
+    }
+
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;

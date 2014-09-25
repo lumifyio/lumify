@@ -55,6 +55,14 @@ public class InjectHelper {
         return workers;
     }
 
+    public static void shutdown() {
+        injector = null;
+    }
+
+    public static boolean hasInjector() {
+        return injector != null;
+    }
+
     public static interface ModuleMaker {
         Module createModule();
 

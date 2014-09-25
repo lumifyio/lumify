@@ -56,6 +56,7 @@ public class TestElasticSearch {
     }
 
     public void shutdown() {
+        LOGGER.info("shutdown");
         try {
             if (elasticSearchNode != null && !elasticSearchNode.isClosed()) {
                 elasticSearchNode.stop();

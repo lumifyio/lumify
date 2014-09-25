@@ -1,5 +1,6 @@
 package io.lumify.web;
 
+import com.altamiracorp.bigtable.model.ModelSession;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.lumify.core.FrameworkUtils;
@@ -16,6 +17,7 @@ import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereInterceptor;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
+import org.securegraph.Graph;
 
 import javax.servlet.*;
 import javax.servlet.annotation.ServletSecurity;
@@ -53,8 +55,28 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        safeLogInfo("BEGIN: Servlet context destroyed...");
+
+        safeLogInfo("Shutdown: ModelSession");
+        InjectHelper.getInstance(ModelSession.class).close();
+
+        safeLogInfo("Shutdown: Graph");
+        InjectHelper.getInstance(Graph.class).shutdown();
+
+        safeLogInfo("Shutdown: InjectHelper");
+        InjectHelper.shutdown();
+
+        safeLogInfo("Shutdown: LumifyBootstrap");
+        LumifyBootstrap.shutdown();
+
+        safeLogInfo("END: Servlet context destroyed...");
+    }
+
+    private void safeLogInfo(String message) {
         if (LOGGER != null) {
-            LOGGER.info("Servlet context destroyed...");
+            LOGGER.info("%s", message);
+        } else {
+            System.out.println(message);
         }
     }
 
@@ -113,7 +135,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     private void addCacheFilter(ServletContext context) {
         FilterRegistration.Dynamic filter = context.addFilter(CACHE_FILTER_NAME, CacheServletFilter.class);
         filter.setAsyncSupported(true);
-        String[] mappings = new String[] { "/", "*.html", "*.css", "*.js", "*.ejs", "*.less", "*.hbs", "*.map" };
+        String[] mappings = new String[]{"/", "*.html", "*.css", "*.js", "*.ejs", "*.less", "*.hbs", "*.map"};
         for (String mapping : mappings) {
             filter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, mapping);
         }

@@ -1,6 +1,8 @@
 package io.lumify.test;
 
+import com.altamiracorp.bigtable.model.ModelSession;
 import io.lumify.core.bootstrap.InjectHelper;
+import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.config.LumifyTestClusterConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
@@ -9,6 +11,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
+import org.securegraph.Graph;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,9 +106,44 @@ public class LumifyTestCluster {
     }
 
     public void shutdown() {
-        jetty.shutdown();
-        elasticsearch.shutdown();
-        accumulo.shutdown();
+        try {
+            jetty.shutdown();
+
+            LOGGER.info("shutdown: graphPropertyRunner");
+            graphPropertyRunner.shutdown();
+
+            LOGGER.info("shutdown: ModelSession");
+            if (InjectHelper.hasInjector()) {
+                ModelSession modelSession = InjectHelper.getInstance(ModelSession.class);
+                try {
+                    modelSession.close();
+                } catch (IllegalStateException ex) {
+                    // ignore this, the model session is already closed.
+                }
+            }
+
+            LOGGER.info("shutdown: Graph");
+            if (InjectHelper.hasInjector()) {
+                Graph graph = InjectHelper.getInstance(Graph.class);
+                graph.shutdown();
+            }
+
+            Thread.sleep(1000);
+
+            elasticsearch.shutdown();
+            accumulo.shutdown();
+
+            LOGGER.info("shutdown: InjectHelper");
+            InjectHelper.shutdown();
+
+            LOGGER.info("shutdown: LumifyBootstrap");
+            LumifyBootstrap.shutdown();
+
+            Thread.sleep(1000);
+            LOGGER.info("shutdown complete");
+        } catch (InterruptedException e) {
+            throw new RuntimeException("failed to sleep", e);
+        }
     }
 
     public Properties getLumifyConfig() {
