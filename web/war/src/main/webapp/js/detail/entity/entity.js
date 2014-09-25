@@ -121,6 +121,8 @@ define([
                         return;
                     }
 
+                    $badge.text(_.isNumber(result.totalReferences) ?
+                        F.number.prettyApproximate(result.totalReferences) : '');
                     $section.data('total', result.totalReferences);
 
                     var node = $content.empty().append('<div>').find('div'),
@@ -193,6 +195,7 @@ define([
             vertexRefresh
                 .done(function(vertex) {
                     self.vertex = vertex;
+                    self.attr.data = vertex;
                     self.$node.html(template({
                         vertex: vertex,
                         fullscreenButton: self.fullscreenButton([vertex.id]),

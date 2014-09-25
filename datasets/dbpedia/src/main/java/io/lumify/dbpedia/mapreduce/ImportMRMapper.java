@@ -1,5 +1,7 @@
 package io.lumify.dbpedia.mapreduce;
 
+import io.lumify.core.config.Configuration;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.mapreduce.LumifyElementMapperBase;
 import io.lumify.core.model.ontology.Concept;
@@ -17,6 +19,7 @@ import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
 import org.securegraph.accumulo.AccumuloAuthorizations;
+import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -44,7 +47,13 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         this.visibility = new Visibility("");
         this.authorizations = new AccumuloAuthorizations();
         AuthorizationRepository authorizationRepository = new InMemoryAuthorizationRepository();
-        this.ontologyRepository = new SecureGraphOntologyRepository(getGraph(), authorizationRepository);
+        try {
+            Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
+            Configuration config = HashMapConfigurationLoader.load(configurationMap);
+            this.ontologyRepository = new SecureGraphOntologyRepository(getGraph(), config, authorizationRepository);
+        } catch (Exception e) {
+            throw new IOException("Could not configure secure graph ontology repository", e);
+        }
         linesProcessedCounter = context.getCounter(DbpediaImportCounters.LINES_PROCESSED);
     }
 

@@ -4,6 +4,7 @@ define([
     'tpl!./form',
     'tpl!./shareRow',
     'tpl!./permissions',
+    'util/users/userSelect',
     'service/user',
     'service/workspace'
 ], function(
@@ -11,6 +12,7 @@ define([
     template,
     shareRowTemplate,
     permissionsTemplate,
+    UserSelect,
     UserService,
     WorkspaceService) {
     'use strict';
@@ -27,7 +29,6 @@ define([
             shareListSelector: '.share-list',
             shareHeader: '.share-header',
             shareFormSelector: '.share-form',
-            userSearchSelector: '.share-form input',
             permissionsSelector: '.permissions',
             permissionsRadioSelector: '.popover input',
             deleteSelector: '.delete',
@@ -41,6 +42,8 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.on(document, 'socketMessage', this.onSocketMessage);
+
             this.editable = this.attr.data.isEditable;
 
             this.$node.html(template({
@@ -50,7 +53,22 @@ define([
             this.userService.getCurrentUsers().done(this.loadUserPermissionsList.bind(this));
 
             if (this.editable) {
-                this.setupTypeahead();
+
+                this.on('userSelected', function(event, data) {
+                    if (data && data.user) {
+                        self.trigger('shareWorkspaceWithUser', {
+                            workspace: self.attr.data,
+                            user: data.user
+                        });
+                        self.trigger(this.select('shareFormSelector'), 'clearUser');
+                    }
+                });
+
+                UserSelect.attachTo(this.select('shareFormSelector'), {
+                    filterUserIds: _.pluck(self.attr.data.users, 'userId'),
+                    placeholder: i18n('workspaces.form.sharing.placeholder')
+                });
+
                 $(document).on('click.permPopover', function(event) {
                     var $target = $(event.target);
 
@@ -69,6 +87,20 @@ define([
                 this.select('titleSelector').on('change keyup paste', this.onChangeTitle.bind(this));
             }
         });
+
+        this.onSocketMessage = function(event, message) {
+            if (message && ~'userStatusChange'.indexOf(message.type)) {
+                var user = message.data;
+                this.$node.find('.share-list > .user-row').each(function() {
+                    var $this = $(this);
+                    if ($this.data('userId') === user.id) {
+                        $this.find('.user-status')
+                            .removeClass('online offline unknown')
+                            .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                    }
+                })
+            }
+        };
 
         var timeout;
         this.saveWorkspace = function(immediate, options) {
@@ -124,8 +156,8 @@ define([
             }
         };
 
-        this.shareRowDataForPermission = function(userPermission) {
-            var user = _.findWhere(this.currentUsers, { id: userPermission.userId });
+        this.shareRowDataForPermission = function(userPermission, _user) {
+            var user = _user || _.findWhere(this.currentUsers, { id: userPermission.userId });
             if (user) {
                 return {
                     user: {
@@ -135,6 +167,7 @@ define([
                             write: i18n('workspaces.form.sharing.access.edit')
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,
+                        status: user.status,
                         displayName: user.displayName
                     },
                     editable: this.editable
@@ -258,7 +291,14 @@ define([
                 })
                 .done(function() {
                     row.remove();
+                    self.updateUserSelectionFilter();
                 });
+        };
+
+        this.updateUserSelectionFilter = function() {
+            this.trigger(this.select('shareFormSelector'), 'updateFilterUserIds', {
+                userIds: _.pluck(this.attr.data.users, 'userId')
+            });
         };
 
         this.onShareWorkspaceWithUser = function(event, data) {
@@ -269,7 +309,7 @@ define([
                     userId: data.user.id,
                     access: 'READ'
                 },
-                row = $(shareRowTemplate(this.shareRowDataForPermission(user))).insertBefore(form),
+                row = $(shareRowTemplate(this.shareRowDataForPermission(user, data.user))).insertBefore(form),
                 badge = row.find('.permissions'),
                 revert = $.extend(true, {}, this.attr.data);
 
@@ -295,46 +335,10 @@ define([
                 .done(function() {
                     _.defer(function() {
                         self.makePopover(badge);
+                        self.updateUserSelectionFilter();
                     });
                 });
         };
 
-        this.setupTypeahead = function() {
-            var self = this,
-                userMap = {};
-
-            this.select('userSearchSelector').typeahead({
-                source: function(query, callback) {
-                    // TODO: pass query to backend to scale
-                    self.userService.getCurrentUsers()
-                        .done(function(response) {
-                            var users = response.users,
-                                regex = new RegExp(query, 'i'),
-                                search = users.filter(function(user) {
-                                    userMap[user.displayName] = user;
-
-                                    // Can't share with oneself
-                                    if (user.id === self.attr.data.createdBy) return false;
-
-                                    return regex.test(user.displayName);
-                                }),
-                                names = _.pluck(search, 'displayName');
-
-                            self.currentUsers = users;
-                            callback(names);
-                        });
-                },
-                updater: function(displayName) {
-                    var user = userMap[displayName];
-                    if (user) {
-                        self.trigger('shareWorkspaceWithUser', {
-                            workspace: self.attr.data,
-                            user: user
-                        });
-                    }
-                    return '';
-                }
-            });
-        };
     }
 });

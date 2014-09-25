@@ -30,6 +30,8 @@ define([
         this.after('initialize', function() {
             this.render();
 
+            this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
+
             this.on('searchRequestCompleted', function(event, data) {
                 if (data.success && data.result) {
                     var self = this,
@@ -47,6 +49,8 @@ define([
                                 result.totalHits === 0
                         );
 
+                    $searchResults.children('.content').scrollTop(0);
+
                     VertexList.attachTo($resultsContainer, {
                         vertices: vertices,
                         nextOffset: result.nextOffset,
@@ -55,7 +59,7 @@ define([
                     });
                     this.makeResizable($searchResults);
                     $searchResults.show().find('.multi-select');
-                    this.trigger(document, 'paneResized');
+                    this.trigger($searchResults, 'paneResized');
                 }
             });
             this.on('clearSearch', function() {
@@ -65,6 +69,12 @@ define([
                 this.trigger(filters, 'clearfilters');
             });
         });
+
+        this.onToggleDisplay = function(event, data) {
+            if (data.name === 'search' && this.$node.closest('.visible').length === 0) {
+                this.hideSearchResults();
+            }
+        };
 
         this.render = function() {
             this.$node.html(template({}));

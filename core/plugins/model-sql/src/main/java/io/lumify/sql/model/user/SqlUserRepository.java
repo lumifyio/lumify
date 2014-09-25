@@ -45,6 +45,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User findByUsername(String username) {
+        username = formatUsername(username);
         Session session = sessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.username=:username")
                 .setParameter("username", username)
@@ -85,6 +86,8 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
+        username = formatUsername(username);
+        displayName = displayName.trim();
         Session session = sessionManager.getSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -96,7 +99,7 @@ public class SqlUserRepository extends UserRepository {
             transaction = session.beginTransaction();
             newUser = new SqlUser();
             String id = "USER_" + graph.getIdGenerator().nextId().toString();
-            newUser.setUserId (id);
+            newUser.setUserId(id);
             newUser.setUsername(username);
             newUser.setDisplayName(displayName);
             newUser.setCreateDate(new Date());
@@ -151,7 +154,7 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public boolean isPasswordValid(User user, String password) {
         checkNotNull(password);
-        if (user == null || user.getUserId() == null|| (user.getUserId() != null && findById(user.getUserId()) == null)) {
+        if (user == null || user.getUserId() == null || (user.getUserId() != null && findById(user.getUserId()) == null)) {
             throw new LumifyException("User is not valid");
         }
 
@@ -301,6 +304,46 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         return authorizationRepository.createAuthorizations(new HashSet<String>());
+    }
+
+    @Override
+    public void setDisplayName(User user, String displayName) {
+        SqlUser sqlUser = sqlUser(user);
+        Session session = sessionManager.getSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            sqlUser.setDisplayName(displayName);
+
+            session.update(sqlUser);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while setting display name", e);
+        }
+    }
+
+    @Override
+    public void setEmailAddress(User user, String emailAddress) {
+        SqlUser sqlUser = sqlUser(user);
+        Session session = sessionManager.getSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            sqlUser.setEmailAddress(emailAddress);
+
+            session.update(sqlUser);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while setting e-mail address", e);
+        }
     }
 
     @Override

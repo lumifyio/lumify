@@ -34,6 +34,10 @@ define([
             { name: 'Underline', selector: 'underline' },
             { name: 'Colors', selector: 'colors' }
         ],
+        TEXT_PROPERTIES = [
+            'http://lumify.io#videoTranscript',
+            'http://lumify.io#text'
+        ],
         DEFAULT = 2,
         useDefaultStyle = true;
 
@@ -99,6 +103,7 @@ define([
             this.on('mousedown mouseup click dblclick contextmenu', this.trackMouse.bind(this));
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
             this.on(document, 'textUpdated', this.onTextUpdated);
+            this.on(document, 'verticesUpdated', this.onVerticesUpdatedWithHighlighting);
             this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
 
             this.applyHighlightStyle();
@@ -107,6 +112,21 @@ define([
         this.onTextUpdated = function(event, data) {
             if (data.vertexId === this.attr.data.id) {
                 this.updateText();
+            }
+        };
+
+        this.onVerticesUpdatedWithHighlighting = function(event, data) {
+            var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
+            if (vertex && data.options && data.options.originalData && data.options.originalData.properties) {
+                var foundTextLikePropertyChange = _.some(data.options.originalData.properties, function(p) {
+                    return _.some(TEXT_PROPERTIES, function(name) {
+                        return p.propertyName === name;
+                    });
+                });
+
+                if (foundTextLikePropertyChange) {
+                    this.updateText();
+                }
             }
         };
 
@@ -609,8 +629,9 @@ define([
                 scrollTop = scrollParent.scrollTop(),
                 expandedKey = this.$node.find('.text-section.expanded').data('key'),
                 textProperties = _.filter(this.attr.data.properties, function(p) {
-                    return p.name === 'http://lumify.io#videoTranscript' ||
-                        p.name === 'http://lumify.io#text'
+                    return _.some(TEXT_PROPERTIES, function(name) {
+                        return name === p.name;
+                    });
                 });
 
             this.select('textContainerSelector').html(
@@ -763,8 +784,12 @@ define([
             var self = this,
                 warningText = i18n('detail.text.none_available');
 
-            return !text ?  alertTemplate({ warning: warningText }) : text.replace(/(\n+)/g, '<br><br>$1');
+            return !text ?  alertTemplate({ warning: warningText }) : this.normalizeString(text);
         }
+
+        this.normalizeString = function(text) {
+            return text.replace(/(\n+)/g, '<br><br>$1');
+        };
 
     }
 });

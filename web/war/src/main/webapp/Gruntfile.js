@@ -125,6 +125,7 @@ module.exports = function(grunt) {
                 'test/spec/**/*.js',
                 '!js/**/three-plugins/*.js',
                 '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
+                '!js/plugin-development/**/*.js',
                 '!js/require.config.js'
             ],
         },
@@ -134,6 +135,7 @@ module.exports = function(grunt) {
                 'test/spec/**/*.js',
                 '!js/**/three-plugins/*.js',
                 '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
+                '!js/plugin-development/**/*.js',
                 '!js/require.config.js'
             ],
             options: {
@@ -172,7 +174,13 @@ module.exports = function(grunt) {
             tasks: ['less:development', 'notify:css']
         },
         scripts: {
-            files: ['js/**/*.js', 'js/**/*.ejs', 'js/**/*.hbs'],
+            files: [
+                'js/**/*.js',
+                'js/**/*.ejs',
+                'js/**/*.hbs',
+                'js/**/*.vsh',
+                'js/**/*.fsh'
+            ],
             tasks: ['requirejs:development', 'notify:js'],
             options: {
                 livereload: {

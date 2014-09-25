@@ -34,6 +34,9 @@ public abstract class ConfigurationLoader {
 
     public static Class getConfigurationLoaderClass() {
         String configLoaderName = System.getenv(ENV_CONFIGURATION_LOADER);
+        if (configLoaderName == null) {
+            configLoaderName = System.getProperty(ENV_CONFIGURATION_LOADER);
+        }
         if (configLoaderName != null) {
             return getConfigurationLoaderByName(configLoaderName);
         }

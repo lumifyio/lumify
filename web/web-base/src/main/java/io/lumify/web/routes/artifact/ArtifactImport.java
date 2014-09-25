@@ -88,7 +88,7 @@ public class ArtifactImport extends BaseRequestHandler {
     private JSONArray getVertexIdsJsonArray(List<Vertex> vertices) {
         JSONArray vertexIdsJson = new JSONArray();
         for (Vertex v : vertices) {
-            vertexIdsJson.put(v.getId().toString());
+            vertexIdsJson.put(v.getId());
         }
         return vertexIdsJson;
     }

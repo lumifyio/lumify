@@ -122,12 +122,14 @@ public abstract class WorkspaceRepository {
             workspaceJson.put("users", usersJson);
 
             if (includeVertices) {
-                JSONObject entitiesJson = new JSONObject();
+                JSONArray verticesJson = new JSONArray();
                 for (WorkspaceEntity workspaceEntity : findEntities(workspace, user)) {
                     if (!workspaceEntity.isVisible()) {
                         continue;
                     }
-                    JSONObject workspaceEntityJson = new JSONObject();
+
+                    JSONObject vertexJson = new JSONObject();
+                    vertexJson.put("vertexId", workspaceEntity.getEntityVertexId());
 
                     Integer graphPositionX = workspaceEntity.getGraphPositionX();
                     Integer graphPositionY = workspaceEntity.getGraphPositionY();
@@ -135,12 +137,12 @@ public abstract class WorkspaceRepository {
                         JSONObject graphPositionJson = new JSONObject();
                         graphPositionJson.put("x", graphPositionX);
                         graphPositionJson.put("y", graphPositionY);
-                        workspaceEntityJson.put("graphPosition", graphPositionJson);
+                        vertexJson.put("graphPosition", graphPositionJson);
                     }
 
-                    entitiesJson.put(workspaceEntity.getEntityVertexId().toString(), workspaceEntityJson);
+                    verticesJson.put(vertexJson);
                 }
-                workspaceJson.put("entities", entitiesJson);
+                workspaceJson.put("vertices", verticesJson);
             }
 
             return workspaceJson;

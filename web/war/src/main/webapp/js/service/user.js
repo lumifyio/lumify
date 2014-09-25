@@ -138,6 +138,15 @@ define([
         });
     };
 
+    UserService.prototype.search = function(query) {
+        return this._ajaxGet({
+            url: 'users',
+            data: {
+                q: query
+            }
+        });
+    };
+
     UserService.prototype.getUser = function(userName) {
         return this._ajaxGet({
             url: 'user',
@@ -171,6 +180,25 @@ define([
         }
 
         return deferred.promise();
+    };
+
+    UserService.prototype.setPreferences = function(prefs) {
+        return this._ajaxPost({
+            url: 'user/ui-preferences/set',
+            data: {
+                'ui-preferences': prefs
+            }
+        });
+    };
+
+    UserService.prototype.setPreference = function(name, value) {
+        return this._ajaxPost({
+            url: 'user/ui-preferences/set',
+            data: {
+                name: name,
+                value: value
+            }
+        });
     };
 
     UserService.prototype.clearLocalStorage = function() {

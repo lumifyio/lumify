@@ -35,7 +35,7 @@
         <repository>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>interval:60</updatePolicy>
             </snapshots>
             <id>lumify-snapshots</id>
             <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
@@ -45,7 +45,7 @@
         <repository>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <id>informatik.uni-erlangen-snapshots</id>
             <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.

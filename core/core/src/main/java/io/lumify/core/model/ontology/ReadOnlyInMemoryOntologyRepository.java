@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -21,7 +20,10 @@ import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -43,31 +45,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         owlConfig.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology(authorizations);
+            defineOntology(config, authorizations);
         } else {
             LOGGER.info("Base ontology already defined.");
-        }
-
-        for (String key : config.getKeys(Configuration.ONTOLOGY_REPOSITORY_OWL)) {
-            if (key.endsWith(".iri")) {
-                String iri = config.getOrNull(key);
-                String dir = config.getOrNull(key.replace(".iri", ".dir"));
-                String file = config.getOrNull(key.replace(".iri", ".file"));
-
-                if (iri != null) {
-                    if (dir != null) {
-                        File owlFile = findOwlFile(new File(dir));
-                        if (owlFile == null) {
-                            throw new LumifyResourceNotFoundException("could not find owl file in directory " + new File(dir).getAbsolutePath());
-                        }
-                        importFile(owlFile, IRI.create(iri), authorizations);
-                    } else if (file != null) {
-                        writePackage(new File(file), IRI.create(iri), authorizations);
-                    } else {
-                        throw new LumifyResourceNotFoundException("iri " + iri + " without matching dir or file");
-                    }
-                }
-            }
         }
     }
 
@@ -148,9 +128,10 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
+            String displayType,
             Double boost) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable, displayTime, boost);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable, displayTime, displayType, boost);
         concept.getProperties().add(property);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
@@ -173,6 +154,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
+            String displayType,
             Double boost) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
@@ -183,6 +165,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setTitle(propertyName);
             property.setDisplayTime(displayTime);
             property.setBoost(boost);
+            property.setDisplayType(displayType);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }
@@ -232,7 +215,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public String getDisplayNameForLabel(String relationshipIRI) {
-        return relationshipsCache.asMap().get(relationshipIRI).getDisplayName();
+        InMemoryRelationship relationship = relationshipsCache.asMap().get(relationshipIRI);
+        checkNotNull(relationship, "Could not find relationship " + relationshipIRI);
+        return relationship.getDisplayName();
     }
 
     @Override

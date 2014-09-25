@@ -320,7 +320,7 @@ define([
                 }
             }).done(function(config, verticesResponse) {
                 var vertices = verticesResponse[0].vertices,
-                    count = vertices.length,
+                    count = verticesResponse[0].count,
                     eventOptions = {
                         options: {
                             addingVerticesRelatedTo: data.vertexId
@@ -1039,7 +1039,12 @@ define([
 
                         var serverVertices = vertexResponse[0],
                             vertices = serverVertices.map(function(vertex) {
-                                var workspaceData = workspace.entities[vertex.id] || {};
+                                var workspaceData = {};
+                                workspace.vertices.forEach(function(v) {
+                                    if (v.vertexId == vertex.id) {
+                                        workspaceData = v;
+                                    }
+                                });
                                 delete workspaceData.dropPosition;
                                 workspaceData.selected = false;
                                 vertex.workspace = workspaceData;
@@ -1220,11 +1225,14 @@ define([
                                 { name: 'http://lumify.io#conceptType', value: info['http://lumify.io#conceptType'] },
                             ];
 
-                            self.updateCacheWithVertex({
-                                id: vertexId,
-                                properties: properties
-                            });
-                            id = vertexId;
+                            id = info.graphVertexId || info.id || vertexId;
+
+                            if (!(id in self.cachedVertices)) {
+                                // Insert stub, since this is synchronous, but
+                                // then refresh with server
+                                self.updateCacheWithVertex({ id: id, properties: properties });
+                                self.refresh([id], true);
+                            }
                         }
 
                         // Detected objects

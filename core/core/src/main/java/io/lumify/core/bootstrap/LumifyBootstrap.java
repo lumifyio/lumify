@@ -186,6 +186,10 @@ public class LumifyBootstrap extends AbstractModule {
         }
     }
 
+    public static void shutdown() {
+        lumifyBootstrap = null;
+    }
+
     private static class CuratorFrameworkProvider implements Provider<CuratorFramework> {
         private String zookeeperConnectionString;
         private RetryPolicy retryPolicy;

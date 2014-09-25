@@ -18,6 +18,8 @@
         <module>server</module>
         <module>war</module>
         <module>plugins</module>
+        <module>client-api</module>
+        <module>client-api-codegen</module>
     </modules>
 
 

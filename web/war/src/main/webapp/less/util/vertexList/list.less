@@ -138,6 +138,16 @@ body > .vertex-dragging {
           }
         }
       }
+
+      &.loading a {
+        background-image: url(../img/loading.gif);
+        background-size: auto 12px;
+        background-repeat: no-repeat;
+        background-position: 4px center;
+      }
+      &.loading.active a {
+        background-image: url(../img/loading-active.gif);
+      }
     }
   }
 

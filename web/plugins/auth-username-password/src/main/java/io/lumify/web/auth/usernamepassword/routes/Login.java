@@ -23,7 +23,7 @@ public class Login extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String username = UrlUtils.urlDecode(request.getParameter("username")).trim().toLowerCase();
+        final String username = UrlUtils.urlDecode(request.getParameter("username"));
         final String password = UrlUtils.urlDecode(request.getParameter("password")).trim();
 
         User user = getUserRepository().findByUsername(username);

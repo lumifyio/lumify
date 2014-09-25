@@ -258,7 +258,8 @@ define([
                         visibilitySpan = d3.select(this).select('.visibility').node(),
                         visibility = isVisibility(property),
                         ontologyProperty = self.ontologyProperties.byTitle[property.name],
-                        dataType = ontologyProperty && ontologyProperty.dataType;
+                        dataType = ontologyProperty && ontologyProperty.dataType,
+                        displayType = ontologyProperty && ontologyProperty.displayType;
 
                     valueSpan.textContent = '';
                     visibilitySpan.textContent = '';
@@ -275,7 +276,10 @@ define([
                         (Privileges.canEDIT || F.vertex.hasMetadata(property))
                     ));
 
-                    if (dataType && F.vertex.properties[dataType]) {
+                    if (displayType && F.vertex.properties[displayType]) {
+                        F.vertex.properties[displayType](valueSpan, property, self.attr.data.id);
+                        return;
+                    } else if (dataType && F.vertex.properties[dataType]) {
                         F.vertex.properties[dataType](valueSpan, property, self.attr.data.id);
                         return;
                     }

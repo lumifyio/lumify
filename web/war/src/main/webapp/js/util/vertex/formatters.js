@@ -100,6 +100,10 @@ define([
                     anchor.appendTo(el);
                 },
 
+                byte: function(el, property) {
+                    el.textContent = F.bytes.pretty(property.value);
+                },
+
                 heading: function(el, property) {
                     var div = document.createElement('div'),
                         dim = 12,
@@ -294,6 +298,7 @@ define([
                             break;
 
                         case 'double':
+                        case 'integer':
                         case 'heading':
                         case 'currency':
                             compareFunction = predicateCompare;
@@ -349,6 +354,12 @@ define([
                     }
                 }
 
+                if (ontologyProperty.displayType) {
+                    switch (ontologyProperty.displayType) {
+                        case 'byte': return F.bytes.pretty(value)
+                    }
+                }
+
                 switch (ontologyProperty.dataType) {
                     case 'boolean': return F.boolean.pretty(value);
 
@@ -362,6 +373,7 @@ define([
                     case 'heading': return F.number.heading(value);
 
                     case 'double':
+                    case 'integer':
                     case 'currency':
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);

@@ -20,6 +20,7 @@ define([
     'util/vertex/menu',
     'util/contextMenu',
     'util/privileges',
+    'util/withAsyncQueue',
     'service/user',
     'service/vertex'
 ], function(
@@ -43,11 +44,12 @@ define([
     VertexMenu,
     ContextMenu,
     Privileges,
+    withAsyncQueue,
     UserService,
     VertexService) {
     'use strict';
 
-    return defineComponent(App, withFileDrop);
+    return defineComponent(App, withFileDrop, withAsyncQueue);
 
     function App() {
         var Graph3D,
@@ -106,6 +108,8 @@ define([
 
             window.lumifyApp = this;
 
+            this.setupAsyncQueue('currentUser');
+
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
 
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
@@ -120,9 +124,14 @@ define([
             this.on(document, 'toggleGraphDimensions', this.onToggleGraphDimensions);
             this.on(document, 'resizestart', this.onResizeStart);
             this.on(document, 'resizestop', this.onResizeStop);
-            this.on(document, 'windowResize', this.triggerPaneResized);
+            this.on(document, 'windowResize', this.onWindowResize);
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
+            this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
+
+            if (window.currentUser) {
+                this.currentUserMarkReady(window.currentUser);
+            }
 
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'escape', this.onEscapeKey);
@@ -163,15 +172,19 @@ define([
                 adminPane = content.filter('.admin-pane').data(DATA_MENUBAR_NAME, 'admin'),
                 chatPane = content.filter('.chat-pane').data(DATA_MENUBAR_NAME, 'chat'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
-                detailPane = content.filter('.detail-pane'),
+                detailPane = content.filter('.detail-pane').data(DATA_MENUBAR_NAME, 'detail'),
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
                 helpDialog = content.filter('.help-dialog');
 
+            this.on('resizecreate', this.onResizeCreateLoad);
+            this.on('resizestart', this.onResizeStartHandleMaxWidths);
+            this.on('resizestop', this.onResizeStopSave);
+
             // Configure splitpane resizing
-            resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this));
-            resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
-            resizable(adminPane, 'e', 190, 250, this.onPaneResize.bind(this));
-            resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
+            resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
+            resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
+            resizable(adminPane, 'e', 190, 250, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
+            resizable(detailPane, 'w', 200, 500, this.onPaneResize.bind(this), this.onResizeCreateLoad.bind(this));
 
             ContextMenu.attachTo(document);
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
@@ -226,6 +239,13 @@ define([
                 }
             }, 500);
         });
+
+        this.onCurrentUserChanged = function(event, user) {
+            if (user) {
+                this.currentUserUnload();
+                this.currentUserMarkReady(user);
+            }
+        };
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
@@ -413,8 +433,16 @@ define([
                 });
         };
 
+        this.onChatMessage = function(e, data) {
+            if (!this.select('chatSelector').hasClass('visible')) {
+                this.trigger(document, 'menubarToggleDisplay', {
+                    name: this.select('chatSelector').data(DATA_MENUBAR_NAME)
+                });
+            }
+        };
+
         this.toggleDisplay = function(e, data) {
-            var SLIDE_OUT = 'search workspaces',
+            var SLIDE_OUT = 'search workspaces admin',
                 pane = this.select(data.name + 'Selector'),
                 isVisible = pane.is('.visible');
 
@@ -429,12 +457,14 @@ define([
             if (SLIDE_OUT.indexOf(data.name) >= 0) {
                 var self = this;
 
+                // TODO: NEED TO MOVE FURTHER LEFT TO COLLAPSE!!!!!
+
                 pane.one(TRANSITION_END, function() {
                     pane.off(TRANSITION_END);
                     if (!isVisible) {
                         self.trigger(data.name + 'PaneVisible');
                     }
-                    self.triggerPaneResized();
+                    self.triggerPaneResized(isVisible ? null : pane);
                 });
             } else this.triggerPaneResized();
 
@@ -451,22 +481,15 @@ define([
             })
         };
 
-        this.onChatMessage = function(e, data) {
-            if (!this.select('chatSelector').hasClass('visible')) {
-                this.trigger(document, 'menubarToggleDisplay', {
-                    name: this.select('chatSelector').data(DATA_MENUBAR_NAME)
-                });
-            }
-        };
-
         this.onObjectsSelected = function(e, data) {
             var detailPane = this.select('detailPaneSelector'),
                 minWidth = 100,
                 width = 0,
                 vertices = data.vertices,
-                edges = data.edges;
+                edges = data.edges,
+                makeVisible = vertices.length || edges.length;
 
-            if (vertices.length || edges.length) {
+            if (makeVisible) {
                 if (detailPane.width() < minWidth) {
                     detailPane[0].style.width = null;
                 }
@@ -476,18 +499,21 @@ define([
                 detailPane.removeClass('visible').addClass('collapsed');
             }
 
-            this.triggerPaneResized();
+            this.triggerPaneResized(makeVisible ? detailPane : null);
         };
 
-        this.onInternalPaneResize = function() {
-            this.triggerPaneResized();
+        this.onInternalPaneResize = function(event) {
+            var $target = event && $(event.target),
+                openingPane = $target && $target.length && $target.is('.ui-resizable') && $target || undefined;
+
+            this.triggerPaneResized(openingPane);
         };
 
         this.onPaneResize = function(e, ui) {
             this.triggerPaneResized();
         };
 
-        this.triggerPaneResized = function() {
+        this.triggerPaneResized = function(openingPane) {
             var PANE_BORDER_WIDTH = 1,
                 searchWidth = this.select('searchSelector')
                     .filter('.visible:not(.collapsed)')
@@ -533,7 +559,119 @@ define([
                 padding.r += PANE_BORDER_WIDTH;
             }
 
+            if (openingPane) {
+                var openingPaneWidth = openingPane.width(),
+                    otherVisiblePanes = [],
+                    availableWidth = this.availablePaneWidth(openingPane, otherVisiblePanes),
+                    pixelsNeeded = openingPaneWidth - availableWidth;
+
+                if (pixelsNeeded > 0) {
+                    _.chain(otherVisiblePanes)
+
+                        // Sort otherVisiblePanes with first being not a parent of openingPane
+                        // So that the search results resizes detail first instead of search query
+                        .sortBy(function(pane) {
+                            return openingPane.closest(pane).length;
+                        })
+
+                        // We resize the opening pane if we have to
+                        .tap(function(panes) {
+                            panes.push(openingPane);
+                        })
+
+                        .each(function(pane) {
+                            // First resize otherVisiblePanes as much as needed (minWidth), then resize openingPane
+                            if (pixelsNeeded <= 0) {
+                                return;
+                            }
+
+                            var $pane = $(pane),
+                                paneWidth = $pane.width(),
+                                minWidth = $pane.resizable('option', 'minWidth'),
+                                newWidth = Math.max(minWidth, paneWidth - pixelsNeeded);
+                                pixelsCompressing = paneWidth - newWidth;
+
+                            pixelsNeeded -= pixelsCompressing;
+
+                            $pane.width(newWidth);
+                        });
+
+                    return this.triggerPaneResized();
+                }
+            }
+
             this.trigger(document, 'graphPaddingUpdated', { padding: padding });
+        };
+
+        this.availablePaneWidth = function(withoutPane, openPanesOut) {
+            var windowWidth = $(window).width(),
+                menubarWidth = $('.menubar-pane').width(),
+                workspaceOverlayWidth = $('.workspace-overlay').outerWidth(),
+                otherVisiblePanes = $('#app > .ui-resizable.visible, .ui-resizable.visible .ui-resizable:visible')
+                    .not(withoutPane).toArray(),
+                widthOfOpenPanes = _.reduce(
+                    otherVisiblePanes,
+                    function(width, el) {
+                        var $el = $(el);
+                        return width + $el.width();
+                    },
+                    0
+                ),
+                maxWidthAllowed = windowWidth - menubarWidth - widthOfOpenPanes - workspaceOverlayWidth;
+
+            // Add visible to out parameter
+            if (openPanesOut) {
+                openPanesOut.splice.apply(openPanesOut, [0, openPanesOut.length].concat(otherVisiblePanes));
+            }
+
+            return maxWidthAllowed;
+        };
+
+        this.onResizeCreateLoad = function(event, ui) {
+            this.currentUserReady(function(user) {
+                var $pane = $(event.target),
+                    sizePaneName = $pane.data('sizePreference'),
+                    widthPaneName = !sizePaneName && $pane.data('widthPreference'),
+                    nameToPref = function(name) {
+                        return name && ('pane-' + name);
+                    },
+                    prefName = nameToPref(sizePaneName || widthPaneName),
+                    userPrefs = user.uiPreferences,
+                    value = userPrefs && prefName in userPrefs && userPrefs[prefName];
+
+                if (sizePaneName && value) {
+                    var size = value.split(',');
+                    if (size.length === 2) {
+                        $pane.width(parseInt(size[0], 10));
+                        $pane.height(parseInt(size[1], 10));
+                    }
+                } else if (widthPaneName && value) {
+                    $pane.width(parseInt(value, 10));
+                } else if (!prefName && !$pane.is('.facebox')) {
+                    console.warn(
+                        'No data-width-preference or data-size-preference ' +
+                        'attribute for resizable pane', $pane[0]
+                    );
+                }
+            });
+        };
+
+        this.onResizeStartHandleMaxWidths = function(event, ui) {
+            var thisPane = ui.element,
+                maxWidthAllowed = this.availablePaneWidth(thisPane);
+
+            thisPane.resizable('option', 'maxWidth', maxWidthAllowed);
+        };
+
+        this.onResizeStopSave = function(event, ui) {
+            var sizePaneName = ui.helper.data('sizePreference'),
+                widthPaneName = ui.helper.data('widthPreference');
+
+            if (sizePaneName) {
+                userService.setPreference('pane-' + sizePaneName, ui.element.width() + ',' + ui.element.height());
+            } else if (widthPaneName) {
+                userService.setPreference('pane-' + widthPaneName, ui.element.width());
+            }
         };
 
         this.onSyncStarted = function() {
@@ -584,6 +722,10 @@ define([
             this.triggerPaneResized();
         };
 
+        this.onWindowResize = function() {
+            this.triggerPaneResized();
+        };
+
         this.onResizeStart = function() {
             var wrapper = $('.draggable-wrapper');
 
@@ -599,12 +741,13 @@ define([
         };
     }
 
-    function resizable(el, handles, minWidth, maxWidth, callback) {
+    function resizable(el, handles, minWidth, maxWidth, callback, createCallback) {
         return el.resizable({
             handles: handles,
             minWidth: minWidth || 150,
             maxWidth: maxWidth || 300,
-            resize: callback
+            resize: callback,
+            create: createCallback
         });
     }
 

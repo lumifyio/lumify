@@ -40,6 +40,8 @@ public class InMemoryUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
+        username = formatUsername(username);
+        displayName = displayName.trim();
         InMemoryUser user = new InMemoryUser(username, displayName, emailAddress, getDefaultPrivileges(), userAuthorizations, null);
         userListenerUtil.fireNewUserAddedEvent(user);
         return user;
@@ -97,6 +99,12 @@ public class InMemoryUserRepository extends UserRepository {
         Collections.addAll(auths, additionalAuthorizations);
         return new InMemoryAuthorizations(auths.toArray(new String[auths.size()]));
     }
+
+    @Override
+    public void setDisplayName(User user, String displayName) { throw new RuntimeException("Not implemented"); }
+
+    @Override
+    public void setEmailAddress(User user, String emailAddress) { throw new RuntimeException("Not implemented"); }
 
     @Override
     public Set<Privilege> getPrivileges(User user) {

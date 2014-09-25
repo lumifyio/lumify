@@ -98,7 +98,7 @@ public class Router extends HttpServlet {
             app.get("/vertex/relationships", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexRelationships.class);
             app.post("/vertex/removeRelationship", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRelationshipRemoval.class);
             app.post("/vertex/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
-            app.post("/vertex", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
+            app.post("/vertex/new", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
 
             app.post("/relationship/property/set", authenticator, csrfProtector, EditPrivilegeFilter.class, SetRelationshipProperty.class);
             app.post("/relationship/property/delete", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteRelationshipProperty.class);
@@ -112,7 +112,7 @@ public class Router extends HttpServlet {
             app.get("/graph/vertex/geoLocationSearch", authenticator, csrfProtector, ReadPrivilegeFilter.class, GraphGeoLocationSearch.class);
             app.post("/graph/vertex/uploadImage", authenticator, csrfProtector, EditPrivilegeFilter.class, GraphVertexUploadImage.class);
 
-            app.get("/workspaces", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
+            app.get("/workspace/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
             app.post("/workspace/new", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceNew.class);
             app.get("/workspace/diff", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceDiff.class);
             app.get("/workspace/relationships", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceRelationships.class);
@@ -125,7 +125,7 @@ public class Router extends HttpServlet {
             app.post("/workspace/undo", authenticator, csrfProtector, EditPrivilegeFilter.class, WorkspaceUndo.class);
 
             app.get("/user/me", authenticator, csrfProtector, MeGet.class);
-            app.get("/user/ui-preferences/set", authenticator, csrfProtector, UserSetUiPreferences.class);
+            app.post("/user/ui-preferences/set", authenticator, csrfProtector, UserSetUiPreferences.class);
             app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
             app.get("/users", authenticator, csrfProtector, UserList.class);
             app.get("/user/info", authenticator, csrfProtector, UserInfo.class);

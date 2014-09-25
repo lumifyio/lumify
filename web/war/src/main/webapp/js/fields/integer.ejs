@@ -1,0 +1,27 @@
+<!-- Table because flexbox isnt supported enough and need [fixed width]|[remaining percent] on one line -->
+
+<table cellpadding="0">
+  <tr class="input-prepend">
+
+    <td class="predicate-row">
+      <span class="add-on">
+        <% if (predicates) { %>
+        <select class="predicate">
+          <option value="<"><%= i18n('field.double.form.less_than') %></option>
+          <option value=">"><%= i18n('field.double.form.greater_than') %></option>
+          <option value="range"><%= i18n('field.double.form.between') %></option>
+          <option value="="><%= i18n('field.double.form.equal') %></option>
+        </select>
+        <% } else { %>
+          <%= i18n('field.double.addon.prefix') %>
+        <% } %>
+      </span>
+    </td>
+
+    <td class="input-row">
+      <input type="text" pattern="[\d,]+" value="<%= value %>">
+      <input class="range-only" pattern="[\d,]+" type="text">
+    </td>
+  </tr>
+</table>
+

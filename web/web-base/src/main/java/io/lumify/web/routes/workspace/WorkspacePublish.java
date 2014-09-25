@@ -12,7 +12,6 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
@@ -33,9 +32,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class WorkspacePublish extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspacePublish.class);
@@ -56,8 +57,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             final Graph graph,
             final VisibilityTranslator visibilityTranslator,
             final OntologyRepository ontologyRepository,
-            final WorkspaceRepository workspaceRepository,
-            final WorkQueueRepository workQueueRepository) {
+            final WorkspaceRepository workspaceRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
@@ -93,6 +93,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishVertices(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN publishVertices");
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
             try {
@@ -105,7 +106,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 checkNotNull(vertexId);
                 Vertex vertex = graph.getVertex(vertexId, authorizations);
                 checkNotNull(vertex);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
                     String msg;
                     if (action.equals("delete")) {
                         msg = "Cannot delete public vertex " + vertexId;
@@ -124,10 +125,12 @@ public class WorkspacePublish extends BaseRequestHandler {
                 failures.put(data);
             }
         }
+        LOGGER.debug("END publishVertices");
         graph.flush();
     }
 
     private void publishEdges(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN publishEdges");
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
             try {
@@ -137,9 +140,9 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
-                Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
-                Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
+                Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
+                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
                     String error_msg;
                     if (action.equals("delete")) {
                         error_msg = "Cannot delete a public edge";
@@ -167,10 +170,12 @@ public class WorkspacePublish extends BaseRequestHandler {
                 failures.put(data);
             }
         }
+        LOGGER.debug("END publishEdges");
         graph.flush();
     }
 
     private void publishProperties(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN publishProperties");
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
             try {
@@ -179,38 +184,90 @@ public class WorkspacePublish extends BaseRequestHandler {
                 if (!type.equals("property")) {
                     continue;
                 }
-                checkNotNull(data.getString("vertexId"));
-                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
-                checkNotNull(vertex);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                    String error_msg;
-                    if (action.equals("delete")) {
-                        error_msg = "Cannot delete a public property";
-                    } else {
-                        error_msg = "Property is already public";
+                Element element = getPropertyElement(authorizations, data);
+
+                String propertyKey = data.getString("key");
+                String propertyName = data.getString("name");
+
+                OntologyProperty ontologyProperty = ontologyRepository.getProperty(propertyName);
+                if (!ontologyProperty.getUserVisible() || propertyName.equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
+                    continue;
+                }
+
+                List<Property> properties = toList(element.getProperties(propertyName));
+                SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
+                boolean propertyFailed = false;
+                for (int propertyIndex = 0; propertyIndex < properties.size(); propertyIndex++) {
+                    Property property = properties.get(propertyIndex);
+                    if (!property.getKey().equals(propertyKey)) {
+                        continue;
                     }
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
+                    SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
+
+                    if (propertySandboxStatus == SandboxStatus.PUBLIC) {
+                        String error_msg;
+                        if (action.equals("delete")) {
+                            error_msg = "Cannot delete a public property";
+                        } else {
+                            error_msg = "Property is already public";
+                        }
+                        LOGGER.warn(error_msg);
+                        data.put("error_msg", error_msg);
+                        failures.put(data);
+                        propertyFailed = true;
+                    }
+                }
+
+                if (propertyFailed) {
+                    continue;
+                }
+
+                if (GraphUtil.getSandboxStatus(element, workspaceId) != SandboxStatus.PUBLIC) {
+                    String errorMessage = "Cannot publish a modification of a property on a private element: " + element.getId();
+                    JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(element);
+                    LOGGER.warn("%s: visibilityJson: %s, workspaceId: %s", errorMessage, visibilityJson.toString(), workspaceId);
+                    data.put("error_msg", errorMessage);
                     failures.put(data);
                     continue;
                 }
 
-                if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
-                    String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId();
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
-                    continue;
-                }
-
-                publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user, authorizations);
+                publishProperty(element, action, propertyKey, propertyName, workspaceId, user, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
                 failures.put(data);
             }
         }
+        LOGGER.debug("END publishProperties");
         graph.flush();
+    }
+
+    private Element getPropertyElement(Authorizations authorizations, JSONObject data) {
+        Element element = null;
+
+        String elementId = data.optString("edgeId", null);
+        if (elementId != null) {
+            element = graph.getEdge(elementId, authorizations);
+        }
+
+        if (element == null) {
+            elementId = data.optString("vertexId", null);
+            if (elementId != null) {
+                element = graph.getVertex(elementId, authorizations);
+            }
+        }
+
+        if (element == null) {
+            elementId = data.optString("elementId", null);
+            checkNotNull(elementId, "elementId, vertexId, or edgeId is required to publish a property");
+            element = graph.getVertex(elementId, authorizations);
+            if (element == null) {
+                element = graph.getEdge(elementId, authorizations);
+            }
+        }
+
+        checkNotNull(element, "Could not find edge/vertex with id: " + elementId);
+        return element;
     }
 
     private void publishVertex(Vertex vertex, String action, Authorizations authorizations, String workspaceId, User user) throws IOException {
@@ -229,8 +286,8 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+
         ExistingElementMutation<Vertex> vertexElementMutation = vertex.prepareMutation();
-        vertex.removeProperty(LumifyProperties.VISIBILITY_SOURCE.getPropertyName(), authorizations);
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : vertex.getProperties()) {
@@ -242,6 +299,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         Map<String, Object> metadata = new HashMap<String, Object>();
+        // we need to alter the visibility of the json property, otherwise we'll have two json properties, one with the old visibility and one with the new.
+        LumifyProperties.VISIBILITY_SOURCE.alterVisibility(vertexElementMutation, lumifyVisibility.getVisibility());
         LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
         LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save(authorizations);

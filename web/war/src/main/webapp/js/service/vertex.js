@@ -87,7 +87,7 @@ define([
 
     VertexService.prototype.createVertex = function(conceptType, visibilitySource) {
         return this._ajaxPost({
-            url: 'vertex',
+            url: 'vertex/new',
             data: {
                 conceptType: conceptType,
                 visibilitySource: visibilitySource

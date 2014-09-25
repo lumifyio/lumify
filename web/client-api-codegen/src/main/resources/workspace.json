@@ -1,0 +1,394 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/workspace",
+    "apis": [
+        {
+            "path": "/workspace/all",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets all workspaces",
+                    "type": "Workspaces",
+                    "nickname": "getAll"
+                }
+            ]
+        },
+        {
+            "path": "/workspace",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get a workspace",
+                    "type": "Workspace",
+                    "nickname": "getById",
+                    "parameters": [
+                        {
+                            "name": "workspaceId",
+                            "description": "ID of the workspace",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/new",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Create a new workspace",
+                    "type": "Workspace",
+                    "nickname": "create"
+                }
+            ]
+        },
+        {
+            "path": "/workspace/update",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Update items on a workspace",
+                    "type": "void",
+                    "nickname": "update",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "data",
+                            "description": "the update data",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/updateDummy",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Dummy method to force WorkspaceUpdateData to be generated",
+                    "type": "WorkspaceUpdateData",
+                    "nickname": "zzzUpdateDummy",
+                    "parameters": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/diff",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get a workspace diff",
+                    "type": "WorkspaceDiff",
+                    "nickname": "getDiff",
+                    "parameters": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/publish",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "publish diff items",
+                    "type": "PublishResponse",
+                    "nickname": "publish",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "publishData",
+                            "description": "data to publish",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/publishDummy",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Dummy method to force PublishItem to be generated",
+                    "type": "PublishItem",
+                    "nickname": "zzzPublishDummy",
+                    "parameters": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Workspaces": {
+            "id": "Workspaces",
+            "properties": {
+                "workspaces": {
+                    "type": "array",
+                    "items": {
+                        "type": "Workspace"
+                    }
+                }
+            }
+        },
+        "Workspace": {
+            "id": "Workspace",
+            "properties": {
+                "workspaceId": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
+                "isSharedToUser": {
+                    "type": "boolean"
+                },
+                "isEditable": {
+                    "type": "boolean"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceUser"
+                    }
+                },
+                "vertices": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceVertex"
+                    }
+                }
+            }
+        },
+        "WorkspaceUser": {
+            "id": "WorkspaceUser",
+            "properties": {
+                "userId": {
+                    "type": "string"
+                },
+                "access": {
+                    "type": "string"
+                }
+            }
+        },
+        "WorkspaceVertex": {
+            "id": "WorkspaceVertex",
+            "properties": {
+                "vertexId": {
+                    "type": "string"
+                },
+                "graphPosition": {
+                    "type": "GraphPosition"
+                }
+            }
+        },
+        "WorkspaceUpdateData": {
+            "id": "WorkspaceUpdateData",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "entityUpdates": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceEntityUpdate"
+                    }
+                },
+                "entityDeletes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "userUpdates": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceUserUpdate"
+                    }
+                },
+                "userDeletes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "WorkspaceEntityUpdate": {
+            "id": "WorkspaceEntityUpdate",
+            "properties": {
+                "vertexId": {
+                    "type": "string"
+                },
+                "graphPosition": {
+                    "type": "GraphPosition"
+                }
+            }
+        },
+        "GraphPosition": {
+            "id": "GraphPosition",
+            "properties": {
+                "x": {
+                    "type": "integer",
+                    "format": "int32",
+                    "required": true
+                },
+                "y": {
+                    "type": "integer",
+                    "format": "int32",
+                    "required": true
+                }
+            }
+        },
+        "WorkspaceUserUpdate": {
+            "id": "WorkspaceUserUpdate",
+            "properties": {
+                "userId": {
+                    "type": "string"
+                },
+                "access": {
+                    "type": "string"
+                }
+            }
+        },
+        "WorkspaceDiff": {
+            "id": "WorkspaceDiff",
+            "properties": {
+                "diffs": {
+                    "type": "array",
+                    "items": {
+                        "type": "WorkspaceDiffItem"
+                    }
+                }
+            }
+        },
+        "WorkspaceDiffItem": {
+            "id": "WorkspaceDiffItem",
+            "required": [
+                "type",
+                "sandboxStatus"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "VertexDiffItem",
+                        "PropertyDiffItem",
+                        "EdgeDiffItem"
+                    ]
+                },
+                "sandboxStatus": {
+                    "type": "string",
+                    "enum": [
+                        "PUBLIC",
+                        "PUBLIC_CHANGED",
+                        "PRIVATE"
+                    ]
+                },
+                "vertexId": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "visible": {
+                    "type": "boolean"
+                },
+                "elementId": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "edgeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "PublishItem": {
+            "id": "PublishItem",
+            "required": [
+                "type",
+                "sandboxStatus"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "vertex",
+                        "relationship",
+                        "property"
+                    ]
+                },
+                "action": {
+                    "type": "string",
+                    "description": "'delete' or ''"
+                },
+                "vertexId": {
+                    "type": "string",
+                    "description": "required for vertex publish"
+                },
+                "edgeId": {
+                    "type": "string",
+                    "description": "required for edge publish"
+                },
+                "elementId": {
+                    "type": "string",
+                    "description": "required for property publish"
+                },
+                "sourceId": {
+                    "type": "string",
+                    "description": "required for edge publish"
+                },
+                "destId": {
+                    "type": "string",
+                    "description": "required for edge publish"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "required for property publish"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "required for property publish"
+                },
+                "error_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "PublishResponse": {
+            "id": "PublishResponse",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "failures": {
+                    "type": "array",
+                    "items": {
+                        "type": "PublishItem"
+                    }
+                }
+            }
+        }
+    }
+}

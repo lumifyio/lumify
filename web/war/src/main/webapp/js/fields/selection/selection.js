@@ -106,7 +106,7 @@ define([
                                 self.currentProperty.title === item.title) {
                                 return 1;
                             }
-                            return 1;//Object.getPrototypeOf(this).matcher.apply(this, [item.displayName]);
+                            return Object.getPrototypeOf(this).matcher.apply(this, [item.displayName]);
                         },
                         highlighter: function(itemJson) {
                             var item = JSON.parse(itemJson);

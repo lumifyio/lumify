@@ -1,5 +1,6 @@
 package io.lumify.web.routes.workspace;
 
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -8,9 +9,8 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.miniweb.HandlerChain;
-import com.google.inject.Inject;
+import io.lumify.web.BaseRequestHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +32,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String workspaceId = getAttributeString(request, "workspaceId");
+        final String workspaceId = getActiveWorkspaceId(request);
         final String data = getRequiredParameter(request, "data");
 
         User authUser = getUser(request);
@@ -105,7 +105,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             JSONObject graphPosition = update.optJSONObject("graphPosition");
             Integer graphPositionX = null;
             Integer graphPositionY = null;
-            if (graphPosition != null)  {
+            if (graphPosition != null) {
                 graphPositionX = graphPosition.getInt("x");
                 graphPositionY = graphPosition.getInt("y");
             }

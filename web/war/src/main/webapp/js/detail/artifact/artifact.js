@@ -503,7 +503,7 @@ define([
                 }
             }
 
-            return !text ?  alertTemplate({ warning: warningText }) : text.replace(/(\n+)/g, '<br><br>$1');
+            return !text ?  alertTemplate({ warning: warningText }) : this.normalizeString(text);
         }
      }
 });
