@@ -115,7 +115,9 @@ public class LumifyTestCluster {
             }
 
             LOGGER.info("shutdown: graphPropertyRunner");
-            graphPropertyRunner.shutdown();
+            if (graphPropertyRunner != null) {
+                graphPropertyRunner.shutdown();
+            }
 
             LOGGER.info("shutdown: ModelSession");
             if (InjectHelper.hasInjector()) {
