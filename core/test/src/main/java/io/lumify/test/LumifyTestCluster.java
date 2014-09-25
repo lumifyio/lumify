@@ -9,12 +9,15 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.accumulo.fate.zookeeper.ZooSession;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.securegraph.Graph;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Queue;
 
@@ -107,7 +110,9 @@ public class LumifyTestCluster {
 
     public void shutdown() {
         try {
-            jetty.shutdown();
+            if (jetty != null) {
+                jetty.shutdown();
+            }
 
             LOGGER.info("shutdown: graphPropertyRunner");
             graphPropertyRunner.shutdown();
@@ -132,6 +137,7 @@ public class LumifyTestCluster {
 
             elasticsearch.shutdown();
             accumulo.shutdown();
+            shutdownAndResetZooSession();
 
             LOGGER.info("shutdown: InjectHelper");
             InjectHelper.shutdown();
@@ -143,6 +149,18 @@ public class LumifyTestCluster {
             LOGGER.info("shutdown complete");
         } catch (InterruptedException e) {
             throw new RuntimeException("failed to sleep", e);
+        }
+    }
+
+    private void shutdownAndResetZooSession() {
+        ZooSession.shutdown();
+
+        try {
+            Field sessionsField = ZooSession.class.getDeclaredField("sessions");
+            sessionsField.setAccessible(true);
+            sessionsField.set(null, new HashMap());
+        } catch (Exception ex) {
+            throw new RuntimeException("Could not reset ZooSession internal state");
         }
     }
 

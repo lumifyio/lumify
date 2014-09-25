@@ -62,7 +62,9 @@ public class TestElasticSearch {
                 elasticSearchNode.stop();
                 elasticSearchNode.close();
             }
-            FileUtils.deleteDirectory(tempDir);
+            if (tempDir != null) {
+                FileUtils.deleteDirectory(tempDir);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
