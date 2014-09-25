@@ -14,9 +14,9 @@ import java.util.Properties;
 
 public class TestElasticSearch {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestElasticSearch.class);
-    private static File tempDir;
-    private static Node elasticSearchNode;
-    private static String addr;
+    private File tempDir;
+    private Node elasticSearchNode;
+    private String addr;
     private final Properties lumifyConfig;
 
     public TestElasticSearch(Properties config) {
@@ -64,6 +64,10 @@ public class TestElasticSearch {
             FileUtils.deleteDirectory(tempDir);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            tempDir = null;
+            elasticSearchNode = null;
+            addr = null;
         }
     }
 

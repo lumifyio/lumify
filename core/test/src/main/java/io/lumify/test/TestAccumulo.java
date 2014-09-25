@@ -19,8 +19,8 @@ public class TestAccumulo {
     private static final String ACCUMULO_PASSWORD = "test";
     private final Properties lumifyConfig;
     private File tempDir;
-    private static MiniAccumuloCluster accumulo;
-    private static AccumuloGraphConfiguration config;
+    private MiniAccumuloCluster accumulo;
+    private AccumuloGraphConfiguration config;
     private Connector connector;
 
     public TestAccumulo(Properties config) {
@@ -58,6 +58,8 @@ public class TestAccumulo {
             throw new RuntimeException(e);
         } finally {
             tempDir.delete();
+            config = null;
+            accumulo = null;
         }
     }
 
@@ -69,8 +71,8 @@ public class TestAccumulo {
         }
     }
 
-    protected Map getConfig() {
-        Map configMap = new HashMap();
+    protected Map<String, Object> getConfig() {
+        Map<String, Object> configMap = new HashMap<String, Object>();
         configMap.put(AccumuloGraphConfiguration.ZOOKEEPER_SERVERS, accumulo.getZooKeepers());
         configMap.put(AccumuloGraphConfiguration.ACCUMULO_INSTANCE_NAME, accumulo.getInstanceName());
         configMap.put(AccumuloGraphConfiguration.ACCUMULO_USERNAME, ACCUMULO_USERNAME);
