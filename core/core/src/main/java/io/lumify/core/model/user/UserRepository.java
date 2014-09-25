@@ -57,6 +57,10 @@ public abstract class UserRepository {
 
     public abstract org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
 
+    public abstract void setDisplayName(User user, String displayName);
+
+    public abstract void setEmailAddress(User user, String emailAddress);
+
     public abstract Set<Privilege> getPrivileges(User user);
 
     public abstract void setUiPreferences(User user, JSONObject preferences);
@@ -185,4 +189,6 @@ public abstract class UserRepository {
         }
         return foundUsers;
     }
+
+
 }

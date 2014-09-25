@@ -23,12 +23,15 @@ public class UserAdmin extends CommandLineBase {
     private static final String CMD_ACTION_DELETE = "delete";
     private static final String CMD_ACTION_SET_PRIVILEGES = "set-privileges";
     private static final String CMD_ACTION_SET_AUTHORIZATIONS = "set-authorizations";
+    private static final String CMD_ACTION_SET_DISPLAYNAME_EMAIL = "set-displayname-and-or-email";
 
     private static final String CMD_OPT_USERID = "userid";
     private static final String CMD_OPT_USERNAME = "username";
     private static final String CMD_OPT_PASSWORD = "password";
     private static final String CMD_OPT_PRIVILEGES = "privileges";
     private static final String CMD_OPT_AUTHORIZATIONS = "authorizations";
+    private static final String CMD_OPT_DISPLAYNAME = "displayname";
+    private static final String CMD_OPT_EMAIL = "email";
 
     private static final String CMD_OPT_AS_TABLE = "as-table";
 
@@ -85,6 +88,22 @@ public class UserAdmin extends CommandLineBase {
 
         opts.addOption(
                 OptionBuilder
+                        .withLongOpt(CMD_OPT_DISPLAYNAME)
+                        .withDescription("Display name to set")
+                        .hasOptionalArg()
+                        .create("d")
+        );
+
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_EMAIL)
+                        .withDescription("E-mail address to set")
+                        .hasOptionalArg()
+                        .create("e")
+        );
+
+        opts.addOption(
+                OptionBuilder
                         .withLongOpt(CMD_OPT_AS_TABLE)
                         .withDescription("List users in a table")
                         .create("t")
@@ -114,6 +133,9 @@ public class UserAdmin extends CommandLineBase {
         }
         if (args.contains(CMD_ACTION_SET_AUTHORIZATIONS)) {
             return setAuthorizations(cmd);
+        }
+        if (args.contains(CMD_ACTION_SET_DISPLAYNAME_EMAIL)) {
+            return setDisplayNameAndOrEmail(cmd);
         }
 
         String actions = StringUtils.join(getActions(), " | ");
@@ -255,6 +277,33 @@ public class UserAdmin extends CommandLineBase {
         }
         System.out.println("");
 
+        printUser(user);
+        return 0;
+    }
+
+    private int setDisplayNameAndOrEmail(CommandLine cmd) {
+        String displayName = cmd.getOptionValue(CMD_OPT_DISPLAYNAME);
+        String emailAddress = cmd.getOptionValue(CMD_OPT_EMAIL);
+
+        if (displayName == null && emailAddress == null) {
+            System.out.println("no display name or e-mail address provided");
+            return -2;
+        }
+
+        User user = findUser(cmd);
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        if (displayName != null) {
+            getUserRepository().setDisplayName(user, displayName);
+        }
+        if (emailAddress != null) {
+            getUserRepository().setEmailAddress(user, emailAddress);
+        }
+
+        user = findUser(cmd); // reload the user so we have our new value(s)
         printUser(user);
         return 0;
     }

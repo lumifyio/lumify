@@ -322,6 +322,20 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
+    public void setDisplayName(User user, String displayName) {
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        UserLumifyProperties.DISPLAY_NAME.setProperty(userVertex, displayName, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
+    }
+
+    @Override
+    public void setEmailAddress(User user, String emailAddress) {
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        UserLumifyProperties.EMAIL_ADDRESS.setProperty(userVertex, emailAddress, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
+    }
+
+    @Override
     public Set<Privilege> getPrivileges(User user) {
         Set<Privilege> privileges;
         if (user instanceof SystemUser) {

@@ -101,6 +101,12 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
+    public void setDisplayName(User user, String displayName) { throw new RuntimeException("Not implemented"); }
+
+    @Override
+    public void setEmailAddress(User user, String emailAddress) { throw new RuntimeException("Not implemented"); }
+
+    @Override
     public Set<Privilege> getPrivileges(User user) {
         if (user instanceof SystemUser) {
             return Privilege.ALL;
