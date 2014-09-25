@@ -271,10 +271,10 @@ define([
                             return true;
                         }
 
-                        var valueCounts = _.countBy(pair[1], 'value'),
-                            values = _.chain(valueCounts)
-                                .values()
-                                .value(),
+                        var valueCounts = _.groupBy(pair[1], 'value'),
+                            values = _.map(valueCounts, function(value, key) {
+                                return value.length;
+                            }),
                             len = values.length;
 
                         if (len <= MAX_BINS_FOR_NON_HISTOGRAM_TYPES) {
@@ -294,7 +294,7 @@ define([
                                     toMove = _.chain(valueCounts)
                                         .pairs()
                                         .filter(function(p) {
-                                            return p[1] === moveToOtherWithCount;
+                                            return p[1].length === moveToOtherWithCount;
                                         })
                                         .value(),
                                     toMoveNames = _.map(toMove, function(p) {
@@ -306,15 +306,19 @@ define([
                                 });
 
                                 for (var i = 0; i < toMove.length; i++) {
-                                    for (var j = 0; j < toMove[i][1]; j++) {
+                                    for (var j = 0; j < toMove[i][1].length; j++) {
                                         pair[1].push({
                                             value: OTHER_PLACEHOLDER,
+                                            vertexId: toMove[i][1][j].vertexId
                                         });
                                     }
                                 }
 
-                                valueCounts = _.countBy(pair[1], 'value');
-                                len = _.values(valueCounts).length;
+                                valueCounts = _.groupBy(pair[1], 'value');
+                                values = _.map(valueCounts, function(value, key) {
+                                    return value.length;
+                                });
+                                len = values.length;
 
                                 collapseSmallest(orderedCounts, valueCounts, len);
                             };
