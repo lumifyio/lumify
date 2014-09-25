@@ -40,7 +40,7 @@ public class TestBase {
     public static final String CONCEPT_TEST_PERSON = "http://lumify.io/test#person";
 
     @Before
-    public void before() throws ApiException, IOException, NoSuchAlgorithmException, KeyManagementException {
+    public void before() throws ApiException, IOException, NoSuchAlgorithmException, KeyManagementException, InterruptedException {
         LumifyTestClusterConfigurationLoader.set("repository.ontology.owl.1.iri", "http://lumify.io/test");
         LumifyTestClusterConfigurationLoader.set("repository.ontology.owl.1.dir", new File(LumifyTestCluster.getLumifyRootDir(), "integration-test/src/test/resources/io/lumify/it/").getAbsolutePath());
 
