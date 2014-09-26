@@ -8,6 +8,7 @@ import io.lumify.web.clientapi.codegen.ArtifactApiExt;
 import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.codegen.model.Element;
 import io.lumify.web.clientapi.codegen.model.Property;
+import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -26,10 +27,10 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
     @Test
     public void testUploadFile() throws IOException, ApiException {
-        importArtifactAsUser1();
+        importVideoAndPublishAsUser1();
     }
 
-    public void importArtifactAsUser1() throws ApiException, IOException {
+    public void importVideoAndPublishAsUser1() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
         workspaceId = lumifyApi.getCurrentWorkspaceId();
@@ -52,6 +53,15 @@ public class UploadVideoFileIntegrationTest extends TestBase {
                 System.out.println(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
             }
         }
+
+        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
+        System.out.println(diff);
+        assertEquals(12, diff.getDiffs().size());
+        lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
+
+        diff = lumifyApi.getWorkspaceApi().getDiff();
+        System.out.println(diff);
+        assertEquals(0, diff.getDiffs().size());
 
         lumifyApi.logout();
     }
