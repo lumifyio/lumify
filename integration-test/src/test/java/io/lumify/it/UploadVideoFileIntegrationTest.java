@@ -45,19 +45,19 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
         Element vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         for (Property prop : vertex.getProperties()) {
-            System.out.println(prop.toString());
+            LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
-                System.out.println(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
+                LOGGER.info(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
             }
         }
 
         WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
-        System.out.println(diff);
+        LOGGER.info("%s", diff.toString());
         assertEquals(12, diff.getDiffs().size());
         lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
-        System.out.println(diff);
+        LOGGER.info("%s", diff.toString());
         assertEquals(0, diff.getDiffs().size());
 
         lumifyApi.logout();
@@ -80,7 +80,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         lumifyTestCluster.processGraphPropertyQueue();
 
         String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, propertyKey);
-        System.out.println(highlightedText);
+        LOGGER.info(highlightedText);
         assertTrue("missing highlighting for Salam", highlightedText.contains(">Salam<"));
         assertTrue("missing highlighting for British", highlightedText.contains("three <span") && highlightedText.contains(">British<"));
 

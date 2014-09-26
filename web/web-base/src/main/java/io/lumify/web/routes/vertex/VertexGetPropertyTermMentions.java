@@ -60,7 +60,7 @@ public class VertexGetPropertyTermMentions extends BaseRequestHandler {
             return;
         }
 
-        Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(vertex.getId().toString(), propertyKey, modelUserContext);
+        Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(vertex.getId(), propertyKey, modelUserContext);
         JSONObject json = new JSONObject();
         JSONArray termMentionsJson = termMentionsToJson(termMentions);
         json.put("termMentions", termMentionsJson);

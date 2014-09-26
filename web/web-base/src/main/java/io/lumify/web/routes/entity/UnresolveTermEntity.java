@@ -1,7 +1,6 @@
 package io.lumify.web.routes.entity;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.termMention.TermMentionModel;
@@ -17,6 +16,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.json.JSONObject;
@@ -104,13 +104,22 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         TermMentionModel termMention;
         if (rowKey != null) {
             termMention = termMentionRepository.findByRowKey(rowKey, modelUserContext);
+            if (termMention == null) {
+                respondWithNotFound(response, "Could not find term mention with rowKey: " + rowKey);
+                return;
+            }
         } else {
             TermMentionRowKey termMentionRowKey = new TermMentionRowKey(graphVertexId, propertyKey, mentionStart, mentionEnd, edgeId);
             termMention = termMentionRepository.findByRowKey(termMentionRowKey.getRowKey(), modelUserContext);
+            if (termMention == null) {
+                respondWithNotFound(response, "Could not find term mention with rowKey: " + termMentionRowKey + " (graphVertexId=" + graphVertexId + ", propertyKey=" + propertyKey + ", mentionStart=" + mentionStart + ", mentionEnd=" + mentionEnd + ", edgeId=" + edgeId + ")");
+                return;
+            }
         }
 
-        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, lumifyVisibility, modelUserContext, user, authorizations);
-
+        workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, lumifyVisibility, modelUserContext, user, authorizations);
+        JSONObject result = new JSONObject();
+        result.put("status", "ok");
         respondWithJson(response, result);
     }
 }

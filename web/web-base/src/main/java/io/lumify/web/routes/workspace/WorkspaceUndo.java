@@ -1,11 +1,9 @@
 package io.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -23,6 +21,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -190,7 +189,10 @@ public class WorkspaceUndo extends BaseRequestHandler {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
             if (termMentionModel != null) {
                 TermMentionRowKey termMentionRowKey = new TermMentionRowKey(rowKeyProperty.getValue().toString());
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
+                workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, lumifyVisibility, modelUserContext, user, authorizations);
+                JSONObject json = new JSONObject();
+                json.put("status", "OK");
+                unresolved.put(json);
             }
         }
 

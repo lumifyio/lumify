@@ -91,5 +91,64 @@ public class EntityApi {
       }
     }
   }
+  public void unresolveTerm (String graphVertexId, Integer mentionStart, Integer mentionEnd, String sign, String conceptId, String edgeId, String rowKey) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null || mentionStart == null || mentionEnd == null || sign == null || conceptId == null || edgeId == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/entity/unresolveTerm".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(mentionStart)))
+      queryParams.put("mentionStart", String.valueOf(mentionStart));
+    if(!"null".equals(String.valueOf(mentionEnd)))
+      queryParams.put("mentionEnd", String.valueOf(mentionEnd));
+    if(!"null".equals(String.valueOf(sign)))
+      queryParams.put("sign", String.valueOf(sign));
+    if(!"null".equals(String.valueOf(conceptId)))
+      queryParams.put("conceptId", String.valueOf(conceptId));
+    if(!"null".equals(String.valueOf(edgeId)))
+      queryParams.put("edgeId", String.valueOf(edgeId));
+    if(!"null".equals(String.valueOf(rowKey)))
+      queryParams.put("rowKey", String.valueOf(rowKey));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return ;
+      }
+      else {
+        return ;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return ;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
   }
 

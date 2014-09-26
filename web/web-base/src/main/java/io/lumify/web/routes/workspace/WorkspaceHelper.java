@@ -23,6 +23,7 @@ import org.securegraph.*;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
 
 @Singleton
@@ -48,43 +49,37 @@ public class WorkspaceHelper {
         this.graph = graph;
     }
 
-    public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, LumifyVisibility visibility,
+    public void unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, LumifyVisibility visibility,
                                     ModelUserContext modelUserContext, User user, Authorizations authorizations) {
-        JSONObject result = new JSONObject();
-        if (termMention == null) {
-            LOGGER.warn("invalid term mention row");
-        } else {
-            Vertex artifactVertex = graph.getVertex(termMention.getRowKey().getGraphVertexId(), authorizations);
+        checkNotNull(termMention, "invalid term mention row");
+        Vertex artifactVertex = graph.getVertex(termMention.getRowKey().getGraphVertexId(), authorizations);
 
-            // If there is only instance of the term entity in this artifact delete the relationship
-            Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexIdAndPropertyKey(termMention.getRowKey().getGraphVertexId(), termMention.getRowKey().getPropertyKey(), modelUserContext).iterator();
-            int termCount = 0;
-            while (termMentionModels.hasNext()) {
-                TermMentionModel termMentionModel = termMentionModels.next();
-                Object termMentionId = termMentionModel.getRowKey().getRowKey();
-                if (termMentionId != null && termMention.getRowKey().getRowKey().equals(termMentionId)) {
-                    termCount++;
-                    break;
-                }
+        // If there is only instance of the term entity in this artifact delete the relationship
+        Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexIdAndPropertyKey(termMention.getRowKey().getGraphVertexId(), termMention.getRowKey().getPropertyKey(), modelUserContext).iterator();
+        int termCount = 0;
+        while (termMentionModels.hasNext()) {
+            TermMentionModel termMentionModel = termMentionModels.next();
+            Object termMentionId = termMentionModel.getRowKey().getRowKey();
+            if (termMentionId != null && termMention.getRowKey().getRowKey().equals(termMentionId)) {
+                termCount++;
+                break;
             }
-            if (termCount == 1) {
-                if (edgeId != null) {
-                    Edge edge = graph.getEdge(edgeId, authorizations);
-                    graph.removeEdge(edgeId, authorizations);
-                    workQueueRepository.pushEdgeDeletion(edge);
-                    auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
-                }
-            }
-
-            termMentionRepository.delete(termMention.getRowKey());
-            workQueueRepository.pushTextUpdated(artifactVertex.getId().toString());
-
-            graph.flush();
-
-            auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, visibility.getVisibility());
-            result.put("success", true);
         }
-        return result;
+        if (termCount == 1) {
+            if (edgeId != null) {
+                Edge edge = graph.getEdge(edgeId, authorizations);
+                graph.removeEdge(edgeId, authorizations);
+                workQueueRepository.pushEdgeDeletion(edge);
+                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
+            }
+        }
+
+        termMentionRepository.delete(termMention.getRowKey());
+        workQueueRepository.pushTextUpdated(artifactVertex.getId().toString());
+
+        graph.flush();
+
+        auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, visibility.getVisibility());
     }
 
     public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId, User user, Authorizations authorizations) {

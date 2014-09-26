@@ -41,6 +41,10 @@ public class ResolveTermIntegrationTest extends TestBase {
         lumifyApi = login(USERNAME_TEST_USER_2);
         assertHighlightedTextContainResolvedEntityForOtherUser(lumifyApi);
         lumifyApi.logout();
+
+        lumifyApi = login(USERNAME_TEST_USER_1);
+        resolveAndUnresolveTerm(lumifyApi);
+        lumifyApi.logout();
     }
 
     public void setupData() throws ApiException, IOException {
@@ -71,11 +75,12 @@ public class ResolveTermIntegrationTest extends TestBase {
     }
 
     public void resolveTerm(LumifyApi lumifyApi) throws ApiException {
-        int entityStartOffset = 0;
+        int entityStartOffset = "".length();
+        int entityEndOffset = entityStartOffset + "Joe Ferner".length();
         lumifyApi.getEntityApi().resolveTerm(
                 artifactVertexId,
                 TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
-                entityStartOffset, entityStartOffset + "Joe Ferner".length(),
+                entityStartOffset, entityEndOffset,
                 "Joe Ferner",
                 CONCEPT_TEST_PERSON,
                 "auth1",
@@ -135,7 +140,8 @@ public class ResolveTermIntegrationTest extends TestBase {
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("publishResolvedTerm: diff after publish: %s", diff.toString());
-        //assertEquals("too many diffs.", 0, diff.getDiffs().size());
+        //TODO add this back in when we switch TermMentions to graph:
+        // assertEquals("too many diffs.", 0, diff.getDiffs().size());
 
         lumifyTestCluster.processGraphPropertyQueue();
     }
@@ -144,5 +150,53 @@ public class ResolveTermIntegrationTest extends TestBase {
         String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("%s", highlightedText);
         assertTrue("highlightedText does not contain string: " + highlightedText, highlightedText.contains("graphVertexId&quot;:&quot;" + joeFernerVertex.getId() + "&quot;"));
+    }
+
+    private void resolveAndUnresolveTerm(LumifyApi lumifyApi) throws ApiException {
+        int entityStartOffset = "Joe Ferner knows ".length();
+        int entityEndOffset = entityStartOffset + "David Singley".length();
+        String sign = "David Singley";
+        lumifyApi.getEntityApi().resolveTerm(
+                artifactVertexId,
+                TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
+                entityStartOffset, entityEndOffset,
+                sign,
+                CONCEPT_TEST_PERSON,
+                "auth1",
+                joeFernerVertex.getId(),
+                "test",
+                null);
+
+        TermMentions termMentions = lumifyApi.getVertexApi().getTermMentions(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
+        LOGGER.info("%s", termMentions.toString());
+        assertEquals(4, termMentions.getTermMentions().size());
+        TermMention termMention = findDavidSingleyTermMention(termMentions);
+        LOGGER.info("%s", termMention.toString());
+
+        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        LOGGER.info("%s", highlightedText);
+        assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && highlightedText.contains(termMention.getMetadata().getEdgeId()));
+
+        lumifyApi.getEntityApi().unresolveTerm(artifactVertexId, entityStartOffset, entityEndOffset, sign, CONCEPT_TEST_PERSON, termMention.getMetadata().getEdgeId(), termMention.getKey().getValue());
+
+        termMentions = lumifyApi.getVertexApi().getTermMentions(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
+        LOGGER.info("%s", termMentions.toString());
+        assertEquals(3, termMentions.getTermMentions().size());
+
+        highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        LOGGER.info("%s", highlightedText);
+        assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && !highlightedText.contains(termMention.getMetadata().getEdgeId()));
+    }
+
+    private TermMention findDavidSingleyTermMention(TermMentions termMentions) {
+        for (TermMention termMention : termMentions.getTermMentions()) {
+            if (termMention.getMetadata() == null) {
+                continue;
+            }
+            if (termMention.getMetadata().getSign().equals("David Singley") && termMention.getMetadata().getGraphVertexId() != null) {
+                return termMention;
+            }
+        }
+        throw new RuntimeException("Could not find 'David Singley' in term mentions");
     }
 }

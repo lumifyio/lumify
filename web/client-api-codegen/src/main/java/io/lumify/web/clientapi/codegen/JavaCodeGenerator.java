@@ -56,6 +56,8 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
                                 + "      com.sun.jersey.multipart.FormDataBodyPart bodyPart = new com.sun.jersey.multipart.FormDataBodyPart(dispo, file, MediaType.MULTIPART_FORM_DATA_TYPE);\n"
                                 + "      mp.bodyPart(bodyPart);"
                 );
+                fileContents = fileContents.replaceAll("public TermMentionMetadata getMetadata\\(\\)", "@com.fasterxml.jackson.annotation.JsonProperty(\"Metadata\")\npublic TermMentionMetadata getMetadata()");
+                fileContents = fileContents.replaceAll("public void setMetadata\\(TermMentionMetadata", "@com.fasterxml.jackson.annotation.JsonProperty(\"Metadata\")\npublic void setMetadata(TermMentionMetadata");
 
                 FileUtils.write(f, fileContents);
             }
