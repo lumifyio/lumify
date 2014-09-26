@@ -106,6 +106,13 @@
                             "paramType": "query"
                         },
                         {
+                            "name": "propertyKey",
+                            "description": "property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
                             "name": "mentionStart",
                             "description": "start offset of mention",
                             "required": true,

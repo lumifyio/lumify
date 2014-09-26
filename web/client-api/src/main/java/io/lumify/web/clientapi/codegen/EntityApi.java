@@ -91,10 +91,10 @@ public class EntityApi {
       }
     }
   }
-  public void unresolveTerm (String graphVertexId, Integer mentionStart, Integer mentionEnd, String sign, String conceptId, String edgeId, String rowKey) throws ApiException {
+  public void unresolveTerm (String graphVertexId, String propertyKey, Integer mentionStart, Integer mentionEnd, String sign, String conceptId, String edgeId, String rowKey) throws ApiException {
     Object postBody = null;
     // verify required params are set
-    if(graphVertexId == null || mentionStart == null || mentionEnd == null || sign == null || conceptId == null || edgeId == null ) {
+    if(graphVertexId == null || propertyKey == null || mentionStart == null || mentionEnd == null || sign == null || conceptId == null || edgeId == null ) {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
@@ -107,6 +107,8 @@ public class EntityApi {
 
     if(!"null".equals(String.valueOf(graphVertexId)))
       queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(propertyKey)))
+      queryParams.put("propertyKey", String.valueOf(propertyKey));
     if(!"null".equals(String.valueOf(mentionStart)))
       queryParams.put("mentionStart", String.valueOf(mentionStart));
     if(!"null".equals(String.valueOf(mentionEnd)))

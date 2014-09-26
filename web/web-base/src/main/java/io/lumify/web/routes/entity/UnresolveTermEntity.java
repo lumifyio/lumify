@@ -63,6 +63,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String edgeId = getRequiredParameter(request, "edgeId");
         final String rowKey = getOptionalParameter(request, "rowKey");
+        String propertyKey = getOptionalParameter(request, "propertyKey");
+        if (propertyKey == null) {
+            propertyKey = "";
+        }
 
         LOGGER.debug(
                 "UnresolveTermEntity (graphVertexId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
@@ -100,7 +104,6 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        String propertyKey = "";
         TermMentionModel termMention;
         if (rowKey != null) {
             termMention = termMentionRepository.findByRowKey(rowKey, modelUserContext);

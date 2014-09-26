@@ -177,7 +177,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         LOGGER.info("%s", highlightedText);
         assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && highlightedText.contains(termMention.getMetadata().getEdgeId()));
 
-        lumifyApi.getEntityApi().unresolveTerm(artifactVertexId, entityStartOffset, entityEndOffset, sign, CONCEPT_TEST_PERSON, termMention.getMetadata().getEdgeId(), termMention.getKey().getValue());
+        lumifyApi.getEntityApi().unresolveTerm(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, entityStartOffset, entityEndOffset, sign, CONCEPT_TEST_PERSON, termMention.getMetadata().getEdgeId());
 
         termMentions = lumifyApi.getVertexApi().getTermMentions(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
         LOGGER.info("%s", termMentions.toString());

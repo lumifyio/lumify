@@ -14,7 +14,7 @@ public class EntityApiExt extends EntityApi {
         resolveTerm(artifactId, propertyKey, mentionStartWithVideoFrame, mentionEndWithVideoFrame, sign, conceptId, visibilitySource, null, null, null);
     }
 
-    public void unresolveTerm(String vertexId, int startOffset, int endOffset, String sign, String conceptIri, String edgeId) throws ApiException {
-        unresolveTerm(vertexId, startOffset, endOffset, sign, conceptIri, edgeId, null);
+    public void unresolveTerm(String vertexId, String propertyKey, int startOffset, int endOffset, String sign, String conceptIri, String edgeId) throws ApiException {
+        unresolveTerm(vertexId, propertyKey, startOffset, endOffset, sign, conceptIri, edgeId, null);
     }
 }
