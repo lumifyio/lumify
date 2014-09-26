@@ -972,6 +972,7 @@ define([
 
         this.onWorkspaceDeleted = function(evt, data) {
             if (this.workspaceId === data.workspaceId) {
+                this.trigger('selectObjects');
                 this.workspaceId = null;
                 this.loadActiveWorkspace();
             }
