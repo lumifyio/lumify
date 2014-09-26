@@ -202,9 +202,10 @@ public class LumifyTestCluster {
 
     private void processGraphPropertyQueueItem(JSONObject graphPropertyQueueItem) {
         try {
+            LOGGER.info("processGraphPropertyQueueItem: %s", graphPropertyQueueItem.toString(2));
             graphPropertyRunner.process(graphPropertyQueueItem);
-        } catch (Exception ex) {
-            throw new RuntimeException("graphPropertyRunner process", ex);
+        } catch (Throwable ex) {
+            throw new RuntimeException("graphPropertyRunner process: " + ex.getMessage(), ex);
         }
     }
 }
