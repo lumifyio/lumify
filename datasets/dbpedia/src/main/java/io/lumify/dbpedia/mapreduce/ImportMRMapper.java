@@ -31,6 +31,7 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
     private Visibility visibility;
     private AccumuloAuthorizations authorizations;
     private SecureGraphOntologyRepository ontologyRepository;
+    private static final Map<String, Integer> conceptTypeDepthCache = new HashMap<String, Integer>();
 
     public static String getDbpediaEntityVertexId(String pageTitle) {
         return DBPEDIA_ID_PREFIX + pageTitle.trim().toLowerCase();
@@ -141,8 +142,13 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
     }
 
     private Integer getConceptDepth(String conceptIri) {
+        if (conceptTypeDepthCache.containsKey(conceptIri)) {
+            return conceptTypeDepthCache.get(conceptIri);
+        }
+
         Concept concept = this.ontologyRepository.getConceptByIRI(conceptIri);
         if (concept == null) {
+            conceptTypeDepthCache.put(conceptIri, null);
             return null;
         }
         int depth = 0;
@@ -154,6 +160,7 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
             depth++;
             concept = parentConcept;
         }
+        conceptTypeDepthCache.put(conceptIri, depth);
         return depth;
     }
 
