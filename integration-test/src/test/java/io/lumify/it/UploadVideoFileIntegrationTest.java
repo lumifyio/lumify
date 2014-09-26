@@ -16,24 +16,21 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UploadVideoFileIntegrationTest extends TestBase {
-    private String user2Id;
-    private String workspaceId;
     private String artifactVertexId;
 
     @Test
     public void testUploadFile() throws IOException, ApiException {
         importVideoAndPublishAsUser1();
+        resolveTermsAsUser1();
     }
 
-    public void importVideoAndPublishAsUser1() throws ApiException, IOException {
+    private void importVideoAndPublishAsUser1() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
-        workspaceId = lumifyApi.getCurrentWorkspaceId();
 
         InputStream videoResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4");
         InputStream videoTranscriptResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4.srt");
@@ -62,6 +59,30 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         diff = lumifyApi.getWorkspaceApi().getDiff();
         System.out.println(diff);
         assertEquals(0, diff.getDiffs().size());
+
+        lumifyApi.logout();
+    }
+
+    private void resolveTermsAsUser1() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        String propertyKey = "io.lumify.subrip.SubRipTranscriptGraphPropertyWorker";
+        int videoFrameIndex = 0;
+        int mentionStart = "".length();
+        int mentionEnd = mentionStart + "Salam".length();
+        lumifyApi.getEntityApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Salam", CONCEPT_TEST_PERSON, "auth1");
+
+        videoFrameIndex = 2;
+        mentionStart = "appalling brutality what we know is that\nthree ".length();
+        mentionEnd = mentionStart + "British".length();
+        lumifyApi.getEntityApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Great Britain", CONCEPT_TEST_PERSON, "auth1");
+
+        lumifyTestCluster.processGraphPropertyQueue();
+
+        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, propertyKey);
+        System.out.println(highlightedText);
+        assertTrue("missing highlighting for Salam", highlightedText.contains(">Salam<"));
+        assertTrue("missing highlighting for British", highlightedText.contains("three <span") && highlightedText.contains(">British<"));
 
         lumifyApi.logout();
     }
