@@ -141,8 +141,8 @@ define([
 
             this.currentUsers = response.users;
 
-            _.sortBy(workspace.users || (workspace.users = []), function(user) {
-                var user = _.findWhere(self.currentUsers, { id: user.userId });
+            _.sortBy(workspace.users || (workspace.users = []), function(userPermission) {
+                var user = _.findWhere(self.currentUsers, { id: userPermission.userId });
                 return user && user.displayName || 0;
             }).forEach(function(userPermission) {
                 if (userPermission.userId != window.currentUser.id) {
