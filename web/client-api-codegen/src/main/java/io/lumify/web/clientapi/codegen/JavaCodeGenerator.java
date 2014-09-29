@@ -17,6 +17,9 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
 
     public static final String BASE_PACKAGE = "io.lumify.web.clientapi.codegen";
 
+    // Run with VMWarguments: "-DfileMap=src/main/resources/lumify.json"
+    //          Arguments:    "lumify.json"
+    //          Working Dir:  "$MODULE_DIR$"
     public static void main(String[] args) {
         try {
             ClientOpts opts = new ClientOpts();
