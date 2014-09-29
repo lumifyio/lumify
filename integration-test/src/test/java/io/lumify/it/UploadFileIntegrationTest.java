@@ -7,6 +7,7 @@ import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.model.*;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -20,6 +21,7 @@ import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UploadFileIntegrationTest extends TestBase {
+    public static final String FILE_CONTENTS = "Joe Ferner knows David Singley.";
     private String user2Id;
     private String workspaceId;
     private String artifactVertexId;
@@ -34,6 +36,7 @@ public class UploadFileIntegrationTest extends TestBase {
         publishArtifact();
         assertUser3StillHasNoAccessToArtifactBecauseAuth1Visibility();
         assertUser3HasAccessWithAuth1Visibility();
+        assertRawRoute();
     }
 
     public void importArtifactAsUser1() throws ApiException, IOException {
@@ -41,7 +44,7 @@ public class UploadFileIntegrationTest extends TestBase {
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
         workspaceId = lumifyApi.getCurrentWorkspaceId();
 
-        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
+        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
@@ -158,5 +161,16 @@ public class UploadFileIntegrationTest extends TestBase {
         LOGGER.info("highlightedText: %s", highlightedText);
         assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("class=\"entity\""));
         assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains(CONCEPT_TEST_PERSON));
+    }
+
+    private void assertRawRoute() throws ApiException, IOException {
+        byte[] expected = FILE_CONTENTS.getBytes();
+
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRaw(artifactVertexId));
+        assertArrayEquals(expected, found);
+
+        lumifyApi.logout();
     }
 }

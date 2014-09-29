@@ -9,10 +9,13 @@ import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.codegen.model.Element;
 import io.lumify.web.clientapi.codegen.model.Property;
 import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,10 +28,15 @@ public class UploadVideoFileIntegrationTest extends TestBase {
     @Test
     public void testUploadFile() throws IOException, ApiException {
         importVideoAndPublishAsUser1();
+        assertRawRoute();
+        assertRawRoutePlayback();
+        assertPosterFrameRoute();
+        assertVideoPreviewRoute();
         resolveTermsAsUser1();
     }
 
     private void importVideoAndPublishAsUser1() throws ApiException, IOException {
+        LOGGER.info("importVideoAndPublishAsUser1");
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
@@ -53,7 +61,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
         WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("%s", diff.toString());
-        assertEquals(12, diff.getDiffs().size());
+        assertEquals(16, diff.getDiffs().size());
         lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
@@ -63,7 +71,54 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         lumifyApi.logout();
     }
 
+    private void assertRawRoute() throws ApiException, IOException {
+        LOGGER.info("assertRawRoute");
+        byte[] expected = IOUtils.toByteArray(UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4"));
+
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRaw(artifactVertexId));
+        assertArrayEquals(expected, found);
+
+        lumifyApi.logout();
+    }
+
+    private void assertRawRoutePlayback() throws ApiException, IOException {
+        LOGGER.info("assertRawRoutePlayback");
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRawForPlayback(artifactVertexId, MediaLumifyProperties.MIME_TYPE_VIDEO_MP4));
+        assertTrue(found.length > 0);
+
+        lumifyApi.logout();
+    }
+
+    private void assertPosterFrameRoute() throws ApiException, IOException {
+        LOGGER.info("assertPosterFrameRoute");
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        InputStream in = lumifyApi.getArtifactApi().getPosterFrame(artifactVertexId, 100);
+        BufferedImage img = ImageIO.read(in);
+        assertEquals(100, img.getWidth());
+        assertEquals(66, img.getHeight());
+
+        lumifyApi.logout();
+    }
+
+    private void assertVideoPreviewRoute() throws IOException, ApiException {
+        LOGGER.info("assertVideoPreviewRoute");
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        InputStream in = lumifyApi.getArtifactApi().getVideoPreview(artifactVertexId, 100);
+        BufferedImage img = ImageIO.read(in);
+        assertEquals(2000, img.getWidth());
+        assertEquals(66, img.getHeight());
+
+        lumifyApi.logout();
+    }
+
     private void resolveTermsAsUser1() throws ApiException {
+        LOGGER.info("resolveTermsAsUser1");
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
         String propertyKey = "io.lumify.subrip.SubRipTranscriptGraphPropertyWorker";

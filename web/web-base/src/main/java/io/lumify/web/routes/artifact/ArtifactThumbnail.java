@@ -1,15 +1,16 @@
 package io.lumify.web.routes.artifact;
 
-import io.lumify.miniweb.HandlerChain;
-import io.lumify.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.miniweb.utils.UrlUtils;
 import io.lumify.web.BaseRequestHandler;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
@@ -20,8 +21,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-
-import static io.lumify.core.model.properties.LumifyProperties.RAW;
 
 public class ArtifactThumbnail extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnail.class);
@@ -71,7 +70,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
 
             thumbnailData = thumbnail.getThumbnailData();
             if (thumbnailData != null) {
-                LOGGER.debug("Cache hit for: %s (raw) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
+                LOGGER.debug("Cache hit for: %s (raw) %d x %d", artifactVertex.getId(), boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();
@@ -79,8 +78,8 @@ public class ArtifactThumbnail extends BaseRequestHandler {
             }
         }
 
-        LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
-        StreamingPropertyValue rawPropertyValue = RAW.getPropertyValue(artifactVertex);
+        LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactVertex.getId(), boundaryDims[0], boundaryDims[1]);
+        StreamingPropertyValue rawPropertyValue = LumifyProperties.RAW.getPropertyValue(artifactVertex);
         if (rawPropertyValue == null) {
             respondWithNotFound(response);
             return;

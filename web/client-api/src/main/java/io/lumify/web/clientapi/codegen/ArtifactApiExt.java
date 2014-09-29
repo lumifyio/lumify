@@ -90,6 +90,60 @@ public class ArtifactApiExt extends ArtifactApi {
         }
     }
 
+    public InputStream getRaw(String graphVertexId) throws IOException, ApiException {
+        return getRaw(graphVertexId, true, false, null);
+    }
+
+    public InputStream getRawForPlayback(String graphVertexId, String type) throws IOException, ApiException {
+        return getRaw(graphVertexId, false, true, type);
+    }
+
+    private InputStream getRaw(String graphVertexId, boolean download, boolean playback, String type) throws ApiException, IOException {
+        Map<String, String> queryParams = new HashMap<String, String>();
+        Map<String, String> headerParams = new HashMap<String, String>();
+        queryParams.put("graphVertexId", graphVertexId);
+        if (download) {
+            queryParams.put("download", "true");
+        }
+        if (playback) {
+            queryParams.put("playback", "true");
+        }
+        if (type != null) {
+            queryParams.put("type", type);
+        }
+        return apiInvoker.getBinary(basePath, "/artifact/raw", queryParams, headerParams);
+    }
+
+    public InputStream getThumbnail(String graphVertexId, Integer width) throws ApiException, IOException {
+        Map<String, String> queryParams = new HashMap<String, String>();
+        Map<String, String> headerParams = new HashMap<String, String>();
+        queryParams.put("graphVertexId", graphVertexId);
+        if (width != null) {
+            queryParams.put("width", width.toString());
+        }
+        return apiInvoker.getBinary(basePath, "/artifact/thumbnail", queryParams, headerParams);
+    }
+
+    public InputStream getPosterFrame(String graphVertexId, Integer width) throws ApiException, IOException {
+        Map<String, String> queryParams = new HashMap<String, String>();
+        Map<String, String> headerParams = new HashMap<String, String>();
+        queryParams.put("graphVertexId", graphVertexId);
+        if (width != null) {
+            queryParams.put("width", width.toString());
+        }
+        return apiInvoker.getBinary(basePath, "/artifact/poster-frame", queryParams, headerParams);
+    }
+
+    public InputStream getVideoPreview(String graphVertexId, Integer width) throws ApiException, IOException {
+        Map<String, String> queryParams = new HashMap<String, String>();
+        Map<String, String> headerParams = new HashMap<String, String>();
+        queryParams.put("graphVertexId", graphVertexId);
+        if (width != null) {
+            queryParams.put("width", width.toString());
+        }
+        return apiInvoker.getBinary(basePath, "/artifact/video-preview", queryParams, headerParams);
+    }
+
     public static class FileForImport {
         private final String visibilitySource;
         private final String fileName;
