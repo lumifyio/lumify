@@ -1,6 +1,10 @@
 * artifact          - Source data which could be a document, image, video, or audio.
+* concept           - A type (person, place, thing, etc). This is usually denoted by a concept IRI which is a unique
+                      URI describing the concept (http://lumify.io/#person).
 * poster frame      - The image that is displayed in the video player before the use clicks play.
 * raw               - The unmodified import data.
+* term mention      - A word or group of words found in a text or video transcript property which denotes a concept.
+                      (i.e. Joe Ferner, United States, Linux, etc).
 * thumbnail image   - The image used in search results and on the graph.
 * video preview     - A stitched together image of X number of frames of a video to support scrubbing withing the video. 
 * visibility source - The string passed from the viability UI component. This could be XML, JSON, etc. This string is
