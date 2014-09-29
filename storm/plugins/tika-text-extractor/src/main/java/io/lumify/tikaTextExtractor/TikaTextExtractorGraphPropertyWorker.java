@@ -15,6 +15,9 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.pdf.LumifyParserConfig;
+import org.apache.tika.parser.pdf.PDFParserConfig;
 import org.apache.tika.sax.BodyContentHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,13 +29,17 @@ import org.securegraph.property.StreamingPropertyValue;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.Normalizer;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -186,7 +193,9 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
         ContentHandler handler = new BodyContentHandler(writer);
-        parser.parse(new ByteArrayInputStream(textBytes), handler, metadata);
+        ParseContext context = new ParseContext();
+        context.set(PDFParserConfig.class, new LumifyParserConfig());
+        parser.parse(new ByteArrayInputStream(textBytes), handler, metadata, context);
         return IOUtils.toString(baos.toByteArray(), "UTF-8");
     }
 
@@ -280,18 +289,19 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private String cleanExtractedText(String extractedText) {
-        StringBuilder trimmedText = new StringBuilder();
-        String[] splitResults = extractedText.split("\\n");
-        Pattern p = Pattern.compile("[a-zA-Z0-9]");
-        for (int i = 0; i < splitResults.length; i++) {
-            if (p.matcher(splitResults[i]).find()) {
-                trimmedText.append(splitResults[i].replaceAll("\\s{2,}", " ").trim());
-                if (i != splitResults.length) {
-                    trimmedText.append("\n");
-                }
-            }
-        }
-        return trimmedText.toString().replaceAll("\\n{3,}", "\n\n");
+        return extractedText
+                // Normalize line breaks
+                .replaceAll("\r", "\n")
+                // Remove tabs
+                .replaceAll("\t", " ")
+                // Remove non-breaking spaces
+                .replaceAll("\u00A0", " ")
+                // Remove newlines that are just paragraph wrapping
+                .replaceAll("(?<![\\n])[\\n](?![\\n])", " ")
+                // Remove remaining newlines with exactly 2
+                .replaceAll("([ ]*\\n[ ]*)+", "\n\n")
+                // Remove duplicate spaces
+                .replaceAll("[ ]+", " ");
     }
 
     @Override
