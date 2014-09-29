@@ -200,28 +200,28 @@
                         {
                             "name": "graphVertexId",
                             "description": "the graphVertexId of the existing detected object",
-                            "required": true,
+                            "required": false,
                             "type": "string",
                             "paramType": "query"
                         },
                         {
                             "name": "justificationText",
                             "description": "the justification",
-                            "required": true,
+                            "required": false,
                             "type": "string",
                             "paramType": "query"
                         },
                         {
                             "name": "sourceInfo",
                             "description": "the source info",
-                            "required": true,
+                            "required": false,
                             "type": "string",
                             "paramType": "query"
                         },
                         {
                             "name": "originalPropertyKey",
                             "description": "the original property key",
-                            "required": true,
+                            "required": false,
                             "type": "string",
                             "paramType": "query"
                         },

@@ -294,6 +294,17 @@
         "DetectedObject": {
             "id": "DetectedObject",
             "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "DetectedObjectValue"
+                }
+            }
+        },
+        "DetectedObjectValue": {
+            "id": "DetectedObjectValue",
+            "properties": {
                 "x1": {
                     "type": "double"
                 },
@@ -307,6 +318,18 @@
                     "type": "double"
                 },
                 "concept": {
+                    "type": "string"
+                },
+                "edgeId": {
+                    "type": "string"
+                },
+                "resolvedVertexId": {
+                    "type": "string"
+                },
+                "originalPropertyKey": {
+                    "type": "string"
+                },
+                "process": {
                     "type": "string"
                 }
             }

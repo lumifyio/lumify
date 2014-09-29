@@ -155,7 +155,7 @@ public class EntityApi {
   public void resolveDetectedObject (String artifactId, String title, String conceptId, String visibilitySource, String graphVertexId, String justificationText, String sourceInfo, String originalPropertyKey, Double x1, Double x2, Double y1, Double y2) throws ApiException {
     Object postBody = null;
     // verify required params are set
-    if(artifactId == null || title == null || conceptId == null || visibilitySource == null || graphVertexId == null || justificationText == null || sourceInfo == null || originalPropertyKey == null || x1 == null || x2 == null || y1 == null || y2 == null ) {
+    if(artifactId == null || title == null || conceptId == null || visibilitySource == null || x1 == null || x2 == null || y1 == null || y2 == null ) {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
