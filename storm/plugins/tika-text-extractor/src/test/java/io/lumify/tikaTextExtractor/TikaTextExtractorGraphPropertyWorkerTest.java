@@ -167,7 +167,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
-        String expected = "the Quita Suená bank\n";
+        String expected = "the Quita Suená bank ";
         String actual = IOUtils.toString(LumifyProperties.TEXT.getPropertyValue(vertex).getInputStream(), "UTF-8");
         assertEquals(21, expected.length());
         assertEquals(expected, actual);
