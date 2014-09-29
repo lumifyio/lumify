@@ -915,21 +915,25 @@ define([
                         if (result[0].length) {
                             self.trigger('verticesAdded', { vertices: result[0], options: options });
                         }
+
+                        async.resolve(result[0]);
                     })
-                    .done(async.resolve);
             } else {
                 var vertices = this.verticesInWorkspace();
                 if (vertices.length) {
                     this.trigger('verticesAdded', { vertices: vertices, options: options });
                 }
-                async.resolve();
+                async.resolve(vertices);
             }
 
-            async.done(function() {
+            async.done(function(vertices) {
                 self.relationshipsReady(function(relationships) {
                     self.trigger('relationshipsLoaded', { relationships: relationships });
                 });
-                self.trigger(event.target, 'workspaceFiltered');
+                self.trigger(event.target, 'workspaceFiltered', {
+                    hits: vertices && vertices.length,
+                    total: _.size(self.workspaceVertices)
+                });
             });
         };
 

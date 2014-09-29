@@ -49,16 +49,19 @@ define([
                                 result.totalHits === 0
                         );
 
-                    $searchResults.children('.content').scrollTop(0);
+                    if (result.totalHits === 0) {
+                        $searchResults.hide();
+                    } else {
+                        $searchResults.show().children('.content').scrollTop(0);
 
-                    VertexList.attachTo($resultsContainer, {
-                        vertices: vertices,
-                        nextOffset: result.nextOffset,
-                        infiniteScrolling: this.attr.infiniteScrolling,
-                        total: result.totalHits
-                    });
-                    this.makeResizable($searchResults);
-                    $searchResults.show().find('.multi-select');
+                        VertexList.attachTo($resultsContainer, {
+                            vertices: vertices,
+                            nextOffset: result.nextOffset,
+                            infiniteScrolling: this.attr.infiniteScrolling,
+                            total: result.totalHits
+                        });
+                        this.makeResizable($searchResults);
+                    }
                     this.trigger($searchResults, 'paneResized');
                 }
             });

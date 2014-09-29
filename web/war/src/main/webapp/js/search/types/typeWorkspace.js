@@ -1,9 +1,11 @@
 define([
     'flight/lib/component',
-    './withSearch'
+    './withSearch',
+    'util/formatters'
 ], function(
     defineComponent,
-    withSearch) {
+    withSearch,
+    F) {
     'use strict';
 
     return defineComponent(SearchTypeWorkspace, withSearch);
@@ -30,7 +32,12 @@ define([
         };
 
         this.onWorkspaceFiltered = function(event, data) {
-            this.trigger('searchRequestCompleted', { success: true });
+            this.trigger('searchRequestCompleted', {
+                success: true,
+                message: i18n('search.types.workspace.message',
+                             F.number.prettyApproximate(data.hits),
+                             F.number.prettyApproximate(data.total))
+            });
         };
 
     }
