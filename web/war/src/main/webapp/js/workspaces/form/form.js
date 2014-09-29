@@ -141,7 +141,10 @@ define([
 
             this.currentUsers = response.users;
 
-            (workspace.users || (workspace.users = [])).forEach(function(userPermission) {
+            _.sortBy(workspace.users || (workspace.users = []), function(user) {
+                var user = _.findWhere(self.currentUsers, { id: user.userId });
+                return user && user.displayName || 0;
+            }).forEach(function(userPermission) {
                 if (userPermission.userId != window.currentUser.id) {
                     var data = self.shareRowDataForPermission(userPermission);
                     if (data) {
@@ -168,7 +171,9 @@ define([
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,
                         status: user.status,
-                        displayName: user.displayName
+                        displayName: user.displayName,
+                        email: user.email,
+                        userName: user.userName
                     },
                     editable: this.editable
                 };
