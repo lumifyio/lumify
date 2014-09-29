@@ -15,6 +15,7 @@ define([
     'service/ontology',
     'service/config',
     'service/user',
+    'util/deferredImage',
     'util/undoManager',
     'util/clipboardManager',
     'util/privileges',
@@ -28,7 +29,7 @@ define([
     // Service
     Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
 
-    undoManager, ClipboardManager, Privileges, F) {
+    deferredImage, undoManager, ClipboardManager, Privileges, F) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 500,
@@ -100,6 +101,7 @@ define([
             this.ontologyService.concepts().done(function(concepts) {
                 self.cachedConcepts = concepts;
                 self.cachedConceptsDeferred.resolve(concepts);
+                self.precacheIcons(concepts);
             })
 
             ClipboardManager.attachTo(this.node);
@@ -1250,6 +1252,29 @@ define([
 
                     return self.vertex(id);
                 }).toArray();
+            }
+        };
+
+        this.precacheIcons = function(concepts) {
+            var urls = _.chain(concepts.byId)
+                .values()
+                .pluck('glyphIconHref')
+                .compact()
+                .unique()
+                .value();
+
+            cacheNextImage(urls);
+
+            function cacheNextImage(urls) {
+                if (!urls.length) {
+                    return;
+                }
+
+                var url = urls.shift();
+
+                deferredImage(url).always(function() {
+                    cacheNextImage(urls);
+                });
             }
         };
     }
