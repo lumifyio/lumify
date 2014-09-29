@@ -550,6 +550,7 @@ define([
             var self = this;
 
             vertexService.deleteProperty(this.attr.data.id, data.property)
+                .done(this.closePropertyForm.bind(this))
                 .fail(this.requestFailure.bind(this, event.target))
         };
 
