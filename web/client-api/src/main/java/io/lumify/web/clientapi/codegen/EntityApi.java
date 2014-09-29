@@ -152,5 +152,123 @@ public class EntityApi {
       }
     }
   }
+  public void resolveDetectedObject (String artifactId, String title, String conceptId, String visibilitySource, String graphVertexId, String justificationText, String sourceInfo, String originalPropertyKey, Double x1, Double x2, Double y1, Double y2) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(artifactId == null || title == null || conceptId == null || visibilitySource == null || graphVertexId == null || justificationText == null || sourceInfo == null || originalPropertyKey == null || x1 == null || x2 == null || y1 == null || y2 == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/entity/resolveDetectedObject".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(artifactId)))
+      queryParams.put("artifactId", String.valueOf(artifactId));
+    if(!"null".equals(String.valueOf(title)))
+      queryParams.put("title", String.valueOf(title));
+    if(!"null".equals(String.valueOf(conceptId)))
+      queryParams.put("conceptId", String.valueOf(conceptId));
+    if(!"null".equals(String.valueOf(visibilitySource)))
+      queryParams.put("visibilitySource", String.valueOf(visibilitySource));
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(justificationText)))
+      queryParams.put("justificationText", String.valueOf(justificationText));
+    if(!"null".equals(String.valueOf(sourceInfo)))
+      queryParams.put("sourceInfo", String.valueOf(sourceInfo));
+    if(!"null".equals(String.valueOf(originalPropertyKey)))
+      queryParams.put("originalPropertyKey", String.valueOf(originalPropertyKey));
+    if(!"null".equals(String.valueOf(x1)))
+      queryParams.put("x1", String.valueOf(x1));
+    if(!"null".equals(String.valueOf(x2)))
+      queryParams.put("x2", String.valueOf(x2));
+    if(!"null".equals(String.valueOf(y1)))
+      queryParams.put("y1", String.valueOf(y1));
+    if(!"null".equals(String.valueOf(y2)))
+      queryParams.put("y2", String.valueOf(y2));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return ;
+      }
+      else {
+        return ;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return ;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public void unresolveDetectedObject (String vertexId, String multiValueKey) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(vertexId == null || multiValueKey == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/entity/unresolveDetectedObject".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(vertexId)))
+      queryParams.put("vertexId", String.valueOf(vertexId));
+    if(!"null".equals(String.valueOf(multiValueKey)))
+      queryParams.put("multiValueKey", String.valueOf(multiValueKey));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return ;
+      }
+      else {
+        return ;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return ;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
   }
 

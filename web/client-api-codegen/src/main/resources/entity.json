@@ -159,6 +159,134 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/entity/resolveDetectedObject",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "resolves a detected object",
+                    "type": "void",
+                    "nickname": "resolveDetectedObject",
+                    "parameters": [
+                        {
+                            "name": "artifactId",
+                            "description": "ID of the artifact",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "title",
+                            "description": "The title",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "conceptId",
+                            "description": "the concept id of the detected object",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "the visibility source of the detected object",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "graphVertexId",
+                            "description": "the graphVertexId of the existing detected object",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "the justification",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "the source info",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "originalPropertyKey",
+                            "description": "the original property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "x1",
+                            "description": "The top left X coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "x2",
+                            "description": "The bottom right X coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "y1",
+                            "description": "The top left Y coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "y2",
+                            "description": "The bottom right Y coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/entity/unresolveDetectedObject",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "unresolves a detected object",
+                    "type": "void",
+                    "nickname": "unresolveDetectedObject",
+                    "parameters": [
+                        {
+                            "name": "vertexId",
+                            "description": "ID of the detected object vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "multiValueKey",
+                            "description": "the multi-value key of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {
