@@ -184,11 +184,12 @@ define([
         });
 
         this.onVerticesUpdated = function(event, data) {
+            var self = this;
             if (data && data.vertices) {
                 var intersection = _.intersection(this.displayingVertexIds, _.pluck(data.vertices, 'id'));
                 if (intersection.length) {
                     appData.refresh(this.displayingVertexIds)
-                        .done(this.drawHistograms.bind(this));
+                        .done(self.drawHistograms.bind(this));
                 }
             }
         };
