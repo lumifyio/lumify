@@ -63,7 +63,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         lumifyApi.logout();
     }
 
-    private void resolveDetectedObject() {
+    private void resolveDetectedObject() throws ApiException {
         // TODO write me
     }
 

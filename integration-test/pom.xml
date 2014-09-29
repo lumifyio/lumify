@@ -87,5 +87,10 @@
             <artifactId>lumify-mime-type-ontology-mapper</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-opencv-object-detector</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
