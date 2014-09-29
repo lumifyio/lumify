@@ -5,10 +5,7 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ArtifactApiExt;
-import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.codegen.model.Element;
-import io.lumify.web.clientapi.codegen.model.Property;
-import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
+import io.lumify.web.clientapi.codegen.model.*;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +54,8 @@ public class UploadImageFileIntegrationTest extends TestBase {
             }
         }
 
-        assertEquals(15, lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), ""));
+        DetectedObjects detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
+        assertEquals(15, detectedObjects.getDetectedObjects().size());
 
         WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("%s", diff.toString());

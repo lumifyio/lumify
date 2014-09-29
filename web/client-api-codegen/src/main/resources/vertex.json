@@ -283,6 +283,17 @@
         "DetectedObjects": {
             "id": "DetectedObjects",
             "properties": {
+                "detectedObjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "DetectedObject"
+                    }
+                }
+            }
+        },
+        "DetectedObject": {
+            "id": "DetectedObject",
+            "properties": {
                 "x1": {
                     "type": "double"
                 },
