@@ -159,6 +159,40 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/property/detectedObjects",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "gets all the detected objects for a vertex",
+                    "type": "DetectedObjects",
+                    "nickname": "getDetectedObjects",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "workspaceId",
+                            "description": "the workspace id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {
@@ -242,6 +276,26 @@
                     "type": "string"
                 },
                 "edgeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "DetectedObjects": {
+            "id": "DetectedObjects",
+            "properties": {
+                "x1": {
+                    "type": "double"
+                },
+                "x2": {
+                    "type": "double"
+                },
+                "y1": {
+                    "type": "double"
+                },
+                "y2": {
+                    "type": "double"
+                },
+                "concept": {
                     "type": "string"
                 }
             }

@@ -57,6 +57,8 @@ public class UploadImageFileIntegrationTest extends TestBase {
             }
         }
 
+        assertEquals(15, lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), ""));
+
         WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("%s", diff.toString());
         assertEquals(9, diff.getDiffs().size());
