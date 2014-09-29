@@ -147,6 +147,9 @@ public class LumifyTestCluster {
             LOGGER.info("shutdown: LumifyBootstrap");
             LumifyBootstrap.shutdown();
 
+            LOGGER.info("shutdown: clear graph property queue");
+            getGraphPropertyQueue().clear();
+
             Thread.sleep(1000);
             LOGGER.info("shutdown complete");
         } catch (InterruptedException e) {
