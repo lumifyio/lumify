@@ -1,13 +1,28 @@
-* artifact          - Source data which could be a document, image, video, or audio.
-* concept           - A type (person, place, thing, etc). This is usually denoted by a concept IRI which is a unique
-                      URI describing the concept (http://lumify.io/#person).
-* poster frame      - The image that is displayed in the video player before the use clicks play.
-* raw               - The unmodified import data.
-* term mention      - A word or group of words found in a text or video transcript property which denotes a concept.
-                      (i.e. Joe Ferner, United States, Linux, etc).
-* thumbnail image   - The image used in search results and on the graph.
-* video preview     - A stitched together image of X number of frames of a video to support scrubbing withing the video. 
-* visibility source - The string passed from the viability UI component. This could be XML, JSON, etc. This string is
-                      then passed through a io.lumify.core.security.VisibilityTranslator to be converted to a
-                      io.lumify.core.security.LumifyVisibility which can create either a Accumulo visibility string
-                      or a JSON document to include workspace visibility.
+artifact
+: source data which could be a document, image, video, or audio
+
+concept
+: a type (person, place, thing, etc)
+: this is usually denoted by a concept IRI which is a unique URI describing the concept, e.g. http://lumify.io/#person
+
+poster frame
+: the image that is displayed in the video player before the use clicks play
+
+raw
+: the unmodified import data
+
+term mention
+: a word or group of words found in a text or video transcript property which denotes a concept
+: e.g. Joe Ferner, United States, Linux
+
+thumbnail image
+: the image used in search results and on the graph
+
+video preview
+: a stitched together image of X number of frames of a video to support scrubbing withing the video
+
+visibility source
+: the string passed from the visibility UI component, this could be XML, JSON, etc.
+: this string is then passed through a io.lumify.core.security.VisibilityTranslator to be converted to a
+io.lumify.core.security.LumifyVisibility which can create either an Accumulo visibility string
+or a JSON document to include workspace visibility
