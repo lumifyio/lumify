@@ -76,6 +76,12 @@ body > .vertex-dragging {
         padding-top: 0.8em;          
         line-height: 2.2em;
       }
+      &.relation-from a:before {
+        content: '← ';
+      }
+      &.relation-to a:before {
+        content: '→ ';
+      }
       &.has-timeSubtitle, &.has-subtitle {
         a {
           line-height: 1.2em;
