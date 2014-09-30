@@ -8,6 +8,7 @@ define([
     'service/vertex',
     'service/ontology',
     'util/vertex/formatters',
+    'util/ontology/conceptSelect',
     'tpl!util/alert',
     'util/jquery.removePrefixedClasses'
 ], function(
@@ -20,6 +21,7 @@ define([
     VertexService,
     OntologyService,
     F,
+    ConceptSelector,
     alertTemplate) {
     'use strict';
 
@@ -36,7 +38,7 @@ define([
             objectSignSelector: '.object-sign',
             graphVertexSelector: '.graphVertexId',
             visibilitySelector: '.visibility',
-            conceptSelector: 'select',
+            conceptContainerSelector: '.concept-container',
             helpSelector: '.help',
             addNewPropertiesSelector: '.none'
         });
@@ -94,7 +96,7 @@ define([
             this.currentGraphVertexId = null;
             this.select('helpSelector').show();
             this.select('visibilitySelector').hide();
-            this.select('conceptSelector').attr('disabled', true).hide();
+            this.select('conceptContainerSelector').hide();
             this.select('actionButtonSelector').hide();
             this.updateResolveImageIcon();
         };
@@ -107,11 +109,9 @@ define([
                 this.select('graphVertexSelector').val(newGraphVertexId);
                 var info = _.isObject(item) ? item.properties || item : $(this.attr.mentionNode).data('info');
 
-                if (newGraphVertexId) {
-                    this.select('conceptSelector').attr('disabled', true);
-                } else {
-                    this.select('conceptSelector').attr('disabled', false);
-                }
+                this.trigger(this.select('conceptContainerSelector'), 'enableConcept', {
+                    enable: !newGraphVertexId
+                })
 
                 var conceptType = _.isArray(info) ?
                     _.findWhere(info, { name: 'http://lumify.io#conceptType' }) :
@@ -123,7 +123,10 @@ define([
                 }
 
                 this.deferredConcepts.done(function() {
-                    self.updateConceptSelect(conceptType).show();
+                    self.trigger(self.select('conceptContainerSelector').show(), 'selectConcept', {
+                        conceptId: conceptType
+                    })
+                    self.updateConceptLabel(conceptType)
                 });
 
                 if (this.unresolve) {
@@ -149,7 +152,9 @@ define([
                 });
             } else if (this.attr.restrictConcept) {
                 this.deferredConcepts.done(function() {
-                    self.updateConceptSelect(self.attr.restrictConcept);
+                    self.trigger(self.select('conceptContainerSelector'), 'selectConcept', {
+                        conceptId: self.attr.restrictConcept
+                    })
                 });
             }
 
@@ -160,18 +165,6 @@ define([
                     });
             } else this.updateResolveImageIcon();
 
-        };
-
-        this.updateConceptSelect = function(val) {
-            var conceptSelect = this.select('conceptSelector').val(val);
-
-            if (val) {
-                this.select('actionButtonSelector').removeAttr('disabled');
-            } else {
-                this.select('actionButtonSelector').attr('disabled', true);
-            }
-
-            return conceptSelect;
         };
 
         this.onButtonClicked = function(event) {
@@ -202,7 +195,7 @@ define([
             var parameters = {
                 sign: newObjectSign,
                 propertyKey: this.attr.propertyKey,
-                conceptId: this.select('conceptSelector').val(),
+                conceptId: this.selectedConceptId,
                 mentionStart: mentionStart,
                 mentionEnd: mentionEnd,
                 artifactId: this.attr.artifactId,
@@ -219,7 +212,7 @@ define([
             _.defer(this.buttonLoading.bind(this));
 
             if (!parameters.conceptId || parameters.conceptId.length === 0) {
-                this.select('conceptSelector').focus();
+                this.select('conceptContainerSelector').find('select').focus();
                 return;
             }
 
@@ -262,7 +255,7 @@ define([
                 newSign = $.trim(this.select('objectSignSelector').val()),
                 parameters = {
                     title: newSign,
-                    conceptId: this.select('conceptSelector').val(),
+                    conceptId: this.selectedConceptId,
                     originalPropertyKey: this.attr.dataInfo.originalPropertyKey,
                     graphVertexId: this.attr.dataInfo.resolvedVertexId ?
                         this.attr.dataInfo.resolvedVertexId :
@@ -307,10 +300,15 @@ define([
                 });
         };
 
-        this.onConceptChanged = function(event) {
-            var select = $(event.target);
+        this.onConceptSelected = function(event, data) {
+            this.selectedConceptId = data && data.concept && data.concept.id || '';
+            this.updateConceptLabel(this.selectedConceptId);
 
-            this.updateConceptLabel(select.val());
+            if (this.selectedConceptId) {
+                this.select('actionButtonSelector').removeAttr('disabled');
+            } else {
+                this.select('actionButtonSelector').attr('disabled', true);
+            }
         };
 
         this.onVisibilityChange = function(event, data) {
@@ -319,6 +317,8 @@ define([
         };
 
         this.updateConceptLabel = function(conceptId, vertex) {
+            var self = this;
+
             if (conceptId === '') {
                 this.select('actionButtonSelector').attr('disabled', true);
                 this.updateResolveImageIcon();
@@ -326,11 +326,9 @@ define([
             }
             this.select('actionButtonSelector').removeAttr('disabled');
 
-            if (this.allConcepts && this.allConcepts.length) {
-
-                vertex = $(vertex || this.promoted || this.attr.mentionNode);
-                this.updateResolveImageIcon(null, conceptId);
-            }
+            this.deferredConcepts.done(function(allConcepts) {
+                self.updateResolveImageIcon(null, conceptId);
+            })
         };
 
         this.setupContent = function() {
@@ -384,6 +382,10 @@ define([
                     i18n('detail.resolve.form.button.resolve.existing') :
                     i18n('detail.resolve.form.button.resolve.new')
             }));
+
+            ConceptSelector.attachTo(this.select('conceptContainerSelector').toggle(!!graphVertexId), {
+                restrictConcept: this.attr.restrictConcept
+            });
 
             this.graphVertexChanged(graphVertexId, data, true);
 
@@ -441,9 +443,7 @@ define([
 
             this.on('visibilitychange', this.onVisibilityChange);
 
-            this.on('change', {
-                conceptSelector: this.onConceptChanged
-            });
+            this.on('conceptSelected', this.onConceptSelected);
 
             this.on('click', {
                 entityConceptMenuSelector: this.onEntityConceptSelected,
@@ -456,8 +456,7 @@ define([
             });
 
             this.on('keydown', {
-                objectSignSelector: this.onKeyPress,
-                conceptSelector: this.onKeyPress
+                objectSignSelector: this.onKeyPress
             });
 
             this.on('opened', function() {
@@ -486,7 +485,7 @@ define([
                     return c.userVisible !== false;
                 });
 
-                var selectedConceptId = vertexInfo && (
+                self.selectedConceptId = vertexInfo && (
                     vertexInfo['http://lumify.io#conceptType'] ||
                     (
                         vertexInfo.properties &&
@@ -494,40 +493,11 @@ define([
                     )
                 ) || '';
 
-                self.select('conceptSelector').html(conceptsTemplate({
-                    concepts: _.chain(self.allConcepts)
-                        .map(function(c) {
-                            return {
-                                id: c.id,
-                                displayName: c.displayName,
-                                indent: c.flattenedDisplayName
-                                         .replace(/[^\/]/g, '')
-                                         .replace(/\//g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
-                                selected: selectedConceptId === c.id
-                            }
-                        })
-                        .filter(function(concept) {
-                            if (self.attr.restrictConcept) {
+                self.trigger(self.select('conceptContainerSelector'), 'selectConcept', {
+                    conceptId: self.selectedConceptId
+                })
 
-                                // Walk up tree to see if any match
-                                var parentConceptId = concept.id;
-                                do {
-                                    if (self.attr.restrictConcept === parentConceptId) {
-                                        return true;
-                                    }
-                                } while (
-                                    parentConceptId &&
-                                    (parentConceptId = concepts.byId[parentConceptId].parentConcept)
-                                );
-
-                                return false;
-                            }
-                            return true;
-                        })
-                        .value()
-                }));
-
-                if (self.select('conceptSelector').val() === '') {
+                if (!self.selectedConceptId) {
                     self.select('actionButtonSelector').attr('disabled', true);
                 }
             });

@@ -7,6 +7,7 @@ define([
     'tpl!./entityItem',
     'data',
     'util/vertex/formatters',
+    'util/ontology/conceptSelect',
     'hbs!util/ontology/concept-options',
     'fields/selection/selection',
     'service/ontology'
@@ -18,6 +19,7 @@ define([
     entityItemTemplate,
     appData,
     F,
+    ConceptSelector,
     conceptsTemplate,
     FieldSelection,
     OntologyService) {
@@ -38,7 +40,7 @@ define([
             fieldSelectionSelector: '.newrow .add-property',
             removeEntityRowSelector: '.entity-filters button.remove',
             removeRowSelector: '.prop-filters button.remove',
-            conceptsSelector: '.concepts-dropdown select'
+            conceptDropdownSelector: '.concepts-dropdown'
         });
 
         this.after('initialize', function() {
@@ -55,9 +57,7 @@ define([
                 removeEntityRowSelector: this.onRemoveEntityRow,
                 removeRowSelector: this.onRemoveRow
             });
-            this.on('change', {
-                conceptsSelector: this.onConceptChange
-            });
+            this.on('conceptSelected', this.onConceptChange);
             this.on('searchByRelatedEntity', this.onSearchByRelatedEntity);
 
             this.loadPropertyFilters();
@@ -79,7 +79,7 @@ define([
             this.notifyOfFilters();
         };
 
-        this.onConceptChange = function(event) {
+        this.onConceptChange = function(event, data) {
             var self = this,
                 deferred = $.Deferred().done(function(properties) {
                     self.select('fieldSelectionSelector').each(function() {
@@ -89,7 +89,7 @@ define([
                     });
                 });
 
-            this.conceptFilter = $(event.target).val();
+            this.conceptFilter = data.concept && data.concept.id || '';
 
             // Publish change to filter properties typeaheads
             if (this.conceptFilter) {
@@ -110,7 +110,7 @@ define([
                 self.teardownField($(this));
             }).closest('li:not(.newrow)').remove();
 
-            this.select('conceptsSelector').val('');
+            this.trigger(this.select('conceptDropdownSelector'), 'clearSelectedConcept');
             this.conceptFilter = '';
 
             this.createNewRowIfNeeded();
@@ -233,18 +233,10 @@ define([
         };
 
         this.loadConcepts = function() {
-            var self = this;
-
-            this.ontologyService.concepts().done(function(concepts) {
-                self.select('conceptsSelector').html(
-                    conceptsTemplate({
-                        defaultText: i18n('search.filters.all_concepts'),
-                        concepts: _.filter(concepts.byTitle, function(c) {
-                            return c.userVisible !== false;
-                        })
-                    })
-                );
-            });
+            ConceptSelector.attachTo(this.select('conceptDropdownSelector'), {
+                onlySearchable: true,
+                defaultText: i18n('search.filters.all_concepts')
+            })
         };
 
         this.loadPropertyFilters = function() {

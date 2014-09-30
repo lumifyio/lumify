@@ -271,6 +271,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             result.setProperty(LumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
         }
 
+        Boolean searchable = getSearchable(o, ontologyClass);
+        if (searchable != null) {
+            result.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
+        }
+
         String titleFormula = getTitleFormula(o, ontologyClass);
         if (titleFormula != null) {
             result.setProperty(LumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);

@@ -1,19 +1,17 @@
 require([
     'configuration/admin/plugin',
     'hbs!io/lumify/web/devTools/templates/ontology-edit',
-    'service/ontology',
     'util/formatters',
+    'util/ontology/conceptSelect',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
     template,
-    OntologyService,
     F,
+    ConceptSelector,
     d3
     ) {
     'use strict';
-
-    var ontologyService = new OntologyService();
 
     return defineLumifyAdminPlugin(OntologyEdit, {
         section: 'Ontology',
@@ -53,43 +51,23 @@ require([
     function OntologyEdit() {
 
         this.defaultAttrs({
-            conceptSelector: '.concept',
+            conceptSelector: '.concept-container',
             buttonSelector: '.btn-primary'
         });
 
         this.after('initialize', function() {
             var self = this;
 
-            this.on('change', {
-                conceptSelector: this.onChange
-            });
+            this.on('conceptSelected', this.onConceptSelected);
             this.on('click', {
                 buttonSelector: this.onSave
             });
 
             this.$node.html(template({}));
 
-            ontologyService.concepts()
-                .always(function() {
-                    self.$node.find('.badge').remove();
-                })
-                .done(function(concepts) {
-                    self.concepts = concepts;
-                    self.select('conceptSelector')
-                        .append(
-                            _.chain(concepts.byId)
-                            .values()
-                            .sortBy(function(concept) {
-                                return concept.displayName.toLowerCase();
-                            })
-                            .map(function(concept) {
-                                return $('<option>')
-                                    .val(concept.title)
-                                    .text(concept.displayName || concept.title)
-                            })
-                            .value()
-                        ).change();
-                });
+            ConceptSelector.attachTo(this.select('conceptSelector'), {
+                showAdminConcepts: true
+            });
         });
 
         this.onSave = function() {
@@ -114,22 +92,23 @@ require([
             )
         };
 
-        this.onChange = function() {
-            var self = this,
-                conceptId = this.select('conceptSelector').val(),
-                concept = this.concepts.byId[conceptId];
+        this.onConceptSelected = function(event, data) {
+            var self = this;
 
-            this.$node.find('.btn-primary').removeAttr('disabled');
+            if (data.concept) {
+                this.$node.find('.btn-primary').removeAttr('disabled');
 
-            _.each(concept, function(value, key) {
-                self.$node.find('.' + key).val(
-                    key === 'color' ?
-                    rgbToHex(value) :
-                    value
-                );
-            });
-
-        }
+                _.each(data.concept, function(value, key) {
+                    self.$node.find('.' + key).val(
+                        key === 'color' ?
+                        rgbToHex(value) :
+                        value
+                    );
+                });
+            } else {
+                this.$node.find('.btn-primary').attr('disabled', true);
+            }
+        };
 
     }
 });

@@ -20,6 +20,7 @@ public class InMemoryConcept extends Concept {
     private byte[] glyphIcon;
     private byte[] mapGlyphIcon;
     private boolean userVisible;
+    private Boolean searchable;
 
     protected InMemoryConcept(String conceptIRI, String parentIRI) {
         super(parentIRI, new ArrayList<OntologyProperty>());
@@ -59,6 +60,11 @@ public class InMemoryConcept extends Concept {
     @Override
     public String getTitleFormula() {
         return titleFormula;
+    }
+
+    @Override
+    public Boolean getSearchable() {
+        return searchable;
     }
 
     @Override
