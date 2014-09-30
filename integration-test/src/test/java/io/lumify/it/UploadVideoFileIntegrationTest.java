@@ -58,7 +58,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
             }
         }
 
-        assertPublishAll(lumifyApi, 9999);
+        assertPublishAll(lumifyApi, 16);
 
         lumifyApi.logout();
     }

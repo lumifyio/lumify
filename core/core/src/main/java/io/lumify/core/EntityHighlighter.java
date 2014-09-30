@@ -1,5 +1,7 @@
 package io.lumify.core;
 
+import io.lumify.core.ingest.video.VideoFrameInfo;
+import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.textHighlighting.OffsetItem;
 import io.lumify.core.model.textHighlighting.VertexOffsetItem;
@@ -135,16 +137,15 @@ public class EntityHighlighter {
     }
 
     private static int getVideoTranscriptEntryIndex(VideoTranscript videoTranscript, OffsetItem offsetItem) {
-        throw new RuntimeException("not implemented");
-//        Integer videoTranscriptEntryIndex = null;
-//        VideoFrameInfo videoFrameInfo = VideoPropertyHelper.getVideoFrameInfo(offsetItem.getRowKey());
-//        if (videoFrameInfo != null) {
-//            videoTranscriptEntryIndex = videoTranscript.findEntryIndexFromStartTime(videoFrameInfo.getFrameStartTime());
-//        }
-//        if (videoTranscriptEntryIndex == null) {
-//            videoTranscriptEntryIndex = offsetItem.getVideoTranscriptEntryIndex();
-//        }
-//        return videoTranscriptEntryIndex;
+        Integer videoTranscriptEntryIndex = null;
+        VideoFrameInfo videoFrameInfo = VideoPropertyHelper.getVideoFrameInfo(offsetItem.getId());
+        if (videoFrameInfo != null) {
+            videoTranscriptEntryIndex = videoTranscript.findEntryIndexFromStartTime(videoFrameInfo.getFrameStartTime());
+        }
+        if (videoTranscriptEntryIndex == null) {
+            videoTranscriptEntryIndex = offsetItem.getVideoTranscriptEntryIndex();
+        }
+        return videoTranscriptEntryIndex;
     }
 
     private static String safeSubstring(String text, int beginIndex) {

@@ -87,14 +87,11 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
 
         videoTranscript = JsonSerializer.getSynthesisedVideoTranscription(artifactVertex, propertyKey);
         if (videoTranscript != null) {
-            throw new RuntimeException("not implemented");
-//            LOGGER.debug("returning synthesised video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
-//            Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex, propertyKey, authorizations);
-//            Iterable<Vertex> frameTermMentions = termMentionRepository.findByRowStartsWith(artifactVertex.getId() + RowKeyHelper.MAJOR_FIELD_SEPARATOR + propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR, modelUserContext);
-//            JoinIterable<Vertex> allTermMentions = new JoinIterable<Vertex>(termMentions, frameTermMentions);
-//            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, allTermMentions, workspaceId, authorizations);
-//            respondWithJson(response, highlightedVideoTranscript.toJson());
-//            return;
+            LOGGER.debug("returning synthesised video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
+            Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex.getId(), propertyKey, authorizations);
+            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions, workspaceId, authorizationsWithTermMention);
+            respondWithJson(response, highlightedVideoTranscript.toJson());
+            return;
         }
 
         respondWithNotFound(response);
