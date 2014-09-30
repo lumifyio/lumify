@@ -126,11 +126,21 @@ define([
                     $section.data('total', result.totalReferences);
 
                     var node = $content.empty().append('<div>').find('div'),
-                        vertices = _.pluck(relationships, 'vertex');
+                        relationDirections = {},
+                        vertices = _.map(relationships, function(relationship) {
+                            var relation = relationship.relationship,
+                                vertex = relationship.vertex;
+                            relationDirections[vertex.id] = 'relation-' + (
+                                relation.destVertexId === vertex.id ?
+                                    'to' : 'from'
+                            );
+                            return vertex;
+                        });
 
                     node.teardownComponent(VertexList);
                     VertexList.attachTo(node, {
-                        vertices: vertices
+                        vertices: vertices,
+                        relationDirections: relationDirections
                     });
 
                     if (result.relationships.length !== result.totalReferences) {

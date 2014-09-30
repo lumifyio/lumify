@@ -69,6 +69,10 @@ define([
                     classes.push('non_concept_preview');
                 }
 
+                if (self.attr.relationDirections && v.id in self.attr.relationDirections) {
+                    classes.push(self.attr.relationDirections[v.id]);
+                }
+
                 classNamesForVertex[v.id] = classes.join(' ');
             });
 
