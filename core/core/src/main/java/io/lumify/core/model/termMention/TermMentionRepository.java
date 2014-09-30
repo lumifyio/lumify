@@ -22,6 +22,7 @@ public class TermMentionRepository {
     }
 
     public Iterable<Vertex> findBySourceGraphVertexAndPropertyKey(String sourceVertexId, final String propertyKey, Authorizations authorizations) {
+        authorizations = getAuthorizations(authorizations);
         return new FilterIterable<Vertex>(findBySourceGraphVertex(sourceVertexId, authorizations)) {
             @Override
             protected boolean isIncluded(Vertex v) {
@@ -46,7 +47,19 @@ public class TermMentionRepository {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         ExistingElementMutation<Vertex> m = termMention.prepareMutation();
         m.alterElementVisibility(newVisibility);
+        for (Property property : termMention.getProperties()) {
+            m.alterPropertyVisibility(property, newVisibility);
+        }
         m.save(authorizationsWithTermMention);
+
+        for (Edge edge : termMention.getEdges(Direction.BOTH, authorizationsWithTermMention)) {
+            ExistingElementMutation<Edge> edgeMutation = edge.prepareMutation();
+            edgeMutation.alterElementVisibility(newVisibility);
+            for (Property property : edge.getProperties()) {
+                edgeMutation.alterPropertyVisibility(property, newVisibility);
+            }
+            edgeMutation.save(authorizationsWithTermMention);
+        }
     }
 
     public Iterable<Vertex> findResolvedTo(String destVertexId, Authorizations authorizations) {

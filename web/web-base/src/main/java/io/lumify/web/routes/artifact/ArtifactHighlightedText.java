@@ -47,7 +47,8 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Authorizations authorizations = termMentionRepository.getAuthorizations(getAuthorizations(request, user));
+        Authorizations authorizations = getAuthorizations(request, user);
+        Authorizations authorizationsWithTermMention = termMentionRepository.getAuthorizations(authorizations);
         String workspaceId = getActiveWorkspaceId(request);
 
         String graphVertexId = getRequiredParameter(request, "graphVertexId");
@@ -67,8 +68,8 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             if (text == null) {
                 highlightedText = "";
             } else {
-                Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex.getId(), propertyKey, authorizations);
-                highlightedText = entityHighlighter.getHighlightedText(text, termMentions, workspaceId, authorizations);
+                Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(artifactVertex.getId(), propertyKey, authorizationsWithTermMention);
+                highlightedText = entityHighlighter.getHighlightedText(text, termMentions, workspaceId, authorizationsWithTermMention);
             }
 
             respondWithHtml(response, highlightedText);

@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.securegraph.util.IterableUtils.count;
 import static org.securegraph.util.IterableUtils.toList;
 
 public class WorkspacePublish extends BaseRequestHandler {
@@ -311,6 +312,13 @@ public class WorkspacePublish extends BaseRequestHandler {
         ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         for (Audit row : auditRepository.findByRowStartsWith(vertex.getId(), systemModelUser)) {
             auditRepository.updateColumnVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString());
+        }
+
+        for (Vertex termMention : termMentionRepository.findBySourceGraphVertex(vertex.getId(), authorizations)) {
+            if (count(termMention.getEdgeIds(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizations)) > 0) {
+                continue; // skip all resolved terms. They will be published by the edge.
+            }
+            termMentionRepository.updateVisibility(termMention, originalVertexVisibility, lumifyVisibility.getVisibility(), authorizations);
         }
     }
 
