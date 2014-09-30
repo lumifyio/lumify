@@ -8,7 +8,6 @@ import io.lumify.web.clientapi.codegen.ArtifactApiExt;
 import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.codegen.model.Element;
 import io.lumify.web.clientapi.codegen.model.Property;
-import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,14 +58,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
             }
         }
 
-        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
-        LOGGER.info("%s", diff.toString());
-        assertEquals(16, diff.getDiffs().size());
-        lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
-
-        diff = lumifyApi.getWorkspaceApi().getDiff();
-        LOGGER.info("%s", diff.toString());
-        assertEquals(0, diff.getDiffs().size());
+        assertPublishAll(lumifyApi, 9999);
 
         lumifyApi.logout();
     }

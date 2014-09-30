@@ -35,7 +35,8 @@ public class ResolveTermIntegrationTest extends TestBase {
         lumifyApi.logout();
 
         lumifyApi = login(USERNAME_TEST_USER_1);
-        publishResolvedTerm(lumifyApi);
+        assertPublishAll(lumifyApi, 9999);
+        lumifyTestCluster.processGraphPropertyQueue();
         lumifyApi.logout();
 
         lumifyApi = login(USERNAME_TEST_USER_2);
@@ -63,13 +64,7 @@ public class ResolveTermIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
-        PublishResponse publishResults = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
-        assertEquals(0, publishResults.getFailures().size());
-        assertTrue(publishResults.getSuccess());
-
-        diff = lumifyApi.getWorkspaceApi().getDiff();
-        assertEquals(0, diff.getDiffs().size());
+        assertPublishAll(lumifyApi, 9999);
 
         lumifyApi.logout();
     }
@@ -128,22 +123,6 @@ public class ResolveTermIntegrationTest extends TestBase {
         String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("%s", highlightedText);
         assertFalse("highlightedText contained string: " + highlightedText, highlightedText.contains("graphVertexId&quot;:&quot;" + joeFernerVertex.getId() + "&quot;"));
-    }
-
-    private void publishResolvedTerm(LumifyApi lumifyApi) throws ApiException {
-        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
-        LOGGER.info("publishResolvedTerm: diff: %s", diff.toString());
-        PublishResponse publishResults = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
-        LOGGER.info("publishResolvedTerm: publish response: %s", publishResults.toString());
-        assertEquals(0, publishResults.getFailures().size());
-        assertTrue(publishResults.getSuccess());
-
-        diff = lumifyApi.getWorkspaceApi().getDiff();
-        LOGGER.info("publishResolvedTerm: diff after publish: %s", diff.toString());
-        //TODO add this back in when we switch TermMentions to graph:
-        // assertEquals("too many diffs.", 0, diff.getDiffs().size());
-
-        lumifyTestCluster.processGraphPropertyQueue();
     }
 
     private void assertHighlightedTextContainResolvedEntityForOtherUser(LumifyApi lumifyApi) throws ApiException {

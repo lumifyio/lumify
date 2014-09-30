@@ -580,6 +580,7 @@
 
     <owl:DatatypeProperty rdf:about="&lumify;video-mp4">
         <rdfs:label xml:lang="en">Video MP4</rdfs:label>
+        <textIndexHints>NONE</textIndexHints>
         <userVisible xml:lang="en">false</userVisible>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
@@ -591,6 +592,7 @@
 
     <owl:DatatypeProperty rdf:about="&lumify;video-webm">
         <rdfs:label xml:lang="en">Video WebM</rdfs:label>
+        <textIndexHints>NONE</textIndexHints>
         <userVisible xml:lang="en">false</userVisible>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
@@ -602,6 +604,7 @@
 
     <owl:DatatypeProperty rdf:about="&lumify;videoFrame">
         <rdfs:label xml:lang="en">Video Frame</rdfs:label>
+        <textIndexHints>NONE</textIndexHints>
         <userVisible xml:lang="en">false</userVisible>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
@@ -613,6 +616,7 @@
 
     <owl:DatatypeProperty rdf:about="&lumify;videoPreviewImage">
         <rdfs:label xml:lang="en">Video Preview Image</rdfs:label>
+        <textIndexHints>NONE</textIndexHints>
         <userVisible xml:lang="en">false</userVisible>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
@@ -636,6 +640,16 @@
 
     <owl:DatatypeProperty rdf:about="&lumify;visibilityJson">
         <rdfs:label xml:lang="en">Visibility JSON</rdfs:label>
+        <textIndexHints>NONE</textIndexHints>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
+    <!-- http://lumify.io#visibilitySource -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;visibilitySource">
+        <rdfs:label xml:lang="en">Visibility Source</rdfs:label>
         <textIndexHints>NONE</textIndexHints>
         <userVisible>false</userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>

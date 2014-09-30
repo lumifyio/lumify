@@ -5,7 +5,9 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.codegen.model.*;
+import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.codegen.model.Element;
+import io.lumify.web.clientapi.codegen.model.Property;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,15 +104,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
     private void publishArtifact() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-
-        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
-        PublishResponse publishResults = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
-        assertEquals(0, publishResults.getFailures().size());
-        assertTrue(publishResults.getSuccess());
-
-        diff = lumifyApi.getWorkspaceApi().getDiff();
-        assertEquals(0, diff.getDiffs().size());
-
+        assertPublishAll(lumifyApi, 11);
         lumifyApi.logout();
     }
 

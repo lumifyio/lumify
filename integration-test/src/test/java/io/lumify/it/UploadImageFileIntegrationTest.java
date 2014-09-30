@@ -53,14 +53,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
             }
         }
 
-        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
-        LOGGER.info("%s", diff.toString());
-        assertEquals(9, diff.getDiffs().size());
-        lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
-
-        diff = lumifyApi.getWorkspaceApi().getDiff();
-        LOGGER.info("%s", diff.toString());
-        assertEquals(0, diff.getDiffs().size());
+        assertPublishAll(lumifyApi, 9);
 
         lumifyApi.logout();
     }

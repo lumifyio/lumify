@@ -8,7 +8,10 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.UserNameOnlyLumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.model.Property;
+import io.lumify.web.clientapi.codegen.model.PublishResponse;
+import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -137,5 +140,19 @@ public class TestBase {
         } else {
             assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
         }
+    }
+
+    protected void assertPublishAll(LumifyApi lumifyApi, int expectedDiffsBeforePublish) throws ApiException {
+        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
+        LOGGER.info("diff before publish: %s", diff.toString());
+        assertEquals(expectedDiffsBeforePublish, diff.getDiffs().size());
+        PublishResponse publishAllResult = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
+        LOGGER.info("publish all results: %s", publishAllResult.toString());
+        Assert.assertTrue("publish all failed: " + publishAllResult, publishAllResult.getSuccess());
+        assertEquals("publish all expected 0 failures: " + publishAllResult, 0, publishAllResult.getFailures().size());
+
+        diff = lumifyApi.getWorkspaceApi().getDiff();
+        LOGGER.info("diff after publish: %s", diff.toString());
+        assertEquals(0, diff.getDiffs().size());
     }
 }
