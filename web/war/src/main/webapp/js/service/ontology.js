@@ -3,7 +3,8 @@ define([
 ], function(ServiceBase) {
     'use strict';
 
-    var PARENT_CONCEPT = 'http://www.w3.org/2002/07/owl#Thing';
+    var PARENT_CONCEPT = 'http://www.w3.org/2002/07/owl#Thing',
+        ROOT_CONCEPT = 'http://lumify.io#root';
 
     function OntologyService() {
         ServiceBase.call(this);
@@ -44,11 +45,16 @@ define([
                                 ontology.concepts,
                                 _.findWhere(ontology.concepts, {id: PARENT_CONCEPT})
                             ),
-                            byId: ontology.conceptsById,
+                            forAdmin: _.chain(ontology.conceptsById)
+                                .filter(onlyEntityConcepts.bind(null, ontology.conceptsById, true))
+                                .map(addFlattenedTitles.bind(null, ontology.conceptsById, true))
+                                .sortBy('flattenedDisplayName')
+                                .value(),
+                            byId: _.indexBy(ontology.concepts, 'id'),
                             byClassName: _.indexBy(ontology.concepts, 'className'),
                             byTitle: _.chain(ontology.concepts)
-                                .filter(onlyEntityConcepts.bind(null, ontology.conceptsById))
-                                .map(addFlattenedTitles.bind(null, ontology.conceptsById))
+                                .filter(onlyEntityConcepts.bind(null, ontology.conceptsById, false))
+                                .map(addFlattenedTitles.bind(null, ontology.conceptsById, false))
                                 .sortBy('flattenedDisplayName')
                                 .value()
                         };
@@ -88,7 +94,7 @@ define([
             return root;
         }
 
-        function onlyEntityConcepts(conceptsById, concept) {
+        function onlyEntityConcepts(conceptsById, includeThing, concept) {
             var parentConceptId = concept.parentConcept,
                 currentParentConcept = null;
 
@@ -105,17 +111,21 @@ define([
                 parentConceptId = currentParentConcept.parentConcept;
             }
 
-            return false;
+            return includeThing && concept.id === PARENT_CONCEPT;
         }
 
-        function addFlattenedTitles(conceptsById, concept) {
+        function addFlattenedTitles(conceptsById, includeThing, concept) {
             var parentConceptId = concept.parentConcept,
                 currentParentConcept = null,
                 parents = [];
 
             while (parentConceptId) {
                 currentParentConcept = conceptsById[parentConceptId];
-                if (currentParentConcept.id === PARENT_CONCEPT) break;
+                if (includeThing) {
+                    if (currentParentConcept.id === ROOT_CONCEPT) break;
+                } else {
+                    if (currentParentConcept.id === PARENT_CONCEPT) break;
+                }
                 parents.push(currentParentConcept);
                 parentConceptId = currentParentConcept.parentConcept;
             }

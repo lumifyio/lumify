@@ -63,6 +63,11 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
+    public Boolean getSearchable() {
+        return LumifyProperties.SEARCHABLE.getPropertyValue(vertex);
+    }
+
+    @Override
     public String getSubtitleFormula() {
         return LumifyProperties.SUBTITLE_FORMULA.getPropertyValue(vertex);
     }

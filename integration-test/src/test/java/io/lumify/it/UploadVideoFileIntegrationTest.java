@@ -50,15 +50,22 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
+        boolean foundTesseractVideoTranscript = false;
         Element vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         for (Property prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
-                LOGGER.info(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
+                String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey());
+                LOGGER.info("highlightedText: %s: %s: %s", prop.getName(), prop.getKey(), highlightedText);
+                if (prop.getKey().equals("io.lumify.tesseract.TesseractGraphPropertyWorker")) {
+                    foundTesseractVideoTranscript = true;
+                    assertTrue("invalid highlighted text for tesseract", highlightedText.contains("Test") && highlightedText.contains("Knows") && highlightedText.contains("40000"));
+                }
             }
         }
+        assertTrue("foundTesseractVideoTranscript", foundTesseractVideoTranscript);
 
-        assertPublishAll(lumifyApi, 16);
+        assertPublishAll(lumifyApi, 17);
 
         lumifyApi.logout();
     }

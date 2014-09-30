@@ -2,7 +2,6 @@ package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
-import org.json.JSONArray;
 import org.securegraph.Authorizations;
 
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ public class InMemoryConcept extends Concept {
     private byte[] glyphIcon;
     private byte[] mapGlyphIcon;
     private boolean userVisible;
+    private Boolean searchable;
 
     protected InMemoryConcept(String conceptIRI, String parentIRI) {
         super(parentIRI, new ArrayList<OntologyProperty>());
@@ -62,6 +62,11 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
+    public Boolean getSearchable() {
+        return searchable;
+    }
+
+    @Override
     public String getSubtitleFormula() {
         return this.subtitleFormula;
     }
@@ -77,7 +82,9 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
-    public String getAddRelatedConceptWhiteList() { return addRelatedConceptWhiteList; }
+    public String getAddRelatedConceptWhiteList() {
+        return addRelatedConceptWhiteList;
+    }
 
     @Override
     public void setProperty(String name, Object value, Authorizations authorizations) {
@@ -103,7 +110,13 @@ public class InMemoryConcept extends Concept {
             this.displayName = (String) value;
         } else if (LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName().equals(name)) {
             this.addRelatedConceptWhiteList = (String) value;
-        } else{
+        } else if (LumifyProperties.SEARCHABLE.getPropertyName().equals(name)) {
+            if (value instanceof Boolean) {
+                this.searchable = (Boolean) value;
+            } else {
+                this.searchable = Boolean.parseBoolean((String) value);
+            }
+        } else {
             throw new LumifyException("Set not implemented for property " + name);
         }
     }

@@ -11,6 +11,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
 
+import static io.lumify.core.model.properties.LumifyProperties.SEARCHABLE;
+
 public abstract class Concept {
     private final String parentConceptIRI;
     private final Collection<OntologyProperty> properties;
@@ -31,6 +33,8 @@ public abstract class Concept {
     public abstract String getDisplayType();
 
     public abstract String getTitleFormula();
+
+    public abstract Boolean getSearchable();
 
     public abstract String getSubtitleFormula();
 
@@ -59,6 +63,9 @@ public abstract class Concept {
             }
             if (getTitleFormula() != null) {
                 result.put("titleFormula", getTitleFormula());
+            }
+            if (getSearchable() != null) {
+                result.put("searchable", getSearchable());
             }
             if (getSubtitleFormula() != null) {
                 result.put("subtitleFormula", getSubtitleFormula());

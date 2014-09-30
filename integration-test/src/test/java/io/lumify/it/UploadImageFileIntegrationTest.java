@@ -49,11 +49,11 @@ public class UploadImageFileIntegrationTest extends TestBase {
         for (Property prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
-                LOGGER.info(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
+                LOGGER.info("highlightedText: %s", lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
             }
         }
 
-        assertPublishAll(lumifyApi, 9);
+        assertPublishAll(lumifyApi, 10);
 
         lumifyApi.logout();
     }
