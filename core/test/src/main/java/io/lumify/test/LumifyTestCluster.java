@@ -1,14 +1,23 @@
 package io.lumify.test;
 
 import com.altamiracorp.bigtable.model.ModelSession;
+import com.altamiracorp.bigtable.model.accumulo.AccumuloSession;
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.config.LumifyTestClusterConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.user.SystemUser;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.ModelUtil;
+import io.lumify.tools.format.FormatLumify;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.ZooKeeperInstance;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.fate.zookeeper.ZooSession;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -46,19 +55,35 @@ public class LumifyTestCluster {
     }
 
     public void startup() {
-        config = LumifyTestClusterConfigurationLoader.getConfigurationProperties();
-        setupHdfsFiles();
-        startAccumulo();
-        startElasticSearch();
-        startWebServer();
-        setupGraphPropertyRunner();
+        try {
+            config = LumifyTestClusterConfigurationLoader.getConfigurationProperties();
+            if (LumifyTestClusterConfigurationLoader.isTestServer()) {
+                FormatLumify.deleteElasticSearchIndex(config);
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                shutdown();
+                ZooKeeperInstance zooKeeperInstance = new ZooKeeperInstance(config.getProperty("bigtable.accumulo.instanceName"), config.getProperty("bigtable.accumulo.zookeeperServerNames"));
+                Connector connector = zooKeeperInstance.getConnector(config.getProperty("bigtable.accumulo.username"), new PasswordToken(config.getProperty("bigtable.accumulo.password")));
+                ModelSession modelSession = new AccumuloSession(connector, true);
+                ModelUserContext modelUserContext = modelSession.createModelUserContext(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
+                SystemUser user = new SystemUser(modelUserContext);
+                ModelUtil.deleteTables(modelSession, user);
+                ModelUtil.initializeTables(modelSession, user);
+            } else {
+                setupHdfsFiles();
+                startAccumulo();
+                startElasticSearch();
             }
-        });
+            startWebServer();
+            setupGraphPropertyRunner();
+
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    shutdown();
+                }
+            });
+        } catch (Exception ex) {
+            throw new RuntimeException("Could not startup", ex);
+        }
     }
 
     public void setupHdfsFiles() {
@@ -137,9 +162,11 @@ public class LumifyTestCluster {
 
             Thread.sleep(1000);
 
-            elasticsearch.shutdown();
-            accumulo.shutdown();
-            shutdownAndResetZooSession();
+            if (!LumifyTestClusterConfigurationLoader.isTestServer()) {
+                elasticsearch.shutdown();
+                accumulo.shutdown();
+                shutdownAndResetZooSession();
+            }
 
             LOGGER.info("shutdown: InjectHelper");
             InjectHelper.shutdown();
