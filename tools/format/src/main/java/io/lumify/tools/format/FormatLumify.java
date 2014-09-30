@@ -1,19 +1,22 @@
 package io.lumify.tools.format;
 
 import com.altamiracorp.bigtable.model.ModelSession;
+import com.google.inject.Inject;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ModelUtil;
-import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.securegraph.GraphConfiguration;
 import org.securegraph.elasticsearch.ElasticSearchSearchIndexBase;
+
+import java.util.Map;
 
 public class FormatLumify extends CommandLineBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FormatLumify.class);
@@ -43,9 +46,15 @@ public class FormatLumify extends CommandLineBase {
 
         getGraph().shutdown();
 
+        deleteElasticSearchIndex(getConfiguration().toMap());
+
+        return 0;
+    }
+
+    public static void deleteElasticSearchIndex(Map configuration) {
         // TODO refactor to pull graph. from some static reference
-        String indexName = getConfiguration().get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_INDEX_NAME);
-        String[] esLocations = getConfiguration().get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_ES_LOCATIONS).split(",");
+        String indexName = (String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_INDEX_NAME);
+        String[] esLocations = ((String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_ES_LOCATIONS)).split(",");
         LOGGER.debug("BEGIN deleting elastic search index: " + indexName);
         TransportClient client = new TransportClient();
         for (String esLocation : esLocations) {
@@ -54,14 +63,17 @@ public class FormatLumify extends CommandLineBase {
             String port = locationSocket.length > 1 ? locationSocket[1] : "9300";
             client.addTransportAddress(new InetSocketTransportAddress(host, Integer.parseInt(port)));
         }
-        DeleteIndexResponse response = client.admin().indices().delete(new DeleteIndexRequest(indexName)).actionGet();
-        if (!response.isAcknowledged()) {
-            LOGGER.error("Failed to delete elastic search index named %s", indexName);
+        LOGGER.info("index %s exists?", indexName);
+        IndicesExistsRequest existsRequest = client.admin().indices().prepareExists(indexName).request();
+        if (client.admin().indices().exists(existsRequest).actionGet().isExists()) {
+            LOGGER.info("index %s exists... deleting!", indexName);
+            DeleteIndexResponse response = client.admin().indices().delete(new DeleteIndexRequest(indexName)).actionGet();
+            if (!response.isAcknowledged()) {
+                LOGGER.error("Failed to delete elastic search index named %s", indexName);
+            }
         }
         LOGGER.debug("END deleting elastic search index: " + indexName);
         client.close();
-
-        return 0;
     }
 
     @Inject
