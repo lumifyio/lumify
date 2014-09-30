@@ -1,13 +1,13 @@
 package io.lumify.web.clientapi.codegen.model;
 
 import java.util.*;
-import io.lumify.web.clientapi.codegen.model.TermMention;
+import io.lumify.web.clientapi.codegen.model.Element;
 public class TermMentions {
-  private List<TermMention> termMentions = new ArrayList<TermMention>();
-  public List<TermMention> getTermMentions() {
+  private List<Element> termMentions = new ArrayList<Element>();
+  public List<Element> getTermMentions() {
     return termMentions;
   }
-  public void setTermMentions(List<TermMention> termMentions) {
+  public void setTermMentions(List<Element> termMentions) {
     this.termMentions = termMentions;
   }
 

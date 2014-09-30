@@ -91,10 +91,10 @@ public class EntityApi {
       }
     }
   }
-  public void unresolveTerm (String graphVertexId, String propertyKey, Integer mentionStart, Integer mentionEnd, String sign, String conceptId, String edgeId, String rowKey) throws ApiException {
+  public void unresolveTerm (String termMentionId) throws ApiException {
     Object postBody = null;
     // verify required params are set
-    if(graphVertexId == null || propertyKey == null || mentionStart == null || mentionEnd == null || sign == null || conceptId == null || edgeId == null ) {
+    if(termMentionId == null ) {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
@@ -105,22 +105,8 @@ public class EntityApi {
     Map<String, String> headerParams = new HashMap<String, String>();
     Map<String, String> formParams = new HashMap<String, String>();
 
-    if(!"null".equals(String.valueOf(graphVertexId)))
-      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
-    if(!"null".equals(String.valueOf(propertyKey)))
-      queryParams.put("propertyKey", String.valueOf(propertyKey));
-    if(!"null".equals(String.valueOf(mentionStart)))
-      queryParams.put("mentionStart", String.valueOf(mentionStart));
-    if(!"null".equals(String.valueOf(mentionEnd)))
-      queryParams.put("mentionEnd", String.valueOf(mentionEnd));
-    if(!"null".equals(String.valueOf(sign)))
-      queryParams.put("sign", String.valueOf(sign));
-    if(!"null".equals(String.valueOf(conceptId)))
-      queryParams.put("conceptId", String.valueOf(conceptId));
-    if(!"null".equals(String.valueOf(edgeId)))
-      queryParams.put("edgeId", String.valueOf(edgeId));
-    if(!"null".equals(String.valueOf(rowKey)))
-      queryParams.put("rowKey", String.valueOf(rowKey));
+    if(!"null".equals(String.valueOf(termMentionId)))
+      queryParams.put("termMentionId", String.valueOf(termMentionId));
     String[] contentTypes = {
       "application/json"};
 

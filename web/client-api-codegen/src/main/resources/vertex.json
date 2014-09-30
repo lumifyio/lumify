@@ -127,7 +127,7 @@
             ]
         },
         {
-            "path": "/vertex/property/termMentions",
+            "path": "/vertex/termMentions",
             "operations": [
                 {
                     "method": "GET",
@@ -161,7 +161,7 @@
             ]
         },
         {
-            "path": "/vertex/property/detectedObjects",
+            "path": "/vertex/detectedObjects",
             "operations": [
                 {
                     "method": "GET",
@@ -233,50 +233,8 @@
                 "termMentions": {
                     "type": "array",
                     "items": {
-                        "type": "TermMention"
+                        "type": "Element"
                     }
-                }
-            }
-        },
-        "TermMention": {
-            "id": "TermMention",
-            "properties": {
-                "key": {
-                    "type": "TermMentionKey"
-                },
-                "Metadata": {
-                    "type": "TermMentionMetadata"
-                }
-            }
-        },
-        "TermMentionKey": {
-            "id": "TermMentionKey",
-            "properties": {
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "TermMentionMetadata": {
-            "id": "TermMentionMetadata",
-            "properties": {
-                "sign": {
-                    "type": "string"
-                },
-                "analyticProcess": {
-                    "type": "string"
-                },
-                "conceptGraphVertexId": {
-                    "type": "string"
-                },
-                "ontologyClassUri": {
-                    "type": "string"
-                },
-                "graphVertexId": {
-                    "type": "string"
-                },
-                "edgeId": {
-                    "type": "string"
                 }
             }
         },

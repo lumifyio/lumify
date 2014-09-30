@@ -99,60 +99,9 @@
                     "nickname": "unresolveTerm",
                     "parameters": [
                         {
-                            "name": "graphVertexId",
-                            "description": "ID of the graph vertex",
+                            "name": "termMentionId",
+                            "description": "ID of the term mention",
                             "required": true,
-                            "type": "string",
-                            "paramType": "query"
-                        },
-                        {
-                            "name": "propertyKey",
-                            "description": "property key",
-                            "required": true,
-                            "type": "string",
-                            "paramType": "query"
-                        },
-                        {
-                            "name": "mentionStart",
-                            "description": "start offset of mention",
-                            "required": true,
-                            "type": "integer",
-                            "format": "int32",
-                            "paramType": "query"
-                        },
-                        {
-                            "name": "mentionEnd",
-                            "description": "end offset of mention",
-                            "required": true,
-                            "type": "integer",
-                            "format": "int32",
-                            "paramType": "query"
-                        },
-                        {
-                            "name": "sign",
-                            "description": "the title of the term mention",
-                            "required": true,
-                            "type": "string",
-                            "paramType": "query"
-                        },
-                        {
-                            "name": "conceptId",
-                            "description": "the concept type IRI",
-                            "required": true,
-                            "type": "string",
-                            "paramType": "query"
-                        },
-                        {
-                            "name": "edgeId",
-                            "description": "The edge id between the term and vertex",
-                            "required": true,
-                            "type": "string",
-                            "paramType": "query"
-                        },
-                        {
-                            "name": "rowKey",
-                            "description": "the term mention row key",
-                            "required": false,
                             "type": "string",
                             "paramType": "query"
                         }

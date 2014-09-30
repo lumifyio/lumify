@@ -194,7 +194,7 @@ public class VertexApi {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
-    String path = "/vertex/property/termMentions".replaceAll("\\{format\\}","json");
+    String path = "/vertex/termMentions".replaceAll("\\{format\\}","json");
 
     // query params
     Map<String, String> queryParams = new HashMap<String, String>();
@@ -245,7 +245,7 @@ public class VertexApi {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
-    String path = "/vertex/property/detectedObjects".replaceAll("\\{format\\}","json");
+    String path = "/vertex/detectedObjects".replaceAll("\\{format\\}","json");
 
     // query params
     Map<String, String> queryParams = new HashMap<String, String>();

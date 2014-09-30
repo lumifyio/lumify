@@ -124,7 +124,7 @@ public class TestBase {
         }
     }
 
-    private Property getProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
+    protected Property getProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
         for (Property property : properties) {
             if (propertyKey.equals(property.getKey()) && propertyName.equals(property.getName())) {
                 return property;
