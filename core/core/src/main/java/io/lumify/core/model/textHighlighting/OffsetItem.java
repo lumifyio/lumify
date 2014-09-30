@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class OffsetItem implements Comparable {
-    public static final int VIDEO_TRANSCRIPT_INDEX_BITS = 12;
-    public static final int VIDEO_TRANSCRIPT_OFFSET_BITS = 20;
+    public static final int VIDEO_TRANSCRIPT_INDEX_BITS = 12; // duplicated in io.lumify.web.clientapi.codegen.EntityApiExt
+    public static final int VIDEO_TRANSCRIPT_OFFSET_BITS = 20; // duplicated in io.lumify.web.clientapi.codegen.EntityApiExt
 
     public abstract long getStart();
 

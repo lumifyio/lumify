@@ -9,6 +9,7 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.Response.Status.Family;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -71,6 +72,55 @@ public class ApiInvoker {
                 return null;
         } catch (Exception e) {
             throw new ApiException(500, e.getMessage());
+        }
+    }
+
+    public InputStream getBinary(String host, String path, Map<String, String> queryParams, Map<String, String> headerParams) throws ApiException {
+        Client client = getClient(host);
+
+        StringBuilder b = new StringBuilder();
+
+        for (String key : queryParams.keySet()) {
+            String value = queryParams.get(key);
+            if (value != null) {
+                if (b.toString().length() == 0)
+                    b.append("?");
+                else
+                    b.append("&");
+                b.append(escapeString(key)).append("=").append(escapeString(value));
+            }
+        }
+        String querystring = b.toString();
+
+        Builder builder = client.resource(host + path + querystring).accept("application/json");
+        for (String key : headerParams.keySet()) {
+            builder.header(key, headerParams.get(key));
+        }
+
+        for (String key : defaultHeaderMap.keySet()) {
+            if (!headerParams.containsKey(key)) {
+                builder.header(key, defaultHeaderMap.get(key));
+            }
+        }
+        if (workspaceId != null) {
+            builder.header("Lumify-Workspace-Id", workspaceId);
+        }
+        if (jSessionId != null) {
+            builder.header("Cookie", "JSESSIONID=" + jSessionId);
+        }
+
+        ClientResponse response = null;
+
+        response = (ClientResponse) builder.get(ClientResponse.class);
+
+        if (response.getClientResponseStatus() == ClientResponse.Status.NO_CONTENT) {
+            return null;
+        } else if (response.getClientResponseStatus().getFamily() == Family.SUCCESSFUL) {
+            return response.getEntityInputStream();
+        } else {
+            throw new ApiException(
+                    response.getClientResponseStatus().getStatusCode(),
+                    response.getEntity(String.class));
         }
     }
 

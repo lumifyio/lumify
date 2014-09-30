@@ -92,6 +92,8 @@ public class Router extends HttpServlet {
 
             app.post("/vertex/property/set", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetProperty.class);
             app.post("/vertex/property/delete", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexDeleteProperty.class);
+            app.get("/vertex/termMentions", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetTermMentions.class);
+            app.get("/vertex/detectedObjects", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetDetectedObjects.class);
             app.get("/vertex/property", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetPropertyValue.class);
             app.post("/vertex/visibility/set", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetVisibility.class);
             app.get("/vertex/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexProperties.class);

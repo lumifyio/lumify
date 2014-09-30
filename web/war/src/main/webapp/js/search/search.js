@@ -28,6 +28,7 @@ define([
             formSelector: '.navbar-search',
             querySelector: '.navbar-search .search-query',
             queryValidationSelector: '.search-query-validation',
+            hitsSelector: '.search-hits',
             queryContainerSelector: '.search-query-container',
             clearSearchSelector: '.search-query-container a',
             segmentedControlSelector: '.segmented-control',
@@ -114,13 +115,17 @@ define([
         };
 
         this.updateQueryError = function(data) {
-            var $error = this.select('queryValidationSelector')
+            var $error = this.select('queryValidationSelector'),
+                $hits = this.select('hitsSelector');
 
             this.$node.toggleClass('hasError', !!(data && !data.success));
 
             if (!data || data.success) {
                 $error.empty();
+
+                $hits.text(data && data.message || '');
             } else {
+                $hits.empty();
                 $error.html(
                     alertTemplate({ error: data.error || i18n('search.query.error') })
                 )
@@ -256,14 +261,18 @@ define([
         };
 
         this.updateQueryValue = function(newSearchType) {
-            var $query = this.select('querySelector');
+            var $query = this.select('querySelector'),
+                $hits = this.select('hitsSelector');
+
             if (this.searchType) {
                 this.savedQueries[this.searchType].query = $query.val();
+                this.savedQueries[this.searchType].hits = $hits.text();
             }
             this.searchType = newSearchType;
             this.otherSearchType = _.without(SEARCH_TYPES, this.searchType)[0];
 
             $query.val(this.savedQueries[newSearchType].query);
+            $hits.text(this.savedQueries[newSearchType].hits || '');
 
             this.updateClearSearch();
         };

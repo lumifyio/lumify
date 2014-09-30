@@ -125,6 +125,74 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/property/termMentions",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "gets all the term mentions for a property",
+                    "type": "TermMentions",
+                    "nickname": "getTermMentions",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "the property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/property/detectedObjects",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "gets all the detected objects for a vertex",
+                    "type": "DetectedObjects",
+                    "nickname": "getDetectedObjects",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "workspaceId",
+                            "description": "the workspace id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {
@@ -156,6 +224,113 @@
                 },
                 "value": {
                     "type": "object"
+                }
+            }
+        },
+        "TermMentions": {
+            "id": "TermMentions",
+            "properties": {
+                "termMentions": {
+                    "type": "array",
+                    "items": {
+                        "type": "TermMention"
+                    }
+                }
+            }
+        },
+        "TermMention": {
+            "id": "TermMention",
+            "properties": {
+                "key": {
+                    "type": "TermMentionKey"
+                },
+                "Metadata": {
+                    "type": "TermMentionMetadata"
+                }
+            }
+        },
+        "TermMentionKey": {
+            "id": "TermMentionKey",
+            "properties": {
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "TermMentionMetadata": {
+            "id": "TermMentionMetadata",
+            "properties": {
+                "sign": {
+                    "type": "string"
+                },
+                "analyticProcess": {
+                    "type": "string"
+                },
+                "conceptGraphVertexId": {
+                    "type": "string"
+                },
+                "ontologyClassUri": {
+                    "type": "string"
+                },
+                "graphVertexId": {
+                    "type": "string"
+                },
+                "edgeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "DetectedObjects": {
+            "id": "DetectedObjects",
+            "properties": {
+                "detectedObjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "DetectedObject"
+                    }
+                }
+            }
+        },
+        "DetectedObject": {
+            "id": "DetectedObject",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "DetectedObjectValue"
+                }
+            }
+        },
+        "DetectedObjectValue": {
+            "id": "DetectedObjectValue",
+            "properties": {
+                "x1": {
+                    "type": "double"
+                },
+                "x2": {
+                    "type": "double"
+                },
+                "y1": {
+                    "type": "double"
+                },
+                "y2": {
+                    "type": "double"
+                },
+                "concept": {
+                    "type": "string"
+                },
+                "edgeId": {
+                    "type": "string"
+                },
+                "resolvedVertexId": {
+                    "type": "string"
+                },
+                "originalPropertyKey": {
+                    "type": "string"
+                },
+                "process": {
+                    "type": "string"
                 }
             }
         }

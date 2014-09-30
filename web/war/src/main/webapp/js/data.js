@@ -15,6 +15,7 @@ define([
     'service/ontology',
     'service/config',
     'service/user',
+    'util/deferredImage',
     'util/undoManager',
     'util/clipboardManager',
     'util/privileges',
@@ -28,7 +29,7 @@ define([
     // Service
     Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
 
-    undoManager, ClipboardManager, Privileges, F) {
+    deferredImage, undoManager, ClipboardManager, Privileges, F) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 500,
@@ -100,6 +101,7 @@ define([
             this.ontologyService.concepts().done(function(concepts) {
                 self.cachedConcepts = concepts;
                 self.cachedConceptsDeferred.resolve(concepts);
+                self.precacheIcons(concepts);
             })
 
             ClipboardManager.attachTo(this.node);
@@ -915,21 +917,25 @@ define([
                         if (result[0].length) {
                             self.trigger('verticesAdded', { vertices: result[0], options: options });
                         }
+
+                        async.resolve(result[0]);
                     })
-                    .done(async.resolve);
             } else {
                 var vertices = this.verticesInWorkspace();
                 if (vertices.length) {
                     this.trigger('verticesAdded', { vertices: vertices, options: options });
                 }
-                async.resolve();
+                async.resolve(vertices);
             }
 
-            async.done(function() {
+            async.done(function(vertices) {
                 self.relationshipsReady(function(relationships) {
                     self.trigger('relationshipsLoaded', { relationships: relationships });
                 });
-                self.trigger(event.target, 'workspaceFiltered');
+                self.trigger(event.target, 'workspaceFiltered', {
+                    hits: vertices && vertices.length,
+                    total: _.size(self.workspaceVertices)
+                });
             });
         };
 
@@ -972,6 +978,7 @@ define([
 
         this.onWorkspaceDeleted = function(evt, data) {
             if (this.workspaceId === data.workspaceId) {
+                this.trigger('selectObjects');
                 this.workspaceId = null;
                 this.loadActiveWorkspace();
             }
@@ -1246,6 +1253,29 @@ define([
 
                     return self.vertex(id);
                 }).toArray();
+            }
+        };
+
+        this.precacheIcons = function(concepts) {
+            var urls = _.chain(concepts.byId)
+                .values()
+                .pluck('glyphIconHref')
+                .compact()
+                .unique()
+                .value();
+
+            cacheNextImage(urls);
+
+            function cacheNextImage(urls) {
+                if (!urls.length) {
+                    return;
+                }
+
+                var url = urls.shift();
+
+                deferredImage(url).always(function() {
+                    cacheNextImage(urls);
+                });
             }
         };
     }

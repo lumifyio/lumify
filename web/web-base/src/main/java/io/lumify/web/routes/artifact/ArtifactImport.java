@@ -1,6 +1,5 @@
 package io.lumify.web.routes.artifact;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -11,6 +10,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ParameterParser;
@@ -66,14 +66,14 @@ public class ArtifactImport extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
         File tempDir = Files.createTempDir();
         try {
-            List<FileAndVisibility> files = getFileAndVisibilities(request, response, chain, tempDir, authorizations, user);
+            List<FileImport.FileAndVisibility> files = getFileAndVisibilities(request, response, chain, tempDir, authorizations, user);
             if (files == null) {
                 return;
             }
 
             Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
 
-            List<Vertex> vertices = importVertices(workspace, files, user, authorizations);
+            List<Vertex> vertices = fileImport.importVertices(workspace, files, user, authorizations);
 
             JSONArray vertexIdsJson = getVertexIdsJsonArray(vertices);
 
@@ -93,18 +93,9 @@ public class ArtifactImport extends BaseRequestHandler {
         return vertexIdsJson;
     }
 
-    private List<Vertex> importVertices(Workspace workspace, List<FileAndVisibility> files, User user, Authorizations authorizations) throws Exception {
-        List<Vertex> vertices = new ArrayList<Vertex>();
-        for (FileAndVisibility file : files) {
-            LOGGER.debug("Processing file: %s", file.getFile().getAbsolutePath());
-            vertices.add(fileImport.importFile(file.getFile(), true, file.getVisibilitySource(), workspace, user, authorizations));
-        }
-        return vertices;
-    }
-
-    private List<FileAndVisibility> getFileAndVisibilities(HttpServletRequest request, HttpServletResponse response, HandlerChain chain, File tempDir, Authorizations authorizations, User user) throws Exception {
+    private List<FileImport.FileAndVisibility> getFileAndVisibilities(HttpServletRequest request, HttpServletResponse response, HandlerChain chain, File tempDir, Authorizations authorizations, User user) throws Exception {
         List<String> invalidVisibilities = new ArrayList<String>();
-        List<FileAndVisibility> files = new ArrayList<FileAndVisibility>();
+        List<FileImport.FileAndVisibility> files = new ArrayList<FileImport.FileAndVisibility>();
         int visibilitySourceIndex = 0;
         int fileIndex = 0;
         for (Part part : request.getParts()) {
@@ -132,19 +123,19 @@ public class ArtifactImport extends BaseRequestHandler {
         return files;
     }
 
-    private void addVisibilityToFilesList(List<FileAndVisibility> files, int index, String visibilitySource) {
+    private void addVisibilityToFilesList(List<FileImport.FileAndVisibility> files, int index, String visibilitySource) {
         ensureFilesSize(files, index);
         files.get(index).setVisibilitySource(visibilitySource);
     }
 
-    private void addFileToFilesList(List<FileAndVisibility> files, int index, File file) {
+    private void addFileToFilesList(List<FileImport.FileAndVisibility> files, int index, File file) {
         ensureFilesSize(files, index);
         files.get(index).setFile(file);
     }
 
-    private void ensureFilesSize(List<FileAndVisibility> files, int index) {
+    private void ensureFilesSize(List<FileImport.FileAndVisibility> files, int index) {
         while (files.size() <= index) {
-            files.add(new FileAndVisibility());
+            files.add(new FileImport.FileAndVisibility());
         }
     }
 
@@ -163,26 +154,5 @@ public class ArtifactImport extends BaseRequestHandler {
         }
 
         return fileName;
-    }
-
-    private class FileAndVisibility {
-        private File file;
-        private String visibilitySource;
-
-        public File getFile() {
-            return file;
-        }
-
-        public void setFile(File file) {
-            this.file = file;
-        }
-
-        public String getVisibilitySource() {
-            return visibilitySource;
-        }
-
-        public void setVisibilitySource(String visibilitySource) {
-            this.visibilitySource = visibilitySource;
-        }
     }
 }

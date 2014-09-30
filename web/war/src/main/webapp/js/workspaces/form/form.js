@@ -72,8 +72,8 @@ define([
                 $(document).on('click.permPopover', function(event) {
                     var $target = $(event.target);
 
-                    if ($target.closest('.permissions').length === 0) {
-                        self.$node.find('.permissions').popover('hide');
+                    if ($target.closest('.permissions-list').length === 0) {
+                        self.$node.find('.permissions-list').popover('hide');
                     }
                 });
                 this.on('shareWorkspaceWithUser', this.onShareWorkspaceWithUser);
@@ -141,7 +141,10 @@ define([
 
             this.currentUsers = response.users;
 
-            (workspace.users || (workspace.users = [])).forEach(function(userPermission) {
+            _.sortBy(workspace.users || (workspace.users = []), function(userPermission) {
+                var user = _.findWhere(self.currentUsers, { id: userPermission.userId });
+                return user && user.displayName || 0;
+            }).forEach(function(userPermission) {
                 if (userPermission.userId != window.currentUser.id) {
                     var data = self.shareRowDataForPermission(userPermission);
                     if (data) {
@@ -168,7 +171,9 @@ define([
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,
                         status: user.status,
-                        displayName: user.displayName
+                        displayName: user.displayName,
+                        email: user.email,
+                        userName: user.userName
                     },
                     editable: this.editable
                 };
@@ -231,7 +236,7 @@ define([
             if (user) {
                 var revert = $.extend(true, {}, this.attr.data);
                 user.access = newPermissions;
-                badge.popover('disable').addClass('loading');
+                badge.popover('hide').popover('disable').addClass('loading');
                 this.saveWorkspace(true, {
                     changes: {
                         userUpdates: [user]
@@ -270,7 +275,7 @@ define([
                 list = $(event.target).closest('.permissions-list'),
                 row = list.data('userRow'),
                 userId = row.data('userId'),
-                badge = row.find('.permissions').popover('disable').addClass('loading'),
+                badge = row.find('.permissions').popover('hide').popover('disable').addClass('loading'),
                 revert = $.extend(true, {}, this.attr.data);
 
             this.attr.data.users = _.reject(this.attr.data.users, function(user) {

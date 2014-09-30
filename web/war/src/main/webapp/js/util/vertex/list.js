@@ -7,6 +7,7 @@ define([
     'tpl!./item',
     'tpl!util/alert',
     'promise!util/service/ontologyPromise',
+    'util/deferredImage',
     'util/video/scrubber',
     'util/vertex/formatters',
     'util/popovers/withElementScrollingPositionUpdates',
@@ -20,6 +21,7 @@ define([
     vertexTemplate,
     alertTemplate,
     ontologyPromise,
+    deferredImage,
     VideoScrubber,
     F,
     withPositionUpdates) {
@@ -295,23 +297,31 @@ define([
                         });
                     } else {
                         var conceptImage = vertex.concept.glyphIconHref,
-                            previewImage = new Image(),
                             clsName = 'non_concept_preview';
+
+                        if ((preview.css('background-image') || '').indexOf(vertex.imageSrc) >= 0) {
+                            return;
+                        }
 
                         li.removeClass(clsName).addClass('loading');
 
-                        previewImage.onload = function() {
-                            preview.css('background-image', 'url(' + vertex.imageSrc + ')');
-                            li.toggleClass(clsName, !vertex.imageSrcIsFromConcept).removeClass('loading');
-                            previewImage = null;
-                        };
-                        previewImage.onerror = function() {
-                            li.removeClass('loading');
-                        }
-                        preview.css('background-image', 'url(' + conceptImage + ')')
-                        _.defer(function() {
-                            previewImage.src = vertex.imageSrc;
-                        });
+                        deferredImage(conceptImage)
+                            .always(function() {
+                                preview.css('background-image', 'url(' + conceptImage + ')')
+                            })
+                            .done(function() {
+                                if (conceptImage === vertex.imageSrc) {
+                                    li.toggleClass(clsName, !vertex.imageSrcIsFromConcept).removeClass('loading');
+                                } else {
+                                    _.delay(function() {
+                                        deferredImage(vertex.imageSrc).always(function() {
+                                            preview.css('background-image', 'url(' + vertex.imageSrc + ')');
+                                            li.toggleClass(clsName, !vertex.imageSrcIsFromConcept)
+                                                .removeClass('loading');
+                                        })
+                                    }, 500);
+                                }
+                            });
                     }
                 }
             });
@@ -396,15 +406,12 @@ define([
                     .toggleClass('has-timeSubtitle', !!F.vertex.time(vertex));
 
                 if (currentAnchor.length) {
-                    if (src) {
-                        newAnchor.find('.preview').css('background-image', 'url(' + src + ')');
-                    }
-
-                    var newHtml = newAnchor.html();
-                    if (currentAnchor.length && newHtml !== currentHtml) {
-                        li.data('previewLoaded', null);
-                        currentAnchor.html(newHtml);
-                    }
+                    currentAnchor[0].normalize()
+                    currentAnchor[0].childNodes[0].textContent = F.vertex.title(vertex);
+                    currentAnchor.children('ul').replaceWith(newAnchor.children('ul'));
+                    currentAnchor.find('.date').replaceWith(newAnchor.find('.date'));
+                    currentAnchor.find('.source').replaceWith(newAnchor.find('.source'));
+                    li.data('previewLoaded', null);
                 }
             });
 

@@ -17,6 +17,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public abstract class ArtifactThumbnailRepository extends Repository<BigTableArtifactThumbnail> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnailRepository.class);
     public static int FRAMES_PER_PREVIEW = 20;
@@ -49,6 +51,7 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
         int type;
         try {
             BufferedImage originalImage = ImageIO.read(in);
+            checkNotNull(originalImage, "Could not generateThumbnail: read original image for artifact " + artifactVertex.getId());
             type = ImageUtils.thumbnailType(originalImage);
             format = ImageUtils.thumbnailFormat(originalImage);
 

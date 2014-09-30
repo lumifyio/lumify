@@ -4,6 +4,8 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ApiInvoker;
 
 import io.lumify.web.clientapi.codegen.model.Element;
+import io.lumify.web.clientapi.codegen.model.DetectedObjects;
+import io.lumify.web.clientapi.codegen.model.TermMentions;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
@@ -172,6 +174,108 @@ public class VertexApi {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (Element) ApiInvoker.deserialize(response, "", Element.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public TermMentions getTermMentions (String graphVertexId, String propertyKey, String propertyName) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null || propertyKey == null || propertyName == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/property/termMentions".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(propertyKey)))
+      queryParams.put("propertyKey", String.valueOf(propertyKey));
+    if(!"null".equals(String.valueOf(propertyName)))
+      queryParams.put("propertyName", String.valueOf(propertyName));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (TermMentions) ApiInvoker.deserialize(response, "", TermMentions.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public DetectedObjects getDetectedObjects (String graphVertexId, String propertyName, String workspaceId) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null || propertyName == null || workspaceId == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/property/detectedObjects".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(propertyName)))
+      queryParams.put("propertyName", String.valueOf(propertyName));
+    if(!"null".equals(String.valueOf(workspaceId)))
+      queryParams.put("workspaceId", String.valueOf(workspaceId));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (DetectedObjects) ApiInvoker.deserialize(response, "", DetectedObjects.class);
       }
       else {
         return null;

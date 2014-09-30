@@ -190,6 +190,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 String propertyName = data.getString("name");
 
                 OntologyProperty ontologyProperty = ontologyRepository.getProperty(propertyName);
+                checkNotNull(ontologyProperty, "Could not find ontology property: " + propertyName);
                 if (!ontologyProperty.getUserVisible() || propertyName.equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
                     continue;
                 }

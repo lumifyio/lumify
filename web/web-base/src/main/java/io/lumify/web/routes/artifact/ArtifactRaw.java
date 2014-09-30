@@ -1,5 +1,6 @@
 package io.lumify.web.routes.artifact;
 
+import io.lumify.core.exception.LumifyException;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
@@ -79,7 +80,7 @@ public class ArtifactRaw extends BaseRequestHandler {
 
             StreamingPropertyValue rawValue = LumifyProperties.RAW.getPropertyValue(artifactVertex);
             if (rawValue == null) {
-                LOGGER.warn("Could not find raw on artifact: %s", artifactVertex.getId().toString());
+                LOGGER.warn("Could not find raw on artifact: %s", artifactVertex.getId());
                 respondWithNotFound(response);
                 return;
             }
@@ -98,7 +99,7 @@ public class ArtifactRaw extends BaseRequestHandler {
         String type = getRequiredParameter(request, "type");
 
         InputStream in;
-        Long totalLength = null;
+        Long totalLength;
         long partialStart = 0;
         Long partialEnd = null;
         String range = request.getHeader("Range");
@@ -152,18 +153,18 @@ public class ArtifactRaw extends BaseRequestHandler {
         StreamingPropertyValue mediaPropertyValue;
         if (MediaLumifyProperties.MIME_TYPE_AUDIO_MP4.equals(type)) {
             mediaPropertyValue = MediaLumifyProperties.AUDIO_MP4.getPropertyValue(artifactVertex);
-            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.AUDIO_MP4, artifactVertex.getId()));
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.MIME_TYPE_AUDIO_MP4, artifactVertex.getId()));
         } else if (MediaLumifyProperties.MIME_TYPE_AUDIO_OGG.equals(type)) {
             mediaPropertyValue = MediaLumifyProperties.AUDIO_OGG.getPropertyValue(artifactVertex);
-            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.AUDIO_OGG, artifactVertex.getId()));
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.MIME_TYPE_AUDIO_OGG, artifactVertex.getId()));
         } else if (MediaLumifyProperties.MIME_TYPE_VIDEO_MP4.equals(type)) {
             mediaPropertyValue = MediaLumifyProperties.VIDEO_MP4.getPropertyValue(artifactVertex);
-            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.VIDEO_MP4, artifactVertex.getId()));
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.MIME_TYPE_VIDEO_MP4, artifactVertex.getId()));
         } else if (MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM.equals(type)) {
             mediaPropertyValue = MediaLumifyProperties.VIDEO_WEBM.getPropertyValue(artifactVertex);
-            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.VIDEO_WEBM, artifactVertex.getId()));
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM, artifactVertex.getId()));
         } else {
-            throw new RuntimeException("Invalid video type: " + type);
+            throw new LumifyException("Invalid video type: " + type);
         }
         return mediaPropertyValue;
     }

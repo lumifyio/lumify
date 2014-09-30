@@ -76,7 +76,7 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
 
         StreamingPropertyValue rawPosterFrameValue = RAW_POSTER_FRAME.getPropertyValue(artifactVertex);
         if (rawPosterFrameValue == null) {
-            LOGGER.warn("Could not find raw poster from for artifact: %s", artifactVertex.getId().toString());
+            LOGGER.warn("Could not find raw poster from for artifact: %s", artifactVertex.getId());
             respondWithNotFound(response);
             return;
         }

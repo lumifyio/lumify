@@ -1,9 +1,11 @@
 define([
     'flight/lib/component',
-    './withSearch'
+    './withSearch',
+    'util/formatters'
 ], function(
     defineComponent,
-    withSearch) {
+    withSearch,
+    F) {
     'use strict';
 
     return defineComponent(SearchTypeLumify, withSearch);
@@ -52,7 +54,17 @@ define([
                     self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
                 })
                 .done(function(result) {
-                    self.trigger('searchRequestCompleted', { success: true, result: result });
+                    self.trigger('searchRequestCompleted', {
+                        success: true,
+                        result: result,
+                        message: i18n('search.types.lumify.hits.' +
+                            (
+                                result.totalHits === 0 ? 'none' :
+                                result.totalHits === 1 ? 'one' :
+                                'many'
+                            ),
+                            F.number.prettyApproximate(result.totalHits))
+                    });
                 });
         };
 

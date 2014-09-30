@@ -17,6 +17,9 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
 
     public static final String BASE_PACKAGE = "io.lumify.web.clientapi.codegen";
 
+    // Run with VMWarguments: "-DfileMap=src/main/resources/lumify.json"
+    //          Arguments:    "lumify.json"
+    //          Working Dir:  "$MODULE_DIR$"
     public static void main(String[] args) {
         try {
             ClientOpts opts = new ClientOpts();
@@ -56,6 +59,8 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
                                 + "      com.sun.jersey.multipart.FormDataBodyPart bodyPart = new com.sun.jersey.multipart.FormDataBodyPart(dispo, file, MediaType.MULTIPART_FORM_DATA_TYPE);\n"
                                 + "      mp.bodyPart(bodyPart);"
                 );
+                fileContents = fileContents.replaceAll("public TermMentionMetadata getMetadata\\(\\)", "@com.fasterxml.jackson.annotation.JsonProperty(\"Metadata\")\npublic TermMentionMetadata getMetadata()");
+                fileContents = fileContents.replaceAll("public void setMetadata\\(TermMentionMetadata", "@com.fasterxml.jackson.annotation.JsonProperty(\"Metadata\")\npublic void setMetadata(TermMentionMetadata");
 
                 FileUtils.write(f, fileContents);
             }

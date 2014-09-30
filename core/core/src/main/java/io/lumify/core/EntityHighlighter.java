@@ -87,7 +87,7 @@ public class EntityHighlighter {
         }
         result.append(StringEscapeUtils.escapeHtml(safeSubstring(text, lastStart)));
 
-        return result.toString();
+        return result.toString().replaceAll("&nbsp;", " ");
     }
 
     public VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, Iterable<Vertex> termMentions, String workspaceId, Authorizations authorizations) {

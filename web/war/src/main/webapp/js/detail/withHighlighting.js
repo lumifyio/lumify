@@ -72,8 +72,12 @@ define([
             $(document).off('ignoreSelectionChanges.detail');
             $(document).off('resumeSelectionChanges.detail');
             $(document).off('termCreated');
-            this.highlightNode().off('scrollstop');
+            this.highlightNode().off('scrollstop scroll');
         });
+
+        this.before('initialize', function() {
+            this.updateEntityAndArtifactDraggables = _.throttle(this.updateEntityAndArtifactDraggables.bind(this), 250);
+        })
 
         this.after('initialize', function() {
             var self = this;
@@ -89,7 +93,8 @@ define([
             });
             $(document).trigger('resumeSelectionChanges');
 
-            this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables.bind(this));
+            this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables);
+            this.highlightNode().on('scroll', this.updateEntityAndArtifactDraggables);
             this.on('click', {
                 resolvableSelector: this.onResolvableClick,
                 textContainerHeaderSelector: this.onTextHeaderClicked,

@@ -24,6 +24,19 @@ width: 215px;
     padding-right: 28px;
   }
 
+  .search-hits {
+    font-size: 95%;
+    margin: 0 1em;
+    color: #999;
+    text-align: right;
+    text-shadow: 0 1px 0 white;
+    font-style: italic;
+    text-align: right;
+    &:empty {
+      display: none;
+    }
+  }
+
   .search-query-container {
     position: relative;
 
@@ -134,7 +147,7 @@ width: 215px;
   left: 0;
   right: 0;
   bottom: 0;
-  top: 7em;  
+  top: 7.5em;  
   .content {
     overflow: auto;
     overflow-x: hidden;

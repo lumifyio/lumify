@@ -93,16 +93,27 @@ define([
     }
 
     function positionTextNumber() {
-        var t = this.previousSibling,
+        var self = this,
+            t = this.previousSibling,
             tX = t.x.baseVal[0].value,
-            w = t.offsetWidth,
+            getWidthOfNodeByClass = function(cls) {
+                var node = self.parentNode;
+                while ((node = node.nextSibling)) {
+                    if (node.classList.contains(cls)) {
+                        return node.getBBox().width;
+                    }
+                }
+                return 0;
+            },
+            textWidth = getWidthOfNodeByClass('on-bar-text'),
+            textNumberWidth = getWidthOfNodeByClass('on-number-bar-text'),
             barRect = this.parentNode.nextSibling,
             barWidthVal = barRect.width.baseVal,
             barWidth = barWidthVal.value,
-            remainingBarWidth = barWidth - w - tX - PADDING;
+            remainingBarWidth = barWidth - textWidth - tX - PADDING;
 
-        if (remainingBarWidth <= this.offsetWidth) {
-            this.setAttribute('x', Math.max(barWidth, tX + w) + PADDING);
+        if (remainingBarWidth <= textNumberWidth) {
+            this.setAttribute('x', Math.max(barWidth, tX + textWidth) + PADDING);
             this.setAttribute('text-anchor', 'start');
             this.setAttribute('dx', 0);
         } else {
@@ -173,11 +184,12 @@ define([
         });
 
         this.onVerticesUpdated = function(event, data) {
+            var self = this;
             if (data && data.vertices) {
                 var intersection = _.intersection(this.displayingVertexIds, _.pluck(data.vertices, 'id'));
                 if (intersection.length) {
                     appData.refresh(this.displayingVertexIds)
-                        .done(this.drawHistograms.bind(this));
+                        .done(self.drawHistograms.bind(this));
                 }
             }
         };
@@ -572,6 +584,9 @@ define([
                                         this.select('use.off-number-bar-text')
                                             .attr('xlink:href', _.compose(toRefId, textNumberId))
                                             .attr('mask', _.compose(toUrlId, append('_1'), maskId));
+
+                                        d3.selectAll('defs .text-number')
+                                            .each(positionTextNumber);
 
                                     })
 

@@ -1,5 +1,8 @@
 package io.lumify.web.routes.entity;
 
+import io.lumify.web.BaseRequestHandler;
+
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -96,7 +99,6 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, user, authorizations);
-
         respondWithJson(response, result);
     }
 }

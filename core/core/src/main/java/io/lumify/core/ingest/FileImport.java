@@ -153,7 +153,7 @@ public class FileImport {
                 workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, null, user);
             }
 
-            LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());
+            LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId());
             pushOnQueue(vertex, workspace, visibilitySource);
             return vertex;
         } finally {
@@ -162,6 +162,21 @@ public class FileImport {
                 addSupportingFilesResult.close();
             }
         }
+    }
+
+    public List<Vertex> importVertices(Workspace workspace, List<FileAndVisibility> files, User user, Authorizations authorizations) throws Exception {
+        ensureInitialized();
+
+        List<Vertex> vertices = new ArrayList<Vertex>();
+        for (FileAndVisibility file : files) {
+            if (isSupportingFile(file.getFile())) {
+                LOGGER.debug("Skipping file: %s (supporting file)", file.getFile().getAbsolutePath());
+                continue;
+            }
+            LOGGER.debug("Processing file: %s", file.getFile().getAbsolutePath());
+            vertices.add(importFile(file.getFile(), true, file.getVisibilitySource(), workspace, user, authorizations));
+        }
+        return vertices;
     }
 
     private JSONObject loadMetadataJson(File f) throws IOException {
@@ -188,7 +203,7 @@ public class FileImport {
     }
 
     private void pushOnQueue(Vertex vertex, Workspace workspace, String visibilitySource) {
-        LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
+        LOGGER.debug("pushing %s on to %s queue", vertex.getId(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
         this.workQueueRepository.pushElement(vertex);
         if (workspace != null) {
             this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY,
@@ -231,5 +246,26 @@ public class FileImport {
     @Inject
     public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
         this.workspaceRepository = workspaceRepository;
+    }
+
+    public static class FileAndVisibility {
+        private File file;
+        private String visibilitySource;
+
+        public File getFile() {
+            return file;
+        }
+
+        public void setFile(File file) {
+            this.file = file;
+        }
+
+        public String getVisibilitySource() {
+            return visibilitySource;
+        }
+
+        public void setVisibilitySource(String visibilitySource) {
+            this.visibilitySource = visibilitySource;
+        }
     }
 }

@@ -40,6 +40,34 @@
         <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
+
+
+    <!-- http://lumify.io/test#rawContainsImageOfEntity -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/test#rawContainsImageOfEntity">
+        <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io#subrip -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;subrip">
+        <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
     
 
 
