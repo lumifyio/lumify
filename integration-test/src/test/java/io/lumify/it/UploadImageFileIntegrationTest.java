@@ -2,6 +2,7 @@ package io.lumify.it;
 
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
+import io.lumify.tesseract.TesseractGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ArtifactApiExt;
@@ -46,12 +47,19 @@ public class UploadImageFileIntegrationTest extends TestBase {
         lumifyTestCluster.processGraphPropertyQueue();
 
         Element vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        boolean foundTesseractText = false;
         for (Property prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
-                LOGGER.info("highlightedText: %s", lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));
+                String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey());
+                LOGGER.info("highlightedText: %s: %s", prop.getKey(), highlightedText);
+                if (prop.getKey().startsWith(TesseractGraphPropertyWorker.TEXT_PROPERTY_KEY)) {
+                    assertTrue("invalid tesseract text", highlightedText.contains("WORLD SERIES GAME 7"));
+                    foundTesseractText = true;
+                }
             }
         }
+        assertTrue("could not find TesseractText", foundTesseractText);
 
         assertPublishAll(lumifyApi, 10);
 

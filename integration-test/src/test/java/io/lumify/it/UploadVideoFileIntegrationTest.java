@@ -2,6 +2,7 @@ package io.lumify.it;
 
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
+import io.lumify.tesseract.TesseractGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ArtifactApiExt;
@@ -57,7 +58,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
                 String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey());
                 LOGGER.info("highlightedText: %s: %s: %s", prop.getName(), prop.getKey(), highlightedText);
-                if (prop.getKey().equals("io.lumify.tesseract.TesseractGraphPropertyWorker")) {
+                if (prop.getKey().equals(TesseractGraphPropertyWorker.TEXT_PROPERTY_KEY)) {
                     foundTesseractVideoTranscript = true;
                     assertTrue("invalid highlighted text for tesseract", highlightedText.contains("Test") && highlightedText.contains("Knows") && highlightedText.contains("40000"));
                 }
