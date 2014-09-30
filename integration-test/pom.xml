@@ -97,5 +97,10 @@
             <artifactId>lumify-opencv-object-detector</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-tesseract</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
