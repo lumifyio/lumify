@@ -64,7 +64,7 @@ public class ResolveTermIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        assertPublishAll(lumifyApi, 9999);
+        assertPublishAll(lumifyApi, 14);
 
         lumifyApi.logout();
     }
@@ -87,13 +87,13 @@ public class ResolveTermIntegrationTest extends TestBase {
     public void assertHighlightedTextUpdatedWithResolvedEntity(LumifyApi lumifyApi) throws ApiException {
         String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("%s", highlightedText);
-        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("graphVertexId&quot;:&quot;" + joeFernerVertex.getId() + "&quot;"));
+        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("resolvedToVertexId&quot;:&quot;" + joeFernerVertex.getId() + "&quot;"));
     }
 
     public void assertDiff(LumifyApi lumifyApi) throws ApiException {
         WorkspaceDiff diff;
         diff = lumifyApi.getWorkspaceApi().getDiff();
-        LOGGER.info("%s", diff.toString());
+        LOGGER.info("assertDiff: %s", diff.toString());
         assertEquals(3, diff.getDiffs().size());
         String edgeId = null;
         boolean foundEdgeDiffItem = false;
