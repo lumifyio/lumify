@@ -92,6 +92,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         DetectedObjects detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
+        LOGGER.info("detectedObjects: %s", detectedObjects.toString());
         assertEquals(15, detectedObjects.getDetectedObjects().size());
 
         // Resolving a new detected object
