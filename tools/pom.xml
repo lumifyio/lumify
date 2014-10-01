@@ -22,5 +22,6 @@
         <module>user-admin</module>
         <module>reindex-mr</module>
         <module>format</module>
+        <module>rdf-import</module>
     </modules>
 </project>
