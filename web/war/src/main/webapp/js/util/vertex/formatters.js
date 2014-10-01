@@ -104,6 +104,21 @@ define([
                     el.textContent = F.bytes.pretty(property.value);
                 },
 
+                link: function(el, property) {
+                    var anchor = document.createElement('a'),
+                        href = $.trim(property.value);
+
+                    if (!(/^http/).test(href)) {
+                        href = 'http://' + href;
+                    }
+
+                    anchor.setAttribute('href', href);
+                    anchor.setAttribute('target', '_blank');
+                    anchor.textContent = property.value;
+
+                    el.appendChild(anchor);
+                },
+
                 heading: function(el, property) {
                     var div = document.createElement('div'),
                         dim = 12,
