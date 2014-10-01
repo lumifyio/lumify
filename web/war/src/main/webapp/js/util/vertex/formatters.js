@@ -269,7 +269,7 @@ define([
 
                     switch (property.dataType) {
                         case 'date':
-                            if (property.displayTime) {
+                            if (property.displayType !== 'dateOnly') {
                                 vertexProperty = F.date.utc(vertexProperty).getTime();
                                 transformFunction = F.date.local;
                             } else {
@@ -364,7 +364,7 @@ define([
                     case 'boolean': return F.boolean.pretty(value);
 
                     case 'date': {
-                        if (ontologyProperty.displayTime) {
+                        if (ontologyProperty.displayType !== 'dateOnly') {
                             return F.date.dateTimeString(value);
                         }
                         return F.date.dateStringUtc(value);

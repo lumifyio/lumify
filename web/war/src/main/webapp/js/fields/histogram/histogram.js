@@ -105,7 +105,7 @@ define([
 
                 isDate = this.attr.property.dataType === 'date',
 
-                isDateTime = this.attr.property.displayTime === true,
+                isDateTime = this.attr.property.displayType !== 'dateOnly',
 
                 values = this.values = (
                     isDate && !isDateTime ?
@@ -448,7 +448,7 @@ define([
                 keys = {},
                 bars = this.barGroup.selectAll('.bar').data(data),
                 isDate = this.attr.property.dataType === 'date',
-                isDateTime = this.attr.property.displayTime === true;
+                isDateTime = this.attr.property.displayType !== 'dateOnly';
 
             bars.enter()
                 .append('g').attr('class', 'bar')

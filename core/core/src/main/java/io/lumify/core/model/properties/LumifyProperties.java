@@ -9,7 +9,6 @@ public class LumifyProperties {
     public static final String META_DATA_TEXT_DESCRIPTION = "http://lumify.io#textDescription";
     public static final String META_DATA_MIME_TYPE = "http://lumify.io#mimeType";
 
-    public static final BooleanLumifyProperty DISPLAY_TIME = new BooleanLumifyProperty("http://lumify.io#displayTime");
     public static final BooleanLumifyProperty SEARCHABLE = new BooleanLumifyProperty("http://lumify.io#searchable");
     public static final BooleanLumifyProperty USER_VISIBLE = new BooleanLumifyProperty("http://lumify.io#userVisible");
 

@@ -42,6 +42,8 @@ define([
                 dateString = '',
                 timeString = '';
 
+            this.displayTime = this.attr.property.displayType !== 'dateOnly';
+
             if (this.attr.value) {
                 dateString = value = F.date.dateStringUtc(this.attr.value);
                 timeString = F.date.timeString(this.attr.value);
@@ -52,7 +54,7 @@ define([
                 timeString: timeString,
                 today: F.date.dateString(new Date()),
                 todayTime: F.date.timeString(new Date()),
-                displayTime: this.attr.property.displayTime,
+                displayTime: this.displayTime,
                 predicates: this.attr.predicates
             }));
 
@@ -67,7 +69,7 @@ define([
                         return $(this).val();
                     }).toArray();
 
-                if (this.attr.property.displayTime && values.length > 1) {
+                if (this.displayTime && values.length > 1) {
                     var newValues = [], i;
                     for (i = 0; i < values.length; i += 2) {
                         newValues.push(values[i] + ' ' + values[i + 1]);
@@ -76,7 +78,7 @@ define([
                 }
 
                 return values.map(function(v) {
-                    if (self.attr.property.displayTime) {
+                    if (self.displayTime) {
                         return F.timezone.dateTimeStringToUtc(v, self.currentTimezone.name);
                     }
                     return v;
@@ -136,7 +138,7 @@ define([
         };
 
         this.updateTimezone = function(tz) {
-            if (this.attr.property.displayTime) {
+            if (this.displayTime) {
                 var self = this,
                     values = this.getValues(),
                     date = (values && values[0]) ? new Date(values[0]) : null,
@@ -217,12 +219,12 @@ define([
         };
 
         this.isValid = function() {
-            var dateRegex = /^\s*\d{4}-\d{1,2}-\d{1,2}\s*$/,
-                dateTimeRegex = /^\s*\d{4}-\d{1,2}-\d{1,2}\s*\d{1,2}:\d{1,2}\s*$/,
-                displayTime = this.attr.property.displayTime;
+            var self = this,
+                dateRegex = /^\s*\d{4}-\d{1,2}-\d{1,2}\s*$/,
+                dateTimeRegex = /^\s*\d{4}-\d{1,2}-\d{1,2}\s*\d{1,2}:\d{1,2}\s*$/;
 
             return _.every(this.getValues(), function(v, i) {
-                if (displayTime) {
+                if (self.displayTime) {
                     return dateTimeRegex.test(v);
                 } else {
                     return dateRegex.test(v);

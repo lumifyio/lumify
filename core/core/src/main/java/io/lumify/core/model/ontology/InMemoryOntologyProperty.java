@@ -9,7 +9,6 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private String displayName;
     private PropertyType dataType;
     private JSONObject possibleValues;
-    private Boolean displayTime;
     private String displayType;
     private Double boost;
 
@@ -48,11 +47,6 @@ public class InMemoryOntologyProperty extends OntologyProperty {
         return searchable;
     }
 
-    @Override
-    public Boolean getDisplayTime() {
-        return displayTime;
-    }
-
     public String getDisplayType() {
         return displayType;
     }
@@ -63,10 +57,6 @@ public class InMemoryOntologyProperty extends OntologyProperty {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setDisplayTime(Boolean displayTime) {
-        this.displayTime = displayTime;
     }
 
     public void setUserVisible(boolean userVisible) {

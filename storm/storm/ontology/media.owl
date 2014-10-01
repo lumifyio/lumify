@@ -51,7 +51,6 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#dateTaken">
         <rdfs:label xml:lang="en">Date Taken</rdfs:label>
-        <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>

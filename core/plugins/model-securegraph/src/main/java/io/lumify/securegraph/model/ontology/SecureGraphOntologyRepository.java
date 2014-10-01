@@ -444,11 +444,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime,
             String displayType,
             Double boost) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, displayType, boost);
+        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayType, boost);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -506,7 +505,6 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime,
             String displayType,
             Double boost) {
         OntologyProperty typeProperty = getProperty(propertyName);
@@ -531,9 +529,6 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
             USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
             SEARCHABLE.setProperty(builder, searchable, VISIBILITY.getVisibility());
-            if (displayTime != null) {
-                DISPLAY_TIME.setProperty(builder, displayTime, VISIBILITY.getVisibility());
-            }
             if (boost != null) {
                 BOOST.setProperty(builder, boost, VISIBILITY.getVisibility());
             }
