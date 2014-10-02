@@ -52,6 +52,7 @@ define([
             audioPreviewSelector: '.audio-preview',
             currentTranscriptSelector: '.currentTranscript',
             imagePreviewSelector: '.image-preview',
+            faceboxContainerSelector: '.image-preview, .background-scrubber',
             detectedObjectLabelsSelector: '.detected-object-labels',
             detectedObjectSelector: '.detected-object',
             detectedObjectTagSelector: '.detected-object-tag',
@@ -420,7 +421,7 @@ define([
                 propertyKey = badge.data('propertyKey');
 
             this.trigger(
-                this.select('imagePreviewSelector'),
+                this.select('faceboxContainerSelector'),
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
                 F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey)
             );
@@ -438,6 +439,7 @@ define([
                 rawUrl: vertex.imageRawSrc,
                 posterFrameUrl: vertex.imageSrc,
                 videoPreviewImageUrl: vertex.imageFramesSrc,
+                duration: this.duration,
                 allowPlayback: true
             });
         };

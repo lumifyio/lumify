@@ -1,0 +1,56 @@
+
+.facebox {
+  cursor: move;
+  position: absolute;
+  opacity: 1;
+  .box-shadow(~"@{blue-color} 0px 0px 0px 1px, rgba(255,255,255,0.4) 0 0 0 2px, @{blue-color} 0px 0px 8px 5px");
+
+  .ui-resizable-handle {
+    background: none;
+    border: none;
+    &:before, &:after {
+      background: none;
+      border: none;
+    }
+
+    &.ui-resizable-se {
+      width: 9px;
+      height: 9px;
+      right: -5px;
+      bottom: -5px;
+    }
+
+    &.ui-resizable-se,
+    &.ui-resizable-ne,
+    &.ui-resizable-sw,
+    &.ui-resizable-nw {
+      &:before {
+        //box-shadow: 0 0 9px white;
+        width: 5px;
+        height: 5px;
+        background: rgba(255,255,255,0.9);
+      }
+    }
+
+    &.ui-resizable-ne:before {
+      left: -1px;
+      top: 5px;
+      border-radius: 0 0 0 5px;
+    }
+    &.ui-resizable-nw:before {
+      left: 5px;
+      top: 5px;
+      border-radius: 0 0 5px 0;
+    }
+    &.ui-resizable-se:before {
+      left: -1px;
+      top: -1px;
+      border-radius: 5px 0 0 0;
+    }
+    &.ui-resizable-sw:before {
+      left: 5px;
+      top: -1px;
+      border-radius: 0 5px 0 0;
+    }
+  }
+}
