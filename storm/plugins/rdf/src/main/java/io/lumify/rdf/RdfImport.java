@@ -5,12 +5,11 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.json.JSONObject;
 import org.securegraph.*;
+import org.securegraph.property.StreamingPropertyValue;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,27 +21,28 @@ public class RdfImport {
     public void importRdf(Graph graph, File inputFile, Authorizations authorizations) throws IOException {
         InputStream in = new FileInputStream(inputFile);
         try {
-            importRdf(graph, in, authorizations);
+            File baseDir = inputFile.getParentFile();
+            importRdf(graph, in, baseDir, authorizations);
         } finally {
             in.close();
         }
     }
 
-    public void importRdf(Graph graph, InputStream in, Authorizations authorizations) {
+    public void importRdf(Graph graph, InputStream in, File baseDir, Authorizations authorizations) {
         Model model = ModelFactory.createDefaultModel();
         model.read(in, null);
-        importRdfModel(graph, model, authorizations);
+        importRdfModel(graph, model, baseDir, authorizations);
     }
 
-    public void importRdfModel(Graph graph, Model model, Authorizations authorizations) {
+    public void importRdfModel(Graph graph, Model model, File baseDir, Authorizations authorizations) {
         ResIterator subjects = model.listSubjects();
         while (subjects.hasNext()) {
             Resource subject = subjects.next();
-            importSubject(graph, subject, authorizations);
+            importSubject(graph, subject, baseDir, authorizations);
         }
     }
 
-    public void importSubject(Graph graph, Resource subject, Authorizations authorizations) {
+    public void importSubject(Graph graph, Resource subject, File baseDir, Authorizations authorizations) {
         LOGGER.info("importSubject: %s", subject.toString());
         String graphVertexId = getGraphVertexId(subject);
         Visibility visibility = getVisibility(subject);
@@ -58,7 +58,8 @@ public class RdfImport {
                     LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, value, visibility);
                 }
             } else if (obj instanceof Literal) {
-                importLiteral(vertexBuilder, statement, visibility);
+                LOGGER.info("set property on %s to %s", subject.toString(), statement.toString());
+                importLiteral(vertexBuilder, statement, baseDir, visibility);
             } else {
                 throw new LumifyException("Unhandled object type: " + obj.getClass().getName());
             }
@@ -84,10 +85,38 @@ public class RdfImport {
         return label.equals(RDF_TYPE_URI);
     }
 
-    private void importLiteral(VertexBuilder v, Statement statement, Visibility visibility) {
+    private void importLiteral(VertexBuilder v, Statement statement, File baseDir, Visibility visibility) {
         String propertyName = statement.getPredicate().toString();
-        String value = statement.getLiteral().toString();
+        String valueString = statement.getLiteral().toString();
+        Object value = valueString;
+
+        if (valueString.startsWith("streamingValue:")) {
+            value = convertStreamingValueJsonToValueObject(baseDir, valueString);
+        }
+
         v.setProperty(propertyName, value, visibility);
+    }
+
+    private Object convertStreamingValueJsonToValueObject(File baseDir, String valueString) {
+        JSONObject streamingValueJson = new JSONObject(valueString.substring("streamingValue:".length()));
+        String fileName = streamingValueJson.getString("fileName");
+        if (baseDir == null) {
+            throw new LumifyException("Could not import streamingValue. No baseDir specified.");
+        }
+        File file = new File(baseDir, fileName);
+        InputStream in;
+        try {
+            if (!file.exists()) {
+                throw new LumifyException("File " + file.getAbsolutePath() + " does not exist.");
+            }
+            in = new FileInputStream(file);
+        } catch (FileNotFoundException ex) {
+            throw new LumifyException("File " + file.getAbsolutePath() + " does not exist.");
+        }
+        StreamingPropertyValue spv = new StreamingPropertyValue(in, byte[].class);
+        spv.searchIndex(false);
+        spv.store(true);
+        return spv;
     }
 
     private void importResource(Graph graph, Vertex outVertex, Statement statement, Visibility visibility, Authorizations authorizations) {
