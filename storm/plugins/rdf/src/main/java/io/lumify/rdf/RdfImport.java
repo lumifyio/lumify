@@ -5,6 +5,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
@@ -89,12 +90,18 @@ public class RdfImport {
         String propertyName = statement.getPredicate().toString();
         String valueString = statement.getLiteral().toString();
         Object value = valueString;
+        String propertyKey = RdfImport.class.getName() + "_" + hashValue(valueString);
 
         if (valueString.startsWith("streamingValue:")) {
             value = convertStreamingValueJsonToValueObject(baseDir, valueString);
         }
 
-        v.setProperty(propertyName, value, visibility);
+        v.addPropertyValue(propertyKey, propertyName, value, visibility);
+    }
+
+    private String hashValue(String valueString) {
+        // we need a unique value but it's a bit silly to store a whole md5 hash
+        return DigestUtils.md5Hex(valueString).substring(0, 10);
     }
 
     private Object convertStreamingValueJsonToValueObject(File baseDir, String valueString) {
