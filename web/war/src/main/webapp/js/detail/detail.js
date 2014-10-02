@@ -80,6 +80,8 @@ define([
             this.teardownComponents();
             this.$node.addClass('loading');
 
+            vertices = _.unique(vertices, 'id');
+
             if (vertices.length > 1) {
                 moduleName = 'multiple';
                 moduleData = vertices;
