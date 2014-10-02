@@ -273,7 +273,9 @@ define([
 
             var self = this,
                 req = null,
+                aborted = false,
                 cancelHandler = function() {
+                    aborted = true;
                     if (req) {
                         req.abort();
                     }
@@ -321,6 +323,10 @@ define([
                     });
                 }
             }).done(function(config, verticesResponse) {
+                if (aborted) {
+                    return;
+                }
+
                 var vertices = verticesResponse[0].vertices,
                     count = verticesResponse[0].count,
                     eventOptions = {
