@@ -13,6 +13,7 @@ import io.lumify.core.user.User;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,8 +82,11 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
 
     @Test
     public void testEntityExtraction() throws Exception {
+        JSONObject visibilityJson = new JSONObject();
+        visibilityJson.put("source", "");
         Vertex vertex = graph.prepareVertex("v1", new Visibility(""))
                 .setProperty("text", "none", new Visibility(""))
+                .setProperty(LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson, new Visibility(""))
                 .save(new InMemoryAuthorizations());
 
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);

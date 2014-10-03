@@ -12,6 +12,7 @@ import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import org.apache.hadoop.fs.FileSystem;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +48,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
     private InMemoryGraph graph;
     private Visibility visibility;
     private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
+    private JSONObject visibilityJson;
 
     @Before
     public void setUp() throws Exception {
@@ -70,6 +72,9 @@ public class PhoneNumberGraphPropertyWorkerTest {
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
         graph = new InMemoryGraph();
         visibility = new Visibility("");
+        visibilityJson = new JSONObject();
+        visibilityJson.put("source", "");
+
         extractor.setGraph(graph);
 
         extractor.prepare(workerPrepareData);
@@ -81,6 +86,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         VertexBuilder vertexBuilder = graph.prepareVertex("v1", visibility);
         StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(in, String.class);
         LumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
+        LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
@@ -116,6 +122,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         VertexBuilder vertexBuilder = graph.prepareVertex("v1", visibility);
         StreamingPropertyValue textPropertyValue = new StreamingPropertyValue(in, String.class);
         LumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
+        LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
