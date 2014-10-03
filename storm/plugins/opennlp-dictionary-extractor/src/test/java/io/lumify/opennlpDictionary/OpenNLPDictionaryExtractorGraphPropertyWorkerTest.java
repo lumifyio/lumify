@@ -19,6 +19,7 @@ import opennlp.tools.namefind.TokenNameFinder;
 import opennlp.tools.util.StringList;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -100,12 +101,15 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
     @Test
     public void testEntityExtraction() throws Exception {
+        JSONObject visibilityJson = new JSONObject();
+        visibilityJson.put("source", "");
         InMemoryVertex vertex = (InMemoryVertex) graph.prepareVertex("v1", new Visibility(""))
                 .setProperty("text", "none", new Visibility(""))
+                .setProperty(LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson, new Visibility(""))
                 .save(new InMemoryAuthorizations());
         graph.flush();
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, "");
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
 
         List<Vertex> termMentions = toList(termMentionRepository.findBySourceGraphVertex(vertex.getId(), authorizations));
