@@ -21,7 +21,7 @@ public class EdgeDiffItem extends DiffItem {
         json.put("label", edge.getLabel());
         json.put("outVertexId", edge.getVertexId(Direction.OUT));
         json.put("inVertexId", edge.getVertexId(Direction.IN));
-        json.put("visibilityJson", JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_SOURCE.getProperty(edge)));
+        json.put("visibilityJson", JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_JSON.getProperty(edge)));
         return json;
     }
 }

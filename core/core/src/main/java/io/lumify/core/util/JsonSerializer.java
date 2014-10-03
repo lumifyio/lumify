@@ -8,6 +8,7 @@ import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.core.security.VisibilityTranslator;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +26,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
 
 public class JsonSerializer {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(JsonSerializer.class);
-
     public static JSONArray toJson(Iterable<? extends Element> elements, String workspaceId, Authorizations authorizations) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
@@ -88,12 +87,9 @@ public class JsonSerializer {
         json.put("id", element.getId());
         json.put("properties", toJsonProperties(element.getProperties(), workspaceId));
         json.put("sandboxStatus", GraphUtil.getSandboxStatus(element, workspaceId).toString());
-        if (element.getVisibility() != null) {
-            json.put(LumifyProperties.VISIBILITY_PROPERTY.getPropertyName(), element.getVisibility().toString());
-        }
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(element);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
         if (visibilityJson != null) {
-            json.put(LumifyProperties.VISIBILITY_SOURCE.getPropertyName(), visibilityJson);
+            json.put("visibilitySource", VisibilityTranslator.getVisibilitySource(visibilityJson));
         }
 
         return json;
@@ -182,9 +178,6 @@ public class JsonSerializer {
             result.put("value", toJsonValue(propertyValue));
         }
 
-        if (property.getVisibility() != null) {
-            result.put(LumifyProperties.VISIBILITY_PROPERTY.getPropertyName(), property.getVisibility().toString());
-        }
         for (String key : property.getMetadata().keySet()) {
             Object value = property.getMetadata().get(key);
             result.put(key, toJsonValue(value));

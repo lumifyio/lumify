@@ -59,7 +59,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
         Vertex sourceVertex = (Vertex) data.getElement();
         List<Vertex> termMentions = new ArrayList<Vertex>();
         while ((line = untokenizedLineStream.read()) != null) {
-            termMentions.addAll(processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(sourceVertex)));
+            termMentions.addAll(processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex)));
             getGraph().flush();
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }

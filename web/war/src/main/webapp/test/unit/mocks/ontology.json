@@ -403,14 +403,7 @@
          "displayName":"Title",
          "searchable":true
       },
-      {  
-         "userVisible":false,
-         "dataType":"string",
-         "title":"http://lumify.io#visibility",
-         "displayName":"Visibility",
-         "searchable":true
-      },
-      {  
+      {
          "userVisible":false,
          "dataType":"string",
          "title":"http://lumify.io#visibilityJson",

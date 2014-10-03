@@ -38,11 +38,14 @@ public class UploadFileIntegrationTest extends TestBase {
         assertUser3StillHasNoAccessToArtifactBecauseAuth1Visibility();
         assertUser3HasAccessWithAuth1Visibility();
         assertRawRoute();
+        alterVisibilityOfArtifactToAuth2();
+        assertUser2DoesNotHaveAccessToAuth2();
     }
 
     public void importArtifactAsUser1() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth2");
         workspaceId = lumifyApi.getCurrentWorkspaceId();
 
         ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
@@ -52,7 +55,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        assertArtifactCorrect(lumifyApi, true);
+        assertArtifactCorrect(lumifyApi, true, "auth1");
 
         lumifyApi.logout();
     }
@@ -118,13 +121,14 @@ public class UploadFileIntegrationTest extends TestBase {
     private void assertUser3HasAccessWithAuth1Visibility() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_3);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_3, "auth1");
-        assertArtifactCorrect(lumifyApi, false);
+        assertArtifactCorrect(lumifyApi, false, "auth1");
         lumifyApi.logout();
     }
 
-    public void assertArtifactCorrect(LumifyApi lumifyApi, boolean hasWorkspaceIdInVisibilityJson) throws ApiException {
+    public void assertArtifactCorrect(LumifyApi lumifyApi, boolean hasWorkspaceIdInVisibilityJson, String expectedVisibilitySource) throws ApiException {
         Element artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         assertNotNull("could not get vertex: " + artifactVertexId, artifactVertex);
+        assertEquals(expectedVisibilitySource, artifactVertex.getVisibilitySource());
         assertEquals(artifactVertexId, artifactVertex.getId());
         for (Property property : artifactVertex.getProperties()) {
             LOGGER.info("property: %s", property.toString());
@@ -134,13 +138,13 @@ public class UploadFileIntegrationTest extends TestBase {
         assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
         assertHasProperty(artifactVertex.getProperties(), TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
         LinkedHashMap<String, Object> visibilityJson = new LinkedHashMap<String, Object>();
-        visibilityJson.put("source", "auth1");
+        visibilityJson.put("source", expectedVisibilitySource);
         ArrayList<String> visibilityJsonWorkspaces = new ArrayList<String>();
         if (hasWorkspaceIdInVisibilityJson) {
             visibilityJsonWorkspaces.add(workspaceId);
         }
         visibilityJson.put("workspaces", visibilityJsonWorkspaces);
-        assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.VISIBILITY_SOURCE.getPropertyName(), visibilityJson);
+        assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson);
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.CONTENT_HASH.getPropertyName(), "urn\u001Fsha256\u001F28fca952b9eb45d43663af8e3099da0572c8232243289b5d8a03eb5ea2cb066a");
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.CREATE_DATE.getPropertyName());
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.FILE_NAME.getPropertyName(), "test.txt");
@@ -163,6 +167,23 @@ public class UploadFileIntegrationTest extends TestBase {
 
         byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRaw(artifactVertexId));
         assertArrayEquals(expected, found);
+
+        lumifyApi.logout();
+    }
+
+    private void alterVisibilityOfArtifactToAuth2() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        lumifyApi.getVertexApi().setVisibility(artifactVertexId, "auth2");
+        assertArtifactCorrect(lumifyApi, false, "auth2");
+
+        lumifyApi.logout();
+    }
+
+    private void assertUser2DoesNotHaveAccessToAuth2() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
+
+        lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
 
         lumifyApi.logout();
     }

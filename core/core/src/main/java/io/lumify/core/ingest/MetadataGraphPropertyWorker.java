@@ -74,7 +74,7 @@ public class MetadataGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, GraphUtil.updateVisibilitySource(null, visibilitySource));
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, GraphUtil.updateVisibilitySource(null, visibilitySource));
 
         data.getElement().addPropertyValue(propertyKey, propertyName, propertyValue, metadata, visibility, getAuthorizations());
     }

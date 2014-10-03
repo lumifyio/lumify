@@ -107,7 +107,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
         ElementMutation<Vertex> vertexMutation;
         Vertex vertex;
         if (resolvedVertexId != null) {
@@ -124,7 +124,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
 
-            LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.VISIBILITY_JSON.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             this.graph.flush();
 
@@ -133,7 +133,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = graph.addEdge(artifactVertex, vertex, this.artifactHasEntityIri, lumifyVisibility.getVisibility(), authorizations);
-        LumifyProperties.VISIBILITY_SOURCE.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
+        LumifyProperties.VISIBILITY_JSON.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 

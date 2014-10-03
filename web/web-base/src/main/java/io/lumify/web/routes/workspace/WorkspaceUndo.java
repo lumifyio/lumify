@@ -151,7 +151,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(vertex);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 

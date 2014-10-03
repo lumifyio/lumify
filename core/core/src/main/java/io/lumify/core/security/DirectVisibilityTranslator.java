@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DirectVisibilityTranslator implements VisibilityTranslator {
+public class DirectVisibilityTranslator extends VisibilityTranslator {
 
     public void init(Map configuration) {
 

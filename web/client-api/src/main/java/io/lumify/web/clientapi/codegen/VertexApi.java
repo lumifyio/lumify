@@ -289,5 +289,55 @@ public class VertexApi {
       }
     }
   }
+  //error info- code: 404 reason: "Vertex not found" model: <none>
+  public Element setVisibility (String graphVertexId, String visibilitySource) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null || visibilitySource == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/visibility/set".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(visibilitySource)))
+      queryParams.put("visibilitySource", String.valueOf(visibilitySource));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (Element) ApiInvoker.deserialize(response, "", Element.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
   }
 

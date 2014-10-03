@@ -19,8 +19,7 @@ public class LumifyProperties {
     public static final DoubleLumifyProperty CONFIDENCE = new DoubleLumifyProperty("http://lumify.io#confidence");
 
     public static final JsonLumifyProperty POSSIBLE_VALUES = new JsonLumifyProperty("http://lumify.io#possibleValues");
-    public static final JsonLumifyProperty VISIBILITY_SOURCE = new JsonLumifyProperty("http://lumify.io#visibilitySource");
-    public static final StringLumifyProperty VISIBILITY_PROPERTY = new StringLumifyProperty("http://lumify.io#visibility");
+    public static final JsonLumifyProperty VISIBILITY_JSON = new JsonLumifyProperty("http://lumify.io#visibilityJson");
 
     public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#glyphIcon");
     public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#mapGlyphIcon");

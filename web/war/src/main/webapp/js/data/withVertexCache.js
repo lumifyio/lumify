@@ -5,8 +5,7 @@ define([
 ], function(VertexService, F) {
 
     var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
-        'http://lumify.io#visibility',
-        'http://lumify.io#visibilityJson',
+        'visibilitySource',
         'properties',
         'sandboxStatus',
         'edgeLabels'
@@ -166,7 +165,6 @@ define([
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
 
             $.extend(cache, _.pick(vertex, [
-                'http://lumify.io#visibility',
                 'http://lumify.io#visibilityJson',
                 'sandboxStatus']));
 

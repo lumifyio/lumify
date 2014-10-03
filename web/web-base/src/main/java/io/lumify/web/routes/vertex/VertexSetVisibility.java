@@ -69,7 +69,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
             chain.next(request, response);
             return;
         }
-        LOGGER.info("changing vertex (%s) visibility source to %s", graphVertex.getId().toString(), visibilitySource);
+        LOGGER.info("changing vertex (%s) visibility source to %s", graphVertex.getId(), visibilitySource);
 
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphVertex, GraphUtil.getSandboxStatus(graphVertex, workspaceId), visibilitySource, workspaceId, authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
@@ -77,7 +77,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
         this.graph.flush();
 
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null,
-                LumifyProperties.VISIBILITY_SOURCE.getPropertyName(), workspaceId, visibilitySource);
+                LumifyProperties.VISIBILITY_JSON.getPropertyName(), workspaceId, visibilitySource);
 
         JSONObject json = JsonSerializer.toJson(graphVertex, workspaceId, authorizations);
         respondWithJson(response, json);

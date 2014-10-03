@@ -292,7 +292,6 @@ require([
                                 .data(function(d) {
                                     var notMetadata = ['name', 'key', 'value', 'sandboxStatus',
                                         'http://lumify.io#visibilityJson',
-                                        'http://lumify.io#visibility',
                                         '_sourceMetadata',
                                         '_justificationMetadata'
                                     ];
@@ -309,7 +308,6 @@ require([
                                             }
 
                                             return (pair[0] === 'name' && !(d.name === '' && d.key === '')) ||
-                                                pair[0] === 'http://lumify.io#visibility' ||
                                                 notMetadata.indexOf(pair[0]) === -1;
                                         })
                                         .sortBy(function(pair) {

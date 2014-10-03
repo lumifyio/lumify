@@ -56,7 +56,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
         final String text = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
 
         Vertex sourceVertex = (Vertex) data.getElement();
-        JSONObject visibilitySource = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(sourceVertex);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
         final Iterable<PhoneNumberMatch> phoneNumbers = phoneNumberUtil.findNumbers(text, defaultRegionCode);
         List<Vertex> termMentions = new ArrayList<Vertex>();
         for (final PhoneNumberMatch phoneNumber : phoneNumbers) {
@@ -71,7 +71,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
                     .end(end)
                     .title(formattedNumber)
                     .conceptIri(entityType)
-                    .visibilityJson(visibilitySource)
+                    .visibilityJson(visibilityJson)
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
             termMentions.add(termMention);

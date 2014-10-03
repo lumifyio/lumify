@@ -193,6 +193,39 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/visibility/set",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Sets the visibility of the vertex",
+                    "type": "Element",
+                    "nickname": "setVisibility",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "ID of the artifact vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "The visibility source",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Vertex not found"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {
@@ -201,6 +234,12 @@
             "properties": {
                 "id": {
                     "type": "string"
+                },
+                "sandboxStatus": {
+                    "type": "string"
+                },
+                "visibilitySource": {
+                    "type": "object"
                 },
                 "properties": {
                     "type": "array",

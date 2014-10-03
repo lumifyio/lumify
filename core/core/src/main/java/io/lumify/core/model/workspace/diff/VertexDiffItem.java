@@ -23,7 +23,7 @@ public class VertexDiffItem extends DiffItem {
         json.put("vertexId", vertex.getId());
         json.put("title", title);
         json.put("visible", visible);
-        json.put("visibilityJson", JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_SOURCE.getProperty(vertex)));
+        json.put("visibilityJson", JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_JSON.getProperty(vertex)));
         return json;
     }
 }

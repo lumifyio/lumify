@@ -106,18 +106,18 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         Workspace workspace = this.workspaceRepository.findById(workspaceId, user);
 
         Vertex entityVertex = graph.getVertex(graphVertexId, authorizations);
-        ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
         if (entityVertex == null) {
             LOGGER.warn("Could not find associated entity vertex for id: %s", graphVertexId);
             respondWithNotFound(response);
             return;
         }
+        ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
 
         JSONObject visibilityJson = getLumifyVisibility(entityVertex, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
 
         String title = String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex));
         ElementBuilder<Vertex> artifactVertexBuilder = convertToArtifact(file, title, visibilityJson, metadata, lumifyVisibility, authorizations);
@@ -134,7 +134,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         List<Edge> existingEdges = toList(entityVertex.getEdges(artifactVertex, Direction.BOTH, entityHasImageIri, authorizations));
         if (existingEdges.size() == 0) {
             EdgeBuilder edgeBuilder = graph.prepareEdge(entityVertex, artifactVertex, entityHasImageIri, lumifyVisibility.getVisibility());
-            LumifyProperties.VISIBILITY_SOURCE.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
+            LumifyProperties.VISIBILITY_JSON.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
             Edge edge = edgeBuilder.save(authorizations);
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
@@ -150,7 +150,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     }
 
     private JSONObject getLumifyVisibility(Vertex entityVertex, String workspaceId) {
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(entityVertex);
+        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(entityVertex);
         if (visibilityJson == null) {
             visibilityJson = new JSONObject();
         }
@@ -181,7 +181,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.store(true);
 
         ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility());
-        LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
         LumifyProperties.TITLE.setProperty(vertexBuilder, title, metadata, lumifyVisibility.getVisibility());
         LumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(), metadata, lumifyVisibility.getVisibility());
         LumifyProperties.FILE_NAME.setProperty(vertexBuilder, fileName, metadata, lumifyVisibility.getVisibility());

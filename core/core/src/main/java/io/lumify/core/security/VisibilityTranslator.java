@@ -4,11 +4,15 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public interface VisibilityTranslator {
+public abstract class VisibilityTranslator {
     public static final String JSON_SOURCE = "source";
     public static final String JSON_WORKSPACES = "workspaces";
 
-    void init(Map configuration);
+    public abstract void init(Map configuration);
 
-    LumifyVisibility toVisibility(JSONObject visibilityJson);
+    public abstract LumifyVisibility toVisibility(JSONObject visibilityJson);
+
+    public static String getVisibilitySource(JSONObject visibilityJson) {
+        return visibilityJson.getString(JSON_SOURCE);
+    }
 }

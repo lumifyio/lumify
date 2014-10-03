@@ -101,7 +101,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         ElementMutation<Vertex> resolvedVertexMutation;
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_SOURCE.setMetadata(metadata, visibilityJson);
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
 
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
@@ -117,7 +117,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             resolvedVertex = resolvedVertexMutation.save(authorizations);
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-            LumifyProperties.VISIBILITY_SOURCE.setProperty(resolvedVertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.VISIBILITY_JSON.setProperty(resolvedVertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             graph.flush();
 
@@ -128,7 +128,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         }
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, artifactContainsImageOfEntityIri, lumifyVisibility.getVisibility(), authorizations);
-        LumifyProperties.VISIBILITY_SOURCE.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
+        LumifyProperties.VISIBILITY_JSON.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
         ArtifactDetectedObject artifactDetectedObject = new ArtifactDetectedObject(

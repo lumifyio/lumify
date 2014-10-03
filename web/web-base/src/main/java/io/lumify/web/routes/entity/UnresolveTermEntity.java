@@ -90,10 +90,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
 
         JSONObject visibilityJson;
         if (vertexSandboxStatus == SandboxStatus.PUBLIC) {
-            visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(edge);
+            visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge);
             visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
         } else {
-            visibilityJson = LumifyProperties.VISIBILITY_SOURCE.getPropertyValue(resolvedVertex);
+            visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(resolvedVertex);
             visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);

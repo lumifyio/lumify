@@ -616,19 +616,6 @@
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
-
-
-    <!-- http://lumify.io#visibility -->
-
-    <owl:DatatypeProperty rdf:about="&lumify;visibility">
-        <rdfs:label xml:lang="en">Visibility</rdfs:label>
-        <userVisible>false</userVisible>
-        <textIndexHints>EXACT_MATCH</textIndexHints>
-        <rdfs:range rdf:resource="&xsd;string"/>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:DatatypeProperty>
-    
 
 
     <!-- http://lumify.io#visibilityJson -->

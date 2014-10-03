@@ -66,9 +66,9 @@ public class VertexNew extends BaseRequestHandler {
         Visibility visibility = lumifyVisibility.getVisibility();
 
         VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility);
-        LumifyProperties.VISIBILITY_SOURCE.setProperty(vertexBuilder, visibilityJson, visibility);
+        LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, visibility);
         Map<String, Object> propertyMetadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_SOURCE.setMetadata(propertyMetadata, visibilityJson);
+        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptType, propertyMetadata, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
         this.graph.flush();
