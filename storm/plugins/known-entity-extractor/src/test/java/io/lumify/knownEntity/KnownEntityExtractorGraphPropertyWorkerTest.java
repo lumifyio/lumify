@@ -97,7 +97,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         for (Vertex termMention : termMentions) {
             assertTrue(LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.getPropertyValue(termMention) != null);
             assertEquals("http://lumify.io/test#person", LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(termMention));
-            assertEquals("Joe Ferner", LumifyProperties.TITLE.getPropertyValue(termMention));
+            assertEquals("Joe Ferner", LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(termMention));
         }
     }
 }
