@@ -54,11 +54,18 @@ define([
                     self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
                 })
                 .done(function(result) {
+                    var unknownTotal = false;
+                    if (!('totalHits' in result)) {
+                        unknownTotal = true;
+                        result.totalHits = result.vertices.length;
+                    }
+
                     self.trigger('searchRequestCompleted', {
                         success: true,
                         result: result,
                         message: i18n('search.types.lumify.hits.' +
                             (
+                                unknownTotal && result.totalHits >= (result.nextOffset - 1) ? 'unknown' :
                                 result.totalHits === 0 ? 'none' :
                                 result.totalHits === 1 ? 'one' :
                                 'many'

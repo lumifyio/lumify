@@ -30,11 +30,6 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
         return SEARCHABLE.getPropertyValue(vertex);
     }
 
-    @Override
-    public Boolean getDisplayTime() {
-        return DISPLAY_TIME.getPropertyValue(vertex);
-    }
-
     public PropertyType getDataType() {
         return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
     }

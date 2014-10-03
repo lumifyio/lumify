@@ -1497,6 +1497,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#dateAdded">
         <rdfs:label xml:lang="en">Date Added to GDELT</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
@@ -1507,6 +1508,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#dateOfOccurrence">
         <rdfs:label xml:lang="en">Date Of Occurence</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>

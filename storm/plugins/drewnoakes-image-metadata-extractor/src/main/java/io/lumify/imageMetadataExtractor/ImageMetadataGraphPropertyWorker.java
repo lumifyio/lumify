@@ -93,7 +93,10 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
-        if (mimeType != null && (mimeType.startsWith("image/jpeg") || mimeType.startsWith("image/tiff"))) {
+        if (mimeType != null && (
+               mimeType.startsWith("image/png") ||
+               mimeType.startsWith("image/jpeg") ||
+               mimeType.startsWith("image/tiff"))) {
             return true;
         }
 

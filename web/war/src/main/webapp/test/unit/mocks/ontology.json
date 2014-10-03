@@ -83,7 +83,6 @@
       },
       {  
          "userVisible":true,
-         "displayTime":true,
          "dataType":"date",
          "title":"http://lumify.io/dev#dateAndTime",
          "displayName":"Date and Time",

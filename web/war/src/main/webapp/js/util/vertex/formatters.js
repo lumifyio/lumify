@@ -104,6 +104,21 @@ define([
                     el.textContent = F.bytes.pretty(property.value);
                 },
 
+                link: function(el, property) {
+                    var anchor = document.createElement('a'),
+                        href = $.trim(property.value);
+
+                    if (!(/^http/).test(href)) {
+                        href = 'http://' + href;
+                    }
+
+                    anchor.setAttribute('href', href);
+                    anchor.setAttribute('target', '_blank');
+                    anchor.textContent = property.value;
+
+                    el.appendChild(anchor);
+                },
+
                 heading: function(el, property) {
                     var div = document.createElement('div'),
                         dim = 12,
@@ -269,7 +284,7 @@ define([
 
                     switch (property.dataType) {
                         case 'date':
-                            if (property.displayTime) {
+                            if (property.displayType !== 'dateOnly') {
                                 vertexProperty = F.date.utc(vertexProperty).getTime();
                                 transformFunction = F.date.local;
                             } else {
@@ -364,7 +379,7 @@ define([
                     case 'boolean': return F.boolean.pretty(value);
 
                     case 'date': {
-                        if (ontologyProperty.displayTime) {
+                        if (ontologyProperty.displayType !== 'dateOnly') {
                             return F.date.dateTimeString(value);
                         }
                         return F.date.dateStringUtc(value);

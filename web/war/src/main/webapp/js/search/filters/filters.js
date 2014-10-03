@@ -73,9 +73,8 @@ define([
             var vertex = appData.vertex(data.vertexId),
                 title = vertex && F.vertex.title(vertex) || data.vertexId;
 
-            this.$node.find('.entity-filter-header')
-                .after(entityItemTemplate({title: title}))
-                .closest('.entity-filters').show();
+            this.$node.find('.entity-filters')
+                .append(entityItemTemplate({title: title})).show();
             this.notifyOfFilters();
         };
 
@@ -116,8 +115,7 @@ define([
             this.createNewRowIfNeeded();
 
             this.entityFilters = {};
-            this.$node.find('.entity-filter-header').nextAll().remove();
-            this.$node.find('.entity-filter-header').closest('.entity-filters').hide();
+            this.$node.find('.entity-filters').hide().empty();
             if (!data || data.triggerUpdates !== false) {
                 this.notifyOfFilters();
             }

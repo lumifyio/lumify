@@ -54,12 +54,6 @@
     
 
 
-    <!-- http://lumify.io#displayTime -->
-
-    <owl:AnnotationProperty rdf:about="&lumify;displayTime"/>
-    
-
-
     <!-- http://lumify.io#displayType -->
 
     <owl:AnnotationProperty rdf:about="&lumify;displayType">
@@ -469,6 +463,7 @@
 
     <owl:DatatypeProperty rdf:about="&lumify;publishedDate">
         <rdfs:label xml:lang="en">Published Date</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
