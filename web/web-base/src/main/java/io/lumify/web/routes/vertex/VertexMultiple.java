@@ -19,6 +19,9 @@ import org.securegraph.Vertex;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import static org.securegraph.util.IterableUtils.toIterable;
 
 public class VertexMultiple extends BaseRequestHandler {
@@ -36,13 +39,13 @@ public class VertexMultiple extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String[] vertexStringIds = getRequiredParameterArray(request, "vertexIds[]");
+        HashSet<String> vertexStringIds = new HashSet<String>(Arrays.asList(getRequiredParameterArray(request, "vertexIds[]")));
         boolean fallbackToPublic = getOptionalParameterBoolean(request, "fallbackToPublic", false);
         User user = getUser(request);
         GetAuthorizationsResult getAuthorizationsResult = getAuthorizations(request, fallbackToPublic, user);
         String workspaceId = getWorkspaceId(request);
 
-        Iterable<String> vertexIds = toIterable(vertexStringIds);
+        Iterable<String> vertexIds = toIterable(vertexStringIds.toArray(new String[vertexStringIds.size()]));
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, getAuthorizationsResult.authorizations);
         JSONObject results = new JSONObject();
         JSONArray vertices = new JSONArray();
