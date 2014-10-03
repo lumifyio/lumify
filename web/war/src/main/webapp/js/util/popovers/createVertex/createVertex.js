@@ -26,7 +26,6 @@ define([
         this.defaultAttrs({
             createSelector: '.btn-primary',
             cancelSelector: '.btn-default',
-            conceptSelector: 'select',
             visibilityInputSelector: '.visibility'
         });
 
@@ -47,24 +46,21 @@ define([
 
                 this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
 
-                ConceptSelect.attachTo(this.popover, {
-                    conceptSelector: this.attr.conceptSelector
-                });
+                ConceptSelect.attachTo(this.popover.find('.concept'));
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
 
                 this.on(this.popover, 'click', {
                     createSelector: this.onCreate,
                     cancelSelector: this.onCancel
                 });
-                this.on(this.popover, 'change', {
-                    conceptSelector: this.onConceptChange
-                });
+                this.on(this.popover, 'conceptSelected', this.onConceptSelected);
 
                 window.focus();
             })
         });
 
-        this.onConceptChange = function(event) {
+        this.onConceptSelected = function(event, data) {
+            this.concept = data.concept;
             this.checkValid();
         };
 
@@ -76,7 +72,7 @@ define([
         this.checkValid = function() {
             var isValid = this.visibilitySource &&
                 this.visibilitySource.valid &&
-                this.popover.find('select').val()
+                this.concept;
 
             if (isValid) {
                 this.popover.find('.btn-primary').removeAttr('disabled');
@@ -100,7 +96,7 @@ define([
                 button = this.popover.find('.btn-primary')
                     .text(i18n('popovers.create_vertex.button.creating'))
                     .attr('disabled', true),
-                conceptType = this.popover.find('select').val(),
+                conceptType = this.concept.id,
                 visibilityValue = this.visibilitySource.value;
 
             this.request = vertexService.createVertex(conceptType, visibilityValue)

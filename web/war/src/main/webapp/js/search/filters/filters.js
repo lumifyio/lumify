@@ -8,7 +8,6 @@ define([
     'data',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
-    'hbs!util/ontology/concept-options',
     'fields/selection/selection',
     'service/ontology'
 ], function(
@@ -20,7 +19,6 @@ define([
     appData,
     F,
     ConceptSelector,
-    conceptsTemplate,
     FieldSelection,
     OntologyService) {
     'use strict';

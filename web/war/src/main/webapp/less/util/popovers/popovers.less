@@ -20,7 +20,11 @@
     .disable-text-selection;
 
     .dropdown-menu {
-      min-width: 160px;
+      width: 100%;
+      overflow: auto;
+      min-width: inherit;
+      min-height: 100px;
+      max-height: 25em;
     }
 
     .popover-title .find-path-form {
@@ -80,6 +84,7 @@
   @import "timezone";
   @import "propertyInfo";
   @import "createConnection";
+  @import "createVertex";
   @import "addToWorkspace";
 }
 

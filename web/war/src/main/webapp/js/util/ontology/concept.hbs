@@ -1,0 +1,10 @@
+<div 
+  class="concept" title="{{ concept.displayName }}{{#if path}} ({{ path }}){{/if}}">
+  <div 
+    class="icon"
+    style="margin-left: {{ marginLeft }}em;
+    {{#if concept.rawConcept.glyphIconHref }}
+           background-image:url({{ concept.rawConcept.glyphIconHref }})
+    {{/if}}">
+  </div>{{ concept.displayName }}
+</div>
