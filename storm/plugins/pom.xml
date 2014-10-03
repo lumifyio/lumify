@@ -37,6 +37,5 @@
         <module>drewnoakes-image-metadata-extractor</module>
         <module>java-code</module>
         <module>mime-type-ontology-mapper</module>
-        <module>rdf</module>
     </modules>
 </project>
