@@ -99,11 +99,11 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
         return termMentions;
     }
 
-    private Edge findOrAddEdge(Vertex sourceVertex, Vertex resolvedToVertex, JSONObject visibilitySource, Visibility visibility) {
+    private Edge findOrAddEdge(Vertex sourceVertex, Vertex resolvedToVertex, JSONObject visibilityJson, Visibility visibility) {
         Edge resolvedEdge = singleOrDefault(sourceVertex.getEdges(resolvedToVertex, Direction.BOTH, getAuthorizations()), null);
         if (resolvedEdge == null) {
             EdgeBuilder resolvedEdgeBuilder = getGraph().prepareEdge(sourceVertex, resolvedToVertex, artifactHasEntityIri, visibility);
-            LumifyProperties.VISIBILITY_SOURCE.setProperty(resolvedEdgeBuilder, visibilitySource, visibility);
+            LumifyProperties.VISIBILITY_JSON.setProperty(resolvedEdgeBuilder, visibilityJson, visibility);
             resolvedEdge = resolvedEdgeBuilder.save(getAuthorizations());
             getAuditRepository().auditRelationship(AuditAction.CREATE, sourceVertex, resolvedToVertex, resolvedEdge, PROCESS, "", getUser(), visibility);
         }
