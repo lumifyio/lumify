@@ -1,4 +1,4 @@
-package io.lumify.web.routes.artifact;
+package io.lumify.web.routes.vertex;
 
 import com.google.common.io.Files;
 import com.google.inject.Inject;
@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ArtifactImport extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactImport.class);
+public class VertexImport extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexImport.class);
 
     private static final String PARAMS_FILENAME = "filename";
     private static final String UNKNOWN_FILENAME = "unknown_filename";
@@ -41,7 +41,7 @@ public class ArtifactImport extends BaseRequestHandler {
     private final FileImport fileImport;
 
     @Inject
-    public ArtifactImport(
+    public VertexImport(
             final Graph graph,
             final FileImport fileImport,
             final UserRepository userRepository,

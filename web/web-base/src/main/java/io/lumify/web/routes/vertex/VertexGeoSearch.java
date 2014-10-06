@@ -1,4 +1,4 @@
-package io.lumify.web.routes.graph;
+package io.lumify.web.routes.vertex;
 
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -23,12 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
 
-public class GraphGeoLocationSearch extends BaseRequestHandler {
+public class VertexGeoSearch extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphGeoLocationSearch(
+    public VertexGeoSearch(
             final Graph graph,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,

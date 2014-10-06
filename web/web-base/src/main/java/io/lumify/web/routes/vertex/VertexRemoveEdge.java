@@ -21,14 +21,14 @@ import org.securegraph.Vertex;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class VertexRelationshipRemoval extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexRelationshipRemoval.class);
+public class VertexRemoveEdge extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexRemoveEdge.class);
     private final Graph graph;
     private final WorkspaceHelper workspaceHelper;
     private final String entityHasImageIri;
 
     @Inject
-    public VertexRelationshipRemoval(
+    public VertexRemoveEdge(
             final Graph graph,
             final WorkspaceHelper workspaceHelper,
             final UserRepository userRepository,

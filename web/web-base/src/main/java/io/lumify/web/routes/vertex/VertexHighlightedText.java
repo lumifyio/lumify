@@ -1,4 +1,4 @@
-package io.lumify.web.routes.artifact;
+package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.EntityHighlighter;
@@ -24,14 +24,14 @@ import org.securegraph.property.StreamingPropertyValue;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ArtifactHighlightedText extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactHighlightedText.class);
+public class VertexHighlightedText extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexHighlightedText.class);
     private final Graph graph;
     private final EntityHighlighter entityHighlighter;
     private final TermMentionRepository termMentionRepository;
 
     @Inject
-    public ArtifactHighlightedText(
+    public VertexHighlightedText(
             final Graph graph,
             final UserRepository userRepository,
             final EntityHighlighter entityHighlighter,

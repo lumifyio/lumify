@@ -1,4 +1,4 @@
-package io.lumify.web.routes.artifact;
+package io.lumify.web.routes.vertex;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.miniweb.HandlerChain;
@@ -29,14 +29,14 @@ import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ArtifactRaw extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactRaw.class);
+public class VertexRaw extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexRaw.class);
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
 
     private final Graph graph;
 
     @Inject
-    public ArtifactRaw(
+    public VertexRaw(
             final Graph graph,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,

@@ -1,4 +1,4 @@
-package io.lumify.web.routes.relationship;
+package io.lumify.web.routes.edge;
 
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -28,8 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-public class SetRelationshipProperty extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SetRelationshipProperty.class);
+public class SetEdgeProperty extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SetEdgeProperty.class);
 
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
@@ -38,7 +38,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
 
     @Inject
-    public SetRelationshipProperty(
+    public SetEdgeProperty(
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final AuditRepository auditRepository,

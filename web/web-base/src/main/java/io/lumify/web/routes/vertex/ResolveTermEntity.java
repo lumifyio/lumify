@@ -1,4 +1,4 @@
-package io.lumify.web.routes.entity;
+package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;

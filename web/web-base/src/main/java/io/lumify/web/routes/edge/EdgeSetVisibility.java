@@ -1,4 +1,4 @@
-package io.lumify.web.routes.relationship;
+package io.lumify.web.routes.edge;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -22,15 +22,15 @@ import org.securegraph.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RelationshipSetVisibility extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RelationshipSetVisibility.class);
+public class EdgeSetVisibility extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EdgeSetVisibility.class);
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkQueueRepository workQueueRepository;
     private final AuditRepository auditRepository;
 
     @Inject
-    public RelationshipSetVisibility(
+    public EdgeSetVisibility(
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,

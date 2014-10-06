@@ -1,4 +1,4 @@
-package io.lumify.web.routes.graph;
+package io.lumify.web.routes.vertex;
 
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -18,11 +18,11 @@ import org.securegraph.Vertex;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GraphFindPath extends BaseRequestHandler {
+public class VertexFindPath extends BaseRequestHandler {
     private final Graph graph;
 
     @Inject
-    public GraphFindPath(
+    public VertexFindPath(
             final Graph graph,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,

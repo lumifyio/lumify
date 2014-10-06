@@ -1,4 +1,4 @@
-package io.lumify.web.routes.relationship;
+package io.lumify.web.routes.edge;
 
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -25,14 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeleteRelationshipProperty extends BaseRequestHandler {
+public class DeleteEdgeProperty extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
     private final WorkQueueRepository workQueueRepository;
 
     @Inject
-    public DeleteRelationshipProperty(
+    public DeleteEdgeProperty(
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final AuditRepository auditRepository,

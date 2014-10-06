@@ -1,4 +1,4 @@
-package io.lumify.web.routes.graph;
+package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -30,14 +30,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.*;
 
-public class GraphVertexSearch extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
+public class VertexSearch extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSearch.class);
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private int defaultSearchResultCount;
 
     @Inject
-    public GraphVertexSearch(
+    public VertexSearch(
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final UserRepository userRepository,

@@ -16,12 +16,12 @@ import org.securegraph.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class VertexRelationships extends BaseRequestHandler {
+public class VertexEdges extends BaseRequestHandler {
     private final Graph graph;
     private final String artifactHasEntityIri;
 
     @Inject
-    public VertexRelationships(
+    public VertexEdges(
             final Graph graph,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,

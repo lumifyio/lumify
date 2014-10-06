@@ -1,70 +1,81 @@
-package io.lumify.web.routes.entity;
+package io.lumify.web.routes.vertex;
+
+import io.lumify.web.BaseRequestHandler;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.ingest.ArtifactDetectedObject;
-import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UnresolveDetectedObject extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UnresolveDetectedObject.class);
+import static org.securegraph.util.IterableUtils.singleOrDefault;
+
+public class UnresolveTermEntity extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UnresolveTermEntity.class);
+    private final TermMentionRepository termMentionRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
-    private final AuditRepository auditRepository;
-    private final WorkQueueRepository workQueueRepository;
+    private final WorkspaceHelper workspaceHelper;
 
     @Inject
-    public UnresolveDetectedObject(
+    public UnresolveTermEntity(
+            final TermMentionRepository termMentionRepository,
             final Graph graph,
             final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
-            final Configuration configuration,
             final WorkspaceRepository workspaceRepository,
-            final WorkspaceHelper workspaceHelper,
-            AuditRepository auditRepository,
-            WorkQueueRepository workQueueRepository) {
+            final Configuration configuration,
+            final WorkspaceHelper workspaceHelper) {
         super(userRepository, workspaceRepository, configuration);
+        this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
-        this.auditRepository = auditRepository;
-        this.workQueueRepository = workQueueRepository;
+        this.workspaceHelper = workspaceHelper;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String vertexId = getRequiredParameter(request, "vertexId");
-        final String multiValueKey = getRequiredParameter(request, "multiValueKey");
+        final String termMentionId = getRequiredParameter(request, "termMentionId");
+
+        LOGGER.debug("UnresolveTermEntity (termMentionId: %s)", termMentionId);
+
         String workspaceId = getActiveWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
 
-        Vertex artifactVertex = graph.getVertex(vertexId, authorizations);
-        ArtifactDetectedObject artifactDetectedObject = LumifyProperties.DETECTED_OBJECT.getPropertyValue(artifactVertex, multiValueKey);
-        Edge edge = graph.getEdge(artifactDetectedObject.getEdgeId(), authorizations);
-        Vertex resolvedVertex = edge.getOtherVertex(artifactVertex.getId(), authorizations);
+        Vertex termMention = termMentionRepository.findById(termMentionId, authorizations);
+        if (termMention == null) {
+            respondWithNotFound(response, "Could not find term mention with id: " + termMentionId);
+            return;
+        }
+
+        Vertex resolvedVertex = singleOrDefault(termMention.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizations), null);
+        if (resolvedVertex == null) {
+            respondWithNotFound(response, "Could not find resolved vertex from term mention: " + termMentionId);
+            return;
+        }
+
+        String edgeId = LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.getPropertyValue(termMention);
+        Edge edge = graph.getEdge(edgeId, authorizations);
+        if (edge == null) {
+            respondWithNotFound(response, "Could not find edge " + edgeId + " from term mention: " + termMentionId);
+            return;
+        }
 
         SandboxStatus vertexSandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
         SandboxStatus edgeSandboxStatus = GraphUtil.getSandboxStatus(edge, workspaceId);
@@ -85,23 +96,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        // remove edge
-        graph.removeEdge(edge, authorizations);
-        auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
-
-        // remove property
-        LumifyProperties.DETECTED_OBJECT.removeProperty(artifactVertex, multiValueKey, authorizations);
-
-        graph.flush();
-
-        this.workQueueRepository.pushEdgeDeletion(edge);
-        this.workQueueRepository.pushGraphPropertyQueue(artifactVertex, multiValueKey,
-                LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getString("source"));
-
-        auditRepository.auditVertex(AuditAction.UNRESOLVE, resolvedVertex.getId(), "", "", user, lumifyVisibility.getVisibility());
-
-        JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId, authorizations);
-
-        respondWithJson(response, artifactJson);
+        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, user, authorizations);
+        respondWithJson(response, result);
     }
 }

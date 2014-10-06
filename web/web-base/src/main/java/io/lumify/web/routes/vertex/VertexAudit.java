@@ -1,4 +1,4 @@
-package io.lumify.web.routes.audit;
+package io.lumify.web.routes.vertex;
 
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;

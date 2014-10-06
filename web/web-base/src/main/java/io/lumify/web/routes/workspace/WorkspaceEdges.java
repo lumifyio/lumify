@@ -27,13 +27,13 @@ import java.util.List;
 
 import static org.securegraph.util.IterableUtils.toList;
 
-public class WorkspaceRelationships extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceRelationships.class);
+public class WorkspaceEdges extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceEdges.class);
     private final Graph graph;
     private final WorkspaceRepository workspaceRepository;
 
     @Inject
-    public WorkspaceRelationships(
+    public WorkspaceEdges(
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,

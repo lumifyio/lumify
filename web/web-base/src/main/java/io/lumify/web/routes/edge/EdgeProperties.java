@@ -1,4 +1,4 @@
-package io.lumify.web.routes.relationship;
+package io.lumify.web.routes.edge;
 
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -15,12 +15,12 @@ import org.securegraph.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RelationshipProperties extends BaseRequestHandler {
+public class EdgeProperties extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public RelationshipProperties(
+    public EdgeProperties(
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final UserRepository userRepository,

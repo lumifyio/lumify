@@ -1,13 +1,13 @@
 package io.lumify.web;
 
-import io.lumify.miniweb.Handler;
-import io.lumify.miniweb.handlers.StaticFileHandler;
 import com.google.inject.Injector;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.handlers.StaticFileHandler;
 import io.lumify.web.privilegeFilters.AdminPrivilegeFilter;
 import io.lumify.web.privilegeFilters.EditPrivilegeFilter;
 import io.lumify.web.privilegeFilters.PublishPrivilegeFilter;
@@ -15,19 +15,16 @@ import io.lumify.web.privilegeFilters.ReadPrivilegeFilter;
 import io.lumify.web.routes.admin.AdminList;
 import io.lumify.web.routes.admin.AdminUploadOntology;
 import io.lumify.web.routes.admin.PluginList;
-import io.lumify.web.routes.artifact.*;
-import io.lumify.web.routes.audit.VertexAudit;
 import io.lumify.web.routes.config.Configuration;
-import io.lumify.web.routes.entity.ResolveDetectedObject;
-import io.lumify.web.routes.entity.ResolveTermEntity;
-import io.lumify.web.routes.entity.UnresolveDetectedObject;
-import io.lumify.web.routes.entity.UnresolveTermEntity;
-import io.lumify.web.routes.graph.*;
-import io.lumify.web.routes.map.MapMarkerImage;
+import io.lumify.web.routes.edge.*;
+import io.lumify.web.routes.vertex.ResolveDetectedObject;
+import io.lumify.web.routes.vertex.ResolveTermEntity;
+import io.lumify.web.routes.vertex.UnresolveDetectedObject;
+import io.lumify.web.routes.vertex.UnresolveTermEntity;
+import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.ontology.Ontology;
 import io.lumify.web.routes.plugins.PluginsCss;
 import io.lumify.web.routes.plugins.PluginsJavaScript;
-import io.lumify.web.routes.relationship.*;
 import io.lumify.web.routes.resource.ResourceGet;
 import io.lumify.web.routes.user.*;
 import io.lumify.web.routes.vertex.*;
@@ -74,51 +71,49 @@ public class Router extends HttpServlet {
 
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 
-            app.get("/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexAudit.class);
-
             app.get("/resource", authenticator, csrfProtector, ReadPrivilegeFilter.class, ResourceGet.class);
+            app.get("/map/marker/image", csrfProtector, MapMarkerImage.class);  // TODO combine with /resource
 
-            app.get("/artifact/highlightedText", authenticator, csrfProtector, ReadPrivilegeFilter.class, ArtifactHighlightedText.class);
-            app.get("/artifact/raw", authenticator, csrfProtector, ReadPrivilegeFilter.class, ArtifactRaw.class);
-            app.get("/artifact/thumbnail", authenticator, csrfProtector, ReadPrivilegeFilter.class, ArtifactThumbnail.class);
-            app.get("/artifact/poster-frame", authenticator, csrfProtector, ReadPrivilegeFilter.class, ArtifactPosterFrame.class);
-            app.get("/artifact/video-preview", authenticator, csrfProtector, ReadPrivilegeFilter.class, ArtifactVideoPreviewImage.class);
-            app.post("/artifact/import", authenticator, csrfProtector, EditPrivilegeFilter.class, ArtifactImport.class);
-
-            app.post("/entity/resolveTerm", authenticator, csrfProtector, EditPrivilegeFilter.class, ResolveTermEntity.class);
-            app.post("/entity/unresolveTerm", authenticator, csrfProtector, EditPrivilegeFilter.class, UnresolveTermEntity.class);
-            app.post("/entity/resolveDetectedObject", authenticator, csrfProtector, EditPrivilegeFilter.class, ResolveDetectedObject.class);
-            app.post("/entity/unresolveDetectedObject", authenticator, csrfProtector, EditPrivilegeFilter.class, UnresolveDetectedObject.class);
-
-            app.post("/vertex/property/set", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetProperty.class);
-            app.post("/vertex/property/delete", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexDeleteProperty.class);
-            app.get("/vertex/termMentions", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetTermMentions.class);
-            app.get("/vertex/detectedObjects", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetDetectedObjects.class);
+            app.get("/vertex/highlighted-text", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexHighlightedText.class);
+            app.get("/vertex/raw", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexRaw.class);
+            app.get("/vertex/thumbnail", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexThumbnail.class);
+            app.get("/vertex/poster-frame", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexPosterFrame.class);
+            app.get("/vertex/video-preview", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexVideoPreviewImage.class);
+            app.post("/vertex/import", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexImport.class);
+            app.post("/vertex/resolve-term", authenticator, csrfProtector, EditPrivilegeFilter.class, ResolveTermEntity.class);
+            app.post("/vertex/unresolve-term", authenticator, csrfProtector, EditPrivilegeFilter.class, UnresolveTermEntity.class);
+            app.post("/vertex/resolve-detected-object", authenticator, csrfProtector, EditPrivilegeFilter.class, ResolveDetectedObject.class);
+            app.post("/vertex/unresolve-detected-object", authenticator, csrfProtector, EditPrivilegeFilter.class, UnresolveDetectedObject.class);
+            app.post("/vertex/property", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetProperty.class);
+            app.delete("/vertex/property", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexDeleteProperty.class);
+            app.get("/vertex/term-mentions", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetTermMentions.class);
+            app.get("/vertex/detected-objects", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetDetectedObjects.class);
             app.get("/vertex/property", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetPropertyValue.class);
-            app.post("/vertex/visibility/set", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetVisibility.class);
+            app.post("/vertex/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetVisibility.class);
             app.get("/vertex/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexProperties.class);
-            app.get("/vertex/relationships", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexRelationships.class);
-            app.post("/vertex/removeRelationship", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRelationshipRemoval.class);
+            app.get("/vertex/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexEdges.class);
+            app.post("/vertex/remove-edge", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRemoveEdge.class);
             app.post("/vertex/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
             app.post("/vertex/new", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
+            app.get("/vertex/search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexSearch.class);
+            app.get("/vertex/geo-search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGeoSearch.class);
+            app.post("/vertex/upload-image", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexUploadImage.class);
+            app.get("/vertex/find-path", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindPath.class);
+            app.get("/vertex/related-vertices", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindRelated.class);
+            app.get("/vertex/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexAudit.class);
 
-            app.post("/relationship/property/set", authenticator, csrfProtector, EditPrivilegeFilter.class, SetRelationshipProperty.class);
-            app.post("/relationship/property/delete", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteRelationshipProperty.class);
-            app.post("/relationship/create", authenticator, csrfProtector, EditPrivilegeFilter.class, RelationshipCreate.class);
-            app.get("/relationship/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, RelationshipProperties.class);
-            app.post("/relationship/visibility/set", authenticator, csrfProtector, EditPrivilegeFilter.class, RelationshipSetVisibility.class);
-
-            app.get("/graph/findPath", authenticator, csrfProtector, ReadPrivilegeFilter.class, GraphFindPath.class);
-            app.get("/graph/relatedVertices", authenticator, csrfProtector, ReadPrivilegeFilter.class, GraphRelatedVertices.class);
-            app.get("/graph/vertex/search", authenticator, csrfProtector, ReadPrivilegeFilter.class, GraphVertexSearch.class);
-            app.get("/graph/vertex/geoLocationSearch", authenticator, csrfProtector, ReadPrivilegeFilter.class, GraphGeoLocationSearch.class);
-            app.post("/graph/vertex/uploadImage", authenticator, csrfProtector, EditPrivilegeFilter.class, GraphVertexUploadImage.class);
+            app.post("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, SetEdgeProperty.class);
+            app.delete("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteEdgeProperty.class);
+            app.post("/edge/create", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeCreate.class);
+            app.get("/edge/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeProperties.class);
+            app.post("/edge/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeSetVisibility.class);
+            app.get("/edge/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeAudit.class);
 
             app.get("/workspace/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
             app.post("/workspace/new", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceNew.class);
             app.get("/workspace/diff", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceDiff.class);
-            app.get("/workspace/relationships", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceRelationships.class);
-            app.post("/workspace/relationships", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceRelationships.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
+            app.get("/workspace/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceEdges.class);
+            app.post("/workspace/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceEdges.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
             app.get("/workspace/vertices", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceVertices.class);
             app.post("/workspace/update", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceUpdate.class);
             app.get("/workspace", authenticator, csrfProtector, ReadPrivilegeFilter.class, ReadPrivilegeFilter.class, WorkspaceById.class);
@@ -127,17 +122,14 @@ public class Router extends HttpServlet {
             app.post("/workspace/undo", authenticator, csrfProtector, EditPrivilegeFilter.class, WorkspaceUndo.class);
 
             app.get("/user/me", authenticator, csrfProtector, MeGet.class);
-            app.post("/user/ui-preferences/set", authenticator, csrfProtector, UserSetUiPreferences.class);
-            app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
-            app.get("/users", authenticator, csrfProtector, UserList.class);
+            app.post("/user/ui-preferences", authenticator, csrfProtector, UserSetUiPreferences.class);
+            app.get("/user/all", authenticator, csrfProtector, UserList.class);
             app.get("/user/info", authenticator, csrfProtector, UserInfo.class);
+            app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
 
-            app.get("/map/marker/image", csrfProtector, MapMarkerImage.class);
-
-            app.get("/admin", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminList.class);
-
+            app.get("/admin/all", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminList.class);
             app.get("/admin/plugins", authenticator, csrfProtector, PluginList.class);
-            app.post("/admin/uploadOntology", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminUploadOntology.class);
+            app.post("/admin/upload-ontology", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 
             List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
             for (WebAppPlugin webAppPlugin : webAppPlugins) {

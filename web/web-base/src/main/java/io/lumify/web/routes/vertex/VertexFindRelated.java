@@ -1,4 +1,4 @@
-package io.lumify.web.routes.graph;
+package io.lumify.web.routes.vertex;
 
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.miniweb.HandlerChain;
@@ -24,12 +24,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GraphRelatedVertices extends BaseRequestHandler {
+public class VertexFindRelated extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphRelatedVertices(
+    public VertexFindRelated(
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final UserRepository userRepository,

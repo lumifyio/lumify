@@ -1,4 +1,4 @@
-package io.lumify.web.routes.map;
+package io.lumify.web.routes.resource;
 
 import io.lumify.miniweb.HandlerChain;
 import com.google.common.cache.Cache;

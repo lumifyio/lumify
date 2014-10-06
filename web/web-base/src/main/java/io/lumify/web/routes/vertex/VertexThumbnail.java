@@ -1,4 +1,4 @@
-package io.lumify.web.routes.artifact;
+package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -22,14 +22,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 
-public class ArtifactThumbnail extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnail.class);
+public class VertexThumbnail extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexThumbnail.class);
 
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
     private final Graph graph;
 
     @Inject
-    public ArtifactThumbnail(
+    public VertexThumbnail(
             final ArtifactThumbnailRepository artifactThumbnailRepository,
             final Graph graph,
             final UserRepository userRepository,

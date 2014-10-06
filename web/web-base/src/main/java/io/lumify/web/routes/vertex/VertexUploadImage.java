@@ -1,4 +1,4 @@
-package io.lumify.web.routes.graph;
+package io.lumify.web.routes.vertex;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -40,13 +40,13 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
 
-public class GraphVertexUploadImage extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexUploadImage.class);
+public class VertexUploadImage extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexUploadImage.class);
 
     private static final String ATTR_GRAPH_VERTEX_ID = "graphVertexId";
     private static final String DEFAULT_MIME_TYPE = "image";
     private static final String SOURCE_UPLOAD = "User Upload";
-    private static final String PROCESS = GraphVertexUploadImage.class.getName();
+    private static final String PROCESS = VertexUploadImage.class.getName();
 
     private final Graph graph;
     private final AuditRepository auditRepository;
@@ -58,7 +58,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private final String entityHasImageIri;
 
     @Inject
-    public GraphVertexUploadImage(
+    public VertexUploadImage(
             final Graph graph,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,

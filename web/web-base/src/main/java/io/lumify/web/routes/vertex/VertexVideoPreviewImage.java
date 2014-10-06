@@ -1,4 +1,4 @@
-package io.lumify.web.routes.artifact;
+package io.lumify.web.routes.vertex;
 
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.miniweb.utils.UrlUtils;
@@ -22,15 +22,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 
-import static io.lumify.core.model.properties.MediaLumifyProperties.RAW_POSTER_FRAME;
+import static io.lumify.core.model.properties.MediaLumifyProperties.VIDEO_PREVIEW_IMAGE;
 
-public class ArtifactPosterFrame extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactPosterFrame.class);
+public class VertexVideoPreviewImage extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexVideoPreviewImage.class);
     private final Graph graph;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
 
     @Inject
-    public ArtifactPosterFrame(
+    public VertexVideoPreviewImage(
             final Graph graph,
             final ArtifactThumbnailRepository artifactThumbnailRepository,
             final UserRepository userRepository,
@@ -48,25 +48,26 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
 
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
-        String widthStr = getOptionalParameter(request, "width");
-        int[] boundaryDims = new int[]{200, 200};
-
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
             respondWithNotFound(response);
             return;
         }
 
+        String widthStr = getOptionalParameter(request, "width");
+        int[] boundaryDims = new int[]{200 * ArtifactThumbnailRepository.FRAMES_PER_PREVIEW, 200};
+
         if (widthStr != null) {
-            boundaryDims[0] = boundaryDims[1] = Integer.parseInt(widthStr);
+            boundaryDims[0] = Integer.parseInt(widthStr) * ArtifactThumbnailRepository.FRAMES_PER_PREVIEW;
+            boundaryDims[1] = Integer.parseInt(widthStr);
 
             response.setContentType("image/jpeg");
-            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + ".jpg");
+            response.addHeader("Content-Disposition", "inline; filename=videoPreview" + boundaryDims[0] + ".jpg");
             setMaxAge(response, EXPIRES_1_HOUR);
 
-            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "poster-frame", boundaryDims[0], boundaryDims[1], user);
+            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "video-preview", boundaryDims[0], boundaryDims[1], user);
             if (thumbnailData != null) {
-                LOGGER.debug("Cache hit for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
+                LOGGER.debug("Cache hit for: %s (video-preview) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();
@@ -74,23 +75,22 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
             }
         }
 
-        StreamingPropertyValue rawPosterFrameValue = RAW_POSTER_FRAME.getPropertyValue(artifactVertex);
-        if (rawPosterFrameValue == null) {
-            LOGGER.warn("Could not find raw poster from for artifact: %s", artifactVertex.getId());
+        StreamingPropertyValue videoPreviewImageValue = VIDEO_PREVIEW_IMAGE.getPropertyValue(artifactVertex);
+        if (videoPreviewImageValue == null) {
+            LOGGER.warn("Could not find video preview image for artifact: %s", artifactVertex.getId().toString());
             respondWithNotFound(response);
             return;
         }
-
-        InputStream in = rawPosterFrameValue.getInputStream();
+        InputStream in = videoPreviewImageValue.getInputStream();
         try {
             if (widthStr != null) {
-                LOGGER.info("Cache miss for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
+                LOGGER.info("Cache miss for: %s (video-preview) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
 
                 response.setContentType("image/jpeg");
-                response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + ".jpg");
+                response.addHeader("Content-Disposition", "inline; filename=videoPreview" + boundaryDims[0] + ".jpg");
                 setMaxAge(response, EXPIRES_1_HOUR);
 
-                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex, "poster-frame", in, boundaryDims, user).getThumbnailData();
+                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex, "video-preview", in, boundaryDims, user).getThumbnailData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();
