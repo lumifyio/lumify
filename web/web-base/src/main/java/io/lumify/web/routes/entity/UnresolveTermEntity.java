@@ -2,14 +2,13 @@ package io.lumify.web.routes.entity;
 
 import io.lumify.web.BaseRequestHandler;
 
-import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -17,7 +16,6 @@ import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.json.JSONObject;
 import org.securegraph.*;

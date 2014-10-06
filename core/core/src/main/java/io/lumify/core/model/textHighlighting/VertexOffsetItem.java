@@ -3,7 +3,7 @@ package io.lumify.core.model.textHighlighting;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;

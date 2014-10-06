@@ -1,6 +1,7 @@
 package io.lumify.core.model.workspace.diff;
 
 import io.lumify.core.util.JsonSerializer;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.json.JSONObject;

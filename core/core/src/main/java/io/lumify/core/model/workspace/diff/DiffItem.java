@@ -1,5 +1,6 @@
 package io.lumify.core.model.workspace.diff;
 
+import io.lumify.web.clientapi.model.SandboxStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

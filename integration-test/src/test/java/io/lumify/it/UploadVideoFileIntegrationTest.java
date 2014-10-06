@@ -6,9 +6,8 @@ import io.lumify.tesseract.TesseractGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ArtifactApiExt;
-import io.lumify.web.clientapi.codegen.model.Element;
-import io.lumify.web.clientapi.codegen.model.Property;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.model.Element;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +52,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
         boolean foundTesseractVideoTranscript = false;
         Element vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
-        for (Property prop : vertex.getProperties()) {
+        for (Element.Property prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
                 String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey());

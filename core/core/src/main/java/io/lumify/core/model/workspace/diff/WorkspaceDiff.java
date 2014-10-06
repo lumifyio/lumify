@@ -7,6 +7,7 @@ import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import org.securegraph.*;
 
 import java.util.ArrayList;

@@ -9,7 +9,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;

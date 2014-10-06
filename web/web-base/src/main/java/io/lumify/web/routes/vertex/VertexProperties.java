@@ -1,14 +1,14 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.Element;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -36,13 +36,20 @@ public class VertexProperties extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        Vertex vertex = graph.getVertex(graphVertexId, authorizations);
-        if (vertex == null) {
+        Element element = handle(graphVertexId, workspaceId, authorizations);
+
+        if (element == null) {
             respondWithNotFound(response);
             return;
         }
-        JSONObject json = JsonSerializer.toJson(vertex, workspaceId, authorizations);
+        respondWith(response, element);
+    }
 
-        respondWithJson(response, json);
+    private Element handle(String graphVertexId, String workspaceId, Authorizations authorizations) {
+        Vertex vertex = graph.getVertex(graphVertexId, authorizations);
+        if (vertex == null) {
+            return null;
+        }
+        return ClientApiConverter.toClientApi(vertex, workspaceId, authorizations);
     }
 }

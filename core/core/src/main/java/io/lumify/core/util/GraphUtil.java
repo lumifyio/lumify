@@ -4,7 +4,7 @@ import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;

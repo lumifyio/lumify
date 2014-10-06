@@ -10,8 +10,8 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
@@ -52,7 +52,6 @@ public class VertexNew extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
-        Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
@@ -60,6 +59,12 @@ public class VertexNew extends BaseRequestHandler {
             chain.next(request, response);
             return;
         }
+
+        respondWith(response, handle(conceptType, visibilitySource, user, workspaceId, authorizations));
+    }
+
+    private io.lumify.web.clientapi.model.Element handle(String conceptType, String visibilitySource, User user, String workspaceId, Authorizations authorizations) {
+        Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
 
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
@@ -82,6 +87,6 @@ public class VertexNew extends BaseRequestHandler {
         workQueueRepository.pushGraphPropertyQueue(vertex, null, LumifyProperties.CONCEPT_TYPE.getPropertyName(), workspaceId, visibilitySource);
         workQueueRepository.pushUserWorkspaceChange(user, workspaceId);
 
-        respondWithJson(response, JsonSerializer.toJson(vertex, workspaceId, authorizations));
+        return ClientApiConverter.toClientApi(vertex, workspaceId, authorizations);
     }
 }

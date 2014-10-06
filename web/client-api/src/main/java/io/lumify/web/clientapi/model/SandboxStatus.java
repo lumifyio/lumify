@@ -1,4 +1,4 @@
-package io.lumify.core.model.workspace.diff;
+package io.lumify.web.clientapi.model;
 
 public enum SandboxStatus {
     PUBLIC,

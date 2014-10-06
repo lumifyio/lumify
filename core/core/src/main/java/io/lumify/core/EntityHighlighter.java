@@ -5,7 +5,7 @@ import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.textHighlighting.OffsetItem;
 import io.lumify.core.model.textHighlighting.VertexOffsetItem;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.util.GraphUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;

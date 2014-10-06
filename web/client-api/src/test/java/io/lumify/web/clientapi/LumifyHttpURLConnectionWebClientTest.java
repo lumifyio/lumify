@@ -2,6 +2,7 @@ package io.lumify.web.clientapi;
 
 import io.lumify.web.clientapi.codegen.model.*;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.model.Element;
 import io.lumify.web.clientapi.model.WorkspacePublishResponse;
 import org.junit.Before;
 
@@ -61,7 +62,7 @@ public class LumifyHttpURLConnectionWebClientTest {
         String artifactVertexId = artifactImportResponse.getVertexIds().get(0);
 
         Element artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
-        for (Property prop : artifactVertex.getProperties()) {
+        for (Element.Property prop : artifactVertex.getProperties()) {
             System.out.println(prop);
             if (prop.getName().equals("http://lumify.io#text")) {
                 System.out.println(lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey()));

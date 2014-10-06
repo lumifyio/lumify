@@ -14,7 +14,6 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -28,6 +27,9 @@ import io.lumify.web.clientapi.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
+import org.securegraph.Edge;
+import org.securegraph.Element;
+import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import javax.servlet.http.HttpServletRequest;

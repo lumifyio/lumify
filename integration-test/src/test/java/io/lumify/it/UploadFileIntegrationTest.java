@@ -5,9 +5,9 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.codegen.model.Element;
-import io.lumify.web.clientapi.codegen.model.Property;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.model.Element;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import static org.junit.Assert.*;
 
@@ -130,20 +128,18 @@ public class UploadFileIntegrationTest extends TestBase {
         assertNotNull("could not get vertex: " + artifactVertexId, artifactVertex);
         assertEquals(expectedVisibilitySource, artifactVertex.getVisibilitySource());
         assertEquals(artifactVertexId, artifactVertex.getId());
-        for (Property property : artifactVertex.getProperties()) {
+        for (Element.Property property : artifactVertex.getProperties()) {
             LOGGER.info("property: %s", property.toString());
         }
         assertEquals(11, artifactVertex.getProperties().size());
         assertHasProperty(artifactVertex.getProperties(), TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.CREATE_DATE.getPropertyName());
         assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
         assertHasProperty(artifactVertex.getProperties(), TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
-        LinkedHashMap<String, Object> visibilityJson = new LinkedHashMap<String, Object>();
-        visibilityJson.put("source", expectedVisibilitySource);
-        ArrayList<String> visibilityJsonWorkspaces = new ArrayList<String>();
+        VisibilityJson visibilityJson = new VisibilityJson();
+        visibilityJson.setSource(expectedVisibilitySource);
         if (hasWorkspaceIdInVisibilityJson) {
-            visibilityJsonWorkspaces.add(workspaceId);
+            visibilityJson.addWorkspace(workspaceId);
         }
-        visibilityJson.put("workspaces", visibilityJsonWorkspaces);
         assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson);
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.CONTENT_HASH.getPropertyName(), "urn\u001Fsha256\u001F28fca952b9eb45d43663af8e3099da0572c8232243289b5d8a03eb5ea2cb066a");
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.CREATE_DATE.getPropertyName());

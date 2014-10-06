@@ -1,8 +1,8 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
@@ -13,10 +13,11 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
@@ -68,9 +69,42 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
         final String metadataString = getOptionalParameter(request, "metadata");
         User user = getUser(request);
-
         String workspaceId = getActiveWorkspaceId(request);
+        Authorizations authorizations = getAuthorizations(request, user);
 
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
+            respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
+            chain.next(request, response);
+            return;
+        }
+
+        respondWith(response, handle(
+                graphVertexId,
+                propertyName,
+                propertyKey,
+                valueStr,
+                justificationText,
+                sourceInfo,
+                metadataString,
+                visibilitySource,
+                user,
+                workspaceId,
+                authorizations));
+    }
+
+    private Object handle(
+            String graphVertexId,
+            String propertyName,
+            String propertyKey,
+            String valueStr,
+            String justificationText,
+            String sourceInfo,
+            String metadataString,
+            String visibilitySource,
+            User user,
+            String workspaceId,
+            Authorizations authorizations) {
         final JSONObject sourceJson;
         if (sourceInfo != null) {
             sourceJson = new JSONObject(sourceInfo);
@@ -84,15 +118,6 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
 
-        Authorizations authorizations = getAuthorizations(request, user);
-
-        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
-            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
-            respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
-            chain.next(request, response);
-            return;
-        }
-
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
@@ -103,8 +128,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             value = property.convertString(valueStr);
         } catch (Exception ex) {
             LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
-            return;
+            throw new LumifyException(ex.getMessage(), ex);
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
@@ -133,7 +157,6 @@ public class VertexSetProperty extends BaseRequestHandler {
         // TODO: use property key from client when we implement multi-valued properties
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId, visibilitySource);
 
-        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId, authorizations);
-        respondWithJson(response, result);
+        return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }
 }

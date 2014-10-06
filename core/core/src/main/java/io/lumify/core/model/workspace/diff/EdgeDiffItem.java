@@ -2,6 +2,7 @@ package io.lumify.core.model.workspace.diff;
 
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.JsonSerializer;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import org.json.JSONObject;
 import org.securegraph.Direction;
 import org.securegraph.Edge;

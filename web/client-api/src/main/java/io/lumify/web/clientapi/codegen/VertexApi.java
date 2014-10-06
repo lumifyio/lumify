@@ -3,10 +3,11 @@ package io.lumify.web.clientapi.codegen;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ApiInvoker;
 
-import io.lumify.web.clientapi.codegen.model.Element;
+import io.lumify.web.clientapi.model.Element;
 import io.lumify.web.clientapi.codegen.model.DetectedObjects;
-import io.lumify.web.clientapi.codegen.model.TermMentions;
 import com.sun.jersey.multipart.FormDataMultiPart;
+import io.lumify.web.clientapi.model.TermMentionsResponse;
+import io.lumify.web.clientapi.model.Vertex;
 
 import javax.ws.rs.core.MediaType;
 
@@ -77,7 +78,7 @@ public class VertexApi {
       }
     }
   }
-  public Element create (String conceptType, String visibilitySource) throws ApiException {
+  public Vertex create (String conceptType, String visibilitySource) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(conceptType == null || visibilitySource == null ) {
@@ -112,7 +113,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Element) ApiInvoker.deserialize(response, "", Element.class);
+        return (Vertex) ApiInvoker.deserialize(response, "", Vertex.class);
       }
       else {
         return null;
@@ -187,7 +188,7 @@ public class VertexApi {
       }
     }
   }
-  public TermMentions getTermMentions (String graphVertexId, String propertyKey, String propertyName) throws ApiException {
+  public TermMentionsResponse getTermMentions (String graphVertexId, String propertyKey, String propertyName) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(graphVertexId == null || propertyKey == null || propertyName == null ) {
@@ -224,7 +225,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (TermMentions) ApiInvoker.deserialize(response, "", TermMentions.class);
+        return (TermMentionsResponse) ApiInvoker.deserialize(response, "", TermMentionsResponse.class);
       }
       else {
         return null;
