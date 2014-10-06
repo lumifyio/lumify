@@ -6,8 +6,8 @@ import io.lumify.web.clientapi.codegen.ApiInvoker;
 import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
 import io.lumify.web.clientapi.codegen.model.Workspaces;
 import io.lumify.web.clientapi.codegen.model.Workspace;
-import com.sun.jersey.multipart.FormDataMultiPart;
 import io.lumify.web.clientapi.model.WorkspacePublishResponse;
+import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
 

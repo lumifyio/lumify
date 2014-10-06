@@ -34,21 +34,17 @@ public class VertexApiExt extends VertexApi {
 
     public ArtifactImportResponse importFile(String visibilitySource, String fileName, InputStream data) throws ApiException, IOException {
         File tempDir = FileUtils.getTempDirectory();
+        File file = new File(tempDir, fileName);
         try {
-            File file = new File(tempDir, fileName);
+            FileOutputStream out = new FileOutputStream(file);
             try {
-                FileOutputStream out = new FileOutputStream(file);
-                try {
-                    IOUtils.copy(data, out);
-                } finally {
-                    out.close();
-                }
-                return importFile(visibilitySource, file);
+                IOUtils.copy(data, out);
             } finally {
-                safeDelete(file);
+                out.close();
             }
+            return importFile(visibilitySource, file);
         } finally {
-            safeDelete(tempDir);
+            safeDelete(file);
         }
     }
 

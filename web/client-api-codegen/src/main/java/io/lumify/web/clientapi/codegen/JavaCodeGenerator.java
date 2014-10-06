@@ -49,6 +49,10 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
                 String fileContents = FileUtils.readFileToString(f);
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Object;", "");
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.LinkedHashMap;", "import java.util.Map;");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.WorkspacePublishResponse;", "import io.lumify.web.clientapi.model.WorkspacePublishResponse;");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.TermMentionsResponse;", "import io.lumify.web.clientapi.model.TermMentionsResponse;");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Element;", "import io.lumify.web.clientapi.model.Element;");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;", "import io.lumify.web.clientapi.model.ArtifactImportResponse;");
                 fileContents = fileContents.replaceAll("LinkedHashMap", "Map<String,Object>");
                 fileContents = fileContents.replaceAll("mp\\.field\\(\"file\", file, MediaType\\.MULTIPART_FORM_DATA_TYPE\\);",
                         "com.sun.jersey.core.header.FormDataContentDisposition dispo = com.sun.jersey.core.header.FormDataContentDisposition\n"
