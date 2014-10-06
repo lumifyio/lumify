@@ -10,13 +10,10 @@ import java.util.Map;
 
 public class LumifyApi {
     private final UserApi userApi;
-    private final ArtifactApiExt artifactApi;
     private final WorkspaceApiExt workspaceApi;
     private final AdminApiExt adminApi;
-    private final VertexApi vertexApi;
+    private final VertexApiExt vertexApi;
     private final OntologyApiExt ontologyApi;
-    private final GraphApiExt graphApi;
-    private final EntityApiExt entityApi;
     private final String basePath;
     private UserMe me;
 
@@ -26,34 +23,21 @@ public class LumifyApi {
         userApi = new UserApi();
         userApi.setBasePath(basePath);
 
-        artifactApi = new ArtifactApiExt();
-        artifactApi.setBasePath(basePath);
-
         workspaceApi = new WorkspaceApiExt();
         workspaceApi.setBasePath(basePath);
 
         adminApi = new AdminApiExt();
         adminApi.setBasePath(basePath);
 
-        vertexApi = new VertexApi();
+        vertexApi = new VertexApiExt();
         vertexApi.setBasePath(basePath);
 
         ontologyApi = new OntologyApiExt();
         ontologyApi.setBasePath(basePath);
-
-        graphApi = new GraphApiExt();
-        graphApi.setBasePath(basePath);
-
-        entityApi = new EntityApiExt();
-        entityApi.setBasePath(basePath);
     }
 
     public UserApi getUserApi() {
         return userApi;
-    }
-
-    public ArtifactApiExt getArtifactApi() {
-        return artifactApi;
     }
 
     public WorkspaceApiExt getWorkspaceApi() {
@@ -64,7 +48,7 @@ public class LumifyApi {
         return adminApi;
     }
 
-    public VertexApi getVertexApi() {
+    public VertexApiExt getVertexApi() {
         return vertexApi;
     }
 
@@ -74,14 +58,6 @@ public class LumifyApi {
 
     public String getCurrentWorkspaceId() {
         return ApiInvoker.getInstance().getWorkspaceId();
-    }
-
-    public GraphApiExt getGraphApi() {
-        return graphApi;
-    }
-
-    public EntityApiExt getEntityApi() {
-        return entityApi;
     }
 
     public Workspace loginAndGetCurrentWorkspace() throws ApiException {

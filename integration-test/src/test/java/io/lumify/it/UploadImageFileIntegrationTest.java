@@ -5,7 +5,7 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.tesseract.TesseractGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.codegen.ArtifactApiExt;
+import io.lumify.web.clientapi.codegen.VertexApiExt;
 import io.lumify.web.clientapi.codegen.model.DetectedObject;
 import io.lumify.web.clientapi.codegen.model.DetectedObjectValue;
 import io.lumify.web.clientapi.codegen.model.DetectedObjects;
@@ -42,8 +42,8 @@ public class UploadImageFileIntegrationTest extends TestBase {
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         InputStream imageResourceStream = UploadImageFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/sampleImage.jpg");
-        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFiles(
-                new ArtifactApiExt.FileForImport("auth1", "sampleImage.jpg", imageResourceStream));
+        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFiles(
+                new VertexApiExt.FileForImport("auth1", "sampleImage.jpg", imageResourceStream));
         assertEquals(1, artifact.getVertexIds().size());
         artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
@@ -55,7 +55,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         for (Element.Property prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
-                String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey());
+                String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, prop.getKey());
                 LOGGER.info("highlightedText: %s: %s", prop.getKey(), highlightedText);
                 if (prop.getKey().startsWith(TesseractGraphPropertyWorker.TEXT_PROPERTY_KEY)) {
                     assertTrue("invalid tesseract text", highlightedText.contains("WORLD SERIES GAME 7"));
@@ -75,7 +75,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
 
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRaw(artifactVertexId));
+        byte[] found = IOUtils.toByteArray(lumifyApi.getVertexApi().getRaw(artifactVertexId));
         assertArrayEquals(expected, found);
 
         lumifyApi.logout();
@@ -84,7 +84,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
     private void assertThumbnailRoute() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        InputStream in = lumifyApi.getArtifactApi().getThumbnail(artifactVertexId, 100);
+        InputStream in = lumifyApi.getVertexApi().getThumbnail(artifactVertexId, 100);
         BufferedImage img = ImageIO.read(in);
         assertEquals(53, img.getWidth());
         assertEquals(100, img.getHeight());
@@ -105,7 +105,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         double x2 = 2.0;
         double y1 = 3.0;
         double y2 = 4.0;
-        lumifyApi.getEntityApi().resolveDetectedObject(
+        lumifyApi.getVertexApi().resolveDetectedObject(
                 artifactVertexId,
                 "Susan",
                 CONCEPT_TEST_PERSON,
@@ -126,7 +126,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         assertNotNull(susanDetectedObject);
 
         // Unresolving a detected object not found by opencv
-        lumifyApi.getEntityApi().unresolveDetectedObject(artifactVertexId, susanDetectedObject.getKey());
+        lumifyApi.getVertexApi().unresolveDetectedObject(artifactVertexId, susanDetectedObject.getKey());
         detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
         assertEquals(15, detectedObjects.getDetectedObjects().size());
         susanDetectedObject = findResolvedDetectedObject(detectedObjects, x1, x2, y1, y2);
@@ -138,7 +138,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         x2 = testDetectedObjectValue.getX2();
         y1 = testDetectedObjectValue.getY1();
         y2 = testDetectedObjectValue.getY2();
-        lumifyApi.getEntityApi().resolveDetectedObject(
+        lumifyApi.getVertexApi().resolveDetectedObject(
                 artifactVertexId,
                 "Joe",
                 CONCEPT_TEST_PERSON,
@@ -158,7 +158,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         assertNotNull(joeDetectedObject);
 
         // Re-resolve a detected object
-        lumifyApi.getEntityApi().resolveDetectedObject(
+        lumifyApi.getVertexApi().resolveDetectedObject(
                 artifactVertexId,
                 "Jeff",
                 CONCEPT_TEST_PERSON,
@@ -180,7 +180,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
 
         // Unresolving a detected object that opencv found
         DetectedObject jeffDetectedObject = jeffDetectedObjects.get(0);
-        lumifyApi.getEntityApi().unresolveDetectedObject(artifactVertexId, jeffDetectedObject.getKey());
+        lumifyApi.getVertexApi().unresolveDetectedObject(artifactVertexId, jeffDetectedObject.getKey());
         detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
         assertEquals(15, detectedObjects.getDetectedObjects().size());
         jeffDetectedObject = findResolvedDetectedObject(detectedObjects, x1, x2, y1, y2);

@@ -3,9 +3,11 @@ package io.lumify.web.clientapi.codegen;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
+import io.lumify.web.clientapi.codegen.model.GraphVertexSearchResult;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
@@ -15,7 +17,21 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArtifactApiExt extends ArtifactApi {
+public class VertexApiExt extends VertexApi {
+    public static final int VIDEO_TRANSCRIPT_INDEX_BITS = 12; // duplicated in io.lumify.core.model.textHighlighting.OffsetItem
+    public static final int VIDEO_TRANSCRIPT_OFFSET_BITS = 20; // duplicated in io.lumify.core.model.textHighlighting.OffsetItem
+    public static final String VERTEX_BASE_URL = "/vertex/";
+
+    public void resolveTerm(String artifactId, String propertyKey, int mentionStart, int mentionEnd, String sign, String conceptId, String visibilitySource) throws ApiException {
+        resolveTerm(artifactId, propertyKey, mentionStart, mentionEnd, sign, conceptId, visibilitySource, null, null, null);
+    }
+
+    public void resolveVideoTranscriptTerm(String artifactId, String propertyKey, int videoFrameIndex, int mentionStart, int mentionEnd, String sign, String conceptId, String visibilitySource) throws ApiException {
+        int mentionStartWithVideoFrame = (videoFrameIndex << VIDEO_TRANSCRIPT_OFFSET_BITS) | mentionStart;
+        int mentionEndWithVideoFrame = (videoFrameIndex << VIDEO_TRANSCRIPT_OFFSET_BITS) | mentionEnd;
+        resolveTerm(artifactId, propertyKey, mentionStartWithVideoFrame, mentionEndWithVideoFrame, sign, conceptId, visibilitySource, null, null, null);
+    }
+
     public ArtifactImportResponse importFile(String visibilitySource, String fileName, InputStream data) throws ApiException, IOException {
         File tempDir = FileUtils.getTempDirectory();
         try {
@@ -29,22 +45,28 @@ public class ArtifactApiExt extends ArtifactApi {
                 }
                 return importFile(visibilitySource, file);
             } finally {
-                file.delete();
+                safeDelete(file);
             }
         } finally {
-            tempDir.delete();
+            safeDelete(tempDir);
+        }
+    }
+
+    private static void safeDelete(File file) {
+        if (!file.delete()) {
+            throw new RuntimeException("Could not delete file: " + file.getAbsolutePath());
         }
     }
 
     public ArtifactImportResponse importFiles(FileForImport... files) throws ApiException, IOException {
-        Object postBody = null;
+        Object postBody;
         // verify required params are set
         if (files == null || files.length == 0) {
             throw new ApiException(400, "missing required params");
         }
         try {
             // create path and map variables
-            String path = "/artifact/import".replaceAll("\\{format\\}", "json");
+            String path = (VERTEX_BASE_URL + "import").replaceAll("\\{format\\}", "json");
 
             // query params
             Map<String, String> queryParams = new HashMap<String, String>();
@@ -111,7 +133,7 @@ public class ArtifactApiExt extends ArtifactApi {
         if (type != null) {
             queryParams.put("type", type);
         }
-        return apiInvoker.getBinary(basePath, "/artifact/raw", queryParams, headerParams);
+        return apiInvoker.getBinary(basePath, VERTEX_BASE_URL + "raw", queryParams, headerParams);
     }
 
     public InputStream getThumbnail(String graphVertexId, Integer width) throws ApiException, IOException {
@@ -121,7 +143,7 @@ public class ArtifactApiExt extends ArtifactApi {
         if (width != null) {
             queryParams.put("width", width.toString());
         }
-        return apiInvoker.getBinary(basePath, "/artifact/thumbnail", queryParams, headerParams);
+        return apiInvoker.getBinary(basePath, VERTEX_BASE_URL + "thumbnail", queryParams, headerParams);
     }
 
     public InputStream getPosterFrame(String graphVertexId, Integer width) throws ApiException, IOException {
@@ -131,7 +153,7 @@ public class ArtifactApiExt extends ArtifactApi {
         if (width != null) {
             queryParams.put("width", width.toString());
         }
-        return apiInvoker.getBinary(basePath, "/artifact/poster-frame", queryParams, headerParams);
+        return apiInvoker.getBinary(basePath, VERTEX_BASE_URL + "poster-frame", queryParams, headerParams);
     }
 
     public InputStream getVideoPreview(String graphVertexId, Integer width) throws ApiException, IOException {
@@ -141,7 +163,7 @@ public class ArtifactApiExt extends ArtifactApi {
         if (width != null) {
             queryParams.put("width", width.toString());
         }
-        return apiInvoker.getBinary(basePath, "/artifact/video-preview", queryParams, headerParams);
+        return apiInvoker.getBinary(basePath, VERTEX_BASE_URL + "video-preview", queryParams, headerParams);
     }
 
     public static class FileForImport {
@@ -180,9 +202,18 @@ public class ArtifactApiExt extends ArtifactApi {
 
         public void deleteTempFiles() {
             if (file != null) {
-                file.delete();
-                file.getParentFile().delete();
+                safeDelete(file);
+                safeDelete(file.getParentFile());
             }
         }
+    }
+
+    public GraphVertexSearchResult vertexSearch(String query) throws ApiException {
+        JSONArray filters = new JSONArray();
+        return vertexSearch(query, filters, null, null, null, null, null);
+    }
+
+    public GraphVertexSearchResult vertexSearch(String query, JSONArray filters, Integer offset, Integer size, String conceptType, Boolean leafNodes, String relatedToVertexId) throws ApiException {
+        return vertexSearch(query, filters.toString(), offset, size, conceptType, leafNodes, relatedToVertexId);
     }
 }

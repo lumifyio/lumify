@@ -70,19 +70,6 @@
             ]
         },
         {
-            "path": "/workspace/updateDummy",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Dummy method to force WorkspaceUpdateData to be generated",
-                    "type": "WorkspaceUpdateData",
-                    "nickname": "zzzUpdateDummy",
-                    "parameters": [
-                    ]
-                }
-            ]
-        },
-        {
             "path": "/workspace/diff",
             "operations": [
                 {
@@ -101,7 +88,7 @@
                 {
                     "method": "POST",
                     "summary": "publish diff items",
-                    "type": "PublishResponse",
+                    "type": "WorkspacePublishResponse",
                     "nickname": "publish",
                     "consumes": [
                         "multipart/form-data"
@@ -114,19 +101,6 @@
                             "type": "string",
                             "paramType": "form"
                         }
-                    ]
-                }
-            ]
-        },
-        {
-            "path": "/workspace/publishDummy",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Dummy method to force PublishItem to be generated",
-                    "type": "PublishItem",
-                    "nickname": "zzzPublishDummy",
-                    "parameters": [
                     ]
                 }
             ]
@@ -321,72 +295,6 @@
                 },
                 "edgeId": {
                     "type": "string"
-                }
-            }
-        },
-        "PublishItem": {
-            "id": "PublishItem",
-            "required": [
-                "type",
-                "sandboxStatus"
-            ],
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "vertex",
-                        "relationship",
-                        "property"
-                    ]
-                },
-                "action": {
-                    "type": "string",
-                    "description": "'delete' or ''"
-                },
-                "vertexId": {
-                    "type": "string",
-                    "description": "required for vertex publish"
-                },
-                "edgeId": {
-                    "type": "string",
-                    "description": "required for edge publish"
-                },
-                "elementId": {
-                    "type": "string",
-                    "description": "required for property publish"
-                },
-                "sourceId": {
-                    "type": "string",
-                    "description": "required for edge publish"
-                },
-                "destId": {
-                    "type": "string",
-                    "description": "required for edge publish"
-                },
-                "key": {
-                    "type": "string",
-                    "description": "required for property publish"
-                },
-                "name": {
-                    "type": "string",
-                    "description": "required for property publish"
-                },
-                "error_msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "PublishResponse": {
-            "id": "PublishResponse",
-            "properties": {
-                "success": {
-                    "type": "boolean"
-                },
-                "failures": {
-                    "type": "array",
-                    "items": {
-                        "type": "PublishItem"
-                    }
                 }
             }
         }

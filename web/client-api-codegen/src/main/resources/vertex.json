@@ -58,7 +58,7 @@
             ]
         },
         {
-            "path": "/vertex/property/set",
+            "path": "/vertex/property",
             "operations": [
                 {
                     "method": "POST",
@@ -127,12 +127,12 @@
             ]
         },
         {
-            "path": "/vertex/termMentions",
+            "path": "/vertex/term-mentions",
             "operations": [
                 {
                     "method": "GET",
                     "summary": "gets all the term mentions for a property",
-                    "type": "TermMentions",
+                    "type": "TermMentionsResponse",
                     "nickname": "getTermMentions",
                     "parameters": [
                         {
@@ -161,7 +161,7 @@
             ]
         },
         {
-            "path": "/vertex/detectedObjects",
+            "path": "/vertex/detected-objects",
             "operations": [
                 {
                     "method": "GET",
@@ -195,7 +195,7 @@
             ]
         },
         {
-            "path": "/vertex/visibility/set",
+            "path": "/vertex/visibility",
             "operations": [
                 {
                     "method": "POST",
@@ -226,57 +226,369 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/highlighted-text",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the artifact highlighted HTML",
+                    "type": "string",
+                    "nickname": "getHighlightedText",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "ID of the artifact vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "The property key of the text property to get the text of",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Artifact not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/import",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Import artifact",
+                    "nickname": "importFile",
+                    "type": "ArtifactImportResponse",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "visibilitySource",
+                            "description": "The visibility source",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        },
+                        {
+                            "name": "file",
+                            "description": "Artifact file",
+                            "required": true,
+                            "type": "File",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/resolve-term",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "resolves an entity",
+                    "type": "void",
+                    "nickname": "resolveTerm",
+                    "parameters": [
+                        {
+                            "name": "artifactId",
+                            "description": "ID of the artifact",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "key of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "mentionStart",
+                            "description": "start offset of mention",
+                            "required": true,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "mentionEnd",
+                            "description": "end offset of mention",
+                            "required": true,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sign",
+                            "description": "the title",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "conceptId",
+                            "description": "the concept type IRI",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "The visibility source",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "resolvedVertexId",
+                            "description": "the resolved vertex id",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "the justification text",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "source info",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/unresolve-term",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "unresolves an entity",
+                    "type": "void",
+                    "nickname": "unresolveTerm",
+                    "parameters": [
+                        {
+                            "name": "termMentionId",
+                            "description": "ID of the term mention",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/resolve-detected-object",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "resolves a detected object",
+                    "type": "void",
+                    "nickname": "resolveDetectedObject",
+                    "parameters": [
+                        {
+                            "name": "artifactId",
+                            "description": "ID of the artifact",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "title",
+                            "description": "The title",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "conceptId",
+                            "description": "the concept id of the detected object",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "the visibility source of the detected object",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "graphVertexId",
+                            "description": "the graphVertexId of the existing detected object",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "the justification",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "the source info",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "originalPropertyKey",
+                            "description": "the original property key",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "x1",
+                            "description": "The top left X coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "x2",
+                            "description": "The bottom right X coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "y1",
+                            "description": "The top left Y coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "y2",
+                            "description": "The bottom right Y coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/unresolve-detected-object",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "unresolves a detected object",
+                    "type": "void",
+                    "nickname": "unresolveDetectedObject",
+                    "parameters": [
+                        {
+                            "name": "vertexId",
+                            "description": "ID of the detected object vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "multiValueKey",
+                            "description": "the multi-value key of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/search",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Searches the graph for vertices",
+                    "type": "GraphVertexSearchResult",
+                    "nickname": "vertexSearch",
+                    "parameters": [
+                        {
+                            "name": "q",
+                            "description": "the phrase to search for",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "filter",
+                            "description": "filter to apply",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "offset",
+                            "description": "offset from start of search results",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "size",
+                            "description": "number of items to return",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "conceptType",
+                            "description": "conceptType IRI to search for",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "leafNodes",
+                            "description": "include child concept types",
+                            "required": false,
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "relatedToVertexId",
+                            "description": "returns vertices related to this vertex",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {
-        "Element": {
-            "id": "Element",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "sandboxStatus": {
-                    "type": "string"
-                },
-                "visibilitySource": {
-                    "type": "object"
-                },
-                "properties": {
-                    "type": "array",
-                    "items": {
-                        "type": "Property"
-                    }
-                }
-            }
-        },
-        "Property": {
-            "id": "Property",
-            "properties": {
-                "key": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "streamingPropertyValue": {
-                    "type": "boolean"
-                },
-                "value": {
-                    "type": "object"
-                }
-            }
-        },
-        "TermMentions": {
-            "id": "TermMentions",
-            "properties": {
-                "termMentions": {
-                    "type": "array",
-                    "items": {
-                        "type": "Element"
-                    }
-                }
-            }
-        },
         "DetectedObjects": {
             "id": "DetectedObjects",
             "properties": {
@@ -328,6 +640,60 @@
                 },
                 "process": {
                     "type": "string"
+                }
+            }
+        },
+        "GraphVertexSearchResult": {
+            "id": "GraphVertexSearchResult",
+            "properties": {
+                "vertices": {
+                    "type": "array",
+                    "items": {
+                        "type": "GraphVertexSearchVertex"
+                    }
+                },
+                "nextOffset": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "retrievalTime": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "totalTime": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "totalHits": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "searchTime": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "GraphVertexSearchVertex": {
+            "id": "GraphVertexSearchVertex",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "sandboxStatus": {
+                    "type": "string"
+                },
+                "edgeLabels": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "properties": {
+                    "type": "array",
+                    "items": {
+                        "type": "LinkedHashMap"
+                    }
                 }
             }
         }

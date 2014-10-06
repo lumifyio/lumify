@@ -5,7 +5,7 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.tesseract.TesseractGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.codegen.ArtifactApiExt;
+import io.lumify.web.clientapi.codegen.VertexApiExt;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.model.Element;
 import org.apache.commons.io.IOUtils;
@@ -41,9 +41,9 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
         InputStream videoResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4");
         InputStream videoTranscriptResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4.srt");
-        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFiles(
-                new ArtifactApiExt.FileForImport("auth1", "shortVideo.mp4", videoResourceStream),
-                new ArtifactApiExt.FileForImport("auth1", "shortVideo.mp4.srt", videoTranscriptResourceStream));
+        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFiles(
+                new VertexApiExt.FileForImport("auth1", "shortVideo.mp4", videoResourceStream),
+                new VertexApiExt.FileForImport("auth1", "shortVideo.mp4.srt", videoTranscriptResourceStream));
         assertEquals(1, artifact.getVertexIds().size());
         artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
@@ -55,7 +55,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         for (Element.Property prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
-                String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, prop.getKey());
+                String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, prop.getKey());
                 LOGGER.info("highlightedText: %s: %s: %s", prop.getName(), prop.getKey(), highlightedText);
                 if (prop.getKey().equals(TesseractGraphPropertyWorker.TEXT_PROPERTY_KEY)) {
                     foundTesseractVideoTranscript = true;
@@ -76,7 +76,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRaw(artifactVertexId));
+        byte[] found = IOUtils.toByteArray(lumifyApi.getVertexApi().getRaw(artifactVertexId));
         assertArrayEquals(expected, found);
 
         lumifyApi.logout();
@@ -86,7 +86,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         LOGGER.info("assertRawRoutePlayback");
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRawForPlayback(artifactVertexId, MediaLumifyProperties.MIME_TYPE_VIDEO_MP4));
+        byte[] found = IOUtils.toByteArray(lumifyApi.getVertexApi().getRawForPlayback(artifactVertexId, MediaLumifyProperties.MIME_TYPE_VIDEO_MP4));
         assertTrue(found.length > 0);
 
         lumifyApi.logout();
@@ -96,7 +96,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         LOGGER.info("assertPosterFrameRoute");
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        InputStream in = lumifyApi.getArtifactApi().getPosterFrame(artifactVertexId, 100);
+        InputStream in = lumifyApi.getVertexApi().getPosterFrame(artifactVertexId, 100);
         BufferedImage img = ImageIO.read(in);
         assertEquals(100, img.getWidth());
         assertEquals(66, img.getHeight());
@@ -108,7 +108,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         LOGGER.info("assertVideoPreviewRoute");
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        InputStream in = lumifyApi.getArtifactApi().getVideoPreview(artifactVertexId, 100);
+        InputStream in = lumifyApi.getVertexApi().getVideoPreview(artifactVertexId, 100);
         BufferedImage img = ImageIO.read(in);
         assertEquals(2000, img.getWidth());
         assertEquals(66, img.getHeight());
@@ -124,16 +124,16 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         int videoFrameIndex = 0;
         int mentionStart = "".length();
         int mentionEnd = mentionStart + "Salam".length();
-        lumifyApi.getEntityApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Salam", CONCEPT_TEST_PERSON, "auth1");
+        lumifyApi.getVertexApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Salam", CONCEPT_TEST_PERSON, "auth1");
 
         videoFrameIndex = 2;
         mentionStart = "appalling brutality what we know is that\nthree ".length();
         mentionEnd = mentionStart + "British".length();
-        lumifyApi.getEntityApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Great Britain", CONCEPT_TEST_PERSON, "auth1");
+        lumifyApi.getVertexApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Great Britain", CONCEPT_TEST_PERSON, "auth1");
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, propertyKey);
+        String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, propertyKey);
         LOGGER.info(highlightedText);
         assertTrue("missing highlighting for Salam", highlightedText.contains(">Salam<"));
         assertTrue("missing highlighting for British", highlightedText.contains("three <span") && highlightedText.contains(">British<"));

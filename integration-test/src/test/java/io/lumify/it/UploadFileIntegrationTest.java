@@ -46,7 +46,7 @@ public class UploadFileIntegrationTest extends TestBase {
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth2");
         workspaceId = lumifyApi.getCurrentWorkspaceId();
 
-        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
+        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
@@ -149,7 +149,7 @@ public class UploadFileIntegrationTest extends TestBase {
         assertHasProperty(artifactVertex.getProperties(), FileImport.MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "test.txt");
         assertHasProperty(artifactVertex.getProperties(), "", LumifyProperties.CONCEPT_TYPE.getPropertyName(), "http://lumify.io/test#document");
 
-        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         assertNotNull(highlightedText);
         LOGGER.info("highlightedText: %s", highlightedText);
         assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("class=\"entity\""));
@@ -161,7 +161,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        byte[] found = IOUtils.toByteArray(lumifyApi.getArtifactApi().getRaw(artifactVertexId));
+        byte[] found = IOUtils.toByteArray(lumifyApi.getVertexApi().getRaw(artifactVertexId));
         assertArrayEquals(expected, found);
 
         lumifyApi.logout();

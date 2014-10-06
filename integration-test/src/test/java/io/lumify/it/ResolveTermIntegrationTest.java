@@ -56,7 +56,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
-        ArtifactImportResponse artifact = lumifyApi.getArtifactApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
+        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
@@ -76,7 +76,7 @@ public class ResolveTermIntegrationTest extends TestBase {
     public void resolveTerm(LumifyApi lumifyApi) throws ApiException {
         int entityStartOffset = "".length();
         int entityEndOffset = entityStartOffset + "Joe Ferner".length();
-        lumifyApi.getEntityApi().resolveTerm(
+        lumifyApi.getVertexApi().resolveTerm(
                 artifactVertexId,
                 TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
                 entityStartOffset, entityEndOffset,
@@ -89,7 +89,7 @@ public class ResolveTermIntegrationTest extends TestBase {
     }
 
     public void assertHighlightedTextUpdatedWithResolvedEntity(LumifyApi lumifyApi) throws ApiException {
-        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("%s", highlightedText);
         assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("resolvedToVertexId&quot;:&quot;" + joeFernerVertex.getId() + "&quot;"));
     }
@@ -118,13 +118,13 @@ public class ResolveTermIntegrationTest extends TestBase {
     }
 
     private void assertHighlightedTextDoesNotContainResolvedEntityForOtherUser(LumifyApi lumifyApi) throws ApiException {
-        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("%s", highlightedText);
         assertFalse("highlightedText contained string: " + highlightedText, highlightedText.contains("resolvedToVertexId&quot;:&quot;" + joeFernerVertex.getId() + "&quot;"));
     }
 
     private void assertHighlightedTextContainResolvedEntityForOtherUser(LumifyApi lumifyApi) throws ApiException {
-        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("%s", highlightedText);
         assertTrue("highlightedText does not contain string: " + highlightedText, highlightedText.contains("resolvedToVertexId&quot;:&quot;" + joeFernerVertex.getId() + "&quot;"));
     }
@@ -133,7 +133,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         int entityStartOffset = "Joe Ferner knows ".length();
         int entityEndOffset = entityStartOffset + "David Singley".length();
         String sign = "David Singley";
-        lumifyApi.getEntityApi().resolveTerm(
+        lumifyApi.getVertexApi().resolveTerm(
                 artifactVertexId,
                 TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
                 entityStartOffset, entityEndOffset,
@@ -150,19 +150,19 @@ public class ResolveTermIntegrationTest extends TestBase {
         Element davidSingleyTermMention = findDavidSingleyTermMention(termMentions);
         LOGGER.info("termMention: %s", davidSingleyTermMention.toString());
 
-        String highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("highlightedText: %s", highlightedText);
         Element.Property davidSingleyEdgeId = getProperty(davidSingleyTermMention.getProperties(), "", "http://lumify.io/termMention#resolvedEdgeId");
         String davidSingleyEdgeIdValue = (String) davidSingleyEdgeId.getValue();
         assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && highlightedText.contains(davidSingleyEdgeIdValue));
 
-        lumifyApi.getEntityApi().unresolveTerm(davidSingleyTermMention.getId());
+        lumifyApi.getVertexApi().unresolveTerm(davidSingleyTermMention.getId());
 
         termMentions = lumifyApi.getVertexApi().getTermMentions(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
         LOGGER.info("termMentions: %s", termMentions.toString());
         assertEquals(3, termMentions.getTermMentions().size());
 
-        highlightedText = lumifyApi.getArtifactApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
+        highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("highlightedText: %s", highlightedText);
         assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && !highlightedText.contains(davidSingleyEdgeIdValue));
     }
