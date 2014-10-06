@@ -1,7 +1,10 @@
 package io.lumify.web.clientapi.codegen;
 
 import io.lumify.web.clientapi.LumifyClientApiException;
-import io.lumify.web.clientapi.codegen.model.*;
+import io.lumify.web.clientapi.codegen.model.WorkspaceDiffItem;
+import io.lumify.web.clientapi.codegen.model.WorkspaceUpdateData;
+import io.lumify.web.clientapi.codegen.model.WorkspaceUserUpdate;
+import io.lumify.web.clientapi.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +14,7 @@ public class WorkspaceApiExt extends WorkspaceApi {
         update(ApiInvoker.serialize(updateData));
     }
 
-    public PublishResponse publishAll(List<WorkspaceDiffItem> diffItems) throws ApiException {
+    public WorkspacePublishResponse publishAll(List<WorkspaceDiffItem> diffItems) throws ApiException {
         List<PublishItem> publishItems = new ArrayList<PublishItem>();
         for (WorkspaceDiffItem diffItem : diffItems) {
             publishItems.add(workspaceDiffItemToPublishItem(diffItem));
@@ -19,28 +22,29 @@ public class WorkspaceApiExt extends WorkspaceApi {
         return publish(publishItems);
     }
 
-    public PublishResponse publish(List<PublishItem> publishItems) throws ApiException {
+    public WorkspacePublishResponse publish(List<PublishItem> publishItems) throws ApiException {
         return publish(ApiInvoker.serialize(publishItems));
     }
 
     public PublishItem workspaceDiffItemToPublishItem(WorkspaceDiffItem workspaceDiffItem) {
-        PublishItem publishItem = new PublishItem();
-        publishItem.setAction("");
         if ("VertexDiffItem".equals(workspaceDiffItem.getType())) {
-            publishItem.setType("vertex");
+            VertexPublishItem publishItem = new VertexPublishItem();
+            publishItem.setAction(PublishItem.Action.addOrUpdate);
             publishItem.setVertexId(workspaceDiffItem.getVertexId());
+            return publishItem;
         } else if ("PropertyDiffItem".equals(workspaceDiffItem.getType())) {
-            publishItem.setType("property");
+            PropertyPublishItem publishItem = new PropertyPublishItem();
             publishItem.setElementId(workspaceDiffItem.getElementId());
             publishItem.setKey(workspaceDiffItem.getKey());
             publishItem.setName(workspaceDiffItem.getName());
+            return publishItem;
         } else if ("EdgeDiffItem".equals(workspaceDiffItem.getType())) {
-            publishItem.setType("relationship");
+            RelationshipPublishItem publishItem = new RelationshipPublishItem();
             publishItem.setEdgeId(workspaceDiffItem.getEdgeId());
+            return publishItem;
         } else {
             throw new LumifyClientApiException("Unhandled WorkspaceDiffItem type: " + workspaceDiffItem.getType());
         }
-        return publishItem;
     }
 
     public void setUserAccess(String userId, String access) throws ApiException {

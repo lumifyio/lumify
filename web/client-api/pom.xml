@@ -13,12 +13,6 @@
     <packaging>jar</packaging>
     <name>Lumify: Web: Client API</name>
 
-    <properties>
-        <jersey.version>1.18.1</jersey.version>
-        <jackson.version>2.1.5</jackson.version>
-        <maven.plugin.version>3.1.6</maven.plugin.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>
@@ -31,19 +25,20 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
-            <version>${jersey.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
-            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
     </dependencies>
 </project>

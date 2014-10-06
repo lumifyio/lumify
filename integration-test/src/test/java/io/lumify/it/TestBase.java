@@ -8,8 +8,8 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.UserNameOnlyLumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.model.Property;
-import io.lumify.web.clientapi.codegen.model.PublishResponse;
 import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
+import io.lumify.web.clientapi.model.WorkspacePublishResponse;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -146,9 +146,9 @@ public class TestBase {
         WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("diff before publish: %s", diff.toString());
         assertEquals(expectedDiffsBeforePublish, diff.getDiffs().size());
-        PublishResponse publishAllResult = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
+        WorkspacePublishResponse publishAllResult = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
         LOGGER.info("publish all results: %s", publishAllResult.toString());
-        Assert.assertTrue("publish all failed: " + publishAllResult, publishAllResult.getSuccess());
+        Assert.assertTrue("publish all failed: " + publishAllResult, publishAllResult.isSuccess());
         assertEquals("publish all expected 0 failures: " + publishAllResult, 0, publishAllResult.getFailures().size());
 
         diff = lumifyApi.getWorkspaceApi().getDiff();

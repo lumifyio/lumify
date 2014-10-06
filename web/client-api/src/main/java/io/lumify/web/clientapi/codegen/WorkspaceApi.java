@@ -4,12 +4,12 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ApiInvoker;
 
 import io.lumify.web.clientapi.codegen.model.WorkspaceUpdateData;
-import io.lumify.web.clientapi.codegen.model.PublishResponse;
 import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
 import io.lumify.web.clientapi.codegen.model.Workspaces;
-import io.lumify.web.clientapi.codegen.model.PublishItem;
 import io.lumify.web.clientapi.codegen.model.Workspace;
 import com.sun.jersey.multipart.FormDataMultiPart;
+import io.lumify.web.clientapi.model.PublishItem;
+import io.lumify.web.clientapi.model.WorkspacePublishResponse;
 
 import javax.ws.rs.core.MediaType;
 
@@ -290,7 +290,7 @@ public class WorkspaceApi {
       }
     }
   }
-  public PublishResponse publish (String publishData) throws ApiException {
+  public WorkspacePublishResponse publish (String publishData) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(publishData == null ) {
@@ -323,7 +323,7 @@ public class WorkspaceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (PublishResponse) ApiInvoker.deserialize(response, "", PublishResponse.class);
+        return (WorkspacePublishResponse) ApiInvoker.deserialize(response, "", WorkspacePublishResponse.class);
       }
       else {
         return null;

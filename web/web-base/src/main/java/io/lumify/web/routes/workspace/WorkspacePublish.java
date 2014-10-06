@@ -1,6 +1,7 @@
 package io.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -23,6 +24,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -75,84 +77,78 @@ public class WorkspacePublish extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final JSONArray publishData = new JSONArray(getRequiredParameter(request, "publishData"));
+        String publishDataString = getRequiredParameter(request, "publishData");
+        PublishItem[] publishData = getObjectMapper().readValue(publishDataString, PublishItem[].class);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        LOGGER.debug("publishing\n%s", publishData.toString(2));
-        JSONArray failures = new JSONArray();
-        publishVertices(publishData, failures, workspaceId, user, authorizations);
-        publishEdges(publishData, failures, workspaceId, user, authorizations);
-        publishProperties(publishData, failures, workspaceId, user, authorizations);
+        LOGGER.debug("publishing\n%s", Joiner.on(",").join(publishData));
+        WorkspacePublishResponse workspacePublishResponse = new WorkspacePublishResponse();
+        publishVertices(publishData, workspacePublishResponse, workspaceId, user, authorizations);
+        publishEdges(publishData, workspacePublishResponse, workspaceId, user, authorizations);
+        publishProperties(publishData, workspacePublishResponse, workspaceId, user, authorizations);
 
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("failures", failures);
-        resultJson.put("success", failures.length() == 0);
-        LOGGER.debug("publishing results\n%s", resultJson.toString(2));
-        respondWithJson(response, resultJson);
+        LOGGER.debug("publishing results\n%s", workspacePublishResponse);
+        respondWith(response, workspacePublishResponse);
     }
 
-    private void publishVertices(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+    private void publishVertices(PublishItem[] publishData, WorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
         LOGGER.debug("BEGIN publishVertices");
-        for (int i = 0; i < publishData.length(); i++) {
-            JSONObject data = publishData.getJSONObject(i);
+        for (PublishItem data : publishData) {
             try {
-                String type = (String) data.get("type");
-                String action = data.getString("action");
-                if (!type.equals("vertex")) {
+                if (!(data instanceof VertexPublishItem)) {
                     continue;
                 }
-                String vertexId = data.getString("vertexId");
+                VertexPublishItem vertexPublishItem = (VertexPublishItem) data;
+                String vertexId = vertexPublishItem.getVertexId();
                 checkNotNull(vertexId);
                 Vertex vertex = graph.getVertex(vertexId, authorizations);
                 checkNotNull(vertex);
                 if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
                     String msg;
-                    if (action.equals("delete")) {
+                    if (data.getAction() == PublishItem.Action.delete) {
                         msg = "Cannot delete public vertex " + vertexId;
                     } else {
                         msg = "Vertex " + vertexId + " is already public";
                     }
                     LOGGER.warn(msg);
-                    data.put("error_msg", msg);
-                    failures.put(data);
+                    data.setErrorMessage(msg);
+                    workspacePublishResponse.addFailure(data);
                     continue;
                 }
-                publishVertex(vertex, action, authorizations, workspaceId, user);
+                publishVertex(vertex, data.getAction(), authorizations, workspaceId, user);
             } catch (Exception ex) {
-                LOGGER.error("Error publishing %s", data.toString(2), ex);
-                data.put("error_msg", ex.getMessage());
-                failures.put(data);
+                LOGGER.error("Error publishing %s", data.toString(), ex);
+                data.setErrorMessage(ex.getMessage());
+                workspacePublishResponse.addFailure(data);
             }
         }
         LOGGER.debug("END publishVertices");
         graph.flush();
     }
 
-    private void publishEdges(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+    private void publishEdges(PublishItem[] publishData, WorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
         LOGGER.debug("BEGIN publishEdges");
-        for (int i = 0; i < publishData.length(); i++) {
-            JSONObject data = publishData.getJSONObject(i);
+        for (PublishItem data : publishData) {
             try {
-                String type = (String) data.get("type");
-                String action = data.getString("action");
-                if (!type.equals("relationship")) {
+                if (!(data instanceof RelationshipPublishItem)) {
                     continue;
                 }
-                Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
+                RelationshipPublishItem relationshipPublishItem = (RelationshipPublishItem) data;
+                Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), authorizations);
                 Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
                 Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
                 if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
                     String error_msg;
-                    if (action.equals("delete")) {
+                    if (data.getAction() == PublishItem.Action.delete) {
                         error_msg = "Cannot delete a public edge";
                     } else {
                         error_msg = "Edge is already public";
                     }
                     LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
+                    data.setErrorMessage(error_msg);
+                    workspacePublishResponse.addFailure(data);
                     continue;
                 }
 
@@ -160,35 +156,33 @@ public class WorkspacePublish extends BaseRequestHandler {
                         GraphUtil.getSandboxStatus(destVertex, workspaceId) != SandboxStatus.PUBLIC) {
                     String error_msg = "Cannot publish edge, " + edge.getId() + ", because either source and/or dest vertex are not public";
                     LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
+                    data.setErrorMessage(error_msg);
+                    workspacePublishResponse.addFailure(data);
                     continue;
                 }
-                publishEdge(edge, sourceVertex, destVertex, action, workspaceId, user, authorizations);
+                publishEdge(edge, sourceVertex, destVertex, data.getAction(), workspaceId, user, authorizations);
             } catch (Exception ex) {
-                LOGGER.error("Error publishing %s", data.toString(2), ex);
-                data.put("error_msg", ex.getMessage());
-                failures.put(data);
+                LOGGER.error("Error publishing %s", data.toString(), ex);
+                data.setErrorMessage(ex.getMessage());
+                workspacePublishResponse.addFailure(data);
             }
         }
         LOGGER.debug("END publishEdges");
         graph.flush();
     }
 
-    private void publishProperties(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+    private void publishProperties(PublishItem[] publishData, WorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
         LOGGER.debug("BEGIN publishProperties");
-        for (int i = 0; i < publishData.length(); i++) {
-            JSONObject data = publishData.getJSONObject(i);
+        for (PublishItem data : publishData) {
             try {
-                String type = (String) data.get("type");
-                String action = data.getString("action");
-                if (!type.equals("property")) {
+                if (!(data instanceof PropertyPublishItem)) {
                     continue;
                 }
-                Element element = getPropertyElement(authorizations, data);
+                PropertyPublishItem propertyPublishItem = (PropertyPublishItem) data;
+                Element element = getPropertyElement(authorizations, propertyPublishItem);
 
-                String propertyKey = data.getString("key");
-                String propertyName = data.getString("name");
+                String propertyKey = propertyPublishItem.getKey();
+                String propertyName = propertyPublishItem.getName();
 
                 OntologyProperty ontologyProperty = ontologyRepository.getProperty(propertyName);
                 checkNotNull(ontologyProperty, "Could not find ontology property: " + propertyName);
@@ -208,14 +202,14 @@ public class WorkspacePublish extends BaseRequestHandler {
 
                     if (propertySandboxStatus == SandboxStatus.PUBLIC) {
                         String error_msg;
-                        if (action.equals("delete")) {
+                        if (data.getAction() == PublishItem.Action.delete) {
                             error_msg = "Cannot delete a public property";
                         } else {
                             error_msg = "Property is already public";
                         }
                         LOGGER.warn(error_msg);
-                        data.put("error_msg", error_msg);
-                        failures.put(data);
+                        data.setErrorMessage(error_msg);
+                        workspacePublishResponse.addFailure(data);
                         propertyFailed = true;
                     }
                 }
@@ -228,39 +222,39 @@ public class WorkspacePublish extends BaseRequestHandler {
                     String errorMessage = "Cannot publish a modification of a property on a private element: " + element.getId();
                     JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
                     LOGGER.warn("%s: visibilityJson: %s, workspaceId: %s", errorMessage, visibilityJson.toString(), workspaceId);
-                    data.put("error_msg", errorMessage);
-                    failures.put(data);
+                    data.setErrorMessage(errorMessage);
+                    workspacePublishResponse.addFailure(data);
                     continue;
                 }
 
-                publishProperty(element, action, propertyKey, propertyName, workspaceId, user, authorizations);
+                publishProperty(element, data.getAction(), propertyKey, propertyName, workspaceId, user, authorizations);
             } catch (Exception ex) {
-                LOGGER.error("Error publishing %s", data.toString(2), ex);
-                data.put("error_msg", ex.getMessage());
-                failures.put(data);
+                LOGGER.error("Error publishing %s", data.toString(), ex);
+                data.setErrorMessage(ex.getMessage());
+                workspacePublishResponse.addFailure(data);
             }
         }
         LOGGER.debug("END publishProperties");
         graph.flush();
     }
 
-    private Element getPropertyElement(Authorizations authorizations, JSONObject data) {
+    private Element getPropertyElement(Authorizations authorizations, PropertyPublishItem data) {
         Element element = null;
 
-        String elementId = data.optString("edgeId", null);
+        String elementId = data.getEdgeId();
         if (elementId != null) {
             element = graph.getEdge(elementId, authorizations);
         }
 
         if (element == null) {
-            elementId = data.optString("vertexId", null);
+            elementId = data.getVertexId();
             if (elementId != null) {
                 element = graph.getVertex(elementId, authorizations);
             }
         }
 
         if (element == null) {
-            elementId = data.optString("elementId", null);
+            elementId = data.getElementId();
             checkNotNull(elementId, "elementId, vertexId, or edgeId is required to publish a property");
             element = graph.getVertex(elementId, authorizations);
             if (element == null) {
@@ -272,8 +266,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         return element;
     }
 
-    private void publishVertex(Vertex vertex, String action, Authorizations authorizations, String workspaceId, User user) throws IOException {
-        if (action.equals("delete")) {
+    private void publishVertex(Vertex vertex, PublishItem.Action action, Authorizations authorizations, String workspaceId, User user) throws IOException {
+        if (action == PublishItem.Action.delete) {
             graph.removeVertex(vertex, authorizations);
             return;
         }
@@ -322,8 +316,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
     }
 
-    private void publishProperty(Element element, String action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
-        if (action.equals("delete")) {
+    private void publishProperty(Element element, PublishItem.Action action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
+        if (action == PublishItem.Action.delete) {
             element.removeProperty(key, name, authorizations);
             return;
         }
@@ -366,8 +360,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         return true;
     }
 
-    private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String action, String workspaceId, User user, Authorizations authorizations) {
-        if (action.equals("delete")) {
+    private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, PublishItem.Action action, String workspaceId, User user, Authorizations authorizations) {
+        if (action == PublishItem.Action.delete) {
             graph.removeEdge(edge, authorizations);
             return;
         }

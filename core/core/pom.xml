@@ -109,6 +109,11 @@
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-distribution</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>client-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Runtime Dependencies -->
         <dependency>

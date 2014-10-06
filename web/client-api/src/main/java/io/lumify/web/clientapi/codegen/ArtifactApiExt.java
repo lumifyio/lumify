@@ -3,7 +3,7 @@ package io.lumify.web.clientapi.codegen;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
-import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 

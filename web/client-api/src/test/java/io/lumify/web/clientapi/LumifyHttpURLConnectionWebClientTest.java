@@ -1,6 +1,8 @@
 package io.lumify.web.clientapi;
 
 import io.lumify.web.clientapi.codegen.model.*;
+import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.model.WorkspacePublishResponse;
 import org.junit.Before;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -81,7 +83,7 @@ public class LumifyHttpURLConnectionWebClientTest {
             System.out.println(diffItem);
         }
 
-        PublishResponse publishResponse = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
+        WorkspacePublishResponse publishResponse = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
         System.out.println(publishResponse);
 
         Workspace workspace = lumifyApi.getWorkspaceApi().getById(lumifyApi.getCurrentWorkspaceId());

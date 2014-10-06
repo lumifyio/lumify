@@ -1,8 +1,7 @@
 package io.lumify.web;
 
-import io.lumify.miniweb.App;
-import io.lumify.miniweb.Handler;
-import io.lumify.miniweb.HandlerChain;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyAccessDeniedException;
@@ -12,6 +11,9 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.App;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.HandlerChain;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -41,6 +43,7 @@ public abstract class BaseRequestHandler implements Handler {
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
     private final Configuration configuration;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     protected BaseRequestHandler(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {
         this.userRepository = userRepository;
@@ -354,6 +357,14 @@ public abstract class BaseRequestHandler implements Handler {
         configureResponse(ResponseTypes.JSON_OBJECT, response, jsonObject);
     }
 
+    protected void respondWith(HttpServletResponse response, Object obj) {
+        try {
+            String jsonObject = objectMapper.writeValueAsString(obj);
+            configureResponse(ResponseTypes.JSON_OBJECT, response, jsonObject);
+        } catch (JsonProcessingException e) {
+            throw new LumifyException("Could not write json", e);
+        }
+    }
 
     /**
      * Configures the content type for the provided response to contain {@link JSONArray} data
@@ -440,5 +451,9 @@ public abstract class BaseRequestHandler implements Handler {
 
     public WebApp getWebApp(HttpServletRequest request) {
         return (WebApp) App.getApp(request);
+    }
+
+    public ObjectMapper getObjectMapper() {
+        return objectMapper;
     }
 }

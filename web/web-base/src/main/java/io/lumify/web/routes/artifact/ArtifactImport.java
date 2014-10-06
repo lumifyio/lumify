@@ -12,13 +12,12 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ParameterParser;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -75,22 +74,18 @@ public class ArtifactImport extends BaseRequestHandler {
 
             List<Vertex> vertices = fileImport.importVertices(workspace, files, user, authorizations);
 
-            JSONArray vertexIdsJson = getVertexIdsJsonArray(vertices);
-
-            JSONObject json = new JSONObject();
-            json.put("vertexIds", vertexIdsJson);
-            respondWithJson(response, json);
+            respondWith(response, toArtifactImportResponse(vertices));
         } finally {
             FileUtils.deleteDirectory(tempDir);
         }
     }
 
-    private JSONArray getVertexIdsJsonArray(List<Vertex> vertices) {
-        JSONArray vertexIdsJson = new JSONArray();
-        for (Vertex v : vertices) {
-            vertexIdsJson.put(v.getId());
+    private ArtifactImportResponse toArtifactImportResponse(List<Vertex> vertices) {
+        ArtifactImportResponse response = new ArtifactImportResponse();
+        for (Vertex vertex : vertices) {
+            response.getVertexIds().add(vertex.getId());
         }
-        return vertexIdsJson;
+        return response;
     }
 
     private List<FileImport.FileAndVisibility> getFileAndVisibilities(HttpServletRequest request, HttpServletResponse response, HandlerChain chain, File tempDir, Authorizations authorizations, User user) throws Exception {

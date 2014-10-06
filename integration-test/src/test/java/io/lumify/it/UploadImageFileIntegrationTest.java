@@ -7,6 +7,7 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ArtifactApiExt;
 import io.lumify.web.clientapi.codegen.model.*;
+import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
