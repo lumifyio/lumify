@@ -24,6 +24,7 @@ define([], function() {
             /^login/,
             /^vertex\/remove-edge/,
             /^vertex\/(un)?resolve/,
+            /^vertex\/import/,
             /^edge\/properties/,
             /^edge\/create/
         ],
