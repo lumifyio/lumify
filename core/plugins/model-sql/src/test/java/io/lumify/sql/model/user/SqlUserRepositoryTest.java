@@ -61,14 +61,14 @@ public class SqlUserRepositoryTest {
         SqlUser sqlUser1 = (SqlUser) sqlUserRepository.addUser("abc", "test user1", null, "", new String[0]);
         assertEquals("abc", sqlUser1.getUsername());
         assertEquals("test user1", sqlUser1.getDisplayName());
-        assertEquals("OFFLINE", sqlUser1.getUserStatus());
+        assertEquals(UserStatus.OFFLINE, sqlUser1.getUserStatus());
 
         SqlUser sqlUser2 = (SqlUser) sqlUserRepository.addUser("def", "test user2", null, null, new String[0]);
         assertNull(sqlUser2.getPasswordHash());
         assertNull(sqlUser2.getPasswordSalt());
         assertEquals("def", sqlUser2.getUsername());
         assertEquals("test user2", sqlUser2.getDisplayName());
-        assertEquals("OFFLINE", sqlUser2.getUserStatus());
+        assertEquals(UserStatus.OFFLINE, sqlUser2.getUserStatus());
 
         SqlUser sqlUser3 = (SqlUser) sqlUserRepository.addUser("ghi", "test user3", null, "&gdja81", new String[0]);
         byte[] salt = sqlUser3.getPasswordSalt();
@@ -76,7 +76,7 @@ public class SqlUserRepositoryTest {
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
         assertEquals("ghi", sqlUser3.getUsername());
         assertEquals("test user3", sqlUser3.getDisplayName());
-        assertEquals("OFFLINE", sqlUser3.getUserStatus());
+        assertEquals(UserStatus.OFFLINE, sqlUser3.getUserStatus());
     }
 
     @Test(expected = LumifyException.class)
@@ -95,7 +95,7 @@ public class SqlUserRepositoryTest {
         assertEquals("12345", user.getUsername());
         assertEquals("test user", user.getDisplayName());
         assertEquals(user.getUserId(), addedUser.getUserId());
-        assertEquals("OFFLINE", user.getUserStatus());
+        assertEquals(UserStatus.OFFLINE, user.getUserStatus());
 
         assertNull(sqlUserRepository.findById("2"));
     }
@@ -197,7 +197,7 @@ public class SqlUserRepositoryTest {
         sqlUserRepository.setStatus(user.getUserId(), UserStatus.ONLINE);
 
         SqlUser testUser = (SqlUser) sqlUserRepository.findById(user.getUserId());
-        assertEquals(UserStatus.ONLINE.name(), testUser.getUserStatus());
+        assertEquals(UserStatus.ONLINE, testUser.getUserStatus());
     }
 
     @Test(expected = LumifyException.class)
