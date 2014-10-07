@@ -32,7 +32,6 @@ define([
             });
 
             this.on('clearSelectedConcept', this.onClearConcept);
-            this.on('selectConcept', this.onSelectConcept);
             this.on('enableConcept', this.onEnableConcept);
 
             this.setupTypeahead();
@@ -52,11 +51,7 @@ define([
         };
 
         this.onClearConcept = function(event) {
-            this.select('conceptSelector').val('');
-        };
-
-        this.onSelectConcept = function(event, data) {
-            this.select('conceptSelector').val(data && data.conceptId || '').change();
+            this.select('fieldSelector').val('');
         };
 
         this.onEnableConcept = function(event, data) {
