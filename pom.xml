@@ -70,9 +70,7 @@
         <hadoop.version>2.0.0-mr1-cdh4.4.0</hadoop.version>
         <httpcomponents.httpclient.version>4.3.1</httpcomponents.httpclient.version>
         <inflector.version>0.7.0</inflector.version>
-        <jackson.version>2.3.1</jackson.version>
-        <jackson.annotations.version>2.3.0</jackson.annotations.version>
-        <jackson.guice.version>2.3.1</jackson.guice.version>
+        <jackson.version>2.4.3</jackson.version>
         <jetty.version>8.1.14.v20131031</jetty.version>
         <jetty.javaee.version>3.0.0.v201112011016</jetty.javaee.version>
         <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
@@ -86,7 +84,6 @@
         <zip4j.version>1.3.1</zip4j.version>
         <zookeeper.version>3.3.6</zookeeper.version>
         <jersey.version>1.18.1</jersey.version>
-        <jackson.version>2.1.5</jackson.version>
         <maven.plugin.version>3.1.6</maven.plugin.version>
 
         <!-- These versions align with storm -->
@@ -249,7 +246,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.annotations.version}</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -264,7 +261,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-guice</artifactId>
-                <version>${jackson.guice.version}</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
