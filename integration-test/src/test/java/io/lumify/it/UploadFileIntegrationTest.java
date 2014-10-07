@@ -5,10 +5,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.model.Element;
-import io.lumify.web.clientapi.model.Property;
-import io.lumify.web.clientapi.model.VisibilityJson;
+import io.lumify.web.clientapi.model.*;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +26,7 @@ public class UploadFileIntegrationTest extends TestBase {
     @Test
     public void testUploadFile() throws IOException, ApiException {
         importArtifactAsUser1();
+        assertUser1CanSeeInSearch();
         assertUser2DoesNotHaveAccessToUser1sWorkspace();
         grantUser2AccessToWorkspace();
         assertUser2HasAccessToWorkspace();
@@ -55,6 +53,18 @@ public class UploadFileIntegrationTest extends TestBase {
         lumifyTestCluster.processGraphPropertyQueue();
 
         assertArtifactCorrect(lumifyApi, true, "auth1");
+
+        lumifyApi.logout();
+    }
+
+    private void assertUser1CanSeeInSearch() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        VertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
+        LOGGER.debug("searchResults: %s", searchResults.toString());
+        assertEquals(1, searchResults.getVertices().size());
+        Vertex searchResult = searchResults.getVertices().get(0);
+        assertEquals(artifactVertexId, searchResult.getId());
 
         lumifyApi.logout();
     }

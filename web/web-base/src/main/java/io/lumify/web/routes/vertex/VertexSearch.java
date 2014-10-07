@@ -11,11 +11,12 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.VertexSearchResponse;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchPhaseExecutionException;
 import org.json.JSONArray;
@@ -129,49 +130,44 @@ public class VertexSearch extends BaseRequestHandler {
         }
 
         long retrievalStartTime = System.nanoTime();
-        List<JSONObject> verticesJsonList = new ArrayList<JSONObject>();
+        List<io.lumify.web.clientapi.model.Vertex> verticesList = new ArrayList<io.lumify.web.clientapi.model.Vertex>();
         for (Vertex vertex : searchResults) {
-            JSONObject vertexJson = JsonSerializer.toJson(vertex, workspaceId, authorizations);
+            io.lumify.web.clientapi.model.Vertex v = ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations);
             if (scores != null) {
-                vertexJson.put("score", scores.get(vertex.getId()));
+                v.setScore(scores.get(vertex.getId()));
             }
-            verticesJsonList.add(vertexJson);
+            verticesList.add(v);
         }
         long retrievalEndTime = System.nanoTime();
 
-        Collections.sort(verticesJsonList, new Comparator<JSONObject>() {
+        Collections.sort(verticesList, new Comparator<io.lumify.web.clientapi.model.Vertex>() {
             @Override
-            public int compare(JSONObject o1, JSONObject o2) {
-                double score1 = o1.optDouble("score", 0.0);
-                double score2 = o2.optDouble("score", 0.0);
+            public int compare(io.lumify.web.clientapi.model.Vertex o1, io.lumify.web.clientapi.model.Vertex o2) {
+                double score1 = o1.getScore(0.0);
+                double score2 = o2.getScore(0.0);
                 return -Double.compare(score1, score2);
             }
         });
 
-        JSONArray verticesJson = new JSONArray();
-        for (JSONObject vertexJson : verticesJsonList) {
-            verticesJson.put(vertexJson);
-        }
-
         long totalEndTime = System.nanoTime();
 
-        JSONObject results = new JSONObject();
-        results.put("vertices", verticesJson);
-        results.put("nextOffset", offset + size);
-        results.put("retrievalTime", retrievalEndTime - retrievalStartTime);
-        results.put("totalTime", totalEndTime - totalStartTime);
+        VertexSearchResponse results = new VertexSearchResponse();
+        results.getVertices().addAll(verticesList);
+        results.setNextOffset(offset + size);
+        results.setRetrievalTime(retrievalEndTime - retrievalStartTime);
+        results.setTotalTime(totalEndTime - totalStartTime);
 
         if (searchResults instanceof IterableWithTotalHits) {
-            results.put("totalHits", ((IterableWithTotalHits) searchResults).getTotalHits());
+            results.setTotalHits(((IterableWithTotalHits) searchResults).getTotalHits());
         }
         if (searchResults instanceof IterableWithSearchTime) {
-            results.put("searchTime", ((IterableWithSearchTime) searchResults).getSearchTimeNanoSeconds());
+            results.setSearchTime(((IterableWithSearchTime) searchResults).getSearchTimeNanoSeconds());
         }
 
         long endTime = System.nanoTime();
-        LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesJsonList.size(), (endTime - startTime) / 1000 / 1000);
+        LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesList.size(), (endTime - startTime) / 1000 / 1000);
 
-        respondWithJson(response, results);
+        respondWith(response, results);
     }
 
     private void updateQueryWithFilter(Query graphQuery, JSONObject obj) throws ParseException {

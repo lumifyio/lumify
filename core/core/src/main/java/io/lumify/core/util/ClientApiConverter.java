@@ -47,7 +47,7 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         throw new RuntimeException("Unexpected element type: " + element.getClass().getName());
     }
 
-    private static io.lumify.web.clientapi.model.Vertex toClientApiVertex(Vertex vertex, String workspaceId, Authorizations authorizations) {
+    public static io.lumify.web.clientapi.model.Vertex toClientApiVertex(Vertex vertex, String workspaceId, Authorizations authorizations) {
         io.lumify.web.clientapi.model.Vertex v = new io.lumify.web.clientapi.model.Vertex();
 
         List<String> vertexEdgeLabels = getVertexEdgeLabels(vertex, authorizations);

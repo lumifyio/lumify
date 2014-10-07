@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vertex extends Element {
+    private Double score;
     private List<String> edgeLabels = new ArrayList<String>();
 
     public List<String> getEdgeLabels() {
@@ -13,5 +14,23 @@ public class Vertex extends Element {
     @Override
     public String getType() {
         return "vertex";
+    }
+
+    /**
+     * search score
+     */
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public double getScore(double defaultValue) {
+        if (this.score == null) {
+            return defaultValue;
+        }
+        return this.score;
     }
 }
