@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.Edge;
 import org.securegraph.Element;
+import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
