@@ -12,4 +12,6 @@
 
 **video preview** - a stitched together image of X number of frames of a video to support scrubbing withing the video
 
-**visibility source** - the string passed from the visibility UI component, this could be XML, JSON, etc. This string is then passed through a io.lumify.core.security.VisibilityTranslator to be converted to a io.lumify.core.security.LumifyVisibility which can create either an Accumulo visibility string or a JSON document to include workspace visibility
+**visibility source** - the raw visibility string passed from the visibility UI component. This string is then passed through a io.lumify.core.security.VisibilityTranslator to be converted to a io.lumify.core.security.LumifyVisibility which can create either an Accumulo visibility string or a JSON document to include workspace visibility
+
+**visibility json** - a json object consisting of the visibility source and list of workspace ids. This JSONObject is set on all edges, vertices, and properties for easy access to modify the raw visibility string as well as workspace ids.

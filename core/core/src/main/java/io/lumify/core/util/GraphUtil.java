@@ -135,7 +135,7 @@ public class GraphUtil {
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {
             propertyMetadata = oldProperty.getMetadata();
-            if (oldProperty.getName().equals(propertyName) && oldProperty.getValue().equals(value)) {
+            if (oldProperty.getName().equals(propertyName) && oldProperty.getKey().equals(propertyKey)) {
                 element.removeProperty(propertyKey, propertyName, authorizations);
                 graph.flush();
             }

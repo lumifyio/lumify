@@ -73,7 +73,7 @@ define([
             ontologyService.concepts().done(function(concepts) {
                 concepts = self.transformConcepts(concepts);
 
-                concepts.splice(0, 1, self.attr.defaultText);
+                concepts.splice(0, 0, self.attr.defaultText);
 
                 self.select('fieldSelector')
                     .attr('placeholder', self.attr.defaultText)
@@ -134,6 +134,7 @@ define([
                     }
 
                     if (self.attr.restrictConcept) {
+
                         // Walk up tree to see if any match
                         var parentConceptId = c.id,
                             shouldRestrictConcept = true;

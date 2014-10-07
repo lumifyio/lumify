@@ -1238,7 +1238,7 @@ define([
                                 { name: 'http://lumify.io#conceptType', value: info['http://lumify.io#conceptType'] },
                             ];
 
-                            id = info.graphVertexId || info.id || vertexId;
+                            id = vertexId;
 
                             if (!(id in self.cachedVertices)) {
                                 // Insert stub, since this is synchronous, but
