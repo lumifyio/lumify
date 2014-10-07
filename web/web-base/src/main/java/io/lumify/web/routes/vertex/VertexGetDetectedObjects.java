@@ -5,12 +5,13 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.DetectedObjects;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
+import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.util.IterableUtils;
 
@@ -21,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 // This route will no longer be needed once we refactor detected objects.
 public class VertexGetDetectedObjects extends BaseRequestHandler {
     private final Graph graph;
-    private final UserRepository userRepository;
 
     @Inject
     public VertexGetDetectedObjects(
@@ -31,7 +31,6 @@ public class VertexGetDetectedObjects extends BaseRequestHandler {
             final WorkspaceRepository workspaceRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -49,15 +48,15 @@ public class VertexGetDetectedObjects extends BaseRequestHandler {
             return;
         }
 
-        Iterable detectedObjectProperties = vertex.getProperties(propertyName);
+        DetectedObjects detectedObjects = new DetectedObjects();
+        Iterable<Property> detectedObjectProperties = vertex.getProperties(propertyName);
         if (detectedObjectProperties == null || IterableUtils.count(detectedObjectProperties) == 0) {
             respondWithNotFound(response, String.format("property %s not found on vertex %s", propertyName, vertex.getId()));
             return;
         }
+        detectedObjects.addDetectedObjects(ClientApiConverter.toClientApiProperties(detectedObjectProperties, workspaceId));
 
-        JSONObject json = new JSONObject();
-        json.put("detectedObjects", JsonSerializer.toJsonProperties(detectedObjectProperties, workspaceId));
-        respondWithJson(response, json);
+        respondWith(response, detectedObjects);
     }
 
 }

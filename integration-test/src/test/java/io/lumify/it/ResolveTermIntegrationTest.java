@@ -4,10 +4,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.model.Element;
-import io.lumify.web.clientapi.model.TermMentionsResponse;
-import io.lumify.web.clientapi.model.WorkspaceDiff;
+import io.lumify.web.clientapi.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -151,7 +148,7 @@ public class ResolveTermIntegrationTest extends TestBase {
 
         String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("highlightedText: %s", highlightedText);
-        Element.Property davidSingleyEdgeId = getProperty(davidSingleyTermMention.getProperties(), "", "http://lumify.io/termMention#resolvedEdgeId");
+        Property davidSingleyEdgeId = getProperty(davidSingleyTermMention.getProperties(), "", "http://lumify.io/termMention#resolvedEdgeId");
         String davidSingleyEdgeIdValue = (String) davidSingleyEdgeId.getValue();
         assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && highlightedText.contains(davidSingleyEdgeIdValue));
 
@@ -168,7 +165,7 @@ public class ResolveTermIntegrationTest extends TestBase {
 
     private Element findDavidSingleyTermMention(TermMentionsResponse termMentions) {
         for (Element termMention : termMentions.getTermMentions()) {
-            for (Element.Property property : termMention.getProperties()) {
+            for (Property property : termMention.getProperties()) {
                 if (property.getName().equals(LumifyProperties.TERM_MENTION_TITLE.getPropertyName())) {
                     if ("David Singley".equals(property.getValue())) {
                         return termMention;

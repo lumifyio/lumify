@@ -6,11 +6,7 @@ import io.lumify.tesseract.TesseractGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.VertexApiExt;
-import io.lumify.web.clientapi.codegen.model.DetectedObject;
-import io.lumify.web.clientapi.codegen.model.DetectedObjectValue;
-import io.lumify.web.clientapi.codegen.model.DetectedObjects;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.model.Element;
+import io.lumify.web.clientapi.model.*;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +48,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
 
         Element vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         boolean foundTesseractText = false;
-        for (Element.Property prop : vertex.getProperties()) {
+        for (Property prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
                 String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, prop.getKey());
@@ -122,7 +118,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
 
         detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
         assertEquals(16, detectedObjects.getDetectedObjects().size());
-        DetectedObject susanDetectedObject = findResolvedDetectedObject(detectedObjects, x1, x2, y1, y2);
+        Property susanDetectedObject = findResolvedDetectedObject(detectedObjects, x1, x2, y1, y2);
         assertNotNull(susanDetectedObject);
 
         // Unresolving a detected object not found by opencv
@@ -133,7 +129,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         assertNull(susanDetectedObject);
 
         // Resolving a detected object that opencv found
-        DetectedObjectValue testDetectedObjectValue = detectedObjects.getDetectedObjects().get(0).getValue();
+        DetectedObject testDetectedObjectValue = DetectedObject.fromProperty(detectedObjects.getDetectedObjects().get(0));
         x1 = testDetectedObjectValue.getX1();
         x2 = testDetectedObjectValue.getX2();
         y1 = testDetectedObjectValue.getY1();
@@ -154,7 +150,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         );
         detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
         assertEquals(16, detectedObjects.getDetectedObjects().size());
-        DetectedObject joeDetectedObject = findResolvedDetectedObject(detectedObjects, x1, x2, y1, y2);
+        Property joeDetectedObject = findResolvedDetectedObject(detectedObjects, x1, x2, y1, y2);
         assertNotNull(joeDetectedObject);
 
         // Re-resolve a detected object
@@ -163,7 +159,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
                 "Jeff",
                 CONCEPT_TEST_PERSON,
                 "auth1",
-                joeDetectedObject.getValue().getResolvedVertexId(),
+                DetectedObject.fromProperty(joeDetectedObject).getResolvedVertexId(),
                 null,
                 null,
                 testDetectedObjectValue.getOriginalPropertyKey(),
@@ -174,12 +170,12 @@ public class UploadImageFileIntegrationTest extends TestBase {
         );
         detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
         assertEquals(16, detectedObjects.getDetectedObjects().size());
-        List<DetectedObject> jeffDetectedObjects = findResolvedDetectedObjects(detectedObjects, x1, x2, y1, y2);
+        List<Property> jeffDetectedObjects = findResolvedDetectedObjects(detectedObjects, x1, x2, y1, y2);
         assertNotNull(jeffDetectedObjects);
         assertEquals(1, jeffDetectedObjects.size());
 
         // Unresolving a detected object that opencv found
-        DetectedObject jeffDetectedObject = jeffDetectedObjects.get(0);
+        Property jeffDetectedObject = jeffDetectedObjects.get(0);
         lumifyApi.getVertexApi().unresolveDetectedObject(artifactVertexId, jeffDetectedObject.getKey());
         detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
         assertEquals(15, detectedObjects.getDetectedObjects().size());
@@ -187,12 +183,12 @@ public class UploadImageFileIntegrationTest extends TestBase {
         assertNull(jeffDetectedObject);
     }
 
-    private DetectedObject findResolvedDetectedObject(DetectedObjects detectedObjects, double x1, double x2, double y1, double y2) {
-        for (DetectedObject detectedObject : detectedObjects.getDetectedObjects()) {
+    private Property findResolvedDetectedObject(DetectedObjects detectedObjects, double x1, double x2, double y1, double y2) {
+        for (Property detectedObject : detectedObjects.getDetectedObjects()) {
             if (detectedObject.getValue() == null) {
                 continue;
             }
-            DetectedObjectValue detectedObjectValue = detectedObject.getValue();
+            DetectedObject detectedObjectValue = DetectedObject.fromProperty(detectedObject);
             if (detectedObjectValue.getX1() == x1 &&
                     detectedObjectValue.getX2() == x2 &&
                     detectedObjectValue.getY1() == y1 &&
@@ -204,13 +200,13 @@ public class UploadImageFileIntegrationTest extends TestBase {
         return null;
     }
 
-    private List<DetectedObject> findResolvedDetectedObjects(DetectedObjects detectedObjects, double x1, double x2, double y1, double y2) {
-        List<DetectedObject> detectedObjectList = new ArrayList<DetectedObject>();
-        for (DetectedObject detectedObject : detectedObjects.getDetectedObjects()) {
+    private List<Property> findResolvedDetectedObjects(DetectedObjects detectedObjects, double x1, double x2, double y1, double y2) {
+        List<Property> detectedObjectList = new ArrayList<Property>();
+        for (Property detectedObject : detectedObjects.getDetectedObjects()) {
             if (detectedObject.getValue() == null) {
                 continue;
             }
-            DetectedObjectValue detectedObjectValue = detectedObject.getValue();
+            DetectedObject detectedObjectValue = DetectedObject.fromProperty(detectedObject);
             if (detectedObjectValue.getX1() == x1 &&
                     detectedObjectValue.getX2() == x2 &&
                     detectedObjectValue.getY1() == y1 &&

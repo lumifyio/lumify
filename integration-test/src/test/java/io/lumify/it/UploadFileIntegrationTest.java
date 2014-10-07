@@ -7,6 +7,7 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.model.Element;
+import io.lumify.web.clientapi.model.Property;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -128,7 +129,7 @@ public class UploadFileIntegrationTest extends TestBase {
         assertNotNull("could not get vertex: " + artifactVertexId, artifactVertex);
         assertEquals(expectedVisibilitySource, artifactVertex.getVisibilitySource());
         assertEquals(artifactVertexId, artifactVertex.getId());
-        for (Element.Property property : artifactVertex.getProperties()) {
+        for (Property property : artifactVertex.getProperties()) {
             LOGGER.info("property: %s", property.toString());
         }
         assertEquals(11, artifactVertex.getProperties().size());

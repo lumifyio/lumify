@@ -3,9 +3,9 @@ package io.lumify.web.clientapi.codegen;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ApiInvoker;
 
+import io.lumify.web.clientapi.model.DetectedObjects;
 import io.lumify.web.clientapi.model.TermMentionsResponse;
 import io.lumify.web.clientapi.model.Element;
-import io.lumify.web.clientapi.codegen.model.DetectedObjects;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.codegen.model.GraphVertexSearchResult;
 import com.sun.jersey.multipart.FormDataMultiPart;

@@ -7,7 +7,7 @@ import io.lumify.test.LumifyTestCluster;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.UserNameOnlyLumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.Element;
+import io.lumify.web.clientapi.model.Property;
 import io.lumify.web.clientapi.model.WorkspaceDiff;
 import io.lumify.web.clientapi.model.WorkspacePublishResponse;
 import org.junit.After;
@@ -117,15 +117,15 @@ public class TestBase {
         return lumifyApi;
     }
 
-    protected void assertHasProperty(Iterable<Element.Property> properties, String propertyKey, String propertyName) {
-        Element.Property property = getProperty(properties, propertyKey, propertyName);
+    protected void assertHasProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
+        Property property = getProperty(properties, propertyKey, propertyName);
         if (property == null) {
             assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
         }
     }
 
-    protected Element.Property getProperty(Iterable<Element.Property> properties, String propertyKey, String propertyName) {
-        for (Element.Property property : properties) {
+    protected Property getProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
+        for (Property property : properties) {
             if (propertyKey.equals(property.getKey()) && propertyName.equals(property.getName())) {
                 return property;
             }
@@ -133,8 +133,8 @@ public class TestBase {
         return null;
     }
 
-    protected void assertHasProperty(Iterable<Element.Property> properties, String propertyKey, String propertyName, Object expectedValue) {
-        Element.Property property = getProperty(properties, propertyKey, propertyName);
+    protected void assertHasProperty(Iterable<Property> properties, String propertyKey, String propertyName, Object expectedValue) {
+        Property property = getProperty(properties, propertyKey, propertyName);
         if (property != null) {
             assertEquals("property value does not match for property " + propertyKey + ":" + propertyName, expectedValue, property.getValue());
         } else {
