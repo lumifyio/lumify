@@ -4,11 +4,10 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
-import io.lumify.web.clientapi.codegen.model.WorkspaceDiffItem;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.model.Element;
 import io.lumify.web.clientapi.model.TermMentionsResponse;
+import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -102,14 +101,14 @@ public class ResolveTermIntegrationTest extends TestBase {
         String edgeId = null;
         boolean foundEdgeDiffItem = false;
         boolean foundEdgeVisibilityJsonDiffItem = false;
-        for (WorkspaceDiffItem workspaceDiffItem : diff.getDiffs()) {
-            if (workspaceDiffItem.getType().equals("EdgeDiffItem")) {
+        for (WorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
+            if (workspaceDiffItem instanceof WorkspaceDiff.EdgeItem) {
                 foundEdgeDiffItem = true;
-                edgeId = workspaceDiffItem.getEdgeId();
+                edgeId = ((WorkspaceDiff.EdgeItem) workspaceDiffItem).getEdgeId();
             }
         }
-        for (WorkspaceDiffItem workspaceDiffItem : diff.getDiffs()) {
-            if (workspaceDiffItem.getType().equals("PropertyDiffItem") && workspaceDiffItem.getElementId().equals(edgeId)) {
+        for (WorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
+            if (workspaceDiffItem instanceof WorkspaceDiff.PropertyItem && ((WorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId)) {
                 foundEdgeVisibilityJsonDiffItem = true;
             }
         }

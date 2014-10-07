@@ -1,6 +1,6 @@
 package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
+import io.lumify.web.clientapi.model.WorkspaceDiff;
 import io.lumify.web.clientapi.model.Workspaces;
 import io.lumify.web.clientapi.model.Workspace;
 import io.lumify.web.clientapi.model.WorkspacePublishResponse;

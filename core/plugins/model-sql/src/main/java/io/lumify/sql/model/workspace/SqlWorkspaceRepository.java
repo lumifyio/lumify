@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.workspace.*;
-import io.lumify.core.model.workspace.diff.DiffItem;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceEntity;
+import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.model.workspace.WorkspaceUser;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -14,6 +16,7 @@ import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
+import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -312,8 +315,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public List<DiffItem> getDiff(Workspace workspace, User user) {
-        return new ArrayList<DiffItem>();
+    public WorkspaceDiff getDiff(Workspace workspace, User user) {
+        return new WorkspaceDiff();
     }
 
     @Override

@@ -14,8 +14,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.*;
-import io.lumify.core.model.workspace.diff.DiffItem;
-import io.lumify.core.model.workspace.diff.WorkspaceDiff;
+import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
@@ -23,6 +22,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.securegraph.model.user.SecureGraphUserRepository;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
+import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.util.ConvertingIterable;
@@ -45,7 +45,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     private String workspaceToUserRelationshipId;
     private UserRepository userRepository;
     private AuthorizationRepository authorizationRepository;
-    private WorkspaceDiff workspaceDiff;
+    private WorkspaceDiffHelper workspaceDiff;
     private final LockRepository lockRepository;
     private Cache<String, Boolean> usersWithReadAccessCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
@@ -60,7 +60,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             Graph graph,
             UserRepository userRepository,
             AuthorizationRepository authorizationRepository,
-            WorkspaceDiff workspaceDiff,
+            WorkspaceDiffHelper workspaceDiff,
             LockRepository lockRepository) {
         this.graph = graph;
         this.userRepository = userRepository;
@@ -433,14 +433,14 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public List<DiffItem> getDiff(final Workspace workspace, final User user) {
+    public WorkspaceDiff getDiff(final Workspace workspace, final User user) {
         if (!hasReadPermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
 
-        return lockRepository.lock(getLockName(workspace), new Callable<List<DiffItem>>() {
+        return lockRepository.lock(getLockName(workspace), new Callable<WorkspaceDiff>() {
             @Override
-            public List<DiffItem> call() throws Exception {
+            public WorkspaceDiff call() throws Exception {
                 List<WorkspaceEntity> workspaceEntities = findEntitiesNoLock(workspace, user);
                 List<Edge> workspaceEdges = toList(findEdges(workspace, workspaceEntities, user));
 

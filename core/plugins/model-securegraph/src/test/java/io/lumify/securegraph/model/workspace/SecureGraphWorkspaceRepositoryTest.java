@@ -10,7 +10,7 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.Relationship;
 import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
-import io.lumify.core.model.workspace.diff.WorkspaceDiff;
+import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.junit.Before;
@@ -58,7 +58,7 @@ public class SecureGraphWorkspaceRepositoryTest {
     private Relationship workspaceToUserRelationship;
 
     @Mock
-    private WorkspaceDiff workspaceDiff;
+    private WorkspaceDiffHelper workspaceDiff;
 
     private InMemoryUser user1;
 

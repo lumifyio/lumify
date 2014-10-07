@@ -1,20 +1,16 @@
 package io.lumify.web.routes.workspace;
 
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.model.workspace.diff.DiffItem;
 import io.lumify.core.user.User;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.miniweb.HandlerChain;
-import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.BaseRequestHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public class WorkspaceDiff extends BaseRequestHandler {
     private final WorkspaceRepository workspaceRepository;
@@ -32,16 +28,16 @@ public class WorkspaceDiff extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
+        io.lumify.web.clientapi.model.WorkspaceDiff diff = handle(workspaceId, user);
+        respondWith(response, diff);
+    }
+
+    public io.lumify.web.clientapi.model.WorkspaceDiff handle(String workspaceId, User user) {
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         if (workspace == null) {
-            respondWithNotFound(response);
-            return;
+            return null;
         }
 
-        List<DiffItem> diffItems = this.workspaceRepository.getDiff(workspace, user);
-        JSONObject result = new JSONObject();
-        JSONArray diffItemsJson = DiffItem.toJson(diffItems);
-        result.put("diffs", diffItemsJson);
-        respondWithJson(response, result);
+        return this.workspaceRepository.getDiff(workspace, user);
     }
 }

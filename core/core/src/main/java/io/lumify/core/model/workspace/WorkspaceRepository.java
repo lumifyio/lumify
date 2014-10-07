@@ -1,11 +1,11 @@
 package io.lumify.core.model.workspace;
 
 import io.lumify.core.exception.LumifyAccessDeniedException;
-import io.lumify.core.model.workspace.diff.DiffItem;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
+import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,7 +74,7 @@ public abstract class WorkspaceRepository {
 
     public abstract void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
-    public abstract List<DiffItem> getDiff(Workspace workspace, User user);
+    public abstract WorkspaceDiff getDiff(Workspace workspace, User user);
 
     public String getCreatorUserId(Workspace workspace, User user) {
         for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
