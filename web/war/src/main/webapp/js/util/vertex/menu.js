@@ -14,7 +14,6 @@ define([
 
         var ontologyService = new OntologyService(),
             DIVIDER = 'DIVIDER',
-            relatedSubmenuItems = null,
             items = [
                 {
                     cls: 'requires-EDIT',
@@ -55,9 +54,10 @@ define([
 
                 {
                     label: i18n('vertex.contextmenu.add_related'),
-                    submenu: (relatedSubmenuItems = [
-                        { label: 'Items', shortcut: 'alt+r', event: 'addRelatedItems', selection: 1 }
-                    ])
+                    event: 'addRelatedItems',
+                    shouldDisable: function(selection, vertexId, target) {
+                        return !appData.workspaceEditable
+                    }
                 },
 
                 DIVIDER,
@@ -74,34 +74,7 @@ define([
                     }
                 }
 
-            ],
-            concepts = ontologyService.concepts().done(function(concepts) {
-                var list = concepts.entityConcept.children || [];
-
-                if (list.length) {
-                    relatedSubmenuItems.push(DIVIDER);
-
-                    list.forEach(function(concept) {
-                        if (concept.userVisible !== false) {
-                            relatedSubmenuItems.push({
-                                shouldHide: function(vertex) {
-                                    var whitelist = vertex.concept.addRelatedConceptWhiteList;
-                                    if (whitelist && whitelist.length) {
-                                        return whitelist.indexOf(concept.id) === -1;
-                                    }
-                                    return false;
-                                },
-                                label: concept.pluralDisplayName,
-                                event: relatedSubmenuItems[0].event,
-                                selection: 1,
-                                args: {
-                                    limitParentConceptId: concept.id
-                                }
-                            })
-                        }
-                    });
-                }
-            });
+            ];
 
         this.defaultAttrs({
             menuSelector: '.vertex-menu a'

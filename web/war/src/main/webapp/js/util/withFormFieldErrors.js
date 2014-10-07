@@ -5,6 +5,10 @@ define(['tpl!./alert'], function(alertTemplate) {
 
     function withFormFieldErrors() {
 
+        this.clearFieldErrors = function(root) {
+            $(root || this.$node).find('.errors').empty();
+        };
+
         this.markFieldErrors = function(error, root) {
             var self = this,
                 rootEl = root || this.$node,

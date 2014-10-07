@@ -262,6 +262,7 @@ define([
         };
 
         this.onAddRelatedItems = function(event, data) {
+            var self = this;
 
             if (!data || _.isUndefined(data.vertexId)) {
                 if (this.selectedVertexIds.length === 1) {
@@ -271,93 +272,20 @@ define([
                 }
             }
 
-            var self = this,
-                req = null,
-                aborted = false,
-                cancelHandler = function() {
-                    aborted = true;
-                    if (req) {
-                        req.abort();
-                    }
-                    self.off('popovercancel');
-                },
-                LoadingPopover = null,
-                timeout = _.delay(function() {
-                    self.on('popovercancel', cancelHandler);
-                    self.trigger('hideInformation');
-                    require(['util/popovers/loading/loading'], function(LP) {
-                        LoadingPopover = LP;
-                        LoadingPopover.teardownAll();
-                        LoadingPopover.attachTo(event.target, {
-                            anchorTo: {
-                                vertexId: data.vertexId
-                            },
-                            message: i18n('lumify.add_related.loading')
-                        });
-                    });
-                }, 1000);
+            require(['util/popovers/addRelated/addRelated'], function(RP) {
+                var vertexId = data.vertexId;
 
-            this.trigger('displayInformation', { message: i18n('lumify.add_related.loading'), dismissDuration: 1000 });
+                RP.teardownAll();
 
-            $.when(
-                this.configService.getProperties(),
-                (
-                    req = this.vertexService.getRelatedVertices({
-                        graphVertexId: data.vertexId,
-                        limitParentConceptId: data.limitParentConceptId
-                    })
-                )
-            ).always(function() {
-                clearTimeout(timeout);
-                if (LoadingPopover) {
-                    LoadingPopover.teardownAll();
-                }
-                self.trigger('hideInformation');
-                self.off('popovercancel');
-            }).fail(function(r, statusText) {
-                if (statusText !== 'abort') {
-                    self.trigger('displayInformation', {
-                        message: 'Error Loading Related Items',
-                        dismiss: 'click',
-                        dismissDuration: 5000
-                    });
-                }
-            }).done(function(config, verticesResponse) {
-                if (aborted) {
-                    return;
-                }
-
-                var vertices = verticesResponse[0].vertices,
-                    count = verticesResponse[0].count,
-                    eventOptions = {
-                        options: {
-                            addingVerticesRelatedTo: data.vertexId
+                self.getVertexTitle(vertexId).done(function(title) {
+                    RP.attachTo(event.target, {
+                        title: title,
+                        relatedToVertexId: vertexId,
+                        anchorTo: {
+                            vertexId: vertexId
                         }
-                    },
-                    forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
-                    promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
-
-                if (count > 0 && (forceSearch || promptBeforeAdding)) {
-                    require(['util/popovers/loadRelated/loadRelated'], function(LoadRelated) {
-                        self.getVertexTitle(data.vertexId)
-                            .done(function(title) {
-                                LoadRelated.teardownAll();
-                                LoadRelated.attachTo(event.target, {
-                                    forceSearch: forceSearch,
-                                    count: count,
-                                    relatedToVertexId: data.vertexId,
-                                    title: title,
-                                    vertices: vertices,
-                                    eventOptions: eventOptions,
-                                    anchorTo: {
-                                        vertexId: data.vertexId
-                                    }
-                                });
-                            });
                     });
-                } else {
-                    self.trigger('addVertices', _.extend({ vertices: vertices }, eventOptions));
-                }
+                });
             });
         };
 
