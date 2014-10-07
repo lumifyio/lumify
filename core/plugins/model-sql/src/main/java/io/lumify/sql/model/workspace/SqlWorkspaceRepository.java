@@ -15,6 +15,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
+import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.hibernate.HibernateException;
@@ -183,7 +184,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
         Session session = sessionManager.getSession();
         SqlWorkspace sqlWorkspace = (SqlWorkspace) session.get(SqlWorkspace.class, workspace.getWorkspaceId());
-        List<WorkspaceEntity> workspaceEntities = new ArrayList<WorkspaceEntity>();
+        List<WorkspaceEntity> workspaceEntities;
         List<SqlWorkspaceVertex> sqlWorkspaceVertices = sqlWorkspace.getSqlWorkspaceVertices();
         workspaceEntities = toList(new ConvertingIterable<SqlWorkspaceVertex, WorkspaceEntity>(sqlWorkspaceVertices) {
             @Override
@@ -221,7 +222,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
+    public void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, GraphPosition graphPosition, User user) {
         checkNotNull(workspace, "Workspace cannot be null");
 
         if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
@@ -241,7 +242,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 throw new LumifyException("more than one vertex was returned");
             } else if (vertices.size() == 0) {
                 sqlWorkspaceVertex = new SqlWorkspaceVertex();
-                sqlWorkspaceVertex.setVertexId(vertexId.toString());
+                sqlWorkspaceVertex.setVertexId(vertexId);
                 sqlWorkspaceVertex.setWorkspace((SqlWorkspace) workspace);
                 ((SqlWorkspace) workspace).getSqlWorkspaceVertices().add(sqlWorkspaceVertex);
                 session.update(workspace);
@@ -249,8 +250,10 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 sqlWorkspaceVertex = (SqlWorkspaceVertex) vertices.get(0);
             }
             sqlWorkspaceVertex.setVisible(visible);
-            sqlWorkspaceVertex.setGraphPositionX(graphPositionX);
-            sqlWorkspaceVertex.setGraphPositionY(graphPositionY);
+            if (graphPosition != null) {
+                sqlWorkspaceVertex.setGraphPositionX(graphPosition.getX());
+                sqlWorkspaceVertex.setGraphPositionY(graphPosition.getY());
+            }
             session.saveOrUpdate(sqlWorkspaceVertex);
             transaction.commit();
         } catch (HibernateException e) {

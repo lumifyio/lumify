@@ -21,6 +21,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.securegraph.model.user.SecureGraphUserRepository;
+import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.securegraph.*;
@@ -267,7 +268,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(final Workspace workspace, final String vertexId, final Boolean visible, final Integer graphPositionX, final Integer graphPositionY, final User user) {
+    public void updateEntityOnWorkspace(final Workspace workspace, final String vertexId, final Boolean visible, final GraphPosition graphPosition, final User user) {
         if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
@@ -291,9 +292,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 if (existingEdges.size() > 0) {
                     for (Edge existingEdge : existingEdges) {
                         ElementMutation<Edge> m = existingEdge.prepareMutation();
-                        if (graphPositionX != null && graphPositionY != null) {
-                            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(m, graphPositionX, VISIBILITY.getVisibility());
-                            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(m, graphPositionY, VISIBILITY.getVisibility());
+                        if (graphPosition != null) {
+                            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(m, graphPosition.getX(), VISIBILITY.getVisibility());
+                            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(m, graphPosition.getY(), VISIBILITY.getVisibility());
                         }
                         if (visible != null) {
                             WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(m, visible, VISIBILITY.getVisibility());
@@ -302,9 +303,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                     }
                 } else {
                     EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, otherVertex, workspaceToEntityRelationshipId, VISIBILITY.getVisibility());
-                    if (graphPositionX != null && graphPositionY != null) {
-                        WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPositionX, VISIBILITY.getVisibility());
-                        WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(edgeBuilder, graphPositionY, VISIBILITY.getVisibility());
+                    if (graphPosition != null) {
+                        WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPosition.getX(), VISIBILITY.getVisibility());
+                        WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(edgeBuilder, graphPosition.getY(), VISIBILITY.getVisibility());
                     }
                     if (visible != null) {
                         WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edgeBuilder, visible, VISIBILITY.getVisibility());

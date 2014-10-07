@@ -1,8 +1,6 @@
 package io.lumify.web.clientapi.codegen;
 
 import io.lumify.web.clientapi.LumifyClientApiException;
-import io.lumify.web.clientapi.codegen.model.WorkspaceUpdateData;
-import io.lumify.web.clientapi.codegen.model.WorkspaceUserUpdate;
 import io.lumify.web.clientapi.model.*;
 
 import java.util.ArrayList;
@@ -49,9 +47,9 @@ public class WorkspaceApiExt extends WorkspaceApi {
         }
     }
 
-    public void setUserAccess(String userId, String access) throws ApiException {
+    public void setUserAccess(String userId, WorkspaceAccess access) throws ApiException {
         WorkspaceUpdateData addUser2WorkspaceUpdate = new WorkspaceUpdateData();
-        WorkspaceUserUpdate addUser2Update = new WorkspaceUserUpdate();
+        WorkspaceUpdateData.UserUpdate addUser2Update = new WorkspaceUpdateData.UserUpdate();
         addUser2Update.setUserId(userId);
         addUser2Update.setAccess(access);
         addUser2WorkspaceUpdate.getUserUpdates().add(addUser2Update);

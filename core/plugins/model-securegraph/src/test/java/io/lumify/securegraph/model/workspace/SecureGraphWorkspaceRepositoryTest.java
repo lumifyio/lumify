@@ -12,6 +12,7 @@ import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.junit.Before;
 import org.junit.Test;
@@ -247,7 +248,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edges between workspaces and users
 
         try {
-            workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 100, 100, user2);
+            workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, new GraphPosition(100, 100), user2);
             fail("user2 should not have write access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
@@ -255,11 +256,11 @@ public class SecureGraphWorkspaceRepositoryTest {
         }
 
         idGenerator.push(workspaceId + "_to_" + entity1Vertex.getId());
-        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 100, 200, user1);
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, new GraphPosition(100, 200), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
 
-        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 200, 300, user1);
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, new GraphPosition(200, 300), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
 

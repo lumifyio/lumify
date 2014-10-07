@@ -121,7 +121,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
             graph.flush();
 
-            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), null, null, null, user);
+            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), null, null, user);
         } else {
             resolvedVertex = graph.getVertex(graphVertexId, authorizations);
             resolvedVertexMutation = resolvedVertex.prepareMutation();

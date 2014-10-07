@@ -139,8 +139,8 @@ public class VertexUploadImage extends BaseRequestHandler {
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, artifactVertex.getId(), null, null, null, user);
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, artifactVertex.getId(), null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, user);
 
         graph.flush();
         workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(),

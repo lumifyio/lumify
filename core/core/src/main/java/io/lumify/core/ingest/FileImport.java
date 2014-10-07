@@ -150,7 +150,7 @@ public class FileImport {
             graph.flush();
 
             if (workspace != null) {
-                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, null, user);
+                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, user);
             }
 
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId());

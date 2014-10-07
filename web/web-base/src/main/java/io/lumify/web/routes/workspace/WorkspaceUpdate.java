@@ -4,18 +4,21 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
-import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
+import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
+import io.lumify.web.clientapi.model.WorkspaceUpdateData;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public class WorkspaceUpdate extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUpdate.class);
@@ -43,23 +46,19 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             return;
         }
 
-        JSONObject dataJson = new JSONObject(data);
+        WorkspaceUpdateData updateData = ObjectMapperFactory.getInstance().readValue(data, WorkspaceUpdateData.class);
 
-        if (dataJson.has("title")) {
-            setTitle(workspace, dataJson.getString("title"), authUser);
+        if (updateData.getTitle() != null) {
+            setTitle(workspace, updateData.getTitle(), authUser);
         }
 
-        JSONArray entityUpdates = dataJson.getJSONArray("entityUpdates");
-        updateEntities(workspace, entityUpdates, authUser);
+        updateEntities(workspace, updateData.getEntityUpdates(), authUser);
 
-        JSONArray entityDeletes = dataJson.getJSONArray("entityDeletes");
-        deleteEntities(workspace, entityDeletes, authUser);
+        deleteEntities(workspace, updateData.getEntityDeletes(), authUser);
 
-        JSONArray userUpdates = dataJson.getJSONArray("userUpdates");
-        updateUsers(workspace, userUpdates, authUser);
+        updateUsers(workspace, updateData.getUserUpdates(), authUser);
 
-        JSONArray userDeletes = dataJson.getJSONArray("userDeletes");
-        deleteUsers(workspace, userDeletes, authUser);
+        deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("result", "OK");
@@ -71,45 +70,35 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         workspaceRepository.setTitle(workspace, title, authUser);
     }
 
-    private void deleteUsers(Workspace workspace, JSONArray userDeletes, User authUser) {
-        for (int i = 0; i < userDeletes.length(); i++) {
-            String userId = userDeletes.getString(i);
+    private void deleteUsers(Workspace workspace, List<String> userDeletes, User authUser) {
+        for (String userId : userDeletes) {
             LOGGER.debug("user delete (%s): %s", workspace.getWorkspaceId(), userId);
             workspaceRepository.deleteUserFromWorkspace(workspace, userId, authUser);
         }
     }
 
-    private void updateUsers(Workspace workspace, JSONArray userUpdates, User authUser) {
-        for (int i = 0; i < userUpdates.length(); i++) {
-            JSONObject update = userUpdates.getJSONObject(i);
+    private void updateUsers(Workspace workspace, List<WorkspaceUpdateData.UserUpdate> userUpdates, User authUser) {
+        for (WorkspaceUpdateData.UserUpdate update : userUpdates) {
             LOGGER.debug("user update (%s): %s", workspace.getWorkspaceId(), update.toString());
-            String userId = update.getString("userId");
-            WorkspaceAccess workspaceAccess = WorkspaceAccess.valueOf(update.getString("access"));
+            String userId = update.getUserId();
+            WorkspaceAccess workspaceAccess = update.getAccess();
             workspaceRepository.updateUserOnWorkspace(workspace, userId, workspaceAccess, authUser);
         }
     }
 
-    private void deleteEntities(Workspace workspace, JSONArray entityDeletes, User authUser) {
-        for (int i = 0; i < entityDeletes.length(); i++) {
-            String entityId = entityDeletes.getString(i);
+    private void deleteEntities(Workspace workspace, List<String> entityDeletes, User authUser) {
+        for (String entityId : entityDeletes) {
             LOGGER.debug("workspace delete (%s): %s", workspace.getWorkspaceId(), entityId);
             workspaceRepository.softDeleteEntityFromWorkspace(workspace, entityId, authUser);
         }
     }
 
-    private void updateEntities(Workspace workspace, JSONArray entityUpdates, User authUser) {
-        for (int i = 0; i < entityUpdates.length(); i++) {
-            JSONObject update = entityUpdates.getJSONObject(i);
+    private void updateEntities(Workspace workspace, List<WorkspaceUpdateData.EntityUpdate> entityUpdates, User authUser) {
+        for (WorkspaceUpdateData.EntityUpdate update : entityUpdates) {
             LOGGER.debug("workspace update (%s): %s", workspace.getWorkspaceId(), update.toString());
-            String entityId = update.getString("vertexId");
-            JSONObject graphPosition = update.optJSONObject("graphPosition");
-            Integer graphPositionX = null;
-            Integer graphPositionY = null;
-            if (graphPosition != null) {
-                graphPositionX = graphPosition.getInt("x");
-                graphPositionY = graphPosition.getInt("y");
-            }
-            workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPositionX, graphPositionY, authUser);
+            String entityId = update.getVertexId();
+            GraphPosition graphPosition = update.getGraphPosition();
+            workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPosition, authUser);
         }
     }
 }

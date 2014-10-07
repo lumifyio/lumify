@@ -61,14 +61,14 @@ public abstract class WorkspaceRepository {
         Workspace newWorkspace = add("Copy of " + workspace.getDisplayTitle(), destinationUser);
         List<WorkspaceEntity> entities = findEntities(workspace, user);
         for (WorkspaceEntity entity : entities) {
-            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.isVisible(), entity.getGraphPositionX(), entity.getGraphPositionY(), destinationUser);
+            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.isVisible(), new GraphPosition(entity.getGraphPositionX(), entity.getGraphPositionY()), destinationUser);
         }
         return newWorkspace;
     }
 
     public abstract void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user);
 
-    public abstract void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
+    public abstract void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, GraphPosition graphPosition, User user);
 
     public abstract void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 

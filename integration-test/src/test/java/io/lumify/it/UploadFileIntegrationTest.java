@@ -89,7 +89,7 @@ public class UploadFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi;
         lumifyApi = login(USERNAME_TEST_USER_1);
         lumifyApi.setWorkspaceId(workspaceId);
-        lumifyApi.getWorkspaceApi().setUserAccess(user2Id, "READ");
+        lumifyApi.getWorkspaceApi().setUserAccess(user2Id, WorkspaceAccess.READ);
         lumifyApi.logout();
     }
 

@@ -78,7 +78,7 @@ public class VertexNew extends BaseRequestHandler {
         Vertex vertex = vertexBuilder.save(authorizations);
         this.graph.flush();
 
-        getWorkspaceRepository().updateEntityOnWorkspace(workspace, vertex.getId(), true, null, null, user);
+        getWorkspaceRepository().updateEntityOnWorkspace(workspace, vertex.getId(), true, null, user);
         this.graph.flush();
 
         LOGGER.debug("Created new empty vertex with id: %s", vertex.getId());
