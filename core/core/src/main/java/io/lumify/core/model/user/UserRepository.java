@@ -4,9 +4,11 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
+import io.lumify.core.util.JSONUtil;
+import io.lumify.web.clientapi.model.Privilege;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.accumulo.core.security.Authorizations;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,6 +82,41 @@ public abstract class UserRepository {
         json.put("privileges", Privilege.toJson(privileges));
 
         return json;
+    }
+
+    public io.lumify.web.clientapi.model.User toClientApiWithAuths(User user) {
+        io.lumify.web.clientapi.model.User u = toClientApi(user);
+
+        for (String a : getAuthorizations(user).getAuthorizations()) {
+            u.addAuthorization(a);
+        }
+
+        u.setUiPreferences(JSONUtil.toJsonNode(user.getUiPreferences()));
+
+        Set<Privilege> privileges = getPrivileges(user);
+        u.getPrivileges().addAll(privileges);
+
+        return u;
+    }
+
+    private io.lumify.web.clientapi.model.User toClientApi(User user) {
+        return toClientApi(user, null);
+    }
+
+    private io.lumify.web.clientapi.model.User toClientApi(User user, Map<String, String> workspaceNames) {
+        io.lumify.web.clientapi.model.User u = new io.lumify.web.clientapi.model.User();
+        u.setId(user.getUserId());
+        u.setUserName(user.getUsername());
+        u.setDisplayName(user.getDisplayName());
+        u.setStatus(user.getUserStatus());
+        u.setUserType(user.getUserType());
+        u.setEmail(user.getEmailAddress());
+        u.setCurrentWorkspaceId(user.getCurrentWorkspaceId());
+        if (workspaceNames != null) {
+            String workspaceName = workspaceNames.get(user.getCurrentWorkspaceId());
+            u.setCurrentWorkspaceName(workspaceName);
+        }
+        return u;
     }
 
     protected String formatUsername(String username) {
@@ -189,6 +226,4 @@ public abstract class UserRepository {
         }
         return foundUsers;
     }
-
-
 }

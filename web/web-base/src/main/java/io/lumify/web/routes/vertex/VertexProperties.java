@@ -37,11 +37,6 @@ public class VertexProperties extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
 
         Element element = handle(graphVertexId, workspaceId, authorizations);
-
-        if (element == null) {
-            respondWithNotFound(response);
-            return;
-        }
         respondWith(response, element);
     }
 

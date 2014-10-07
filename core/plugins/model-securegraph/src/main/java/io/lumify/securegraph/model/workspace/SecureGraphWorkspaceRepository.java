@@ -22,6 +22,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.securegraph.model.user.SecureGraphUserRepository;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.util.ConvertingIterable;

@@ -3,7 +3,7 @@ package io.lumify.web;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.user.UserStatus;
+import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;

@@ -6,7 +6,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserListenerUtil;
 import io.lumify.core.model.user.UserPasswordUtil;
-import io.lumify.core.model.user.UserStatus;
+import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.workspace.SqlWorkspace;
@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public class SqlUserRepositoryTest {

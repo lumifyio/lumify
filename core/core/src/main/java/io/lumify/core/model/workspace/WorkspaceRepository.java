@@ -4,6 +4,8 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.workspace.diff.DiffItem;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -146,6 +148,56 @@ public abstract class WorkspaceRepository {
             }
 
             return workspaceJson;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public io.lumify.web.clientapi.model.Workspace toClientApi(Workspace workspace, User user, boolean includeVertices) {
+        checkNotNull(workspace, "workspace cannot be null");
+        checkNotNull(user, "user cannot be null");
+
+        try {
+            io.lumify.web.clientapi.model.Workspace workspaceClientApi = new io.lumify.web.clientapi.model.Workspace();
+            workspaceClientApi.setWorkspaceId(workspace.getWorkspaceId());
+            workspaceClientApi.setTitle(workspace.getDisplayTitle());
+
+            String creatorUserId = getCreatorUserId(workspace, user);
+            if (creatorUserId != null) {
+                workspaceClientApi.setCreatedBy(creatorUserId);
+                workspaceClientApi.setSharedToUser(!creatorUserId.equals(user.getUserId()));
+            }
+            workspaceClientApi.setEditable(hasWritePermissions(workspace.getWorkspaceId(), user));
+
+            for (WorkspaceUser u : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
+                String userId = u.getUserId();
+                io.lumify.web.clientapi.model.Workspace.User workspaceUser = new io.lumify.web.clientapi.model.Workspace.User();
+                workspaceUser.setUserId(userId);
+                workspaceUser.setAccess(u.getWorkspaceAccess());
+                workspaceClientApi.addUser(workspaceUser);
+            }
+
+            if (includeVertices) {
+                for (WorkspaceEntity workspaceEntity : findEntities(workspace, user)) {
+                    if (!workspaceEntity.isVisible()) {
+                        continue;
+                    }
+
+                    io.lumify.web.clientapi.model.Workspace.Vertex v = new io.lumify.web.clientapi.model.Workspace.Vertex();
+                    v.setVertexId(workspaceEntity.getEntityVertexId());
+
+                    Integer graphPositionX = workspaceEntity.getGraphPositionX();
+                    Integer graphPositionY = workspaceEntity.getGraphPositionY();
+                    if (graphPositionX != null && graphPositionY != null) {
+                        GraphPosition graphPosition = new GraphPosition(graphPositionX, graphPositionY);
+                        v.setGraphPosition(graphPosition);
+                    }
+
+                    workspaceClientApi.addVertex(v);
+                }
+            }
+
+            return workspaceClientApi;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

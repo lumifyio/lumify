@@ -1,8 +1,9 @@
 package io.lumify.securegraph.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.core.model.user.UserType;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.UserStatus;
+import io.lumify.web.clientapi.model.UserType;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.User;
 import org.json.JSONObject;
 
@@ -23,7 +24,7 @@ public class SecureGraphUser implements User, Serializable {
     private Date previousLoginDate;
     private String previousLoginRemoteAddr;
     private int loginCount;
-    private String userStatus;
+    private UserStatus userStatus;
     private Set<Privilege> privileges;
     private String currentWorkspaceId;
     private JSONObject preferences;
@@ -33,7 +34,7 @@ public class SecureGraphUser implements User, Serializable {
 
     }
 
-    public SecureGraphUser(String userId, String username, String displayName, String emailAddress, Date createDate, Date currentLoginDate, String currentLoginRemoteAddr, Date previousLoginDate, String previousLoginRemoteAddr, int loginCount, ModelUserContext modelUserContext, String userStatus, Set<Privilege> privileges, String currentWorkspaceId, JSONObject preferences) {
+    public SecureGraphUser(String userId, String username, String displayName, String emailAddress, Date createDate, Date currentLoginDate, String currentLoginRemoteAddr, Date previousLoginDate, String previousLoginRemoteAddr, int loginCount, ModelUserContext modelUserContext, UserStatus userStatus, Set<Privilege> privileges, String currentWorkspaceId, JSONObject preferences) {
         this.userId = userId;
         this.username = username;
         this.displayName = displayName;
@@ -98,11 +99,11 @@ public class SecureGraphUser implements User, Serializable {
     }
 
     @Override
-    public String getUserStatus() {
+    public UserStatus getUserStatus() {
         return userStatus;
     }
 
-    public void setUserStatus(String status) {
+    public void setUserStatus(UserStatus status) {
         this.userStatus = status;
     }
 

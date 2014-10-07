@@ -1,4 +1,4 @@
-package io.lumify.core.user;
+package io.lumify.web.clientapi.model;
 
 import com.google.common.base.Joiner;
 import org.json.JSONArray;

@@ -7,7 +7,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserListenerUtil;
 import io.lumify.core.model.workspace.Workspace;
-import io.lumify.core.model.workspace.WorkspaceAccess;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceUser;
 import io.lumify.sql.model.HibernateSessionManager;

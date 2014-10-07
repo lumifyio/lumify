@@ -199,7 +199,6 @@ public class VertexApiExt extends VertexApi {
         public void deleteTempFiles() {
             if (file != null) {
                 safeDelete(file);
-                safeDelete(file.getParentFile());
             }
         }
     }

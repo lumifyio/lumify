@@ -1,4 +1,4 @@
-package io.lumify.core.model.user;
+package io.lumify.web.clientapi.model;
 
 public enum UserStatus {
     ONLINE,

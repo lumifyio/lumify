@@ -12,11 +12,12 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.*;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.securegraph.Graph;
@@ -90,7 +91,7 @@ public class SecureGraphUserRepository extends UserRepository {
         int loginCount = UserLumifyProperties.LOGIN_COUNT.getPropertyValue(user, 0);
         String[] authorizations = toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
-        String userStatus = UserLumifyProperties.STATUS.getPropertyValue(user);
+        UserStatus userStatus = UserStatus.valueOf(UserLumifyProperties.STATUS.getPropertyValue(user));
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
         JSONObject preferences = UserLumifyProperties.UI_PREFERENCES.getPropertyValue(user);
@@ -245,7 +246,7 @@ public class SecureGraphUserRepository extends UserRepository {
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         UserLumifyProperties.STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility(), authorizations);
         graph.flush();
-        user.setUserStatus(status.toString());
+        user.setUserStatus(status);
         return user;
     }
 

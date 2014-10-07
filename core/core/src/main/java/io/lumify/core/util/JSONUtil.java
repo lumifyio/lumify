@@ -1,12 +1,20 @@
 package io.lumify.core.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyJsonParseException;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class JSONUtil {
+    private static ObjectMapper mapper = ObjectMapperFactory.getInstance();
+
     public static JSONArray getOrCreateJSONArray(JSONObject json, String name) {
         JSONArray arr = json.optJSONArray(name);
         if (arr == null) {
@@ -55,6 +63,17 @@ public class JSONUtil {
             return new JSONObject(jsonString);
         } catch (JSONException ex) {
             throw new LumifyJsonParseException(jsonString, ex);
+        }
+    }
+
+    public static JsonNode toJsonNode(JSONObject json) {
+        try {
+            if (json == null) {
+                return null;
+            }
+            return mapper.readTree(json.toString());
+        } catch (IOException e) {
+            throw new LumifyException("Could not create json node from: " + json.toString(), e);
         }
     }
 }

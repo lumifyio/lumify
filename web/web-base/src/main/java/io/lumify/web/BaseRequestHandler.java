@@ -8,12 +8,13 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.miniweb.App;
 import io.lumify.miniweb.Handler;
 import io.lumify.miniweb.HandlerChain;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -43,7 +44,7 @@ public abstract class BaseRequestHandler implements Handler {
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
     private final Configuration configuration;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = ObjectMapperFactory.getInstance();
 
     protected BaseRequestHandler(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {
         this.userRepository = userRepository;
@@ -357,7 +358,11 @@ public abstract class BaseRequestHandler implements Handler {
         configureResponse(ResponseTypes.JSON_OBJECT, response, jsonObject);
     }
 
-    protected void respondWith(HttpServletResponse response, Object obj) {
+    protected void respondWith(HttpServletResponse response, Object obj) throws IOException {
+        if (obj == null) {
+            respondWithNotFound(response);
+            return;
+        }
         try {
             String jsonObject = objectMapper.writeValueAsString(obj);
             configureResponse(ResponseTypes.JSON_OBJECT, response, jsonObject);

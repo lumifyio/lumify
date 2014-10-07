@@ -1,17 +1,13 @@
 package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.codegen.ApiInvoker;
-
 import io.lumify.web.clientapi.codegen.model.WorkspaceDiff;
-import io.lumify.web.clientapi.codegen.model.Workspaces;
-import io.lumify.web.clientapi.codegen.model.Workspace;
+import io.lumify.web.clientapi.model.Workspaces;
+import io.lumify.web.clientapi.model.Workspace;
 import io.lumify.web.clientapi.model.WorkspacePublishResponse;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
 
-import java.io.File;
 import java.util.*;
 
 public class WorkspaceApi {

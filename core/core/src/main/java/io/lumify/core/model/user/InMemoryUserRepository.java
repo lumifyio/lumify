@@ -1,9 +1,10 @@
 package io.lumify.core.model.user;
 
 import io.lumify.core.config.Configuration;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.inmemory.InMemoryAuthorizations;

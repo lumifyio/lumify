@@ -1,8 +1,8 @@
 package io.lumify.sql.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.core.model.user.UserType;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.UserType;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import io.lumify.sql.model.workspace.SqlWorkspaceUser;

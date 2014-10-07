@@ -1,4 +1,4 @@
-package io.lumify.core.model.workspace;
+package io.lumify.web.clientapi.model;
 
 public enum WorkspaceAccess {
     NONE,

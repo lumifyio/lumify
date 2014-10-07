@@ -110,7 +110,7 @@ public class Router extends HttpServlet {
             app.get("/edge/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeAudit.class);
 
             app.get("/workspace/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
-            app.post("/workspace/create", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceNew.class);
+            app.post("/workspace/create", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceCreate.class);
             app.get("/workspace/diff", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceDiff.class);
             app.get("/workspace/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceEdges.class);
             app.post("/workspace/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceEdges.class); // this is a post method to allow large data (ie data larger than would fit in the URL)

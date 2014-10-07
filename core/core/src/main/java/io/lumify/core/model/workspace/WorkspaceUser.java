@@ -1,5 +1,7 @@
 package io.lumify.core.model.workspace;
 
+import io.lumify.web.clientapi.model.WorkspaceAccess;
+
 public class WorkspaceUser {
     private final String userId;
     private final WorkspaceAccess workspaceAccess;

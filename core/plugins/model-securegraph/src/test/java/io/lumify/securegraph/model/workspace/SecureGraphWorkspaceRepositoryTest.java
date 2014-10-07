@@ -12,6 +12,7 @@ import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiff;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

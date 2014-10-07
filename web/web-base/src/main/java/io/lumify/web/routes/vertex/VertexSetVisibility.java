@@ -65,10 +65,6 @@ public class VertexSetVisibility extends BaseRequestHandler {
         }
 
         Element element = handle(graphVertexId, visibilitySource, workspaceId, user, authorizations);
-        if (element == null) {
-            respondWithNotFound(response);
-            return;
-        }
         respondWith(response, element);
     }
 

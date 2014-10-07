@@ -1,15 +1,14 @@
 package io.lumify.web.routes.workspace;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.Workspaces;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,25 +28,25 @@ public class WorkspaceList extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
+        Workspaces results = handle(user);
+        respondWith(response, results);
+    }
 
+    public Workspaces handle(User user) {
         Iterable<Workspace> workspaces = workspaceRepository.findAll(user);
         String activeWorkspaceId = getUserRepository().getCurrentWorkspaceId(user.getUserId());
         activeWorkspaceId = activeWorkspaceId != null ? activeWorkspaceId : "";
-        JSONArray workspacesJson = new JSONArray();
+
+        Workspaces results = new Workspaces();
         for (Workspace workspace : workspaces) {
-            JSONObject workspaceJson = workspaceRepository.toJson(workspace, user, false);
-            if (workspaceJson != null) {
+            io.lumify.web.clientapi.model.Workspace workspaceClientApi = workspaceRepository.toClientApi(workspace, user, false);
+            if (workspaceClientApi != null) {
                 if (activeWorkspaceId.equals(workspace.getWorkspaceId())) { //if its the active one
-                    workspaceJson.put("active", true);
+                    workspaceClientApi.setActive(true);
                 }
-                workspacesJson.put(workspaceJson);
+                results.addWorkspace(workspaceClientApi);
             }
         }
-
-        JSONObject json = new JSONObject();
-        json.put("workspaces", workspacesJson);
-
-        respondWithJson(response, json);
-        chain.next(request, response);
+        return results;
     }
 }

@@ -1,7 +1,7 @@
 package io.lumify.tools;
 
 import io.lumify.core.cmdline.CommandLineBase;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.User;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;

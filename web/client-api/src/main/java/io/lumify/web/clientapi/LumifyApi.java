@@ -1,8 +1,8 @@
 package io.lumify.web.clientapi;
 
 import io.lumify.web.clientapi.codegen.*;
-import io.lumify.web.clientapi.codegen.model.UserMe;
-import io.lumify.web.clientapi.codegen.model.Workspace;
+import io.lumify.web.clientapi.model.User;
+import io.lumify.web.clientapi.model.Workspace;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ public class LumifyApi {
     private final VertexApiExt vertexApi;
     private final OntologyApiExt ontologyApi;
     private final String basePath;
-    private UserMe me;
+    private User me;
 
     public LumifyApi(String basePath) {
         this.basePath = basePath;

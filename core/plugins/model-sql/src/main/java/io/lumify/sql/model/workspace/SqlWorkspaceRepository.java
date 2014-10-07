@@ -13,6 +13,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
