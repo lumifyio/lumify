@@ -38,22 +38,27 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.getRelationships = function(workspaceId, additionalIds) {
-        var data = {};
+    WorkspaceService.prototype.getEdges = function(workspaceId, additionalIds) {
+        var data = {},
+            method = '_ajaxGet';
+
         if (additionalIds && additionalIds.length) {
             data.ids = additionalIds;
+            if (additionalIds.length > 10) {
+                method = '_ajaxPost';
+            }
         }
         data.workspaceId = workspaceId;
 
-        return this._ajaxGet({
-            url: 'workspace/relationships',
+        return this[method]({
+            url: 'workspace/edges',
             data: data
         });
     };
 
-    WorkspaceService.prototype.saveNew = function(title) {
+    WorkspaceService.prototype.create = function(title) {
         return this._ajaxPost({
-            url: 'workspace/new',
+            url: 'workspace/create',
             data: {
                 title: title
             }

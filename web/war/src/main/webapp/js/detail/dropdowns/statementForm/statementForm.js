@@ -3,21 +3,21 @@ define([
     '../withDropdown',
     'tpl!./statementForm',
     'tpl!./relationship-options',
-    'service/relationship',
+    'service/edge',
     'service/ontology'
 ], function(
     defineComponent,
     withDropdown,
     statementFormTemplate,
     relationshipTypeTemplate,
-    RelationshipService,
+    EdgeService,
     OntologyService) {
     'use strict';
 
     return defineComponent(StatementForm, withDropdown);
 
     function StatementForm() {
-        this.relationshipService = new RelationshipService();
+        this.edgeService = new EdgeService();
         this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
@@ -166,7 +166,7 @@ define([
 
             _.defer(this.buttonLoading.bind(this));
 
-            this.relationshipService.createRelationship(parameters)
+            this.edgeService.create(parameters)
                 .fail(function(req, reason, status) {
                     self.clearLoading();
                     self.markFieldErrors(status);

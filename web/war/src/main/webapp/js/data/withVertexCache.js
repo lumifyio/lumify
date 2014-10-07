@@ -221,7 +221,7 @@ define([
                     graphVertexId: vertex.id
                 },
                 artifactUrl = function(type, p) {
-                    return _.template('artifact/{ type }?' + $.param($.extend(params, p || {})), { type: type });
+                    return _.template('vertex/{ type }?' + $.param($.extend(params, p || {})), { type: type });
                 },
                 entityImageUrl = F.vertex.prop(vertex, 'entityImageUrl'),
                 entityImageVertexId = F.vertex.prop(vertex, 'entityImageVertexId');

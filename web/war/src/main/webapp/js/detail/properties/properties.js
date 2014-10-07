@@ -3,8 +3,7 @@ define([
     'flight/lib/component',
     'service/ontology',
     'service/vertex',
-    'service/relationship',
-    'service/audit',
+    'service/edge',
     'service/config',
     'util/vertex/formatters',
     'util/privileges',
@@ -17,8 +16,7 @@ define([
     defineComponent,
     OntologyService,
     VertexService,
-    RelationshipService,
-    AuditService,
+    EdgeService,
     ConfigService,
     F,
     Privileges,
@@ -39,8 +37,7 @@ define([
         alreadyWarnedAboutMissingOntology = {},
         ontologyService = new OntologyService(),
         vertexService = new VertexService(),
-        relationshipService = new RelationshipService(),
-        auditService = new AuditService(),
+        edgeService = new EdgeService(),
         configService = new ConfigService();
 
     return component;
@@ -422,7 +419,9 @@ define([
 
                 $.when(
                         ontologyService.ontology(),
-                        this.auditRequest = auditService.getAudits(this.attr.data.id)
+                        this.auditRequest = (F.vertex.isEdge(self.attr.data) ?
+                                             edgeService : vertexService
+                                            ).getAudits(this.attr.data.id)
                     ).done(function(ontology, auditResponse) {
                         var audits = _.sortBy(auditResponse[0].auditHistory, function(a) {
                                 return new Date(a.dateTime).getTime() * -1;

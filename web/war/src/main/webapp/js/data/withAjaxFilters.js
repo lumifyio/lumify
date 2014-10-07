@@ -6,15 +6,14 @@ define([], function() {
 
         IGNORE_NO_CONVERTER_FOUND_REGEXS = [
             /^audit/,
-            /^artifact\/import/,
             /^user/,
             /^configuration$/,
             /^workspaces?$/,
             /^workspace\?/,
-            /^workspace\/new/,
+            /^workspace\/create/,
             /^workspace\/all/,
             /^workspace\/diff/,
-            /^workspace\/relationships/,
+            /^workspace\/edges/,
             /^workspace\/update/,
             /^workspace\/publish/,
             /^workspace\/undo/,
@@ -23,9 +22,10 @@ define([], function() {
             /^logout$/,
             /^admin/,
             /^login/,
-            /^vertex\/removeRelationship/,
-            /^relationship\/properties/,
-            /^relationship\/create/
+            /^vertex\/remove-edge/,
+            /^vertex\/(un)?resolve/,
+            /^edge\/properties/,
+            /^edge\/create/
         ],
 
         // Custom converters for routes that are more complicated than above,

@@ -4,17 +4,26 @@ define([
 ], function(ServiceBase, F) {
     'use strict';
 
-    function RelationshipService() {
+    function EdgeService() {
         ServiceBase.call(this);
         return this;
     }
 
-    RelationshipService.prototype = Object.create(ServiceBase.prototype);
+    EdgeService.prototype = Object.create(ServiceBase.prototype);
 
-    RelationshipService.prototype.setProperty = function(propertyName, value, visibilitySource, justificationText,
+    EdgeService.prototype.getAudits = function(edgeId) {
+        return this._ajaxGet({
+            url: 'edge/audit',
+            data: {
+                graphVertexId: edgeId
+            }
+        });
+    };
+
+    EdgeService.prototype.setProperty = function(propertyName, value, visibilitySource, justificationText,
         sourceInfo, sourceId, destId, id) {
         return this._ajaxPost({
-            url: 'relationship/property/set',
+            url: 'edge/property',
             data: {
                 propertyName: propertyName,
                 value: value,
@@ -28,9 +37,9 @@ define([
         });
     };
 
-    RelationshipService.prototype.setVisibility = function(edgeId, visibilitySource) {
+    EdgeService.prototype.setVisibility = function(edgeId, visibilitySource) {
         return this._ajaxPost({
-            url: 'relationship/visibility/set',
+            url: 'edge/visibility',
             data: {
                 graphEdgeId: edgeId,
                 visibilitySource: visibilitySource
@@ -38,33 +47,32 @@ define([
         });
     };
 
-    RelationshipService.prototype.deleteProperty = function(propertyName, sourceId, destId, edgeId) {
-        return this._ajaxPost({
-            url: 'relationship/property/delete',
-            data: {
+    EdgeService.prototype.deleteProperty = function(propertyName, sourceId, destId, edgeId) {
+        return this._ajaxDelete({
+            url: 'edge/property?' + $.param({
                 propertyName: propertyName,
                 source: sourceId,
                 dest: destId,
                 edgeId: edgeId
-            }
+            })
         });
     };
 
-    RelationshipService.prototype.createRelationship = function(createRequest) {
+    EdgeService.prototype.create = function(createRequest) {
         return this._ajaxPost({
-            url: 'relationship/create',
+            url: 'edge/create',
             data: createRequest
         });
     };
 
-    RelationshipService.prototype.getRelationshipDetails = function(id) {
+    EdgeService.prototype.properties = function(id) {
         return this._ajaxGet({
-            url: 'relationship/properties',
+            url: 'edge/properties',
             data: {
                 graphEdgeId: id
             }
         });
     };
 
-    return RelationshipService;
+    return EdgeService;
 });

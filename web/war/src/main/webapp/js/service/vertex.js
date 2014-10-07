@@ -11,6 +11,15 @@ define([
 
     VertexService.prototype = Object.create(ServiceBase.prototype);
 
+    VertexService.prototype.getAudits = function(vertexId) {
+        return this._ajaxGet({
+            url: 'vertex/audit',
+            data: {
+                graphVertexId: vertexId
+            }
+        });
+    };
+
     VertexService.prototype.setProperty = function(
         vertexId,
         propertyKey,
@@ -23,7 +32,7 @@ define([
         workspaceId
     ) {
         return this._ajaxPost({
-            url: 'vertex/property/set',
+            url: 'vertex/property',
             data: _.tap({
                 graphVertexId: vertexId,
                 propertyName: propertyName,
@@ -49,7 +58,7 @@ define([
 
     VertexService.prototype.setVisibility = function(vertexId, visibilitySource) {
         return this._ajaxPost({
-            url: 'vertex/visibility/set',
+            url: 'vertex/visibility',
             data: {
                 graphVertexId: vertexId,
                 visibilitySource: visibilitySource
@@ -58,17 +67,16 @@ define([
     };
 
     VertexService.prototype.deleteProperty = function(vertexId, property, workspaceId) {
-        return this._ajaxPost({
-            url: 'vertex/property/delete',
-            data: _.tap({
-                graphVertexId: vertexId,
-                propertyName: property.name,
-                propertyKey: property.key
-            }, function(data) {
-                if (workspaceId) {
-                    data.workspaceId = workspaceId;
-                }
-            })
+        return this._ajaxDelete({
+            url: 'vertex/property?' + $.param(_.tap({
+                    graphVertexId: vertexId,
+                    propertyName: property.name,
+                    propertyKey: property.key
+                }, function(data) {
+                    if (workspaceId) {
+                        data.workspaceId = workspaceId;
+                    }
+                }))
         });
     };
 
@@ -78,7 +86,7 @@ define([
         formData.append('file', imageFile);
 
         return this._ajaxUpload({
-            url: 'graph/vertex/uploadImage?' + $.param({
+            url: 'vertex/upload-image?' + $.param({
                 graphVertexId: vertexId
             }),
             data: formData
@@ -117,7 +125,7 @@ define([
                 'Importing ' + pluralString,
                 'Imported ' + pluralString
             ],
-            url: 'artifact/import',
+            url: 'vertex/import',
             data: formData
         });
     };
@@ -133,27 +141,26 @@ define([
     };
 
     VertexService.prototype.deleteEdge = function(sourceId, targetId, label, edgeId) {
-        return this._ajaxPost({
-            url: 'vertex/removeRelationship',
-            data: {
+        return this._ajaxDelete({
+            url: 'vertex/edge?' + $.param({
                 sourceId: sourceId,
                 targetId: targetId,
                 label: label,
                 edgeId: edgeId
-            }
+            })
         });
     };
 
     VertexService.prototype.findPath = function(data) {
         return this._ajaxGet({
-            url: 'graph/findPath',
+            url: 'vertex/find-path',
             data: data
         });
     };
 
-    VertexService.prototype.locationSearch = function(lat, lon, radiuskm) {
+    VertexService.prototype.geoSearch = function(lat, lon, radiuskm) {
         return this._ajaxGet({
-            url: 'graph/vertex/geoLocationSearch',
+            url: 'vertex/geo-search',
             data: {
                 lat: lat,
                 lon: lon,
@@ -166,7 +173,7 @@ define([
         return this._get('statement', statementRowKey);
     };
 
-    VertexService.prototype.graphVertexSearch = function(query, filters, conceptType, paging) {
+    VertexService.prototype.search = function(query, filters, conceptType, paging) {
         var data = {};
 
         if (conceptType) data.conceptType = conceptType;
@@ -185,7 +192,7 @@ define([
         data.filter = JSON.stringify(filters || []);
 
         return this._ajaxGet({
-            url: 'graph/vertex/search',
+            url: 'vertex/search',
             data: data
         });
     };
@@ -193,7 +200,7 @@ define([
     VertexService.prototype.getArtifactHighlightedTextById = function(graphVertexId, propertyKey) {
         return this._ajaxGet({
             dataType: 'html',
-            url: 'artifact/highlightedText',
+            url: 'vertex/highlighted-text',
             data: {
                 graphVertexId: graphVertexId,
                 propertyKey: propertyKey
@@ -203,7 +210,7 @@ define([
 
     VertexService.prototype.getRelatedVertices = function(data) {
         return this._ajaxGet({
-            url: 'graph/relatedVertices',
+            url: 'vertex/find-related',
             data: {
                 graphVertexId: data.graphVertexId,
                 limitParentConceptId: data.limitParentConceptId
@@ -218,7 +225,7 @@ define([
         }
         data.graphVertexId = graphVertexId;
         return this._ajaxGet({
-            url: 'vertex/relationships',
+            url: 'vertex/edges',
             data: data
         });
     };
@@ -229,19 +236,6 @@ define([
             data: {
                 graphVertexId: graphVertexId,
                 workspaceId: workspaceId
-            }
-        });
-    };
-
-    VertexService.prototype._search = function(resource, query) {
-        //maybe it's an object for future options stuff?
-        var q = typeof query == 'object' ? query.query : query,
-            url = resource + '/search';
-
-        return this._ajaxGet({
-            url: url,
-            data: {
-                q: q
             }
         });
     };
@@ -263,28 +257,28 @@ define([
 
     VertexService.prototype.resolveTerm = function(resolveRequest) {
         return this._ajaxPost({
-            url: 'entity/resolveTerm',
+            url: 'vertex/resolve-term',
             data: resolveRequest
         });
     };
 
     VertexService.prototype.unresolveTerm = function(unresolveRequest) {
         return this._ajaxPost({
-            url: 'entity/unresolveTerm',
+            url: 'vertex/unresolve-term',
             data: unresolveRequest
         });
     };
 
     VertexService.prototype.resolveDetectedObject = function(resolveRequest) {
         return this._ajaxPost({
-            url: 'entity/resolveDetectedObject',
+            url: 'vertex/resolve-detected-object',
             data: resolveRequest
         });
     };
 
     VertexService.prototype.unresolveDetectedObject = function(unresolveRequest) {
         return this._ajaxPost({
-            url: 'entity/unresolveDetectedObject',
+            url: 'vertex/unresolve-detected-object',
             data: unresolveRequest
         });
     };

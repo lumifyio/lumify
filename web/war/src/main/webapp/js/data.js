@@ -498,7 +498,7 @@ define([
 
             this.relationshipsUnload();
 
-            this.workspaceService.getRelationships(this.workspaceId, this.newlyAddedIds)
+            this.workspaceService.getEdges(this.workspaceId, this.newlyAddedIds)
                 .done(function(relationships) {
                     self.relationshipsMarkReady(relationships);
                     self.trigger('relationshipsLoaded', { relationships: relationships });
@@ -957,7 +957,7 @@ define([
                         });
 
                     if (myWorkspaces.length === 0) {
-                        self.workspaceService.saveNew().done(function(workspace) {
+                        self.workspaceService.create().done(function(workspace) {
                             self.loadWorkspace(workspace);
                         });
                         return;

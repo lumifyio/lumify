@@ -118,31 +118,22 @@ define([
     UserService.prototype.search = function(query, workspaceId) {
         var data = {};
         if (query) {
-            data.query = query;
+            data.q = query;
         }
         if (workspaceId) {
             data.workspaceId = workspaceId;
         }
         return this._ajaxGet({
-            url: 'users',
+            url: 'user/all',
             data: data
         });
     };
 
     UserService.prototype.getCurrentUsers = function(workspaceId) {
         return this._ajaxGet({
-            url: 'users',
+            url: 'user/all',
             data: {
                 workspaceId: workspaceId
-            }
-        });
-    };
-
-    UserService.prototype.search = function(query) {
-        return this._ajaxGet({
-            url: 'users',
-            data: {
-                q: query
             }
         });
     };
@@ -184,7 +175,7 @@ define([
 
     UserService.prototype.setPreferences = function(prefs) {
         return this._ajaxPost({
-            url: 'user/ui-preferences/set',
+            url: 'user/ui-preferences',
             data: {
                 'ui-preferences': prefs
             }
@@ -193,7 +184,7 @@ define([
 
     UserService.prototype.setPreference = function(name, value) {
         return this._ajaxPost({
-            url: 'user/ui-preferences/set',
+            url: 'user/ui-preferences',
             data: {
                 name: name,
                 value: value

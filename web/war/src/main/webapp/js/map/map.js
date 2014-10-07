@@ -588,7 +588,7 @@ define([
                     self.$node.find('.instructions').remove();
                     self.$node.append(loadingTemplate({}));
 
-                    self.vertexService.locationSearch(
+                    self.vertexService.geoSearch(
                         lonlat.lat,
                         lonlat.lon,
                         radius).done(

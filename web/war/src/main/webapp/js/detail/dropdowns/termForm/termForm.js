@@ -508,7 +508,7 @@ define([
 
             var badge = this.select('objectSignSelector').nextAll('.badge')
                     .addClass('loading'),
-                request = this.vertexService.graphVertexSearch(query, null, this.attr.restrictConcept)
+                request = this.vertexService.search(query, null, this.attr.restrictConcept)
                     .always(function() {
                         badge.removeClass('loading');
                     })

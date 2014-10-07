@@ -4,7 +4,7 @@ define([
     './withVertexPopover',
     'service/vertex',
     'service/ontology',
-    'service/relationship',
+    'service/edge',
     'util/withFormFieldErrors',
     'util/withTeardown'
 ], function(
@@ -12,7 +12,7 @@ define([
     withVertexPopover,
     VertexService,
     OntologyService,
-    RelationshipService,
+    EdgeService,
     withFormFieldErrors,
     withTeardown) {
     'use strict';
@@ -28,7 +28,7 @@ define([
 
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
-        this.relationshipService = new RelationshipService();
+        this.edgeService = new EdgeService();
 
         this.defaultAttrs({
             connectButtonSelector: '.connect-dialog .btn-primary',
@@ -186,7 +186,7 @@ define([
                 parameters.justificationText = this.justification.justificationText;
             }
 
-            this.relationshipService.createRelationship(parameters)
+            this.edgeService.create(parameters)
                 .always(function() {
                     self.attr.teardownOnTap = true;
                 })

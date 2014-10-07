@@ -62,7 +62,7 @@ define([
 
             if (!title) return;
 
-            this.workspaceService.saveNew(title)
+            this.workspaceService.create(title)
                 .done(function(workspace) {
                     self.loadWorkspaceList()
                         .done(function() {

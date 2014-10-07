@@ -92,14 +92,14 @@ public class Router extends HttpServlet {
             app.post("/vertex/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetVisibility.class);
             app.get("/vertex/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexProperties.class);
             app.get("/vertex/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexEdges.class);
-            app.post("/vertex/remove-edge", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRemoveEdge.class);
+            app.delete("/vertex/edge", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRemoveEdge.class);
             app.post("/vertex/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
             app.post("/vertex/new", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
             app.get("/vertex/search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexSearch.class);
             app.get("/vertex/geo-search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGeoSearch.class);
             app.post("/vertex/upload-image", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexUploadImage.class);
             app.get("/vertex/find-path", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindPath.class);
-            app.get("/vertex/related-vertices", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindRelated.class);
+            app.get("/vertex/find-related", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindRelated.class);
             app.get("/vertex/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexAudit.class);
 
             app.post("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, SetEdgeProperty.class);
@@ -110,7 +110,7 @@ public class Router extends HttpServlet {
             app.get("/edge/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeAudit.class);
 
             app.get("/workspace/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
-            app.post("/workspace/new", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceNew.class);
+            app.post("/workspace/create", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceNew.class);
             app.get("/workspace/diff", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceDiff.class);
             app.get("/workspace/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceEdges.class);
             app.post("/workspace/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceEdges.class); // this is a post method to allow large data (ie data larger than would fit in the URL)

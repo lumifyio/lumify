@@ -84,7 +84,7 @@ define([
             return (
                 this.currentRequest = this.serviceRequest.apply(
                     this,
-                    ['vertex', 'graphVertexSearch'].concat(_.toArray(arguments))
+                    ['vertex', 'search'].concat(_.toArray(arguments))
                 )
             );
         };

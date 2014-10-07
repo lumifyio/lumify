@@ -4,7 +4,7 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     'tpl!./relationship',
-    'service/relationship',
+    'service/edge',
     'service/vertex',
     'service/ontology',
     'detail/properties/properties',
@@ -17,7 +17,7 @@ define([
     withTypeContent,
     withHighlighting,
     template,
-    RelationshipService,
+    EdgeService,
     VertexService,
     OntologyService,
     Properties,
@@ -27,13 +27,13 @@ define([
     'use strict';
 
     var predicate = { name: 'http://lumify.io#conceptType' },
-        relationshipService = new RelationshipService(),
+        edgeService = new EdgeService(),
         vertexService = new VertexService(),
         ontologyService = new OntologyService();
 
-    return defineComponent(Relationship, withTypeContent, withHighlighting);
+    return defineComponent(Edge, withTypeContent, withHighlighting);
 
-    function Relationship() {
+    function Edge() {
 
         this.defaultAttrs({
             vertexToVertexRelationshipSelector: '.vertex-to-vertex-relationship',
@@ -95,7 +95,7 @@ define([
             $.when(
                 self.handleCancelling(self.ontologyService.ontology()),
                 self.handleCancelling(self.ontologyService.relationships()),
-                self.handleCancelling(relationshipService.getRelationshipDetails(data.id))
+                self.handleCancelling(edgeService.properties(data.id))
             ).done(function(ontology, ontologyRelationships, relationshipData) {
                 var relationship = relationshipData[0];
 
