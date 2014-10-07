@@ -121,7 +121,7 @@ public class WorkspaceApi {
   public Workspace create () throws ApiException {
     Object postBody = null;
     // create path and map variables
-    String path = "/workspace/new".replaceAll("\\{format\\}","json");
+    String path = "/workspace/create".replaceAll("\\{format\\}","json");
 
     // query params
     Map<String, String> queryParams = new HashMap<String, String>();
