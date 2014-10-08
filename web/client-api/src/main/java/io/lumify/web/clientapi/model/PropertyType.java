@@ -1,5 +1,7 @@
 package io.lumify.web.clientapi.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -25,6 +27,11 @@ public enum PropertyType {
     @Override
     public String toString() {
         return this.text;
+    }
+
+    @JsonValue
+    public String getText() {
+        return text;
     }
 
     public static PropertyType convert(String property) {
