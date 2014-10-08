@@ -57,6 +57,13 @@ define([], function() {
                                 self.trigger('refreshRelationships');
                             }
                         }
+
+                        self.trigger('edgesUpdated', {
+                            edges: [message.data.edge],
+                            options: {
+                                originalData: message.data
+                            }
+                        })
                     }
                     break;
                 case 'entityImageUpdated':
