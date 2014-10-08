@@ -10,6 +10,7 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -118,7 +119,7 @@ public class FileImport {
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
             rawValue.searchIndex(false);
 
-            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
+            VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
             Map<String, Object> propertyMetadata = new HashMap<String, Object>();

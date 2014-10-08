@@ -2,17 +2,15 @@ package io.lumify.foodTruck;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
-import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.twitter.TwitterOntology;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
 import org.securegraph.*;
 
 import java.io.InputStream;
@@ -23,12 +21,10 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FoodTruckTweetAnalyzerGraphPropertyWorker.class);
-    private static final String MULTI_VALUE_KEY = FoodTruckTweetAnalyzerGraphPropertyWorker.class.getName();
     private Cache<String, List<Vertex>> keywordVerticesCache = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
     private static final String KEYWORD_VERTICES_CACHE_KEY = "keywords";
-    private TermMentionRepository termMentionRepository;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
@@ -39,7 +35,7 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
         findAndLinkKeywords(tweetVertex, text, data.getVisibility(), data.getVisibilitySourceJson());
     }
 
-    private void findAndLinkKeywords(Vertex tweetVertex, String text, Visibility visibility, JSONObject visibilityJson) {
+    private void findAndLinkKeywords(Vertex tweetVertex, String text, Visibility visibility, VisibilityJson visibilityJson) {
         List<Vertex> keywordVertices = getKeywordVertices();
         for (Vertex keywordVertex : keywordVertices) {
             Iterable<String> keywords = FoodTruckOntology.KEYWORD.getPropertyValues(keywordVertex);
@@ -55,7 +51,7 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
         }
     }
 
-    private Edge createTermMentionAndEdge(Vertex tweetVertex, Vertex keywordVertex, String keyword, long startOffset, long endOffset, Visibility visibility, JSONObject visibilityJson) {
+    private Edge createTermMentionAndEdge(Vertex tweetVertex, Vertex keywordVertex, String keyword, long startOffset, long endOffset, Visibility visibility, VisibilityJson visibilityJson) {
         String conceptUri = FoodTruckOntology.CONCEPT_TYPE_LOCATION;
 
         String edgeId = tweetVertex.getId() + "_HAS_" + keywordVertex.getId();
@@ -105,10 +101,5 @@ public class FoodTruckTweetAnalyzerGraphPropertyWorker extends GraphPropertyWork
             return false;
         }
         return true;
-    }
-
-    @Inject
-    public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
-        this.termMentionRepository = termMentionRepository;
     }
 }

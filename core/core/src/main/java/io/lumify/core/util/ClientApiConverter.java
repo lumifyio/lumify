@@ -1,18 +1,21 @@
 package io.lumify.core.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.web.clientapi.model.Element;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.clientapi.model.TermMentionsResponse;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.VisibilityJson;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.IterableUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -82,9 +85,9 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         clientApiElement.getProperties().addAll(toClientApiProperties(element.getProperties(), workspaceId));
         clientApiElement.setSandboxStatus(GraphUtil.getSandboxStatus(element, workspaceId));
 
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
         if (visibilityJson != null) {
-            clientApiElement.setVisibilitySource(VisibilityTranslator.getVisibilitySource(visibilityJson));
+            clientApiElement.setVisibilitySource(visibilityJson.getSource());
         }
     }
 
@@ -149,5 +152,21 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
             }
         }
         return null;
+    }
+
+    public static String clientApiObjectToJsonString(Object value) {
+        try {
+            return ObjectMapperFactory.getInstance().writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            throw new LumifyException("Could not convert object " + value + " to json string", e);
+        }
+    }
+
+    public static <T> T toClientApi(String str, Class<T> clazz) {
+        try {
+            return ObjectMapperFactory.getInstance().readValue(str, clazz);
+        } catch (IOException e) {
+            throw new LumifyException("Could not parse '" + str + "' to class '" + clazz.getName() + "'", e);
+        }
     }
 }

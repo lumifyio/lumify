@@ -22,6 +22,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
@@ -41,7 +42,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final VisibilityTranslator visibilityTranslator;
-    private final TermMentionRepository termMentionRepository;
     private final WorkspaceRepository workspaceRepository;
     private final WorkQueueRepository workQueueRepository;
     private final String artifactHasEntityIri;
@@ -62,7 +62,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.visibilityTranslator = visibilityTranslator;
-        this.termMentionRepository = termMentionRepository;
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
 
@@ -91,7 +90,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         Authorizations authorizations = getAuthorizations(request, user);
 
-        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility visibility = this.visibilityTranslator.toVisibility(visibilityJson);
         if (!graph.isVisibilityValid(visibility.getVisibility(), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());

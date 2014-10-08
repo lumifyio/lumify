@@ -10,6 +10,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.opennlpDictionary.model.DictionaryEntry;
 import io.lumify.opennlpDictionary.model.DictionaryEntryRepository;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import opennlp.tools.dictionary.Dictionary;
 import opennlp.tools.namefind.DictionaryNameFinder;
 import opennlp.tools.namefind.TokenNameFinder;
@@ -22,7 +23,6 @@ import opennlp.tools.util.Span;
 import opennlp.tools.util.StringList;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -79,21 +79,21 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
         LOGGER.debug("Stream processing completed");
     }
 
-    private List<Vertex> processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, JSONObject visibilitySource) {
+    private List<Vertex> processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, VisibilityJson visibilityJson) {
         List<Vertex> termMentions = new ArrayList<Vertex>();
         String tokenList[] = tokenizer.tokenize(line);
         Span[] tokenListPositions = tokenizer.tokenizePos(line);
         for (TokenNameFinder finder : finders) {
             Span[] foundSpans = finder.find(tokenList);
             for (Span span : foundSpans) {
-                termMentions.add(createTermMention(sourceVertex, propertyKey, charOffset, span, tokenList, tokenListPositions, visibilitySource));
+                termMentions.add(createTermMention(sourceVertex, propertyKey, charOffset, span, tokenList, tokenListPositions, visibilityJson));
             }
             finder.clearAdaptiveData();
         }
         return termMentions;
     }
 
-    private Vertex createTermMention(Vertex sourceVertex, String propertyKey, int charOffset, Span foundName, String[] tokens, Span[] tokenListPositions, JSONObject visibilitySource) {
+    private Vertex createTermMention(Vertex sourceVertex, String propertyKey, int charOffset, Span foundName, String[] tokens, Span[] tokenListPositions, VisibilityJson visibilityJson) {
         String name = Span.spansToStrings(new Span[]{foundName}, tokens)[0];
         int start = charOffset + tokenListPositions[foundName.getStart()].getStart();
         int end = charOffset + tokenListPositions[foundName.getEnd() - 1].getEnd();
@@ -107,7 +107,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
                 .end(end)
                 .title(name)
                 .conceptIri(ontologyClassUri)
-                .visibilityJson(visibilitySource)
+                .visibilityJson(visibilityJson)
                 .process(getClass().getName())
                 .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
     }

@@ -10,6 +10,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.FileStatus;
@@ -17,7 +18,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.arabidopsis.ahocorasick.AhoCorasick;
 import org.arabidopsis.ahocorasick.SearchResult;
-import org.json.JSONObject;
 import org.securegraph.*;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.prefs.CsvPreference;
@@ -64,15 +64,15 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
         List<Vertex> termMentions = new ArrayList<Vertex>();
         while (searchResults.hasNext()) {
             SearchResult searchResult = searchResults.next();
-            JSONObject visibilitySource = data.getVisibilitySourceJson();
-            List<Vertex> newTermMentions = outputResultToTermMention(sourceVertex, searchResult, data.getProperty().getKey(), visibilitySource, data.getVisibility());
+            VisibilityJson visibilityJson = data.getVisibilitySourceJson();
+            List<Vertex> newTermMentions = outputResultToTermMention(sourceVertex, searchResult, data.getProperty().getKey(), visibilityJson, data.getVisibility());
             termMentions.addAll(newTermMentions);
             getGraph().flush();
         }
         applyTermMentionFilters(sourceVertex, termMentions);
     }
 
-    private List<Vertex> outputResultToTermMention(Vertex sourceVertex, SearchResult<Match> searchResult, String propertyKey, JSONObject visibilitySource, Visibility visibility) {
+    private List<Vertex> outputResultToTermMention(Vertex sourceVertex, SearchResult<Match> searchResult, String propertyKey, VisibilityJson visibilityJson, Visibility visibility) {
         List<Vertex> termMentions = new ArrayList<Vertex>();
         for (Match match : searchResult.getOutputs()) {
             int start = searchResult.getLastIndex() - match.getMatchText().length();
@@ -81,7 +81,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             String ontologyClassUri = mapToOntologyIri(match.getConceptTitle());
 
             Vertex resolvedToVertex = findOrAddEntity(title, ontologyClassUri, visibility);
-            Edge resolvedEdge = findOrAddEdge(sourceVertex, resolvedToVertex, visibilitySource, visibility);
+            Edge resolvedEdge = findOrAddEdge(sourceVertex, resolvedToVertex, visibilityJson, visibility);
 
             Vertex termMention = new TermMentionBuilder()
                     .sourceVertex(sourceVertex)
@@ -90,7 +90,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
                     .end(end)
                     .title(title)
                     .conceptIri(ontologyClassUri)
-                    .visibilityJson(visibilitySource)
+                    .visibilityJson(visibilityJson)
                     .process(PROCESS)
                     .resolvedTo(resolvedToVertex, resolvedEdge)
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
@@ -99,7 +99,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
         return termMentions;
     }
 
-    private Edge findOrAddEdge(Vertex sourceVertex, Vertex resolvedToVertex, JSONObject visibilityJson, Visibility visibility) {
+    private Edge findOrAddEdge(Vertex sourceVertex, Vertex resolvedToVertex, VisibilityJson visibilityJson, Visibility visibility) {
         Edge resolvedEdge = singleOrDefault(sourceVertex.getEdges(resolvedToVertex, Direction.BOTH, getAuthorizations()), null);
         if (resolvedEdge == null) {
             EdgeBuilder resolvedEdgeBuilder = getGraph().prepareEdge(sourceVertex, resolvedToVertex, artifactHasEntityIri, visibility);

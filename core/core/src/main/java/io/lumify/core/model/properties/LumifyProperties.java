@@ -19,7 +19,7 @@ public class LumifyProperties {
     public static final DoubleLumifyProperty CONFIDENCE = new DoubleLumifyProperty("http://lumify.io#confidence");
 
     public static final JsonLumifyProperty POSSIBLE_VALUES = new JsonLumifyProperty("http://lumify.io#possibleValues");
-    public static final JsonLumifyProperty VISIBILITY_JSON = new JsonLumifyProperty("http://lumify.io#visibilityJson");
+    public static final VisibilityJsonLumifyProperty VISIBILITY_JSON = new VisibilityJsonLumifyProperty("http://lumify.io#visibilityJson");
 
     public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#glyphIcon");
     public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#mapGlyphIcon");
@@ -41,7 +41,6 @@ public class LumifyProperties {
     public static final StringLumifyProperty FILE_NAME = new StringLumifyProperty("http://lumify.io#fileName");
     public static final StringLumifyProperty FILE_NAME_EXTENSION = new StringLumifyProperty("http://lumify.io#fileNameExtension");
     public static final StringLumifyProperty GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#glyphIconFileName");
-    public static final StringLumifyProperty ENTITY_IMAGE_URL = new StringLumifyProperty("http://lumify.io#entityImageUrl");
     public static final StringLumifyProperty ENTITY_IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
     public static final StringLumifyProperty MAP_GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#mapGlyphIconFileName");
     public static final StringLumifyProperty MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
@@ -66,7 +65,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty TERM_MENTION_RESOLVED_EDGE_ID = new StringLumifyProperty("http://lumify.io/termMention#resolvedEdgeId");
     public static final StringLumifyProperty TERM_MENTION_TITLE = new StringLumifyProperty("http://lumify.io/termMention#title");
     public static final StringLumifyProperty TERM_MENTION_CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io/termMention#conceptType");
-    public static final JsonLumifyProperty TERM_MENTION_VISIBILITY_JSON = new JsonLumifyProperty("http://lumify.io/termMention#visibilityJson");
+    public static final VisibilityJsonLumifyProperty TERM_MENTION_VISIBILITY_JSON = new VisibilityJsonLumifyProperty("http://lumify.io/termMention#visibilityJson");
     public static final String TERM_MENTION_LABEL_HAS_TERM_MENTION = "http://lumify.io/termMention#hasTermMention";
     public static final String TERM_MENTION_LABEL_RESOLVED_TO = "http://lumify.io/termMention#resolvedTo";
 
