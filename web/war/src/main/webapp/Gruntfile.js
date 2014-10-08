@@ -104,10 +104,16 @@ module.exports = function(grunt) {
             jshintrc: true
         },
         development: {
-            src: ['js/**/*\.js']
+            src: [
+                'js/**/*\.js',
+                '!js/plugin-development/**/libs/**/*.js'
+            ]
         },
         ci: {
-            src: ['js/**/*\.js'],
+            src: [
+                'js/**/*\.js',
+                '!js/plugin-development/**/libs/**/*.js'
+            ],
             options: {
                 reporter: 'checkstyle',
                 reporterOutput: 'build/jshint-checkstyle.xml'
