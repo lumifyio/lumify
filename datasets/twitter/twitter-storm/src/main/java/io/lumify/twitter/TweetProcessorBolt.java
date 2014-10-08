@@ -18,6 +18,7 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -343,7 +344,7 @@ public class TweetProcessorBolt extends BaseRichBolt {
     }
 
     private void createTermMention(Vertex tweetVertex, Vertex vertex, Edge edge, String conceptUri, JSONArray offsets) {
-        JSONObject visibilitySource = new JSONObject();
+        VisibilityJson visibilitySource = new VisibilityJson();
         long startOffset = offsets.getInt(0);
         long endOffset = offsets.getInt(1);
         String title = LumifyProperties.TITLE.getPropertyValue(vertex);

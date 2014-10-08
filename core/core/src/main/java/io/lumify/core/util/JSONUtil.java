@@ -54,14 +54,6 @@ public class JSONUtil {
         }
     }
 
-    public static void removeWorkspacesFromJSONArray(JSONArray jsonArray) {
-        for (int i = 0; i < jsonArray.length(); i++) {
-            if (jsonArray.get(i).toString().contains(WorkspaceRepository.VISIBILITY_STRING.toUpperCase())) {
-                jsonArray.remove(i);
-            }
-        }
-    }
-
     public static JSONObject parse(String jsonString) {
         try {
             return new JSONObject(jsonString);

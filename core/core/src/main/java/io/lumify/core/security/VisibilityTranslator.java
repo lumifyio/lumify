@@ -1,6 +1,6 @@
 package io.lumify.core.security;
 
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.VisibilityJson;
 
 import java.util.Map;
 
@@ -10,9 +10,5 @@ public abstract class VisibilityTranslator {
 
     public abstract void init(Map configuration);
 
-    public abstract LumifyVisibility toVisibility(JSONObject visibilityJson);
-
-    public static String getVisibilitySource(JSONObject visibilityJson) {
-        return visibilityJson.getString(JSON_SOURCE);
-    }
+    public abstract LumifyVisibility toVisibility(VisibilityJson visibilityJson);
 }

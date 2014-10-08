@@ -10,6 +10,7 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.Property;
 import io.lumify.web.clientapi.model.WorkspaceDiff;
 import io.lumify.web.clientapi.model.WorkspacePublishResponse;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -136,7 +137,16 @@ public class TestBase {
     protected void assertHasProperty(Iterable<Property> properties, String propertyKey, String propertyName, Object expectedValue) {
         Property property = getProperty(properties, propertyKey, propertyName);
         if (property != null) {
-            assertEquals("property value does not match for property " + propertyKey + ":" + propertyName, expectedValue, property.getValue());
+            Object value = property.getValue();
+            if (value instanceof Map) {
+                try {
+                    value = ObjectMapperFactory.getInstance().writeValueAsString(value);
+                    expectedValue = ObjectMapperFactory.getInstance().writeValueAsString(expectedValue);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            assertEquals("property value does not match for property " + propertyKey + ":" + propertyName, expectedValue, value);
         } else {
             assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
         }

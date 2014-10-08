@@ -1,5 +1,6 @@
 package io.lumify.web.clientapi.model.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -64,5 +65,16 @@ public class ClientApiConverter {
             }
         }
         return obj;
+    }
+
+    public static String clientApiToString(Object o) {
+        if (o == null) {
+            throw new RuntimeException("o cannot be null.");
+        }
+        try {
+            return ObjectMapperFactory.getInstance().writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Could not convert object '" + o.getClass().getName() + "' to string", e);
+        }
     }
 }

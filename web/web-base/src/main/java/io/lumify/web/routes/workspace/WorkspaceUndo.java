@@ -10,7 +10,6 @@ import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -19,6 +18,8 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.SandboxStatus;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -150,7 +151,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
@@ -174,7 +175,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     auditRepository.auditRelationship(AuditAction.DELETE, outVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
                     this.workQueueRepository.pushEdgeDeletion(edge);
                     this.workQueueRepository.pushGraphPropertyQueue(outVertex, multiValueKey,
-                            LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getString("source"));
+                            LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getSource());
                 }
             }
         }

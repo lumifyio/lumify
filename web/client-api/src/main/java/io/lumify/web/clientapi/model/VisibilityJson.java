@@ -1,13 +1,17 @@
 package io.lumify.web.clientapi.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Joiner;
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class VisibilityJson {
-    private String source;
-    private List<String> workspaces = new ArrayList<String>();
+    private String source = "";
+    private Set<String> workspaces = new HashSet<String>();
 
     public String getSource() {
         return source;
@@ -17,7 +21,8 @@ public class VisibilityJson {
         this.source = source;
     }
 
-    public List<String> getWorkspaces() {
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public Set<String> getWorkspaces() {
         return workspaces;
     }
 
@@ -27,10 +32,7 @@ public class VisibilityJson {
 
     @Override
     public String toString() {
-        return "VisibilityJson{" +
-                "source='" + source + '\'' +
-                ", workspaces=" + Joiner.on(',').join(workspaces) +
-                '}';
+        return ClientApiConverter.clientApiToString(this);
     }
 
     @Override

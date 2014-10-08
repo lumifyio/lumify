@@ -18,6 +18,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.version.VersionService;
 import io.lumify.securegraph.model.audit.SecureGraphAuditRepository;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import io.lumify.wikipedia.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.hadoop.io.LongWritable;
@@ -29,7 +30,6 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.accumulo.AccumuloAuthorizations;
 import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
@@ -76,7 +76,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private Counter pagesProcessedCounter;
     private Text auditTableNameText;
     private Counter pagesSkippedCounter;
-    private JSONObject visibilitySource;
+    private VisibilityJson visibilityJson;
     private VisibilityTranslator visibilityTranslator;
 
     public ImportMRMapper() {
@@ -90,7 +90,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         super.setup(context);
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
         this.visibility = new Visibility("");
-        this.visibilitySource = new JSONObject();
+        this.visibilityJson = new VisibilityJson();
         this.authorizations = new AccumuloAuthorizations();
         this.user = new SystemUser(null);
         VersionService versionService = new VersionService();
@@ -262,7 +262,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
                 .end(link.getEndOffset())
                 .title(linkTarget)
                 .conceptIri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI)
-                .visibilityJson(visibilitySource)
+                .visibilityJson(visibilityJson)
                 .process(WIKIPEDIA_PROCESS)
                 .resolvedTo(linkedPageVertex, edge)
                 .save(getGraph(), visibilityTranslator, authorizations);

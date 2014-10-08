@@ -19,9 +19,9 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.*;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
@@ -113,7 +113,7 @@ public class VertexUploadImage extends BaseRequestHandler {
         }
         ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
 
-        JSONObject visibilityJson = getLumifyVisibility(entityVertex, workspaceId);
+        VisibilityJson visibilityJson = getLumifyVisibility(entityVertex, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         Map<String, Object> metadata = new HashMap<String, Object>();
@@ -143,25 +143,24 @@ public class VertexUploadImage extends BaseRequestHandler {
         this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, user);
 
         graph.flush();
-        workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(),
-                workspaceId, visibilityJson.getString("source"));
+        workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(), workspaceId, visibilityJson.getSource());
 
         respondWithJson(response, JsonSerializer.toJson(entityVertex, workspaceId, authorizations));
     }
 
-    private JSONObject getLumifyVisibility(Vertex entityVertex, String workspaceId) {
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(entityVertex);
+    private VisibilityJson getLumifyVisibility(Vertex entityVertex, String workspaceId) {
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(entityVertex);
         if (visibilityJson == null) {
-            visibilityJson = new JSONObject();
+            visibilityJson = new VisibilityJson();
         }
-        String visibilitySource = visibilityJson.optString(VisibilityTranslator.JSON_SOURCE);
+        String visibilitySource = visibilityJson.getSource();
         if (visibilitySource == null) {
             visibilitySource = "";
         }
         return GraphUtil.updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
     }
 
-    private ElementBuilder<Vertex> convertToArtifact(final Part file, String title, JSONObject visibilityJson, Map<String, Object> metadata, LumifyVisibility lumifyVisibility, Authorizations authorizations) throws IOException {
+    private ElementBuilder<Vertex> convertToArtifact(final Part file, String title, VisibilityJson visibilityJson, Map<String, Object> metadata, LumifyVisibility lumifyVisibility, Authorizations authorizations) throws IOException {
         final InputStream fileInputStream = file.getInputStream();
         final byte[] rawContent = IOUtils.toByteArray(fileInputStream);
         LOGGER.debug("Uploaded file raw content byte length: %d", rawContent.length);
