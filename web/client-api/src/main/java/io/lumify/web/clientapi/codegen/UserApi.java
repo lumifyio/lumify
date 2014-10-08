@@ -1,7 +1,7 @@
 package io.lumify.web.clientapi.codegen;
 
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.codegen.ApiInvoker;
+import io.lumify.web.clientapi.ApiInvoker;
 
 import io.lumify.web.clientapi.model.User;
 import com.sun.jersey.multipart.FormDataMultiPart;
@@ -12,8 +12,8 @@ import java.io.File;
 import java.util.*;
 
 public class UserApi {
-  String basePath = "http://localhost:8889";
-  ApiInvoker apiInvoker = ApiInvoker.getInstance();
+  protected String basePath = "http://localhost:8889";
+  protected ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public ApiInvoker getInvoker() {
     return apiInvoker;

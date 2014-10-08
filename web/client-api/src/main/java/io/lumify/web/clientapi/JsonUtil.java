@@ -1,4 +1,4 @@
-package io.lumify.web.clientapi.codegen;
+package io.lumify.web.clientapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;

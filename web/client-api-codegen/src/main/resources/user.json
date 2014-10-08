@@ -10,42 +10,13 @@
                 {
                     "method": "GET",
                     "summary": "Gets the current user info",
-                    "type": "UserMe",
+                    "type": "User",
                     "nickname": "getMe"
                 }
             ]
         }
     ],
     "models": {
-        "UserMe": {
-            "id": "UserMe",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string",
-                    "enum": [
-                        "ONLINE",
-                        "OFFLINE"
-                    ]
-                },
-                "csrfToken": {
-                    "type": "string"
-                },
-                "currentWorkspaceId": {
-                    "type": "string"
-                },
-                "userName": {
-                    "type": "string"
-                },
-                "displayName": {
-                    "type": "string"
-                },
-                "userType": {
-                    "type": "string"
-                }
-            }
-        }
+
     }
 }

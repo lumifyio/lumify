@@ -1,8 +1,9 @@
-package io.lumify.web.clientapi.codegen;
+package io.lumify.web.clientapi;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
+import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.ArtifactImportResponse;
 import io.lumify.web.clientapi.model.VertexSearchResponse;
 import org.apache.commons.io.FileUtils;
@@ -17,7 +18,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VertexApiExt extends VertexApi {
+public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
     public static final int VIDEO_TRANSCRIPT_INDEX_BITS = 12; // duplicated in io.lumify.core.model.textHighlighting.OffsetItem
     public static final int VIDEO_TRANSCRIPT_OFFSET_BITS = 20; // duplicated in io.lumify.core.model.textHighlighting.OffsetItem
     public static final String VERTEX_BASE_URL = "/vertex/";

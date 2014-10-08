@@ -1,12 +1,12 @@
-package io.lumify.web.clientapi.codegen;
+package io.lumify.web.clientapi;
 
-import io.lumify.web.clientapi.LumifyClientApiException;
+import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkspaceApiExt extends WorkspaceApi {
+public class WorkspaceApiExt extends io.lumify.web.clientapi.codegen.WorkspaceApi {
     public void update(WorkspaceUpdateData updateData) throws ApiException {
         update(ApiInvoker.serialize(updateData));
     }

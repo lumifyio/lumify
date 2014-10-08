@@ -1,7 +1,5 @@
 package io.lumify.web.clientapi;
 
-import io.lumify.web.clientapi.codegen.ApiInvoker;
-
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
