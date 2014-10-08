@@ -22,6 +22,10 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
         return DISPLAY_NAME.getPropertyValue(vertex);
     }
 
+    public String getPropertyGroup() {
+        return PROPERTY_GROUP.getPropertyValue(vertex);
+    }
+
     public boolean getUserVisible() {
         return USER_VISIBLE.getPropertyValue(vertex);
     }

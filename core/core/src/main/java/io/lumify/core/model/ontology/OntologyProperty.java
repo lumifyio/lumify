@@ -40,6 +40,8 @@ public abstract class OntologyProperty {
 
     public abstract String getDisplayType();
 
+    public abstract String getPropertyGroup();
+
     public static JSONArray toJsonProperties(Iterable<OntologyProperty> properties) {
         JSONArray json = new JSONArray();
         for (OntologyProperty property : properties) {
@@ -57,6 +59,9 @@ public abstract class OntologyProperty {
             json.put("searchable", getSearchable());
             json.put("dataType", getDataType().toString());
             json.put("displayType", getDisplayType());
+            if (getPropertyGroup() != null) {
+                json.put("propertyGroup", getPropertyGroup());
+            }
             if (getPossibleValues() != null) {
                 json.put("possibleValues", getPossibleValues());
             }

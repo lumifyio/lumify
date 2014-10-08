@@ -529,6 +529,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#gender">
         <rdfs:label xml:lang="en">Gender</rdfs:label>
         <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
+        <lumify:propertyGroup xml:lang="en">Physical Characteristics</lumify:propertyGroup>
         <lumify:possibleValues xml:lang="en">
         {
             "M": "Male",
@@ -539,6 +540,34 @@
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
+
+    <!-- http://lumify.io/dev#nationality -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#nationality">
+        <rdfs:label xml:lang="en">Nationality</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+    <!-- http://lumify.io/dev#haircolor -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#haircolor">
+        <rdfs:label xml:lang="en">Hair Color</rdfs:label>
+        <lumify:propertyGroup xml:lang="en">Physical Characteristics</lumify:propertyGroup>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+    <!-- http://lumify.io/dev#eyecolor -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#eyecolor">
+        <rdfs:label xml:lang="en">Eye Color</rdfs:label>
+        <lumify:propertyGroup xml:lang="en">Physical Characteristics</lumify:propertyGroup>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
 
 
     <!-- http://lumify.io/dev#geolocation -->

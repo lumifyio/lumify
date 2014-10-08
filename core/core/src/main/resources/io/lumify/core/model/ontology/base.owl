@@ -61,7 +61,15 @@
         <userVisible>false</userVisible>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:AnnotationProperty>
-    
+
+
+    <!-- http://lumify.io#propertyGroup -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;propertyGroup">
+        <textIndexHints>NONE</textIndexHints>
+        <userVisible>false</userVisible>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:AnnotationProperty>
 
 
     <!-- http://lumify.io#glyphIconFileName -->
