@@ -5,8 +5,11 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.PropertyType;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
@@ -25,10 +28,7 @@ import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -271,10 +271,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             result.setProperty(LumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
         }
 
-        Boolean searchable = getSearchable(o, ontologyClass);
-        if (searchable != null) {
-            result.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
-        }
+        boolean searchable = getSearchable(o, ontologyClass);
+        result.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
 
         String titleFormula = getTitleFormula(o, ontologyClass);
         if (titleFormula != null) {
@@ -369,7 +367,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
 
-            JSONObject possibleValues = getPossibleValues(o, dataTypeProperty);
+            Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
             addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, boost);
         }
@@ -380,7 +378,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            JSONObject possibleValues,
+            Map<String, String> possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -422,7 +420,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     protected abstract void getOrCreateInverseOfRelationship(Relationship fromRelationship, Relationship inverseOfRelationship);
 
     private Iterable<Concept> getRangesConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
-        String uri = objectProperty.getIRI().toString();
         List<Concept> ranges = new ArrayList<Concept>();
         for (OWLClassExpression rangeClassExpr : objectProperty.getRanges(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
@@ -435,7 +432,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     private Iterable<Concept> getDomainsConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
-        String uri = objectProperty.getIRI().toString();
         List<Concept> domains = new ArrayList<Concept>();
         for (OWLClassExpression domainClassExpr : objectProperty.getDomains(o)) {
             OWLClass rangeClass = domainClassExpr.asOWLClass();
@@ -576,12 +572,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return getAnnotationValueByUri(o, owlEntity, LumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName());
     }
 
-    protected JSONObject getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
+    protected Map<String, String> getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.POSSIBLE_VALUES.getPropertyName());
         if (val == null || val.trim().length() == 0) {
             return null;
         }
-        return new JSONObject(val);
+        return JSONUtil.toMap(new JSONObject(val));
     }
 
     protected String getAddRelatedConceptWhiteList(OWLOntology o, OWLEntity owlEntity) {
@@ -660,17 +656,18 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     @Override
-    public JSONObject getJson() {
-        JSONObject resultJson = new JSONObject();
+    public Ontology getClientApiObject() {
+        Ontology ontology = new Ontology();
 
         Iterable<Concept> concepts = getConceptsWithProperties();
-        resultJson.put("concepts", Concept.toJsonConcepts(concepts));
+        ontology.addAllConcepts(Concept.toClientApiConcepts(concepts));
 
         Iterable<OntologyProperty> properties = getProperties();
-        resultJson.put("properties", OntologyProperty.toJsonProperties(properties));
+        ontology.addAllProperties(OntologyProperty.toClientApiProperties(properties));
 
         Iterable<Relationship> relationships = getRelationshipLabels();
-        resultJson.put("relationships", Relationship.toJsonRelationships(relationships));
-        return resultJson;
+        ontology.addAllRelationships(Relationship.toClientApiRelationships(relationships));
+
+        return ontology;
     }
 }

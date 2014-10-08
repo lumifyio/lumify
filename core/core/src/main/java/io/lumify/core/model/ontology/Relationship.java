@@ -1,8 +1,10 @@
 package io.lumify.core.model.ontology;
 
-import org.json.JSONArray;
+import io.lumify.web.clientapi.model.Ontology;
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class Relationship {
     private final String sourceConceptIRI;
@@ -27,27 +29,23 @@ public abstract class Relationship {
         return destConceptIRI;
     }
 
-    public JSONObject toJson() {
+    public Ontology.Relationship toClientApi() {
         try {
-            JSONObject json = new JSONObject();
-            json.put("title", getIRI());
-            json.put("displayName", getDisplayName());
-            json.put("source", getSourceConceptIRI());
-            json.put("dest", getDestConceptIRI());
+            Ontology.Relationship result = new Ontology.Relationship();
+            result.setTitle(getIRI());
+            result.setDisplayName(getDisplayName());
+            result.setSource(getSourceConceptIRI());
+            result.setDest(getDestConceptIRI());
 
             Iterable<String> inverseOfIRIs = getInverseOfIRIs();
-            JSONArray inverseOfsJson = new JSONArray();
             for (String inverseOfIRI : inverseOfIRIs) {
-                JSONObject inverseOfJson = new JSONObject();
-                inverseOfJson.put("iri", inverseOfIRI);
-                inverseOfJson.put("primaryIri", getPrimaryInverseOfIRI(getIRI(), inverseOfIRI));
-                inverseOfsJson.put(inverseOfJson);
-            }
-            if (inverseOfsJson.length() > 0) {
-                json.put("inverseOfs", inverseOfsJson);
+                Ontology.Relationship.InverseOf inverseOf = new Ontology.Relationship.InverseOf();
+                inverseOf.setIri(inverseOfIRI);
+                inverseOf.setPrimaryIri(getPrimaryInverseOfIRI(getIRI(), inverseOfIRI));
+                result.getInverseOfs().add(inverseOf);
             }
 
-            return json;
+            return result;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -60,10 +58,10 @@ public abstract class Relationship {
         return iri1;
     }
 
-    public static JSONArray toJsonRelationships(Iterable<Relationship> relationships) {
-        JSONArray results = new JSONArray();
+    public static Collection<Ontology.Relationship> toClientApiRelationships(Iterable<Relationship> relationships) {
+        Collection<Ontology.Relationship> results = new ArrayList<Ontology.Relationship>();
         for (Relationship vertex : relationships) {
-            results.put(vertex.toJson());
+            results.add(vertex.toClientApi());
         }
         return results;
     }

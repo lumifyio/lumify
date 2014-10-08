@@ -3,7 +3,7 @@ package io.lumify.web.clientapi.codegen;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.ApiInvoker;
 
-import io.lumify.web.clientapi.codegen.model.Ontology;
+import io.lumify.web.clientapi.model.Ontology;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;

@@ -6,7 +6,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.PropertyType;
+import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;

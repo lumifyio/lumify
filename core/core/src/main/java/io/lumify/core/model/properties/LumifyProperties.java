@@ -28,7 +28,7 @@ public class LumifyProperties {
     public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("http://lumify.io#text");
     public static final StreamingLumifyProperty RAW = new StreamingLumifyProperty("http://lumify.io#raw");
 
-    public static final StringLumifyProperty ADD_RELATED_CONCEPT_WHITE_LIST = new StringLumifyProperty("http://lumify.io#addRelatedConceptWhiteList");
+    public static final JsonArrayLumifyProperty ADD_RELATED_CONCEPT_WHITE_LIST = new JsonArrayLumifyProperty("http://lumify.io#addRelatedConceptWhiteList");
     public static final StringLumifyProperty AUTHOR = new StringLumifyProperty("http://lumify.io#author");
     public static final StringLumifyProperty COLOR = new StringLumifyProperty("http://lumify.io#color");
     public static final StringLumifyProperty CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io#conceptType");

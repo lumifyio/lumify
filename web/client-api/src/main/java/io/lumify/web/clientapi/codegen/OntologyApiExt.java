@@ -1,16 +1,15 @@
 package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.codegen.model.Ontology;
-import io.lumify.web.clientapi.codegen.model.OntologyConcept;
+import io.lumify.web.clientapi.model.Ontology;
 
 public class OntologyApiExt extends OntologyApi {
     private Ontology ontology;
 
-    public OntologyConcept getConcept(String conceptIri) throws ApiException {
+    public Ontology.Concept getConcept(String conceptIri) throws ApiException {
         if (ontology == null) {
             ontology = get();
         }
-        for (OntologyConcept concept : ontology.getConcepts()) {
+        for (Ontology.Concept concept : ontology.getConcepts()) {
             if (concept.getId().equals(conceptIri)) {
                 return concept;
             }

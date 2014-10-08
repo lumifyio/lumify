@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.PropertyType;
+import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;

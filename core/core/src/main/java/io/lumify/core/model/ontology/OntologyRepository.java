@@ -1,6 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.web.clientapi.model.Ontology;
 import net.lingala.zip4j.exception.ZipException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +65,7 @@ public interface OntologyRepository {
 
     void writePackage(File file, IRI documentIRI, Authorizations authorizations) throws Exception;
 
-    JSONObject getJson();
+    Ontology getClientApiObject();
 
     String guessDocumentIRIFromPackage(File inFile) throws Exception;
 }

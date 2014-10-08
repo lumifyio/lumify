@@ -10,10 +10,12 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.*;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.TimingCallable;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.ConvertingIterable;
@@ -51,7 +53,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
-    private Cache<String, JSONObject> jsonCache = CacheBuilder.newBuilder()
+    private Cache<String, Ontology> clientApiCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
 
@@ -77,21 +79,21 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public JSONObject getJson() {
-        JSONObject json = this.jsonCache.getIfPresent("json");
-        if (json != null) {
-            return json;
+    public Ontology getClientApiObject() {
+        Ontology o = this.clientApiCache.getIfPresent("clientApi");
+        if (o != null) {
+            return o;
         }
-        json = super.getJson();
-        this.jsonCache.put("json", json);
-        return json;
+        o = super.getClientApiObject();
+        this.clientApiCache.put("clientApi", o);
+        return o;
     }
 
     @Override
     public void clearCache() {
         LOGGER.info("clearing ontology cache");
         graph.flush();
-        this.jsonCache.invalidateAll();
+        this.clientApiCache.invalidateAll();
         this.allConceptsWithPropertiesCache.invalidateAll();
         this.allPropertiesCache.invalidateAll();
         this.relationshipLabelsCache.invalidateAll();
@@ -440,7 +442,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            JSONObject possibleValues,
+            Map<String, String> possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -501,7 +503,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             final String propertyName,
             final PropertyType dataType,
             final String displayName,
-            JSONObject possibleValues,
+            Map<String, String> possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -536,7 +538,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
             }
             if (possibleValues != null) {
-                POSSIBLE_VALUES.setProperty(builder, possibleValues, VISIBILITY.getVisibility());
+                POSSIBLE_VALUES.setProperty(builder, JSONUtil.toJson(possibleValues), VISIBILITY.getVisibility());
             }
             if (displayType != null && !displayName.trim().isEmpty()) {
                 DISPLAY_TYPE.setProperty(builder, displayType, VISIBILITY.getVisibility());

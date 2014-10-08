@@ -12,7 +12,7 @@ import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.*;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.PropertyType;
+import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.version.VersionService;

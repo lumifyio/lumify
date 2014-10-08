@@ -5,6 +5,7 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.util.JSONUtil;
 import org.codehaus.plexus.util.IOUtil;
 import org.json.JSONArray;
 import org.securegraph.Authorizations;
@@ -13,6 +14,7 @@ import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 public class SecureGraphConcept extends Concept {
     private final Vertex vertex;
@@ -83,7 +85,13 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
-    public String getAddRelatedConceptWhiteList () { return LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyValue(vertex); }
+    public List<String> getAddRelatedConceptWhiteList() {
+        JSONArray arr = LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyValue(vertex);
+        if (arr == null) {
+            return null;
+        }
+        return JSONUtil.toStringList(arr);
+    }
 
     @Override
     public void setProperty(String name, Object value, Authorizations authorizations) {
