@@ -1,6 +1,6 @@
 package io.lumify.web.clientapi;
 
-import io.lumify.web.clientapi.codegen.*;
+import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.User;
 import io.lumify.web.clientapi.model.Workspace;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LumifyApi {
-    private final UserApi userApi;
+    private final UserApiExt userApi;
     private final WorkspaceApiExt workspaceApi;
     private final AdminApiExt adminApi;
     private final VertexApiExt vertexApi;
@@ -20,7 +20,7 @@ public class LumifyApi {
     public LumifyApi(String basePath) {
         this.basePath = basePath;
 
-        userApi = new UserApi();
+        userApi = new UserApiExt();
         userApi.setBasePath(basePath);
 
         workspaceApi = new WorkspaceApiExt();
@@ -36,7 +36,7 @@ public class LumifyApi {
         ontologyApi.setBasePath(basePath);
     }
 
-    public UserApi getUserApi() {
+    public UserApiExt getUserApi() {
         return userApi;
     }
 

@@ -15,7 +15,8 @@ import java.util.Map;
 
 public class JavaCodeGenerator extends BasicJavaGenerator {
 
-    public static final String BASE_PACKAGE = "io.lumify.web.clientapi.codegen";
+    public static final String BASE_CODEGEN_PACKAGE = "io.lumify.web.clientapi.codegen";
+    public static final String BASE_PACKAGE = "io.lumify.web.clientapi";
 
     // Run with VMWarguments: "-DfileMap=src/main/resources/lumify.json"
     //          Arguments:    "lumify.json"
@@ -36,23 +37,21 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
     }
 
     private void fixFiles() throws IOException {
-        File destDir = new File(destinationDir());
-
-        removeModelObjectImports(destDir);
+        File destDir = new File(destinationDir(), "io/lumify/web/clientapi/codegen");
+        fixFiles(destDir);
     }
 
-    private void removeModelObjectImports(File destDir) throws IOException {
+    private void fixFiles(File destDir) throws IOException {
         for (File f : destDir.listFiles()) {
             if (f.isDirectory()) {
-                removeModelObjectImports(f);
+                fixFiles(f);
             } else {
                 String fileContents = FileUtils.readFileToString(f);
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Object;", "");
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.LinkedHashMap;", "import java.util.Map;");
-                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.WorkspacePublishResponse;", "import io.lumify.web.clientapi.model.WorkspacePublishResponse;");
-                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.TermMentionsResponse;", "import io.lumify.web.clientapi.model.TermMentionsResponse;");
-                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Element;", "import io.lumify.web.clientapi.model.Element;");
-                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.ArtifactImportResponse;", "import io.lumify.web.clientapi.model.ArtifactImportResponse;");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.ApiInvoker;", "import io.lumify.web.clientapi.ApiInvoker;");
+                fileContents = fileContents.replaceAll("String basePath =", "protected String basePath =");
+                fileContents = fileContents.replaceAll("ApiInvoker apiInvoker =", "protected ApiInvoker apiInvoker =");
                 fileContents = fileContents.replaceAll("LinkedHashMap", "Map<String,Object>");
                 fileContents = fileContents.replaceAll("mp\\.field\\(\"file\", file, MediaType\\.MULTIPART_FORM_DATA_TYPE\\);",
                         "com.sun.jersey.core.header.FormDataContentDisposition dispo = com.sun.jersey.core.header.FormDataContentDisposition\n"
@@ -78,12 +77,12 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
 
     @Override
     public Some<String> apiPackage() {
-        return new Some(BASE_PACKAGE);
+        return new Some(BASE_CODEGEN_PACKAGE);
     }
 
     @Override
     public Some<String> invokerPackage() {
-        return new Some(BASE_PACKAGE);
+        return new Some(BASE_CODEGEN_PACKAGE);
     }
 
     @Override

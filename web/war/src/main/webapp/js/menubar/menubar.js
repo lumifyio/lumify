@@ -100,20 +100,18 @@ define([
         });
 
         var self = this,
-            extensionCount = 0;
+            extensionCount = 0,
+            extensions = {};
+
         menubarPlugin.items.forEach(function(data) {
             var cls = 'extension-' + extensionCount++,
                 type = data.action.type;
-
-            if (!self.extensions) {
-                self.extensions = {};
-            }
 
             if (type in ACTION_TYPES) {
                 ACTION_TYPES[type].names.push(cls);
             }
 
-            self.extensions[cls] = data;
+            extensions[cls] = data;
             attrs[cls + 'IconSelector'] = '.' + cls;
             events[cls + 'IconSelector'] = menubarItemHandler(cls);
         });
@@ -124,6 +122,7 @@ define([
             var self = this;
 
             this.$node.html(template({}));
+            this.extensions = extensions;
 
             _.each(this.extensions, function(item, cls) {
                 var options = $.extend({

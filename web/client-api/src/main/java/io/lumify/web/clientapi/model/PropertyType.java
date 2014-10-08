@@ -1,7 +1,4 @@
-package io.lumify.core.model.ontology;
-
-import io.lumify.core.exception.LumifyException;
-import org.securegraph.type.GeoPoint;
+package io.lumify.web.clientapi.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,6 +13,8 @@ public enum PropertyType {
     DOUBLE("double"),
     BOOLEAN("boolean"),
     INTEGER("integer");
+
+    public static final String ORG_SECUREGRAPH_TYPE_GEO_POINT = "org.securegraph.type.GeoPoint";
 
     private final String text;
 
@@ -44,7 +43,11 @@ public enum PropertyType {
             case STRING:
                 return String.class;
             case GEO_LOCATION:
-                return GeoPoint.class;
+                try {
+                    return Class.forName(ORG_SECUREGRAPH_TYPE_GEO_POINT);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("Could not find class: " + ORG_SECUREGRAPH_TYPE_GEO_POINT);
+                }
             case IMAGE:
                 return byte[].class;
             case BINARY:
@@ -58,7 +61,7 @@ public enum PropertyType {
             case INTEGER:
                 return Integer.class;
             default:
-                throw new LumifyException("Unhandled property type: " + propertyType);
+                throw new RuntimeException("Unhandled property type: " + propertyType);
         }
     }
 }

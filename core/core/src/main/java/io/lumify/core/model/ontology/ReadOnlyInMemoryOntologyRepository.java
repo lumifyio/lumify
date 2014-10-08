@@ -8,8 +8,8 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
 import org.securegraph.inmemory.InMemoryAuthorizations;
@@ -20,10 +20,7 @@ import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -123,7 +120,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            JSONObject possibleValues,
+            Map<String, String> possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -150,7 +147,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             final String propertyName,
             final PropertyType dataType,
             final String displayName,
-            JSONObject possibleValues,
+            Map<String, String> possibleValues,
             boolean userVisible,
             boolean searchable,
             String displayType,

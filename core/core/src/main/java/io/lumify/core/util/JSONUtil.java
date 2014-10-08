@@ -11,6 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JSONUtil {
     private static ObjectMapper mapper = ObjectMapperFactory.getInstance();
@@ -66,6 +70,14 @@ public class JSONUtil {
         }
     }
 
+    public static JSONArray parseArray(String s) {
+        try {
+            return new JSONArray(s);
+        } catch (JSONException ex) {
+            throw new LumifyJsonParseException(s, ex);
+        }
+    }
+
     public static JsonNode toJsonNode(JSONObject json) {
         try {
             if (json == null) {
@@ -75,5 +87,30 @@ public class JSONUtil {
         } catch (IOException e) {
             throw new LumifyException("Could not create json node from: " + json.toString(), e);
         }
+    }
+
+    public static Map<String, String> toMap(JSONObject json) {
+        Map<String, String> results = new HashMap<String, String>();
+        for (Object key : json.keySet()) {
+            String keyStr = (String) key;
+            results.put(keyStr, json.getString(keyStr));
+        }
+        return results;
+    }
+
+    public static List<String> toStringList(JSONArray arr) {
+        List<String> result = new ArrayList<String>();
+        for (int i = 0; i < arr.length(); i++) {
+            result.add(arr.getString(i));
+        }
+        return result;
+    }
+
+    public static JSONObject toJson(Map<String, String> map) {
+        JSONObject json = new JSONObject();
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            json.put(e.getKey(), e.getValue());
+        }
+        return json;
     }
 }

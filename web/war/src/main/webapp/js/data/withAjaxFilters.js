@@ -25,8 +25,7 @@ define([], function() {
             /^vertex\/remove-edge/,
             /^vertex\/(un)?resolve/,
             /^vertex\/import/,
-            /^edge\/properties/,
-            /^edge\/create/
+            /^edge/
         ],
 
         // Custom converters for routes that are more complicated than above,

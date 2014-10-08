@@ -1,4 +1,4 @@
-package io.lumify.web.clientapi.codegen;
+package io.lumify.web.clientapi;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.sun.jersey.api.client.Client;
@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.multipart.FormDataMultiPart;
+import io.lumify.web.clientapi.codegen.ApiException;
 
 import javax.ws.rs.core.Response.Status.Family;
 import java.io.IOException;
