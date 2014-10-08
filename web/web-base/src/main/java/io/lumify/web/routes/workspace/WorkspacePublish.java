@@ -18,14 +18,11 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.Edge;
 import org.securegraph.Element;
@@ -223,7 +220,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
                 if (GraphUtil.getSandboxStatus(element, workspaceId) != SandboxStatus.PUBLIC) {
                     String errorMessage = "Cannot publish a modification of a property on a private element: " + element.getId();
-                    JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
+                    VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
                     LOGGER.warn("%s: visibilityJson: %s, workspaceId: %s", errorMessage, visibilityJson.toString(), workspaceId);
                     data.setErrorMessage(errorMessage);
                     workspacePublishResponse.addFailure(data);
@@ -277,9 +274,8 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         LOGGER.debug("publishing vertex %s(%s)", vertex.getId(), vertex.getVisibility().toString());
         Visibility originalVertexVisibility = vertex.getVisibility();
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
-        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
-        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
+        if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
             throw new LumifyException(String.format("vertex with id '%s' is not local to workspace '%s'", vertex.getId(), workspaceId));
         }
 
@@ -339,13 +335,12 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private boolean publishProperty(ExistingElementMutation elementMutation, Property property, String workspaceId, User user) {
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getMetadataValue(property.getMetadata());
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getMetadataValue(property.getMetadata());
         if (visibilityJson == null) {
             LOGGER.debug("skipping property %s. no visibility json property", property.toString());
             return false;
         }
-        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
-        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+        if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
             LOGGER.debug("skipping property %s. doesn't have workspace in json.", property.toString());
             return false;
         }
@@ -370,9 +365,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         LOGGER.debug("publishing edge %s(%s)", edge.getId(), edge.getVisibility().toString());
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge);
-        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
-        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge);
+        if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
             throw new LumifyException(String.format("edge with id '%s' is not local to workspace '%s'", edge.getId(), workspaceId));
         }
 

@@ -9,7 +9,6 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -19,6 +18,8 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.SandboxStatus;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
@@ -75,7 +76,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             return;
         }
 
-        JSONObject visibilityJson;
+        VisibilityJson visibilityJson;
         if (vertexSandboxStatus == SandboxStatus.PUBLIC) {
             visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge);
             visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
@@ -96,7 +97,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
 
         this.workQueueRepository.pushEdgeDeletion(edge);
         this.workQueueRepository.pushGraphPropertyQueue(artifactVertex, multiValueKey,
-                LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getString("source"));
+                LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getSource());
 
         auditRepository.auditVertex(AuditAction.UNRESOLVE, resolvedVertex.getId(), "", "", user, lumifyVisibility.getVisibility());
 

@@ -3,16 +3,14 @@ package io.lumify.core.model.termMention;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
-import org.json.JSONObject;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TermMentionBuilder {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TermMentionBuilder.class);
     private static final String TERM_MENTION_VERTEX_ID_PREFIX = "TM_";
     private Vertex sourceVertex;
     private String propertyKey;
@@ -20,7 +18,7 @@ public class TermMentionBuilder {
     private long end = -1;
     private String title;
     private String conceptIri;
-    private JSONObject visibilityJson;
+    private VisibilityJson visibilityJson;
     private String process;
     private Vertex resolvedToVertex;
     private Edge resolvedEdge;
@@ -79,19 +77,19 @@ public class TermMentionBuilder {
     /**
      * Visibility JSON object. This will be applied to the newly created term.
      */
-    public TermMentionBuilder visibilityJson(JSONObject visibilitySource) {
+    public TermMentionBuilder visibilityJson(VisibilityJson visibilitySource) {
         this.visibilityJson = visibilitySource;
         return this;
     }
 
-    private static JSONObject visibilityJsonStringToJson(String visibilityJsonString) {
+    private static VisibilityJson visibilityJsonStringToJson(String visibilityJsonString) {
         if (visibilityJsonString == null) {
-            return new JSONObject();
+            return new VisibilityJson();
         }
         if (visibilityJsonString.length() == 0) {
-            return new JSONObject();
+            return new VisibilityJson();
         }
-        return new JSONObject(visibilityJsonString);
+        return ClientApiConverter.toClientApi(visibilityJsonString, VisibilityJson.class);
     }
 
     /**

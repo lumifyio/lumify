@@ -12,7 +12,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -56,7 +56,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
         final String text = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
 
         Vertex sourceVertex = (Vertex) data.getElement();
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
         final Iterable<PhoneNumberMatch> phoneNumbers = phoneNumberUtil.findNumbers(text, defaultRegionCode);
         List<Vertex> termMentions = new ArrayList<Vertex>();
         for (final PhoneNumberMatch phoneNumber : phoneNumbers) {

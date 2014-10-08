@@ -1,11 +1,11 @@
 package io.lumify.core.security;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.VisibilityJson;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class DirectVisibilityTranslator extends VisibilityTranslator {
 
@@ -14,22 +14,19 @@ public class DirectVisibilityTranslator extends VisibilityTranslator {
     }
 
     @Override
-    public LumifyVisibility toVisibility(JSONObject visibilityJson) {
+    public LumifyVisibility toVisibility(VisibilityJson visibilityJson) {
         StringBuilder visibilityString = new StringBuilder();
 
         List<String> required = new ArrayList<String>();
 
-        String source = visibilityJson.optString(JSON_SOURCE);
+        String source = visibilityJson.getSource();
         if (source != null && source.trim().length() > 0) {
             required.add(source.trim());
         }
 
-        JSONArray workspaces = visibilityJson.optJSONArray(JSON_WORKSPACES);
+        Set<String> workspaces = visibilityJson.getWorkspaces();
         if (workspaces != null) {
-            for (int i = 0; i < workspaces.length(); i++) {
-                String workspace = workspaces.getString(i);
-                required.add(workspace);
-            }
+            required.addAll(workspaces);
         }
 
         for (String v : required) {

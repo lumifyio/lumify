@@ -11,6 +11,7 @@ import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.hadoop.fs.FileSystem;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -48,7 +49,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
     private InMemoryGraph graph;
     private Visibility visibility;
     private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
-    private JSONObject visibilityJson;
+    private VisibilityJson visibilityJson;
 
     @Before
     public void setUp() throws Exception {
@@ -72,8 +73,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
         graph = new InMemoryGraph();
         visibility = new Visibility("");
-        visibilityJson = new JSONObject();
-        visibilityJson.put("source", "");
+        visibilityJson = new VisibilityJson();
 
         extractor.setGraph(graph);
 

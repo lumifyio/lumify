@@ -1,7 +1,7 @@
 package io.lumify.core.ingest.graphProperty;
 
 import io.lumify.core.model.properties.LumifyProperties;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.*;
 
 import java.io.File;
@@ -50,16 +50,19 @@ public class GraphPropertyWorkData {
         return visibilitySource;
     }
 
-    public JSONObject getVisibilitySourceJson() {
+    // TODO this is a weird method. I'm not sure what this should be used for
+    public VisibilityJson getVisibilitySourceJson() {
         if (getVisibilitySource() == null || getVisibilitySource().length() == 0) {
-            return new JSONObject();
+            return new VisibilityJson();
         }
-        return new JSONObject(getVisibilitySource());
+        VisibilityJson visibilityJson = new VisibilityJson();
+        visibilityJson.setSource(getVisibilitySource());
+        return visibilityJson;
     }
 
     public Map<String, Object> createPropertyMetadata() {
         Map<String, Object> metadata = new HashMap<String, Object>();
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
         if (visibilityJson != null) {
             LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
         }
@@ -67,14 +70,14 @@ public class GraphPropertyWorkData {
     }
 
     public void setVisibilityJsonOnElement(ElementBuilder builder) {
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
         if (visibilityJson != null) {
             LumifyProperties.VISIBILITY_JSON.setProperty(builder, visibilityJson, getVisibility());
         }
     }
 
     public void setVisibilityJsonOnElement(Element element, Authorizations authorizations) {
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
         if (visibilityJson != null) {
             LumifyProperties.VISIBILITY_JSON.setProperty(element, visibilityJson, getVisibility(), authorizations);
         }

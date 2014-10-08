@@ -7,8 +7,8 @@ import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.web.clientapi.model.SandboxStatus;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,9 +87,9 @@ public class JsonSerializer {
         json.put("id", element.getId());
         json.put("properties", toJsonProperties(element.getProperties(), workspaceId));
         json.put("sandboxStatus", GraphUtil.getSandboxStatus(element, workspaceId).toString());
-        JSONObject visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
         if (visibilityJson != null) {
-            json.put("visibilitySource", VisibilityTranslator.getVisibilitySource(visibilityJson));
+            json.put("visibilitySource", visibilityJson.getSource());
         }
 
         return json;
