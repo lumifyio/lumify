@@ -9,6 +9,26 @@
       display: table-row;
     }
   }
+  
+  .table tbody + tbody {
+    border-top: none;
+  }
+  
+  .property-group {
+    .property-group-header {
+      background: #ccc;
+      cursor: pointer;
+      .disable-text-selection;
+    }
+    &.collapsed {      
+      .property-row {
+        display: none;        
+      }
+      & > .property-group-header {
+        display: table-row;
+      }
+    }
+  }
 
   .property-name {    
       color: #999;

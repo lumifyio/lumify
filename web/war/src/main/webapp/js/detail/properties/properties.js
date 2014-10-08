@@ -341,6 +341,7 @@ define([
             this.tableRoot = root
                 .append('table')
                 .attr('class', 'table')
+                .on('click', onTableClick)
                 .call(function() {
                     if (!F.vertex.isEdge(self.attr.data)) {
                         this.append('tr')
@@ -704,16 +705,19 @@ define([
         };
     }
 
+    function onTableClick(event) {
+        var $target = $(d3.event.target).closest('.property-group-header'),
+            $tbody = $target.closest('.property-group');
+
+        if ($target.is('.property-group-header')) {
+            $tbody.toggleClass('collapsed');
+        }
+    }
+
     function createPropertyGroups(maxItemsBeforeHidden) {
         this.enter()
-            .insert('tr', '.buttons-row')
+            .insert('tbody', '.buttons-row')
             .attr('class', 'property-group')
-            .text(function(pair) {
-                return pair[0];
-            })
-            .append('tbody');
-
-        this.select('tbody')
             .selectAll('tr.property-row')
             .data(function(pair) {
                 return _.chain(pair[1])
@@ -721,6 +725,11 @@ define([
                         return p[1].slice(0, maxItemsBeforeHidden);
                     })
                     .flatten()
+                    .tap(function(list) {
+                        if (pair[0] !== NO_GROUP) {
+                            list.splice(0, 0, pair[0]);
+                        }
+                    })
                     .value();
             })
             .call(createProperties)
@@ -729,14 +738,53 @@ define([
     }
 
     function createProperties() {
+        var GROUP = 0, NAME = 1, VALUE = 2;
+
         this.enter()
             .append('tr')
-            .call(function() {
-                this.append('td').text(function(property) {
-                    return property.name;
-                });
-                this.append('td').text('right');
+            .attr('class', function(datum) {
+                if (_.isString(datum)) {
+                    return 'property-group-header collapsed';
+                }
+                return 'property-row';
             })
+            .selectAll('td')
+            .data(function(datum) {
+                if (_.isString(datum)) {
+                    return [{
+                        type: GROUP,
+                        name: datum
+                    }];
+                }
+
+                return [
+                    {
+                        type: NAME,
+                        name: datum.name
+                    },
+                    {
+                        type: VALUE,
+                        property: datum
+                    }
+                ];
+            })
+            .call(function() {
+                this.enter()
+                    .append('td')
+                    .attr('colspan', function(datum) {
+                        if (datum.type === GROUP) {
+                            return '2';
+                        }
+                    })
+                    .text(function(datum, row, column) {
+                        switch (datum.type) {
+                            case GROUP: return datum.name;
+                            case NAME: return datum.name;
+                            case VALUE: return datum.property.value;
+                        }
+                    });
+                this.exit().remove();
+            });
     }
 
 });
