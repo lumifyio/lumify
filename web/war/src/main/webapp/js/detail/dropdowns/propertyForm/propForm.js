@@ -481,6 +481,7 @@ define([
                  (((_.isString(value) && value.length) || value)))) {
 
                 this.trigger('addProperty', {
+                    isEdge: F.vertex.isEdge (this.attr.data),
                     property: $.extend({
                             key: propertyKey,
                             name: propertyName,
