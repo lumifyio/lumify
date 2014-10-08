@@ -32,12 +32,17 @@ define([
             });
 
             this.on('clearSelectedConcept', this.onClearConcept);
-            this.on('selectConcept', this.onSelectConcept);
+            this.on('selectConceptId', this.onSelectConceptId);
             this.on('enableConcept', this.onEnableConcept);
 
             this.setupTypeahead();
 
         });
+
+        this.onSelectConceptId = function(event, data) {
+            var concept = this.conceptsById[data.conceptId];
+            this.select('fieldSelector').val(concept && concept.displayName || '');
+        };
 
         this.showTypeahead = function() {
             this.select('fieldSelector').typeahead('lookup').select();
@@ -52,11 +57,7 @@ define([
         };
 
         this.onClearConcept = function(event) {
-            this.select('conceptSelector').val('');
-        };
-
-        this.onSelectConcept = function(event, data) {
-            this.select('conceptSelector').val(data && data.conceptId || '').change();
+            this.select('fieldSelector').val('');
         };
 
         this.onEnableConcept = function(event, data) {

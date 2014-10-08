@@ -341,6 +341,7 @@ define([
             this.on('deleteProperty', this.onDeleteProperty);
             this.on('editProperty', this.onEditProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+            this.on(document, 'edgesUpdated', this.onEdgesUpdated);
 
             var positionPopovers = _.throttle(function() {
                     self.trigger('positionPropertyInfo');
@@ -534,15 +535,20 @@ define([
             return JSON.stringify(info);
         };
 
-        this.onVerticesUpdated = function(event, data) {
-            var self = this;
+        this.onEdgesUpdated = function(event, data) {
+            var edge = _.findWhere(data.edges, { id: this.attr.data.id });
+            if (edge) {
+                this.attr.data.properties = edge.properties;
+                this.update(edge.properties);
+            }
+        };
 
-            data.vertices.forEach(function(vertex) {
-                if (vertex.id === self.attr.data.id) {
-                    self.attr.data.properties = vertex.properties;
-                    self.update(vertex.properties)
-                }
-            });
+        this.onVerticesUpdated = function(event, data) {
+            var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
+            if (vertex) {
+                this.attr.data.properties = vertex.properties;
+                this.update(vertex.properties)
+            }
         };
 
         this.onDeleteProperty = function(event, data) {
@@ -555,13 +561,19 @@ define([
 
         this.onAddProperty = function(event, data) {
             if (data.property.name === 'http://lumify.io#visibilityJson') {
-
-                vertexService.setVisibility(
+                if (data.isEdge) {
+                    edgeService.setVisibility(
                         this.attr.data.id,
                         data.property.visibilitySource)
-                    .fail(this.requestFailure.bind(this))
-                    .done(this.closePropertyForm.bind(this));
-
+                        .fail(this.requestFailure.bind(this))
+                        .done(this.closePropertyForm.bind(this));
+                } else {
+                    vertexService.setVisibility(
+                        this.attr.data.id,
+                        data.property.visibilitySource)
+                        .fail(this.requestFailure.bind(this))
+                        .done(this.closePropertyForm.bind(this));
+                }
             } else {
 
                 vertexService.setProperty(

@@ -74,7 +74,10 @@ define([
         }
 
         this.onSearch = function(event) {
-            this.trigger(document, 'searchByRelatedEntity', { vertexId: this.attr.relatedToVertexId });
+            this.trigger(document, 'searchByRelatedEntity', {
+                vertexId: this.attr.relatedToVertexId,
+                conceptId: this.conceptId
+            });
             this.teardown();
         };
 

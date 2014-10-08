@@ -1,6 +1,7 @@
 build/
 libs/*
 css/*
+js/plugin-development
 jsc/*
 test/reports
 libpeerconnection.log
