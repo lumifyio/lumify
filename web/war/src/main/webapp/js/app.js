@@ -307,16 +307,26 @@ define([
         this.handleFilesDropped = function(files, event) {
             var self = this;
 
-            require(['util/popovers/fileImport/fileImport'], function(FileImport) {
-                FileImport.attachTo(event.target, {
-                    files: files,
-                    anchorTo: {
-                        page: {
-                            x: event.pageX,
-                            y: event.pageY
-                        }
-                    }
-                });
+            require(['configuration/plugins/fileImport/plugin'], function(FileHandlers) {
+                var mimeType = files.length === 1 && files[0].type,
+                    handler;
+
+                if (mimeType in FileHandlers.fileHandlers) {
+                    handler = FileHandlers.fileHandlers[mimeType];
+                    handler(files[0]);
+                } else {
+                    require(['util/popovers/fileImport/fileImport'], function(FileImport) {
+                        FileImport.attachTo(event.target, {
+                            files: files,
+                            anchorTo: {
+                                page: {
+                                    x: event.pageX,
+                                    y: event.pageY
+                                }
+                            }
+                        });
+                    });
+                }
             });
         };
 
