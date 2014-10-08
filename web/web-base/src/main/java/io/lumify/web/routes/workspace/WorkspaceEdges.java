@@ -1,5 +1,6 @@
 package io.lumify.web.routes.workspace;
 
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -75,6 +76,7 @@ public class WorkspaceEdges extends BaseRequestHandler {
             rel.put("relationshipType", edge.getLabel());
             rel.put("id", edge.getId());
             rel.put("diffType", GraphUtil.getSandboxStatus(edge, workspaceId).toString());
+            rel.put("visibilityJson", LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge));
             resultsJson.put(rel);
         }
 
