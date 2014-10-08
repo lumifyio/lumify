@@ -34,6 +34,7 @@ define([
         AUDIT_DATE_DISPLAY_REAL = 1,
         MAX_AUDIT_ITEMS = 3,
         CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE,
+        NO_GROUP = '${NO_GROUP}',
         alreadyWarnedAboutMissingOntology = {},
         ontologyService = new OntologyService(),
         vertexService = new VertexService(),
@@ -85,73 +86,18 @@ define([
 
         this.update = function(properties) {
             var self = this,
-                model = self.attr.data,
-                isEdge = F.vertex.isEdge(model),
-                displayProperties = _.chain(properties)
-                    .filter(function(property) {
-                        if (isEdge && isJustification(property)) {
-                            $.extend(property, {
-                                hideInfo: true,
-                                hideVisibility: true,
-                                displayName: 'Justification',
-                                justificationData: {
-                                    justificationMetadata: property.name === '_justificationMetadata' ?
-                                        property.value : null,
-                                    sourceMetadata: property.name === '_sourceMetadata' ?
-                                        property.value : null
-                                }
-                            });
-                            return true;
-                        }
+                displayProperties = this.transformPropertiesForUpdate(properties);
 
-                        if (isVisibility(property)) {
-                            return true;
-                        }
+            this.tableRoot.selectAll('tr.property-group')
+                .data(displayProperties)
+                .call(
+                    _.partial(
+                        createPropertyGroups,
+                        parseInt(self.config['properties.multivalue.defaultVisibleCount'], 10)
+                    )
+                );
 
-                        var ontologyProperty = self.ontologyProperties.byTitle[property.name];
-                        return ontologyProperty && ontologyProperty.userVisible;
-                    })
-                    .tap(function(properties) {
-                        var visibility = _.find(properties, isVisibility);
-                        if (!visibility) {
-                            properties.push({
-                                name: VISIBILITY_NAME,
-                                value: self.attr.data[VISIBILITY_NAME]
-                            });
-                        }
-
-                        if (isEdge && model.label) {
-                            var ontologyRelationship = self.ontologyRelationships.byTitle[model.label];
-                            properties.push({
-                                name: 'relationshipLabel',
-                                displayName: 'Type',
-                                hideInfo: true,
-                                hideVisibility: true,
-                                value: ontologyRelationship ?
-                                    ontologyRelationship.displayName :
-                                    model.label
-                            });
-                        }
-                    })
-                    .sortBy(function(property) {
-                        if (isVisibility(property)) {
-                            return '0';
-                        }
-
-                        if (isEdge) {
-                            return property.name === 'relationshipLabel' ?
-                                '1' :
-                                isJustification(property) ?
-                                '2' : '3';
-                        }
-
-                        var ontologyProperty = self.ontologyProperties.byTitle[property.name];
-                        if (ontologyProperty && ontologyProperty.displayName) {
-                            return '1' + ontologyProperty.displayName.toLowerCase();
-                        }
-                        return '2' + propertyName.toLowerCase();
-                    })
-                    .value(),
+                /*
                 row = this.tableRoot.selectAll('tr.property-row')
                     .data(displayProperties)
                     .call(function() {
@@ -291,8 +237,97 @@ define([
 
                     valueSpan.textContent = F.vertex.displayProp(property);
                 });
-
             row.exit().remove()
+            */
+        };
+
+        this.transformPropertiesForUpdate = function(properties) {
+            var self = this,
+                model = self.attr.data,
+                isEdge = F.vertex.isEdge(model),
+                displayProperties = _.chain(properties)
+                    .filter(function(property) {
+                        if (isEdge && isJustification(property)) {
+                            $.extend(property, {
+                                hideInfo: true,
+                                hideVisibility: true,
+                                displayName: 'Justification',
+                                justificationData: {
+                                    justificationMetadata: property.name === '_justificationMetadata' ?
+                                        property.value : null,
+                                    sourceMetadata: property.name === '_sourceMetadata' ?
+                                        property.value : null
+                                }
+                            });
+                            return true;
+                        }
+
+                        if (isVisibility(property)) {
+                            return true;
+                        }
+
+                        var ontologyProperty = self.ontologyProperties.byTitle[property.name];
+                        return ontologyProperty && ontologyProperty.userVisible;
+                    })
+                    .tap(function(properties) {
+                        var visibility = _.find(properties, isVisibility);
+                        if (!visibility) {
+                            properties.push({
+                                name: VISIBILITY_NAME,
+                                value: self.attr.data[VISIBILITY_NAME]
+                            });
+                        }
+
+                        if (isEdge && model.label) {
+                            var ontologyRelationship = self.ontologyRelationships.byTitle[model.label];
+                            properties.push({
+                                name: 'relationshipLabel',
+                                displayName: 'Type',
+                                hideInfo: true,
+                                hideVisibility: true,
+                                value: ontologyRelationship ?
+                                    ontologyRelationship.displayName :
+                                    model.label
+                            });
+                        }
+                    })
+                    .groupBy('name')
+                    .pairs()
+                    /*
+                    .sortBy(function(property) {
+                        if (isVisibility(property)) {
+                            return '0';
+                        }
+
+                        if (isEdge) {
+                            return property.name === 'relationshipLabel' ?
+                                '1' :
+                                isJustification(property) ?
+                                '2' : '3';
+                        }
+
+                        var ontologyProperty = self.ontologyProperties.byTitle[property.name];
+                        if (ontologyProperty && ontologyProperty.propertyGroup) {
+                            return '3' + ontologyProperty.propertyGroup.toLowerCase() + ontologyProperty.displayName;
+                        }
+                        if (ontologyProperty && ontologyProperty.displayName) {
+                            return '1' + ontologyProperty.displayName.toLowerCase();
+                        }
+                        return '2' + propertyName.toLowerCase();
+                    })
+                    */
+                    .groupBy(function(pair) {
+                        var ontologyProperty = self.ontologyProperties.byTitle[pair[0]];
+                        if (ontologyProperty && ontologyProperty.propertyGroup) {
+                            return ontologyProperty.propertyGroup;
+                        }
+
+                        return NO_GROUP;
+                    })
+                    .pairs()
+                    .value();
+
+            return displayProperties;
         };
 
         this.after('initialize', function() {
@@ -668,4 +703,40 @@ define([
             });
         };
     }
+
+    function createPropertyGroups(maxItemsBeforeHidden) {
+        this.enter()
+            .insert('tr', '.buttons-row')
+            .attr('class', 'property-group')
+            .text(function(pair) {
+                return pair[0];
+            })
+            .append('tbody');
+
+        this.select('tbody')
+            .selectAll('tr.property-row')
+            .data(function(pair) {
+                return _.chain(pair[1])
+                    .map(function(p) {
+                        return p[1].slice(0, maxItemsBeforeHidden);
+                    })
+                    .flatten()
+                    .value();
+            })
+            .call(createProperties)
+
+        this.exit().remove();
+    }
+
+    function createProperties() {
+        this.enter()
+            .append('tr')
+            .call(function() {
+                this.append('td').text(function(property) {
+                    return property.name;
+                });
+                this.append('td').text('right');
+            })
+    }
+
 });
