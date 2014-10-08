@@ -32,11 +32,17 @@ define([
             });
 
             this.on('clearSelectedConcept', this.onClearConcept);
+            this.on('selectConceptId', this.onSelectConceptId);
             this.on('enableConcept', this.onEnableConcept);
 
             this.setupTypeahead();
 
         });
+
+        this.onSelectConceptId = function(event, data) {
+            var concept = this.conceptsById[data.conceptId];
+            this.select('fieldSelector').val(concept && concept.displayName || '');
+        };
 
         this.showTypeahead = function() {
             this.select('fieldSelector').typeahead('lookup').select();

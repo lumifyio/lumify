@@ -68,6 +68,10 @@ define([
             this.onClearFilters();
 
             this.entityFilters.relatedToVertexId = data.vertexId;
+            this.conceptFilter = data.conceptId || '';
+            this.trigger(this.select('conceptDropdownSelector'), 'selectConceptId', {
+                conceptId: data.conceptId || ''
+            });
             var vertex = appData.vertex(data.vertexId),
                 title = vertex && F.vertex.title(vertex) || data.vertexId;
 
