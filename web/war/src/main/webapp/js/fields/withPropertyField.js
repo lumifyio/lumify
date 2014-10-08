@@ -9,7 +9,7 @@ define(['util/withTeardown'], function(withTeardown) {
         this.defaultAttrs({
             predicateSelector: 'select.predicate',
             visibleInputsSelector: 'input:visible,select:not(.predicate):visible',
-            inputSelector: 'input,select',
+            inputSelector: 'input,textarea,select',
             value: ''
         });
 

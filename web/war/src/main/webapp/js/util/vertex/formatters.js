@@ -119,6 +119,10 @@ define([
                     el.appendChild(anchor);
                 },
 
+                textarea: function(el, property) {
+                    $(el).html((property.value||'').replace(/\r?\n/g, '<br />'));
+                },
+
                 heading: function(el, property) {
                     var div = document.createElement('div'),
                         dim = 12,
