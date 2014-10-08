@@ -443,8 +443,23 @@ define([
 
         this.toggleDisplay = function(e, data) {
             var SLIDE_OUT = 'search workspaces admin',
-                pane = this.select(data.name + 'Selector'),
-                isVisible = pane.is('.visible');
+                pane = this.select(data.name + 'Selector');
+
+            if (data.action) {
+                pane = this.$node.find('.' + data.name + '-pane');
+                if (!pane.length) {
+                    pane = $('<div>')
+                        .addClass('fullscreen-pane ' + data.name + '-pane')
+                        .appendTo(this.$node);
+                }
+                require([data.action.componentPath], function(Component) {
+                    Component.attachTo(pane);
+                });
+            } else if (pane.length === 0) {
+                pane = this.$node.find('.' + data.name + '-pane');
+            }
+
+            var isVisible = pane.is('.visible');
 
             if (data.name === 'logout') {
                 return this.logout();

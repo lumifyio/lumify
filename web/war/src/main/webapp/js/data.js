@@ -141,6 +141,7 @@ define([
             this.on('workspaceDeleted', this.onWorkspaceDeleted);
             this.on('workspaceCopied', this.onWorkspaceCopied);
             this.on('reloadWorkspace', this.onReloadWorkspace);
+            this.on('requestLoadWorkspace', this.onRequestLoadWorkspace);
 
             // Vertices
             this.on('searchTitle', this.onSearchTitle);
@@ -929,6 +930,12 @@ define([
                     this.trigger('workspaceLoaded', workspace);
                     this.trigger('relationshipsLoaded', { relationships: relationships });
                 });
+            });
+        };
+
+        this.onRequestLoadWorkspace = function(event) {
+            this.workspaceReady(function(workspace) {
+                this.loadActiveWorkspace();
             });
         };
 

@@ -133,7 +133,7 @@ html.fullscreenDetails {
   }
 }
 
-.graph-pane, .map-pane, .dashboard-pane {
+.graph-pane, .map-pane, .dashboard-pane, .fullscreen-pane {
   display: none;
 
   &.visible {
@@ -190,6 +190,11 @@ html.fullscreenDetails {
   left: @menubar-width;
 
   @import "graph/graph";
+}
+
+.fullscreen-pane {
+  .fullscreen;
+  left: @menubar-width;
 }
 
 .map-pane {
