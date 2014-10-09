@@ -2,6 +2,7 @@ package io.lumify.web.routes.workspace;
 
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
@@ -18,14 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 public class WorkspaceDelete extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceDelete.class);
     private final WorkspaceRepository workspaceRepository;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public WorkspaceDelete(
             final WorkspaceRepository workspaceRepository,
+            final WorkQueueRepository workQueueRepository,
             final UserRepository userRepository,
             final Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
         this.workspaceRepository = workspaceRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -41,7 +45,9 @@ public class WorkspaceDelete extends BaseRequestHandler {
                 respondWithNotFound(response);
                 return;
             }
+            io.lumify.web.clientapi.model.Workspace clientApiWorkspaceBeforeDeletion = workspaceRepository.toClientApi(workspace, user, false);
             workspaceRepository.delete(workspace, user);
+            workQueueRepository.pushWorkspaceDelete(clientApiWorkspaceBeforeDeletion);
 
             JSONObject resultJson = new JSONObject();
             resultJson.put("success", true);

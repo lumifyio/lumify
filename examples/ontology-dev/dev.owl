@@ -383,7 +383,8 @@
         <rdfs:domain rdf:resource="http://lumify.io/dev#raw"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
-    
+
+
 
 
     <!-- http://lumify.io/dev#rawHasSourceOrganization -->
@@ -486,8 +487,13 @@
         <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-    
 
+    <!-- http://lumify.io/dev#sentiment -->
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#sentiment">
+        <rdfs:label xml:lang="en">Sentiment</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#document"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
 
     <!-- http://lumify.io/dev#dateAndTime -->
 

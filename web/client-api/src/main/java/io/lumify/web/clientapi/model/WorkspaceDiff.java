@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,11 @@ public class WorkspaceDiff {
 
     public List<Item> getDiffs() {
         return diffs;
+    }
+
+    @Override
+    public String toString() {
+        return ClientApiConverter.clientApiToString(this);
     }
 
     @JsonTypeInfo(
@@ -43,6 +49,11 @@ public class WorkspaceDiff {
 
         public SandboxStatus getSandboxStatus() {
             return sandboxStatus;
+        }
+
+        @Override
+        public String toString() {
+            return ClientApiConverter.clientApiToString(this);
         }
     }
 

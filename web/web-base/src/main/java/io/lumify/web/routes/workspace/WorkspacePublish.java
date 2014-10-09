@@ -83,13 +83,13 @@ public class WorkspacePublish extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        LOGGER.debug("publishing\n%s", Joiner.on(",").join(publishData));
+        LOGGER.debug("publishing:\n%s", Joiner.on("\n").join(publishData));
         WorkspacePublishResponse workspacePublishResponse = new WorkspacePublishResponse();
         publishVertices(publishData, workspacePublishResponse, workspaceId, user, authorizations);
         publishEdges(publishData, workspacePublishResponse, workspaceId, user, authorizations);
         publishProperties(publishData, workspacePublishResponse, workspaceId, user, authorizations);
 
-        LOGGER.debug("publishing results\n%s", workspacePublishResponse);
+        LOGGER.debug("publishing results: %s", workspacePublishResponse);
         respondWith(response, workspacePublishResponse);
     }
 

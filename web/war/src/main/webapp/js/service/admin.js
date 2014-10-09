@@ -27,7 +27,7 @@ define([
         formData.append('documentIRI', iri);
 
         return this._ajaxUpload({
-            url: 'admin/uploadOntology',
+            url: 'admin/upload-ontology',
             dataType: 'html',
             data: formData
         });

@@ -137,7 +137,7 @@ define([
             var self = this,
                 graph = this.graph;
 
-            this.isWorkspaceEditable = workspace.isEditable;
+            this.isWorkspaceEditable = workspace.editable;
             if (workspace.data && workspace.data.vertices) {
                 this.addVertices(workspace.data.vertices);
             }

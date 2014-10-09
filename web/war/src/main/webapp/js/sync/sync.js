@@ -17,8 +17,7 @@ define([
         this.events = [
             'addVertices',
             'updateVertices',
-            'deleteVertices',
-            'workspaceRemoteSave'
+            'deleteVertices'
         ];
 
         if (this.syncCursors) {
@@ -44,7 +43,7 @@ define([
         });
 
         this.onWorkspaceLoaded = function(evt, workspace) {
-            this.workspaceEditable = workspace.isEditable;
+            this.workspaceEditable = workspace.editable;
             this.currentWorkspaceId = workspace.workspaceId;
 
             this.usersReady(function(usersData) {
@@ -98,9 +97,8 @@ define([
                 });
             }
 
-            if (evt.type === 'workspaceRemoteSave') {
-                this.syncService.publishWorkspaceMetadataSyncEvent(evt.type, this.currentWorkspaceId, data);
-            } else this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceId, data);
+
+            this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceId, data);
         };
 
         this.onOnlineStatusChanged = function(evt, data) {

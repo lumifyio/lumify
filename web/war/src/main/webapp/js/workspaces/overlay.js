@@ -139,10 +139,10 @@ define([
             }
         }
 
-        this.setContent = function(title, isEditable, subtitle) {
+        this.setContent = function(title, editable, subtitle) {
             this.select('nameSelector').text(title);
             this.select('subtitleSelector').html(
-                isEditable === false ?
+                editable === false ?
                     i18n('workspaces.overlay.read_only') :
                     subtitle
             );
@@ -155,7 +155,7 @@ define([
 
         this.onWorkspaceLoaded = function(event, data) {
             this.workspaceDeferred.resolve();
-            this.setContent(data.title, data.isEditable, i18n('workspaces.overlay.no_changes'));
+            this.setContent(data.title, data.editable, i18n('workspaces.overlay.no_changes'));
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
             this.updateDiffBadge();
@@ -350,7 +350,7 @@ define([
             if (animateTimer) {
                 clearTimeout(animateTimer);
                 animateTimer = _.delay(
-                    badgeReset.bind(null, previousWidth),
+                    badgeReset.bind(null, previousWidth, formattedCount),
                     SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000
                 );
                 return badge.html(html).css({ width: findWidth() })
@@ -372,7 +372,7 @@ define([
                 transition: 'opacity ease-out 0.5s',
             })
 
-            animateTimer = _.delay((badgeReset = function(previousWidth) {
+            animateTimer = _.delay((badgeReset = function(previousWidth, formattedCount) {
                 animateTimer = null;
                 badge.on(TRANSITION_END, function(e) {
                     if (e.originalEvent.propertyName === 'width') {
@@ -384,7 +384,7 @@ define([
                     backgroundColor: '#3a87ad',
                     width: previousWidth + 'px'
                 }).find('span').css('opacity',0);
-            }).bind(null, previousWidth), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);
+            }).bind(null, previousWidth, formattedCount), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);
         };
 
         this.updateUserTooltip = function(data) {

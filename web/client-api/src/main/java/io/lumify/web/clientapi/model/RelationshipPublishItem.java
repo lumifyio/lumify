@@ -1,5 +1,7 @@
 package io.lumify.web.clientapi.model;
 
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
+
 public class RelationshipPublishItem extends PublishItem {
     private String edgeId;
 
@@ -14,13 +16,5 @@ public class RelationshipPublishItem extends PublishItem {
     @Override
     public String getType() {
         return "relationship";
-    }
-
-    @Override
-    public String toString() {
-        return "RelationshipPublishItem{" +
-                super.toString() +
-                ", edgeId='" + edgeId + '\'' +
-                '}';
     }
 }

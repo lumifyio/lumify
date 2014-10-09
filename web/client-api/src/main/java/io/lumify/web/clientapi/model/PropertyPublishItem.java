@@ -1,5 +1,7 @@
 package io.lumify.web.clientapi.model;
 
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
+
 public class PropertyPublishItem extends PublishItem {
     private String key;
     private String name;
@@ -50,17 +52,5 @@ public class PropertyPublishItem extends PublishItem {
     @Override
     public String getType() {
         return "property";
-    }
-
-    @Override
-    public String toString() {
-        return "PropertyPublishItem{" +
-                super.toString() +
-                ", key='" + key + '\'' +
-                ", name='" + name + '\'' +
-                ", edgeId='" + edgeId + '\'' +
-                ", vertexId='" + vertexId + '\'' +
-                ", elementId='" + elementId + '\'' +
-                '}';
     }
 }

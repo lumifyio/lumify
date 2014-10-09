@@ -44,7 +44,7 @@ define([
 
             this.on(document, 'socketMessage', this.onSocketMessage);
 
-            this.editable = this.attr.data.isEditable;
+            this.editable = this.attr.data.editable;
 
             this.$node.html(template({
                 workspace: this.attr.data,

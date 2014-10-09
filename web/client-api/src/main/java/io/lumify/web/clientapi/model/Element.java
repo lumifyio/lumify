@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.lumify.web.clientapi.model.util.ClientApiConverter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -52,4 +50,9 @@ public abstract class Element {
     }
 
     public abstract String getType();
+
+    @Override
+    public String toString() {
+        return ClientApiConverter.clientApiToString(this);
+    }
 }

@@ -1,6 +1,6 @@
 package io.lumify.web.clientapi.model;
 
-import com.google.common.base.Joiner;
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,7 @@ public class WorkspacePublishResponse {
 
     @Override
     public String toString() {
-        return "WorkspacePublishResponse{" +
-                "failures=" + Joiner.on(",").join(failures) +
-                '}';
+        return ClientApiConverter.clientApiToString(this);
     }
 
     public void addFailure(PublishItem data) {

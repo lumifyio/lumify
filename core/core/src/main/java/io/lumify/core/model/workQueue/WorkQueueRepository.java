@@ -5,6 +5,8 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
@@ -153,8 +155,12 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushUserWorkspaceChange(User user, String workspaceId) {
+    public void pushUserCurrentWorkspaceChange(User user, String workspaceId) {
         broadcastUserWorkspaceChange(user, workspaceId);
+    }
+
+    public void pushWorkspaceChange(io.lumify.web.clientapi.model.Workspace workspace) {
+        broadcastWorkspace(workspace);
     }
 
     protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
@@ -164,6 +170,44 @@ public abstract class WorkQueueRepository {
         data.put("workspaceId", workspaceId);
         json.put("data", data);
         broadcastJson(json);
+    }
+
+    protected void broadcastWorkspace(io.lumify.web.clientapi.model.Workspace workspace) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceChange");
+        json.put("permissions", getPermissionsWithUsers(workspace));
+        json.put("data", new JSONObject(ClientApiConverter.clientApiObjectToJsonString(workspace)));
+        broadcastJson(json);
+    }
+
+    public void pushWorkspaceDelete(io.lumify.web.clientapi.model.Workspace workspace) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceDelete");
+        json.put("permissions", getPermissionsWithUsers(workspace));
+        json.put("workspaceId", workspace.getWorkspaceId());
+        broadcastJson(json);
+    }
+
+    public void pushWorkspaceDelete(String workspaceId, String userId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceDelete");
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        json.put("permissions", permissions);
+        json.put("workspaceId", workspaceId);
+        broadcastJson(json);
+    }
+
+    private JSONObject getPermissionsWithUsers(io.lumify.web.clientapi.model.Workspace workspace) {
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        for (io.lumify.web.clientapi.model.Workspace.User user : workspace.getUsers()) {
+            users.put(user.getUserId());
+        }
+        permissions.put("users", users);
+        return permissions;
     }
 
     protected void broadcastPropertyChange(Element element, String propertyKey, String propertyName, String workspaceId) {

@@ -16,12 +16,14 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
@@ -42,7 +44,7 @@ import static org.securegraph.util.IterableUtils.count;
 public class ClavinTermMentionFilter extends TermMentionFilter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ClavinTermMentionFilter.class);
 
-    private static final String MULTI_VALUE_PROERTY_KEY = ClavinTermMentionFilter.class.getName();
+    private static final String MULTI_VALUE_PROPERTY_KEY = ClavinTermMentionFilter.class.getName();
 
     /**
      * The CLAVIN index directory configuration key.
@@ -96,6 +98,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     private AuditRepository auditRepository;
     private User user;
     private String artifactHasEntityIri;
+    private WorkspaceRepository workspaceRepository;
 
     @Override
     public void prepare(TermMentionFilterPrepareData termMentionFilterPrepareData) throws Exception {
@@ -228,14 +231,23 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 String conceptType = getOntologyClassUri(loc, termMentionConceptType);
 
                 ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
-                        .addPropertyValue(MULTI_VALUE_PROERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
-                LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, conceptType, sourceVertex.getVisibility());
-                LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, "CLAVIN", sourceVertex.getVisibility());
-                LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROERTY_KEY, title, sourceVertex.getVisibility());
+                        .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
+                LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, conceptType, sourceVertex.getVisibility());
+                LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, "CLAVIN", sourceVertex.getVisibility());
+                LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, title, sourceVertex.getVisibility());
                 Vertex resolvedToVertex = resolvedToVertexBuilder.save(authorizations);
+                getGraph().flush();
 
                 String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + resolvedToVertex.getId();
                 Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, resolvedToVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
+                LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedEdge, MULTI_VALUE_PROPERTY_KEY, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex), sourceVertex.getVisibility(), authorizations);
+                VisibilityJson visibilityJson = LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(termMention);
+                if (visibilityJson != null && visibilityJson.getWorkspaces().size() > 0) {
+                    Set<String> workspaceIds = visibilityJson.getWorkspaces();
+                    for (String workspaceId : workspaceIds) {
+                        workspaceRepository.updateEntityOnWorkspace(workspaceRepository.findById(workspaceId, user), id, null, null, user);
+                    }
+                }
 
                 Vertex resolvedMention = new TermMentionBuilder(termMention, sourceVertex)
                         .resolvedTo(resolvedToVertex, resolvedEdge)
@@ -308,4 +320,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     public void setAuditRepository(AuditRepository auditRepository) {
         this.auditRepository = auditRepository;
     }
+
+    @Inject
+    public void setWorkspaceRepository (WorkspaceRepository workspaceRepository) { this.workspaceRepository = workspaceRepository; }
 }

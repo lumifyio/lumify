@@ -9,6 +9,8 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -31,6 +33,7 @@ public abstract class GraphPropertyWorker {
     private AuditRepository auditRepository;
     private GraphPropertyWorkerPrepareData workerPrepareData;
     private Configuration configuration;
+    private WorkspaceRepository workspaceRepository;
     private String locationIri;
     private String organizationIri;
     private String personIri;
@@ -93,6 +96,15 @@ public abstract class GraphPropertyWorker {
     @Inject
     public final void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
         this.workQueueRepository = workQueueRepository;
+    }
+
+    @Inject
+    public final void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
+    }
+
+    protected WorkspaceRepository getWorkspaceRepository() {
+        return workspaceRepository;
     }
 
     protected WorkQueueRepository getWorkQueueRepository() {
@@ -185,5 +197,12 @@ public abstract class GraphPropertyWorker {
         String startTime = String.format("%08d", Math.max(0L, entry.getTime().getStart()));
         String endTime = String.format("%08d", Math.max(0L, entry.getTime().getEnd()));
         return propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + startTime + RowKeyHelper.MINOR_FIELD_SEPARATOR + endTime;
+    }
+
+    protected void addVertexToWorkspaceIfNeeded(GraphPropertyWorkData data, Vertex vertex) {
+        if (data.getWorkspaceId() == null) {
+            return;
+        }
+        getWorkspaceRepository().updateEntityOnWorkspace(data.getWorkspaceId(), vertex.getId(), null, null, getUser());
     }
 }

@@ -167,6 +167,11 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         return value != null ? rawConverter.apply(value) : null;
     }
 
+    public final TRaw getPropertyValue(Property property) {
+        Object value = property.getValue();
+        return value != null ? rawConverter.apply(value) : null;
+    }
+
     /**
      * Get all values of this property from the provided Element.
      *

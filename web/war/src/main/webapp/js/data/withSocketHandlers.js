@@ -101,6 +101,18 @@ define([], function() {
                         })
                     });
                     break;
+
+                case 'workspaceChange':
+                    self.trigger('workspaceUpdated', {
+                        workspace: message.data
+                    });
+                    break;
+
+                case 'workspaceDelete':
+                    self.trigger('workspaceDeleted', {
+                        workspaceId: message.workspaceId
+                    });
+                    break;
             }
         };
     }

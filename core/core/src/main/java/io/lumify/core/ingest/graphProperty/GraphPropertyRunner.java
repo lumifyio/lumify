@@ -17,13 +17,11 @@ import org.apache.hadoop.fs.FileSystem;
 import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
+import org.securegraph.util.IterableUtils;
 
 import java.io.*;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toList;
 
@@ -249,8 +247,18 @@ public class GraphPropertyRunner {
     }
 
     private List<GraphPropertyThreadedWrapper> findInterestedWorkers(Element element, Property property) {
+        Set<String> graphPropertyWorkerWhiteList = IterableUtils.toSet(LumifyProperties.GRAPH_PROPERTY_WORKER_WHITE_LIST.getPropertyValues(element));
+        Set<String> graphPropertyWorkerBlackList = IterableUtils.toSet(LumifyProperties.GRAPH_PROPERTY_WORKER_BLACK_LIST.getPropertyValues(element));
+
         List<GraphPropertyThreadedWrapper> interestedWorkers = new ArrayList<GraphPropertyThreadedWrapper>();
         for (GraphPropertyThreadedWrapper wrapper : workerWrappers) {
+            String graphPropertyWorkerName = wrapper.getWorker().getClass().getName();
+            if (graphPropertyWorkerWhiteList.size() > 0 && !graphPropertyWorkerWhiteList.contains(graphPropertyWorkerName)) {
+                continue;
+            }
+            if (graphPropertyWorkerBlackList.contains(graphPropertyWorkerName)) {
+                continue;
+            }
             if (wrapper.getWorker().isHandled(element, property)) {
                 interestedWorkers.add(wrapper);
             }

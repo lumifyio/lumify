@@ -461,7 +461,7 @@ define([
 
         this.onAddVertices = function(evt, data) {
             this.workspaceReady(function(ws) {
-                if (!ws.isEditable && !data.remoteEvent) return;
+                if (!ws.editable && !data.remoteEvent) return;
 
                 var self = this,
                     added = [],
@@ -756,7 +756,7 @@ define([
         this.onDeleteVertices = function(evt, data) {
             var self = this;
             this.workspaceReady(function(ws) {
-                if (!ws.isEditable && !data.remoteEvent) return;
+                if (!ws.editable && !data.remoteEvent) return;
 
                 var toDelete = [],
                     undoDelete = [],
@@ -882,7 +882,7 @@ define([
                 .done(function(data) {
                     var workspaces = data.workspaces || [],
                         myWorkspaces = _.filter(workspaces, function(w) {
-                            return !w.isSharedToUser;
+                            return !w.sharedToUser;
                         });
 
                     if (myWorkspaces.length === 0) {
@@ -974,7 +974,7 @@ define([
                         self.workspaceService.getVertices(workspaceId)
                     ).done(function(workspace, vertexResponse) {
 
-                        self.workspaceEditable = workspace.isEditable;
+                        self.workspaceEditable = workspace.editable;
 
                         _.each(_.values(self.cachedVertices), resetWorkspace);
                         self.workspaceVertices = {};
@@ -1138,7 +1138,7 @@ define([
                     }
 
                     self.workspaceReady(function(ws) {
-                        if (ws.isEditable) {
+                        if (ws.editable) {
                             self.trigger('clearWorkspaceFilter');
                             self.trigger('verticesDropped', { vertices: vertices });
                         }
