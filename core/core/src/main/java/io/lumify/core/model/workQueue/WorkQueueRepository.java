@@ -5,6 +5,8 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
@@ -153,8 +155,12 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushUserWorkspaceChange(User user, String workspaceId) {
+    public void pushUserCurrentWorkspaceChange(User user, String workspaceId) {
         broadcastUserWorkspaceChange(user, workspaceId);
+    }
+
+    public void pushWorkspaceChange(io.lumify.web.clientapi.model.Workspace workspace) {
+        broadcastWorkspace(workspace);
     }
 
     protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
@@ -163,6 +169,20 @@ public abstract class WorkQueueRepository {
         JSONObject data = UserRepository.toJson(user);
         data.put("workspaceId", workspaceId);
         json.put("data", data);
+        broadcastJson(json);
+    }
+
+    protected void broadcastWorkspace(io.lumify.web.clientapi.model.Workspace workspace) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceChange");
+        json.put("data", new JSONObject(ClientApiConverter.clientApiObjectToJsonString(workspace)));
+        broadcastJson(json);
+    }
+
+    public void pushWorkspaceDelete(String workspaceId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceDelete");
+        json.put("workspaceId", workspaceId);
         broadcastJson(json);
     }
 

@@ -176,7 +176,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             User authUser = userRepository.findById(authUserId);
             Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
             userRepository.setCurrentWorkspace(authUserId, workspace.getWorkspaceId());
-            workQueueRepository.pushUserWorkspaceChange(authUser, workspace.getWorkspaceId());
+            workQueueRepository.pushUserCurrentWorkspaceChange(authUser, workspace.getWorkspaceId());
 
             LOGGER.debug("User %s switched current workspace to %s", authUserId, workspaceId);
         }

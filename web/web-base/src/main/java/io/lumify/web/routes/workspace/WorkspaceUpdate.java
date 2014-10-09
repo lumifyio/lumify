@@ -3,6 +3,7 @@ package io.lumify.web.routes.workspace;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
@@ -23,14 +24,17 @@ import java.util.List;
 public class WorkspaceUpdate extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUpdate.class);
     private final WorkspaceRepository workspaceRepository;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public WorkspaceUpdate(
             final WorkspaceRepository workspaceRepository,
             final UserRepository userRepository,
+            final WorkQueueRepository workQueueRepository,
             final Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
         this.workspaceRepository = workspaceRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -59,6 +63,8 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         updateUsers(workspace, updateData.getUserUpdates(), authUser);
 
         deleteUsers(workspace, updateData.getUserDeletes(), authUser);
+
+        broadcastWorkspaceChange(workspace, authUser);
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("result", "OK");
@@ -100,5 +106,10 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             GraphPosition graphPosition = update.getGraphPosition();
             workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPosition, authUser);
         }
+    }
+
+    private void broadcastWorkspaceChange(Workspace workspace, User authUser) {
+        workspace = workspaceRepository.findById(workspace.getWorkspaceId(), authUser);
+        workQueueRepository.pushWorkspaceChange(workspaceRepository.toClientApi(workspace, authUser, false));
     }
 }

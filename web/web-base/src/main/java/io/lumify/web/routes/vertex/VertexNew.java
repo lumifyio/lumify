@@ -85,7 +85,7 @@ public class VertexNew extends BaseRequestHandler {
 
         workQueueRepository.pushElement(vertex);
         workQueueRepository.pushGraphPropertyQueue(vertex, null, LumifyProperties.CONCEPT_TYPE.getPropertyName(), workspaceId, visibilitySource);
-        workQueueRepository.pushUserWorkspaceChange(user, workspaceId);
+        workQueueRepository.pushUserCurrentWorkspaceChange(user, workspaceId);
 
         return ClientApiConverter.toClientApi(vertex, workspaceId, authorizations);
     }

@@ -127,11 +127,8 @@ define([
 
         this.onWorkspaceDeleted = function(event, data) {
             this.collapseEditForm();
-            this.loadWorkspaceList();
 
-            if (this.deletingWorkspace) {
-                this.trigger(document, 'workspaceRemoteSave', this.deletingWorkspace);
-            }
+            this.loadWorkspaceList(this.workspaceId === data.workspaceId);
         };
 
         this.onSwitchWorkspace = function(event, data) {
@@ -219,6 +216,23 @@ define([
         this.onWorkspaceCopied = function(event, data) {
             this.collapseEditForm();
             this.loadWorkspaceList();
+        };
+
+        this.onWorkspaceUpdated = function(event, data) {
+            var self = this;
+
+            this.currentUserReady(function(currentUser) {
+                var workspace = data.workspace,
+                     userAccess = _.findWhere(workspace.users, { userId: currentUser.id });
+                workspace.editable = (/write/i).test(userAccess && userAccess.access);
+                workspace.sharedToUser = workspace.createdBy !== currentUser.id;
+
+                if (self.workspaceId === workspace.workspaceId) {
+                    appData.loadWorkspace(workspace);
+                } else {
+                    self.updateListItemWithData(workspace);
+                }
+            })
         };
 
         this.onWorkspaceRemoteSave = function(event, data) {
@@ -395,7 +409,7 @@ define([
             this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
             this.on(document, 'workspaceDeleted', this.onWorkspaceDeleted);
             this.on(document, 'workspaceCopied', this.onWorkspaceCopied);
-            this.on(document, 'workspaceRemoteSave', this.onWorkspaceRemoteSave);
+            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'workspaceNotAvailable', this.onWorkspaceNotAvailable);
 
             this.on(document, 'menubarToggleDisplay', this.onToggleMenu);

@@ -17,8 +17,7 @@ define([
         this.events = [
             'addVertices',
             'updateVertices',
-            'deleteVertices',
-            'workspaceRemoteSave'
+            'deleteVertices'
         ];
 
         if (this.syncCursors) {
@@ -98,9 +97,8 @@ define([
                 });
             }
 
-            if (evt.type === 'workspaceRemoteSave') {
-                this.syncService.publishWorkspaceMetadataSyncEvent(evt.type, this.currentWorkspaceId, data);
-            } else this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceId, data);
+
+            this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceId, data);
         };
 
         this.onOnlineStatusChanged = function(evt, data) {
