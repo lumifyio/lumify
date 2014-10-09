@@ -62,7 +62,9 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             onOpen(resource);
             resource.suspend();
         } else if (req.getMethod().equalsIgnoreCase("POST")) {
-            resource.getBroadcaster().broadcast(req.getReader().readLine().trim());
+            String line = req.getReader().readLine().trim();
+            LOGGER.debug("onRequest() POST: %s", line);
+            resource.getBroadcaster().broadcast(line);
         }
     }
 

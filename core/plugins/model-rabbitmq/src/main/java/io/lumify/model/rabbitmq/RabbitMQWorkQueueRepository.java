@@ -34,6 +34,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     protected void broadcastJson(JSONObject json) {
         try {
             ensureBroadcastExchange();
+            LOGGER.debug("publishing message to broadcast exchange [%s]: %s", BROADCAST_EXCHANGE_NAME, json.toString());
             channel.basicPublish(BROADCAST_EXCHANGE_NAME, "", null, json.toString().getBytes());
         } catch (IOException ex) {
             throw new LumifyException("Could not broadcast json", ex);
@@ -51,6 +52,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json) {
         try {
             ensureQueue(queueName);
+            LOGGER.debug("enqueueing message to queue [%s]: %s", queueName, json.toString());
             channel.basicPublish("", queueName, null, json.toString().getBytes());
         } catch (Exception ex) {
             throw new LumifyException("Could not push on queue", ex);
@@ -115,6 +117,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
                             QueueingConsumer.Delivery delivery = callback.nextDelivery();
                             try {
                                 JSONObject json = new JSONObject(new String(delivery.getBody()));
+                                LOGGER.debug("received message from broadcast exchange [%s]: %s", BROADCAST_EXCHANGE_NAME, json.toString());
                                 broadcastConsumer.broadcastReceived(json);
                             } catch (Exception ex) {
                                 LOGGER.error("problem in broadcast thread", ex);
