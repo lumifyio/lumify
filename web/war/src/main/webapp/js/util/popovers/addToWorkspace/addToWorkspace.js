@@ -84,13 +84,13 @@ define([
                         'selected' : null;
                 })
                 .attr('disabled', function(workspace) {
-                    return workspace.isEditable ? null : 'disabled';
+                    return workspace.editable ? null : 'disabled';
                 })
                 .attr('value', function(workspace) {
                     return workspace.workspaceId;
                 })
                 .text(function(workspace) {
-                    if (!workspace.isEditable) {
+                    if (!workspace.editable) {
                         return workspace.title + ' (' + i18n('popovers.add_to_workspace.readonly') + ')';
                     }
                     return workspace.title;

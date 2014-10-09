@@ -164,7 +164,7 @@ define([
 
         this.onWorkspaceLoaded = function(evt, workspaceData) {
             var self = this;
-            this.isWorkspaceEditable = workspaceData.isEditable;
+            this.isWorkspaceEditable = workspaceData.editable;
             this.mapReady(function(map) {
 
                 map.featuresLayer.removeAllFeatures();

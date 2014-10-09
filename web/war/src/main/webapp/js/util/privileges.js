@@ -20,7 +20,7 @@ define([
         });
 
         this.onWorkspaceLoaded = function(event, workspace) {
-            this.workspaceEditable = workspace.isEditable;
+            this.workspaceEditable = workspace.editable;
             this.update();
         };
 

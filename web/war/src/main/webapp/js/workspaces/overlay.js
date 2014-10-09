@@ -139,10 +139,10 @@ define([
             }
         }
 
-        this.setContent = function(title, isEditable, subtitle) {
+        this.setContent = function(title, editable, subtitle) {
             this.select('nameSelector').text(title);
             this.select('subtitleSelector').html(
-                isEditable === false ?
+                editable === false ?
                     i18n('workspaces.overlay.read_only') :
                     subtitle
             );
@@ -155,7 +155,7 @@ define([
 
         this.onWorkspaceLoaded = function(event, data) {
             this.workspaceDeferred.resolve();
-            this.setContent(data.title, data.isEditable, i18n('workspaces.overlay.no_changes'));
+            this.setContent(data.title, data.editable, i18n('workspaces.overlay.no_changes'));
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
             this.updateDiffBadge();

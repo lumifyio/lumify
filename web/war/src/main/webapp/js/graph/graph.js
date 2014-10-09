@@ -1048,7 +1048,7 @@ define([
 
         this.onWorkspaceLoaded = function(evt, workspace) {
             this.resetGraph();
-            this.isWorkspaceEditable = workspace.isEditable;
+            this.isWorkspaceEditable = workspace.editable;
             if (workspace.data.vertices.length) {
                 var newWorkspace = !this.previousWorkspace || this.previousWorkspace != workspace.workspaceId;
                 this.addVertices(workspace.data.vertices, {

@@ -109,9 +109,9 @@ public abstract class WorkspaceRepository {
             String creatorUserId = getCreatorUserId(workspace, user);
             if (creatorUserId != null) {
                 workspaceJson.put("createdBy", creatorUserId);
-                workspaceJson.put("isSharedToUser", !creatorUserId.equals(user.getUserId()));
+                workspaceJson.put("sharedToUser", !creatorUserId.equals(user.getUserId()));
             }
-            workspaceJson.put("isEditable", hasWritePermissions(workspace.getWorkspaceId(), user));
+            workspaceJson.put("editable", hasWritePermissions(workspace.getWorkspaceId(), user));
 
             JSONArray usersJson = new JSONArray();
             for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {

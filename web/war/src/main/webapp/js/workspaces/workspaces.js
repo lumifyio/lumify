@@ -177,13 +177,13 @@ define([
                         .done(function(data) {
                             var content = $(itemTemplate({ workspace: data, selected: self.workspaceId }));
                             if (li.length === 0) {
-                                self.$node.find('li.nav-header').eq(data.isSharedToUser ? 1 : 0).after(content);
+                                self.$node.find('li.nav-header').eq(data.sharedToUser ? 1 : 0).after(content);
                             } else {
                                 li.replaceWith(content);
                             }
 
                             // Sort section because title might be renamed
-                            var lis = self.getWorkspaceListItemsInSection(data.isSharedToUser),
+                            var lis = self.getWorkspaceListItemsInSection(data.sharedToUser),
                                 titleGetter = function() {
                                     return $(this).data('title');
                                 },
@@ -237,8 +237,8 @@ define([
                     })
                     .done(function(data) {
                         var userAccess = _.findWhere(data.users, { userId: currentUser.id });
-                        data.isEditable = (/write/i).test(userAccess && userAccess.access);
-                        data.isSharedToUser = data.createdBy !== currentUser.id;
+                        data.editable = (/write/i).test(userAccess && userAccess.access);
+                        data.sharedToUser = data.createdBy !== currentUser.id;
 
                         if (self.workspaceId === data.workspaceId) {
                             appData.loadWorkspace(data);
@@ -301,7 +301,7 @@ define([
                                             return w.title.toLowerCase()
                                         })
                                         .groupBy(function(w) {
-                                            return w.isSharedToUser ? 'shared' : 'mine';
+                                            return w.sharedToUser ? 'shared' : 'mine';
                                         })
                                         .value();
 
@@ -337,7 +337,7 @@ define([
                 }),
                 people = usersNotCurrent.length;
 
-            if (row.isSharedToUser) {
+            if (row.sharedToUser) {
                 this.userService.userInfo(row.createdBy).done(function(result) {
                     var createdBy = result.users && result.users[row.createdBy],
                         name = createdBy && createdBy.displayName ||
@@ -350,7 +350,7 @@ define([
             }
 
             return deferred.promise().then(function(text) {
-                if (people === 1 && row.isSharedToUser) {
+                if (people === 1 && row.sharedToUser) {
                     row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.only_you');
                 } else if (people === 1) {
                     row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.one_other');
