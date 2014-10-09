@@ -350,7 +350,7 @@ define([
             if (animateTimer) {
                 clearTimeout(animateTimer);
                 animateTimer = _.delay(
-                    badgeReset.bind(null, previousWidth),
+                    badgeReset.bind(null, previousWidth, formattedCount),
                     SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000
                 );
                 return badge.html(html).css({ width: findWidth() })
@@ -372,7 +372,7 @@ define([
                 transition: 'opacity ease-out 0.5s',
             })
 
-            animateTimer = _.delay((badgeReset = function(previousWidth) {
+            animateTimer = _.delay((badgeReset = function(previousWidth, formattedCount) {
                 animateTimer = null;
                 badge.on(TRANSITION_END, function(e) {
                     if (e.originalEvent.propertyName === 'width') {
@@ -384,7 +384,7 @@ define([
                     backgroundColor: '#3a87ad',
                     width: previousWidth + 'px'
                 }).find('span').css('opacity',0);
-            }).bind(null, previousWidth), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);
+            }).bind(null, previousWidth, formattedCount), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);
         };
 
         this.updateUserTooltip = function(data) {
