@@ -106,6 +106,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
 
             String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + zipCodeVertex.getId();
             Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, zipCodeVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
+            LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedEdge, MULTI_VALUE_PROPERTY_KEY, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex), sourceVertex.getVisibility(), authorizations);
 
             new TermMentionBuilder(termMention, sourceVertex)
                     .resolvedTo(zipCodeVertex, resolvedEdge)
