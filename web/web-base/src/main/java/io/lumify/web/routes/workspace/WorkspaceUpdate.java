@@ -62,9 +62,10 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         updateUsers(workspace, updateData.getUserUpdates(), authUser);
 
-        deleteUsers(workspace, updateData.getUserDeletes(), authUser);
+        io.lumify.web.clientapi.model.Workspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, false);
+        workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
 
-        broadcastWorkspaceChange(workspace, authUser);
+        deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("result", "OK");
@@ -80,6 +81,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         for (String userId : userDeletes) {
             LOGGER.debug("user delete (%s): %s", workspace.getWorkspaceId(), userId);
             workspaceRepository.deleteUserFromWorkspace(workspace, userId, authUser);
+            workQueueRepository.pushWorkspaceDelete(workspace.getWorkspaceId(), userId);
         }
     }
 
@@ -106,10 +108,5 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             GraphPosition graphPosition = update.getGraphPosition();
             workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPosition, authUser);
         }
-    }
-
-    private void broadcastWorkspaceChange(Workspace workspace, User authUser) {
-        workspace = workspaceRepository.findById(workspace.getWorkspaceId(), authUser);
-        workQueueRepository.pushWorkspaceChange(workspaceRepository.toClientApi(workspace, authUser, false));
     }
 }

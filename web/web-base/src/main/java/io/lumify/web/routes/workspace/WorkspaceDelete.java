@@ -45,8 +45,9 @@ public class WorkspaceDelete extends BaseRequestHandler {
                 respondWithNotFound(response);
                 return;
             }
+            io.lumify.web.clientapi.model.Workspace clientApiWorkspaceBeforeDeletion = workspaceRepository.toClientApi(workspace, user, false);
             workspaceRepository.delete(workspace, user);
-            workQueueRepository.pushWorkspaceDelete(workspaceId);
+            workQueueRepository.pushWorkspaceDelete(clientApiWorkspaceBeforeDeletion);
 
             JSONObject resultJson = new JSONObject();
             resultJson.put("success", true);
