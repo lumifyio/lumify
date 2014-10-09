@@ -23,6 +23,7 @@ import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
@@ -240,6 +241,13 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + resolvedToVertex.getId();
                 Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, resolvedToVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
                 LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedEdge, MULTI_VALUE_PROPERTY_KEY, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex), sourceVertex.getVisibility(), authorizations);
+                VisibilityJson visibilityJson = LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(termMention);
+                if (visibilityJson != null && visibilityJson.getWorkspaces().size() > 0) {
+                    Set<String> workspaceIds = visibilityJson.getWorkspaces();
+                    for (String workspaceId : workspaceIds) {
+                        workspaceRepository.updateEntityOnWorkspace(workspaceRepository.findById(workspaceId, user), id, null, null, user);
+                    }
+                }
 
                 Vertex resolvedMention = new TermMentionBuilder(termMention, sourceVertex)
                         .resolvedTo(resolvedToVertex, resolvedEdge)

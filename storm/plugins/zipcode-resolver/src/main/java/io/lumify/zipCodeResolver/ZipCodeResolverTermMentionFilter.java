@@ -1,11 +1,15 @@
 package io.lumify.zipCodeResolver;
 
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
+import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.ElementBuilder;
@@ -19,6 +23,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     private static final String MULTI_VALUE_PROPERTY_KEY = ZipCodeResolverTermMentionFilter.class.getName();
@@ -28,6 +33,8 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     private String geoLocationIri;
     private Map<String, ZipCodeEntry> zipCodesByZipCode = new HashMap<String, ZipCodeEntry>();
     private String artifactHasEntityIri;
+    private WorkspaceRepository workspaceRepository;
+    private User user;
 
     @Override
     public void prepare(TermMentionFilterPrepareData termMentionFilterPrepareData) throws Exception {
@@ -35,6 +42,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
 
         prepareIris(termMentionFilterPrepareData);
         prepareZipCodeDatabase();
+        user = termMentionFilterPrepareData.getUser();
     }
 
     private void prepareZipCodeDatabase() {
@@ -107,6 +115,13 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + zipCodeVertex.getId();
             Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, zipCodeVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
             LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedEdge, MULTI_VALUE_PROPERTY_KEY, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex), sourceVertex.getVisibility(), authorizations);
+            VisibilityJson visibilityJson = LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(termMention);
+            if (visibilityJson != null && visibilityJson.getWorkspaces().size() > 0) {
+                Set<String> workspaceIds = visibilityJson.getWorkspaces();
+                for (String workspaceId : workspaceIds) {
+                    workspaceRepository.updateEntityOnWorkspace(workspaceRepository.findById(workspaceId, user), id, null, null, user);
+                }
+            }
 
             new TermMentionBuilder(termMention, sourceVertex)
                     .resolvedTo(zipCodeVertex, resolvedEdge)
@@ -153,4 +168,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             return longitude;
         }
     }
+
+    @Inject
+    public void setWorkspaceRepository (WorkspaceRepository workspaceRepository) { this.workspaceRepository = workspaceRepository;}
 }
