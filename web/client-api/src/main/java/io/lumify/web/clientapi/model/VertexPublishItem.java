@@ -1,5 +1,7 @@
 package io.lumify.web.clientapi.model;
 
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
+
 public class VertexPublishItem extends PublishItem {
     private String vertexId;
 
@@ -14,13 +16,5 @@ public class VertexPublishItem extends PublishItem {
     @Override
     public String getType() {
         return "vertex";
-    }
-
-    @Override
-    public String toString() {
-        return "VertexPublishItem{" +
-                super.toString() +
-                ", vertexId='" + vertexId + '\'' +
-                '}';
     }
 }

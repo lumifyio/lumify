@@ -206,8 +206,26 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
 
+    <!-- http://lumify.io#graphPropertyWorkerWhiteList -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;graphPropertyWorkerWhiteList">
+        <rdfs:label xml:lang="en">Graph Property Worker White List</rdfs:label>
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
+    <!-- http://lumify.io#graphPropertyWorkerBlackList -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;graphPropertyWorkerBlackList">
+        <rdfs:label xml:lang="en">Graph Property Worker Black List</rdfs:label>
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
     <!-- http://lumify.io#color -->
 

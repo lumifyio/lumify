@@ -11,6 +11,7 @@ import io.lumify.web.clientapi.model.Property;
 import io.lumify.web.clientapi.model.WorkspaceDiff;
 import io.lumify.web.clientapi.model.WorkspacePublishResponse;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -164,5 +166,25 @@ public class TestBase {
         diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("diff after publish: %s", diff.toString());
         assertEquals(0, diff.getDiffs().size());
+    }
+
+    protected static String getResourceString(String resourceName) {
+        InputStream resource = TestBase.class.getResourceAsStream(resourceName);
+        if (resource == null) {
+            throw new RuntimeException("Could not find resource: " + resourceName);
+        }
+        try {
+            try {
+                return IOUtils.toString(resource);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not convert resource " + resourceName + " to string");
+            }
+        } finally {
+            try {
+                resource.close();
+            } catch (IOException e) {
+                throw new RuntimeException("Could not close resource " + resourceName);
+            }
+        }
     }
 }

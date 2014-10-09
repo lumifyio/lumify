@@ -70,6 +70,11 @@ public abstract class WorkspaceRepository {
 
     public abstract void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, GraphPosition graphPosition, User user);
 
+    public void updateEntityOnWorkspace(String workspaceId, String vertexId, Boolean visible, GraphPosition graphPosition, User user) {
+        Workspace workspace = findById(workspaceId, user);
+        updateEntityOnWorkspace(workspace, vertexId, visible, graphPosition, user);
+    }
+
     public abstract void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
     public abstract void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);

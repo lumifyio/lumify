@@ -85,6 +85,9 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
                 throw new LumifyException("Failed running PostMimeTypeWorker " + postMimeTypeWorker.getClass().getName(), ex);
             }
         }
+        if (postMimeTypeWorkers.size() > 0) {
+            getGraph().flush();
+        }
     }
 
     protected abstract String getMimeType(InputStream in, String fileName) throws Exception;

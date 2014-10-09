@@ -60,9 +60,18 @@ public class GraphPropertyWorkData {
         return visibilityJson;
     }
 
+    public VisibilityJson getVisibilityJson() {
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
+        if (visibilityJson != null) {
+            return visibilityJson;
+        }
+
+        return getVisibilitySourceJson();
+    }
+
     public Map<String, Object> createPropertyMetadata() {
         Map<String, Object> metadata = new HashMap<String, Object>();
-        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
+        VisibilityJson visibilityJson = getVisibilityJson();
         if (visibilityJson != null) {
             LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
         }
@@ -70,14 +79,14 @@ public class GraphPropertyWorkData {
     }
 
     public void setVisibilityJsonOnElement(ElementBuilder builder) {
-        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
+        VisibilityJson visibilityJson = getVisibilityJson();
         if (visibilityJson != null) {
             LumifyProperties.VISIBILITY_JSON.setProperty(builder, visibilityJson, getVisibility());
         }
     }
 
     public void setVisibilityJsonOnElement(Element element, Authorizations authorizations) {
-        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(getElement());
+        VisibilityJson visibilityJson = getVisibilitySourceJson();
         if (visibilityJson != null) {
             LumifyProperties.VISIBILITY_JSON.setProperty(element, visibilityJson, getVisibility(), authorizations);
         }
