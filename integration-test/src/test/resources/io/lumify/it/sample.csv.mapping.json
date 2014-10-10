@@ -1,0 +1,40 @@
+{
+    "linesToSkip": 1,
+    "vertices": [
+        {
+            "properties": [
+                {
+                    "name": "http://lumify.io#conceptType",
+                    "value": "http://lumify.io/test#person"
+                },
+                {
+                    "column": 0,
+                    "name": "http://lumify.io/test#firstName"
+                },
+                {
+                    "column": 1,
+                    "name": "http://lumify.io/test#lastName"
+                }
+            ]
+        },
+        {
+            "properties": [
+                {
+                    "name": "http://lumify.io#conceptType",
+                    "value": "http://lumify.io/test#company"
+                },
+                {
+                    "column": 2,
+                    "name": "http://lumify.io/test#name"
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "label": "http://lumify.io/test#worksFor",
+            "out": 0,
+            "in": 1
+        }
+    ]
+}

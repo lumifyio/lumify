@@ -141,7 +141,6 @@
         <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) + ' ' + prop(&apos;http://lumify.io/test#lastName&apos;)</lumify:titleFormula>
     </owl:Class>
 
-
     <!-- http://lumify.io/test#company -->
 
     <owl:Class rdf:about="http://lumify.io/test#company">
