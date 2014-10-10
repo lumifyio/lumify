@@ -2,7 +2,7 @@ package io.lumify.web.clientapi.model;
 
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 
-public class DetectedObject {
+public class ClientApiDetectedObject {
     private Double x1 = null;
     private Double x2 = null;
     private Double y1 = null;
@@ -85,7 +85,7 @@ public class DetectedObject {
         this.process = process;
     }
 
-    public static DetectedObject fromProperty(Property property) {
-        return ObjectMapperFactory.getInstance().convertValue(property.getValue(), DetectedObject.class);
+    public static ClientApiDetectedObject fromProperty(ClientApiProperty property) {
+        return ObjectMapperFactory.getInstance().convertValue(property.getValue(), ClientApiDetectedObject.class);
     }
 }

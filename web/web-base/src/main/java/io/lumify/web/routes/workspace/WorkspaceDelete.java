@@ -11,6 +11,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class WorkspaceDelete extends BaseRequestHandler {
                 respondWithNotFound(response);
                 return;
             }
-            io.lumify.web.clientapi.model.Workspace clientApiWorkspaceBeforeDeletion = workspaceRepository.toClientApi(workspace, user, false);
+            ClientApiWorkspace clientApiWorkspaceBeforeDeletion = workspaceRepository.toClientApi(workspace, user, false);
             workspaceRepository.delete(workspace, user);
             workQueueRepository.pushWorkspaceDelete(clientApiWorkspaceBeforeDeletion);
 

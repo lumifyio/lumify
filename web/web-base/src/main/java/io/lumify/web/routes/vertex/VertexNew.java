@@ -16,6 +16,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.*;
 
@@ -63,7 +64,7 @@ public class VertexNew extends BaseRequestHandler {
         respondWith(response, handle(conceptType, visibilitySource, user, workspaceId, authorizations));
     }
 
-    private io.lumify.web.clientapi.model.Element handle(String conceptType, String visibilitySource, User user, String workspaceId, Authorizations authorizations) {
+    private ClientApiElement handle(String conceptType, String visibilitySource, User user, String workspaceId, Authorizations authorizations) {
         Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
 
         VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);

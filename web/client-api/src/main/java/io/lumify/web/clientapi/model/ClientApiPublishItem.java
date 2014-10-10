@@ -10,11 +10,11 @@ import io.lumify.web.clientapi.model.util.ClientApiConverter;
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = VertexPublishItem.class, name = "vertex"),
-        @JsonSubTypes.Type(value = PropertyPublishItem.class, name = "property"),
-        @JsonSubTypes.Type(value = RelationshipPublishItem.class, name = "relationship")
+        @JsonSubTypes.Type(value = ClientApiVertexPublishItem.class, name = "vertex"),
+        @JsonSubTypes.Type(value = ClientApiPropertyPublishItem.class, name = "property"),
+        @JsonSubTypes.Type(value = ClientApiRelationshipPublishItem.class, name = "relationship")
 })
-public abstract class PublishItem {
+public abstract class ClientApiPublishItem {
     private Action action;
     private String errorMessage;
 

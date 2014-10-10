@@ -7,6 +7,7 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class Ontology extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        io.lumify.web.clientapi.model.Ontology result = ontologyRepository.getClientApiObject();
+        ClientApiOntology result = ontologyRepository.getClientApiObject();
 
         String json = ObjectMapperFactory.getInstance().writeValueAsString(result);
         String eTag = generateETag(json.getBytes());

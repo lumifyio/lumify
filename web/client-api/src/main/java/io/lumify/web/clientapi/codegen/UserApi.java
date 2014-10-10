@@ -1,14 +1,10 @@
 package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
-import io.lumify.web.clientapi.model.User;
+import io.lumify.web.clientapi.model.ClientApiUser;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
-import javax.ws.rs.core.MediaType;
-
-import java.io.File;
 import java.util.*;
 
 public class UserApi {
@@ -27,7 +23,7 @@ public class UserApi {
     return basePath;
   }
 
-  public User getMe () throws ApiException {
+  public ClientApiUser getMe () throws ApiException {
     Object postBody = null;
     // create path and map variables
     String path = "/user/me".replaceAll("\\{format\\}","json");
@@ -54,7 +50,7 @@ public class UserApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (User) ApiInvoker.deserialize(response, "", User.class);
+        return (ClientApiUser) ApiInvoker.deserialize(response, "", ClientApiUser.class);
       }
       else {
         return null;

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class User {
+public class ClientApiUser {
     private String id;
     private String userName;
     private String displayName;

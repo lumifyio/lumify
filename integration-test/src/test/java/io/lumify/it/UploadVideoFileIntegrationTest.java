@@ -6,9 +6,9 @@ import io.lumify.tesseract.TesseractGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.VertexApiExt;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.model.Element;
-import io.lumify.web.clientapi.model.Property;
+import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiElement;
+import io.lumify.web.clientapi.model.ClientApiProperty;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +42,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
         InputStream videoResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4");
         InputStream videoTranscriptResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4.srt");
-        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFiles(
+        ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFiles(
                 new VertexApiExt.FileForImport("auth1", "shortVideo.mp4", videoResourceStream),
                 new VertexApiExt.FileForImport("auth1", "shortVideo.mp4.srt", videoTranscriptResourceStream));
         assertEquals(1, artifact.getVertexIds().size());
@@ -52,8 +52,8 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         lumifyTestCluster.processGraphPropertyQueue();
 
         boolean foundTesseractVideoTranscript = false;
-        Element vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
-        for (Property prop : vertex.getProperties()) {
+        ClientApiElement vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        for (ClientApiProperty prop : vertex.getProperties()) {
             LOGGER.info(prop.toString());
             if (LumifyProperties.TEXT.getPropertyName().equals(prop.getName()) || MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName().equals(prop.getName())) {
                 String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, prop.getKey());

@@ -1,8 +1,6 @@
 package io.lumify.web.clientapi.model;
 
-import io.lumify.web.clientapi.model.util.ClientApiConverter;
-
-public class PropertyPublishItem extends PublishItem {
+public class ClientApiPropertyPublishItem extends ClientApiPublishItem {
     private String key;
     private String name;
     private String edgeId;

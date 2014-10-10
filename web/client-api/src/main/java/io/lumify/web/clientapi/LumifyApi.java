@@ -1,8 +1,8 @@
 package io.lumify.web.clientapi;
 
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.User;
-import io.lumify.web.clientapi.model.Workspace;
+import io.lumify.web.clientapi.model.ClientApiUser;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ public class LumifyApi {
     private final VertexApiExt vertexApi;
     private final OntologyApiExt ontologyApi;
     private final String basePath;
-    private User me;
+    private ClientApiUser me;
 
     public LumifyApi(String basePath) {
         this.basePath = basePath;
@@ -60,15 +60,15 @@ public class LumifyApi {
         return ApiInvoker.getInstance().getWorkspaceId();
     }
 
-    public Workspace loginAndGetCurrentWorkspace() throws ApiException {
+    public ClientApiWorkspace loginAndGetCurrentWorkspace() throws ApiException {
         me = getUserApi().getMe();
         ApiInvoker.getInstance().setCsrfToken(me.getCsrfToken());
 
-        List<Workspace> workspaces = getWorkspaceApi().getAll().getWorkspaces();
+        List<ClientApiWorkspace> workspaces = getWorkspaceApi().getAll().getWorkspaces();
 
-        Workspace currentWorkspace = null;
+        ClientApiWorkspace currentWorkspace = null;
         if (me.getCurrentWorkspaceId() != null) {
-            for (Workspace workspace : workspaces) {
+            for (ClientApiWorkspace workspace : workspaces) {
                 if (workspace.getWorkspaceId().equals(me.getCurrentWorkspaceId())) {
                     currentWorkspace = workspace;
                     break;

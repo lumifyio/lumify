@@ -45,7 +45,7 @@ public class UploadFileIntegrationTest extends TestBase {
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth2");
         workspaceId = lumifyApi.getCurrentWorkspaceId();
 
-        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
+        ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
@@ -60,10 +60,10 @@ public class UploadFileIntegrationTest extends TestBase {
     private void assertUser1CanSeeInSearch() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        VertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
+        ClientApiVertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
         LOGGER.debug("searchResults: %s", searchResults.toString());
         assertEquals(1, searchResults.getVertices().size());
-        Vertex searchResult = searchResults.getVertices().get(0);
+        ClientApiVertex searchResult = searchResults.getVertices().get(0);
         assertEquals(artifactVertexId, searchResult.getId());
 
         lumifyApi.logout();
@@ -97,7 +97,7 @@ public class UploadFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi;
         lumifyApi = login(USERNAME_TEST_USER_2);
         lumifyApi.setWorkspaceId(workspaceId);
-        Element artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        ClientApiElement artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         assertNotNull(artifactVertex);
         lumifyApi.logout();
     }
@@ -122,7 +122,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
     private void assertUser3StillHasNoAccessToArtifactBecauseAuth1Visibility() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_3);
-        Element vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        ClientApiElement vertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         assertNull("should have failed", vertex);
         lumifyApi.logout();
     }
@@ -135,11 +135,11 @@ public class UploadFileIntegrationTest extends TestBase {
     }
 
     public void assertArtifactCorrect(LumifyApi lumifyApi, boolean hasWorkspaceIdInVisibilityJson, String expectedVisibilitySource) throws ApiException {
-        Element artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        ClientApiElement artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         assertNotNull("could not get vertex: " + artifactVertexId, artifactVertex);
         assertEquals(expectedVisibilitySource, artifactVertex.getVisibilitySource());
         assertEquals(artifactVertexId, artifactVertex.getId());
-        for (Property property : artifactVertex.getProperties()) {
+        for (ClientApiProperty property : artifactVertex.getProperties()) {
             LOGGER.info("property: %s", property.toString());
         }
         assertEquals(11, artifactVertex.getProperties().size());

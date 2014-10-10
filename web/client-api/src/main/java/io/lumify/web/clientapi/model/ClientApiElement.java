@@ -12,12 +12,12 @@ import java.util.List;
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = Edge.class, name = "edge"),
-        @JsonSubTypes.Type(value = Vertex.class, name = "vertex")
+        @JsonSubTypes.Type(value = ClientApiEdge.class, name = "edge"),
+        @JsonSubTypes.Type(value = ClientApiVertex.class, name = "vertex")
 })
-public abstract class Element {
+public abstract class ClientApiElement {
     private String id;
-    private List<Property> properties = new ArrayList<Property>();
+    private List<ClientApiProperty> properties = new ArrayList<ClientApiProperty>();
     private SandboxStatus sandboxStatus;
     private String visibilitySource;
 
@@ -37,7 +37,7 @@ public abstract class Element {
         this.sandboxStatus = sandboxStatus;
     }
 
-    public List<Property> getProperties() {
+    public List<ClientApiProperty> getProperties() {
         return properties;
     }
 

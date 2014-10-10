@@ -7,9 +7,9 @@ import io.lumify.test.LumifyTestCluster;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.UserNameOnlyLumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.Property;
-import io.lumify.web.clientapi.model.WorkspaceDiff;
-import io.lumify.web.clientapi.model.WorkspacePublishResponse;
+import io.lumify.web.clientapi.model.ClientApiProperty;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
+import io.lumify.web.clientapi.model.ClientApiWorkspacePublishResponse;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -120,15 +120,15 @@ public class TestBase {
         return lumifyApi;
     }
 
-    protected void assertHasProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
-        Property property = getProperty(properties, propertyKey, propertyName);
+    protected void assertHasProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName) {
+        ClientApiProperty property = getProperty(properties, propertyKey, propertyName);
         if (property == null) {
             assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
         }
     }
 
-    protected Property getProperty(Iterable<Property> properties, String propertyKey, String propertyName) {
-        for (Property property : properties) {
+    protected ClientApiProperty getProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName) {
+        for (ClientApiProperty property : properties) {
             if (propertyKey.equals(property.getKey()) && propertyName.equals(property.getName())) {
                 return property;
             }
@@ -136,8 +136,8 @@ public class TestBase {
         return null;
     }
 
-    protected void assertHasProperty(Iterable<Property> properties, String propertyKey, String propertyName, Object expectedValue) {
-        Property property = getProperty(properties, propertyKey, propertyName);
+    protected void assertHasProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName, Object expectedValue) {
+        ClientApiProperty property = getProperty(properties, propertyKey, propertyName);
         if (property != null) {
             Object value = property.getValue();
             if (value instanceof Map) {
@@ -155,10 +155,10 @@ public class TestBase {
     }
 
     protected void assertPublishAll(LumifyApi lumifyApi, int expectedDiffsBeforePublish) throws ApiException {
-        WorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
+        ClientApiWorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("diff before publish: %s", diff.toString());
         assertEquals(expectedDiffsBeforePublish, diff.getDiffs().size());
-        WorkspacePublishResponse publishAllResult = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
+        ClientApiWorkspacePublishResponse publishAllResult = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
         LOGGER.info("publish all results: %s", publishAllResult.toString());
         Assert.assertTrue("publish all failed: " + publishAllResult, publishAllResult.isSuccess());
         assertEquals("publish all expected 0 failures: " + publishAllResult, 0, publishAllResult.getFailures().size());

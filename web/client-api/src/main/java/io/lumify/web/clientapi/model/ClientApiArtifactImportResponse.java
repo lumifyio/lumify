@@ -3,7 +3,7 @@ package io.lumify.web.clientapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArtifactImportResponse {
+public class ClientApiArtifactImportResponse {
     private List<String> vertexIds = new ArrayList<String>();
 
     public List<String> getVertexIds() {

@@ -8,7 +8,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.PropertyType;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -656,8 +656,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     @Override
-    public Ontology getClientApiObject() {
-        Ontology ontology = new Ontology();
+    public ClientApiOntology getClientApiObject() {
+        ClientApiOntology ontology = new ClientApiOntology();
 
         Iterable<Concept> concepts = getConceptsWithProperties();
         ontology.addAllConcepts(Concept.toClientApiConcepts(concepts));

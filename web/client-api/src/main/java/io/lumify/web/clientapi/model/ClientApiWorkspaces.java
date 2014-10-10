@@ -5,10 +5,10 @@ import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Workspaces {
-    private List<Workspace> workspaces = new ArrayList<Workspace>();
+public class ClientApiWorkspaces {
+    private List<ClientApiWorkspace> workspaces = new ArrayList<ClientApiWorkspace>();
 
-    public List<Workspace> getWorkspaces() {
+    public List<ClientApiWorkspace> getWorkspaces() {
         return workspaces;
     }
 
@@ -19,7 +19,7 @@ public class Workspaces {
                 '}';
     }
 
-    public void addWorkspace(Workspace workspace) {
+    public void addWorkspace(ClientApiWorkspace workspace) {
         this.workspaces.add(workspace);
     }
 }

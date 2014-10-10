@@ -16,7 +16,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.Element;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -64,11 +64,11 @@ public class VertexSetVisibility extends BaseRequestHandler {
             return;
         }
 
-        Element element = handle(graphVertexId, visibilitySource, workspaceId, user, authorizations);
+        ClientApiElement element = handle(graphVertexId, visibilitySource, workspaceId, user, authorizations);
         respondWith(response, element);
     }
 
-    private Element handle(String graphVertexId, String visibilitySource, String workspaceId, User user, Authorizations authorizations) {
+    private ClientApiElement handle(String graphVertexId, String visibilitySource, String workspaceId, User user, Authorizations authorizations) {
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         if (graphVertex == null) {
             return null;

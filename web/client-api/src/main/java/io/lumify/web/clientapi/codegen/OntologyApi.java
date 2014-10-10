@@ -1,14 +1,10 @@
 package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
-import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
-import javax.ws.rs.core.MediaType;
-
-import java.io.File;
 import java.util.*;
 
 public class OntologyApi {
@@ -27,7 +23,7 @@ public class OntologyApi {
     return basePath;
   }
 
-  public Ontology get () throws ApiException {
+  public ClientApiOntology get () throws ApiException {
     Object postBody = null;
     // create path and map variables
     String path = "/ontology".replaceAll("\\{format\\}","json");
@@ -54,7 +50,7 @@ public class OntologyApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Ontology) ApiInvoker.deserialize(response, "", Ontology.class);
+        return (ClientApiOntology) ApiInvoker.deserialize(response, "", ClientApiOntology.class);
       }
       else {
         return null;

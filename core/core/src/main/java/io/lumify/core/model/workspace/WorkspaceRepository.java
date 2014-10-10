@@ -4,8 +4,9 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
-import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,7 +80,7 @@ public abstract class WorkspaceRepository {
 
     public abstract void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
-    public abstract WorkspaceDiff getDiff(Workspace workspace, User user);
+    public abstract ClientApiWorkspaceDiff getDiff(Workspace workspace, User user);
 
     public String getCreatorUserId(Workspace workspace, User user) {
         for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
@@ -158,12 +159,12 @@ public abstract class WorkspaceRepository {
         }
     }
 
-    public io.lumify.web.clientapi.model.Workspace toClientApi(Workspace workspace, User user, boolean includeVertices) {
+    public ClientApiWorkspace toClientApi(Workspace workspace, User user, boolean includeVertices) {
         checkNotNull(workspace, "workspace cannot be null");
         checkNotNull(user, "user cannot be null");
 
         try {
-            io.lumify.web.clientapi.model.Workspace workspaceClientApi = new io.lumify.web.clientapi.model.Workspace();
+            ClientApiWorkspace workspaceClientApi = new ClientApiWorkspace();
             workspaceClientApi.setWorkspaceId(workspace.getWorkspaceId());
             workspaceClientApi.setTitle(workspace.getDisplayTitle());
 
@@ -176,7 +177,7 @@ public abstract class WorkspaceRepository {
 
             for (WorkspaceUser u : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
                 String userId = u.getUserId();
-                io.lumify.web.clientapi.model.Workspace.User workspaceUser = new io.lumify.web.clientapi.model.Workspace.User();
+                ClientApiWorkspace.User workspaceUser = new ClientApiWorkspace.User();
                 workspaceUser.setUserId(userId);
                 workspaceUser.setAccess(u.getWorkspaceAccess());
                 workspaceClientApi.addUser(workspaceUser);
@@ -188,7 +189,7 @@ public abstract class WorkspaceRepository {
                         continue;
                     }
 
-                    io.lumify.web.clientapi.model.Workspace.Vertex v = new io.lumify.web.clientapi.model.Workspace.Vertex();
+                    ClientApiWorkspace.Vertex v = new ClientApiWorkspace.Vertex();
                     v.setVertexId(workspaceEntity.getEntityVertexId());
 
                     Integer graphPositionX = workspaceEntity.getGraphPositionX();

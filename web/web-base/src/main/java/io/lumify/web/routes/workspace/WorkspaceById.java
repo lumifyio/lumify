@@ -10,6 +10,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +38,7 @@ public class WorkspaceById extends BaseRequestHandler {
             respondWithNotFound(response);
         } else {
             LOGGER.debug("Successfully found workspace");
-            io.lumify.web.clientapi.model.Workspace result = getWorkspaceRepository().toClientApi(workspace, authUser, true);
+            ClientApiWorkspace result = getWorkspaceRepository().toClientApi(workspace, authUser, true);
             respondWith(response, result);
         }
 

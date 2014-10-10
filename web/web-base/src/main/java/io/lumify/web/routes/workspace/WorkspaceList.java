@@ -8,7 +8,8 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.Workspaces;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
+import io.lumify.web.clientapi.model.ClientApiWorkspaces;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,18 +29,18 @@ public class WorkspaceList extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Workspaces results = handle(user);
+        ClientApiWorkspaces results = handle(user);
         respondWith(response, results);
     }
 
-    public Workspaces handle(User user) {
+    public ClientApiWorkspaces handle(User user) {
         Iterable<Workspace> workspaces = workspaceRepository.findAll(user);
         String activeWorkspaceId = getUserRepository().getCurrentWorkspaceId(user.getUserId());
         activeWorkspaceId = activeWorkspaceId != null ? activeWorkspaceId : "";
 
-        Workspaces results = new Workspaces();
+        ClientApiWorkspaces results = new ClientApiWorkspaces();
         for (Workspace workspace : workspaces) {
-            io.lumify.web.clientapi.model.Workspace workspaceClientApi = workspaceRepository.toClientApi(workspace, user, false);
+            ClientApiWorkspace workspaceClientApi = workspaceRepository.toClientApi(workspace, user, false);
             if (workspaceClientApi != null) {
                 if (activeWorkspaceId.equals(workspace.getWorkspaceId())) { //if its the active one
                     workspaceClientApi.setActive(true);

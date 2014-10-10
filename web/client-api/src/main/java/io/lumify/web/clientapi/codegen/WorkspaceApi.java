@@ -1,17 +1,15 @@
 package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
-import io.lumify.web.clientapi.model.WorkspaceDiff;
-import io.lumify.web.clientapi.model.Workspaces;
-import io.lumify.web.clientapi.model.Workspace;
-import io.lumify.web.clientapi.model.WorkspacePublishResponse;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
+import io.lumify.web.clientapi.model.ClientApiWorkspacePublishResponse;
+import io.lumify.web.clientapi.model.ClientApiWorkspaces;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
 
-import java.io.File;
 import java.util.*;
 
 public class WorkspaceApi {
@@ -30,7 +28,7 @@ public class WorkspaceApi {
     return basePath;
   }
 
-  public Workspaces getAll () throws ApiException {
+  public ClientApiWorkspaces getAll () throws ApiException {
     Object postBody = null;
     // create path and map variables
     String path = "/workspace/all".replaceAll("\\{format\\}","json");
@@ -57,7 +55,7 @@ public class WorkspaceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Workspaces) ApiInvoker.deserialize(response, "", Workspaces.class);
+        return (ClientApiWorkspaces) ApiInvoker.deserialize(response, "", ClientApiWorkspaces.class);
       }
       else {
         return null;
@@ -71,7 +69,7 @@ public class WorkspaceApi {
       }
     }
   }
-  public Workspace getById (String workspaceId) throws ApiException {
+  public ClientApiWorkspace getById (String workspaceId) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(workspaceId == null ) {
@@ -104,7 +102,7 @@ public class WorkspaceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Workspace) ApiInvoker.deserialize(response, "", Workspace.class);
+        return (ClientApiWorkspace) ApiInvoker.deserialize(response, "", ClientApiWorkspace.class);
       }
       else {
         return null;
@@ -118,7 +116,7 @@ public class WorkspaceApi {
       }
     }
   }
-  public Workspace create () throws ApiException {
+  public ClientApiWorkspace create () throws ApiException {
     Object postBody = null;
     // create path and map variables
     String path = "/workspace/create".replaceAll("\\{format\\}","json");
@@ -145,7 +143,7 @@ public class WorkspaceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Workspace) ApiInvoker.deserialize(response, "", Workspace.class);
+        return (ClientApiWorkspace) ApiInvoker.deserialize(response, "", ClientApiWorkspace.class);
       }
       else {
         return null;
@@ -206,7 +204,7 @@ public class WorkspaceApi {
       }
     }
   }
-  public WorkspaceDiff getDiff () throws ApiException {
+  public ClientApiWorkspaceDiff getDiff () throws ApiException {
     Object postBody = null;
     // create path and map variables
     String path = "/workspace/diff".replaceAll("\\{format\\}","json");
@@ -233,7 +231,7 @@ public class WorkspaceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (WorkspaceDiff) ApiInvoker.deserialize(response, "", WorkspaceDiff.class);
+        return (ClientApiWorkspaceDiff) ApiInvoker.deserialize(response, "", ClientApiWorkspaceDiff.class);
       }
       else {
         return null;
@@ -247,7 +245,7 @@ public class WorkspaceApi {
       }
     }
   }
-  public WorkspacePublishResponse publish (String publishData) throws ApiException {
+  public ClientApiWorkspacePublishResponse publish (String publishData) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(publishData == null ) {
@@ -280,7 +278,7 @@ public class WorkspaceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (WorkspacePublishResponse) ApiInvoker.deserialize(response, "", WorkspacePublishResponse.class);
+        return (ClientApiWorkspacePublishResponse) ApiInvoker.deserialize(response, "", ClientApiWorkspacePublishResponse.class);
       }
       else {
         return null;

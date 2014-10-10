@@ -5,10 +5,10 @@ import io.lumify.web.clientapi.model.util.ClientApiConverter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkspacePublishResponse {
-    private List<PublishItem> failures = new ArrayList<PublishItem>();
+public class ClientApiWorkspacePublishResponse {
+    private List<ClientApiPublishItem> failures = new ArrayList<ClientApiPublishItem>();
 
-    public List<PublishItem> getFailures() {
+    public List<ClientApiPublishItem> getFailures() {
         return failures;
     }
 
@@ -21,7 +21,7 @@ public class WorkspacePublishResponse {
         return ClientApiConverter.clientApiToString(this);
     }
 
-    public void addFailure(PublishItem data) {
+    public void addFailure(ClientApiPublishItem data) {
         this.failures.add(data);
     }
 }

@@ -12,7 +12,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ParameterParser;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -80,8 +80,8 @@ public class VertexImport extends BaseRequestHandler {
         }
     }
 
-    private ArtifactImportResponse toArtifactImportResponse(List<Vertex> vertices) {
-        ArtifactImportResponse response = new ArtifactImportResponse();
+    private ClientApiArtifactImportResponse toArtifactImportResponse(List<Vertex> vertices) {
+        ClientApiArtifactImportResponse response = new ClientApiArtifactImportResponse();
         for (Vertex vertex : vertices) {
             response.getVertexIds().add(vertex.getId());
         }

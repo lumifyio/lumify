@@ -8,7 +8,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.Element;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -36,11 +36,11 @@ public class VertexProperties extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        Element element = handle(graphVertexId, workspaceId, authorizations);
+        ClientApiElement element = handle(graphVertexId, workspaceId, authorizations);
         respondWith(response, element);
     }
 
-    private Element handle(String graphVertexId, String workspaceId, Authorizations authorizations) {
+    private ClientApiElement handle(String graphVertexId, String workspaceId, Authorizations authorizations) {
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
         if (vertex == null) {
             return null;

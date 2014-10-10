@@ -9,7 +9,7 @@ import io.lumify.web.clientapi.model.util.ClientApiConverter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkspaceDiff {
+public class ClientApiWorkspaceDiff {
     private List<Item> diffs = new ArrayList<Item>();
 
     public void addAll(List<Item> diffs) {

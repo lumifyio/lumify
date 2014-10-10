@@ -3,7 +3,7 @@ package io.lumify.web.clientapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vertex extends Element {
+public class ClientApiVertex extends ClientApiElement {
     private Double score;
     private List<String> edgeLabels = new ArrayList<String>();
 

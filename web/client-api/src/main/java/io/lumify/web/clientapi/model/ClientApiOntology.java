@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.*;
 
-public class Ontology {
+public class ClientApiOntology {
     private List<Concept> concepts = new ArrayList<Concept>();
     private List<Property> properties = new ArrayList<Property>();
     private List<Relationship> relationships = new ArrayList<Relationship>();

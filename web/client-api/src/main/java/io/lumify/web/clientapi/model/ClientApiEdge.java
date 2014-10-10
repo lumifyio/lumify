@@ -1,6 +1,6 @@
 package io.lumify.web.clientapi.model;
 
-public class Edge extends Element {
+public class ClientApiEdge extends ClientApiElement {
     private String label;
     private String sourceVertexId;
     private String destVertexId;

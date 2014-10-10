@@ -1,8 +1,6 @@
 package io.lumify.web.clientapi.model;
 
-import io.lumify.web.clientapi.model.util.ClientApiConverter;
-
-public class RelationshipPublishItem extends PublishItem {
+public class ClientApiRelationshipPublishItem extends ClientApiPublishItem {
     private String edgeId;
 
     public String getEdgeId() {

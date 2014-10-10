@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ResolveTermIntegrationTest extends TestBase {
     private String artifactVertexId;
-    private Element joeFernerVertex;
+    private ClientApiElement joeFernerVertex;
 
     @Test
     public void testResolveTerm() throws IOException, ApiException {
@@ -52,7 +52,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
-        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
+        ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         artifactVertexId = artifact.getVertexIds().get(0);
         assertNotNull(artifactVertexId);
@@ -91,21 +91,21 @@ public class ResolveTermIntegrationTest extends TestBase {
     }
 
     public void assertDiff(LumifyApi lumifyApi) throws ApiException {
-        WorkspaceDiff diff;
+        ClientApiWorkspaceDiff diff;
         diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("assertDiff: %s", diff.toString());
         assertEquals(2, diff.getDiffs().size());
         String edgeId = null;
         boolean foundEdgeDiffItem = false;
         boolean foundEdgeVisibilityJsonDiffItem = false;
-        for (WorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
-            if (workspaceDiffItem instanceof WorkspaceDiff.EdgeItem) {
+        for (ClientApiWorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
+            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.EdgeItem) {
                 foundEdgeDiffItem = true;
-                edgeId = ((WorkspaceDiff.EdgeItem) workspaceDiffItem).getEdgeId();
+                edgeId = ((ClientApiWorkspaceDiff.EdgeItem) workspaceDiffItem).getEdgeId();
             }
         }
-        for (WorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
-            if (workspaceDiffItem instanceof WorkspaceDiff.PropertyItem && ((WorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId)) {
+        for (ClientApiWorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
+            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem && ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId)) {
                 foundEdgeVisibilityJsonDiffItem = true;
             }
         }
@@ -140,15 +140,15 @@ public class ResolveTermIntegrationTest extends TestBase {
                 "test",
                 null);
 
-        TermMentionsResponse termMentions = lumifyApi.getVertexApi().getTermMentions(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
+        ClientApiTermMentionsResponse termMentions = lumifyApi.getVertexApi().getTermMentions(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY, LumifyProperties.TEXT.getPropertyName());
         LOGGER.info("termMentions: %s", termMentions.toString());
         assertEquals(4, termMentions.getTermMentions().size());
-        Element davidSingleyTermMention = findDavidSingleyTermMention(termMentions);
+        ClientApiElement davidSingleyTermMention = findDavidSingleyTermMention(termMentions);
         LOGGER.info("termMention: %s", davidSingleyTermMention.toString());
 
         String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         LOGGER.info("highlightedText: %s", highlightedText);
-        Property davidSingleyEdgeId = getProperty(davidSingleyTermMention.getProperties(), "", "http://lumify.io/termMention#resolvedEdgeId");
+        ClientApiProperty davidSingleyEdgeId = getProperty(davidSingleyTermMention.getProperties(), "", "http://lumify.io/termMention#resolvedEdgeId");
         String davidSingleyEdgeIdValue = (String) davidSingleyEdgeId.getValue();
         assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && highlightedText.contains(davidSingleyEdgeIdValue));
 
@@ -163,9 +163,9 @@ public class ResolveTermIntegrationTest extends TestBase {
         assertTrue("highlightedText invalid: " + highlightedText, highlightedText.contains(">David Singley<") && !highlightedText.contains(davidSingleyEdgeIdValue));
     }
 
-    private Element findDavidSingleyTermMention(TermMentionsResponse termMentions) {
-        for (Element termMention : termMentions.getTermMentions()) {
-            for (Property property : termMention.getProperties()) {
+    private ClientApiElement findDavidSingleyTermMention(ClientApiTermMentionsResponse termMentions) {
+        for (ClientApiElement termMention : termMentions.getTermMentions()) {
+            for (ClientApiProperty property : termMention.getProperties()) {
                 if (property.getName().equals(LumifyProperties.TERM_MENTION_TITLE.getPropertyName())) {
                     if ("David Singley".equals(property.getValue())) {
                         return termMention;

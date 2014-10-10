@@ -8,7 +8,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.DetectedObjects;
+import io.lumify.web.clientapi.model.ClientApiDetectedObjects;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Property;
@@ -48,7 +48,7 @@ public class VertexGetDetectedObjects extends BaseRequestHandler {
             return;
         }
 
-        DetectedObjects detectedObjects = new DetectedObjects();
+        ClientApiDetectedObjects detectedObjects = new ClientApiDetectedObjects();
         Iterable<Property> detectedObjectProperties = vertex.getProperties(propertyName);
         if (detectedObjectProperties == null || IterableUtils.count(detectedObjectProperties) == 0) {
             respondWithNotFound(response, String.format("property %s not found on vertex %s", propertyName, vertex.getId()));
