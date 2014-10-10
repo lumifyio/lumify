@@ -4,6 +4,7 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
 import io.lumify.web.clientapi.model.ClientApiDetectedObjects;
+import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
 import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import io.lumify.web.clientapi.model.ClientApiElement;
 import io.lumify.web.clientapi.model.ClientApiVertexFindPathResponse;
@@ -829,6 +830,57 @@ public class VertexApi {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (ClientApiVertexFindPathResponse) ApiInvoker.deserialize(response, "", ClientApiVertexFindPathResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiVertexFindRelatedResponse findRelated (String graphVertexId, String limitParentConceptId, Integer maxVerticesToReturn) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/find-related".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(limitParentConceptId)))
+      queryParams.put("limitParentConceptId", String.valueOf(limitParentConceptId));
+    if(!"null".equals(String.valueOf(maxVerticesToReturn)))
+      queryParams.put("maxVerticesToReturn", String.valueOf(maxVerticesToReturn));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVertexFindRelatedResponse) ApiInvoker.deserialize(response, "", ClientApiVertexFindRelatedResponse.class);
       }
       else {
         return null;

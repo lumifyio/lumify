@@ -1,18 +1,17 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
 import org.securegraph.Authorizations;
 import org.securegraph.Direction;
 import org.securegraph.Graph;
@@ -65,21 +64,19 @@ public class VertexFindRelated extends BaseRequestHandler {
         Iterable<Vertex> vertices = graph.getVertex(graphVertexId, authorizations)
                 .getVertices(Direction.BOTH, authorizations);
 
-        JSONObject json = new JSONObject();
-        JSONArray verticesJson = new JSONArray();
+        ClientApiVertexFindRelatedResponse result = new ClientApiVertexFindRelatedResponse();
         long count = 0;
         for (Vertex vertex : vertices) {
             if (limitConceptIds.size() == 0 || !isLimited(limitConceptIds, vertex)) {
                 if (count < maxVerticesToReturn) {
-                    verticesJson.put(JsonSerializer.toJson(vertex, workspaceId, authorizations));
+                    result.getVertices().add(ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations));
                 }
                 count++;
             }
         }
-        json.put("count", count);
-        json.put("vertices", verticesJson);
+        result.setCount(count);
 
-        respondWithJson(response, json);
+        respondWithClientApiObject(response, result);
     }
 
     private boolean isLimited(Set<String> limitConceptIds, Vertex vertex) {

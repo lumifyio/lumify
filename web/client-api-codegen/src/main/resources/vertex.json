@@ -670,6 +670,41 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/find-related",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Finds related vertices",
+                    "type": "ClientApiVertexFindRelatedResponse",
+                    "nickname": "findRelated",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "limitParentConceptId",
+                            "description": "concept type iri to limit related",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "maxVerticesToReturn",
+                            "description": "max number of vertices to return",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {

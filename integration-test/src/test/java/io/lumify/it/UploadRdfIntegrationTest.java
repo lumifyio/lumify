@@ -66,14 +66,46 @@ public class UploadRdfIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
 
+        assertSearch(lumifyApi);
+        assertGetEdges(lumifyApi);
+        assertFindPath(lumifyApi);
+        assertFindRelated(lumifyApi);
+
+        lumifyApi.logout();
+    }
+
+    private void assertFindRelated(LumifyApi lumifyApi) throws ApiException {
+        ClientApiVertexFindRelatedResponse related = lumifyApi.getVertexApi().findRelated(joeFernerVertexId);
+        assertEquals(2, related.getCount());
+        assertEquals(2, related.getVertices().size());
+
+        boolean foundAltamiraCorporation = false;
+        boolean foundRdfDocument = false;
+        for (ClientApiVertex v : related.getVertices()) {
+            if (v.getId().equals(altamiraCorporationVertexId)) {
+                foundAltamiraCorporation = true;
+            }
+            if (v.getId().equals(artifactVertexId)) {
+                foundRdfDocument = true;
+            }
+        }
+        assertTrue(foundAltamiraCorporation, "could not find AltamiraCorporation in related");
+        assertTrue(foundRdfDocument, "could not find rdf in related");
+    }
+
+    private void assertSearch(LumifyApi lumifyApi) throws ApiException {
         ClientApiVertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
         LOGGER.info("searchResults (user2): %s", searchResults);
         assertEquals(4, searchResults.getVertices().size());
+    }
 
+    private void assertGetEdges(LumifyApi lumifyApi) throws ApiException {
         ClientApiVertexEdges artifactEdges = lumifyApi.getVertexApi().getEdges(artifactVertexId, null, null, null);
         assertEquals(3, artifactEdges.getTotalReferences());
         assertEquals(3, artifactEdges.getRelationships().size());
+    }
 
+    private void assertFindPath(LumifyApi lumifyApi) throws ApiException {
         ClientApiVertexFindPathResponse paths = lumifyApi.getVertexApi().findPath(joeFernerVertexId, daveSingleyVertexId, 2);
         LOGGER.info("paths: %s", paths.toString());
         assertEquals(2, paths.getPaths().size());
@@ -90,7 +122,5 @@ public class UploadRdfIntegrationTest extends TestBase {
         }
         assertTrue(foundAltamiraCorporation, "could not find AltamiraCorporation in path");
         assertTrue(foundRdfDocument, "could not find rdf in path");
-
-        lumifyApi.logout();
     }
 }

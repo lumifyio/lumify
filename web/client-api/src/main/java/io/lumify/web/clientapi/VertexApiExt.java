@@ -5,6 +5,7 @@ import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
 import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -161,6 +162,10 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
             queryParams.put("width", width.toString());
         }
         return apiInvoker.getBinary(basePath, VERTEX_BASE_URL + "video-preview", queryParams, headerParams);
+    }
+
+    public ClientApiVertexFindRelatedResponse findRelated(String vertexId) throws ApiException {
+        return findRelated(vertexId, null, null);
     }
 
     public static class FileForImport {
