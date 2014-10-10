@@ -80,8 +80,6 @@ public class VertexFindRelated extends BaseRequestHandler {
         json.put("vertices", verticesJson);
 
         respondWithJson(response, json);
-
-        chain.next(request, response);
     }
 
     private boolean isLimited(Set<String> limitConceptIds, Vertex vertex) {

@@ -1,5 +1,6 @@
 package io.lumify.web.routes.workspace;
 
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -8,11 +9,9 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.miniweb.HandlerChain;
-import com.google.inject.Inject;
+import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiWorkspace;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,11 +49,7 @@ public class WorkspaceDelete extends BaseRequestHandler {
             workspaceRepository.delete(workspace, user);
             workQueueRepository.pushWorkspaceDelete(clientApiWorkspaceBeforeDeletion);
 
-            JSONObject resultJson = new JSONObject();
-            resultJson.put("success", true);
-
-            respondWithJson(response, resultJson);
-
+            respondWithSuccessJson(response);
         } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }

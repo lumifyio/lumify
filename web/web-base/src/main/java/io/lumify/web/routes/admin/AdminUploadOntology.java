@@ -69,9 +69,7 @@ public class AdminUploadOntology extends BaseRequestHandler {
 
         tempFile.delete();
 
-        JSONObject json = new JSONObject();
-        json.put("status", "OK");
-        respondWithJson(response, json);
+        respondWithSuccessJson(response);
     }
 
     private Iterable<Part> getFiles(HttpServletRequest request) throws IOException, ServletException {

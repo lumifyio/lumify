@@ -117,7 +117,10 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations));
+                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+                JSONObject successJson = new JSONObject();
+                successJson.put("success", true);
+                responseResult.put("edges", successJson);
                 successArray.put(responseResult);
             } else if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
@@ -181,7 +184,10 @@ public class WorkspaceUndo extends BaseRequestHandler {
         }
 
         for (Vertex termMention : termMentionRepository.findResolvedTo(vertex.getId(), authorizations)) {
-            unresolved.put(workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations));
+            workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations);
+            JSONObject result = new JSONObject();
+            result.put("success", true);
+            unresolved.put(result);
         }
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);

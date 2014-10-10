@@ -17,7 +17,6 @@ import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
-import org.json.JSONObject;
 import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,7 +95,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, user, authorizations);
-        respondWithJson(response, result);
+        workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, user, authorizations);
+        respondWithSuccessJson(response);
     }
 }

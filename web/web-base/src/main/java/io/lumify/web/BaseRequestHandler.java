@@ -359,6 +359,12 @@ public abstract class BaseRequestHandler implements Handler {
         configureResponse(ResponseTypes.JSON_OBJECT, response, jsonObject);
     }
 
+    protected void respondWithSuccessJson(HttpServletResponse response) {
+        JSONObject result = new JSONObject();
+        result.put("success", true);
+        respondWithJson(response, result);
+    }
+
     protected void respondWithClientApiObject(HttpServletResponse response, ClientApiObject obj) throws IOException {
         if (obj == null) {
             respondWithNotFound(response);

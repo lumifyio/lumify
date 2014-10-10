@@ -16,14 +16,14 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import io.lumify.web.clientapi.model.VisibilityJson;
-import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 
@@ -153,7 +153,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         workQueueRepository.pushElement(edge);
         workQueueRepository.pushGraphPropertyQueue(artifactVertex, propertyKey, LumifyProperties.DETECTED_OBJECT.getPropertyName());
 
-        JSONObject result = JsonSerializer.toJson(artifactVertex, workspaceId, authorizations);
-        respondWithJson(response, result);
+        ClientApiElement result = ClientApiConverter.toClientApi(artifactVertex, workspaceId, authorizations);
+        respondWithClientApiObject(response, result);
     }
 }

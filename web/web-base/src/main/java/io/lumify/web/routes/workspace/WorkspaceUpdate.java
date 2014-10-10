@@ -11,12 +11,11 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.ClientApiWorkspace;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceUpdateData;
+import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,9 +67,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("result", "OK");
-        respondWithJson(response, resultJson);
+        respondWithSuccessJson(response);
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {

@@ -4,6 +4,7 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
 import io.lumify.web.clientapi.model.ClientApiVertex;
+import io.lumify.web.clientapi.model.ClientApiVertexEdges;
 import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,6 +54,10 @@ public class UploadRdfIntegrationTest extends TestBase {
         ClientApiVertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
         LOGGER.info("searchResults (user2): %s", searchResults);
         assertEquals(3, searchResults.getVertices().size());
+
+        ClientApiVertexEdges artifactEdges = lumifyApi.getVertexApi().getEdges(artifactVertexId, null, null, null);
+        assertEquals(2, artifactEdges.getTotalReferences());
+        assertEquals(2, artifactEdges.getRelationships().size());
 
         lumifyApi.logout();
     }

@@ -67,7 +67,7 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         return IterableUtils.toList(edgeLabels);
     }
 
-    private static ClientApiEdge toClientApiEdge(Edge edge, String workspaceId, Authorizations authorizations) {
+    public static ClientApiEdge toClientApiEdge(Edge edge, String workspaceId, Authorizations authorizations) {
         ClientApiEdge e = new ClientApiEdge();
         e.setLabel(edge.getLabel());
         e.setSourceVertexId(edge.getVertexId(Direction.OUT));

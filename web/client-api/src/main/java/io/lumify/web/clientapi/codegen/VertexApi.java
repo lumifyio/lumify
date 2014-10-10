@@ -1,9 +1,14 @@
 package io.lumify.web.clientapi.codegen;
 
+import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
-import io.lumify.web.clientapi.model.*;
+import io.lumify.web.clientapi.model.ClientApiDetectedObjects;
+import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import io.lumify.web.clientapi.model.ClientApiElement;
+import io.lumify.web.clientapi.model.ClientApiVertexEdges;
+import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiTermMentionsResponse;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
@@ -62,6 +67,60 @@ public class VertexApi {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (ClientApiElement) ApiInvoker.deserialize(response, "", ClientApiElement.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  //error info- code: 404 reason: "Vertex not found" model: <none>
+  public ClientApiVertexEdges getEdges (String graphVertexId, String edgeLabel, Integer offset, Integer size) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/edges".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(edgeLabel)))
+      queryParams.put("edgeLabel", String.valueOf(edgeLabel));
+    if(!"null".equals(String.valueOf(offset)))
+      queryParams.put("offset", String.valueOf(offset));
+    if(!"null".equals(String.valueOf(size)))
+      queryParams.put("size", String.valueOf(size));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVertexEdges) ApiInvoker.deserialize(response, "", ClientApiVertexEdges.class);
       }
       else {
         return null;

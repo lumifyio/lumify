@@ -5,13 +5,13 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
@@ -66,6 +66,7 @@ public class VertexRemoveEdge extends BaseRequestHandler {
             return;
         }
 
-        respondWithJson(response, workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations));
+        workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+        respondWithSuccessJson(response);
     }
 }

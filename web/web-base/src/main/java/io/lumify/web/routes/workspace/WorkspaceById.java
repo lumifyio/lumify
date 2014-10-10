@@ -41,7 +41,5 @@ public class WorkspaceById extends BaseRequestHandler {
             ClientApiWorkspace result = getWorkspaceRepository().toClientApi(workspace, authUser, true);
             respondWithClientApiObject(response, result);
         }
-
-        chain.next(request, response);
     }
 }
