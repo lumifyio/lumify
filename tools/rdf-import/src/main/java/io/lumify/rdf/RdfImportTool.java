@@ -5,6 +5,7 @@ import io.lumify.core.exception.LumifyException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.securegraph.Visibility;
 
 import java.io.File;
 
@@ -41,7 +42,10 @@ public class RdfImportTool extends CommandLineBase {
             throw new LumifyException("Could not find file: " + inputFileName);
         }
 
-        new RdfImport().importRdf(getGraph(), inputFile, getAuthorizations());
+        RdfGraphPropertyWorker rdfGraphPropertyWorker = new RdfGraphPropertyWorker();
+
+        Visibility visibility = new Visibility("");
+        rdfGraphPropertyWorker.importRdf(getGraph(), inputFile, null, visibility, getAuthorizations());
         getGraph().flush();
 
         return 0;

@@ -397,6 +397,7 @@
 .ras	image/cmu-raster
 .ras	image/x-cmu-raster
 .rast	image/cmu-raster
+.rdf    application/rdf+xml
 .rexx	text/x-script.rexx
 .rf	    image/vnd.rn-realflash
 .rgb	image/x-rgb
