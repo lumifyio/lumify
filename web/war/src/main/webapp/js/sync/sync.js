@@ -97,7 +97,6 @@ define([
                 });
             }
 
-
             this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceId, data);
         };
 
