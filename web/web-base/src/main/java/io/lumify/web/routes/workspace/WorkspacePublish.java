@@ -274,6 +274,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         LOGGER.debug("publishing vertex %s(%s)", vertex.getId(), vertex.getVisibility().toString());
         Visibility originalVertexVisibility = vertex.getVisibility();
+        Property visibilityJsonProperty = LumifyProperties.VISIBILITY_JSON.getProperty(vertex);
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
         if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
             throw new LumifyException(String.format("vertex with id '%s' is not local to workspace '%s'", vertex.getId(), workspaceId));
@@ -295,7 +296,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         // we need to alter the visibility of the json property, otherwise we'll have two json properties, one with the old visibility and one with the new.
-        LumifyProperties.VISIBILITY_JSON.alterVisibility(vertexElementMutation, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_JSON.alterVisibility(vertexElementMutation, visibilityJsonProperty.getKey(), lumifyVisibility.getVisibility());
         LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
         LumifyProperties.VISIBILITY_JSON.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save(authorizations);
