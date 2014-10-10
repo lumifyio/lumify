@@ -80,7 +80,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
 
         JSONArray failures = new JSONArray();
-        JSONArray successArray = new JSONArray();
         JSONArray verticesDeleted = new JSONArray();
 
         for (int i = 0; i < undoData.length(); i++) {
@@ -97,9 +96,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     failures.put(data);
                     continue;
                 }
-                JSONObject responseResult = new JSONObject();
-                responseResult.put("vertex", undoVertex(vertex, workspaceId, authorizations, user));
-                successArray.put(responseResult);
+                undoVertex(vertex, workspaceId, authorizations, user);
                 verticesDeleted.put(vertex.getId());
             } else if (type.equals("relationship")) {
                 Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
@@ -116,12 +113,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     failures.put(data);
                     continue;
                 }
-                JSONObject responseResult = new JSONObject();
                 workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
-                JSONObject successJson = new JSONObject();
-                successJson.put("success", true);
-                responseResult.put("edges", successJson);
-                successArray.put(responseResult);
             } else if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
                 Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
@@ -136,9 +128,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 Property property = vertex.getProperty(data.getString("key"), data.getString("name"));
-                JSONObject responseResult = new JSONObject();
-                responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId, user, authorizations));
-                successArray.put(responseResult);
+                workspaceHelper.deleteProperty(vertex, property, workspaceId, user, authorizations);
             }
         }
 
@@ -147,7 +137,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
         }
 
         JSONObject resultJson = new JSONObject();
-        resultJson.put("success", successArray);
         resultJson.put("failures", failures);
         respondWithJson(response, resultJson);
     }

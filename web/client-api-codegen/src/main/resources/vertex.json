@@ -635,6 +635,41 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/find-path",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Finds paths between two vertices",
+                    "type": "ClientApiVertexFindPathResponse",
+                    "nickname": "findPath",
+                    "parameters": [
+                        {
+                            "name": "sourceGraphVertexId",
+                            "description": "Source vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "destGraphVertexId",
+                            "description": "Destination vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "hops",
+                            "description": "number of hops to search",
+                            "required": true,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {

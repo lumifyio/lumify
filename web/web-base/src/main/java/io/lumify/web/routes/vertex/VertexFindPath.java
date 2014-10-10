@@ -1,15 +1,16 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiElement;
+import io.lumify.web.clientapi.model.ClientApiVertex;
+import io.lumify.web.clientapi.model.ClientApiVertexFindPathResponse;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Path;
@@ -17,6 +18,8 @@ import org.securegraph.Vertex;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VertexFindPath extends BaseRequestHandler {
     private final Graph graph;
@@ -53,18 +56,19 @@ public class VertexFindPath extends BaseRequestHandler {
             return;
         }
 
-        JSONObject resultsJson = new JSONObject();
-        JSONArray pathResults = new JSONArray();
+        ClientApiVertexFindPathResponse results = new ClientApiVertexFindPathResponse();
 
         Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, authorizations);
         for (Path path : paths) {
-            JSONArray verticesJson = JsonSerializer.toJson(graph.getVerticesInOrder(path, authorizations), workspaceId, authorizations);
-            pathResults.put(verticesJson);
+            List<ClientApiElement> clientApiElementPath = ClientApiConverter.toClientApi(graph.getVerticesInOrder(path, authorizations), workspaceId, authorizations);
+            List<ClientApiVertex> clientApiVertexPath = new ArrayList<ClientApiVertex>();
+            for (ClientApiElement e : clientApiElementPath) {
+                clientApiVertexPath.add((ClientApiVertex) e);
+            }
+            results.getPaths().add(clientApiVertexPath);
         }
 
-        resultsJson.put("paths", pathResults);
-
-        respondWithJson(response, resultsJson);
+        respondWithClientApiObject(response, results);
     }
 }
 

@@ -10,11 +10,8 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.securegraph.*;
 
 import java.util.List;
@@ -60,23 +57,14 @@ public class WorkspaceHelper {
         auditRepository.auditVertex(AuditAction.UNRESOLVE, resolvedVertex.getId(), "", "", user, visibility.getVisibility());
     }
 
-    public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId, User user, Authorizations authorizations) {
+    public void deleteProperty(Vertex vertex, Property property, String workspaceId, User user, Authorizations authorizations) {
         auditRepository.auditEntityProperty(AuditAction.DELETE, vertex.getId(), property.getKey(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
 
         vertex.removeProperty(property.getKey(), property.getName(), authorizations);
 
         graph.flush();
 
-        List<Property> properties = toList(vertex.getProperties(property.getName()));
-        JSONObject json = new JSONObject();
-        JSONArray propertiesJson = JsonSerializer.toJsonProperties(properties, workspaceId);
-        json.put("properties", propertiesJson);
-        json.put("deletedProperty", property.getName());
-        json.put("vertex", JsonSerializer.toJson(vertex, workspaceId, authorizations));
-
         workQueueRepository.pushGraphPropertyQueue(vertex, property);
-
-        return json;
     }
 
     public void deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String imageRelationshipLabel, User user, Authorizations authorizations) {

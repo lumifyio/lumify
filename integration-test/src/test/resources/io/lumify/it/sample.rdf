@@ -21,6 +21,13 @@
         <test:worksFor rdf:resource="&test;COMPANY_Altamira_Corporation"/>
     </rdf:Description>
 
+    <rdf:Description rdf:about="&test;PERSON_Dave_Singley">
+        <rdf:type rdf:resource="&test;person"/>
+        <test:firstName>Dave</test:firstName>
+        <test:lastName>Singley</test:lastName>
+        <test:worksFor rdf:resource="&test;COMPANY_Altamira_Corporation"/>
+    </rdf:Description>
+
     <rdf:Description rdf:about="&test;COMPANY_Altamira_Corporation">
         <rdf:type rdf:resource="&test;company"/>
         <lumify:title>Altamira Corporation</lumify:title>
