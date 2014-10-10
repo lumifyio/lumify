@@ -814,18 +814,19 @@ define([
                     {
                         type: VALUE,
                         property: datum,
+                        propertyIndex: currentPropertyIndex,
                         showHidden: currentPropertyIndex === (maxItemsBeforeHidden - 1) &&
                             !(datum.name in showMoreExpanded),
                         hidden: Math.max(0, totalPropertyCountsByName[datum.name])
                     }
                 ];
             })
-            .call(_.partial(createPropertyRow, vertexId, ontologyProperties));
+            .call(_.partial(createPropertyRow, vertexId, ontologyProperties, maxItemsBeforeHidden));
 
         this.exit().remove();
     }
 
-    function createPropertyRow(vertexId, ontologyProperties) {
+    function createPropertyRow(vertexId, ontologyProperties, maxItemsBeforeHidden) {
         this.enter()
             .append('td')
             .each(function() {
@@ -845,7 +846,9 @@ define([
                         self.append('span').attr('class', 'value');
                         self.append('button').attr('class', 'info')
                         self.append('span').attr('class', 'visibility');
-                        self.append('a').attr('class', 'show-more');
+                        if (datum.propertyIndex === (maxItemsBeforeHidden - 1)) {
+                            self.append('a').attr('class', 'show-more');
+                        }
                         break;
                 }
             });
