@@ -3,9 +3,9 @@ package io.lumify.it;
 import io.lumify.csv.CsvOntology;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.model.Vertex;
-import io.lumify.web.clientapi.model.VertexSearchResponse;
+import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiVertex;
+import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -31,7 +31,7 @@ public class UploadCsvIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
-        ArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "sample.csv", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
+        ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "sample.csv", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         artifactVertexId = artifact.getVertexIds().get(0);
 
         lumifyApi.getVertexApi().setProperty(artifactVertexId, "", CsvOntology.MAPPING_JSON.getPropertyName(), MAPPING_JSON, "", "", null, null);
@@ -40,10 +40,10 @@ public class UploadCsvIntegrationTest extends TestBase {
 
         assertPublishAll(lumifyApi, 46);
 
-        VertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
+        ClientApiVertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
         LOGGER.info("searchResults (user1): %s", searchResults);
         assertEquals(8, searchResults.getVertices().size());
-        for (Vertex v : searchResults.getVertices()) {
+        for (ClientApiVertex v : searchResults.getVertices()) {
             assertEquals("auth1", v.getVisibilitySource());
         }
 
@@ -54,7 +54,7 @@ public class UploadCsvIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
 
-        VertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
+        ClientApiVertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
         LOGGER.info("searchResults (user2): %s", searchResults);
         assertEquals(8, searchResults.getVertices().size());
 
