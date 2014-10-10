@@ -761,7 +761,7 @@ define([
                     .flatten()
                     .tap(function(list) {
                         if (pair[0] !== NO_GROUP) {
-                            list.splice(0, 0, pair[0]);
+                            list.splice(0, 0, [pair[0], pair[1].length]);
                         }
                     })
                     .value();
@@ -788,7 +788,7 @@ define([
         this.enter()
             .append('tr')
             .attr('class', function(datum) {
-                if (_.isString(datum)) {
+                if (_.isString(datum[0])) {
                     return 'property-group-header';
                 }
                 return 'property-row';
@@ -797,10 +797,11 @@ define([
         var currentPropertyIndex = 0, lastPropertyName = '';
         this.selectAll('td')
             .data(function(datum, i, j) {
-                if (_.isString(datum)) {
+                if (_.isString(datum[0])) {
                     return [{
                         type: GROUP,
-                        name: datum
+                        name: datum[0],
+                        count: datum[1]
                     }];
                 }
 
@@ -881,6 +882,10 @@ define([
                 var previousPropertyName = '';
 
                 this.select('h1.collapsible-header strong').text(_.property('name'))
+                this.select('h1.collapsible-header .badge')
+                    .text(function(d) {
+                        return F.number.pretty(d.count);
+                    });
 
                 this.select('.property-name strong')
                     .text(function(d) {
