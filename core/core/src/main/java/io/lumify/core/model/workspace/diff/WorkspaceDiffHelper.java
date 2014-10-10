@@ -11,8 +11,8 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.JsonSerializer;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 import io.lumify.web.clientapi.model.SandboxStatus;
-import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.securegraph.*;
 
 import java.util.ArrayList;
@@ -32,19 +32,19 @@ public class WorkspaceDiffHelper {
         this.userRepository = userRepository;
     }
 
-    public WorkspaceDiff diff(Workspace workspace, List<WorkspaceEntity> workspaceEntities, List<Edge> workspaceEdges, User user) {
+    public ClientApiWorkspaceDiff diff(Workspace workspace, List<WorkspaceEntity> workspaceEntities, List<Edge> workspaceEdges, User user) {
         Authorizations authorizations = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspace.getWorkspaceId());
 
-        WorkspaceDiff result = new WorkspaceDiff();
+        ClientApiWorkspaceDiff result = new ClientApiWorkspaceDiff();
         for (WorkspaceEntity workspaceEntity : workspaceEntities) {
-            List<WorkspaceDiff.Item> entityDiffs = diffWorkspaceEntity(workspace, workspaceEntity, authorizations);
+            List<ClientApiWorkspaceDiff.Item> entityDiffs = diffWorkspaceEntity(workspace, workspaceEntity, authorizations);
             if (entityDiffs != null) {
                 result.addAll(entityDiffs);
             }
         }
 
         for (Edge workspaceEdge : workspaceEdges) {
-            List<WorkspaceDiff.Item> entityDiffs = diffEdge(workspace, workspaceEdge);
+            List<ClientApiWorkspaceDiff.Item> entityDiffs = diffEdge(workspace, workspaceEdge);
             if (entityDiffs != null) {
                 result.addAll(entityDiffs);
             }
@@ -53,8 +53,8 @@ public class WorkspaceDiffHelper {
         return result;
     }
 
-    private List<WorkspaceDiff.Item> diffEdge(Workspace workspace, Edge edge) {
-        List<WorkspaceDiff.Item> result = new ArrayList<WorkspaceDiff.Item>();
+    private List<ClientApiWorkspaceDiff.Item> diffEdge(Workspace workspace, Edge edge) {
+        List<ClientApiWorkspaceDiff.Item> result = new ArrayList<ClientApiWorkspaceDiff.Item>();
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getWorkspaceId());
         if (sandboxStatus != SandboxStatus.PUBLIC) {
@@ -66,8 +66,8 @@ public class WorkspaceDiffHelper {
         return result;
     }
 
-    private WorkspaceDiff.EdgeItem createWorkspaceDiffEdgeItem(Edge edge, SandboxStatus sandboxStatus) {
-        return new WorkspaceDiff.EdgeItem(
+    private ClientApiWorkspaceDiff.EdgeItem createWorkspaceDiffEdgeItem(Edge edge, SandboxStatus sandboxStatus) {
+        return new ClientApiWorkspaceDiff.EdgeItem(
                 edge.getId(),
                 edge.getLabel(),
                 edge.getVertexId(Direction.OUT),
@@ -77,8 +77,8 @@ public class WorkspaceDiffHelper {
         );
     }
 
-    public List<WorkspaceDiff.Item> diffWorkspaceEntity(Workspace workspace, WorkspaceEntity workspaceEntity, Authorizations authorizations) {
-        List<WorkspaceDiff.Item> result = new ArrayList<WorkspaceDiff.Item>();
+    public List<ClientApiWorkspaceDiff.Item> diffWorkspaceEntity(Workspace workspace, WorkspaceEntity workspaceEntity, Authorizations authorizations) {
+        List<ClientApiWorkspaceDiff.Item> result = new ArrayList<ClientApiWorkspaceDiff.Item>();
 
         Vertex entityVertex = this.graph.getVertex(workspaceEntity.getEntityVertexId(), authorizations);
 
@@ -97,9 +97,9 @@ public class WorkspaceDiffHelper {
         return result;
     }
 
-    private WorkspaceDiff.VertexItem createWorkspaceDiffVertexItem(Vertex vertex, SandboxStatus sandboxStatus, boolean visible) {
+    private ClientApiWorkspaceDiff.VertexItem createWorkspaceDiffVertexItem(Vertex vertex, SandboxStatus sandboxStatus, boolean visible) {
         String title = LumifyProperties.TITLE.getPropertyValue(vertex);
-        return new WorkspaceDiff.VertexItem(
+        return new ClientApiWorkspaceDiff.VertexItem(
                 vertex.getId(),
                 title,
                 JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_JSON.getProperty(vertex))),
@@ -108,7 +108,7 @@ public class WorkspaceDiffHelper {
         );
     }
 
-    private void diffProperties(Workspace workspace, Element element, List<WorkspaceDiff.Item> result) {
+    private void diffProperties(Workspace workspace, Element element, List<ClientApiWorkspaceDiff.Item> result) {
         List<Property> properties = toList(element.getProperties());
         SandboxStatus[] propertyStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspace.getWorkspaceId());
         for (int i = 0; i < properties.size(); i++) {
@@ -120,13 +120,13 @@ public class WorkspaceDiffHelper {
         }
     }
 
-    private WorkspaceDiff.PropertyItem createWorkspaceDiffPropertyItem(Element element, Property workspaceProperty, Property existingProperty, SandboxStatus sandboxStatus) {
+    private ClientApiWorkspaceDiff.PropertyItem createWorkspaceDiffPropertyItem(Element element, Property workspaceProperty, Property existingProperty, SandboxStatus sandboxStatus) {
         JsonNode oldData = null;
         if (existingProperty != null) {
             oldData = JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(existingProperty));
         }
         JsonNode newData = JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(workspaceProperty));
-        return new WorkspaceDiff.PropertyItem(
+        return new ClientApiWorkspaceDiff.PropertyItem(
                 element.getId(),
                 workspaceProperty.getName(),
                 workspaceProperty.getKey(),

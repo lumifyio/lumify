@@ -223,6 +223,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         elementMutation.alterPropertyVisibility(getPropertyName(), newVisibility);
     }
 
+    public void alterVisibility(ExistingElementMutation<?> elementMutation, String propertyKey, Visibility newVisibility) {
+        elementMutation.alterPropertyVisibility(propertyKey, getPropertyName(), newVisibility);
+    }
+
     /**
      * Function that converts the values returned by the Vertex.getProperty()
      * methods to the configured TRaw type.

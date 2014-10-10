@@ -9,7 +9,6 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
-import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -203,6 +202,7 @@ public abstract class GraphPropertyWorker {
         if (data.getWorkspaceId() == null) {
             return;
         }
+        graph.flush();
         getWorkspaceRepository().updateEntityOnWorkspace(data.getWorkspaceId(), vertex.getId(), null, null, getUser());
     }
 }

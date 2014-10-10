@@ -1,6 +1,6 @@
 package io.lumify.core.model.ontology;
 
-import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,17 +47,17 @@ public abstract class OntologyProperty {
 
     public abstract String getPropertyGroup();
 
-    public static Collection<Ontology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
-        Collection<Ontology.Property> results = new ArrayList<Ontology.Property>();
+    public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
+        Collection<ClientApiOntology.Property> results = new ArrayList<ClientApiOntology.Property>();
         for (OntologyProperty property : properties) {
             results.add(property.toClientApi());
         }
         return results;
     }
 
-    public Ontology.Property toClientApi() {
+    public ClientApiOntology.Property toClientApi() {
         try {
-            Ontology.Property result = new Ontology.Property();
+            ClientApiOntology.Property result = new ClientApiOntology.Property();
             result.setTitle(getTitle());
             result.setDisplayName(getDisplayName());
             result.setUserVisible(getUserVisible());

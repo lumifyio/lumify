@@ -23,7 +23,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.VisibilityJson;
-import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
@@ -155,8 +154,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         workQueueRepository.pushElement(edge);
 
-        JSONObject result = new JSONObject();
-        result.put("success", true);
-        respondWithJson(response, result);
+        respondWithSuccessJson(response);
     }
 }

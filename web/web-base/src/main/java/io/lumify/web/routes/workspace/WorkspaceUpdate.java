@@ -11,11 +11,11 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceUpdateData;
 import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
-import io.lumify.web.clientapi.model.WorkspaceUpdateData;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +50,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             return;
         }
 
-        WorkspaceUpdateData updateData = ObjectMapperFactory.getInstance().readValue(data, WorkspaceUpdateData.class);
+        ClientApiWorkspaceUpdateData updateData = ObjectMapperFactory.getInstance().readValue(data, ClientApiWorkspaceUpdateData.class);
 
         if (updateData.getTitle() != null) {
             setTitle(workspace, updateData.getTitle(), authUser);
@@ -62,14 +62,12 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         updateUsers(workspace, updateData.getUserUpdates(), authUser);
 
-        io.lumify.web.clientapi.model.Workspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, false);
+        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, false);
         workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
 
         deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("result", "OK");
-        respondWithJson(response, resultJson);
+        respondWithSuccessJson(response);
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {
@@ -85,8 +83,8 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         }
     }
 
-    private void updateUsers(Workspace workspace, List<WorkspaceUpdateData.UserUpdate> userUpdates, User authUser) {
-        for (WorkspaceUpdateData.UserUpdate update : userUpdates) {
+    private void updateUsers(Workspace workspace, List<ClientApiWorkspaceUpdateData.UserUpdate> userUpdates, User authUser) {
+        for (ClientApiWorkspaceUpdateData.UserUpdate update : userUpdates) {
             LOGGER.debug("user update (%s): %s", workspace.getWorkspaceId(), update.toString());
             String userId = update.getUserId();
             WorkspaceAccess workspaceAccess = update.getAccess();
@@ -101,8 +99,8 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         }
     }
 
-    private void updateEntities(Workspace workspace, List<WorkspaceUpdateData.EntityUpdate> entityUpdates, User authUser) {
-        for (WorkspaceUpdateData.EntityUpdate update : entityUpdates) {
+    private void updateEntities(Workspace workspace, List<ClientApiWorkspaceUpdateData.EntityUpdate> entityUpdates, User authUser) {
+        for (ClientApiWorkspaceUpdateData.EntityUpdate update : entityUpdates) {
             LOGGER.debug("workspace update (%s): %s", workspace.getWorkspaceId(), update.toString());
             String entityId = update.getVertexId();
             GraphPosition graphPosition = update.getGraphPosition();

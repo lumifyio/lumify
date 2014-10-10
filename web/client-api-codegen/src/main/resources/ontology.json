@@ -10,7 +10,7 @@
                 {
                     "method": "GET",
                     "summary": "Gets the ontology",
-                    "type": "Ontology",
+                    "type": "ClientApiOntology",
                     "nickname": "get",
                     "parameters": [
                     ]

@@ -10,7 +10,7 @@
                 {
                     "method": "GET",
                     "summary": "Gets the vertex properties",
-                    "type": "Element",
+                    "type": "ClientApiElement",
                     "nickname": "getByVertexId",
                     "parameters": [
                         {
@@ -31,12 +31,61 @@
             ]
         },
         {
+            "path": "/vertex/edges",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the edges of a vertex",
+                    "type": "ClientApiVertexEdges",
+                    "nickname": "getEdges",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "ID of the artifact vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "edgeLabel",
+                            "description": "edge label to find",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "offset",
+                            "description": "offset for paging",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "size",
+                            "description": "size for paging",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Vertex not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "path": "/vertex/new",
             "operations": [
                 {
                     "method": "POST",
                     "summary": "Creates a new vertex",
-                    "type": "Element",
+                    "type": "ClientApiElement",
                     "nickname": "create",
                     "parameters": [
                         {
@@ -63,7 +112,7 @@
                 {
                     "method": "POST",
                     "summary": "Creates a new vertex",
-                    "type": "Element",
+                    "type": "ClientApiElement",
                     "nickname": "setProperty",
                     "parameters": [
                         {
@@ -132,7 +181,7 @@
                 {
                     "method": "GET",
                     "summary": "gets all the term mentions for a property",
-                    "type": "TermMentionsResponse",
+                    "type": "ClientApiTermMentionsResponse",
                     "nickname": "getTermMentions",
                     "parameters": [
                         {
@@ -166,7 +215,7 @@
                 {
                     "method": "GET",
                     "summary": "gets all the detected objects for a vertex",
-                    "type": "DetectedObjects",
+                    "type": "ClientApiDetectedObjects",
                     "nickname": "getDetectedObjects",
                     "parameters": [
                         {
@@ -200,7 +249,7 @@
                 {
                     "method": "POST",
                     "summary": "Sets the visibility of the vertex",
-                    "type": "Element",
+                    "type": "ClientApiElement",
                     "nickname": "setVisibility",
                     "parameters": [
                         {
@@ -267,7 +316,7 @@
                     "method": "POST",
                     "summary": "Import artifact",
                     "nickname": "importFile",
-                    "type": "ArtifactImportResponse",
+                    "type": "ClientApiArtifactImportResponse",
                     "consumes": [
                         "multipart/form-data"
                     ],
@@ -529,7 +578,7 @@
                 {
                     "method": "GET",
                     "summary": "Searches the graph for vertices",
-                    "type": "VertexSearchResponse",
+                    "type": "ClientApiVertexSearchResponse",
                     "nickname": "vertexSearch",
                     "parameters": [
                         {
@@ -581,6 +630,76 @@
                             "description": "returns vertices related to this vertex",
                             "required": false,
                             "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/find-path",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Finds paths between two vertices",
+                    "type": "ClientApiVertexFindPathResponse",
+                    "nickname": "findPath",
+                    "parameters": [
+                        {
+                            "name": "sourceGraphVertexId",
+                            "description": "Source vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "destGraphVertexId",
+                            "description": "Destination vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "hops",
+                            "description": "number of hops to search",
+                            "required": true,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/find-related",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Finds related vertices",
+                    "type": "ClientApiVertexFindRelatedResponse",
+                    "nickname": "findRelated",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "limitParentConceptId",
+                            "description": "concept type iri to limit related",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "maxVerticesToReturn",
+                            "description": "max number of vertices to return",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
                             "paramType": "query"
                         }
                     ]

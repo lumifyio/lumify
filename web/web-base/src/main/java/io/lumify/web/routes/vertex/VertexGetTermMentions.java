@@ -9,7 +9,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.TermMentionsResponse;
+import io.lumify.web.clientapi.model.ClientApiTermMentionsResponse;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Property;
@@ -57,7 +57,7 @@ public class VertexGetTermMentions extends BaseRequestHandler {
         }
 
         Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(graphVertexId, propertyKey, authorizations);
-        TermMentionsResponse termMentionsResponse = ClientApiConverter.toTermMentionsResponse(termMentions, workspaceId, authorizations);
-        respondWith(response, termMentionsResponse);
+        ClientApiTermMentionsResponse termMentionsResponse = ClientApiConverter.toTermMentionsResponse(termMentions, workspaceId, authorizations);
+        respondWithClientApiObject(response, termMentionsResponse);
     }
 }

@@ -1,7 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
-import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import org.atteo.evo.inflector.English;
 import org.securegraph.Authorizations;
 
@@ -50,9 +50,9 @@ public abstract class Concept {
         return this.parentConceptIRI;
     }
 
-    public Ontology.Concept toClientApi() {
+    public ClientApiOntology.Concept toClientApi() {
         try {
-            Ontology.Concept concept = new Ontology.Concept();
+            ClientApiOntology.Concept concept = new ClientApiOntology.Concept();
             concept.setId(getTitle());
             concept.setTitle(getTitle());
             concept.setDisplayName(getDisplayName());
@@ -105,8 +105,8 @@ public abstract class Concept {
         return String.format("%s (%s)", getDisplayName(), getTitle());
     }
 
-    public static Collection<Ontology.Concept> toClientApiConcepts(Iterable<Concept> concepts) {
-        Collection<Ontology.Concept> results = new ArrayList<Ontology.Concept>();
+    public static Collection<ClientApiOntology.Concept> toClientApiConcepts(Iterable<Concept> concepts) {
+        Collection<ClientApiOntology.Concept> results = new ArrayList<ClientApiOntology.Concept>();
         for (Concept concept : concepts) {
             results.add(concept.toClientApi());
         }

@@ -67,11 +67,6 @@
 
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-csv-structured-ingest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
             <artifactId>lumify-storm</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -117,6 +112,11 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
+            <artifactId>lumify-rdf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-tika-mime-type</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -133,6 +133,11 @@
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-phone-number-extractor</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-csv</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

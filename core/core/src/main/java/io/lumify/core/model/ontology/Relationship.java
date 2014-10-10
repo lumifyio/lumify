@@ -1,6 +1,6 @@
 package io.lumify.core.model.ontology;
 
-import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -29,9 +29,9 @@ public abstract class Relationship {
         return destConceptIRI;
     }
 
-    public Ontology.Relationship toClientApi() {
+    public ClientApiOntology.Relationship toClientApi() {
         try {
-            Ontology.Relationship result = new Ontology.Relationship();
+            ClientApiOntology.Relationship result = new ClientApiOntology.Relationship();
             result.setTitle(getIRI());
             result.setDisplayName(getDisplayName());
             result.setSource(getSourceConceptIRI());
@@ -39,7 +39,7 @@ public abstract class Relationship {
 
             Iterable<String> inverseOfIRIs = getInverseOfIRIs();
             for (String inverseOfIRI : inverseOfIRIs) {
-                Ontology.Relationship.InverseOf inverseOf = new Ontology.Relationship.InverseOf();
+                ClientApiOntology.Relationship.InverseOf inverseOf = new ClientApiOntology.Relationship.InverseOf();
                 inverseOf.setIri(inverseOfIRI);
                 inverseOf.setPrimaryIri(getPrimaryInverseOfIRI(getIRI(), inverseOfIRI));
                 result.getInverseOfs().add(inverseOf);
@@ -58,8 +58,8 @@ public abstract class Relationship {
         return iri1;
     }
 
-    public static Collection<Ontology.Relationship> toClientApiRelationships(Iterable<Relationship> relationships) {
-        Collection<Ontology.Relationship> results = new ArrayList<Ontology.Relationship>();
+    public static Collection<ClientApiOntology.Relationship> toClientApiRelationships(Iterable<Relationship> relationships) {
+        Collection<ClientApiOntology.Relationship> results = new ArrayList<ClientApiOntology.Relationship>();
         for (Relationship vertex : relationships) {
             results.add(vertex.toClientApi());
         }

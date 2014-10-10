@@ -12,16 +12,16 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
-import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
@@ -101,8 +101,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
 
         auditRepository.auditVertex(AuditAction.UNRESOLVE, resolvedVertex.getId(), "", "", user, lumifyVisibility.getVisibility());
 
-        JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId, authorizations);
-
-        respondWithJson(response, artifactJson);
+        ClientApiElement result = ClientApiConverter.toClientApi(artifactVertex, workspaceId, authorizations);
+        respondWithClientApiObject(response, result);
     }
 }

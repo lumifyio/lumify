@@ -8,6 +8,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,11 +29,11 @@ public class WorkspaceDiff extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
-        io.lumify.web.clientapi.model.WorkspaceDiff diff = handle(workspaceId, user);
-        respondWith(response, diff);
+        ClientApiWorkspaceDiff diff = handle(workspaceId, user);
+        respondWithClientApiObject(response, diff);
     }
 
-    public io.lumify.web.clientapi.model.WorkspaceDiff handle(String workspaceId, User user) {
+    public ClientApiWorkspaceDiff handle(String workspaceId, User user) {
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         if (workspace == null) {
             return null;

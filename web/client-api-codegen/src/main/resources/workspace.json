@@ -10,7 +10,7 @@
                 {
                     "method": "GET",
                     "summary": "Gets all workspaces",
-                    "type": "Workspaces",
+                    "type": "ClientApiWorkspaces",
                     "nickname": "getAll"
                 }
             ]
@@ -21,7 +21,7 @@
                 {
                     "method": "GET",
                     "summary": "Get a workspace",
-                    "type": "Workspace",
+                    "type": "ClientApiWorkspace",
                     "nickname": "getById",
                     "parameters": [
                         {
@@ -41,7 +41,7 @@
                 {
                     "method": "POST",
                     "summary": "Create a new workspace",
-                    "type": "Workspace",
+                    "type": "ClientApiWorkspace",
                     "nickname": "create"
                 }
             ]
@@ -75,7 +75,7 @@
                 {
                     "method": "GET",
                     "summary": "Get a workspace diff",
-                    "type": "WorkspaceDiff",
+                    "type": "ClientApiWorkspaceDiff",
                     "nickname": "getDiff",
                     "parameters": [
                     ]
@@ -88,7 +88,7 @@
                 {
                     "method": "POST",
                     "summary": "publish diff items",
-                    "type": "WorkspacePublishResponse",
+                    "type": "ClientApiWorkspacePublishResponse",
                     "nickname": "publish",
                     "consumes": [
                         "multipart/form-data"

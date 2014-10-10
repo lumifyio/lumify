@@ -7,6 +7,7 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JSONUtil;
+import io.lumify.web.clientapi.model.ClientApiUser;
 import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.accumulo.core.security.Authorizations;
@@ -84,8 +85,8 @@ public abstract class UserRepository {
         return json;
     }
 
-    public io.lumify.web.clientapi.model.User toClientApiWithAuths(User user) {
-        io.lumify.web.clientapi.model.User u = toClientApi(user);
+    public ClientApiUser toClientApiWithAuths(User user) {
+        ClientApiUser u = toClientApi(user);
 
         for (String a : getAuthorizations(user).getAuthorizations()) {
             u.addAuthorization(a);
@@ -99,12 +100,12 @@ public abstract class UserRepository {
         return u;
     }
 
-    private io.lumify.web.clientapi.model.User toClientApi(User user) {
+    private ClientApiUser toClientApi(User user) {
         return toClientApi(user, null);
     }
 
-    private io.lumify.web.clientapi.model.User toClientApi(User user, Map<String, String> workspaceNames) {
-        io.lumify.web.clientapi.model.User u = new io.lumify.web.clientapi.model.User();
+    private ClientApiUser toClientApi(User user, Map<String, String> workspaceNames) {
+        ClientApiUser u = new ClientApiUser();
         u.setId(user.getUserId());
         u.setUserName(user.getUsername());
         u.setDisplayName(user.getDisplayName());

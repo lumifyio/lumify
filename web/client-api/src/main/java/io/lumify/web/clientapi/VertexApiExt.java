@@ -4,8 +4,9 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
-import io.lumify.web.clientapi.model.VertexSearchResponse;
+import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
+import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -33,7 +34,7 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
         resolveTerm(artifactId, propertyKey, mentionStartWithVideoFrame, mentionEndWithVideoFrame, sign, conceptId, visibilitySource, null, null, null);
     }
 
-    public ArtifactImportResponse importFile(String visibilitySource, String fileName, InputStream data) throws ApiException, IOException {
+    public ClientApiArtifactImportResponse importFile(String visibilitySource, String fileName, InputStream data) throws ApiException, IOException {
         File tempDir = FileUtils.getTempDirectory();
         File file = new File(tempDir, fileName);
         try {
@@ -55,7 +56,7 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
         }
     }
 
-    public ArtifactImportResponse importFiles(FileForImport... files) throws ApiException, IOException {
+    public ClientApiArtifactImportResponse importFiles(FileForImport... files) throws ApiException, IOException {
         Object postBody;
         // verify required params are set
         if (files == null || files.length == 0) {
@@ -91,7 +92,7 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
             try {
                 String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
                 if (response != null) {
-                    return (ArtifactImportResponse) ApiInvoker.deserialize(response, "", ArtifactImportResponse.class);
+                    return (ClientApiArtifactImportResponse) ApiInvoker.deserialize(response, "", ClientApiArtifactImportResponse.class);
                 } else {
                     return null;
                 }
@@ -163,6 +164,10 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
         return apiInvoker.getBinary(basePath, VERTEX_BASE_URL + "video-preview", queryParams, headerParams);
     }
 
+    public ClientApiVertexFindRelatedResponse findRelated(String vertexId) throws ApiException {
+        return findRelated(vertexId, null, null);
+    }
+
     public static class FileForImport {
         private final String visibilitySource;
         private final String fileName;
@@ -204,12 +209,12 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
         }
     }
 
-    public VertexSearchResponse vertexSearch(String query) throws ApiException {
+    public ClientApiVertexSearchResponse vertexSearch(String query) throws ApiException {
         JSONArray filters = new JSONArray();
         return vertexSearch(query, filters, null, null, null, null, null);
     }
 
-    public VertexSearchResponse vertexSearch(String query, JSONArray filters, Integer offset, Integer size, String conceptType, Boolean leafNodes, String relatedToVertexId) throws ApiException {
+    public ClientApiVertexSearchResponse vertexSearch(String query, JSONArray filters, Integer offset, Integer size, String conceptType, Boolean leafNodes, String relatedToVertexId) throws ApiException {
         return vertexSearch(query, filters.toString(), offset, size, conceptType, leafNodes, relatedToVertexId);
     }
 }

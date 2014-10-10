@@ -10,7 +10,7 @@
                 {
                     "method": "GET",
                     "summary": "Gets the current user info",
-                    "type": "User",
+                    "type": "ClientApiUser",
                     "nickname": "getMe"
                 }
             ]

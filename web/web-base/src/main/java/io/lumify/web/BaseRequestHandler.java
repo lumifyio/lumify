@@ -8,12 +8,13 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.miniweb.App;
 import io.lumify.miniweb.Handler;
 import io.lumify.miniweb.HandlerChain;
+import io.lumify.web.clientapi.model.ClientApiObject;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
@@ -358,7 +359,13 @@ public abstract class BaseRequestHandler implements Handler {
         configureResponse(ResponseTypes.JSON_OBJECT, response, jsonObject);
     }
 
-    protected void respondWith(HttpServletResponse response, Object obj) throws IOException {
+    protected void respondWithSuccessJson(HttpServletResponse response) {
+        JSONObject result = new JSONObject();
+        result.put("success", true);
+        respondWithJson(response, result);
+    }
+
+    protected void respondWithClientApiObject(HttpServletResponse response, ClientApiObject obj) throws IOException {
         if (obj == null) {
             respondWithNotFound(response);
             return;

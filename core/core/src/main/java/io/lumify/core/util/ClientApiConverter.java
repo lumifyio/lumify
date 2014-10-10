@@ -6,10 +6,7 @@ import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.web.clientapi.model.Element;
-import io.lumify.web.clientapi.model.SandboxStatus;
-import io.lumify.web.clientapi.model.TermMentionsResponse;
-import io.lumify.web.clientapi.model.VisibilityJson;
+import io.lumify.web.clientapi.model.*;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
@@ -23,23 +20,23 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ClientApiConverter extends io.lumify.web.clientapi.model.util.ClientApiConverter {
-    public static TermMentionsResponse toTermMentionsResponse(Iterable<Vertex> termMentions, String workspaceId, Authorizations authorizations) {
-        TermMentionsResponse termMentionsResponse = new TermMentionsResponse();
-        for (io.lumify.web.clientapi.model.Element element : toClientApi(termMentions, workspaceId, authorizations)) {
+    public static ClientApiTermMentionsResponse toTermMentionsResponse(Iterable<Vertex> termMentions, String workspaceId, Authorizations authorizations) {
+        ClientApiTermMentionsResponse termMentionsResponse = new ClientApiTermMentionsResponse();
+        for (ClientApiElement element : toClientApi(termMentions, workspaceId, authorizations)) {
             termMentionsResponse.getTermMentions().add(element);
         }
         return termMentionsResponse;
     }
 
-    public static List<? extends Element> toClientApi(Iterable<? extends org.securegraph.Element> elements, String workspaceId, Authorizations authorizations) {
-        List<io.lumify.web.clientapi.model.Element> clientApiElements = new ArrayList<Element>();
+    public static List<ClientApiElement> toClientApi(Iterable<? extends org.securegraph.Element> elements, String workspaceId, Authorizations authorizations) {
+        List<ClientApiElement> clientApiElements = new ArrayList<ClientApiElement>();
         for (org.securegraph.Element element : elements) {
             clientApiElements.add(toClientApi(element, workspaceId, authorizations));
         }
         return clientApiElements;
     }
 
-    public static io.lumify.web.clientapi.model.Element toClientApi(org.securegraph.Element element, String workspaceId, Authorizations authorizations) {
+    public static ClientApiElement toClientApi(org.securegraph.Element element, String workspaceId, Authorizations authorizations) {
         checkNotNull(element, "element cannot be null");
         if (element instanceof Vertex) {
             return toClientApiVertex((Vertex) element, workspaceId, authorizations);
@@ -50,8 +47,8 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         throw new RuntimeException("Unexpected element type: " + element.getClass().getName());
     }
 
-    public static io.lumify.web.clientapi.model.Vertex toClientApiVertex(Vertex vertex, String workspaceId, Authorizations authorizations) {
-        io.lumify.web.clientapi.model.Vertex v = new io.lumify.web.clientapi.model.Vertex();
+    public static ClientApiVertex toClientApiVertex(Vertex vertex, String workspaceId, Authorizations authorizations) {
+        ClientApiVertex v = new ClientApiVertex();
 
         List<String> vertexEdgeLabels = getVertexEdgeLabels(vertex, authorizations);
         if (vertexEdgeLabels != null) {
@@ -70,8 +67,8 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         return IterableUtils.toList(edgeLabels);
     }
 
-    private static io.lumify.web.clientapi.model.Edge toClientApiEdge(Edge edge, String workspaceId, Authorizations authorizations) {
-        io.lumify.web.clientapi.model.Edge e = new io.lumify.web.clientapi.model.Edge();
+    public static ClientApiEdge toClientApiEdge(Edge edge, String workspaceId, Authorizations authorizations) {
+        ClientApiEdge e = new ClientApiEdge();
         e.setLabel(edge.getLabel());
         e.setSourceVertexId(edge.getVertexId(Direction.OUT));
         e.setDestVertexId(edge.getVertexId(Direction.IN));
@@ -80,7 +77,7 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         return e;
     }
 
-    private static void populateClientApiElement(io.lumify.web.clientapi.model.Element clientApiElement, org.securegraph.Element element, String workspaceId, Authorizations authorizations) {
+    private static void populateClientApiElement(ClientApiElement clientApiElement, org.securegraph.Element element, String workspaceId, Authorizations authorizations) {
         clientApiElement.setId(element.getId());
         clientApiElement.getProperties().addAll(toClientApiProperties(element.getProperties(), workspaceId));
         clientApiElement.setSandboxStatus(GraphUtil.getSandboxStatus(element, workspaceId));
@@ -91,8 +88,8 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         }
     }
 
-    public static List<io.lumify.web.clientapi.model.Property> toClientApiProperties(Iterable<Property> properties, String workspaceId) {
-        List<io.lumify.web.clientapi.model.Property> clientApiProperties = new ArrayList<io.lumify.web.clientapi.model.Property>();
+    public static List<ClientApiProperty> toClientApiProperties(Iterable<Property> properties, String workspaceId) {
+        List<ClientApiProperty> clientApiProperties = new ArrayList<ClientApiProperty>();
         List<Property> propertiesList = IterableUtils.toList(properties);
         Collections.sort(propertiesList, new ConfidencePropertyComparator());
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(propertiesList, workspaceId);
@@ -104,7 +101,7 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
                 String textDescription = (String) property.getMetadata().get(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
                 addVideoFramePropertyToResults(clientApiProperties, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
             } else {
-                io.lumify.web.clientapi.model.Property clientApiProperty = toClientApiProperty(property);
+                ClientApiProperty clientApiProperty = toClientApiProperty(property);
                 clientApiProperty.setSandboxStatus(sandboxStatus);
                 clientApiProperties.add(clientApiProperty);
             }
@@ -112,8 +109,8 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         return clientApiProperties;
     }
 
-    public static io.lumify.web.clientapi.model.Property toClientApiProperty(Property property) {
-        io.lumify.web.clientapi.model.Property clientApiProperty = new io.lumify.web.clientapi.model.Property();
+    public static ClientApiProperty toClientApiProperty(Property property) {
+        ClientApiProperty clientApiProperty = new ClientApiProperty();
         clientApiProperty.setKey(property.getKey());
         clientApiProperty.setName(property.getName());
 
@@ -132,10 +129,10 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         return clientApiProperty;
     }
 
-    private static void addVideoFramePropertyToResults(List<io.lumify.web.clientapi.model.Property> clientApiProperties, String propertyKey, String textDescription, SandboxStatus sandboxStatus) {
-        io.lumify.web.clientapi.model.Property clientApiProperty = findProperty(clientApiProperties, MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName(), propertyKey);
+    private static void addVideoFramePropertyToResults(List<ClientApiProperty> clientApiProperties, String propertyKey, String textDescription, SandboxStatus sandboxStatus) {
+        ClientApiProperty clientApiProperty = findProperty(clientApiProperties, MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName(), propertyKey);
         if (clientApiProperty == null) {
-            clientApiProperty = new io.lumify.web.clientapi.model.Property();
+            clientApiProperty = new ClientApiProperty();
             clientApiProperty.setKey(propertyKey);
             clientApiProperty.setName(MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName());
             clientApiProperty.setSandboxStatus(sandboxStatus);
@@ -145,8 +142,8 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         }
     }
 
-    private static io.lumify.web.clientapi.model.Property findProperty(List<io.lumify.web.clientapi.model.Property> clientApiProperties, String propertyName, String propertyKey) {
-        for (io.lumify.web.clientapi.model.Property property : clientApiProperties) {
+    private static ClientApiProperty findProperty(List<ClientApiProperty> clientApiProperties, String propertyName, String propertyKey) {
+        for (ClientApiProperty property : clientApiProperties) {
             if (property.getName().equals(propertyName) && property.getKey().equals(propertyKey)) {
                 return property;
             }

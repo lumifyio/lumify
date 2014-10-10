@@ -6,6 +6,8 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.web.clientapi.model.ClientApiVertex;
+import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
@@ -16,7 +18,6 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.VertexSearchResponse;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchPhaseExecutionException;
 import org.json.JSONArray;
@@ -130,9 +131,9 @@ public class VertexSearch extends BaseRequestHandler {
         }
 
         long retrievalStartTime = System.nanoTime();
-        List<io.lumify.web.clientapi.model.Vertex> verticesList = new ArrayList<io.lumify.web.clientapi.model.Vertex>();
+        List<ClientApiVertex> verticesList = new ArrayList<ClientApiVertex>();
         for (Vertex vertex : searchResults) {
-            io.lumify.web.clientapi.model.Vertex v = ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations);
+            ClientApiVertex v = ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations);
             if (scores != null) {
                 v.setScore(scores.get(vertex.getId()));
             }
@@ -140,9 +141,9 @@ public class VertexSearch extends BaseRequestHandler {
         }
         long retrievalEndTime = System.nanoTime();
 
-        Collections.sort(verticesList, new Comparator<io.lumify.web.clientapi.model.Vertex>() {
+        Collections.sort(verticesList, new Comparator<ClientApiVertex>() {
             @Override
-            public int compare(io.lumify.web.clientapi.model.Vertex o1, io.lumify.web.clientapi.model.Vertex o2) {
+            public int compare(ClientApiVertex o1, ClientApiVertex o2) {
                 double score1 = o1.getScore(0.0);
                 double score2 = o2.getScore(0.0);
                 return -Double.compare(score1, score2);
@@ -151,7 +152,7 @@ public class VertexSearch extends BaseRequestHandler {
 
         long totalEndTime = System.nanoTime();
 
-        VertexSearchResponse results = new VertexSearchResponse();
+        ClientApiVertexSearchResponse results = new ClientApiVertexSearchResponse();
         results.getVertices().addAll(verticesList);
         results.setNextOffset(offset + size);
         results.setRetrievalTime(retrievalEndTime - retrievalStartTime);
@@ -167,7 +168,7 @@ public class VertexSearch extends BaseRequestHandler {
         long endTime = System.nanoTime();
         LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesList.size(), (endTime - startTime) / 1000 / 1000);
 
-        respondWith(response, results);
+        respondWithClientApiObject(response, results);
     }
 
     private void updateQueryWithFilter(Query graphQuery, JSONObject obj) throws ParseException {

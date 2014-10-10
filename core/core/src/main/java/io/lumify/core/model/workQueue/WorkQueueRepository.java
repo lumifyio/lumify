@@ -5,8 +5,8 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.util.ClientApiConverter;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
 import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
@@ -159,7 +159,7 @@ public abstract class WorkQueueRepository {
         broadcastUserWorkspaceChange(user, workspaceId);
     }
 
-    public void pushWorkspaceChange(io.lumify.web.clientapi.model.Workspace workspace) {
+    public void pushWorkspaceChange(ClientApiWorkspace workspace) {
         broadcastWorkspace(workspace);
     }
 
@@ -172,7 +172,7 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    protected void broadcastWorkspace(io.lumify.web.clientapi.model.Workspace workspace) {
+    protected void broadcastWorkspace(ClientApiWorkspace workspace) {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceChange");
         json.put("permissions", getPermissionsWithUsers(workspace));
@@ -180,7 +180,7 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushWorkspaceDelete(io.lumify.web.clientapi.model.Workspace workspace) {
+    public void pushWorkspaceDelete(ClientApiWorkspace workspace) {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceDelete");
         json.put("permissions", getPermissionsWithUsers(workspace));
@@ -200,10 +200,10 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    private JSONObject getPermissionsWithUsers(io.lumify.web.clientapi.model.Workspace workspace) {
+    private JSONObject getPermissionsWithUsers(ClientApiWorkspace workspace) {
         JSONObject permissions = new JSONObject();
         JSONArray users = new JSONArray();
-        for (io.lumify.web.clientapi.model.Workspace.User user : workspace.getUsers()) {
+        for (ClientApiWorkspace.User user : workspace.getUsers()) {
             users.put(user.getUserId());
         }
         permissions.put("users", users);

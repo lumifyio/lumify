@@ -1,16 +1,14 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiVertexEdges;
 import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public class VertexEdges extends BaseRequestHandler {
     private final Graph graph;
-    private final String artifactHasEntityIri;
 
     @Inject
     public VertexEdges(
@@ -28,11 +25,6 @@ public class VertexEdges extends BaseRequestHandler {
             final Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
-
-        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
-        if (this.artifactHasEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
-        }
     }
 
     @Override
@@ -59,8 +51,7 @@ public class VertexEdges extends BaseRequestHandler {
             edges = vertex.getEdges(Direction.BOTH, edgeLabel, authorizations);
         }
 
-        JSONObject json = new JSONObject();
-        JSONArray relationshipsJson = new JSONArray();
+        ClientApiVertexEdges result = new ClientApiVertexEdges();
         long referencesAdded = 0, skipped = 0, totalReferences = 0;
         for (Edge edge : edges) {
             totalReferences++;
@@ -78,15 +69,14 @@ public class VertexEdges extends BaseRequestHandler {
                 continue;
             }
 
-            JSONObject relationshipJson = new JSONObject();
-            relationshipJson.put("relationship", JsonSerializer.toJson(edge, workspaceId, authorizations));
-            relationshipJson.put("vertex", JsonSerializer.toJson(otherVertex, workspaceId, authorizations));
-            relationshipsJson.put(relationshipJson);
+            ClientApiVertexEdges.Edge clientApiEdge = new ClientApiVertexEdges.Edge();
+            clientApiEdge.setRelationship(ClientApiConverter.toClientApiEdge(edge, workspaceId, authorizations));
+            clientApiEdge.setVertex(ClientApiConverter.toClientApiVertex(otherVertex, workspaceId, authorizations));
+            result.getRelationships().add(clientApiEdge);
             referencesAdded++;
         }
-        json.put("totalReferences", totalReferences);
-        json.put("relationships", relationshipsJson);
+        result.setTotalReferences(totalReferences);
 
-        respondWithJson(response, json);
+        respondWithClientApiObject(response, result);
     }
 }

@@ -23,11 +23,6 @@
         <!-- file import supporting file handler dependencies -->
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-csv-structured-ingest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
             <artifactId>lumify-youtube-transcript</artifactId>
             <version>${project.version}</version>
         </dependency>

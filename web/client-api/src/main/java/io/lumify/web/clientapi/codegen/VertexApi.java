@@ -3,11 +3,14 @@ package io.lumify.web.clientapi.codegen;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
-import io.lumify.web.clientapi.model.VertexSearchResponse;
-import io.lumify.web.clientapi.model.TermMentionsResponse;
-import io.lumify.web.clientapi.model.Element;
-import io.lumify.web.clientapi.model.DetectedObjects;
-import io.lumify.web.clientapi.model.ArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiDetectedObjects;
+import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
+import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
+import io.lumify.web.clientapi.model.ClientApiElement;
+import io.lumify.web.clientapi.model.ClientApiVertexFindPathResponse;
+import io.lumify.web.clientapi.model.ClientApiVertexEdges;
+import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiTermMentionsResponse;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
@@ -32,7 +35,7 @@ public class VertexApi {
   }
 
   //error info- code: 404 reason: "Vertex not found" model: <none>
-  public Element getByVertexId (String graphVertexId) throws ApiException {
+  public ClientApiElement getByVertexId (String graphVertexId) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(graphVertexId == null ) {
@@ -65,7 +68,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Element) ApiInvoker.deserialize(response, "", Element.class);
+        return (ClientApiElement) ApiInvoker.deserialize(response, "", ClientApiElement.class);
       }
       else {
         return null;
@@ -79,7 +82,61 @@ public class VertexApi {
       }
     }
   }
-  public Element create (String conceptType, String visibilitySource) throws ApiException {
+  //error info- code: 404 reason: "Vertex not found" model: <none>
+  public ClientApiVertexEdges getEdges (String graphVertexId, String edgeLabel, Integer offset, Integer size) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/edges".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(edgeLabel)))
+      queryParams.put("edgeLabel", String.valueOf(edgeLabel));
+    if(!"null".equals(String.valueOf(offset)))
+      queryParams.put("offset", String.valueOf(offset));
+    if(!"null".equals(String.valueOf(size)))
+      queryParams.put("size", String.valueOf(size));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVertexEdges) ApiInvoker.deserialize(response, "", ClientApiVertexEdges.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiElement create (String conceptType, String visibilitySource) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(conceptType == null || visibilitySource == null ) {
@@ -114,7 +171,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Element) ApiInvoker.deserialize(response, "", Element.class);
+        return (ClientApiElement) ApiInvoker.deserialize(response, "", ClientApiElement.class);
       }
       else {
         return null;
@@ -128,7 +185,7 @@ public class VertexApi {
       }
     }
   }
-  public Element setProperty (String graphVertexId, String propertyKey, String propertyName, String value, String visibilitySource, String justificationText, String sourceInfo, String metadata) throws ApiException {
+  public ClientApiElement setProperty (String graphVertexId, String propertyKey, String propertyName, String value, String visibilitySource, String justificationText, String sourceInfo, String metadata) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(graphVertexId == null || propertyKey == null || propertyName == null || value == null || visibilitySource == null || justificationText == null ) {
@@ -175,7 +232,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Element) ApiInvoker.deserialize(response, "", Element.class);
+        return (ClientApiElement) ApiInvoker.deserialize(response, "", ClientApiElement.class);
       }
       else {
         return null;
@@ -189,7 +246,7 @@ public class VertexApi {
       }
     }
   }
-  public TermMentionsResponse getTermMentions (String graphVertexId, String propertyKey, String propertyName) throws ApiException {
+  public ClientApiTermMentionsResponse getTermMentions (String graphVertexId, String propertyKey, String propertyName) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(graphVertexId == null || propertyKey == null || propertyName == null ) {
@@ -226,7 +283,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (TermMentionsResponse) ApiInvoker.deserialize(response, "", TermMentionsResponse.class);
+        return (ClientApiTermMentionsResponse) ApiInvoker.deserialize(response, "", ClientApiTermMentionsResponse.class);
       }
       else {
         return null;
@@ -240,7 +297,7 @@ public class VertexApi {
       }
     }
   }
-  public DetectedObjects getDetectedObjects (String graphVertexId, String propertyName, String workspaceId) throws ApiException {
+  public ClientApiDetectedObjects getDetectedObjects (String graphVertexId, String propertyName, String workspaceId) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(graphVertexId == null || propertyName == null || workspaceId == null ) {
@@ -277,7 +334,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (DetectedObjects) ApiInvoker.deserialize(response, "", DetectedObjects.class);
+        return (ClientApiDetectedObjects) ApiInvoker.deserialize(response, "", ClientApiDetectedObjects.class);
       }
       else {
         return null;
@@ -292,7 +349,7 @@ public class VertexApi {
     }
   }
   //error info- code: 404 reason: "Vertex not found" model: <none>
-  public Element setVisibility (String graphVertexId, String visibilitySource) throws ApiException {
+  public ClientApiElement setVisibility (String graphVertexId, String visibilitySource) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(graphVertexId == null || visibilitySource == null ) {
@@ -327,7 +384,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (Element) ApiInvoker.deserialize(response, "", Element.class);
+        return (ClientApiElement) ApiInvoker.deserialize(response, "", ClientApiElement.class);
       }
       else {
         return null;
@@ -391,7 +448,7 @@ public class VertexApi {
       }
     }
   }
-  public ArtifactImportResponse importFile (String visibilitySource, File file) throws ApiException {
+  public ClientApiArtifactImportResponse importFile (String visibilitySource, File file) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(visibilitySource == null || file == null ) {
@@ -432,7 +489,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (ArtifactImportResponse) ApiInvoker.deserialize(response, "", ArtifactImportResponse.class);
+        return (ClientApiArtifactImportResponse) ApiInvoker.deserialize(response, "", ClientApiArtifactImportResponse.class);
       }
       else {
         return null;
@@ -676,7 +733,7 @@ public class VertexApi {
       }
     }
   }
-  public VertexSearchResponse vertexSearch (String q, String filter, Integer offset, Integer size, String conceptType, Boolean leafNodes, String relatedToVertexId) throws ApiException {
+  public ClientApiVertexSearchResponse vertexSearch (String q, String filter, Integer offset, Integer size, String conceptType, Boolean leafNodes, String relatedToVertexId) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(filter == null ) {
@@ -721,7 +778,109 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (VertexSearchResponse) ApiInvoker.deserialize(response, "", VertexSearchResponse.class);
+        return (ClientApiVertexSearchResponse) ApiInvoker.deserialize(response, "", ClientApiVertexSearchResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiVertexFindPathResponse findPath (String sourceGraphVertexId, String destGraphVertexId, Integer hops) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(sourceGraphVertexId == null || destGraphVertexId == null || hops == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/find-path".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(sourceGraphVertexId)))
+      queryParams.put("sourceGraphVertexId", String.valueOf(sourceGraphVertexId));
+    if(!"null".equals(String.valueOf(destGraphVertexId)))
+      queryParams.put("destGraphVertexId", String.valueOf(destGraphVertexId));
+    if(!"null".equals(String.valueOf(hops)))
+      queryParams.put("hops", String.valueOf(hops));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVertexFindPathResponse) ApiInvoker.deserialize(response, "", ClientApiVertexFindPathResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiVertexFindRelatedResponse findRelated (String graphVertexId, String limitParentConceptId, Integer maxVerticesToReturn) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(graphVertexId == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/find-related".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(graphVertexId)))
+      queryParams.put("graphVertexId", String.valueOf(graphVertexId));
+    if(!"null".equals(String.valueOf(limitParentConceptId)))
+      queryParams.put("limitParentConceptId", String.valueOf(limitParentConceptId));
+    if(!"null".equals(String.valueOf(maxVerticesToReturn)))
+      queryParams.put("maxVerticesToReturn", String.valueOf(maxVerticesToReturn));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVertexFindRelatedResponse) ApiInvoker.deserialize(response, "", ClientApiVertexFindRelatedResponse.class);
       }
       else {
         return null;

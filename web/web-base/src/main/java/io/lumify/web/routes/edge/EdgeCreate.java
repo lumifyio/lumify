@@ -1,6 +1,5 @@
 package io.lumify.web.routes.edge;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
@@ -11,10 +10,8 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
-import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.*;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.securegraph.*;
 
@@ -83,6 +80,6 @@ public class EdgeCreate extends BaseRequestHandler {
 
         workQueueRepository.pushElement(edge);
 
-        respondWithJson(response, JsonSerializer.toJson(edge, workspaceId, authorizations));
+        respondWithClientApiObject(response, ClientApiConverter.toClientApi(edge, workspaceId, authorizations));
     }
 }

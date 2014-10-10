@@ -6,7 +6,6 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
@@ -38,7 +37,7 @@ public class WorkspaceCreate extends BaseRequestHandler {
         String title = getOptionalParameter(request, "title");
 
         Workspace workspace = handle(title, user, authUser);
-        respondWith(response, workspaceRepository.toClientApi(workspace, user, true));
+        respondWithClientApiObject(response, workspaceRepository.toClientApi(workspace, user, true));
     }
 
     public Workspace handle(String title, User user, User authUser) {

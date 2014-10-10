@@ -16,8 +16,8 @@ import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
-import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -318,8 +318,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public WorkspaceDiff getDiff(Workspace workspace, User user) {
-        return new WorkspaceDiff();
+    public ClientApiWorkspaceDiff getDiff(Workspace workspace, User user) {
+        return new ClientApiWorkspaceDiff();
     }
 
     @Override

@@ -8,6 +8,7 @@ import io.lumify.core.user.User;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.miniweb.handlers.CSRFHandler;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +30,9 @@ public class MeGet extends BaseRequestHandler {
             return;
         }
 
-        io.lumify.web.clientapi.model.User userMe = getUserRepository().toClientApiWithAuths(user);
+        ClientApiUser userMe = getUserRepository().toClientApiWithAuths(user);
         userMe.setCsrfToken(CSRFHandler.getSavedToken(request, true));
 
-        respondWith(response, userMe);
+        respondWithClientApiObject(response, userMe);
     }
 }

@@ -78,36 +78,36 @@ public class WorkspacePublish extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String publishDataString = getRequiredParameter(request, "publishData");
-        PublishItem[] publishData = getObjectMapper().readValue(publishDataString, PublishItem[].class);
+        ClientApiPublishItem[] publishData = getObjectMapper().readValue(publishDataString, ClientApiPublishItem[].class);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
         LOGGER.debug("publishing:\n%s", Joiner.on("\n").join(publishData));
-        WorkspacePublishResponse workspacePublishResponse = new WorkspacePublishResponse();
+        ClientApiWorkspacePublishResponse workspacePublishResponse = new ClientApiWorkspacePublishResponse();
         publishVertices(publishData, workspacePublishResponse, workspaceId, user, authorizations);
         publishEdges(publishData, workspacePublishResponse, workspaceId, user, authorizations);
         publishProperties(publishData, workspacePublishResponse, workspaceId, user, authorizations);
 
         LOGGER.debug("publishing results: %s", workspacePublishResponse);
-        respondWith(response, workspacePublishResponse);
+        respondWithClientApiObject(response, workspacePublishResponse);
     }
 
-    private void publishVertices(PublishItem[] publishData, WorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
+    private void publishVertices(ClientApiPublishItem[] publishData, ClientApiWorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
         LOGGER.debug("BEGIN publishVertices");
-        for (PublishItem data : publishData) {
+        for (ClientApiPublishItem data : publishData) {
             try {
-                if (!(data instanceof VertexPublishItem)) {
+                if (!(data instanceof ClientApiVertexPublishItem)) {
                     continue;
                 }
-                VertexPublishItem vertexPublishItem = (VertexPublishItem) data;
+                ClientApiVertexPublishItem vertexPublishItem = (ClientApiVertexPublishItem) data;
                 String vertexId = vertexPublishItem.getVertexId();
                 checkNotNull(vertexId);
                 Vertex vertex = graph.getVertex(vertexId, authorizations);
                 checkNotNull(vertex);
                 if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
                     String msg;
-                    if (data.getAction() == PublishItem.Action.delete) {
+                    if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         msg = "Cannot delete public vertex " + vertexId;
                     } else {
                         msg = "Vertex " + vertexId + " is already public";
@@ -128,20 +128,20 @@ public class WorkspacePublish extends BaseRequestHandler {
         graph.flush();
     }
 
-    private void publishEdges(PublishItem[] publishData, WorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
+    private void publishEdges(ClientApiPublishItem[] publishData, ClientApiWorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
         LOGGER.debug("BEGIN publishEdges");
-        for (PublishItem data : publishData) {
+        for (ClientApiPublishItem data : publishData) {
             try {
-                if (!(data instanceof RelationshipPublishItem)) {
+                if (!(data instanceof ClientApiRelationshipPublishItem)) {
                     continue;
                 }
-                RelationshipPublishItem relationshipPublishItem = (RelationshipPublishItem) data;
+                ClientApiRelationshipPublishItem relationshipPublishItem = (ClientApiRelationshipPublishItem) data;
                 Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), authorizations);
                 Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
                 Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
                 if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
                     String error_msg;
-                    if (data.getAction() == PublishItem.Action.delete) {
+                    if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         error_msg = "Cannot delete a public edge";
                     } else {
                         error_msg = "Edge is already public";
@@ -171,14 +171,14 @@ public class WorkspacePublish extends BaseRequestHandler {
         graph.flush();
     }
 
-    private void publishProperties(PublishItem[] publishData, WorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
+    private void publishProperties(ClientApiPublishItem[] publishData, ClientApiWorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {
         LOGGER.debug("BEGIN publishProperties");
-        for (PublishItem data : publishData) {
+        for (ClientApiPublishItem data : publishData) {
             try {
-                if (!(data instanceof PropertyPublishItem)) {
+                if (!(data instanceof ClientApiPropertyPublishItem)) {
                     continue;
                 }
-                PropertyPublishItem propertyPublishItem = (PropertyPublishItem) data;
+                ClientApiPropertyPublishItem propertyPublishItem = (ClientApiPropertyPublishItem) data;
                 Element element = getPropertyElement(authorizations, propertyPublishItem);
 
                 String propertyKey = propertyPublishItem.getKey();
@@ -202,7 +202,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
                     if (propertySandboxStatus == SandboxStatus.PUBLIC) {
                         String error_msg;
-                        if (data.getAction() == PublishItem.Action.delete) {
+                        if (data.getAction() == ClientApiPublishItem.Action.delete) {
                             error_msg = "Cannot delete a public property";
                         } else {
                             error_msg = "Property is already public";
@@ -238,7 +238,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         graph.flush();
     }
 
-    private Element getPropertyElement(Authorizations authorizations, PropertyPublishItem data) {
+    private Element getPropertyElement(Authorizations authorizations, ClientApiPropertyPublishItem data) {
         Element element = null;
 
         String elementId = data.getEdgeId();
@@ -266,14 +266,15 @@ public class WorkspacePublish extends BaseRequestHandler {
         return element;
     }
 
-    private void publishVertex(Vertex vertex, PublishItem.Action action, Authorizations authorizations, String workspaceId, User user) throws IOException {
-        if (action == PublishItem.Action.delete) {
+    private void publishVertex(Vertex vertex, ClientApiPublishItem.Action action, Authorizations authorizations, String workspaceId, User user) throws IOException {
+        if (action == ClientApiPublishItem.Action.delete) {
             graph.removeVertex(vertex, authorizations);
             return;
         }
 
         LOGGER.debug("publishing vertex %s(%s)", vertex.getId(), vertex.getVisibility().toString());
         Visibility originalVertexVisibility = vertex.getVisibility();
+        Property visibilityJsonProperty = LumifyProperties.VISIBILITY_JSON.getProperty(vertex);
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
         if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
             throw new LumifyException(String.format("vertex with id '%s' is not local to workspace '%s'", vertex.getId(), workspaceId));
@@ -295,7 +296,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         // we need to alter the visibility of the json property, otherwise we'll have two json properties, one with the old visibility and one with the new.
-        LumifyProperties.VISIBILITY_JSON.alterVisibility(vertexElementMutation, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_JSON.alterVisibility(vertexElementMutation, visibilityJsonProperty.getKey(), lumifyVisibility.getVisibility());
         LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
         LumifyProperties.VISIBILITY_JSON.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save(authorizations);
@@ -315,8 +316,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
     }
 
-    private void publishProperty(Element element, PublishItem.Action action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
-        if (action == PublishItem.Action.delete) {
+    private void publishProperty(Element element, ClientApiPublishItem.Action action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
+        if (action == ClientApiPublishItem.Action.delete) {
             element.removeProperty(key, name, authorizations);
             return;
         }
@@ -358,8 +359,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         return true;
     }
 
-    private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, PublishItem.Action action, String workspaceId, User user, Authorizations authorizations) {
-        if (action == PublishItem.Action.delete) {
+    private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, ClientApiPublishItem.Action action, String workspaceId, User user, Authorizations authorizations) {
+        if (action == ClientApiPublishItem.Action.delete) {
             graph.removeEdge(edge, authorizations);
             return;
         }

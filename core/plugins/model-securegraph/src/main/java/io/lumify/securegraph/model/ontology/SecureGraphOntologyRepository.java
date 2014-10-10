@@ -14,7 +14,7 @@ import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.TimingCallable;
-import io.lumify.web.clientapi.model.Ontology;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
@@ -53,7 +53,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
-    private Cache<String, Ontology> clientApiCache = CacheBuilder.newBuilder()
+    private Cache<String, ClientApiOntology> clientApiCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
 
@@ -79,8 +79,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Ontology getClientApiObject() {
-        Ontology o = this.clientApiCache.getIfPresent("clientApi");
+    public ClientApiOntology getClientApiObject() {
+        ClientApiOntology o = this.clientApiCache.getIfPresent("clientApi");
         if (o != null) {
             return o;
         }

@@ -74,6 +74,16 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
+            <artifactId>lumify-csv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-rdf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-ccextractor</artifactId>
             <version>${project.version}</version>
         </dependency>

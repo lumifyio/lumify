@@ -14,10 +14,6 @@
 
     <name>Lumify: Tools: RDF Import</name>
 
-    <properties>
-        <jena.version>2.12.0</jena.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
@@ -45,9 +41,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.jena</groupId>
-            <artifactId>jena-core</artifactId>
-            <version>${jena.version}</version>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-rdf</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

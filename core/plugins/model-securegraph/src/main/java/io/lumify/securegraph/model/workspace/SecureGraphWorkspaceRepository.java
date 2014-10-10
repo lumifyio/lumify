@@ -22,8 +22,8 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.securegraph.model.user.SecureGraphUserRepository;
 import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
-import io.lumify.web.clientapi.model.WorkspaceDiff;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.util.ConvertingIterable;
@@ -467,14 +467,14 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public WorkspaceDiff getDiff(final Workspace workspace, final User user) {
+    public ClientApiWorkspaceDiff getDiff(final Workspace workspace, final User user) {
         if (!hasReadPermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
 
-        return lockRepository.lock(getLockName(workspace), new Callable<WorkspaceDiff>() {
+        return lockRepository.lock(getLockName(workspace), new Callable<ClientApiWorkspaceDiff>() {
             @Override
-            public WorkspaceDiff call() throws Exception {
+            public ClientApiWorkspaceDiff call() throws Exception {
                 List<WorkspaceEntity> workspaceEntities = findEntitiesNoLock(workspace, user);
                 List<Edge> workspaceEdges = toList(findEdges(workspace, workspaceEntities, user));
 
