@@ -725,6 +725,11 @@ define([
         } else if ($target.is('.show-more')) {
             this.showMoreExpanded[$target.data('propertyName')] = true;
             this.reload();
+        } else if ($target.is('.info')) {
+            d3.event.stopPropagation();
+            d3.event.preventDefault();
+            var datum = d3.select($target.closest('.property-value').get(0)).datum();
+            this.showPropertyInfo($target, datum.property);
         }
     }
 
