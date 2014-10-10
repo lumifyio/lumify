@@ -58,6 +58,6 @@ public class VertexGetTermMentions extends BaseRequestHandler {
 
         Iterable<Vertex> termMentions = termMentionRepository.findBySourceGraphVertexAndPropertyKey(graphVertexId, propertyKey, authorizations);
         ClientApiTermMentionsResponse termMentionsResponse = ClientApiConverter.toTermMentionsResponse(termMentions, workspaceId, authorizations);
-        respondWith(response, termMentionsResponse);
+        respondWithClientApiObject(response, termMentionsResponse);
     }
 }

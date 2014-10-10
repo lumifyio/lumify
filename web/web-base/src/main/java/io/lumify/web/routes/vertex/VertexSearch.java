@@ -168,7 +168,7 @@ public class VertexSearch extends BaseRequestHandler {
         long endTime = System.nanoTime();
         LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesList.size(), (endTime - startTime) / 1000 / 1000);
 
-        respondWith(response, results);
+        respondWithClientApiObject(response, results);
     }
 
     private void updateQueryWithFilter(Query graphQuery, JSONObject obj) throws ParseException {

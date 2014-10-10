@@ -56,7 +56,7 @@ public class VertexGetDetectedObjects extends BaseRequestHandler {
         }
         detectedObjects.addDetectedObjects(ClientApiConverter.toClientApiProperties(detectedObjectProperties, workspaceId));
 
-        respondWith(response, detectedObjects);
+        respondWithClientApiObject(response, detectedObjects);
     }
 
 }

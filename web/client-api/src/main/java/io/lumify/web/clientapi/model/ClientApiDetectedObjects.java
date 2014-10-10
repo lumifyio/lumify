@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ClientApiDetectedObjects {
+public class ClientApiDetectedObjects implements ClientApiObject {
     private List<ClientApiProperty> detectedObjects = new ArrayList<ClientApiProperty>();
 
     public List<ClientApiProperty> getDetectedObjects() {

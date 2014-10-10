@@ -37,7 +37,7 @@ public class VertexProperties extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
 
         ClientApiElement element = handle(graphVertexId, workspaceId, authorizations);
-        respondWith(response, element);
+        respondWithClientApiObject(response, element);
     }
 
     private ClientApiElement handle(String graphVertexId, String workspaceId, Authorizations authorizations) {

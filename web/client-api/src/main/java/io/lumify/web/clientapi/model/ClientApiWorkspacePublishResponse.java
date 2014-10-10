@@ -5,7 +5,7 @@ import io.lumify.web.clientapi.model.util.ClientApiConverter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientApiWorkspacePublishResponse {
+public class ClientApiWorkspacePublishResponse implements ClientApiObject {
     private List<ClientApiPublishItem> failures = new ArrayList<ClientApiPublishItem>();
 
     public List<ClientApiPublishItem> getFailures() {

@@ -9,9 +9,6 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.web.clientapi.model.*;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.securegraph.*;
-import org.securegraph.Element;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.IterableUtils;
 
@@ -31,8 +28,8 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         return termMentionsResponse;
     }
 
-    public static List<? extends Element> toClientApi(Iterable<? extends org.securegraph.Element> elements, String workspaceId, Authorizations authorizations) {
-        List<ClientApiElement> clientApiElements = new ArrayList<Element>();
+    public static List<ClientApiElement> toClientApi(Iterable<? extends org.securegraph.Element> elements, String workspaceId, Authorizations authorizations) {
+        List<ClientApiElement> clientApiElements = new ArrayList<ClientApiElement>();
         for (org.securegraph.Element element : elements) {
             clientApiElements.add(toClientApi(element, workspaceId, authorizations));
         }

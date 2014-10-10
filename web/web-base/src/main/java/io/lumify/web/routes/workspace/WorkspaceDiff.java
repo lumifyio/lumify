@@ -30,7 +30,7 @@ public class WorkspaceDiff extends BaseRequestHandler {
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
         ClientApiWorkspaceDiff diff = handle(workspaceId, user);
-        respondWith(response, diff);
+        respondWithClientApiObject(response, diff);
     }
 
     public ClientApiWorkspaceDiff handle(String workspaceId, User user) {

@@ -15,7 +15,7 @@ import java.util.List;
         @JsonSubTypes.Type(value = ClientApiEdge.class, name = "edge"),
         @JsonSubTypes.Type(value = ClientApiVertex.class, name = "vertex")
 })
-public abstract class ClientApiElement {
+public abstract class ClientApiElement implements ClientApiObject {
     private String id;
     private List<ClientApiProperty> properties = new ArrayList<ClientApiProperty>();
     private SandboxStatus sandboxStatus;

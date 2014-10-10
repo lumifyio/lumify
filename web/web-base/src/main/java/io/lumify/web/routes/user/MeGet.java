@@ -33,6 +33,6 @@ public class MeGet extends BaseRequestHandler {
         ClientApiUser userMe = getUserRepository().toClientApiWithAuths(user);
         userMe.setCsrfToken(CSRFHandler.getSavedToken(request, true));
 
-        respondWith(response, userMe);
+        respondWithClientApiObject(response, userMe);
     }
 }

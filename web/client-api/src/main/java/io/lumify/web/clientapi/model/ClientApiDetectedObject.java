@@ -2,7 +2,7 @@ package io.lumify.web.clientapi.model;
 
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 
-public class ClientApiDetectedObject {
+public class ClientApiDetectedObject implements ClientApiObject {
     private Double x1 = null;
     private Double x2 = null;
     private Double y1 = null;

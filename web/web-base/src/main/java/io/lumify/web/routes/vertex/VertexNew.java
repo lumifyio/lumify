@@ -61,7 +61,7 @@ public class VertexNew extends BaseRequestHandler {
             return;
         }
 
-        respondWith(response, handle(conceptType, visibilitySource, user, workspaceId, authorizations));
+        respondWithClientApiObject(response, handle(conceptType, visibilitySource, user, workspaceId, authorizations));
     }
 
     private ClientApiElement handle(String conceptType, String visibilitySource, User user, String workspaceId, Authorizations authorizations) {

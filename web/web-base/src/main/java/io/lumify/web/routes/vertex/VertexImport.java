@@ -74,7 +74,7 @@ public class VertexImport extends BaseRequestHandler {
 
             List<Vertex> vertices = fileImport.importVertices(workspace, files, user, authorizations);
 
-            respondWith(response, toArtifactImportResponse(vertices));
+            respondWithClientApiObject(response, toArtifactImportResponse(vertices));
         } finally {
             FileUtils.deleteDirectory(tempDir);
         }

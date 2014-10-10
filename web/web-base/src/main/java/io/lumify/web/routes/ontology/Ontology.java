@@ -37,6 +37,6 @@ public class Ontology extends BaseRequestHandler {
         }
 
         addETagHeader(response, eTag);
-        respondWith(response, result);
+        respondWithClientApiObject(response, result);
     }
 }

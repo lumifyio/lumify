@@ -14,7 +14,7 @@ import io.lumify.web.clientapi.model.util.ClientApiConverter;
         @JsonSubTypes.Type(value = ClientApiPropertyPublishItem.class, name = "property"),
         @JsonSubTypes.Type(value = ClientApiRelationshipPublishItem.class, name = "relationship")
 })
-public abstract class ClientApiPublishItem {
+public abstract class ClientApiPublishItem implements ClientApiObject {
     private Action action;
     private String errorMessage;
 

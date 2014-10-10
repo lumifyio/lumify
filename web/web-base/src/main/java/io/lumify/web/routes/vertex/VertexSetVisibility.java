@@ -65,7 +65,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
         }
 
         ClientApiElement element = handle(graphVertexId, visibilitySource, workspaceId, user, authorizations);
-        respondWith(response, element);
+        respondWithClientApiObject(response, element);
     }
 
     private ClientApiElement handle(String graphVertexId, String visibilitySource, String workspaceId, User user, Authorizations authorizations) {

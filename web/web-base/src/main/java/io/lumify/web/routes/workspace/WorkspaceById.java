@@ -39,7 +39,7 @@ public class WorkspaceById extends BaseRequestHandler {
         } else {
             LOGGER.debug("Successfully found workspace");
             ClientApiWorkspace result = getWorkspaceRepository().toClientApi(workspace, authUser, true);
-            respondWith(response, result);
+            respondWithClientApiObject(response, result);
         }
 
         chain.next(request, response);

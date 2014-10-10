@@ -5,7 +5,7 @@ import io.lumify.web.clientapi.model.util.ClientApiConverter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientApiVertexSearchResponse {
+public class ClientApiVertexSearchResponse implements ClientApiObject {
     private List<ClientApiVertex> vertices = new ArrayList<ClientApiVertex>();
     private Integer nextOffset = null;
     private Long retrievalTime = null;

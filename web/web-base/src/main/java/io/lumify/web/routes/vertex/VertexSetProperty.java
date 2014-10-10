@@ -19,6 +19,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
@@ -79,7 +80,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
-        respondWith(response, handle(
+        respondWithClientApiObject(response, handle(
                 graphVertexId,
                 propertyName,
                 propertyKey,
@@ -93,7 +94,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                 authorizations));
     }
 
-    private Object handle(
+    private ClientApiElement handle(
             String graphVertexId,
             String propertyName,
             String propertyKey,

@@ -5,7 +5,7 @@ import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientApiWorkspaces {
+public class ClientApiWorkspaces implements ClientApiObject {
     private List<ClientApiWorkspace> workspaces = new ArrayList<ClientApiWorkspace>();
 
     public List<ClientApiWorkspace> getWorkspaces() {

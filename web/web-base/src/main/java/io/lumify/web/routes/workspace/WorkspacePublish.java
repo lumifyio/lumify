@@ -90,7 +90,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         publishProperties(publishData, workspacePublishResponse, workspaceId, user, authorizations);
 
         LOGGER.debug("publishing results: %s", workspacePublishResponse);
-        respondWith(response, workspacePublishResponse);
+        respondWithClientApiObject(response, workspacePublishResponse);
     }
 
     private void publishVertices(ClientApiPublishItem[] publishData, ClientApiWorkspacePublishResponse workspacePublishResponse, String workspaceId, User user, Authorizations authorizations) {

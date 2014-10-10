@@ -30,7 +30,7 @@ public class WorkspaceList extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         ClientApiWorkspaces results = handle(user);
-        respondWith(response, results);
+        respondWithClientApiObject(response, results);
     }
 
     public ClientApiWorkspaces handle(User user) {

@@ -5,7 +5,7 @@ import io.lumify.web.clientapi.model.util.ClientApiConverter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientApiProperty {
+public class ClientApiProperty implements ClientApiObject {
     private SandboxStatus sandboxStatus;
     private String key;
     private String name;

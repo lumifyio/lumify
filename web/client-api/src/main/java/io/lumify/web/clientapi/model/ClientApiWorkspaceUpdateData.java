@@ -3,7 +3,7 @@ package io.lumify.web.clientapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientApiWorkspaceUpdateData {
+public class ClientApiWorkspaceUpdateData implements ClientApiObject {
     private String title;
     private List<EntityUpdate> entityUpdates = new ArrayList<EntityUpdate>();
     private List<String> entityDeletes = new ArrayList<String>();
