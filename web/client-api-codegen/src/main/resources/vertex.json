@@ -705,6 +705,36 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/multiple",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Finds multiple vertices",
+                    "type": "ClientApiVertexMultipleResponse",
+                    "nickname": "findMultiple",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "vertexIds[]",
+                            "description": "vertex ids",
+                            "required": true,
+                            "type": "List[string]",
+                            "paramType": "form"
+                        },
+                        {
+                            "name": "fallbackToPublic",
+                            "description": "true to fallback to public vertices if a private vertex can't be found",
+                            "required": true,
+                            "type": "boolean",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {

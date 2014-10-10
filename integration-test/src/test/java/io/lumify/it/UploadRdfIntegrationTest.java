@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.util.MyAsserts.assertTrue;
@@ -70,8 +71,43 @@ public class UploadRdfIntegrationTest extends TestBase {
         assertGetEdges(lumifyApi);
         assertFindPath(lumifyApi);
         assertFindRelated(lumifyApi);
+        assertFindMultiple(lumifyApi);
 
         lumifyApi.logout();
+    }
+
+    private void assertFindMultiple(LumifyApi lumifyApi) throws ApiException {
+        List<String> graphVertexIds = new ArrayList<String>();
+        graphVertexIds.add(artifactVertexId);
+        graphVertexIds.add(joeFernerVertexId);
+        graphVertexIds.add(daveSingleyVertexId);
+        graphVertexIds.add(altamiraCorporationVertexId);
+        ClientApiVertexMultipleResponse vertices = lumifyApi.getVertexApi().findMultiple(graphVertexIds, true);
+        LOGGER.info("vertices: %s", vertices.toString());
+        assertEquals(4, vertices.getVertices().size());
+        assertTrue(!vertices.isRequiredFallback(), "isRequiredFallback");
+        boolean foundAltamiraCorporation = false;
+        boolean foundArtifact = false;
+        boolean foundDaveSingley = false;
+        boolean foundJoeFerner = false;
+        for (ClientApiVertex v : vertices.getVertices()) {
+            if (v.getId().equals(altamiraCorporationVertexId)) {
+                foundAltamiraCorporation = true;
+            }
+            if (v.getId().equals(artifactVertexId)) {
+                foundArtifact = true;
+            }
+            if (v.getId().equals(joeFernerVertexId)) {
+                foundDaveSingley = true;
+            }
+            if (v.getId().equals(daveSingleyVertexId)) {
+                foundJoeFerner = true;
+            }
+        }
+        assertTrue(foundAltamiraCorporation, "could not find AltamiraCorporation in multiple");
+        assertTrue(foundArtifact, "could not find Artifact in multiple");
+        assertTrue(foundDaveSingley, "could not find DaveSingley in multiple");
+        assertTrue(foundJoeFerner, "could not find JoeFerner in multiple");
     }
 
     private void assertFindRelated(LumifyApi lumifyApi) throws ApiException {

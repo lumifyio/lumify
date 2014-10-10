@@ -53,6 +53,8 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
                 fileContents = fileContents.replaceAll("String basePath =", "protected String basePath =");
                 fileContents = fileContents.replaceAll("ApiInvoker apiInvoker =", "protected ApiInvoker apiInvoker =");
                 fileContents = fileContents.replaceAll("LinkedHashMap", "Map<String,Object>");
+                fileContents = fileContents.replaceAll("mp.field\\(\"vertexIds\\[\\]\", vertexIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String vertexId:vertexIds) { mp.field(\"vertexIds[]\", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
+                fileContents = fileContents.replaceAll("formParams\\.put\\(\"vertexIds\\[\\]\", vertexIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
                 fileContents = fileContents.replaceAll("mp\\.field\\(\"file\", file, MediaType\\.MULTIPART_FORM_DATA_TYPE\\);",
                         "com.sun.jersey.core.header.FormDataContentDisposition dispo = com.sun.jersey.core.header.FormDataContentDisposition\n"
                                 + "        .name(\"file\")\n"

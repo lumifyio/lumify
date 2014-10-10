@@ -10,6 +10,7 @@ import io.lumify.web.clientapi.model.ClientApiElement;
 import io.lumify.web.clientapi.model.ClientApiVertexFindPathResponse;
 import io.lumify.web.clientapi.model.ClientApiVertexEdges;
 import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
+import io.lumify.web.clientapi.model.ClientApiVertexMultipleResponse;
 import io.lumify.web.clientapi.model.ClientApiTermMentionsResponse;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
@@ -881,6 +882,55 @@ public class VertexApi {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (ClientApiVertexFindRelatedResponse) ApiInvoker.deserialize(response, "", ClientApiVertexFindRelatedResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiVertexMultipleResponse findMultiple (List<String> vertexIds, Boolean fallbackToPublic) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(vertexIds == null || fallbackToPublic == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/multiple".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(fallbackToPublic)))
+      queryParams.put("fallbackToPublic", String.valueOf(fallbackToPublic));
+    String[] contentTypes = {
+      "multipart/form-data"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      hasFields = true;
+      for(String vertexId:vertexIds) { mp.field("vertexIds[]", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      throw new java.lang.RuntimeException("invalid content type");}
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVertexMultipleResponse) ApiInvoker.deserialize(response, "", ClientApiVertexMultipleResponse.class);
       }
       else {
         return null;
