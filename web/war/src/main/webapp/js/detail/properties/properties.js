@@ -35,6 +35,10 @@ define([
         MAX_AUDIT_ITEMS = 3,
         CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE,
         NO_GROUP = '${NO_GROUP}',
+
+        // Property td types
+        GROUP = 0, NAME = 1, VALUE = 2,
+
         alreadyWarnedAboutMissingOntology = {},
         ontologyService = new OntologyService(),
         vertexService = new VertexService(),
@@ -88,11 +92,16 @@ define([
             var self = this,
                 displayProperties = this.transformPropertiesForUpdate(properties);
 
-            this.tableRoot.selectAll('tr.property-group')
+            this.reload = this.update.bind(this, properties);
+
+            this.tableRoot.selectAll('tbody.property-group')
                 .data(displayProperties)
                 .call(
                     _.partial(
                         createPropertyGroups,
+                        self.attr.data.id,
+                        self.ontologyProperties,
+                        self.showMoreExpanded,
                         parseInt(self.config['properties.multivalue.defaultVisibleCount'], 10)
                     )
                 );
@@ -338,10 +347,11 @@ define([
 
             root.append('div').attr('class', 'entity_audit_events');
 
+            this.showMoreExpanded = {};
             this.tableRoot = root
                 .append('table')
                 .attr('class', 'table')
-                .on('click', onTableClick)
+                .on('click', onTableClick.bind(this))
                 .call(function() {
                     if (!F.vertex.isEdge(self.attr.data)) {
                         this.append('tr')
@@ -706,22 +716,41 @@ define([
     }
 
     function onTableClick(event) {
-        var $target = $(d3.event.target).closest('.property-group-header'),
-            $tbody = $target.closest('.property-group');
+        var $target = $(d3.event.target),
+            $header = $target.closest('.property-group-header'),
+            $tbody = $header.closest('.property-group');
 
-        if ($target.is('.property-group-header')) {
-            $tbody.toggleClass('collapsed');
+        if ($header.is('.property-group-header')) {
+            $tbody.toggleClass('collapsed expanded');
+        } else if ($target.is('.show-more')) {
+            this.showMoreExpanded[$target.data('propertyName')] = true;
+            this.reload();
         }
     }
 
-    function createPropertyGroups(maxItemsBeforeHidden) {
+    function createPropertyGroups(vertexId, ontologyProperties, showMoreExpanded, maxItemsBeforeHidden) {
         this.enter()
             .insert('tbody', '.buttons-row')
-            .attr('class', 'property-group')
-            .selectAll('tr.property-row')
+            .attr('class', function(d, groupIndex, j) {
+                var cls = 'property-group collapsible';
+                if (groupIndex === 0) {
+                    return cls + ' expanded';
+                }
+
+                return cls + ' collapsed';
+            });
+
+        var totalPropertyCountsByName = {};
+
+        this.selectAll('tr')
             .data(function(pair) {
                 return _.chain(pair[1])
                     .map(function(p) {
+                        totalPropertyCountsByName[p[0]] = p[1].length;
+                        if (p[0] in showMoreExpanded) {
+                            return p[1];
+                        }
+                        totalPropertyCountsByName[p[0]] -= maxItemsBeforeHidden;
                         return p[1].slice(0, maxItemsBeforeHidden);
                     })
                     .flatten()
@@ -732,29 +761,49 @@ define([
                     })
                     .value();
             })
-            .call(createProperties)
+            .call(
+                _.partial(createProperties,
+                          vertexId,
+                          ontologyProperties,
+                          totalPropertyCountsByName,
+                          maxItemsBeforeHidden,
+                          showMoreExpanded
+                )
+            )
 
         this.exit().remove();
     }
 
-    function createProperties() {
-        var GROUP = 0, NAME = 1, VALUE = 2;
+    function createProperties(vertexId,
+                              ontologyProperties,
+                              totalPropertyCountsByName,
+                              maxItemsBeforeHidden,
+                              showMoreExpanded) {
 
         this.enter()
             .append('tr')
             .attr('class', function(datum) {
                 if (_.isString(datum)) {
-                    return 'property-group-header collapsed';
+                    return 'property-group-header';
                 }
                 return 'property-row';
-            })
-            .selectAll('td')
-            .data(function(datum) {
+            });
+
+        var currentPropertyIndex = 0, lastPropertyName = '';
+        this.selectAll('td')
+            .data(function(datum, i, j) {
                 if (_.isString(datum)) {
                     return [{
                         type: GROUP,
                         name: datum
                     }];
+                }
+
+                if (datum.name === lastPropertyName) {
+                    currentPropertyIndex++;
+                } else {
+                    currentPropertyIndex = 0;
+                    lastPropertyName = datum.name;
                 }
 
                 return [
@@ -764,27 +813,123 @@ define([
                     },
                     {
                         type: VALUE,
-                        property: datum
+                        property: datum,
+                        showHidden: currentPropertyIndex === (maxItemsBeforeHidden - 1) &&
+                            !(datum.name in showMoreExpanded),
+                        hidden: Math.max(0, totalPropertyCountsByName[datum.name])
                     }
                 ];
             })
-            .call(function() {
-                this.enter()
-                    .append('td')
-                    .attr('colspan', function(datum) {
-                        if (datum.type === GROUP) {
-                            return '2';
-                        }
-                    })
-                    .text(function(datum, row, column) {
-                        switch (datum.type) {
-                            case GROUP: return datum.name;
-                            case NAME: return datum.name;
-                            case VALUE: return datum.property.value;
-                        }
-                    });
-                this.exit().remove();
+            .call(_.partial(createPropertyRow, vertexId, ontologyProperties));
+
+        this.exit().remove();
+    }
+
+    function createPropertyRow(vertexId, ontologyProperties) {
+        this.enter()
+            .append('td')
+            .each(function() {
+                var self = d3.select(this),
+                    datum = self.datum();
+                switch (datum.type) {
+                    case GROUP:
+                        self.append('h1')
+                            .attr('class', 'collapsible-header')
+                            .call(function() {
+                                this.append('strong');
+                                this.append('span').attr('class', 'badge');
+                            });
+                            break;
+                    case NAME: self.append('strong'); break;
+                    case VALUE:
+                        self.append('span').attr('class', 'value');
+                        self.append('button').attr('class', 'info')
+                        self.append('span').attr('class', 'visibility');
+                        self.append('a').attr('class', 'show-more');
+                        break;
+                }
             });
+
+        this.attr('class', function(datum) {
+                if (datum.type === NAME) {
+                    return 'property-name';
+                } else if (datum.type === VALUE) {
+                    return 'property-value';
+                }
+            }) .attr('width', function(datum) {
+                if (datum.type === NAME) {
+                    return '40%';
+                }
+            })
+            .attr('colspan', function(datum) {
+                if (datum.type === GROUP) {
+                    return '3';
+                } else if (datum.type === VALUE) {
+                    return '2';
+                }
+                return '1';
+            })
+            .call(function() {
+                var previousPropertyName = '';
+
+                this.select('h1.collapsible-header strong').text(_.property('name'))
+
+                this.select('.property-name strong')
+                    .text(function(d) {
+                        if (previousPropertyName === d.name) {
+                            return '';
+                        }
+                        previousPropertyName = d.name;
+
+                        if (isVisibility(d)) {
+                            return i18n('visibility.label');
+                        }
+
+                        var ontologyProperty = ontologyProperties.byTitle[d.name];
+                        if (ontologyProperty) {
+                            return ontologyProperty.displayName;
+                        }
+
+                        console.warn('No ontology definition for ', d.name);
+                        return d.name;
+                    });
+
+                this.select('.property-value .visibility').each(function() {
+                    var self = d3.select(this),
+                        datum = self.datum(),
+                        node = self.node();
+
+                    node.textContent = '';
+                    F.vertex.properties.visibility(
+                        node,
+                        { value: datum.property[VISIBILITY_NAME] },
+                        vertexId
+                    );
+                })
+                this.select('.property-value .value')
+                    .text(function(d) {
+                        return d.property.value;
+                    });
+                this.select('.property-value .show-more')
+                    .attr('data-property-name', function(d) {
+                        return d.property.name;
+                    })
+                    .text(function(d) {
+                        return i18n(
+                            'properties.button.show_more',
+                            F.number.pretty(d.hidden)
+                        );
+                    })
+                    .style('display', function(d) {
+                        if (d.showHidden && d.hidden > 0) {
+                            return 'block';
+                        }
+
+                        return 'none';
+                    });
+            })
+
+        this.exit().remove();
     }
 
 });

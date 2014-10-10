@@ -16,9 +16,14 @@
   
   .property-group {
     .property-group-header {
-      background: #ccc;
       cursor: pointer;
       .disable-text-selection;
+      h1 {
+        font-size: 100%;
+      }
+    }
+    &.expanded > tr:last-child td {
+      padding-bottom: 1em;
     }
     &.collapsed {      
       .property-row {
@@ -68,8 +73,6 @@
     font-variant: small-caps;
     text-transform: uppercase;
     font-style: italic;
-    float: left;
-    clear: left;
     display: none;
     &:after {
       content:'…'
