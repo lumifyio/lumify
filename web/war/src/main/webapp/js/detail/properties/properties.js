@@ -260,7 +260,7 @@ define([
                             $.extend(property, {
                                 hideInfo: true,
                                 hideVisibility: true,
-                                displayName: 'Justification',
+                                displayName: i18n('justification.field.label'),
                                 justificationData: {
                                     justificationMetadata: property.name === '_justificationMetadata' ?
                                         property.value : null,
@@ -300,9 +300,6 @@ define([
                             });
                         }
                     })
-                    .groupBy('name')
-                    .pairs()
-                    /*
                     .sortBy(function(property) {
                         if (isVisibility(property)) {
                             return '0';
@@ -322,9 +319,10 @@ define([
                         if (ontologyProperty && ontologyProperty.displayName) {
                             return '1' + ontologyProperty.displayName.toLowerCase();
                         }
-                        return '2' + propertyName.toLowerCase();
+                        return '2' + property.name.toLowerCase();
                     })
-                    */
+                    .groupBy('name')
+                    .pairs()
                     .groupBy(function(pair) {
                         var ontologyProperty = self.ontologyProperties.byTitle[pair[0]];
                         if (ontologyProperty && ontologyProperty.propertyGroup) {
@@ -815,7 +813,8 @@ define([
                 return [
                     {
                         type: NAME,
-                        name: datum.name
+                        name: datum.name,
+                        property: datum
                     },
                     {
                         type: VALUE,
@@ -865,7 +864,8 @@ define([
                 } else if (datum.type === VALUE) {
                     return 'property-value';
                 }
-            }) .attr('width', function(datum) {
+            })
+            .attr('width', function(datum) {
                 if (datum.type === NAME) {
                     return '40%';
                 }
@@ -903,26 +903,61 @@ define([
                             return ontologyProperty.displayName;
                         }
 
+                        if (d.property.displayName) {
+                            return d.property.displayName;
+                        }
+
                         console.warn('No ontology definition for ', d.name);
                         return d.name;
                     });
 
-                this.select('.property-value .visibility').each(function() {
-                    var self = d3.select(this),
-                        datum = self.datum(),
-                        node = self.node();
-
-                    node.textContent = '';
-                    F.vertex.properties.visibility(
-                        node,
-                        { value: datum.property[VISIBILITY_NAME] },
-                        vertexId
-                    );
-                })
                 this.select('.property-value .value')
-                    .text(function(d) {
-                        return d.property.value;
+                    .each(function() {
+                        var self = d3.select(this),
+                            property = self.datum().property,
+                            valueSpan = self.node(),
+                            $valueSpan = $(valueSpan),
+                            visibilitySpan = $valueSpan.siblings('.visibility')[0],
+                            $infoButton = $valueSpan.siblings('.info'),
+                            visibility = isVisibility(property),
+                            ontologyProperty = ontologyProperties.byTitle[property.name],
+                            dataType = ontologyProperty && ontologyProperty.dataType,
+                            displayType = ontologyProperty && ontologyProperty.displayType;
+
+                        valueSpan.textContent = '';
+                        visibilitySpan.textContent = '';
+
+                        if (visibility) {
+                            dataType = 'visibility';
+                        } else if (property.hideVisibility !== true) {
+                            F.vertex.properties.visibility(
+                                visibilitySpan, { value: property[VISIBILITY_NAME] }, vertexId);
+                        }
+
+                        $infoButton.toggle(Boolean(
+                            !property.hideInfo &&
+                            (Privileges.canEDIT || F.vertex.hasMetadata(property))
+                        ));
+
+                        if (displayType && F.vertex.properties[displayType]) {
+                            F.vertex.properties[displayType](valueSpan, property, vertexId);
+                            return;
+                        } else if (dataType && F.vertex.properties[dataType]) {
+                            F.vertex.properties[dataType](valueSpan, property, vertexId);
+                            return;
+                        }
+
+                        if (isJustification(property)) {
+                            require(['util/vertex/justification/viewer'], function(JustificationViewer) {
+                                $(valueSpan).teardownAllComponents();
+                                JustificationViewer.attachTo(valueSpan, property.justificationData);
+                            });
+                            return;
+                        }
+
+                        valueSpan.textContent = F.vertex.displayProp(property);
                     });
+
                 this.select('.property-value .show-more')
                     .attr('data-property-name', function(d) {
                         return d.property.name;
