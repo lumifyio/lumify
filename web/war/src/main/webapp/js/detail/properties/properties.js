@@ -789,7 +789,7 @@ define([
                 if (_.isString(datum[0])) {
                     return 'property-group-header';
                 }
-                return 'property-row';
+                return 'property-row property-row-' + F.className.to(datum.name + datum.key);
             });
 
         var currentPropertyIndex = 0, lastPropertyName = '';
