@@ -45,6 +45,8 @@ public abstract class OntologyProperty {
 
     public abstract String getDisplayType();
 
+    public abstract String getPropertyGroup();
+
     public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
         Collection<ClientApiOntology.Property> results = new ArrayList<ClientApiOntology.Property>();
         for (OntologyProperty property : properties) {
@@ -62,6 +64,7 @@ public abstract class OntologyProperty {
             result.setSearchable(getSearchable());
             result.setDataType(getDataType());
             result.setDisplayType(getDisplayType());
+            result.setPropertyGroup(getPropertyGroup());
             if (getPossibleValues() != null) {
                 result.getPossibleValues().putAll(getPossibleValues());
             }

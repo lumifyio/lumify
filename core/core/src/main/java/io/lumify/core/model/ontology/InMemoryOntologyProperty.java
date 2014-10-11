@@ -9,6 +9,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private boolean userVisible;
     private boolean searchable;
     private String displayName;
+    private String propertyGroup;
     private PropertyType dataType;
     private Map<String, String> possibleValues;
     private String displayType;
@@ -42,6 +43,11 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     @Override
     public Map<String, String> getPossibleValues() {
         return possibleValues;
+    }
+
+    @Override
+    public String getPropertyGroup() {
+        return propertyGroup;
     }
 
     @Override
@@ -83,5 +89,9 @@ public class InMemoryOntologyProperty extends OntologyProperty {
 
     public void setDisplayType(String displayType) {
         this.displayType = displayType;
+    }
+
+    public void setPropertyGroup(String propertyGroup) {
+        this.propertyGroup = propertyGroup;
     }
 }

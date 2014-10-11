@@ -960,19 +960,31 @@ define([
                 targetPositions.push(e.data('targetPosition'));
             });
 
-            var graphMovedVerticesData = {
-                vertices: $.map(vertices, function(vertex) {
-                    return {
-                        id: fromCyId(vertex.id()),
-                        workspace: {
-                            graphPosition: vertex.data('targetPosition')
-                        }
-                    };
-                })
-            };
-            self.trigger(document, 'updateVertices', graphMovedVerticesData);
+            var previousData = {
+                    vertices: $.map(vertices, function(vertex) {
+                        return {
+                            id: fromCyId(vertex.id()),
+                            workspace: {
+                                graphPosition: vertex.data('originalPosition')
+                            }
+                        };
+                    })
+                },
+                graphMovedVerticesData = {
+                    vertices: $.map(vertices, function(vertex) {
+                        return {
+                            id: fromCyId(vertex.id()),
+                            workspace: {
+                                graphPosition: vertex.data('targetPosition')
+                            }
+                        };
+                    })
+                };
 
-            this.setWorkspaceDirty();
+            if (!_.isEqual(previousData, graphMovedVerticesData)) {
+                self.trigger(document, 'updateVertices', graphMovedVerticesData);
+                this.setWorkspaceDirty();
+            }
         };
 
         this.graphMouseOver = function(event) {

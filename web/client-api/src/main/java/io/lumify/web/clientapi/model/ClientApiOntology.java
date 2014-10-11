@@ -171,6 +171,7 @@ public class ClientApiOntology implements ClientApiObject {
         private boolean searchable;
         private PropertyType dataType;
         private String displayType;
+        private String propertyGroup;
         private Map<String, String> possibleValues = new HashMap<String, String>();
 
         public String getTitle() {
@@ -219,6 +220,14 @@ public class ClientApiOntology implements ClientApiObject {
 
         public void setDisplayType(String displayType) {
             this.displayType = displayType;
+        }
+
+        public String getPropertyGroup() {
+            return propertyGroup;
+        }
+
+        public void setPropertyGroup(String propertyGroup) {
+            this.propertyGroup = propertyGroup;
         }
 
         @JsonInclude(JsonInclude.Include.NON_EMPTY)

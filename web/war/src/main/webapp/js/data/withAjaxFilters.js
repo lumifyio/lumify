@@ -5,7 +5,6 @@ define([], function() {
         VERTICES_RESPONSE_KEYPATHS = ['vertices', 'data.vertices'],
 
         IGNORE_NO_CONVERTER_FOUND_REGEXS = [
-            /^audit/,
             /^user/,
             /^configuration$/,
             /^workspaces?$/,
@@ -25,6 +24,7 @@ define([], function() {
             /^vertex\/remove-edge/,
             /^vertex\/(un)?resolve/,
             /^vertex\/import/,
+            /^vertex\/audit/,
             /^edge/
         ],
 

@@ -354,6 +354,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         boolean userVisible = getUserVisible(o, dataTypeProperty);
         boolean searchable = getSearchable(o, dataTypeProperty);
         String displayType = getDisplayType(o, dataTypeProperty);
+        String propertyGroup = getPropertyGroup(o, dataTypeProperty);
         Double boost = getBoost(o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
@@ -369,7 +370,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, boost);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
         }
     }
 
@@ -383,6 +384,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             boolean userVisible,
             boolean searchable,
             String displayType,
+            String propertyGroup,
             Double boost);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
@@ -532,6 +534,10 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, LumifyProperties.DISPLAY_TYPE.getPropertyName());
+    }
+
+    protected String getPropertyGroup(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.PROPERTY_GROUP.getPropertyName());
     }
 
     protected String getTitleFormula(OWLOntology o, OWLEntity owlEntity) {
