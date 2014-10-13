@@ -57,7 +57,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
                     .end(end)
                     .title(patternGroup)
                     .conceptIri(getOntologyClassUri())
-                    .visibilityJson(data.getVisibilitySource())
+                    .visibilityJson(data.getVisibilityJson())
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
             termMentions.add(termMention);

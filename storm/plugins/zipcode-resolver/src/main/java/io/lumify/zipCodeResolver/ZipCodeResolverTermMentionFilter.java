@@ -104,17 +104,22 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
 
             String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
             String sign = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
+            VisibilityJson sourceVertexVisibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
+            Map<String, Object> metadata = new HashMap<String, Object>();
+            LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, sourceVertexVisibilityJson);
             GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
             ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
                     .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, sourceVertex.getVisibility());
-            LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, zipCodeIri, sourceVertex.getVisibility());
-            LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, "Zip Code Resolver", sourceVertex.getVisibility());
-            LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, sign, sourceVertex.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, zipCodeIri, metadata, sourceVertex.getVisibility());
+            LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, "Zip Code Resolver", metadata, sourceVertex.getVisibility());
+            LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, sign, metadata, sourceVertex.getVisibility());
+            LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, sourceVertexVisibilityJson, metadata, sourceVertex.getVisibility());
             Vertex zipCodeVertex = resolvedToVertexBuilder.save(authorizations);
+            getGraph().flush();
 
             String edgeId = sourceVertex.getId() + "-" + artifactHasEntityIri + "-" + zipCodeVertex.getId();
             Edge resolvedEdge = getGraph().prepareEdge(edgeId, sourceVertex, zipCodeVertex, artifactHasEntityIri, sourceVertex.getVisibility()).save(authorizations);
-            LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedEdge, MULTI_VALUE_PROPERTY_KEY, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex), sourceVertex.getVisibility(), authorizations);
+            LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedEdge, MULTI_VALUE_PROPERTY_KEY, sourceVertexVisibilityJson, metadata, sourceVertex.getVisibility(), authorizations);
             VisibilityJson visibilityJson = LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(termMention);
             if (visibilityJson != null && visibilityJson.getWorkspaces().size() > 0) {
                 Set<String> workspaceIds = visibilityJson.getWorkspaces();
@@ -170,5 +175,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     }
 
     @Inject
-    public void setWorkspaceRepository (WorkspaceRepository workspaceRepository) { this.workspaceRepository = workspaceRepository;}
+    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
+    }
 }
