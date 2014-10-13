@@ -1,5 +1,7 @@
 package io.lumify.web;
 
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -13,7 +15,7 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyWebServer extends WebServer {
-
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(JettyWebServer.class);
     public static final String OPT_DONT_JOIN = "dontjoin";
     private Server server;
 
@@ -60,6 +62,8 @@ public class JettyWebServer extends WebServer {
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath(this.getContextPath());
         webAppContext.setWar(this.getWebAppDir());
+        webAppContext.getSessionHandler().getSessionManager().setMaxInactiveInterval(super.getSessionTimeout() * 60);
+        LOGGER.info("getMaxInactiveInterval() is %d seconds", webAppContext.getSessionHandler().getSessionManager().getMaxInactiveInterval());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[]{webAppContext});

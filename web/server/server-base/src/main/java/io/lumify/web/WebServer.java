@@ -15,9 +15,11 @@ public abstract class WebServer extends CommandLineBase {
     public static final String REQUIRE_CLIENT_CERT_OPTION_VALUE = "requireClientCert";
     public static final String WEB_APP_DIR_OPTION_VALUE = "webAppDir";
     public static final String CONTEXT_PATH_OPTION_VALUE = "contextPath";
+    public static final String SESSION_TIMEOUT_OPTION_VALUE = "sessionTimeout";
     public static final int DEFAULT_SERVER_PORT = 8080;
     public static final int DEFAULT_HTTPS_SERVER_PORT = 8443;
     public static final String DEFAULT_CONTEXT_PATH = "/";
+    public static final int DEFAULT_SESSION_TIMEOUT = 30;
 
     private int httpPort;
     private int httpsPort;
@@ -28,6 +30,7 @@ public abstract class WebServer extends CommandLineBase {
     private boolean requireClientCert = false;
     private String webAppDir;
     private String contextPath;
+    private int sessionTimeout;
 
     public int getHttpPort() {
         return httpPort;
@@ -70,6 +73,8 @@ public abstract class WebServer extends CommandLineBase {
     public String getWebAppDir() {
         return webAppDir;
     }
+
+    public int getSessionTimeout() { return sessionTimeout; }
 
     @Override
     protected Options getOptions() {
@@ -155,6 +160,14 @@ public abstract class WebServer extends CommandLineBase {
                         .create()
         );
 
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(SESSION_TIMEOUT_OPTION_VALUE)
+                        .withDescription("number of minutes before idle sessions expire")
+                        .hasArg(true)
+                        .create()
+        );
+
         return options;
     }
 
@@ -184,5 +197,12 @@ public abstract class WebServer extends CommandLineBase {
 
         webAppDir = cmd.getOptionValue(WEB_APP_DIR_OPTION_VALUE);
         contextPath = cmd.getOptionValue(CONTEXT_PATH_OPTION_VALUE, DEFAULT_CONTEXT_PATH);
+
+        final String timeout = cmd.getOptionValue(SESSION_TIMEOUT_OPTION_VALUE);
+        if (timeout == null) {
+            sessionTimeout = DEFAULT_SESSION_TIMEOUT;
+        } else {
+            sessionTimeout = Integer.parseInt(timeout);
+        }
     }
 }

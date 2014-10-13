@@ -1,5 +1,8 @@
 package io.lumify.web;
 
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.cli.CommandLine;
@@ -9,7 +12,7 @@ import org.apache.commons.cli.Options;
 import java.io.File;
 
 public class TomcatWebServer extends WebServer {
-
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TomcatWebServer.class);
     private Tomcat tomcat;
 
     public static void main(String[] args) throws Exception {
@@ -45,7 +48,10 @@ public class TomcatWebServer extends WebServer {
         Connector defaultConnector = tomcat.getConnector();
         defaultConnector.setRedirectPort(super.getHttpsPort());
 
-        tomcat.addWebapp(this.getContextPath(), new File(this.getWebAppDir()).getAbsolutePath());
+        Context context = tomcat.addWebapp(this.getContextPath(), new File(this.getWebAppDir()).getAbsolutePath());
+        context.setSessionTimeout(super.getSessionTimeout());
+        LOGGER.info("getSessionTimeout() is %d minutes", context.getSessionTimeout());
+
         System.out.println("configuring app with basedir: " + new File("./" + this.getWebAppDir()).getAbsolutePath());
 
         tomcat.start();
