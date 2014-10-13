@@ -33,6 +33,14 @@ define([
             });
 
             this.select('usernameSelector').focus();
+
+            var match = window.location.hash.match(/^#username=(.*)/),
+                username = match != null ? match[1] : null;
+            if (username != null) {
+                this.select('usernameSelector').val(username);
+                this.select('loginButtonSelector').click();
+                // TODO: remove fragment after login
+            }
         });
 
         this.onUsernameChange = function(event) {
@@ -40,7 +48,7 @@ define([
                 input = this.select('usernameSelector'),
                 isValid = function() {
                     return $.trim(input.val()).length > 0;
-                }
+                };
 
             if (event.which === $.ui.keyCode.ENTER) {
                 event.preventDefault();
