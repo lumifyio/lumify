@@ -32,15 +32,16 @@ public class SessionUser implements HttpSessionBindingListener, Serializable {
 
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
-        LOGGER.info("setting userId %s status to %s due to %s", userId, UserStatus.OFFLINE, event.getName());
+        UserStatus status = UserStatus.OFFLINE;
+        LOGGER.info("setting userId %s status to %s", userId, status);
         UserRepository userRepository = InjectHelper.getInstance(UserRepository.class);
-        userRepository.setStatus(userId, UserStatus.OFFLINE);
+        userRepository.setStatus(userId, status);
         User user = userRepository.findById(userId);
         if (user != null) {
             WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
-            workQueueRepository.pushUserStatusChange(user, UserStatus.OFFLINE);
+            workQueueRepository.pushUserStatusChange(user, status);
         } else {
-            LOGGER.warn("user is null");
+            LOGGER.warn("unable to push user status change");
         }
     }
 }

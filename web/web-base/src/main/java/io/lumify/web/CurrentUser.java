@@ -1,5 +1,8 @@
 package io.lumify.web;
 
+import io.lumify.core.bootstrap.InjectHelper;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 
@@ -8,10 +11,16 @@ import javax.servlet.http.HttpSession;
 
 public class CurrentUser {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(CurrentUser.class);
-    public static final String SESSION_ATTRIBUTE_NAME = "user.current";
+    public static final String SESSIONUSER_ATTRIBUTE_NAME = "user.current";
+    public static final String STRING_ATTRIBUTE_NAME = "username";
 
     public static void set(HttpServletRequest request, String userId) {
-        request.getSession().setAttribute(CurrentUser.SESSION_ATTRIBUTE_NAME, new SessionUser(userId));
+        request.getSession().setAttribute(CurrentUser.SESSIONUSER_ATTRIBUTE_NAME, new SessionUser(userId));
+        if (LOGGER.isDebugEnabled()) {
+            UserRepository userRepository = InjectHelper.getInstance(UserRepository.class);
+            User user = userRepository.findById(userId);
+            request.getSession().setAttribute(CurrentUser.STRING_ATTRIBUTE_NAME, user.getUsername());
+        }
     }
 
     public static String get(HttpSession session) {
@@ -19,7 +28,7 @@ public class CurrentUser {
             LOGGER.warn("session is null");
             return null;
         }
-        SessionUser sessionUser = (SessionUser) session.getAttribute(CurrentUser.SESSION_ATTRIBUTE_NAME);
+        SessionUser sessionUser = (SessionUser) session.getAttribute(CurrentUser.SESSIONUSER_ATTRIBUTE_NAME);
         if (sessionUser == null) {
             LOGGER.warn("sessionUser is null");
             return null;
@@ -32,6 +41,7 @@ public class CurrentUser {
     }
 
     public static void clear(HttpServletRequest request) {
-        request.getSession().removeAttribute(CurrentUser.SESSION_ATTRIBUTE_NAME);
+        request.getSession().removeAttribute(CurrentUser.SESSIONUSER_ATTRIBUTE_NAME);
+        request.getSession().removeAttribute(CurrentUser.STRING_ATTRIBUTE_NAME);
     }
 }
