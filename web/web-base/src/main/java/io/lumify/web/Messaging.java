@@ -115,7 +115,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     }
 
     public void onOpen(AtmosphereResource resource) throws IOException {
-        setStatus(resource, UserStatus.ONLINE);
+        setStatus(resource, UserStatus.ACTIVE);
     }
 
     public void onResume(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {

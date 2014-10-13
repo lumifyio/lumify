@@ -194,10 +194,10 @@ public class SqlUserRepositoryTest {
     @Test
     public void testSetStatus() throws Exception {
         SqlUser user = (SqlUser)sqlUserRepository.addUser("123", "abc", null, null, new String[0]);
-        sqlUserRepository.setStatus(user.getUserId(), UserStatus.ONLINE);
+        sqlUserRepository.setStatus(user.getUserId(), UserStatus.ACTIVE);
 
         SqlUser testUser = (SqlUser) sqlUserRepository.findById(user.getUserId());
-        assertEquals(UserStatus.ONLINE, testUser.getUserStatus());
+        assertEquals(UserStatus.ACTIVE, testUser.getUserStatus());
     }
 
     @Test(expected = LumifyException.class)

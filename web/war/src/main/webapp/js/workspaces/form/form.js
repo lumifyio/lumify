@@ -95,7 +95,7 @@ define([
                     var $this = $(this);
                     if ($this.data('userId') === user.id) {
                         $this.find('.user-status')
-                            .removeClass('online offline unknown')
+                            .removeClass('active idle offline unknown')
                             .addClass((user.status && user.status.toLowerCase()) || 'unknown');
                     }
                 })
