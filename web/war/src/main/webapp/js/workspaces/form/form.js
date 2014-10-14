@@ -31,6 +31,7 @@ define([
             shareFormSelector: '.share-form',
             permissionsSelector: '.permissions',
             permissionsRadioSelector: '.popover input',
+            permissionsRadioLabelSelector: '.popover label',
             deleteSelector: '.delete',
             removeAccessSelector: '.remove-access'
         });
@@ -79,7 +80,10 @@ define([
                 this.on('shareWorkspaceWithUser', this.onShareWorkspaceWithUser);
                 this.on('click', {
                     deleteSelector: this.onDelete,
-                    removeAccessSelector: this.onRevokeAccess
+                    removeAccessSelector: this.onRevokeAccess,
+                    permissionsRadioLabelSelector: function(e) {
+                        e.stopPropagation();
+                    }
                 });
                 this.on('change', {
                     permissionsRadioSelector: this.onPermissionsChange
