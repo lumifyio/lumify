@@ -312,7 +312,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             if (count(termMention.getEdgeIds(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizations)) > 0) {
                 continue; // skip all resolved terms. They will be published by the edge.
             }
-            termMentionRepository.updateVisibility(termMention, originalVertexVisibility, lumifyVisibility.getVisibility(), authorizations);
+            termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
     }
 
@@ -401,7 +401,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex.getId(), authorizations)) {
-            termMentionRepository.updateVisibility(termMention, originalEdgeVisibility, lumifyVisibility.getVisibility(), authorizations);
+            termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
     }
 

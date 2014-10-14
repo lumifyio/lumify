@@ -3,6 +3,7 @@ package io.lumify.core.model.termMention;
 import com.google.inject.Inject;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.security.LumifyVisibility;
 import org.securegraph.*;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.util.FilterIterable;
@@ -43,15 +44,15 @@ public class TermMentionRepository {
         return graph.getVertex(termMentionId, authorizationsWithTermMention);
     }
 
-    public void updateVisibility(Vertex termMention, Visibility originalVisibility, Visibility newVisibility, Authorizations authorizations) {
+    public void updateVisibility(Vertex termMention, Visibility newVisibility, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
+        newVisibility = new LumifyVisibility().and(newVisibility, TermMentionRepository.VISIBILITY);
         ExistingElementMutation<Vertex> m = termMention.prepareMutation();
         m.alterElementVisibility(newVisibility);
         for (Property property : termMention.getProperties()) {
             m.alterPropertyVisibility(property, newVisibility);
         }
         m.save(authorizationsWithTermMention);
-
         for (Edge edge : termMention.getEdges(Direction.BOTH, authorizationsWithTermMention)) {
             ExistingElementMutation<Edge> edgeMutation = edge.prepareMutation();
             edgeMutation.alterElementVisibility(newVisibility);
