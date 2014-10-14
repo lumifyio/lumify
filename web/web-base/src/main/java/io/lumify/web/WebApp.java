@@ -72,18 +72,20 @@ public class WebApp extends App {
     }
 
     public void registerJavaScript(String scriptResourceName) {
+        String resourcePath = "/js" + scriptResourceName;
         if (devMode) {
-            get(scriptResourceName, new StaticResourceHandler(this.getClass(), scriptResourceName, "application/javascript"));
-            pluginsJsResources.add(scriptResourceName);
+            get(resourcePath, new StaticResourceHandler(this.getClass(), scriptResourceName, "application/javascript"));
+            pluginsJsResources.add(resourcePath);
         } else {
             pluginsJsResourceHandler.appendResource(scriptResourceName);
         }
     }
 
     public void registerCss(String cssResourceName) {
+        String resourcePath = "/css" + cssResourceName;
         if (devMode) {
-            get(cssResourceName, new StaticResourceHandler(this.getClass(), cssResourceName, "text/css"));
-            pluginsCssResources.add(cssResourceName);
+            get(resourcePath, new StaticResourceHandler(this.getClass(), cssResourceName, "text/css"));
+            pluginsCssResources.add(resourcePath);
         } else {
             pluginsCssResourceHandler.appendResource(cssResourceName);
         }
