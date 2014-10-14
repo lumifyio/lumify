@@ -34,14 +34,13 @@ public class SessionUser implements HttpSessionBindingListener, Serializable {
     public void valueUnbound(HttpSessionBindingEvent event) {
         UserStatus status = UserStatus.OFFLINE;
         LOGGER.info("setting userId %s status to %s", userId, status);
-        UserRepository userRepository = InjectHelper.getInstance(UserRepository.class);
-        userRepository.setStatus(userId, status);
-        User user = userRepository.findById(userId);
-        if (user != null) {
+        try {
+            UserRepository userRepository = InjectHelper.getInstance(UserRepository.class);
+            User user = userRepository.setStatus(userId, status);
             WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
             workQueueRepository.pushUserStatusChange(user, status);
-        } else {
-            LOGGER.warn("unable to push user status change");
+        } catch (Exception ex) {
+            LOGGER.error("exception while setting userId %s status to %s", userId, status, ex);
         }
     }
 }
