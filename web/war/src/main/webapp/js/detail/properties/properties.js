@@ -745,7 +745,7 @@ define([
 
         var totalPropertyCountsByName = {};
 
-        this.selectAll('tr')
+        this.selectAll('tr.property-group-header, tr.property-row')
             .data(function(pair) {
                 return _.chain(pair[1])
                     .map(function(p) {
