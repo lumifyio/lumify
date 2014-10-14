@@ -141,7 +141,7 @@
                                     <directory>src/main/webapp</directory>
                                     <filtering>true</filtering>
                                     <includes>
-                                        <include>index.html</include>
+                                        <include>index.hbs</include>
                                         <include>ping.html</include>
                                     </includes>
                                 </resource>
