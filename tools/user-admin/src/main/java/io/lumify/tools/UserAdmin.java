@@ -3,6 +3,7 @@ package io.lumify.tools;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
@@ -19,6 +20,7 @@ import static org.securegraph.util.IterableUtils.toList;
 public class UserAdmin extends CommandLineBase {
     private static final String CMD_ACTION_CREATE = "create";
     private static final String CMD_ACTION_LIST = "list";
+    private static final String CMD_ACTION_ACTIVE = "active";
     private static final String CMD_ACTION_UPDATE_PASSWORD = "update-password";
     private static final String CMD_ACTION_DELETE = "delete";
     private static final String CMD_ACTION_SET_PRIVILEGES = "set-privileges";
@@ -32,6 +34,7 @@ public class UserAdmin extends CommandLineBase {
     private static final String CMD_OPT_AUTHORIZATIONS = "authorizations";
     private static final String CMD_OPT_DISPLAYNAME = "displayname";
     private static final String CMD_OPT_EMAIL = "email";
+    private static final String CMD_OPT_IDLE = "idle";
 
     private static final String CMD_OPT_AS_TABLE = "as-table";
 
@@ -109,6 +112,13 @@ public class UserAdmin extends CommandLineBase {
                         .create("t")
         );
 
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_IDLE)
+                        .withDescription("Include idle users")
+                        .create()
+        );
+
         return opts;
     }
 
@@ -121,6 +131,9 @@ public class UserAdmin extends CommandLineBase {
         }
         if (args.contains(CMD_ACTION_LIST)) {
             return list(cmd);
+        }
+        if (args.contains(CMD_ACTION_ACTIVE)) {
+            return active(cmd);
         }
         if (args.contains(CMD_ACTION_UPDATE_PASSWORD)) {
             return updatePassword(cmd);
@@ -197,6 +210,44 @@ public class UserAdmin extends CommandLineBase {
                 printUser(user);
             }
         }
+        return 0;
+    }
+
+    private int active(CommandLine cmd) {
+        int skip = 0;
+        int limit = 100;
+        List<User> activeUsers = new ArrayList<User>();
+        while (true) {
+            List<User> users = toList(getUserRepository().findByStatus(skip, limit, UserStatus.ACTIVE));
+            if (users.size() == 0) {
+                break;
+            }
+            activeUsers.addAll(users);
+            skip += limit;
+        }
+        System.out.println(activeUsers.size() + " " + UserStatus.ACTIVE + " user" + (activeUsers.size() == 1 ? "" : "s"));
+        for (User user : activeUsers) {
+            printShortUser(user);
+        }
+
+        if (cmd.hasOption(CMD_OPT_IDLE)) {
+            skip = 0;
+            limit = 100;
+            List<User> idleUsers = new ArrayList<User>();
+            while (true) {
+                List<User> users = toList(getUserRepository().findByStatus(skip, limit, UserStatus.IDLE));
+                if (users.size() == 0) {
+                    break;
+                }
+                idleUsers.addAll(users);
+                skip += limit;
+            }
+            System.out.println(idleUsers.size() + " " + UserStatus.IDLE + " user" + (activeUsers.size() == 1 ? "" : "s"));
+            for (User user : idleUsers) {
+                printShortUser(user);
+            }
+        }
+
         return 0;
     }
 
@@ -319,6 +370,15 @@ public class UserAdmin extends CommandLineBase {
             user = getUserRepository().findById(userid);
         }
         return user;
+    }
+
+    private void printShortUser(User user) {
+        String username = user.getUsername();
+        String displayName = user.getDisplayName();
+        displayName = username.equals(displayName) ? "" : " " + displayName;
+        String emailAddress = user.getEmailAddress();
+        emailAddress = emailAddress == null ? "" : " " + emailAddress;
+        System.out.println(username + displayName + emailAddress);
     }
 
     private void printUser(User user) {

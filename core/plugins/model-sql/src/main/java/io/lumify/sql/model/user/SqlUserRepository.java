@@ -71,6 +71,17 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
+    public Iterable<User> findByStatus(int skip, int limit, UserStatus status) {
+        Session session = sessionManager.getSession();
+        List<User> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.status = :status")
+                .setParameter("status", status.toString())
+                .setFirstResult(skip)
+                .setMaxResults(limit)
+                .list();
+        return users;
+    }
+
+    @Override
     public User findById(String userId) {
         Session session = sessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.userId=:id")

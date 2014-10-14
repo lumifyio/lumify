@@ -124,6 +124,21 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
+    public Iterable<User> findByStatus(int skip, int limit, UserStatus status) {
+        return new ConvertingIterable<Vertex, User>(graph.query(authorizations)
+                .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .has(UserLumifyProperties.STATUS.getPropertyName(), status.toString())
+                .skip(skip)
+                .limit(limit)
+                .vertices()) {
+            @Override
+            protected User convert(Vertex vertex) {
+                return createFromVertex(vertex);
+            }
+        };
+    }
+
+    @Override
     public User findById(String userId) {
         return createFromVertex(findByIdUserVertex(userId));
     }

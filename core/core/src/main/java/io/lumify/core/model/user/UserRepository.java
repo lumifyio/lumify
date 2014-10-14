@@ -16,10 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toList;
 
@@ -37,6 +34,20 @@ public abstract class UserRepository {
     public abstract User findByUsername(String username);
 
     public abstract Iterable<User> find(int skip, int limit);
+
+    /*
+    simple and likely slow implementation expected to be overridden in production implementations
+     */
+    public Iterable<User> findByStatus(int skip, int limit, UserStatus status) {
+        List<User> allUsers = toList(find(skip, limit));
+        List<User> matchingUsers = new ArrayList<User>();
+        for (User user : allUsers) {
+            if (user.getUserStatus() == status) {
+                matchingUsers.add(user);
+            }
+        }
+        return matchingUsers;
+    }
 
     public abstract User findById(String userId);
 
