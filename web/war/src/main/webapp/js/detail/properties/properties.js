@@ -721,7 +721,14 @@ define([
         if ($header.is('.property-group-header')) {
             $tbody.toggleClass('collapsed expanded');
         } else if ($target.is('.show-more')) {
-            this.showMoreExpanded[$target.data('propertyName')] = true;
+            var isShowing = $target.data('showing');
+            $target.data('showing', !isShowing);
+            if (isShowing) {
+                delete this.showMoreExpanded[$target.data('propertyName')];
+            } else {
+                this.showMoreExpanded[$target.data('propertyName')] = true;
+            }
+
             this.reload();
         } else if ($target.is('.info')) {
             d3.event.stopPropagation();
@@ -749,11 +756,10 @@ define([
             .data(function(pair) {
                 return _.chain(pair[1])
                     .map(function(p) {
-                        totalPropertyCountsByName[p[0]] = p[1].length;
+                        totalPropertyCountsByName[p[0]] = p[1].length - maxItemsBeforeHidden;
                         if (p[0] in showMoreExpanded) {
                             return p[1];
                         }
-                        totalPropertyCountsByName[p[0]] -= maxItemsBeforeHidden;
                         return p[1].slice(0, maxItemsBeforeHidden);
                     })
                     .flatten()
@@ -820,8 +826,8 @@ define([
                         type: VALUE,
                         property: datum,
                         propertyIndex: currentPropertyIndex,
-                        showHidden: currentPropertyIndex === (maxItemsBeforeHidden - 1) &&
-                            !(datum.name in showMoreExpanded),
+                        showToggleLink: currentPropertyIndex === (maxItemsBeforeHidden - 1),
+                        isExpanded: datum.name in showMoreExpanded,
                         hidden: Math.max(0, totalPropertyCountsByName[datum.name])
                     }
                 ];
@@ -964,12 +970,13 @@ define([
                     })
                     .text(function(d) {
                         return i18n(
-                            'properties.button.show_more',
-                            F.number.pretty(d.hidden)
+                            'properties.button.' + (d.isExpanded ? 'hide_more' : 'show_more'),
+                            F.number.pretty(d.hidden),
+                            ontologyProperties.byTitle[d.property.name].displayName
                         );
                     })
                     .style('display', function(d) {
-                        if (d.showHidden && d.hidden > 0) {
+                        if (d.showToggleLink && d.hidden > 0) {
                             return 'block';
                         }
 
