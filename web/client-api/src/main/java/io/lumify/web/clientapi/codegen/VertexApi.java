@@ -793,6 +793,57 @@ public class VertexApi {
       }
     }
   }
+  public ClientApiVertexSearchResponse vertexGeoSearch (Double lat, Double lon, Double radius) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(lat == null || lon == null || radius == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/geo-search".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(lat)))
+      queryParams.put("lat", String.valueOf(lat));
+    if(!"null".equals(String.valueOf(lon)))
+      queryParams.put("lon", String.valueOf(lon));
+    if(!"null".equals(String.valueOf(radius)))
+      queryParams.put("radius", String.valueOf(radius));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVertexSearchResponse) ApiInvoker.deserialize(response, "", ClientApiVertexSearchResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
   public ClientApiVertexFindPathResponse findPath (String sourceGraphVertexId, String destGraphVertexId, Integer hops) throws ApiException {
     Object postBody = null;
     // verify required params are set

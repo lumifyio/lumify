@@ -637,6 +637,40 @@
             ]
         },
         {
+            "path": "/vertex/geo-search",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Searches the graph for vertices around a geo-location",
+                    "type": "ClientApiVertexSearchResponse",
+                    "nickname": "vertexGeoSearch",
+                    "parameters": [
+                        {
+                            "name": "lat",
+                            "description": "latitude",
+                            "required": true,
+                            "type": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "lon",
+                            "description": "longitude",
+                            "required": true,
+                            "type": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "radius",
+                            "description": "radius",
+                            "required": true,
+                            "type": "double",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "path": "/vertex/find-path",
             "operations": [
                 {

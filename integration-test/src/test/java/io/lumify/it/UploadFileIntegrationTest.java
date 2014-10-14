@@ -1,15 +1,18 @@
 package io.lumify.it;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.lumify.core.ingest.FileImport;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.type.GeoPoint;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,6 +40,7 @@ public class UploadFileIntegrationTest extends TestBase {
         assertRawRoute();
         alterVisibilityOfArtifactToAuth2();
         assertUser2DoesNotHaveAccessToAuth2();
+        testGeoSearch();
     }
 
     public void importArtifactAsUser1() throws ApiException, IOException {
@@ -191,6 +195,18 @@ public class UploadFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
 
         lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+
+        lumifyApi.logout();
+    }
+
+    private void testGeoSearch() throws ApiException, JsonProcessingException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        String geoPoint = ObjectMapperFactory.getInstance().writeValueAsString(new GeoPoint(38.8951, -77.0367));
+        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", TestOntology.GEO_LOCATION.getPropertyName(), geoPoint, "", "justification", null, null);
+
+        ClientApiVertexSearchResponse geoSearchResults = lumifyApi.getVertexApi().vertexGeoSearch(38.8951, -77.0367, 1000.0);
+        assertEquals(1, geoSearchResults.getVertices().size());
 
         lumifyApi.logout();
     }

@@ -1,18 +1,17 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -21,7 +20,6 @@ import org.securegraph.type.GeoCircle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
 
 public class VertexGeoSearch extends BaseRequestHandler {
     private final Graph graph;
@@ -49,25 +47,21 @@ public class VertexGeoSearch extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        JSONObject results = new JSONObject();
-        JSONArray vertices = new JSONArray();
+        ClientApiVertexSearchResponse results = new ClientApiVertexSearchResponse();
 
         for (OntologyProperty property : this.ontologyRepository.getProperties()) {
             if (property.getDataType() != PropertyType.GEO_LOCATION) {
                 continue;
             }
 
-            Iterator<Vertex> vertexIterator = graph.query(authorizations).
+            Iterable<Vertex> vertices = graph.query(authorizations).
                     has(property.getTitle(), GeoCompare.WITHIN, new GeoCircle(latitude, longitude, radius)).
-                    vertices().
-                    iterator();
-            while (vertexIterator.hasNext()) {
-                vertices.put(JsonSerializer.toJson(vertexIterator.next(), workspaceId, authorizations));
+                    vertices();
+            for (Vertex vertex : vertices) {
+                results.getVertices().add(ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations));
             }
         }
 
-        results.put("vertices", vertices);
-
-        respondWithJson(response, results);
+        respondWithClientApiObject(response, results);
     }
 }
