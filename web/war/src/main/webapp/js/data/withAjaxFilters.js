@@ -25,6 +25,7 @@ define([], function() {
             /^vertex\/(un)?resolve/,
             /^vertex\/import/,
             /^vertex\/audit/,
+            /^vertex\/property/,
             /^edge/
         ],
 
