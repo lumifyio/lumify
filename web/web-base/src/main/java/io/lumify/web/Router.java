@@ -7,24 +7,18 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.miniweb.Handler;
-import io.lumify.miniweb.handlers.StaticFileHandler;
 import io.lumify.web.privilegeFilters.AdminPrivilegeFilter;
 import io.lumify.web.privilegeFilters.EditPrivilegeFilter;
 import io.lumify.web.privilegeFilters.PublishPrivilegeFilter;
 import io.lumify.web.privilegeFilters.ReadPrivilegeFilter;
+import io.lumify.web.routes.Index;
 import io.lumify.web.routes.admin.AdminList;
 import io.lumify.web.routes.admin.AdminUploadOntology;
 import io.lumify.web.routes.admin.PluginList;
 import io.lumify.web.routes.config.Configuration;
 import io.lumify.web.routes.edge.*;
-import io.lumify.web.routes.vertex.ResolveDetectedObject;
-import io.lumify.web.routes.vertex.ResolveTermEntity;
-import io.lumify.web.routes.vertex.UnresolveDetectedObject;
-import io.lumify.web.routes.vertex.UnresolveTermEntity;
-import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.ontology.Ontology;
-import io.lumify.web.routes.plugins.PluginsCss;
-import io.lumify.web.routes.plugins.PluginsJavaScript;
+import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.resource.ResourceGet;
 import io.lumify.web.routes.user.*;
 import io.lumify.web.routes.vertex.*;
@@ -50,7 +44,6 @@ public class Router extends HttpServlet {
     private static final String JETTY_MULTIPART_CONFIG_ELEMENT = "org.eclipse.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
-    private UserAgentFilter userAgentFilter = new UserAgentFilter();
 
     public Router(ServletContext servletContext) {
         try {
@@ -63,9 +56,7 @@ public class Router extends HttpServlet {
 
             Class<? extends Handler> csrfProtector = LumifyCsrfHandler.class;
 
-            app.get("/", userAgentFilter, new StaticFileHandler(servletContext, "/index.html"));
-            app.get("/plugins.css", csrfProtector, PluginsCss.class);
-            app.get("/plugins.js", csrfProtector, PluginsJavaScript.class);
+            app.get("/", UserAgentFilter.class, csrfProtector, Index.class);
             app.get("/configuration", csrfProtector, Configuration.class);
             app.post("/logout", csrfProtector, Logout.class);
 

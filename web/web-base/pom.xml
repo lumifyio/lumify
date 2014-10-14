@@ -102,6 +102,11 @@
             <groupId>net.sf.uadetector</groupId>
             <artifactId>uadetector-resources</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
