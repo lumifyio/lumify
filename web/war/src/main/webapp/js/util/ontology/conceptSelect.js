@@ -21,7 +21,8 @@ define([
             fieldSelector: 'input',
             showAdminConcepts: false,
             onlySearchable: false,
-            restrictConcept: ''
+            restrictConcept: '',
+            limitRelatedToConceptId: ''
         });
 
         this.after('initialize', function() {
@@ -71,8 +72,9 @@ define([
         this.setupTypeahead = function() {
             var self = this;
 
-            ontologyService.concepts().done(function(concepts) {
-                concepts = self.transformConcepts(concepts);
+            ontologyService.concepts()
+                .then(this.transformConcepts.bind(this))
+                .done(function(concepts) {
 
                 concepts.splice(0, 0, self.attr.defaultText);
 
@@ -124,61 +126,81 @@ define([
         }
 
         this.transformConcepts = function(concepts) {
-            var self = this;
+            var self = this,
+                deferred = $.Deferred(),
+                limitRelatedSearch;
 
-            this.allConcepts = _.chain(
-                    concepts[self.attr.showAdminConcepts ? 'forAdmin' : 'byTitle']
-                )
-                .filter(function(c) {
-                    if (c.userVisible === false) {
-                        return false;
-                    }
+            if (this.attr.limitRelatedToConceptId) {
+                limitRelatedSearch = ontologyService.relationships();
+            } else {
+                limitRelatedSearch = $.Deferred().resolve();
+            }
 
-                    if (self.attr.restrictConcept) {
-
-                        // Walk up tree to see if any match
-                        var parentConceptId = c.id,
-                            shouldRestrictConcept = true;
-                        do {
-                            if (self.attr.restrictConcept === parentConceptId) {
-                                shouldRestrictConcept = false;
-                                break;
-                            }
-                        } while (
-                            parentConceptId &&
-                            (parentConceptId = concepts.byId[parentConceptId].parentConcept)
-                        );
-
-                        if (shouldRestrictConcept) {
+            limitRelatedSearch.done(function(r) {
+                self.allConcepts = _.chain(
+                        concepts[self.attr.showAdminConcepts ? 'forAdmin' : 'byTitle']
+                    )
+                    .filter(function(c) {
+                        if (c.userVisible === false) {
                             return false;
                         }
-                    }
 
-                    if (self.attr.onlySearchable && c.searchable === false) {
-                        return false;
-                    }
+                        if (self.attr.restrictConcept) {
 
-                    return true;
-                })
-                .map(function(c) {
-                    return {
-                        id: c.id,
-                        toString: function() {
-                            return this.id;
-                        },
-                        displayName: c.displayName,
-                        flattenedDisplayName: c.flattenedDisplayName,
-                        depth: c.flattenedDisplayName
-                                 .replace(/[^\/]/g, '').length,
-                        selected: self.attr.selected === c.id,
-                        rawConcept: c
-                    }
-                })
-                .value();
+                            // Walk up tree to see if any match
+                            var parentConceptId = c.id,
+                                shouldRestrictConcept = true;
+                            do {
+                                if (self.attr.restrictConcept === parentConceptId) {
+                                    shouldRestrictConcept = false;
+                                    break;
+                                }
+                            } while (
+                                parentConceptId &&
+                                (parentConceptId = concepts.byId[parentConceptId].parentConcept)
+                            );
 
-            this.conceptsById = _.indexBy(this.allConcepts, 'id');
+                            if (shouldRestrictConcept) {
+                                return false;
+                            }
+                        }
 
-            return this.allConcepts;
+                        if (self.attr.onlySearchable && c.searchable === false) {
+                            return false;
+                        }
+
+                        if (self.attr.limitRelatedToConceptId &&
+                           r && r.groupedBySourceConcept &&
+                           r.groupedBySourceConcept[self.attr.limitRelatedToConceptId]) {
+                            if (r.groupedBySourceConcept[self.attr.limitRelatedToConceptId].indexOf(c.id) === -1) {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    })
+                    .map(function(c) {
+                        return {
+                            id: c.id,
+                            toString: function() {
+                                return this.id;
+                            },
+                            displayName: c.displayName,
+                            flattenedDisplayName: c.flattenedDisplayName,
+                            depth: c.flattenedDisplayName
+                                     .replace(/[^\/]/g, '').length,
+                            selected: self.attr.selected === c.id,
+                            rawConcept: c
+                        }
+                    })
+                    .value();
+
+                self.conceptsById = _.indexBy(self.allConcepts, 'id');
+
+                deferred.resolve(self.allConcepts);
+            });
+
+            return deferred;
         }
     }
 

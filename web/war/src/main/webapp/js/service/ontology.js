@@ -148,13 +148,15 @@ define([
     OntologyService.prototype.relationships = function() {
         return $.when(this.concepts(), this.ontology())
                     .then(function(concepts, ontology) {
-                        var list = _.sortBy(ontology.relationships, 'displayName');
+                        var list = _.sortBy(ontology.relationships, 'displayName'),
+                            groupedBySource = {};
                         return {
                             list: list,
                             byId: _.indexBy(ontology.relationships, 'id'),
                             byTitle: _.indexBy(ontology.relationships, 'title'),
-                            groupedBySourceDestConcepts: conceptGrouping(concepts, list),
-                            groupedBySourceDestConceptsKeyGen: genKey
+                            groupedBySourceDestConcepts: conceptGrouping(concepts, list, groupedBySource),
+                            groupedBySourceDestConceptsKeyGen: genKey,
+                            groupedBySourceConcept: groupedBySource
                         };
                     });
 
@@ -165,7 +167,7 @@ define([
         // Calculates cache with all possible mappings from source->dest
         // including all possible combinations of source->children and
         // dest->children
-        function conceptGrouping(concepts, relationships) {
+        function conceptGrouping(concepts, relationships, groupedBySource) {
             var groups = {},
                 addToAllSourceDestChildrenGroups = function(r, source, dest) {
                     var key = genKey(source, dest);
@@ -173,8 +175,14 @@ define([
                     if (!groups[key]) {
                         groups[key] = [];
                     }
+                    if (!groupedBySource[source]) {
+                        groupedBySource[source] = [];
+                    }
 
                     groups[key].push(r);
+                    if (groupedBySource[source].indexOf(dest) === -1) {
+                        groupedBySource[source].push(dest);
+                    }
 
                     var destConcept = concepts.byId[dest]
                     if (destConcept && destConcept.children) {

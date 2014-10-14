@@ -5,6 +5,7 @@ define([
     'service/config',
     'service/vertex',
     'util/withFormFieldErrors',
+    'data',
     '../withPopover'
 ], function(
     defineComponent,
@@ -12,6 +13,7 @@ define([
     ConfigService,
     VertexService,
     withFormFieldErrors,
+    appData,
     withPopover) {
     'use strict';
 
@@ -38,6 +40,8 @@ define([
         });
 
         this.after('initialize', function() {
+            var self = this;
+
             this.after('setupWithTemplate', function() {
                 this.on(this.popover, 'conceptSelected', this.onConceptSelected);
                 this.on(this.popover, 'click', {
@@ -47,9 +51,14 @@ define([
                     promptAddButtonSelector: this.onPromptAdd
                 })
 
-                ConceptSelector.attachTo(this.popover.find('.concept'), {
-                    defaultText: i18n('popovers.add_related.concept.default_text')
-                });
+                appData.refresh(this.attr.relatedToVertexId)
+                    .done(function(vertex) {
+                        var conceptId = vertex.concept.id;
+                        ConceptSelector.attachTo(self.popover.find('.concept'), {
+                            defaultText: i18n('popovers.add_related.concept.default_text'),
+                            limitRelatedToConceptId: conceptId
+                        });
+                    })
 
                 this.positionDialog();
             });
