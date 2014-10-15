@@ -20,6 +20,10 @@
             "description": "Vertex operations"
         },
         {
+            "path": "/edge.json",
+            "description": "Edge operations"
+        },
+        {
             "path": "/ontology.json",
             "description": "Ontology operations"
         }

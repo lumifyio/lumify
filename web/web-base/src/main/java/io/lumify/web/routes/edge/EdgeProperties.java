@@ -1,15 +1,15 @@
 package io.lumify.web.routes.edge;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiEdge;
 import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,10 +47,8 @@ public class EdgeProperties extends BaseRequestHandler {
         Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
         Vertex targetVertex = edge.getVertex(Direction.IN, authorizations);
 
-        JSONObject results = JsonSerializer.toJson(edge, workspaceId, authorizations);
-        results.put("source", JsonSerializer.toJson(sourceVertex, workspaceId, authorizations));
-        results.put("target", JsonSerializer.toJson(targetVertex, workspaceId, authorizations));
+        ClientApiEdge results = ClientApiConverter.toClientApiEdgeWithVertexData(edge, sourceVertex, targetVertex, workspaceId, authorizations);
 
-        respondWithJson(response, results);
+        respondWithClientApiObject(response, results);
     }
 }

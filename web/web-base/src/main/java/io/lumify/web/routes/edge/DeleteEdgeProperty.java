@@ -78,14 +78,8 @@ public class DeleteEdgeProperty extends BaseRequestHandler {
         edge.removeProperty(propertyKey, propertyName, authorizations);
         graph.flush();
 
-        List<Property> properties = new ArrayList<Property>();
-        for (Property p : edge.getProperties()) {
-            properties.add(p);
-        }
-
         workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName, workspaceId, null);
 
-        JSONArray resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
-        respondWithJson(response, resultsJson);
+        respondWithSuccessJson(response);
     }
 }

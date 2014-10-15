@@ -14,6 +14,7 @@ public class LumifyApi {
     private final AdminApiExt adminApi;
     private final VertexApiExt vertexApi;
     private final OntologyApiExt ontologyApi;
+    private final EdgeApiExt edgeApi;
     private final String basePath;
     private ClientApiUser me;
 
@@ -31,6 +32,9 @@ public class LumifyApi {
 
         vertexApi = new VertexApiExt();
         vertexApi.setBasePath(basePath);
+
+        edgeApi = new EdgeApiExt();
+        edgeApi.setBasePath(basePath);
 
         ontologyApi = new OntologyApiExt();
         ontologyApi.setBasePath(basePath);
@@ -54,6 +58,10 @@ public class LumifyApi {
 
     public OntologyApiExt getOntologyApi() {
         return ontologyApi;
+    }
+
+    public EdgeApiExt getEdgeApi() {
+        return edgeApi;
     }
 
     public String getCurrentWorkspaceId() {

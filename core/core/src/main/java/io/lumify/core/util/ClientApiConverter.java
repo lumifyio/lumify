@@ -69,12 +69,24 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
 
     public static ClientApiEdge toClientApiEdge(Edge edge, String workspaceId, Authorizations authorizations) {
         ClientApiEdge e = new ClientApiEdge();
+        populateClientApiEdge(e, edge, workspaceId, authorizations);
+        return e;
+    }
+
+    public static ClientApiEdge toClientApiEdgeWithVertexData(Edge edge, Vertex source, Vertex target, String workspaceId, Authorizations authorizations) {
+        ClientApiEdgeWithVertexData e = new ClientApiEdgeWithVertexData();
+        e.setSource(toClientApiVertex(source, workspaceId, authorizations));
+        e.setTarget(toClientApiVertex(target, workspaceId, authorizations));
+        populateClientApiEdge(e, edge, workspaceId, authorizations);
+        return e;
+    }
+
+    public static void populateClientApiEdge(ClientApiEdge e, Edge edge, String workspaceId, Authorizations authorizations) {
         e.setLabel(edge.getLabel());
         e.setSourceVertexId(edge.getVertexId(Direction.OUT));
         e.setDestVertexId(edge.getVertexId(Direction.IN));
 
         populateClientApiElement(e, edge, workspaceId, authorizations);
-        return e;
     }
 
     private static void populateClientApiElement(ClientApiElement clientApiElement, org.securegraph.Element element, String workspaceId, Authorizations authorizations) {

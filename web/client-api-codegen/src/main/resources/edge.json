@@ -1,0 +1,37 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/edge",
+    "apis": [
+        {
+            "path": "/edge/properties",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the edge properties",
+                    "type": "ClientApiEdgeWithVertexData",
+                    "nickname": "getByEdgeId",
+                    "parameters": [
+                        {
+                            "name": "graphEdgeId",
+                            "description": "ID of the edge",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Edge not found"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+
+    }
+}

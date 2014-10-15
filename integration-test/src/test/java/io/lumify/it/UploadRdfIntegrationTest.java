@@ -139,6 +139,12 @@ public class UploadRdfIntegrationTest extends TestBase {
         ClientApiVertexEdges artifactEdges = lumifyApi.getVertexApi().getEdges(artifactVertexId, null, null, null);
         assertEquals(3, artifactEdges.getTotalReferences());
         assertEquals(3, artifactEdges.getRelationships().size());
+
+        for (ClientApiVertexEdges.Edge e : artifactEdges.getRelationships()) {
+            String edgeId = e.getRelationship().getId();
+            ClientApiEdgeWithVertexData edge = lumifyApi.getEdgeApi().getByEdgeId(edgeId);
+            LOGGER.info("edge: %s", edge.toString());
+        }
     }
 
     private void assertFindPath(LumifyApi lumifyApi) throws ApiException {
