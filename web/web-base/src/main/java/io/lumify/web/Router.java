@@ -63,8 +63,6 @@ public class Router extends HttpServlet {
 
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 
-            app.get("/system-notifications", authenticator, csrfProtector, ReadPrivilegeFilter.class, SystemNotification.class);
-
             app.get("/resource", authenticator, csrfProtector, ReadPrivilegeFilter.class, ResourceGet.class);
             app.get("/map/marker/image", csrfProtector, MapMarkerImage.class);  // TODO combine with /resource
 
