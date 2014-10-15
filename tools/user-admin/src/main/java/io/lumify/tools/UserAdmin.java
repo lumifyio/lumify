@@ -240,7 +240,7 @@ public class UserAdmin extends CommandLineBase {
                 idleUsers.addAll(users);
                 skip += limit;
             }
-            System.out.println(idleUsers.size() + " " + UserStatus.IDLE + " user" + (activeUsers.size() == 1 ? "" : "s"));
+            System.out.println(idleUsers.size() + " " + UserStatus.IDLE + " user" + (idleUsers.size() == 1 ? "" : "s"));
             printUsers(idleUsers);
         }
 
