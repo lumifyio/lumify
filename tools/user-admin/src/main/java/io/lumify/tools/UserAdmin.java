@@ -226,9 +226,7 @@ public class UserAdmin extends CommandLineBase {
             skip += limit;
         }
         System.out.println(activeUsers.size() + " " + UserStatus.ACTIVE + " user" + (activeUsers.size() == 1 ? "" : "s"));
-        for (User user : activeUsers) {
-            printShortUser(user);
-        }
+        printUsers(activeUsers);
 
         if (cmd.hasOption(CMD_OPT_IDLE)) {
             skip = 0;
@@ -243,9 +241,7 @@ public class UserAdmin extends CommandLineBase {
                 skip += limit;
             }
             System.out.println(idleUsers.size() + " " + UserStatus.IDLE + " user" + (activeUsers.size() == 1 ? "" : "s"));
-            for (User user : idleUsers) {
-                printShortUser(user);
-            }
+            printUsers(idleUsers);
         }
 
         return 0;
@@ -370,15 +366,6 @@ public class UserAdmin extends CommandLineBase {
             user = getUserRepository().findById(userid);
         }
         return user;
-    }
-
-    private void printShortUser(User user) {
-        String username = user.getUsername();
-        String displayName = user.getDisplayName();
-        displayName = username.equals(displayName) ? "" : " " + displayName;
-        String emailAddress = user.getEmailAddress();
-        emailAddress = emailAddress == null ? "" : " " + emailAddress;
-        System.out.println(username + displayName + emailAddress);
     }
 
     private void printUser(User user) {
