@@ -15,6 +15,7 @@ define([
     'detail/detail',
     'map/map',
     'help/help',
+    'configuration/plugins/logout/plugin',
     'util/mouseOverlay',
     'util/withFileDrop',
     'util/vertex/menu',
@@ -39,6 +40,7 @@ define([
     Detail,
     Map,
     Help,
+    LogoutExtensions,
     MouseOverlay,
     withFileDrop,
     VertexMenu,
@@ -423,24 +425,26 @@ define([
 
             this.trigger('willLogout');
 
-            userService.logout()
-                .fail(function() {
-                    require(['login'], function(Login) {
-                        $(document.body)
-                            .removeClass('animatelogin animateloginstart')
-                            .append('<div id="login"/>');
-                        Login.teardownAll();
-                        Login.attachTo('#login', {
-                            errorMessage: data && data.message || i18n('lumify.server.not_found')
+            if (LogoutExtensions.executeHandlers()) {
+                userService.logout()
+                    .fail(function() {
+                        require(['login'], function(Login) {
+                            $(document.body)
+                                .removeClass('animatelogin animateloginstart')
+                                .append('<div id="login"/>');
+                            Login.teardownAll();
+                            Login.attachTo('#login', {
+                                errorMessage: data && data.message || i18n('lumify.server.not_found')
+                            });
+                            _.defer(function() {
+                                self.teardown();
+                            });
                         });
-                        _.defer(function() {
-                            self.teardown();
-                        });
+                    })
+                    .done(function() {
+                        window.location.reload();
                     });
-                })
-                .done(function() {
-                    window.location.reload();
-                });
+            }
         };
 
         this.onChatMessage = function(e, data) {
