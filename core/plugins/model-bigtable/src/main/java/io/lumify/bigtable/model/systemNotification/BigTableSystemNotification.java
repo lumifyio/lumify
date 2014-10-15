@@ -1,0 +1,98 @@
+package io.lumify.bigtable.model.systemNotification;
+
+import com.altamiracorp.bigtable.model.ColumnFamily;
+import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.bigtable.model.Value;
+import io.lumify.bigtable.model.systemNotification.model.SystemNotificationRowKey;
+import io.lumify.core.model.systemNotification.SystemNotification;
+import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+
+import java.util.Date;
+
+public class BigTableSystemNotification extends Row<SystemNotificationRowKey> implements SystemNotification {
+    public static final String TABLE_NAME = "lumify_systemNotifications";
+    public static final String COLUMN_FAMILY_NAME = "";
+    public static final String SEVERITY_COLUMN_NAME = "severity";
+    public static final String TITLE_COLUMN_NAME = "title";
+    public static final String MESSAGE_COLUMN_NAME = "message";
+    public static final String START_DATE_COLUMN_NAME = "startDate";
+    public static final String END_DATE_COLUMN_NAME = "endDate";
+
+    public BigTableSystemNotification(SystemNotificationRowKey rowKey) {
+        super(TABLE_NAME, rowKey);
+    }
+
+    public BigTableSystemNotification() {
+        super(TABLE_NAME);
+    }
+
+    @Override
+    public String getId() {
+        return getRowKey().getRowKey();
+    }
+
+    public void setSeverity(SystemNotificationSeverity severity) {
+        getColumnFamily().set(SEVERITY_COLUMN_NAME, severity.toString());
+    }
+
+    @Override
+    public SystemNotificationSeverity getSeverity() {
+        return SystemNotificationSeverity.valueOf(Value.toString(getColumnFamily().get(SEVERITY_COLUMN_NAME)));
+    }
+
+    public void setTitle(String title) {
+        getColumnFamily().set(TITLE_COLUMN_NAME, title);
+    }
+
+    @Override
+    public String getTitle() {
+        return Value.toString(getColumnFamily().get(TITLE_COLUMN_NAME));
+    }
+
+    public void setMessage(String message) {
+        getColumnFamily().set(MESSAGE_COLUMN_NAME, message);
+    }
+
+    @Override
+    public String getMessage() {
+        return Value.toString(getColumnFamily().get(MESSAGE_COLUMN_NAME));
+    }
+
+    public void setStartDate(Date startDate) {
+        if (startDate == null) {
+            startDate = new Date();
+        }
+        getColumnFamily().set(START_DATE_COLUMN_NAME, startDate.getTime());
+    }
+
+    @Override
+    public Date getStartDate() {
+        return new Date(Value.toLong(getColumnFamily().get(START_DATE_COLUMN_NAME)));
+    }
+
+    public void setEndDate(Date endDate) {
+        if (endDate != null) {
+            getColumnFamily().set(END_DATE_COLUMN_NAME, endDate.getTime());
+        } else {
+            throw new IllegalArgumentException("unable to set a null end date");
+        }
+    }
+
+    @Override
+    public Date getEndDate() {
+        Long endDate = Value.toLong(getColumnFamily().get(END_DATE_COLUMN_NAME));
+        if (endDate != null) {
+            return new Date(endDate);
+        }
+        return null;
+    }
+
+    private ColumnFamily getColumnFamily() {
+        ColumnFamily cf = get(COLUMN_FAMILY_NAME);
+        if (cf == null) {
+            cf = new ColumnFamily(COLUMN_FAMILY_NAME);
+            addColumnFamily(cf);
+        }
+        return cf;
+    }
+}
