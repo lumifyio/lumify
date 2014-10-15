@@ -4,7 +4,7 @@
 
   <h1 title="<%= F.vertex.title(vertex) %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= F.vertex.title(vertex) %><div class="subtitle"><%= vertex.concept.displayName %></div></h1>
 
-  <div class="detail-toolbar">
+  <!--div class="detail-toolbar">
     <div class="btn-toolbar">
       <% var sourceUrl = _.findWhere(vertex.properties, { name: 'http://lumify.io#sourceUrl' }); %>
       <% if (sourceUrl) { %>
@@ -14,7 +14,9 @@
 
       <%- auditsButton %>
     </div>
-  </div>
+  </div-->
+  <div class="comp-toolbar"></div>
+
 </div>
 
 <div class="nav-with-background">

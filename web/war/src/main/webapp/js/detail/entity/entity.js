@@ -6,6 +6,7 @@ define([
     '../properties/properties',
     '../withTypeContent',
     '../withHighlighting',
+    '../toolbar/toolbar',
     'tpl!./entity',
     'tpl!./relationships',
     'tpl!util/alert',
@@ -23,6 +24,7 @@ define([
     Properties,
     withTypeContent,
     withHighlighting,
+    Toolbar,
     template,
     relationshipsTemplate,
     alertTemplate,
@@ -53,6 +55,7 @@ define([
             glyphIconSelector: '.entity-glyphIcon',
             propertiesSelector: '.properties',
             titleSelector: '.entity-title',
+            toolbarSelector: '.comp-toolbar',
             relationshipsHeaderSelector: '.relationships section.collapsible h1',
             relationshipsPagingButtonsSelector: 'section.collapsible .paging button'
         });
@@ -212,6 +215,9 @@ define([
                         auditsButton: self.auditsButton(),
                         F: F
                     }));
+
+                    Toolbar.attachTo(self.select('toolbarSelector'), {
+                    });
 
                     Image.attachTo(self.select('glyphIconSelector'), {
                         data: vertex,

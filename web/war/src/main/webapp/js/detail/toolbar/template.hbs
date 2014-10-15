@@ -1,0 +1,22 @@
+<ul>
+  {{#each toolbar~}}
+  <li{{#if submenu}} class="has-submenu"{{/if}}>
+    <a>
+      <strong>{{ title }}</strong>
+    </a>
+    {{#if submenu~}}
+    <ul>
+      {{#each submenu~}}
+      <li data-event="{{ event }}">
+        <a>{{ title }}
+          {{#if subtitle}}
+          <div class="subtitle">{{ subtitle }}</div>
+          {{/if}}
+        </a>
+      </li>
+      {{~/each}}
+    </ul>
+    {{~/if}}
+  </li>
+  {{~/each}}
+</ul>

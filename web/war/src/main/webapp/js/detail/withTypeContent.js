@@ -46,6 +46,8 @@ define([
 
             this.auditDisplayed = false;
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
+            this.on('addNewProperty', this.onAddNewProperty);
+            this.on('openFullscreen', this.onOpenFullscreen);
 
             this.on('click', {
                 auditSelector: this.onAuditToggle
@@ -61,6 +63,15 @@ define([
                 }
             });
         });
+
+        this.onAddNewProperty = function(event) {
+            this.trigger(this.select('propertiesSelector'), 'editProperty');
+        };
+
+        this.onOpenFullscreen = function(event) {
+            var url = F.vertexUrl.url([this.attr.data.id], appData.workspaceId);
+            window.open(url);
+        };
 
         this.debouncedConceptTypeChange = function(vertex) {
             this.trigger(document, 'selectObjects', {

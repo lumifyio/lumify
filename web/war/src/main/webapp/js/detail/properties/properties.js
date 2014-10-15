@@ -674,7 +674,7 @@ define([
                         .find('td')
                 );
             } else {
-                root.insertAfter(button);
+                $('<tr><td colspan="3"></td></tr>').prependTo(this.$node.find('table')).find('td').append(root);
             }
 
             PropertyForm.teardownAll();
