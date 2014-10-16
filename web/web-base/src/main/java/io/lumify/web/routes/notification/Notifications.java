@@ -35,14 +35,14 @@ public class Notifications extends BaseRequestHandler {
         JSONObject notifications = new JSONObject();
 
         JSONObject systemNotifications = new JSONObject();
-        systemNotifications.put("active", new JSONArray(systemNotificationRepository.getActiveNotifications()));
+        systemNotifications.put("active", new JSONArray(systemNotificationRepository.getActiveNotifications(getUser(request))));
         int futureDays = DEFAULT_FUTURE_DAYS;
         String futureDaysParameter = getOptionalParameter(request, FUTURE_DAYS_PARAMETER_NAME);
         if (futureDaysParameter != null) {
             futureDays = Integer.parseInt(futureDaysParameter);
         }
         Date maxDate = DateUtils.addDays(new Date(), futureDays);
-        systemNotifications.put("future", new JSONArray(systemNotificationRepository.getFutureNotifications(maxDate)));
+        systemNotifications.put("future", new JSONArray(systemNotificationRepository.getFutureNotifications(maxDate, getUser(request))));
 
         JSONArray userNotifications = new JSONArray(); // TODO: return notifications for the current user (e.g. completed long running tasks)
 

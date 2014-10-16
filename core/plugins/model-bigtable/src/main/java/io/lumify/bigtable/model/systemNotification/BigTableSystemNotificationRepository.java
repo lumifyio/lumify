@@ -2,12 +2,14 @@ package io.lumify.bigtable.model.systemNotification;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
 import io.lumify.bigtable.model.systemNotification.model.SystemNotificationRowKey;
 import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,38 +17,39 @@ import java.util.List;
 import java.util.UUID;
 
 public class BigTableSystemNotificationRepository extends SystemNotificationRepository {
-    private ModelUserContext modelUserContext;
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BigTableSystemNotificationRepository.class);
     private io.lumify.bigtable.model.systemNotification.model.SystemNotificationRepository repository;
 
     @Inject
-    public BigTableSystemNotificationRepository(ModelUserContext modelUserContext, ModelSession modelSession) {
-        this.modelUserContext = modelUserContext;
+    public BigTableSystemNotificationRepository(ModelSession modelSession) {
         repository = new io.lumify.bigtable.model.systemNotification.model.SystemNotificationRepository(modelSession);
     }
 
     @Override
-    public List<SystemNotification> getActiveNotifications() {
+    public List<SystemNotification> getActiveNotifications(User user) {
         Date now = new Date();
         List<SystemNotification> activeNotifications = new ArrayList<SystemNotification>();
-        for (SystemNotification notification : repository.findAll(modelUserContext)) {
+        for (SystemNotification notification : repository.findAll(user.getModelUserContext())) {
             if (notification.getStartDate().after(now)) {
                 if (notification.getEndDate() == null || notification.getEndDate().after(now)) {
                     activeNotifications.add(notification);
                 }
             }
         }
+        LOGGER.debug("returning %d active system notifications", activeNotifications.size());
         return activeNotifications;
     }
 
     @Override
-    public List<SystemNotification> getFutureNotifications(Date maxDate) {
+    public List<SystemNotification> getFutureNotifications(Date maxDate, User user) {
         Date now = new Date();
         List<SystemNotification> futureNotifications = new ArrayList<SystemNotification>();
-        for (SystemNotification notification : repository.findAll(modelUserContext)) {
+        for (SystemNotification notification : repository.findAll(user.getModelUserContext())) {
             if (notification.getStartDate().after(now) && notification.getStartDate().before(maxDate)) {
                 futureNotifications.add(notification);
             }
         }
+        LOGGER.debug("returning %d future system notifications", futureNotifications.size());
         return futureNotifications;
     }
 

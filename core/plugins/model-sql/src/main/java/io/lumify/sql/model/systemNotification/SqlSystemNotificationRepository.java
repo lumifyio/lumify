@@ -5,6 +5,9 @@ import com.google.inject.Singleton;
 import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import org.hibernate.Session;
 
@@ -13,6 +16,7 @@ import java.util.List;
 
 @Singleton
 public class SqlSystemNotificationRepository extends SystemNotificationRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlSystemNotificationRepository.class);
     private final HibernateSessionManager sessionManager;
 
     @Inject
@@ -21,22 +25,26 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
     }
 
     @Override
-    public List<SystemNotification> getActiveNotifications() {
+    public List<SystemNotification> getActiveNotifications(User user) {
         Session session = sessionManager.getSession();
-        return session.createQuery(
+        List<SystemNotification> activeNotifications = session.createQuery(
                 "select * from " + SqlSystemNotification.class.getSimpleName() + " as sn where sn.start_date <= :now and (sn.end_date is null or sn.end_date > :now")
                 .setParameter("now", new Date())
                 .list();
+        LOGGER.debug("returning %d active system notifications", activeNotifications.size());
+        return activeNotifications;
     }
 
     @Override
-    public List<SystemNotification> getFutureNotifications(Date maxDate) {
+    public List<SystemNotification> getFutureNotifications(Date maxDate, User user) {
        Session session = sessionManager.getSession();
-        return session.createQuery(
+        List<SystemNotification> futureNotifications = session.createQuery(
                 "select * from " + SqlSystemNotification.class.getSimpleName() + " as sn where sn.start_date > :now and sn.start_date < :maxDate")
                 .setParameter("now", new Date())
                 .setParameter("maxDate", maxDate)
                 .list();
+        LOGGER.debug("returning %d future system notifications", futureNotifications.size());
+        return futureNotifications;
     }
 
     @Override

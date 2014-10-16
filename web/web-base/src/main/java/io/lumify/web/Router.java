@@ -36,7 +36,6 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class Router extends HttpServlet {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Router.class);
-    private static final LumifyLogger LOGGER_ACCESS = LumifyLoggerFactory.getLogger(Router.class.getName() + "-ACCESS");
 
     /**
      * Copied from org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT.
