@@ -33,6 +33,7 @@ public final class Configuration {
     public static final String AUDIT_REPOSITORY = "repository.audit";
     public static final String ARTIFACT_THUMBNAIL_REPOSITORY = "repository.artifactThumbnail";
     public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
+    public static final String SYSTEM_NOTIFICATION_REPOSITORY = "repository.systemNotification";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
     public static final String ONTOLOGY_IRI_PREFIX = "ontology.iri.";
     public static final String ONTOLOGY_IRI_ENTITY_IMAGE = ONTOLOGY_IRI_PREFIX + "entityImage";

@@ -1,4 +1,4 @@
-package io.lumify.web.routes.systemNotification;
+package io.lumify.web.routes.notification;
 
 import com.google.inject.Inject;
 import io.lumify.core.model.systemNotification.SystemNotificationRepository;
@@ -14,13 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
-public class SystemNotification extends BaseRequestHandler {
+public class Notifications extends BaseRequestHandler {
     private static final String FUTURE_DAYS_PARAMETER_NAME = "futureDays";
     private static final int DEFAULT_FUTURE_DAYS = 10;
     private final SystemNotificationRepository systemNotificationRepository;
 
     @Inject
-    public SystemNotification(
+    public Notifications(
             final SystemNotificationRepository systemNotificationRepository,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,
@@ -33,16 +33,21 @@ public class SystemNotification extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         JSONObject notifications = new JSONObject();
-        notifications.put("active", new JSONArray(systemNotificationRepository.getActiveNotifications()));
 
+        JSONObject systemNotifications = new JSONObject();
+        systemNotifications.put("active", new JSONArray(systemNotificationRepository.getActiveNotifications()));
         int futureDays = DEFAULT_FUTURE_DAYS;
         String futureDaysParameter = getOptionalParameter(request, FUTURE_DAYS_PARAMETER_NAME);
         if (futureDaysParameter != null) {
             futureDays = Integer.parseInt(futureDaysParameter);
         }
         Date maxDate = DateUtils.addDays(new Date(), futureDays);
-        notifications.put("future", new JSONArray(systemNotificationRepository.getFutureNotifications(maxDate)));
+        systemNotifications.put("future", new JSONArray(systemNotificationRepository.getFutureNotifications(maxDate)));
 
+        JSONArray userNotifications = new JSONArray(); // TODO: return notifications for the current user (e.g. completed long running tasks)
+
+        notifications.put("system", systemNotifications);
+        notifications.put("user", userNotifications);
         respondWithJson(response, notifications);
     }
 }

@@ -1,5 +1,6 @@
 package io.lumify.bigtable.model.systemNotification;
 
+import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.Value;
@@ -74,7 +75,17 @@ public class BigTableSystemNotification extends Row<SystemNotificationRowKey> im
         if (endDate != null) {
             getColumnFamily().set(END_DATE_COLUMN_NAME, endDate.getTime());
         } else {
-            throw new IllegalArgumentException("unable to set a null end date");
+            boolean existingEndDate = false;
+            for (Column column : getColumnFamily().getColumns()) {
+                if (column.getName().equals(END_DATE_COLUMN_NAME)) {
+                    existingEndDate = true;
+                    break;
+                }
+            }
+            if (existingEndDate) {
+                throw new IllegalArgumentException("unable to update to a null end date");
+            }
+            // it's ok for it to never be set which will behave like a null
         }
     }
 
