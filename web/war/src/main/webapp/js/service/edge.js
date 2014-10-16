@@ -15,7 +15,7 @@ define([
         return this._ajaxGet({
             url: 'edge/audit',
             data: {
-                graphVertexId: edgeId
+                edgeId: edgeId
             }
         });
     };
