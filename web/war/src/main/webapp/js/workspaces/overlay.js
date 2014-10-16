@@ -358,7 +358,7 @@ define([
 
             badge.css({
                 width: previousWidth + 'px',
-                backgroundColor: '#3a87ad',
+                backgroundColor: '#0088cc',
                 transition: 'all cubic-bezier(.29,.79,0,1.48) 0.5s',
                 overflow: 'hidden',
                 position: 'relative',
@@ -366,7 +366,7 @@ define([
             }).html(html);
 
             badge.css({
-                backgroundColor: '#0088cc',
+                backgroundColor: '#1ab2ff',
                 width: findWidth()
             }).find('span').css({
                 transition: 'opacity ease-out 0.5s',
@@ -381,7 +381,7 @@ define([
                     }
                 }).css({
                     transition: 'all cubic-bezier(.92,-0.42,.37,1.31) 0.5s',
-                    backgroundColor: '#3a87ad',
+                    backgroundColor: '#0088cc',
                     width: previousWidth + 'px'
                 }).find('span').css('opacity',0);
             }).bind(null, previousWidth, formattedCount), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);

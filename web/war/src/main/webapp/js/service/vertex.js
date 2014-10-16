@@ -140,6 +140,7 @@ define([
         });
     };
 
+    // Move to edgeService
     VertexService.prototype.deleteEdge = function(sourceId, targetId, label, edgeId) {
         return this._ajaxDelete({
             url: 'vertex/edge?' + $.param({
