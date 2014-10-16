@@ -7,6 +7,7 @@ import com.altamiracorp.bigtable.model.Value;
 import io.lumify.bigtable.model.systemNotification.model.SystemNotificationRowKey;
 import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -96,6 +97,18 @@ public class BigTableSystemNotification extends Row<SystemNotificationRowKey> im
             return new Date(endDate);
         }
         return null;
+    }
+
+    @Override
+    public JSONObject toJSONObject() {
+        JSONObject json = new JSONObject();
+        json.put("id", getId());
+        json.put("severity", getSeverity().toString());
+        json.put("title", getTitle());
+        json.put("message", getMessage());
+        json.put("startDate", getStartDate());
+        json.put("endDate", getEndDate());
+        return json;
     }
 
     private ColumnFamily getColumnFamily() {

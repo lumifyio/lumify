@@ -13,6 +13,7 @@ import org.hibernate.Session;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Singleton
 public class SqlSystemNotificationRepository extends SystemNotificationRepository {
@@ -28,7 +29,7 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
     public List<SystemNotification> getActiveNotifications(User user) {
         Session session = sessionManager.getSession();
         List<SystemNotification> activeNotifications = session.createQuery(
-                "select * from " + SqlSystemNotification.class.getSimpleName() + " as sn where sn.start_date <= :now and (sn.end_date is null or sn.end_date > :now")
+                "select sn from " + SqlSystemNotification.class.getSimpleName() + " as sn where sn.startDate <= :now and (sn.endDate is null or sn.endDate > :now)")
                 .setParameter("now", new Date())
                 .list();
         LOGGER.debug("returning %d active system notifications", activeNotifications.size());
@@ -39,7 +40,7 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
     public List<SystemNotification> getFutureNotifications(Date maxDate, User user) {
        Session session = sessionManager.getSession();
         List<SystemNotification> futureNotifications = session.createQuery(
-                "select * from " + SqlSystemNotification.class.getSimpleName() + " as sn where sn.start_date > :now and sn.start_date < :maxDate")
+                "select sn from " + SqlSystemNotification.class.getSimpleName() + " as sn where sn.startDate > :now and sn.startDate < :maxDate")
                 .setParameter("now", new Date())
                 .setParameter("maxDate", maxDate)
                 .list();
@@ -49,8 +50,13 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
 
     @Override
     public SystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, Date startDate, Date endDate) {
+        if (startDate == null) {
+            startDate = new Date();
+        }
+        String id = Long.toString(startDate.getTime()) + ":" + UUID.randomUUID().toString();
         Session session = sessionManager.getSession();
         SqlSystemNotification notification = new SqlSystemNotification();
+        notification.setId(id);
         notification.setSeverity(severity);
         notification.setTitle(title);
         notification.setMessage(message);

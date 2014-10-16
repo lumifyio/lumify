@@ -1,5 +1,7 @@
 package io.lumify.core.model.systemNotification;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 
 public interface SystemNotification {
@@ -25,4 +27,6 @@ public interface SystemNotification {
     public void setEndDate(Date endDate);
 
     public Date getEndDate();
+
+    public JSONObject toJSONObject();
 }

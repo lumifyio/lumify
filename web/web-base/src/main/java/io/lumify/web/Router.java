@@ -17,6 +17,7 @@ import io.lumify.web.routes.admin.AdminUploadOntology;
 import io.lumify.web.routes.admin.PluginList;
 import io.lumify.web.routes.config.Configuration;
 import io.lumify.web.routes.edge.*;
+import io.lumify.web.routes.notification.SystemNotificationCreate;
 import io.lumify.web.routes.ontology.Ontology;
 import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.resource.ResourceGet;
@@ -62,7 +63,8 @@ public class Router extends HttpServlet {
 
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 
-            app.get("/notifications", authenticator, csrfProtector, ReadPrivilegeFilter.class, Notifications.class);
+            app.get("/notification/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, Notifications.class);
+            app.post("/notification/system/create", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationCreate.class);
 
             app.get("/resource", authenticator, csrfProtector, ReadPrivilegeFilter.class, ResourceGet.class);
             app.get("/map/marker/image", csrfProtector, MapMarkerImage.class);  // TODO combine with /resource

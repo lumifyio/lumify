@@ -30,7 +30,7 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
         Date now = new Date();
         List<SystemNotification> activeNotifications = new ArrayList<SystemNotification>();
         for (SystemNotification notification : repository.findAll(user.getModelUserContext())) {
-            if (notification.getStartDate().after(now)) {
+            if (notification.getStartDate().before(now)) {
                 if (notification.getEndDate() == null || notification.getEndDate().after(now)) {
                     activeNotifications.add(notification);
                 }

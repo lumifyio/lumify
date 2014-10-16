@@ -2,6 +2,7 @@ package io.lumify.sql.model.systemNotification;
 
 import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,9 +17,13 @@ public class SqlSystemNotification implements SystemNotification {
     private Date startDate;
     private Date endDate;
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     @Id
-    @GeneratedValue
+    @Column(name = "id", unique = true)
     public String getId() {
         return id;
     }
@@ -76,5 +81,17 @@ public class SqlSystemNotification implements SystemNotification {
     @Column(name = "end_date")
     public Date getEndDate() {
         return endDate;
+    }
+
+    @Override
+    public JSONObject toJSONObject() {
+        JSONObject json = new JSONObject();
+        json.put("id", getId());
+        json.put("severity", getSeverity().toString());
+        json.put("title", getTitle());
+        json.put("message", getMessage());
+        json.put("startDate", getStartDate());
+        json.put("endDate", getEndDate());
+        return json;
     }
 }
