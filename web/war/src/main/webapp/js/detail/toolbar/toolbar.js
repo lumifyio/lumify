@@ -6,6 +6,10 @@ define([
     template) {
     'use strict';
 
+    var DIVIDER = {
+            divider: true
+        };
+
     return defineComponent(Toolbar);
 
     function Toolbar() {
@@ -17,7 +21,7 @@ define([
                     submenu: [
                         {
                             title: 'Fullscreen',
-                            subtitle: 'Open Entity in new Fullscreen Window',
+                            subtitle: 'Open in New Window / Tab',
                             event: 'openFullscreen'
                         }
                     ]
@@ -33,8 +37,18 @@ define([
                         {
                             title: 'Image',
                             subtitle: 'Upload an Image for Entity',
-                            event: 'addProperty'
+                            event: 'addImage',
+                            options: {
+                                fileSelector: true
+                            }
+                        }/*, TODO: implement add to graph
+                        DIVIDER,
+                        {
+                            title: 'To Workspace',
+                            subtitle: 'Add Entity to Workspace',
+                            event: 'addToGraph'
                         }
+                        */
                     ]
                 },
                 { title: 'Audit', right: true }
@@ -53,18 +67,35 @@ define([
                 $target = $(event.target).closest('li'),
                 eventName = $target.data('event');
 
+            if (eventName && $(event.target).is('input[type=file')) {
+                $(event.target).one('change', function(e) {
+                    if (e.target.files && e.target.files.length) {
+                        self.trigger(eventName, {
+                            files: e.target.files
+                        })
+                    }
+                })
+                this.hideMenu();
+                return;
+            }
+
             if (eventName) {
                 event.preventDefault();
                 event.stopPropagation();
 
-                var node = this.$node.addClass('hideSubmenus');
                 _.defer(function() {
                     self.trigger(eventName);
                 });
-                _.delay(function() {
-                    node.removeClass('hideSubmenus');
-                }, 500);
+
+                this.hideMenu();
             }
+        };
+
+        this.hideMenu = function() {
+            var node = this.$node.addClass('hideSubmenus');
+            _.delay(function() {
+                node.removeClass('hideSubmenus');
+            }, 500);
         };
     }
 });

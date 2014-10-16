@@ -73,9 +73,14 @@ define([
                 relationshipsHeaderSelector: this.onToggleRelationships,
                 relationshipsPagingButtonsSelector: this.onPageRelationships
             });
+            this.on('addImage', this.onAddImage);
 
             this.loadEntity();
         });
+
+        this.onAddImage = function(event, data) {
+            this.select('glyphIconSelector').trigger('setImage', data);
+        };
 
         this.onToggleRelationships = function(event) {
             var $section = $(event.target).closest('.collapsible');

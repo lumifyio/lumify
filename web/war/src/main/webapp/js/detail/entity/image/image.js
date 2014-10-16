@@ -56,6 +56,8 @@ define([
                     change: this.onFileChange.bind(this)
                 });
 
+                this.on('setImage', this.onSetImage);
+
                 this.$node.addClass('upload-available');
                 this.$node.on({
                     mouseenter: function() {
@@ -67,6 +69,10 @@ define([
                 });
             }
         });
+
+        this.onSetImage = function(e, data) {
+            this.handleFilesDropped(data.files);
+        }
 
         this.onGraphPaddingUpdated = function(event, data) {
             if (data.padding.r && this.imageNaturalSize) {

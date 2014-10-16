@@ -5,6 +5,7 @@
   @highlight-color: darken(desaturate(@base-color, 5%), 5%);
   @submenu-color: @highlight-color;
   @submenu-highlight-color: darken(@highlight-color, 5%);
+  @subtitle-color: lighten(desaturate(@submenu-color, 50%), 50%);              
 
   position: absolute;
   top: 100%;
@@ -53,9 +54,22 @@
         margin: 0;
         padding: 0;    
         li {
-          list-style: none;         
+          list-style: none;    
+          position: relative;     
+          cursor: pointer;  
+          overflow: hidden;          
+
+          &.divider {
+            border-top: 1px solid @submenu-highlight-color;
+          }
+
+          &:hover a {
+            background: @submenu-highlight-color;
+          }
+
           a {
-            padding: 1em 1.8em;
+            cursor: pointer;            
+            padding: .5em 1.4em;
             display: inline-block;
             width: 100%;
             .box-sizing(border-box);
@@ -63,15 +77,28 @@
             text-decoration: none;                    
             .subtitle {
               white-space: nowrap;
-              color: fadeout(white, 10%);              
+              font-size: 95%;
+              color: @subtitle-color;
               font-variant: normal;
               text-shadow: none;
               font-weight: normal;
               text-transform: none;
             }
-          }
-          &:hover a {
-            background: @submenu-highlight-color;
+          }          
+
+          input[type=file] {
+            position: absolute;
+            top: 0;
+            left: 0;            
+            height: 100%;
+            width: 200%;
+            margin: 0;
+            margin-left: -50%;            
+            padding: 0;            
+            bottom: 0;
+            z-index: 1;
+            cursor: pointer;              
+            .opacity(0);
           }
         }
       }
