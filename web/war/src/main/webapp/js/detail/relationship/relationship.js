@@ -84,6 +84,9 @@ define([
                         .text(function(d) {
                             return F.vertex.title(d);
                         })
+                        .attr('data-vertex-id', function(d) {
+                            return d.id;
+                        })
                         .append('div')
                         .attr('class', 'subtitle')
                         .text(function(d) {

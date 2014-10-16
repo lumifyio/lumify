@@ -713,10 +713,11 @@ define([
         };
     }
 
-    function onTableClick(event) {
+    function onTableClick() {
         var $target = $(d3.event.target),
             $header = $target.closest('.property-group-header'),
-            $tbody = $header.closest('.property-group');
+            $tbody = $header.closest('.property-group'),
+            processed = true;
 
         if ($header.is('.property-group-header')) {
             $tbody.toggleClass('collapsed expanded');
@@ -728,13 +729,17 @@ define([
             } else {
                 this.showMoreExpanded[$target.data('propertyName')] = true;
             }
-
             this.reload();
         } else if ($target.is('.info')) {
-            d3.event.stopPropagation();
-            d3.event.preventDefault();
             var datum = d3.select($target.closest('.property-value').get(0)).datum();
             this.showPropertyInfo($target, datum.property);
+        } else {
+            processed = false;
+        }
+
+        if (processed) {
+            d3.event.stopPropagation();
+            d3.event.preventDefault();
         }
     }
 
