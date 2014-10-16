@@ -20,7 +20,6 @@ import io.lumify.web.routes.edge.*;
 import io.lumify.web.routes.ontology.Ontology;
 import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.resource.ResourceGet;
-import io.lumify.web.routes.systemNotification.SystemNotification;
 import io.lumify.web.routes.user.*;
 import io.lumify.web.routes.vertex.*;
 import io.lumify.web.routes.workspace.*;
