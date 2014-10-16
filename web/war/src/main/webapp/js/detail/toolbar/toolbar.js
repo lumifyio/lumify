@@ -8,76 +8,70 @@ define([
 
     var DIVIDER = {
             divider: true
-        };
+        },
+        ToolbarComponent = defineComponent(Toolbar);
 
-    return defineComponent(Toolbar);
+    ToolbarComponent.ITEMS = {
+        DIVIDER: DIVIDER,
+        BACK: { title: '◀' },
+        FORWARD: { title: '▶' },
+        FULLSCREEN: {
+            title: i18n('detail.toolbar.open.fullscreen'),
+            subtitle: i18n('detail.toolbar.open.fullscreen.subtitle'), //'Open in New Window / Tab',
+            event: 'openFullscreen'
+        },
+        ADD_PROPERTY: {
+            title: i18n('detail.toolbar.add.property'),
+            subtitle: i18n('detail.toolbar.add.property.subtitle'), // 'Add New Property to Entity',
+            event: 'addNewProperty'
+        },
+        ADD_IMAGE: {
+            title: i18n('detail.toolbar.add.image'),
+            subtitle: i18n('detail.toolbar.add.image.subtitle'), // 'Upload an Image for Entity',
+            event: 'addImage',
+            options: {
+                fileSelector: true
+            }
+        },
+        AUDIT: {
+            title: i18n('detail.toolbar.audit'),
+            cls: 'audits',
+            right: true,
+            event: 'toggleAudit'
+        }
+    };
+
+    return ToolbarComponent;
 
     function Toolbar() {
         this.defaultAttrs({
             toolbarItemSelector: 'li',
-            toolbar: [
-                {
-                    title: 'Open',
-                    submenu: [
-                        {
-                            title: 'Fullscreen',
-                            subtitle: 'Open in New Window / Tab',
-                            event: 'openFullscreen'
-                        }
-                    ]
-                },
-                {
-                    title: 'Add',
-                    submenu: [
-                        {
-                            title: 'Property',
-                            subtitle: 'Add New Property to Entity',
-                            event: 'addNewProperty'
-                        },
-                        {
-                            title: 'Image',
-                            subtitle: 'Upload an Image for Entity',
-                            event: 'addImage',
-                            options: {
-                                fileSelector: true
-                            }
-                        }/*, TODO: implement add to graph
-                        DIVIDER,
-                        {
-                            title: 'To Workspace',
-                            subtitle: 'Add Entity to Workspace',
-                            event: 'addToGraph'
-                        }
-                        */
-                    ]
-                },
-                {
-                    title: 'Audit',
-                    cls: 'audits',
-                    right: true,
-                    event: 'toggleAudit'
-                }
-            ]
+            toolbar: []
         })
 
         this.after('initialize', function() {
             this.on('click', {
                 toolbarItemSelector: this.onToolbarItem
             })
-            this.$node.html(template(this.attr));
+            if (this.attr.toolbar.length) {
+                this.$node.html(template(this.attr));
+            } else {
+                this.$node.hide();
+            }
         });
 
         this.onToolbarItem = function(event) {
             var self = this,
                 $target = $(event.target).closest('li'),
-                eventName = $target.data('event');
+                eventName = $target.data('event'),
+                eventData = $target.data('eventData');
 
             if (eventName && $(event.target).is('input[type=file')) {
                 $(event.target).one('change', function(e) {
                     if (e.target.files && e.target.files.length) {
-                        self.trigger(eventName, {
+                        self.trigger(eventName, $.extend({
                             files: e.target.files
-                        })
+                        }, eventData));
                     }
                 })
                 this.hideMenu();
@@ -89,7 +83,7 @@ define([
                 event.stopPropagation();
 
                 _.defer(function() {
-                    self.trigger(eventName);
+                    self.trigger(eventName, eventData);
                 });
 
                 this.hideMenu();

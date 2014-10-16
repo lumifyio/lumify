@@ -3,6 +3,7 @@ define([
     'data',
     '../withTypeContent',
     '../withHighlighting',
+    '../toolbar/toolbar',
     'tpl!./relationship',
     'service/edge',
     'service/vertex',
@@ -16,6 +17,7 @@ define([
     appData,
     withTypeContent,
     withHighlighting,
+    Toolbar,
     template,
     EdgeService,
     VertexService,
@@ -37,7 +39,8 @@ define([
 
         this.defaultAttrs({
             vertexToVertexRelationshipSelector: '.vertex-to-vertex-relationship',
-            propertiesSelector: '.properties'
+            propertiesSelector: '.properties',
+            toolbarSelector: '.comp-toolbar'
         });
 
         this.after('teardown', function() {
@@ -113,13 +116,17 @@ define([
                         _.findWhere(relationship.target.properties, predicate).value
                     ]
                 });
-                self.$node.html(template({
-                    auditsButton: self.auditsButton()
-                }));
+                self.$node.html(template({}));
                 self.update();
 
                 Properties.attachTo(self.select('propertiesSelector'), {
                     data: relationship
+                });
+
+                Toolbar.attachTo(self.select('toolbarSelector'), {
+                    toolbar: [
+                        Toolbar.ITEMS.AUDIT
+                    ]
                 });
 
                 self.updateEntityAndArtifactDraggables();

@@ -8,6 +8,10 @@ define([
         return F.date.dateTimeString(date);
     });
 
+    Handlebars.registerHelper('json', function(obj) {
+        return JSON.stringify(obj);
+    });
+
     Handlebars.registerHelper('dateonly', function(date) {
         return F.date.dateString(date);
     });

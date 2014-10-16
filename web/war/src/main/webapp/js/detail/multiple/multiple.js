@@ -3,6 +3,7 @@ define([
     'flight/lib/registry',
     'data',
     '../withTypeContent',
+    '../toolbar/toolbar',
     'service/vertex',
     'service/ontology',
     'sf',
@@ -15,6 +16,7 @@ define([
     registry,
     appData,
     withTypeContent,
+    Toolbar,
     VertexService,
     OntologyService,
     sf,
@@ -132,7 +134,8 @@ define([
             histogramSelector: '.multiple .histogram',
             histogramListSelector: '.multiple .histograms',
             vertexListSelector: '.multiple .vertices-list',
-            histogramBarSelector: 'g.histogram-bar'
+            histogramBarSelector: 'g.histogram-bar',
+            toolbarSelector: '.comp-toolbar'
         });
 
         this.before('teardown', function() {
@@ -148,8 +151,7 @@ define([
 
             this.$node.html(template({
                 getClasses: this.classesForVertex,
-                vertices: vertices,
-                fullscreenButton: self.fullscreenButton(ids)
+                vertices: vertices
             }));
 
             this.on('click', {
@@ -174,6 +176,17 @@ define([
 
                 VertexList.attachTo(self.select('vertexListSelector'), {
                     vertices: vertices
+                });
+
+                Toolbar.attachTo(self.select('toolbarSelector'), {
+                    toolbar: [
+                        {
+                            title: i18n('detail.toolbar.open'),
+                            submenu: [
+                                Toolbar.ITEMS.FULLSCREEN
+                            ]
+                        }
+                    ]
                 });
 
                 self.drawHistograms = _.partial(self.renderHistograms, _, concepts, properties);

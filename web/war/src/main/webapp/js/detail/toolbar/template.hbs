@@ -1,8 +1,10 @@
 <ul>
   {{#each toolbar~}}
+  {{#if this}}
   <li 
-  class="{{#if submenu}}has-submenu{{/if}} {{#if cls}}{{ cls }}{{/if}}"
+    class="{{#if submenu}}has-submenu{{/if}} {{#if cls}}{{ cls }}{{/if}} {{#if right}}pull-right{{/if}}"
     {{#if event}} data-event="{{ event }}"{{/if}}
+    {{#if eventData}} data-event-data="{{ json eventData }}"{{/if}}
       >
     <a>
       <strong>{{ title }}</strong>
@@ -10,7 +12,10 @@
     {{#if submenu~}}
       <ul>
         {{#each submenu~}}
-        <li data-event="{{ event }}"{{#if divider}} class="divider"{{/if}}>
+        {{#if this}}
+        <li {{#if divider}} class="divider"{{/if}}
+            {{#if event}} data-event="{{ event }}"{{/if}}
+            {{#if eventData}} data-event-data="{{ json eventData }}"{{/if}}>
           {{~#unless divider~}}
             <a>{{ title }}
               {{#if subtitle}}
@@ -24,9 +29,11 @@
             {{/if}}
           {{~/unless~}}
         </li>
+        {{~/if~}}
         {{~/each}}
       </ul>
     {{~/if~}}
   </li>
+  {{/if}}
   {{~/each}}
 </ul>

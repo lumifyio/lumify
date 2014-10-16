@@ -216,12 +216,27 @@ define([
                     self.attr.data = vertex;
                     self.$node.html(template({
                         vertex: vertex,
-                        fullscreenButton: self.fullscreenButton([vertex.id]),
-                        auditsButton: self.auditsButton(),
                         F: F
                     }));
 
                     Toolbar.attachTo(self.select('toolbarSelector'), {
+                        toolbar: [
+                            {
+                                title: i18n('detail.toolbar.open'),
+                                submenu: [
+                                    Toolbar.ITEMS.FULLSCREEN,
+                                    self.sourceUrlToolbarItem()
+                                ]
+                            },
+                            {
+                                title: i18n('detail.toolbar.add'),
+                                submenu: [
+                                    Toolbar.ITEMS.ADD_PROPERTY,
+                                    Toolbar.ITEMS.ADD_IMAGE
+                                ]
+                            },
+                            Toolbar.ITEMS.AUDIT
+                        ]
                     });
 
                     Image.attachTo(self.select('glyphIconSelector'), {

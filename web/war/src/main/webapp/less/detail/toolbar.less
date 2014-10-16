@@ -39,9 +39,12 @@
       &:hover > a, &.active > a {        
         background: @highlight-color;
       }
-      &:last-child {        
+      &.pull-right {        
         float: right;
-      }
+      }      
+      /*&:nth-child(1) a, &:nth-child(2) a {
+        padding: 0 0.5em;        
+      }*/
 
       &.has-submenu > a:after {
         content: '▾';        
@@ -57,10 +60,20 @@
           list-style: none;    
           position: relative;     
           cursor: pointer;  
-          overflow: hidden;          
+          overflow: hidden;   
+
+          @h-padding: 1.4em;       
 
           &.divider {
-            border-top: 1px solid @submenu-highlight-color;
+            &:after {
+              content: '';
+              display: block;
+              height: 0px;              
+              border-top: 1px solid @submenu-highlight-color;              
+              border-bottom: 1px solid lighten(@submenu-color, 2%);
+              margin: 0 @h-padding;              
+              .box-sizing(border-box);
+            }            
           }
 
           &:hover a {
@@ -69,7 +82,7 @@
 
           a {
             cursor: pointer;            
-            padding: .5em 1.4em;
+            padding: 0.5em @h-padding;
             display: inline-block;
             width: 100%;
             .box-sizing(border-box);
@@ -140,24 +153,23 @@
 }
 
 .type-content {
-.entity-background {
-  border: 0;
-  height: 5em;
-  background: #444444;   
-  h1 {
-    bottom: auto;
-    top: .5em;
-  }
-  .entity-glyphIcon {
-    left: auto;
-    width: 100px;
-    height: 75%;
-    right: 0;    
-    top: .7em;
+  .entity-background {
+    border: 0;
+    height: 5em;
+    background: #444444;   
+    h1 {
+      bottom: auto;
+      top: .5em;
+    }
+    .entity-glyphIcon {
+      left: auto;
+      width: 100px;
+      height: 75%;
+      right: 1em;
+      top: .7em;
+    }
   }
 }
-}
-
 
 .type-content .nav-with-background {
     margin-top: 100px;
