@@ -1,14 +1,9 @@
 
 define([
-    'tpl!./toolbar/fullscreen',
-    'tpl!./toolbar/fullscreen-item',
-    'tpl!./toolbar/audits',
     'data',
     'util/vertex/formatters'
-], function(fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate, appData, F) {
+], function(appData, F) {
     'use strict';
-
-    var intercomInstance;
 
     return withTypeContent;
 
