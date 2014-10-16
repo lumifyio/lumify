@@ -48,10 +48,7 @@ define([
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
             this.on('addNewProperty', this.onAddNewProperty);
             this.on('openFullscreen', this.onOpenFullscreen);
-
-            this.on('click', {
-                auditSelector: this.onAuditToggle
-            });
+            this.on('toggleAudit', this.onAuditToggle);
 
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
@@ -97,7 +94,7 @@ define([
         this.onToggleAuditDisplay = function(event, data) {
             this.auditDisplayed = data.displayed;
             this.$node.toggleClass('showAuditing', data.displayed);
-            this.$node.find('.btn-toolbar .audits').toggleClass('active', data.displayed);
+            this.$node.find('.comp-toolbar .audits').toggleClass('active', data.displayed);
         };
 
         this.onAuditToggle = function(event) {

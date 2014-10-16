@@ -51,7 +51,12 @@ define([
                         */
                     ]
                 },
-                { title: 'Audit', right: true }
+                {
+                    title: 'Audit',
+                    cls: 'audits',
+                    right: true,
+                    event: 'toggleAudit'
+                }
             ]
         })
 

@@ -1,6 +1,9 @@
 <ul>
   {{#each toolbar~}}
-  <li{{#if submenu}} class="has-submenu"{{/if}}>
+  <li 
+  class="{{#if submenu}}has-submenu{{/if}} {{#if cls}}{{ cls }}{{/if}}"
+    {{#if event}} data-event="{{ event }}"{{/if}}
+      >
     <a>
       <strong>{{ title }}</strong>
     </a>
