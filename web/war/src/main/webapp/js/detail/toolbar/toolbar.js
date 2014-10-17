@@ -77,7 +77,7 @@ define([
                 eventName = $target.data('event'),
                 eventData = $target.data('eventData');
 
-            if (eventName && $(event.target).is('input[type=file')) {
+            if (eventName && $(event.target).is('input[type=file]')) {
                 $(event.target).one('change', function(e) {
                     if (e.target.files && e.target.files.length) {
                         self.trigger(eventName, $.extend({
