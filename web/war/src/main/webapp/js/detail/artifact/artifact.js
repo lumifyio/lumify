@@ -171,6 +171,7 @@ define([
                     },
                     {
                         title: i18n('detail.toolbar.add'),
+                        cls: 'requires-EDIT',
                         submenu: [
                             Toolbar.ITEMS.ADD_PROPERTY
                         ]
@@ -193,12 +194,10 @@ define([
         };
 
         this.updateTitle = function() {
-            $('<div>')
-                .addClass('subtitle')
-                .text(this.attr.data.concept.displayName)
-                .appendTo(
-                    this.select('titleSelector').text(F.vertex.title(this.attr.data))
-                )
+            this.select('titleSelector')
+                .text(F.vertex.title(this.attr.data))
+                .next('.subtitle')
+                .text(this.attr.data.concept.displayName);
         };
 
         this.updateDetectedObjects = function() {

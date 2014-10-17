@@ -17,6 +17,7 @@ define([
         FORWARD: { title: '▶' },
         FULLSCREEN: {
             title: i18n('detail.toolbar.open.fullscreen'),
+            cls: 'hide-in-fullscreen-details',
             subtitle: i18n('detail.toolbar.open.fullscreen.subtitle'), //'Open in New Window / Tab',
             event: 'openFullscreen'
         },
@@ -55,6 +56,16 @@ define([
             })
             if (this.attr.toolbar.length) {
                 this.$node.html(template(this.attr));
+                this.$node.find('.has-submenu').each(function() {
+                    var $this = $(this);
+                        displayValues = $this.find('li').map(function() {
+                            return $(this).css('display') === 'none';
+                        }).toArray();
+
+                    if (_.all(displayValues)) {
+                        $this.hide();
+                    }
+                })
             } else {
                 this.$node.hide();
             }

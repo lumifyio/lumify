@@ -192,12 +192,9 @@ define([
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
             if (matching) {
-                $('<div>')
-                    .addClass('subtitle')
-                    .text(matching.concept.displayName)
-                    .appendTo(
-                        this.select('titleSelector').text(F.vertex.title(matching))
-                    )
+                this.select('titleSelector').text(F.vertex.title(matching))
+                    .next('.subtitle')
+                    .text(matching.concept.displayName);
 
                 this.attr.data = matching;
                 this.updateRelationships();
@@ -230,6 +227,7 @@ define([
                             },
                             {
                                 title: i18n('detail.toolbar.add'),
+                                cls: 'requires-EDIT',
                                 submenu: [
                                     Toolbar.ITEMS.ADD_PROPERTY,
                                     Toolbar.ITEMS.ADD_IMAGE

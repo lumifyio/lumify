@@ -151,7 +151,8 @@ define([
             this.$node
                 .addClass('accepts-file')
                 .css({ backgroundImage: 'url("' + imageUrl + '")' })
-                .toggleClass('custom-image', customImage);
+                .toggleClass('custom-image', customImage)
+                .closest('.type-content').toggleClass('custom-entity-image', customImage);
         };
 
         this.onFileChange = function(e) {

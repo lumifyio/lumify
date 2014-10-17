@@ -61,7 +61,6 @@ define([
     function Properties() {
 
         this.defaultAttrs({
-            addNewPropertiesSelector: '.add-new-properties',
             entityAuditsSelector: '.entity_audit_events',
             auditShowAllSelector: '.show-all-button-row button',
             auditDateSelector: '.audit-date',
@@ -349,19 +348,7 @@ define([
             this.tableRoot = root
                 .append('table')
                 .attr('class', 'table')
-                .on('click', onTableClick.bind(this))
-                .call(function() {
-                    if (!F.vertex.isEdge(self.attr.data)) {
-                        this.append('tr')
-                            .attr('class', 'buttons-row requires-EDIT')
-                            .append('td')
-                                .attr('colspan', 3)
-                                .attr('class', 'buttons')
-                                .append('button')
-                                    .attr('class', 'add-new-properties btn btn-mini btn-default')
-                                    .text(i18n('properties.button.add_property'));
-                    }
-                });
+                .on('click', onTableClick.bind(this));
 
             $.when(
                 ontologyService.relationships(),
@@ -375,7 +362,6 @@ define([
             });
 
             this.on('click', {
-                addNewPropertiesSelector: this.onAddNewPropertiesClicked,
                 auditDateSelector: this.onAuditDateClicked,
                 auditUserSelector: this.onAuditUserClicked,
                 auditShowAllSelector: this.onAuditShowAll,
@@ -655,13 +641,8 @@ define([
             this.trigger(target, 'propertyerror', { error: error });
         };
 
-        this.onAddNewPropertiesClicked = function(evt) {
-            this.trigger('editProperty');
-        };
-
         this.onEditProperty = function(evt, data) {
-            var button = this.select('addNewPropertiesSelector'),
-                root = $('<div class="underneath">'),
+            var root = $('<div class="underneath">'),
                 property = data && data.property,
                 propertyRow = property && $(evt.target).closest('tr')
 

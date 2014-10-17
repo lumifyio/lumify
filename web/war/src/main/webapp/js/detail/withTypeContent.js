@@ -20,6 +20,10 @@ define([
             this.$node.empty();
         });
 
+        this.before('initialize', function(node) {
+            $(node).removeClass('custom-entity-image')
+        });
+
         this.after('initialize', function() {
             var self = this,
                 previousConcept = this.attr.data.concept && this.attr.data.concept.id;

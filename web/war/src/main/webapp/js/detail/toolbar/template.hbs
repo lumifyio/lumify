@@ -13,7 +13,7 @@
       <ul>
         {{#each submenu~}}
         {{#if this}}
-        <li {{#if divider}} class="divider"{{/if}}
+        <li class="{{#if divider}}divider{{/if}} {{#if cls}}{{ cls }}{{/if}}"
             {{#if event}} data-event="{{ event }}"{{/if}}
             {{#if eventData}} data-event-data="{{ json eventData }}"{{/if}}>
           {{~#unless divider~}}
