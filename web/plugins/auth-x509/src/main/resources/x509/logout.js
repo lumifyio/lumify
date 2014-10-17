@@ -5,13 +5,9 @@ require([
 ], function(logoutHandlers, UserService, messages) {
     var userService = new UserService();
     logoutHandlers.registerLogoutHandler(function() {
-        var logoutPath = "logout.html?msg=" + encodeURIComponent(messages("lumify.session.expired"));
         userService.logout()
-            .fail(function () {
-                window.location = logoutPath;
-            })
-            .done(function() {
-                window.location = logoutPath;
+            .always(function () {
+                window.location = "logout.html?msg=" + encodeURIComponent(messages("lumify.session.expired"));
             });
 
         return false;
