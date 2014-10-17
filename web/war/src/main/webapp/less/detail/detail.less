@@ -9,7 +9,7 @@
 
 .content {
 
-  padding: 2.5em 0;
+  padding: 0;
 
   &.loading {
 
@@ -31,14 +31,46 @@
     }
   }
 
-  .type-content > .preview, .content > .preview {
+  .type-content > .nav-with-background > .preview, .content > .preview {
     height: 300px;
     cursor: pointer;
     background: black;
     margin-top: 1em;
   }
-  .type-content > .audio-preview {
+  .type-content > .nav-with-background > .audio-preview {
     margin-top: 1em;
+  }
+
+  .type-content {
+
+    &.custom-entity-image .entity-background {
+        height: 14em;
+        h1 {
+          bottom: 1.5em;
+          top: auto;
+        }
+        .subtitle {
+          top: auto;
+          bottom: 0.25em;
+        }        
+    }
+
+    &.custom-entity-image .entity-background .entity-glyphIcon {
+        width: 100%;   
+        height: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 0;
+        background-position: center center;
+    }
+
+    &.custom-entity-image .nav-with-background {
+        margin-top: 16.5em;
+    }
+
   }
 
   .entity_audit_events .audit-list {
@@ -170,19 +202,16 @@
     cursor: pointer;
   }
 
-  .fake-link {
-    color: #08c;
+  .entity-background {
 
-    &:hover {
-      color: #079;
-      text-decoration: underline;
-    }
-  }
-
-  .relationship-header {
-    padding: 0.5em;
+  
+  .relationship-header {    
     text-align: center;
     margin-bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0.5em 0;
+  }
   }
   .vertex-to-vertex-relationship {
     font-size: 90%;   
@@ -201,30 +230,6 @@
   
   .underneath {
     @import "dropdown";
-  }
-
-  .detail-toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 0 1em;
-    margin: 0 20px 0 0;
-    white-space: nowrap;
-    z-index: 1;
-    .btn-toolbar {
-
-      .checked a {
-        background-image: url(../../img/glyphicons/glyphicons_206_ok_2@2x.png);
-        background-repeat: no-repeat;
-        background-position: 5px center;
-        background-size: 10px;
-      }
-
-      li.checked:hover a {
-        background-image: url(../../img/glyphicons/white/glyphicons_206_ok_2@2x.png);
-      }
-    }
   }
 
   section.collapsible {
@@ -547,6 +552,7 @@
   }
 
   @import "properties";
+  @import "toolbar";
   
   .properties .buttons .underneath {
     margin: 1em 0;       
@@ -557,18 +563,7 @@
     margin: 0; 
     font-size: 130%;    
   }
-  .artifact-title, .entity-title {
-    .subtitle {
-      margin: 0;
-      padding: 0;
-      font-size: 90%;
-      line-height: 1.1em;
-      margin-top: 0em;
-      color: #999;
-      font-variant: small-caps;
-      text-transform: lowercase;
-    }
-  }
+  
   .artifact-header {    
     margin: 1em 0 0 0;
     padding: 0;
@@ -576,7 +571,7 @@
 
   .nav-with-background {  
     overflow: auto;    
-    margin: 200px 0 0 0;
+    margin: 8.5em 0 0 0;
     padding: 0;
     position: absolute;
     top: 0;    
@@ -623,12 +618,12 @@
 
   .entity-background {
     position: absolute;
-    width: 100%;
-    height: 200px;
+    background: #444;   
+    width: 100%;    
+    height: 6em;
     top: 0;
     margin: 0;
-    padding: 0 1em;
-    border-bottom: 3px solid #0088cc;
+    padding: 0 1em;    
     z-index: 1;
     .box-sizing(border-box);
 
@@ -647,31 +642,14 @@
         &:after, &:before, * {display: none; }
       }
     }
-
-    .detail-toolbar {
-      z-index: 4;
-      background: transparent;
-    }
-
-    .btn {
-      position: relative;
-      .opacity(40);
-      &:hover {
-        .opacity(100);
-      }
-
-      &.open {
-        .opacity(100);
-      }
-    }
-
+    
     h1 {
       white-space: nowrap;
-      bottom: 0;
+      display: inline-block; 
+      top: 0.5em;
       color: white;      
       font-size: 150%;
-      left: 0;
-      right: 0;      
+      left: 0;          
       overflow: hidden;
       padding: 0 0.75em;
       position: absolute;
@@ -679,15 +657,19 @@
       text-shadow: 0 0px 20px rgba(0,0,0,0.2), 0 0px 2px rgba(0,0,0,1);
       z-index: 4;
       margin: 0;
-      .subtitle {
-        margin-bottom: 0.5em;
-        font-size: 80%;
-        color: fadeOut(white, 15%);
-      }
-    }
+    }    
 
-    .entity-background .dropdown-menu {
-      margin-top: 0px;
+    & > .subtitle {
+      font-size: 120%;
+      font-weight: bold;
+      position: absolute;
+      top: 2.2em;
+      padding-left: .2ex;
+      display: inline-block;
+      margin-bottom: 0.5em;      
+      color: fadeOut(white, 15%);     
+      font-variant: small-caps;
+      text-transform: lowercase;   
     }
   }
 
@@ -715,12 +697,12 @@
 
   .entity-glyphIcon {
     position: absolute;
-    margin: 0 -1em;
+    margin: 0 -1em;    
     width: 100%;
     height: 100%;
-    background-size: contain;
+    background-size: auto 65%;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: right 1em center;
     background-color: #444;
     
     &.shake {

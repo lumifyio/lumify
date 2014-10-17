@@ -6,6 +6,7 @@ define([
     '../properties/properties',
     '../withTypeContent',
     '../withHighlighting',
+    '../toolbar/toolbar',
     'tpl!./entity',
     'tpl!./relationships',
     'tpl!util/alert',
@@ -23,6 +24,7 @@ define([
     Properties,
     withTypeContent,
     withHighlighting,
+    Toolbar,
     template,
     relationshipsTemplate,
     alertTemplate,
@@ -53,6 +55,7 @@ define([
             glyphIconSelector: '.entity-glyphIcon',
             propertiesSelector: '.properties',
             titleSelector: '.entity-title',
+            toolbarSelector: '.comp-toolbar',
             relationshipsHeaderSelector: '.relationships section.collapsible h1',
             relationshipsPagingButtonsSelector: 'section.collapsible .paging button'
         });
@@ -70,9 +73,14 @@ define([
                 relationshipsHeaderSelector: this.onToggleRelationships,
                 relationshipsPagingButtonsSelector: this.onPageRelationships
             });
+            this.on('addImage', this.onAddImage);
 
             this.loadEntity();
         });
+
+        this.onAddImage = function(event, data) {
+            this.select('glyphIconSelector').trigger('setImage', data);
+        };
 
         this.onToggleRelationships = function(event) {
             var $section = $(event.target).closest('.collapsible');
@@ -184,12 +192,9 @@ define([
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
             if (matching) {
-                $('<div>')
-                    .addClass('subtitle')
-                    .text(matching.concept.displayName)
-                    .appendTo(
-                        this.select('titleSelector').text(F.vertex.title(matching))
-                    )
+                this.select('titleSelector').text(F.vertex.title(matching))
+                    .next('.subtitle')
+                    .text(matching.concept.displayName);
 
                 this.attr.data = matching;
                 this.updateRelationships();
@@ -208,10 +213,29 @@ define([
                     self.attr.data = vertex;
                     self.$node.html(template({
                         vertex: vertex,
-                        fullscreenButton: self.fullscreenButton([vertex.id]),
-                        auditsButton: self.auditsButton(),
                         F: F
                     }));
+
+                    Toolbar.attachTo(self.select('toolbarSelector'), {
+                        toolbar: [
+                            {
+                                title: i18n('detail.toolbar.open'),
+                                submenu: [
+                                    Toolbar.ITEMS.FULLSCREEN,
+                                    self.sourceUrlToolbarItem()
+                                ]
+                            },
+                            {
+                                title: i18n('detail.toolbar.add'),
+                                cls: 'requires-EDIT',
+                                submenu: [
+                                    Toolbar.ITEMS.ADD_PROPERTY,
+                                    Toolbar.ITEMS.ADD_IMAGE
+                                ]
+                            },
+                            Toolbar.ITEMS.AUDIT
+                        ]
+                    });
 
                     Image.attachTo(self.select('glyphIconSelector'), {
                         data: vertex,

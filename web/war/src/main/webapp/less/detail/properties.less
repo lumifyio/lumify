@@ -9,6 +9,10 @@
       display: table-row;
     }
   }
+
+  table {
+    margin-bottom: 0;
+  }
   
   .table tbody + tbody {
     border-top: none;
@@ -26,7 +30,7 @@
       padding-bottom: 1em;
     }
     &.collapsed {      
-      .property-row {
+      .property-row, .audit-row {
         display: none;        
       }
       & > .property-group-header {

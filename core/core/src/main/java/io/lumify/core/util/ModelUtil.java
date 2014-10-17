@@ -17,7 +17,8 @@ public class ModelUtil {
             // TODO refactor to config file info. But since this is only for development this is low priority
             "lumify_securegraph_d",
             "lumify_securegraph_v",
-            "lumify_securegraph_e");
+            "lumify_securegraph_e",
+            "lumify_systemNotifications");
 
     public static void initializeTables(ModelSession modelSession, User user) {
         for (String table : tables) {

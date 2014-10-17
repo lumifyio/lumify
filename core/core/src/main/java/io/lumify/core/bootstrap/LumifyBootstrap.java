@@ -13,6 +13,7 @@ import io.lumify.core.metrics.MetricsManager;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -138,6 +139,9 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(ArtifactThumbnailRepository.class)
                 .toProvider(this.<ArtifactThumbnailRepository>getConfigurableProvider(configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))
+                .in(Scopes.SINGLETON);
+        bind(SystemNotificationRepository.class)
+                .toProvider(this.<SystemNotificationRepository>getConfigurableProvider(configuration, Configuration.SYSTEM_NOTIFICATION_REPOSITORY))
                 .in(Scopes.SINGLETON);
 
         injectProviders();

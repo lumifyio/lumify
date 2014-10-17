@@ -102,7 +102,7 @@ require([
                     li.find('input[name=key]').val(),
                     property.name || li.find('input[name=name]').val(),
                     li.find('input[name=value]').val(),
-                    li.find('input[name="http://lumify.io#visibilityJson"]').val(),
+                    li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
                     'admin graph vertex editor',
                     null,
                     JSON.parse(li.find('textarea[name=metadata]').val()),

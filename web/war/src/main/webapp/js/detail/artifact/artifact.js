@@ -7,6 +7,7 @@ define([
     './image/image',
     '../withTypeContent',
     '../withHighlighting',
+    '../toolbar/toolbar',
     'detail/dropdowns/termForm/termForm',
     'detail/properties/properties',
     'tpl!./artifact',
@@ -26,6 +27,7 @@ define([
     Privileges,
     Image,
     withTypeContent, withHighlighting,
+    Toolbar,
     TermForm,
     Properties,
     template,
@@ -57,6 +59,7 @@ define([
             detectedObjectSelector: '.detected-object',
             detectedObjectTagSelector: '.detected-object-tag',
             artifactSelector: '.artifact-image',
+            toolbarSelector: '.comp-toolbar',
             propertiesSelector: '.properties',
             titleSelector: '.artifact-title',
             timestampAnchorSelector: '.av-times a'
@@ -75,6 +78,8 @@ define([
             this.on('termCreated', this.onTeardownDropdowns);
             this.on('dropdownClosed', this.onTeardownDropdowns);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+            this.on('openOriginal', this.onOpenOriginal);
+            this.on('downloadOriginal', this.onDownloadOriginal);
             this.after('tearDownDropdowns', this.onTeardownDropdowns);
 
             this.before('teardown', function() {
@@ -90,6 +95,16 @@ define([
         this.before('teardown', function() {
             this.select('propertiesSelector').teardownComponent(Properties);
         });
+
+        this.onOpenOriginal = function(event) {
+            window.open(this.attr.data.imageRawSrc);
+        };
+
+        this.onDownloadOriginal = function(event) {
+            window.open(this.attr.data.imageRawSrc + (
+                /\?/.test(this.attr.data.imageRawSrc) ? '&' : '?'
+            ) + 'download=true');
+        };
 
         this.onVerticesUpdated = function(event, data) {
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
@@ -129,12 +144,41 @@ define([
 
             this.$node.html(template({
                 vertex: vertex,
-                fullscreenButton: this.fullscreenButton([vertex.id]),
-                auditsButton: this.auditsButton(),
                 F: F
             }));
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
+
+            Toolbar.attachTo(this.select('toolbarSelector'), {
+                toolbar: [
+                    {
+                        title: i18n('detail.toolbar.open'),
+                        submenu: [
+                            Toolbar.ITEMS.FULLSCREEN,
+                            Toolbar.ITEMS.DIVIDER,
+                            self.sourceUrlToolbarItem(),
+                            {
+                                title: i18n('detail.artifact.open.original'),
+                                subtitle: i18n('detail.artifact.open.original.subtitle'),
+                                event: 'openOriginal'
+                            },
+                            {
+                                title: i18n('detail.artifact.open.download.original'),
+                                subtitle: i18n('detail.artifact.open.download.original.subtitle'),
+                                event: 'downloadOriginal'
+                            }
+                        ]
+                    },
+                    {
+                        title: i18n('detail.toolbar.add'),
+                        cls: 'requires-EDIT',
+                        submenu: [
+                            Toolbar.ITEMS.ADD_PROPERTY
+                        ]
+                    },
+                    Toolbar.ITEMS.AUDIT
+                ]
+            });
 
             this.update()
             this.updateText();
@@ -150,12 +194,10 @@ define([
         };
 
         this.updateTitle = function() {
-            $('<div>')
-                .addClass('subtitle')
-                .text(this.attr.data.concept.displayName)
-                .appendTo(
-                    this.select('titleSelector').text(F.vertex.title(this.attr.data))
-                )
+            this.select('titleSelector')
+                .text(F.vertex.title(this.attr.data))
+                .next('.subtitle')
+                .text(this.attr.data.concept.displayName);
         };
 
         this.updateDetectedObjects = function() {

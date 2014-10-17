@@ -61,7 +61,6 @@ define([
     function Properties() {
 
         this.defaultAttrs({
-            addNewPropertiesSelector: '.add-new-properties',
             entityAuditsSelector: '.entity_audit_events',
             auditShowAllSelector: '.show-all-button-row button',
             auditDateSelector: '.audit-date',
@@ -349,19 +348,7 @@ define([
             this.tableRoot = root
                 .append('table')
                 .attr('class', 'table')
-                .on('click', onTableClick.bind(this))
-                .call(function() {
-                    if (!F.vertex.isEdge(self.attr.data)) {
-                        this.append('tr')
-                            .attr('class', 'buttons-row requires-EDIT')
-                            .append('td')
-                                .attr('colspan', 3)
-                                .attr('class', 'buttons')
-                                .append('button')
-                                    .attr('class', 'add-new-properties btn btn-mini btn-default')
-                                    .text(i18n('properties.button.add_property'));
-                    }
-                });
+                .on('click', onTableClick.bind(this));
 
             $.when(
                 ontologyService.relationships(),
@@ -375,7 +362,6 @@ define([
             });
 
             this.on('click', {
-                addNewPropertiesSelector: this.onAddNewPropertiesClicked,
                 auditDateSelector: this.onAuditDateClicked,
                 auditUserSelector: this.onAuditUserClicked,
                 auditShowAllSelector: this.onAuditShowAll,
@@ -655,13 +641,8 @@ define([
             this.trigger(target, 'propertyerror', { error: error });
         };
 
-        this.onAddNewPropertiesClicked = function(evt) {
-            this.trigger('editProperty');
-        };
-
         this.onEditProperty = function(evt, data) {
-            var button = this.select('addNewPropertiesSelector'),
-                root = $('<div class="underneath">'),
+            var root = $('<div class="underneath">'),
                 property = data && data.property,
                 propertyRow = property && $(evt.target).closest('tr')
 
@@ -674,7 +655,7 @@ define([
                         .find('td')
                 );
             } else {
-                root.insertAfter(button);
+                $('<tr><td colspan="3"></td></tr>').prependTo(this.$node.find('table')).find('td').append(root);
             }
 
             PropertyForm.teardownAll();
@@ -713,10 +694,11 @@ define([
         };
     }
 
-    function onTableClick(event) {
+    function onTableClick() {
         var $target = $(d3.event.target),
             $header = $target.closest('.property-group-header'),
-            $tbody = $header.closest('.property-group');
+            $tbody = $header.closest('.property-group'),
+            processed = true;
 
         if ($header.is('.property-group-header')) {
             $tbody.toggleClass('collapsed expanded');
@@ -728,13 +710,17 @@ define([
             } else {
                 this.showMoreExpanded[$target.data('propertyName')] = true;
             }
-
             this.reload();
         } else if ($target.is('.info')) {
-            d3.event.stopPropagation();
-            d3.event.preventDefault();
             var datum = d3.select($target.closest('.property-value').get(0)).datum();
             this.showPropertyInfo($target, datum.property);
+        } else {
+            processed = false;
+        }
+
+        if (processed) {
+            d3.event.stopPropagation();
+            d3.event.preventDefault();
         }
     }
 

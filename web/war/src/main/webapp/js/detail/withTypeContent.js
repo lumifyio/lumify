@@ -1,14 +1,9 @@
 
 define([
-    'tpl!./toolbar/fullscreen',
-    'tpl!./toolbar/fullscreen-item',
-    'tpl!./toolbar/audits',
     'data',
     'util/vertex/formatters'
-], function(fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate, appData, F) {
+], function(appData, F) {
     'use strict';
-
-    var intercomInstance;
 
     return withTypeContent;
 
@@ -17,10 +12,6 @@ define([
         this._xhrs = [];
 
         this.defaultAttrs({
-            fullscreenSingleSelector: '.fullscreen-single',
-            fullscreenMultiSelector: '.fullscreen-multi',
-            fullscreenDropdownButtonSelector: '.fullscreen-multi .dropdown-toggle',
-            fullscreenDropdownItemSelector: '.fullscreen-multi .existing a',
             auditSelector: '.audits'
         });
 
@@ -29,27 +20,20 @@ define([
             this.$node.empty();
         });
 
+        this.before('initialize', function(node) {
+            $(node).removeClass('custom-entity-image')
+        });
+
         this.after('initialize', function() {
             var self = this,
                 previousConcept = this.attr.data.concept && this.attr.data.concept.id;
 
-            if (!window.isFullscreenDetails) {
-                this.on('clearAvailableFullscreenDetails', this.onFullscreenClear);
-                this.on('fullscreenDetailVerticesAvailable', this.onFullscreenAdd);
-                this.on('click', {
-                    fullscreenDropdownButtonSelector: this.onFullscreenDropdownClicked,
-                    fullscreenDropdownItemSelector: this.onFullscreenWindowClicked
-                });
-
-                this.setupTabCommunication();
-            }
-
             this.auditDisplayed = false;
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
-
-            this.on('click', {
-                auditSelector: this.onAuditToggle
-            });
+            this.on('addNewProperty', this.onAddNewProperty);
+            this.on('openFullscreen', this.onOpenFullscreen);
+            this.on('toggleAudit', this.onAuditToggle);
+            this.on('openSourceUrl', this.onOpenSourceUrl);
 
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
@@ -62,6 +46,22 @@ define([
             });
         });
 
+        this.onOpenSourceUrl = function(event, data) {
+            window.open(data.sourceUrl);
+        }
+
+        this.onAddNewProperty = function(event) {
+            this.trigger(this.select('propertiesSelector'), 'editProperty');
+        };
+
+        this.onOpenFullscreen = function(event) {
+            var url = F.vertexUrl.url(
+                _.isArray(this.attr.data) ? this.attr.data : [this.attr.data.id],
+                appData.workspaceId
+            );
+            window.open(url);
+        };
+
         this.debouncedConceptTypeChange = function(vertex) {
             this.trigger(document, 'selectObjects', {
                 vertices: [vertex],
@@ -71,22 +71,25 @@ define([
             });
         };
 
-        this.fullscreenButton = function(vertexIds) {
-            return fullscreenButtonTemplate({
-                vertexIds: vertexIds,
-                F: F,
-                workspaceId: appData.workspaceId
-            });
-        };
+        this.sourceUrlToolbarItem = function() {
+            var sourceUrl = _.findWhere(this.attr.data.properties, { name: 'http://lumify.io#sourceUrl' });
 
-        this.auditsButton = function() {
-            return auditsButtonTemplate({});
+            if (sourceUrl) {
+                return {
+                    title: i18n('detail.toolbar.open.source_url'),
+                    subtitle: i18n('detail.toolbar.open.source_url.subtitle'),
+                    event: 'openSourceUrl',
+                    eventData: {
+                        sourceUrl: sourceUrl.value
+                    }
+                };
+            }
         };
 
         this.onToggleAuditDisplay = function(event, data) {
             this.auditDisplayed = data.displayed;
             this.$node.toggleClass('showAuditing', data.displayed);
-            this.$node.find('.btn-toolbar .audits').toggleClass('active', data.displayed);
+            this.$node.find('.comp-toolbar .audits').toggleClass('active', data.displayed);
         };
 
         this.onAuditToggle = function(event) {
@@ -96,82 +99,6 @@ define([
             this.auditDisplayed = !this.auditDisplayed;
             this.trigger('toggleAuditDisplay', {
                 displayed: this.auditDisplayed
-            });
-        };
-
-        this.onFullscreenDropdownClicked = function(event) {
-            if (intercomInstance) {
-                var multi = this.select('fullscreenMultiSelector');
-                multi.find('.existing').remove();
-                multi.find('.divider').hide();
-                intercomInstance.emit('ping');
-            }
-        };
-
-        this.onFullscreenWindowClicked = function(event) {
-            var info = $(event.target).closest('li').data('info');
-
-            if (info) {
-                var ids;
-                if ($.isArray(this.attr.data)) {
-                    ids = _.map(
-                            _.reject(this.attr.data, function(v) {
-                                return v['http://lumify.io#conceptType'] === 'relationship';
-                            }), function(v) {
-                                return v.id || v.graphVertexId;
-                            });
-                } else {
-                    ids = [this.attr.data.id || this.attr.data.graphVertexId];
-                }
-                intercomInstance.emit('addVertices', {
-                    message: JSON.stringify({
-                        targetIdentifier: info.identifier,
-                        vertices: ids,
-                        workspaceId: appData.workspaceId
-                    })
-                });
-            }
-        };
-
-        this.onFullscreenClear = function(event, data) {
-            this.select('fullscreenMultiSelector')
-                .hide()
-                .find('.existing').remove();
-
-            this.select('fullscreenSingleSelector').show();
-        };
-
-        this.onFullscreenAdd = function(event, data) {
-            $.when.apply(null, this._xhrs)
-             .done(function() {
-                var multi = this.select('fullscreenMultiSelector');
-                multi.show()
-                    .find('ul')
-                    .append(fullscreenItemTemplate({
-                        data: data,
-                        text: data.title
-                    }));
-
-                multi.find('.divider').show();
-
-                this.select('fullscreenSingleSelector').hide();
-             }.bind(this));
-        };
-
-        this.setupTabCommunication = function() {
-            var self = this;
-
-            require(['intercom'], function(Intercom) {
-                if (!intercomInstance) {
-                    intercomInstance = Intercom.getInstance();
-
-                    intercomInstance.on('fullscreenDetailsWithVertices', function(data) {
-                        var info = JSON.parse(data.message);
-                        self.trigger('fullscreenDetailVerticesAvailable', info);
-                    });
-                }
-                self.trigger('clearAvailableFullscreenDetails');
-                intercomInstance.emit('ping');
             });
         };
 

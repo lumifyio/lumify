@@ -56,6 +56,8 @@ define([
                     change: this.onFileChange.bind(this)
                 });
 
+                this.on('setImage', this.onSetImage);
+
                 this.$node.addClass('upload-available');
                 this.$node.on({
                     mouseenter: function() {
@@ -67,6 +69,10 @@ define([
                 });
             }
         });
+
+        this.onSetImage = function(e, data) {
+            this.handleFilesDropped(data.files);
+        }
 
         this.onGraphPaddingUpdated = function(event, data) {
             if (data.padding.r && this.imageNaturalSize) {
@@ -145,7 +151,8 @@ define([
             this.$node
                 .addClass('accepts-file')
                 .css({ backgroundImage: 'url("' + imageUrl + '")' })
-                .toggleClass('custom-image', customImage);
+                .toggleClass('custom-image', customImage)
+                .closest('.type-content').toggleClass('custom-entity-image', customImage);
         };
 
         this.onFileChange = function(e) {
