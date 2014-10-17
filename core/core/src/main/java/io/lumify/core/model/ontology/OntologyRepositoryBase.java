@@ -627,8 +627,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
     }
 
-    protected File findOwlFile(File dir) {
-        File[] files = dir.listFiles();
+    protected File findOwlFile(File fileOrDir) {
+        if (fileOrDir.isFile()) {
+            return fileOrDir;
+        }
+        File[] files = fileOrDir.listFiles();
         if (files == null) {
             return null;
         }
