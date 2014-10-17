@@ -113,6 +113,13 @@ define([], function() {
                         workspaceId: message.workspaceId
                     });
                     break;
+
+                case 'userStatusChange':
+                    if (message.data && message.data.status && message.data.status === "OFFLINE"
+                        && message.data.id && message.data.id === currentUser.id) {
+                        $(document).trigger('logout', {  message: i18n('lumify.session.expired') });
+                    }
+                    break;
             }
         };
     }
