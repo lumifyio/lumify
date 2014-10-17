@@ -21,9 +21,18 @@
 <div id='login'>
   <div class="logo"></div>
     <form action="." class="logout">
-        <p class="text-error">You are logged out of Lumify.</p>
+        <p class="text-error">Session Expired</p>
         <button class="btn btn-primary">Login</button>
     </form>
 </div>
+<script type="text/javascript">
+  var query = location.search.substr(1);
+  var params = {};
+  query.split("&").forEach(function(part) {
+    var item = part.split("=");
+    params[item[0]] = decodeURIComponent(item[1]);
+  });
+  document.getElementsByClassName('text-error')[0].innerText = params['msg'];
+</script>
 </body>
 </html>
