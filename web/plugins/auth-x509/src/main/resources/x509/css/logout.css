@@ -1,0 +1,15 @@
+.logout {
+  margin: auto;
+  width: 16em;
+}
+button, button.btn-primary {
+  width: 100%;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  transition: none;
+}
+p {
+  text-align: center;
+}
+
