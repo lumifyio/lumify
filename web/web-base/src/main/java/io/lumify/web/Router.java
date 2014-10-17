@@ -17,9 +17,11 @@ import io.lumify.web.routes.admin.AdminUploadOntology;
 import io.lumify.web.routes.admin.PluginList;
 import io.lumify.web.routes.config.Configuration;
 import io.lumify.web.routes.edge.*;
+import io.lumify.web.routes.notification.SystemNotificationCreate;
 import io.lumify.web.routes.ontology.Ontology;
 import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.resource.ResourceGet;
+import io.lumify.web.routes.notification.Notifications;
 import io.lumify.web.routes.user.*;
 import io.lumify.web.routes.vertex.*;
 import io.lumify.web.routes.workspace.*;
@@ -35,7 +37,6 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class Router extends HttpServlet {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Router.class);
-    private static final LumifyLogger LOGGER_ACCESS = LumifyLoggerFactory.getLogger(Router.class.getName() + "-ACCESS");
 
     /**
      * Copied from org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT.
@@ -61,6 +62,9 @@ public class Router extends HttpServlet {
             app.post("/logout", csrfProtector, Logout.class);
 
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
+
+            app.get("/notification/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, Notifications.class);
+            app.post("/notification/system/create", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationCreate.class);
 
             app.get("/resource", authenticator, csrfProtector, ReadPrivilegeFilter.class, ResourceGet.class);
             app.get("/map/marker/image", csrfProtector, MapMarkerImage.class);  // TODO combine with /resource
