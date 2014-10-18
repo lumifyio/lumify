@@ -1,6 +1,7 @@
 package io.lumify.sql.model.systemNotification;
 
 import io.lumify.core.model.systemNotification.SystemNotification;
+import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
 import org.json.JSONObject;
 
@@ -85,13 +86,6 @@ public class SqlSystemNotification implements SystemNotification {
 
     @Override
     public JSONObject toJSONObject() {
-        JSONObject json = new JSONObject();
-        json.put("id", getId());
-        json.put("severity", getSeverity().toString());
-        json.put("title", getTitle());
-        json.put("message", getMessage());
-        json.put("startDate", getStartDate());
-        json.put("endDate", getEndDate());
-        return json;
+        return SystemNotificationRepository.toJSONObject(this);
     }
 }
