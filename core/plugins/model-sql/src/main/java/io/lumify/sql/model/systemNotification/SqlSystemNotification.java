@@ -88,4 +88,9 @@ public class SqlSystemNotification implements SystemNotification {
     public JSONObject toJSONObject() {
         return SystemNotificationRepository.toJSONObject(this);
     }
+
+    @Override
+    public boolean isActive() {
+        return SystemNotificationRepository.isActive(this);
+    }
 }

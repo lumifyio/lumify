@@ -37,4 +37,10 @@ public abstract class SystemNotificationRepository {
         json.put("endDate", notification.getEndDate());
         return json;
     }
+
+    public static boolean isActive(SystemNotification notification) {
+        Date now = new Date();
+        Date endDate = notification.getEndDate();
+        return notification.getStartDate().before(now) && (endDate == null || endDate.after(now));
+    }
 }

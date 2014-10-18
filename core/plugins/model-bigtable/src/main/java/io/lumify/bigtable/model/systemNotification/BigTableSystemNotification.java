@@ -105,6 +105,11 @@ public class BigTableSystemNotification extends Row<SystemNotificationRowKey> im
         return SystemNotificationRepository.toJSONObject(this);
     }
 
+    @Override
+    public boolean isActive() {
+        return SystemNotificationRepository.isActive(this);
+    }
+    
     private ColumnFamily getColumnFamily() {
         ColumnFamily cf = get(COLUMN_FAMILY_NAME);
         if (cf == null) {

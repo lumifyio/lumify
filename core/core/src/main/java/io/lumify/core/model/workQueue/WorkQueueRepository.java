@@ -4,6 +4,8 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.systemNotification.SystemNotification;
+import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.util.ClientApiConverter;
 import io.lumify.web.clientapi.model.ClientApiWorkspace;
@@ -208,6 +210,13 @@ public abstract class WorkQueueRepository {
         }
         permissions.put("users", users);
         return permissions;
+    }
+
+    public void pushSystemNotification(SystemNotification notification) {
+        JSONObject json = new JSONObject();
+        json.put("type", "systemNotification");
+        json.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
     }
 
     protected void broadcastPropertyChange(Element element, String propertyKey, String propertyName, String workspaceId) {

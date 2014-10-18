@@ -1,9 +1,11 @@
 package io.lumify.web.routes.notification;
 
 import com.google.inject.Inject;
+import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
@@ -15,6 +17,7 @@ import java.util.Date;
 
 public class SystemNotificationCreate extends BaseRequestHandler {
     private final SystemNotificationRepository systemNotificationRepository;
+    private final WorkQueueRepository workQueueRepository;
     private static final String SEVERITY_PARAMETER_NAME = "severity";
     private static final String TITLE_PARAMETER_NAME = "title";
     private static final String MESSAGE_PARAMETER_NAME = "message";
@@ -25,12 +28,14 @@ public class SystemNotificationCreate extends BaseRequestHandler {
     @Inject
     public SystemNotificationCreate(
             final SystemNotificationRepository systemNotificationRepository,
+            final WorkQueueRepository workQueueRepository,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,
             final io.lumify.core.config.Configuration configuration
     ) {
         super(userRepository, workspaceRepository, configuration);
         this.systemNotificationRepository = systemNotificationRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -45,7 +50,11 @@ public class SystemNotificationCreate extends BaseRequestHandler {
         String endDateParameter = getOptionalParameter(request, END_DATE_PARAMETER_NAME);
         Date endDate = endDateParameter != null ? sdf.parse(endDateParameter) : null;
 
-        systemNotificationRepository.createNotification(severity, title, message, startDate, endDate);
+        SystemNotification notification = systemNotificationRepository.createNotification(severity, title, message, startDate, endDate);
+
+        if (notification.isActive()) {
+            workQueueRepository.pushSystemNotification(notification);
+        }
 
         respondWithSuccessJson(response);
     }

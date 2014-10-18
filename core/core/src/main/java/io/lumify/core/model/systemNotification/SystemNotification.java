@@ -29,4 +29,6 @@ public interface SystemNotification {
     public Date getEndDate();
 
     public JSONObject toJSONObject();
+
+    public boolean isActive();
 }
