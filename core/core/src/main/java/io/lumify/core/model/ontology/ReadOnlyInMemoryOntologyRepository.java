@@ -150,7 +150,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost) {
-        InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
+        InMemoryOntologyProperty property = (InMemoryOntologyProperty) getPropertyByIRI(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();
             property.setDataType(dataType);
@@ -195,16 +195,6 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Iterable<Concept> getConcepts() {
-        return new ConvertingIterable<InMemoryConcept, Concept>(conceptsCache.values()) {
-            @Override
-            protected Concept convert(InMemoryConcept concept) {
-                return concept;
-            }
-        };
-    }
-
-    @Override
     public String getDisplayNameForLabel(String relationshipIRI) {
         InMemoryRelationship relationship = relationshipsCache.get(relationshipIRI);
         checkNotNull(relationship, "Could not find relationship " + relationshipIRI);
@@ -212,7 +202,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public OntologyProperty getProperty(String propertyIRI) {
+    public OntologyProperty getPropertyByIRI(String propertyIRI) {
         return propertiesCache.get(propertyIRI);
     }
 
@@ -245,16 +235,6 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     public Concept getParentConcept(Concept concept) {
         for (String key : conceptsCache.keySet()) {
             if (key.equals(concept.getParentConceptIRI())) {
-                return conceptsCache.get(key);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Concept getConceptByIRI(String conceptIRI) {
-        for (String key : conceptsCache.keySet()) {
-            if (key.equals(conceptIRI)) {
                 return conceptsCache.get(key);
             }
         }

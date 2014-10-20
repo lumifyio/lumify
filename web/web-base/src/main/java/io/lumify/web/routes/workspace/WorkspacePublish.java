@@ -184,7 +184,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 String propertyKey = propertyPublishItem.getKey();
                 String propertyName = propertyPublishItem.getName();
 
-                OntologyProperty ontologyProperty = ontologyRepository.getProperty(propertyName);
+                OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(propertyName);
                 checkNotNull(ontologyProperty, "Could not find ontology property: " + propertyName);
                 if (!ontologyProperty.getUserVisible() || propertyName.equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
                     continue;
@@ -287,7 +287,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : vertex.getProperties()) {
-            OntologyProperty ontologyProperty = ontologyRepository.getProperty(property.getName());
+            OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
             checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName());
             if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
                 publishProperty(vertexElementMutation, property, workspaceId, user);

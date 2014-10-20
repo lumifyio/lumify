@@ -93,7 +93,7 @@ public class SetEdgeProperty extends BaseRequestHandler {
             return;
         }
 
-        OntologyProperty property = ontologyRepository.getProperty(propertyName);
+        OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }

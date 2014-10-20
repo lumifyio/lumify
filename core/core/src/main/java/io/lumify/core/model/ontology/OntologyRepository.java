@@ -28,13 +28,9 @@ public interface OntologyRepository {
 
     Iterable<OntologyProperty> getProperties();
 
-    Iterable<Concept> getConcepts();
-
     String getDisplayNameForLabel(String relationshipIRI);
 
-    OntologyProperty getProperty(String propertyIRI);
-
-    Relationship getRelationshipByIRI(String relationshipIRI);
+    OntologyProperty getPropertyByIRI(String propertyIRI);
 
     boolean hasRelationshipByIRI(String relationshipIRI);
 
