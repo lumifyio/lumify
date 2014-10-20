@@ -29,7 +29,7 @@ public class Login extends BaseRequestHandler {
         User user = getUserRepository().findByUsername(username);
         if (user != null && getUserRepository().isPasswordValid(user, password)) {
             getUserRepository().recordLogin(user, request.getRemoteAddr());
-            CurrentUser.set(request, user.getUserId());
+            CurrentUser.set(request, user.getUserId(), user.getUsername());
             JSONObject json = new JSONObject();
             json.put("status", "OK");
             respondWithJson(response, json);
