@@ -29,6 +29,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
     @Test
     public void testUploadFile() throws IOException, ApiException {
+        testOntology();
         importArtifactAsUser1();
         assertUser1CanSeeInSearch();
         assertUser2DoesNotHaveAccessToUser1sWorkspace();
@@ -43,6 +44,25 @@ public class UploadFileIntegrationTest extends TestBase {
         assertUser2DoesNotHaveAccessToAuth2();
         testGeoSearch();
         testSetTitleAndCheckConfidence();
+    }
+
+    private void testOntology() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiOntology ontology = lumifyApi.getOntologyApi().get();
+
+        boolean foundPersonConcept = false;
+        for (ClientApiOntology.Concept concept : ontology.getConcepts()) {
+            if (concept.getId().equals("http://lumify.io/test#person")) {
+                foundPersonConcept = true;
+                assertEquals("invalid title formula", "prop('http://lumify.io/test#firstName') + ' ' + prop('http://lumify.io/test#lastName')", concept.getTitleFormula());
+                assertEquals("invalid sub-title formula", "prop('http://lumify.io/test#firstName') || ''", concept.getSubtitleFormula());
+                assertEquals("invalid time formula", "prop('http://lumify.io/test#birthDate') || ''", concept.getTimeFormula());
+            }
+        }
+        assertTrue("could not find http://lumify.io/test#person", foundPersonConcept);
+
+        lumifyApi.logout();
     }
 
     public void importArtifactAsUser1() throws ApiException, IOException {

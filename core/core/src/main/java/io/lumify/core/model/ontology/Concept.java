@@ -69,7 +69,7 @@ public abstract class Concept {
                 concept.setSubtitleFormula(getSubtitleFormula());
             }
             if (getTimeFormula() != null) {
-                concept.setTitleFormula(getTimeFormula());
+                concept.setTimeFormula(getTimeFormula());
             }
             if (getParentConceptIRI() != null) {
                 concept.setParentConcept(getParentConceptIRI());
