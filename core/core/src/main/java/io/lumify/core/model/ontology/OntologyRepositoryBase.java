@@ -393,11 +393,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         checkNotNull(label, "label cannot be null or empty for " + iri);
         LOGGER.info("Importing ontology object property " + iri + " (label: " + label + ")");
 
-        for (Concept domain : getDomainsConcepts(o, objectProperty)) {
-            for (Concept range : getRangesConcepts(o, objectProperty)) {
-                getOrCreateRelationshipType(domain, range, iri, label);
-            }
-        }
+        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label);
     }
 
     protected void importInverseOf(OWLOntology o, OWLObjectProperty objectProperty) {
@@ -674,7 +670,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         Iterable<OntologyProperty> properties = getProperties();
         ontology.addAllProperties(OntologyProperty.toClientApiProperties(properties));
 
-        Iterable<Relationship> relationships = getRelationshipLabels();
+        Iterable<Relationship> relationships = getRelationships();
         ontology.addAllRelationships(Relationship.toClientApiRelationships(relationships));
 
         return ontology;

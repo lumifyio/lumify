@@ -24,7 +24,7 @@ public interface OntologyRepository {
 
     void clearCache();
 
-    Iterable<Relationship> getRelationshipLabels();
+    Iterable<Relationship> getRelationships();
 
     Iterable<OntologyProperty> getProperties();
 
@@ -35,6 +35,8 @@ public interface OntologyRepository {
     OntologyProperty getProperty(String propertyIRI);
 
     Relationship getRelationshipByIRI(String relationshipIRI);
+
+    boolean hasRelationshipByIRI(String relationshipIRI);
 
     Iterable<Concept> getConceptsWithProperties();
 
@@ -50,7 +52,7 @@ public interface OntologyRepository {
 
     Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir);
 
-    Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName);
+    Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName);
 
     OWLOntologyManager createOwlOntologyManager(OWLOntologyLoaderConfiguration config, IRI excludeDocumentIRI) throws Exception;
 

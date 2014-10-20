@@ -3,9 +3,9 @@ package io.lumify.core.model.workspace;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
-import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.ClientApiWorkspace;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
+import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,9 +19,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class WorkspaceRepository {
     public static final String VISIBILITY_STRING = "workspace";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
-    public static final String WORKSPACE_CONCEPT_NAME = "http://lumify.io/workspace";
-    public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME = "http://lumify.io/workspace/toEntity";
-    public static final String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
+    public static final String WORKSPACE_CONCEPT_IRI = "http://lumify.io/workspace";
+    public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace/toEntity";
+    public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace/toUser";
     public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
 
     public abstract void delete(Workspace workspace, User user);

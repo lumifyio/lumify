@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import io.lumify.core.mapreduce.LumifyMRBase;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.Relationship;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.wikipedia.WikipediaConstants;
@@ -47,8 +46,7 @@ public class ImportMR extends LumifyMRBase {
     }
 
     private void verifyWikipediaPageInternalLinkWikipediaPageRelationship(OntologyRepository ontologyRepository) {
-        Relationship wikipediaPageInternalLinkWikipediaPageRelationship = ontologyRepository.getRelationshipByIRI(WikipediaConstants.WIKIPEDIA_PAGE_INTERNAL_LINK_WIKIPEDIA_PAGE_CONCEPT_URI);
-        if (wikipediaPageInternalLinkWikipediaPageRelationship == null) {
+        if (!ontologyRepository.hasRelationshipByIRI(WikipediaConstants.WIKIPEDIA_PAGE_INTERNAL_LINK_WIKIPEDIA_PAGE_CONCEPT_URI)) {
             throw new RuntimeException(WikipediaConstants.WIKIPEDIA_PAGE_INTERNAL_LINK_WIKIPEDIA_PAGE_CONCEPT_URI + " relationship not found");
         }
     }

@@ -1,7 +1,5 @@
 package io.lumify.core.model.ontology;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -21,19 +19,16 @@ import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemoryOntologyRepository.class);
     private OWLOntologyLoaderConfiguration owlConfig = new OWLOntologyLoaderConfiguration();
-    private Cache<String, InMemoryConcept> conceptsCache = CacheBuilder.newBuilder()
-            .build();
-    private Cache<String, InMemoryOntologyProperty> propertiesCache = CacheBuilder.newBuilder()
-            .build();
-    private Cache<String, InMemoryRelationship> relationshipsCache = CacheBuilder.newBuilder()
-            .build();
+    private Map<String, InMemoryConcept> conceptsCache = new HashMap<String, InMemoryConcept>();
+    private Map<String, InMemoryOntologyProperty> propertiesCache = new HashMap<String, InMemoryOntologyProperty>();
+    private Map<String, InMemoryRelationship> relationshipsCache = new HashMap<String, InMemoryRelationship>();
     private List<OwlData> fileCache = new ArrayList<OwlData>();
 
     public void init(Configuration config) throws Exception {
@@ -174,15 +169,12 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public void clearCache() {
-        LOGGER.info("clearing ReadOnlyInMemoryOntologyRepository cache");
-        propertiesCache.invalidateAll();
-        relationshipsCache.invalidateAll();
-        conceptsCache.invalidateAll();
+        // do nothing it's all in memory already.
     }
 
     @Override
-    public Iterable<Relationship> getRelationshipLabels() {
-        return new ConvertingIterable<InMemoryRelationship, Relationship>(relationshipsCache.asMap().values()) {
+    public Iterable<Relationship> getRelationships() {
+        return new ConvertingIterable<InMemoryRelationship, Relationship>(relationshipsCache.values()) {
             @Override
             protected Relationship convert(InMemoryRelationship InMemRelationship) {
                 return InMemRelationship;
@@ -192,7 +184,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Iterable<OntologyProperty> getProperties() {
-        return new ConvertingIterable<InMemoryOntologyProperty, OntologyProperty>(propertiesCache.asMap().values()) {
+        return new ConvertingIterable<InMemoryOntologyProperty, OntologyProperty>(propertiesCache.values()) {
             @Override
             protected OntologyProperty convert(InMemoryOntologyProperty ontologyProperty) {
                 return ontologyProperty;
@@ -202,7 +194,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Iterable<Concept> getConcepts() {
-        return new ConvertingIterable<InMemoryConcept, Concept>(conceptsCache.asMap().values()) {
+        return new ConvertingIterable<InMemoryConcept, Concept>(conceptsCache.values()) {
             @Override
             protected Concept convert(InMemoryConcept concept) {
                 return concept;
@@ -212,24 +204,29 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public String getDisplayNameForLabel(String relationshipIRI) {
-        InMemoryRelationship relationship = relationshipsCache.asMap().get(relationshipIRI);
+        InMemoryRelationship relationship = relationshipsCache.get(relationshipIRI);
         checkNotNull(relationship, "Could not find relationship " + relationshipIRI);
         return relationship.getDisplayName();
     }
 
     @Override
     public OntologyProperty getProperty(String propertyIRI) {
-        return propertiesCache.asMap().get(propertyIRI);
+        return propertiesCache.get(propertyIRI);
     }
 
     @Override
     public Relationship getRelationshipByIRI(String relationshipIRI) {
-        return relationshipsCache.asMap().get(relationshipIRI);
+        return relationshipsCache.get(relationshipIRI);
+    }
+
+    @Override
+    public boolean hasRelationshipByIRI(String relationshipIRI) {
+        return getRelationshipByIRI(relationshipIRI) != null;
     }
 
     @Override
     public Iterable<Concept> getConceptsWithProperties() {
-        return new ConvertingIterable<InMemoryConcept, Concept>(conceptsCache.asMap().values()) {
+        return new ConvertingIterable<InMemoryConcept, Concept>(conceptsCache.values()) {
             @Override
             protected Concept convert(InMemoryConcept concept) {
                 return concept;
@@ -239,15 +236,14 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getEntityConcept() {
-        return conceptsCache.asMap().get(ReadOnlyInMemoryOntologyRepository.ENTITY_CONCEPT_IRI);
+        return conceptsCache.get(ReadOnlyInMemoryOntologyRepository.ENTITY_CONCEPT_IRI);
     }
 
     @Override
     public Concept getParentConcept(Concept concept) {
-        ConcurrentMap<String, InMemoryConcept> conceptConcurrentMap = conceptsCache.asMap();
-        for (String key : conceptConcurrentMap.keySet()) {
+        for (String key : conceptsCache.keySet()) {
             if (key.equals(concept.getParentConceptIRI())) {
-                return conceptConcurrentMap.get(key);
+                return conceptsCache.get(key);
             }
         }
         return null;
@@ -255,10 +251,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getConceptByIRI(String conceptIRI) {
-        ConcurrentMap<String, InMemoryConcept> conceptConcurrentMap = conceptsCache.asMap();
-        for (String key : conceptConcurrentMap.keySet()) {
+        for (String key : conceptsCache.keySet()) {
             if (key.equals(conceptIRI)) {
-                return conceptConcurrentMap.get(key);
+                return conceptsCache.get(key);
             }
         }
         return null;
@@ -267,13 +262,13 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     @Override
     public List<Concept> getConceptAndChildrenByIRI(String conceptIRI) {
         List<Concept> concepts = new ArrayList<Concept>();
-        concepts.add(conceptsCache.asMap().get(conceptIRI));
+        concepts.add(conceptsCache.get(conceptIRI));
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         try {
             List<OWLOntology> owlOntologyList = loadOntologyFiles(m, owlConfig, null);
             OWLClass owlClass = m.getOWLDataFactory().getOWLClass(IRI.create(conceptIRI));
             for (OWLClassExpression child : owlClass.getSubClasses(new HashSet<OWLOntology>(owlOntologyList))) {
-                InMemoryConcept inMemoryConcept = conceptsCache.asMap().get(child.asOWLClass().getIRI().toString());
+                InMemoryConcept inMemoryConcept = conceptsCache.get(child.asOWLClass().getIRI().toString());
                 concepts.add(inMemoryConcept);
             }
         } catch (Exception e) {
@@ -293,7 +288,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             List<OWLOntology> owlOntologyList = loadOntologyFiles(m, owlConfig, null);
             OWLClass owlClass = m.getOWLDataFactory().getOWLClass(IRI.create(((InMemoryConcept) concept).getConceptIRI()));
             for (OWLClassExpression child : owlClass.getSubClasses(new HashSet<OWLOntology>(owlOntologyList))) {
-                InMemoryConcept inMemoryConcept = conceptsCache.asMap().get(child.asOWLClass().getIRI().toString());
+                InMemoryConcept inMemoryConcept = conceptsCache.get(child.asOWLClass().getIRI().toString());
                 concepts.add(inMemoryConcept);
             }
         } catch (Exception e) {
@@ -322,13 +317,27 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName) {
+    public Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName) {
         Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
             return relationship;
         }
 
-        InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, ((InMemoryConcept) from).getConceptIRI(), ((InMemoryConcept) to).getConceptIRI());
+        List<String> domainConceptIris = toList(new ConvertingIterable<Concept, String>(domainConcepts) {
+            @Override
+            protected String convert(Concept o) {
+                return o.getIRI();
+            }
+        });
+
+        List<String> rangeConceptIris = toList(new ConvertingIterable<Concept, String>(rangeConcepts) {
+            @Override
+            protected String convert(Concept o) {
+                return o.getIRI();
+            }
+        });
+
+        InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, domainConceptIris, rangeConceptIris);
         relationshipsCache.put(relationshipIRI, inMemRelationship);
         return inMemRelationship;
     }

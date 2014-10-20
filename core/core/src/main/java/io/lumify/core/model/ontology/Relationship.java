@@ -5,14 +5,15 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public abstract class Relationship {
-    private final String sourceConceptIRI;
-    private final String destConceptIRI;
+    private final List<String> domainConceptIRIs;
+    private final List<String> rangeConceptIRIs;
 
-    protected Relationship(String sourceConceptIRI, String destConceptIRI) {
-        this.sourceConceptIRI = sourceConceptIRI;
-        this.destConceptIRI = destConceptIRI;
+    protected Relationship(List<String> domainConceptIRIs, List<String> rangeConceptIRIs) {
+        this.domainConceptIRIs = domainConceptIRIs;
+        this.rangeConceptIRIs = rangeConceptIRIs;
     }
 
     public abstract String getIRI();
@@ -21,12 +22,12 @@ public abstract class Relationship {
 
     public abstract Iterable<String> getInverseOfIRIs();
 
-    public String getSourceConceptIRI() {
-        return sourceConceptIRI;
+    public List<String> getDomainConceptIRIs() {
+        return domainConceptIRIs;
     }
 
-    public String getDestConceptIRI() {
-        return destConceptIRI;
+    public List<String> getRangeConceptIRIs() {
+        return rangeConceptIRIs;
     }
 
     public ClientApiOntology.Relationship toClientApi() {
@@ -34,8 +35,8 @@ public abstract class Relationship {
             ClientApiOntology.Relationship result = new ClientApiOntology.Relationship();
             result.setTitle(getIRI());
             result.setDisplayName(getDisplayName());
-            result.setSource(getSourceConceptIRI());
-            result.setDest(getDestConceptIRI());
+            result.setDomainConceptIris(getDomainConceptIRIs());
+            result.setRangeConceptIris(getRangeConceptIRIs());
 
             Iterable<String> inverseOfIRIs = getInverseOfIRIs();
             for (String inverseOfIRI : inverseOfIRIs) {

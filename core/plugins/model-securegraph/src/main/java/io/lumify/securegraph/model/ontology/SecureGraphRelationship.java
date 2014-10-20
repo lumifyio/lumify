@@ -12,8 +12,8 @@ public class SecureGraphRelationship extends Relationship {
     private final Vertex vertex;
     private final List<String> inverseOfIRIs;
 
-    public SecureGraphRelationship(Vertex vertex, String sourceConceptIRI, String destConceptIRI, List<String> inverseOfIRIs) {
-        super(sourceConceptIRI, destConceptIRI);
+    public SecureGraphRelationship(Vertex vertex, List<String> domainConceptIRIs, List<String> rangeConceptIRIs, List<String> inverseOfIRIs) {
+        super(domainConceptIRIs, rangeConceptIRIs);
         this.vertex = vertex;
         this.inverseOfIRIs = inverseOfIRIs;
     }
