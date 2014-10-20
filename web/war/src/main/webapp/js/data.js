@@ -973,7 +973,6 @@ define([
                             }),
                         self.workspaceService.getVertices(workspaceId)
                     ).done(function(workspace, vertexResponse) {
-
                         self.workspaceEditable = workspace.editable;
 
                         _.each(_.values(self.cachedVertices), resetWorkspace);
@@ -985,7 +984,7 @@ define([
                             };
                         }), 'vertexId');
 
-                        var serverVertices = vertexResponse[0],
+                        var serverVertices = vertexResponse[0].vertices,
                             vertices = serverVertices.map(function(vertex) {
                                 var workspaceData = {};
                                 workspace.vertices.forEach(function(v) {

@@ -169,6 +169,7 @@ public class UploadRdfIntegrationTest extends TestBase {
 
     private void assertWorkspace(LumifyApi lumifyApi) throws ApiException {
         addAllVerticesExceptArtifactToWorkspace(lumifyApi);
+        assertWorkspaceVertices(lumifyApi);
         assertWorkspaceEdges(lumifyApi);
     }
 
@@ -185,6 +186,12 @@ public class UploadRdfIntegrationTest extends TestBase {
             workspaceUpdateData.getEntityUpdates().add(entityUpdate);
         }
         lumifyApi.getWorkspaceApi().update(workspaceUpdateData);
+    }
+
+    private void assertWorkspaceVertices(LumifyApi lumifyApi) throws ApiException {
+        ClientApiWorkspaceVertices vertices = lumifyApi.getWorkspaceApi().getVertices();
+        LOGGER.info("workspace vertices: %s", vertices.toString());
+        assertEquals(3, vertices.getVertices().size());
     }
 
     private void assertWorkspaceEdges(LumifyApi lumifyApi) throws ApiException {

@@ -127,6 +127,19 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/workspace/vertices",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get workspace vertices",
+                    "type": "ClientApiWorkspaceVertices",
+                    "nickname": "getVertices",
+                    "parameters": [
+                    ]
+                }
+            ]
         }
     ],
     "models": {
