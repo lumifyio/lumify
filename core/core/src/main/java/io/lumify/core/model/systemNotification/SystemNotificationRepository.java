@@ -1,15 +1,20 @@
 package io.lumify.core.model.systemNotification;
 
-import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.model.lock.LockRepository;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
 
 public abstract class SystemNotificationRepository {
-    public static final String VISIBILITY_STRING = "systemNotification";
-    public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SystemNotificationRepository.class);
+    private static final String LOCK_NAME = SystemNotificationRepository.class.getName();
 
     public abstract List<SystemNotification> getActiveNotifications(User user);
 
@@ -42,5 +47,48 @@ public abstract class SystemNotificationRepository {
         Date now = new Date();
         Date endDate = notification.getEndDate();
         return notification.getStartDate().before(now) && (endDate == null || endDate.after(now));
+    }
+
+    protected void startBackgroundThread(final LockRepository lockRepository, final UserRepository userRepository, final WorkQueueRepository workQueueRepository) {
+        Runnable acquireLock = new Runnable() {
+            @Override
+            public void run() {
+                Runnable useLock = new Runnable() {
+                    @Override
+                    public void run() {
+                        LOGGER.debug("using successfully acquired lock");
+                        runPeriodically(userRepository, workQueueRepository);
+                    }
+                };
+                LOGGER.debug("acquiring lock...");
+                lockRepository.lock(LOCK_NAME, useLock);
+            }
+        };
+
+        LOGGER.debug("starting background thread");
+        Thread thread = new Thread(acquireLock);
+        thread.setName(this.getClass().getSimpleName() + "-background-thread");
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void runPeriodically(UserRepository userRepository, WorkQueueRepository workQueueRepository) {
+        while (true) {
+            LOGGER.debug("running periodically");
+            Date now = new Date();
+            Date nowPlusOneMinute = DateUtils.addMinutes(now, 1);
+            List<SystemNotification> notifications = getFutureNotifications(nowPlusOneMinute, userRepository.getSystemUser());
+            for (SystemNotification notification : notifications) {
+                workQueueRepository.pushSystemNotification(notification);
+            }
+            try {
+                long remainingMilliseconds = nowPlusOneMinute.getTime() - System.currentTimeMillis();
+                if (remainingMilliseconds > 0) {
+                    Thread.sleep(remainingMilliseconds);
+                }
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        }
     }
 }
