@@ -112,7 +112,7 @@ public class Twitter implements Handler {
         }
         userRepository.recordLogin(user, httpRequest.getRemoteAddr());
 
-        CurrentUser.set(httpRequest, user.getUserId());
+        CurrentUser.set(httpRequest, user.getUserId(), user.getUsername());
 
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");
     }

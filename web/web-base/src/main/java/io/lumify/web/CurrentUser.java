@@ -1,8 +1,5 @@
 package io.lumify.web;
 
-import io.lumify.core.bootstrap.InjectHelper;
-import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 
@@ -14,12 +11,10 @@ public class CurrentUser {
     public static final String SESSIONUSER_ATTRIBUTE_NAME = "user.current";
     public static final String STRING_ATTRIBUTE_NAME = "username";
 
-    public static void set(HttpServletRequest request, String userId) {
+    public static void set(HttpServletRequest request, String userId, String userName) {
         request.getSession().setAttribute(CurrentUser.SESSIONUSER_ATTRIBUTE_NAME, new SessionUser(userId));
         if (LOGGER.isDebugEnabled()) {
-            UserRepository userRepository = InjectHelper.getInstance(UserRepository.class);
-            User user = userRepository.findById(userId);
-            request.getSession().setAttribute(CurrentUser.STRING_ATTRIBUTE_NAME, user.getUsername());
+            request.getSession().setAttribute(CurrentUser.STRING_ATTRIBUTE_NAME, userName);
         }
     }
 
