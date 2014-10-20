@@ -59,13 +59,6 @@ public class ClientApiProperty implements ClientApiObject {
 
     @Override
     public String toString() {
-        return "Property{" +
-                "sandboxStatus=" + sandboxStatus +
-                ", key='" + key + '\'' +
-                ", name='" + name + '\'' +
-                ", streamingPropertyValue=" + streamingPropertyValue +
-                ", metadata=" + metadata +
-                ", value=" + value +
-                '}';
+        return ClientApiConverter.clientApiToString(this);
     }
 }
