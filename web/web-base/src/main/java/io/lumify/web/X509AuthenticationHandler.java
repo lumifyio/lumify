@@ -49,7 +49,7 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
                 return;
             }
             userRepository.recordLogin(user, request.getRemoteAddr());
-            CurrentUser.set(request, user.getUserId());
+            CurrentUser.set(request, user.getUserId(), user.getUsername());
         }
         chain.next(request, response);
     }
