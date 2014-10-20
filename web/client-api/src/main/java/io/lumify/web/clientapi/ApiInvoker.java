@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource.Builder;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.impl.MultiPartWriter;
 import io.lumify.web.clientapi.codegen.ApiException;
 
 import javax.ws.rs.core.Response.Status.Family;
@@ -221,9 +224,12 @@ public class ApiInvoker {
 
     private Client getClient(String host) {
         if (!hostMap.containsKey(host)) {
-            Client client = Client.create();
-            if (isDebug)
+            ClientConfig clientConfig = new DefaultClientConfig();
+            clientConfig.getClasses().add(MultiPartWriter.class);
+            Client client = Client.create(clientConfig);
+            if (isDebug) {
                 client.addFilter(new LoggingFilter());
+            }
             hostMap.put(host, client);
         }
         return hostMap.get(host);
