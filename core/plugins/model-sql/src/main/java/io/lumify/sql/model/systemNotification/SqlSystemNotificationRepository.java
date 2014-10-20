@@ -2,9 +2,12 @@ package io.lumify.sql.model.systemNotification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -21,8 +24,12 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
     private final HibernateSessionManager sessionManager;
 
     @Inject
-    public SqlSystemNotificationRepository(HibernateSessionManager sessionManager) {
+    public SqlSystemNotificationRepository(HibernateSessionManager sessionManager,
+                                           LockRepository lockRepository,
+                                           UserRepository userRepository,
+                                           WorkQueueRepository workQueueRepository) {
         this.sessionManager = sessionManager;
+        startBackgroundThread(lockRepository, userRepository, workQueueRepository);
     }
 
     @Override
