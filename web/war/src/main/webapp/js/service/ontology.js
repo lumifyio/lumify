@@ -200,7 +200,11 @@ define([
                 };
 
             relationships.forEach(function(r) {
-                addToAllSourceDestChildrenGroups(r, r.source, r.dest);
+                r.domainConceptIris.forEach(function(source) {
+                    r.rangeConceptIris.forEach(function(dest) {
+                        addToAllSourceDestChildrenGroups(r, source, dest);
+                    });
+                });
             });
 
             return groups;
