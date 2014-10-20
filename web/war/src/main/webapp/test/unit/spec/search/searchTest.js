@@ -1,16 +1,16 @@
 
-describeComponent('search/search', function(Search) {
+describeComponent('search/search', function() {
+
+    beforeEach(function(done) {
+        setupComponent(this)
+        var c = this.component;
+        switchToSearchType(c, 'lumify').done(function() {
+            querySetValue(c, '');
+            done();
+        });
+    })
 
     describe('search', function() {
-
-        beforeEach(function(done) {
-            setupComponent()
-            var c = this.component;
-            switchToSearchType(c, 'lumify').done(function() {
-                querySetValue(c, '');
-                done();
-            });
-        })
 
         it('should initialize', function() {
             var c = this.component
@@ -114,8 +114,10 @@ describeComponent('search/search', function(Search) {
                 $clear = c.select('clearSearchSelector')
 
             c.$node.find('.search-type-lumify').on('clearSearch', function() {
-                $q.val().should.be.empty
-                done()
+                _.defer(function() {
+                    $q.val().should.be.empty
+                    done()
+                })
             })
             querySetValue(c, 'Some text')
             _.defer(function() {
@@ -126,7 +128,7 @@ describeComponent('search/search', function(Search) {
 
         it('should blur search field on escape', function() {
             var $q = this.component.select('querySelector'),
-                event = $.Event('keydown');
+                event = $.Event('keyup');
 
             $q.focus()
             document.activeElement.should.equal($q[0])
@@ -138,11 +140,13 @@ describeComponent('search/search', function(Search) {
         it('should clear search field on escape when value', function(done) {
             var c = this.component,
                 $q = c.select('querySelector'),
-                event = $.Event('keydown');
+                event = $.Event('keyup');
 
             c.$node.find('.search-type-lumify').on('clearSearch', function() {
-                $q.val().should.be.empty
-                done()
+                _.defer(function() {
+                    $q.val().should.be.empty
+                    done()
+                })
             })
 
             $q.focus()
@@ -199,7 +203,7 @@ describeComponent('search/search', function(Search) {
             c.trigger('searchRequestCompleted', { success: false })
             $error.html().should.not.be.empty
             $error.find('button').remove()
-            $.trim($error.text()).should.equal('Server error')
+            $.trim($error.text()).should.equal('search.query.error')
         })
 
         it('should show hide errors on succesfull query', function() {
@@ -238,4 +242,4 @@ describeComponent('search/search', function(Search) {
         return d.promise();
     }
 
-})
+});

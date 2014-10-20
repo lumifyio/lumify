@@ -5,7 +5,7 @@ describeComponent('configuration/plugins/visibility/visibilityEditor', function(
         NEW_VALUE = 'a NEW value';
 
     beforeEach(function() {
-        setupComponent({ value: VALUE })
+        setupComponent(this, { value: VALUE })
     })
 
     it('Should populate the input field with value attribue', function() {

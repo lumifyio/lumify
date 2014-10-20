@@ -104,6 +104,42 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/workspace/edges",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Get all the workspace edges (this is a POST because ids can be quite large)",
+                    "type": "ClientApiWorkspaceEdges",
+                    "nickname": "getEdges",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "ids[]",
+                            "description": "additional vertex ids to search for",
+                            "required": false,
+                            "type": "List[string]",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/vertices",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get workspace vertices",
+                    "type": "ClientApiWorkspaceVertices",
+                    "nickname": "getVertices",
+                    "parameters": [
+                    ]
+                }
+            ]
         }
     ],
     "models": {

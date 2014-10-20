@@ -2,7 +2,7 @@
 describeMixin('search/types/withSearch', function() {
 
     beforeEach(function() {
-        setupComponent();
+        setupComponent(this);
     })
 
     it('should clear filters on clearSearch events')

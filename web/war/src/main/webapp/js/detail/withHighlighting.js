@@ -641,8 +641,9 @@ define([
 
             this.select('textContainerSelector').html(
                 _.map(textProperties, function(p) {
+                    var textDescription = 'http://lumify.io#textDescription';
                     return textTemplate({
-                        description: p['http://lumify.io#textDescription'] || p.key,
+                        description: p[textDescription] || p.metadata[textDescription] || p.key,
                         key: p.key,
                         cls: F.className.to(p.key)
                     })

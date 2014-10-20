@@ -35,11 +35,10 @@
     "timezone-js": "~0.4.11"
   },
   "devDependencies": {
-    "sinon": "~1.9.0",
-    "sinon-chai": "~2.5.0",
-    "mocha": "~1.18.0",
-    "chai": "~1.9.0",
-    "mocha-flight": "~0.3.0",
+    "sinon": "~1.10.3",
+    "sinon-chai": "~2.6.0",
+    "mocha": "~1.21.5",
+    "chai": "~1.9.2",
     "gremlins.js": "~0.1.0"
   }
 }

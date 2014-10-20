@@ -4,9 +4,12 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.google.inject.Inject;
 import io.lumify.bigtable.model.systemNotification.model.SystemNotificationRowKey;
+import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -21,8 +24,12 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
     private io.lumify.bigtable.model.systemNotification.model.SystemNotificationRepository repository;
 
     @Inject
-    public BigTableSystemNotificationRepository(ModelSession modelSession) {
+    public BigTableSystemNotificationRepository(ModelSession modelSession,
+                                                LockRepository lockRepository,
+                                                UserRepository userRepository,
+                                                WorkQueueRepository workQueueRepository) {
         repository = new io.lumify.bigtable.model.systemNotification.model.SystemNotificationRepository(modelSession);
+        startBackgroundThread(lockRepository, userRepository, workQueueRepository);
     }
 
     @Override

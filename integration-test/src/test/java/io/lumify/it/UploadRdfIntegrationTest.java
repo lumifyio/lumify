@@ -72,6 +72,7 @@ public class UploadRdfIntegrationTest extends TestBase {
         assertFindPath(lumifyApi);
         assertFindRelated(lumifyApi);
         assertFindMultiple(lumifyApi);
+        assertWorkspace(lumifyApi);
 
         lumifyApi.logout();
     }
@@ -164,5 +165,40 @@ public class UploadRdfIntegrationTest extends TestBase {
         }
         assertTrue(foundAltamiraCorporation, "could not find AltamiraCorporation in path");
         assertTrue(foundRdfDocument, "could not find rdf in path");
+    }
+
+    private void assertWorkspace(LumifyApi lumifyApi) throws ApiException {
+        addAllVerticesExceptArtifactToWorkspace(lumifyApi);
+        assertWorkspaceVertices(lumifyApi);
+        assertWorkspaceEdges(lumifyApi);
+    }
+
+    private void addAllVerticesExceptArtifactToWorkspace(LumifyApi lumifyApi) throws ApiException {
+        ClientApiVertexSearchResponse vertices = lumifyApi.getVertexApi().vertexSearch("*");
+        ClientApiWorkspaceUpdateData workspaceUpdateData = new ClientApiWorkspaceUpdateData();
+        for (ClientApiVertex v : vertices.getVertices()) {
+            if (v.getId().equals(artifactVertexId)) {
+                continue;
+            }
+            ClientApiWorkspaceUpdateData.EntityUpdate entityUpdate = new ClientApiWorkspaceUpdateData.EntityUpdate();
+            entityUpdate.setVertexId(v.getId());
+            entityUpdate.setGraphPosition(new GraphPosition(10, 10));
+            workspaceUpdateData.getEntityUpdates().add(entityUpdate);
+        }
+        lumifyApi.getWorkspaceApi().update(workspaceUpdateData);
+    }
+
+    private void assertWorkspaceVertices(LumifyApi lumifyApi) throws ApiException {
+        ClientApiWorkspaceVertices vertices = lumifyApi.getWorkspaceApi().getVertices();
+        LOGGER.info("workspace vertices: %s", vertices.toString());
+        assertEquals(3, vertices.getVertices().size());
+    }
+
+    private void assertWorkspaceEdges(LumifyApi lumifyApi) throws ApiException {
+        List<String> additionalIds = new ArrayList<String>();
+        additionalIds.add(artifactVertexId);
+        ClientApiWorkspaceEdges edges = lumifyApi.getWorkspaceApi().getEdges(additionalIds);
+        LOGGER.info("workspace edges: %s", edges.toString());
+        assertEquals(5, edges.getEdges().size());
     }
 }

@@ -3,6 +3,7 @@ package io.lumify.it;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.lumify.core.ingest.FileImport;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.util.GraphUtil;
 import io.lumify.tikaTextExtractor.TikaTextExtractorGraphPropertyWorker;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
@@ -28,6 +29,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
     @Test
     public void testUploadFile() throws IOException, ApiException {
+        testOntology();
         importArtifactAsUser1();
         assertUser1CanSeeInSearch();
         assertUser2DoesNotHaveAccessToUser1sWorkspace();
@@ -41,6 +43,26 @@ public class UploadFileIntegrationTest extends TestBase {
         alterVisibilityOfArtifactToAuth2();
         assertUser2DoesNotHaveAccessToAuth2();
         testGeoSearch();
+        testSetTitleAndCheckConfidence();
+    }
+
+    private void testOntology() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiOntology ontology = lumifyApi.getOntologyApi().get();
+
+        boolean foundPersonConcept = false;
+        for (ClientApiOntology.Concept concept : ontology.getConcepts()) {
+            if (concept.getId().equals("http://lumify.io/test#person")) {
+                foundPersonConcept = true;
+                assertEquals("invalid title formula", "prop('http://lumify.io/test#firstName') + ' ' + prop('http://lumify.io/test#lastName')", concept.getTitleFormula());
+                assertEquals("invalid sub-title formula", "prop('http://lumify.io/test#firstName') || ''", concept.getSubtitleFormula());
+                assertEquals("invalid time formula", "prop('http://lumify.io/test#birthDate') || ''", concept.getTimeFormula());
+            }
+        }
+        assertTrue("could not find http://lumify.io/test#person", foundPersonConcept);
+
+        lumifyApi.logout();
     }
 
     public void importArtifactAsUser1() throws ApiException, IOException {
@@ -209,5 +231,29 @@ public class UploadFileIntegrationTest extends TestBase {
         assertEquals(1, geoSearchResults.getVertices().size());
 
         lumifyApi.logout();
+    }
+
+    private void testSetTitleAndCheckConfidence() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiWorkspace newWorkspace = lumifyApi.getWorkspaceApi().create();
+        lumifyApi.setWorkspaceId(newWorkspace.getWorkspaceId());
+
+        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", LumifyProperties.TITLE.getPropertyName(), "New Title", "", "new title", null, null);
+
+        ClientApiElement artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
+        boolean foundNewTitle = false;
+        for (ClientApiProperty prop : artifactVertex.getProperties()) {
+            if (prop.getKey().equals("") && prop.getName().equals(LumifyProperties.TITLE.getPropertyName())) {
+                foundNewTitle = true;
+                LOGGER.info("new title prop: %s", prop.toString());
+                assertNotNull("could not find confidence", LumifyProperties.CONFIDENCE.getMetadataValue(prop.getMetadata()));
+                assertEquals(GraphUtil.SET_PROPERTY_CONFIDENCE, LumifyProperties.CONFIDENCE.getMetadataValue(prop.getMetadata()), 0.01);
+            }
+        }
+        assertTrue("Could not find new title", foundNewTitle);
+
+        lumifyApi.logout();
+        lumifyApi.setWorkspaceId(workspaceId);
     }
 }

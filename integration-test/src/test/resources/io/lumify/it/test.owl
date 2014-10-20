@@ -107,6 +107,14 @@
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
 
+    <!-- http://lumify.io/test#birthDate -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/test#birthDate">
+        <rdfs:label xml:lang="en">Birth Date</rdfs:label>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
+    </owl:DatatypeProperty>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -147,6 +155,8 @@
 
     <owl:Class rdf:about="http://lumify.io/test#person">
         <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) + ' ' + prop(&apos;http://lumify.io/test#lastName&apos;)</lumify:titleFormula>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) || &apos;&apos;</lumify:subtitleFormula>
+        <lumify:timeFormula>prop(&apos;http://lumify.io/test#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
     </owl:Class>
 
     <!-- http://lumify.io/test#company -->

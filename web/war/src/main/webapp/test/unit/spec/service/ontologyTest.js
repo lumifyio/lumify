@@ -1,11 +1,13 @@
 
 define(['service/ontology'], function(OntologyService) {
 
-    describe('OntologyService', function() {
+    describe.only('OntologyService', function() {
 
-        before(function() {
+        before(function(done) {
             this.service = new OntologyService();
-            this.service.ontology();
+            this.service.ontology().done(function() {
+                done()
+            })
         })
 
         describe('concepts', function() {
@@ -205,7 +207,8 @@ define(['service/ontology'], function(OntologyService) {
                 expect(this.service).to.have.property('propertiesByConceptId').that.is.a.function
             })
 
-            shouldHaveProperties('company', ['netIncome', 'formationDate', 'abbreviation', 'source'])
+            shouldHaveProperties('company', ['netIncome', 'formationDate', 'abbreviation'])
+            shouldHaveProperties('nonprofit', ['netIncome', 'formationDate', 'abbreviation'])
             shouldNotHaveProperties('organization', ['netIncome'])
 
             it('should have properties by relationshipLabel function', function() {
@@ -213,8 +216,12 @@ define(['service/ontology'], function(OntologyService) {
             })
 
             it('should return properties by relationship label', function(done) {
-                this.service.propertiesByRelationshipLabel('Has Entity')
+                this.service.propertiesByRelationshipLabel('http://lumify.io/dev#rawHasEntity')
                     .done(function(properties) {
+                        expect(properties).to.have.property('list')
+                        expect(properties).to.have.property('byTitle')
+                        // Relationships can't have properties
+                        expect(properties.list).to.have.length(0)
                         done();
                     })
             })

@@ -36,6 +36,14 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         return clientApiElements;
     }
 
+    public static List<ClientApiVertex> toClientApiVertices(Iterable<? extends Vertex> vertices, String workspaceId, Authorizations authorizations) {
+        List<ClientApiVertex> clientApiElements = new ArrayList<ClientApiVertex>();
+        for (Vertex v : vertices) {
+            clientApiElements.add(toClientApiVertex(v, workspaceId, authorizations));
+        }
+        return clientApiElements;
+    }
+
     public static ClientApiElement toClientApi(org.securegraph.Element element, String workspaceId, Authorizations authorizations) {
         checkNotNull(element, "element cannot be null");
         if (element instanceof Vertex) {

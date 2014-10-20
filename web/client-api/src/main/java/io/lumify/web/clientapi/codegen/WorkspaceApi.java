@@ -3,7 +3,9 @@ package io.lumify.web.clientapi.codegen;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
+import io.lumify.web.clientapi.model.ClientApiWorkspaceVertices;
 import io.lumify.web.clientapi.model.ClientApiWorkspacePublishResponse;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceEdges;
 import io.lumify.web.clientapi.model.ClientApiWorkspace;
 import io.lumify.web.clientapi.model.ClientApiWorkspaces;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
@@ -281,6 +283,90 @@ public class WorkspaceApi {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (ClientApiWorkspacePublishResponse) ApiInvoker.deserialize(response, "", ClientApiWorkspacePublishResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiWorkspaceEdges getEdges (List<String> ids) throws ApiException {
+    Object postBody = null;
+    // create path and map variables
+    String path = "/workspace/edges".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    String[] contentTypes = {
+      "multipart/form-data"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      hasFields = true;
+      for(String id:ids) { mp.field("ids[]", id, MediaType.MULTIPART_FORM_DATA_TYPE); }
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      throw new java.lang.RuntimeException("invalid content type");}
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiWorkspaceEdges) ApiInvoker.deserialize(response, "", ClientApiWorkspaceEdges.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiWorkspaceVertices getVertices () throws ApiException {
+    Object postBody = null;
+    // create path and map variables
+    String path = "/workspace/vertices".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiWorkspaceVertices) ApiInvoker.deserialize(response, "", ClientApiWorkspaceVertices.class);
       }
       else {
         return null;

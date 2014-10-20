@@ -17,6 +17,8 @@ import org.securegraph.mutation.ExistingElementMutation;
 import java.util.*;
 
 public class GraphUtil {
+    public static final double SET_PROPERTY_CONFIDENCE = 0.5;
+
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
         return getSandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
@@ -149,6 +151,7 @@ public class GraphUtil {
         LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
         LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, new Date());
         LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId());
+        LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, SET_PROPERTY_CONFIDENCE);
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
