@@ -1,9 +1,8 @@
 package io.lumify.web.routes.workspace;
 
-import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
@@ -12,9 +11,9 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceEdges;
 import org.securegraph.Authorizations;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
@@ -57,7 +56,6 @@ public class WorkspaceEdges extends BaseRequestHandler {
 
         long startTime = System.nanoTime();
 
-        JSONArray resultsJson = new JSONArray();
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
         List<String> allIds = toList(new ConvertingIterable<WorkspaceEntity, String>(workspaceEntities) {
@@ -69,20 +67,21 @@ public class WorkspaceEdges extends BaseRequestHandler {
         Collections.addAll(allIds, additionalIds);
 
         List<Edge> edges = toList(graph.getEdges(graph.findRelatedEdges(allIds, authorizations), authorizations));
+        ClientApiWorkspaceEdges results = new ClientApiWorkspaceEdges();
         for (Edge edge : edges) {
-            JSONObject rel = new JSONObject();
-            rel.put("from", edge.getVertexId(Direction.OUT));
-            rel.put("to", edge.getVertexId(Direction.IN));
-            rel.put("relationshipType", edge.getLabel());
-            rel.put("id", edge.getId());
-            rel.put("diffType", GraphUtil.getSandboxStatus(edge, workspaceId).toString());
-            rel.put("visibilityJson", LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge));
-            resultsJson.put(rel);
+            ClientApiWorkspaceEdges.Edge e = new ClientApiWorkspaceEdges.Edge();
+            e.setFrom(edge.getVertexId(Direction.OUT));
+            e.setTo(edge.getVertexId(Direction.IN));
+            e.setRelationshipType(edge.getLabel());
+            e.setId(edge.getId());
+            e.setDiffType(GraphUtil.getSandboxStatus(edge, workspaceId));
+            e.setVisibilityJson(LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge));
+            results.getEdges().add(e);
         }
 
         long endTime = System.nanoTime();
         LOGGER.debug("Retrieved %d in %dms", edges.size(), (endTime - startTime) / 1000 / 1000);
 
-        respondWithJson(response, resultsJson);
+        respondWithClientApiObject(response, results);
     }
 }

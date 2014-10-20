@@ -429,8 +429,8 @@ define([
 
             this.workspaceService.getEdges(this.workspaceId, this.newlyAddedIds)
                 .done(function(relationships) {
-                    self.relationshipsMarkReady(relationships);
-                    self.trigger('relationshipsLoaded', { relationships: relationships });
+                    self.relationshipsMarkReady(relationships.edges);
+                    self.trigger('relationshipsLoaded', { relationships: relationships.edges });
                 });
         };
 
