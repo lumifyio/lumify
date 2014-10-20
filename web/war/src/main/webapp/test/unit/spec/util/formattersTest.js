@@ -1,4 +1,3 @@
-
 define(['util/formatters'], function(f) {
 
     describe('formatters', function() {
@@ -19,38 +18,38 @@ define(['util/formatters'], function(f) {
                 expect(f.number.prettyApproximate(0)).to.equal('0');
                 expect(f.number.prettyApproximate(1)).to.equal('1');
 
-                expect(f.number.prettyApproximate(1024)).to.equal('1K');
-                expect(f.number.prettyApproximate(1100)).to.equal('1.1K');
-                expect(f.number.prettyApproximate(1150)).to.equal('1.2K');
+                expect(f.number.prettyApproximate(1024)).to.equal('1numbers.thousand_suffix');
+                expect(f.number.prettyApproximate(1100)).to.equal('1.1numbers.thousand_suffix');
+                expect(f.number.prettyApproximate(1150)).to.equal('1.2numbers.thousand_suffix');
 
-                expect(f.number.prettyApproximate(10000)).to.equal('10K');
-                expect(f.number.prettyApproximate(10550)).to.equal('10.6K');
+                expect(f.number.prettyApproximate(10000)).to.equal('10numbers.thousand_suffix');
+                expect(f.number.prettyApproximate(10550)).to.equal('10.6numbers.thousand_suffix');
 
-                expect(f.number.prettyApproximate(100000)).to.equal('100K');
+                expect(f.number.prettyApproximate(100000)).to.equal('100numbers.thousand_suffix');
 
-                expect(f.number.prettyApproximate(1000000)).to.equal('1M');
-                expect(f.number.prettyApproximate(6235987)).to.equal('6.2M');
+                expect(f.number.prettyApproximate(1000000)).to.equal('1numbers.million_suffix');
+                expect(f.number.prettyApproximate(6235987)).to.equal('6.2numbers.million_suffix');
 
-                expect(f.number.prettyApproximate(1000000000)).to.equal('1B');
-                expect(f.number.prettyApproximate(6740000000)).to.equal('6.7B');
+                expect(f.number.prettyApproximate(1000000000)).to.equal('1numbers.billion_suffix');
+                expect(f.number.prettyApproximate(6740000000)).to.equal('6.7numbers.billion_suffix');
             })
         });
 
         describe('for bytes', function() {
 
             it('should be able to format byte numbers', function() {
-                f.bytes.pretty(1023).should.equal('1023 B');
-                f.bytes.pretty(1024).should.equal('1.0 KB');
-                f.bytes.pretty(1024 * 1024).should.equal('1.0 MB');
-                f.bytes.pretty(1024 * 1024 * 1.1).should.equal('1.1 MB');
+                f.bytes.pretty(1023).should.equal('1023 bytes.suffix');
+                f.bytes.pretty(1024).should.equal('1.0 bytes.kilo');
+                f.bytes.pretty(1024 * 1024).should.equal('1.0 bytes.mega');
+                f.bytes.pretty(1024 * 1024 * 1.1).should.equal('1.1 bytes.mega');
 
-                f.bytes.pretty(1024 * 1024 * 1024).should.equal('1.0 GB');
-                f.bytes.pretty(1024 * 1024 * 1024 * 1024).should.equal('1.0 TB');
-                f.bytes.pretty(1024 * 1024 * 1024 * 1024 * 1024).should.equal('1024.0 TB');
+                f.bytes.pretty(1024 * 1024 * 1024).should.equal('1.0 bytes.giga');
+                f.bytes.pretty(1024 * 1024 * 1024 * 1024).should.equal('1.0 bytes.tera');
+                f.bytes.pretty(1024 * 1024 * 1024 * 1024 * 1024).should.equal('1024.0 bytes.tera');
             })
 
             it('should be able to format byte numbers with precision', function() {
-                f.bytes.pretty(1024, 0).should.equal('1 KB');
+                f.bytes.pretty(1024, 0).should.equal('1 bytes.kilo');
             })
         });
 
@@ -105,7 +104,7 @@ define(['util/formatters'], function(f) {
 
             it('should format to prefered format', function() {
                 var now = new Date(),
-                    month = String(now.getMonth() + 1);
+                month = String(now.getMonth() + 1);
 
                 if (month.length === 1) month = '0' + month;
 
@@ -126,17 +125,13 @@ define(['util/formatters'], function(f) {
             })
 
             it('should format dates when string thats actually a time millis', function() {
-                f.date.dateString('1396310400000').should.equal('2014-04-01')
+                f.date.dateString('1396310400000').should.equal('2014-03-31')
             })
 
             it('should format to prefered format with time', function() {
                 var now = new Date(),
-                    originalTime = now.getTime();
-
-                //now.addHours(now.getTimezoneOffset());
-                now.setMinutes(now.getMinutes() + now.getTimezoneOffset())
-
-                var month = String(now.getMonth() + 1),
+                    originalTime = now.getTime(),
+                    month = String(now.getMonth() + 1),
                     day = String(now.getDate()),
                     hours = String(now.getHours()),
                     minutes = String(now.getMinutes());
@@ -146,30 +141,29 @@ define(['util/formatters'], function(f) {
                 if (hours.length === 1) hours = '0' + hours;
                 if (minutes.length === 1) minutes = '0' + minutes;
 
-                f.date.dateTimeString(originalTime).should.equal(
-                    now.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes
-                );
+                var noTz = now.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+                f.date.dateTimeString(originalTime).should.contain(noTz);
             })
 
-            shouldBeRelative({seconds: 30}, 'moments ago')
-            shouldBeRelative({seconds: 59}, 'moments ago')
-            shouldBeRelative({seconds: 60}, 'a minute ago')
-            shouldBeRelative({minutes: 2}, '2 minutes ago')
-            shouldBeRelative({minutes: 60}, 'an hour ago')
-            shouldBeRelative({minutes: 110}, 'an hour ago')
-            shouldBeRelative({hours: 2}, '2 hours ago')
-            shouldBeRelative({hours: 23}, '23 hours ago')
-            shouldBeRelative({hours: 24}, 'a day ago')
-            shouldBeRelative({days: 2}, '2 days ago')
-            shouldBeRelative({days: 40}, 'a month ago')
-            shouldBeRelative({days: 60}, '2 months ago')
-            shouldBeRelative({days: 363}, '12 months ago')
-            shouldBeRelative({days: 367}, 'a year ago')
-            shouldBeRelative({days: 366 * 2}, '2 years ago')
+            shouldBeRelative({seconds: 30}, 'time.moments time.ago')
+            shouldBeRelative({seconds: 59}, 'time.moments time.ago')
+            shouldBeRelative({seconds: 60}, 'time.minute time.ago')
+            shouldBeRelative({minutes: 2}, '2 time.minutes time.ago')
+            shouldBeRelative({minutes: 60}, 'time.hour time.ago')
+            shouldBeRelative({minutes: 110}, 'time.hour time.ago')
+            shouldBeRelative({hours: 2}, '2 time.hours time.ago')
+            shouldBeRelative({hours: 23}, '23 time.hours time.ago')
+            shouldBeRelative({hours: 24}, 'time.day time.ago')
+            shouldBeRelative({days: 2}, '2 time.days time.ago')
+            shouldBeRelative({days: 40}, 'time.month time.ago')
+            shouldBeRelative({days: 60}, '2 time.months time.ago')
+            shouldBeRelative({days: 363}, '12 time.months time.ago')
+            shouldBeRelative({days: 367}, 'time.year time.ago')
+            shouldBeRelative({days: 366 * 2}, '2 time.years time.ago')
 
             function shouldBeRelative(time, string) {
                 var unit = _.keys(time)[0],
-                    mult = { };
+                mult = { };
 
                 mult.seconds = 1000;
                 mult.minutes = mult.seconds * 60;
@@ -179,9 +173,9 @@ define(['util/formatters'], function(f) {
 
                 it('should format ' + time[unit] + ' ' + unit + ' relative to now as ' + string, function() {
                     var now = new Date(),
-                        nowUtc = f.date.utc(now),
-                        older = new Date(nowUtc.getTime() - (mult[unit] * time[unit])),
-                        old = Date.now;
+                    nowUtc = f.date.utc(now),
+                    older = new Date(nowUtc.getTime() - (mult[unit] * time[unit])),
+                    old = Date.now;
 
                     Date.now = function() {
                         return now;
