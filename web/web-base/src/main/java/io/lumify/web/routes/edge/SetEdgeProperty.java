@@ -1,6 +1,5 @@
 package io.lumify.web.routes.edge;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
@@ -13,11 +12,10 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
@@ -78,7 +76,7 @@ public class SetEdgeProperty extends BaseRequestHandler {
         }
 
         if (propertyKey == null) {
-            propertyKey = this.graph.getIdGenerator().nextId().toString();
+            propertyKey = this.graph.getIdGenerator().nextId();
         }
 
         Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
@@ -131,7 +129,6 @@ public class SetEdgeProperty extends BaseRequestHandler {
 
         this.workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName, workspaceId, visibilitySource);
 
-        JSONArray resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
-        respondWithJson(response, resultsJson);
+        respondWithSuccessJson(response);
     }
 }
