@@ -111,8 +111,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected OntologyProperty addPropertyTo(
-            Concept concept,
-            String propertyIRI,
+            List<Concept> concepts,
+            String propertyIri,
             String displayName,
             PropertyType dataType,
             Map<String, String> possibleValues,
@@ -122,10 +122,12 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost) {
-        checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable, displayType, propertyGroup, boost);
-        concept.getProperties().add(property);
-        checkNotNull(property, "Could not find property: " + propertyIRI);
+        checkNotNull(concepts, "concept was null");
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIri, dataType, displayName, possibleValues, userVisible, searchable, displayType, propertyGroup, boost);
+        for (Concept concept : concepts) {
+            concept.getProperties().add(property);
+        }
+        checkNotNull(property, "Could not find property: " + propertyIri);
         return property;
     }
 

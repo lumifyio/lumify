@@ -360,23 +360,24 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
 
+        List<Concept> domainConcepts = new ArrayList<Concept>();
         for (OWLClassExpression domainClassExpr : dataTypeProperty.getDomains(o)) {
             OWLClass domainClass = domainClassExpr.asOWLClass();
             String domainClassUri = domainClass.getIRI().toString();
             Concept domainConcept = getConceptByIRI(domainClassUri);
-            checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
-
+            checkNotNull(domainConcepts, "Could not find class with uri: " + domainClassUri);
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
-
-            Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
-            Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
+            domainConcepts.add(domainConcept);
         }
+
+        Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
+        Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
+        addPropertyTo(domainConcepts, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
     }
 
     protected abstract OntologyProperty addPropertyTo(
-            Concept concept,
-            String propertyIRI,
+            List<Concept> concepts,
+            String propertyIri,
             String displayName,
             PropertyType dataType,
             Map<String, String> possibleValues,

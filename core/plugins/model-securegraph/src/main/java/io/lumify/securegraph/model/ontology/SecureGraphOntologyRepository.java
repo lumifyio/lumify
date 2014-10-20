@@ -445,8 +445,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public OntologyProperty addPropertyTo(
-            Concept concept,
-            String propertyIRI,
+            List<Concept> concepts,
+            String propertyIri,
             String displayName,
             PropertyType dataType,
             Map<String, String> possibleValues,
@@ -456,11 +456,13 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost) {
-        checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
-        checkNotNull(property, "Could not find property: " + propertyIRI);
+        checkNotNull(concepts, "vertex was null");
+        OntologyProperty property = getOrCreatePropertyType(concepts, propertyIri, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
+        checkNotNull(property, "Could not find property: " + propertyIri);
 
-        findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
+        for (Concept concept : concepts) {
+            findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
+        }
 
         graph.flush();
         return property;
@@ -527,8 +529,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private OntologyProperty getOrCreatePropertyType(
-            final Concept concept,
-            final String propertyName,
+            final List<Concept> concepts,
+            final String propertyIri,
             final PropertyType dataType,
             final String displayName,
             Map<String, String> possibleValues,
@@ -538,9 +540,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost) {
-        OntologyProperty typeProperty = getProperty(propertyName);
+        OntologyProperty typeProperty = getProperty(propertyIri);
         if (typeProperty == null) {
-            DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyName);
+            DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyIri);
             definePropertyBuilder.dataType(PropertyType.getTypeClass(dataType));
             if (dataType == PropertyType.STRING) {
                 definePropertyBuilder.textIndexHint(textIndexHints);
@@ -554,9 +556,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             definePropertyBuilder.define();
 
-            VertexBuilder builder = graph.prepareVertex(ID_PREFIX_PROPERTY + concept.getIRI() + "_" + propertyName, VISIBILITY.getVisibility());
+            VertexBuilder builder = graph.prepareVertex(ID_PREFIX_PROPERTY + propertyIri, VISIBILITY.getVisibility());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
-            ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
+            ONTOLOGY_TITLE.setProperty(builder, propertyIri, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
             USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
             SEARCHABLE.setProperty(builder, searchable, VISIBILITY.getVisibility());
