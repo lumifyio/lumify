@@ -7,6 +7,7 @@ public class ClientApiLongRunningProcess implements ClientApiObject {
     private Double progress;
     private boolean canceled;
     private String resultsString;
+    private String userId;
 
     public Long getStartTime() {
         return startTime;
@@ -54,5 +55,13 @@ public class ClientApiLongRunningProcess implements ClientApiObject {
 
     public void setResultsString(String resultsString) {
         this.resultsString = resultsString;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
