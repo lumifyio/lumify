@@ -12,7 +12,7 @@ public abstract class ClientApiLumifyProperty<TClientApi> extends LumifyProperty
 
     @Override
     public String wrap(TClientApi value) {
-        return ClientApiConverter.clientApiObjectToJsonString(value);
+        return ClientApiConverter.clientApiToString(value);
     }
 
     @Override

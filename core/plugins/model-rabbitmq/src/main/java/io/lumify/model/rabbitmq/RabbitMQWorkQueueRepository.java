@@ -181,4 +181,50 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
             throw new LumifyException("Could not subscribe to graph property queue", e);
         }
     }
+
+    @Override
+    public void subscribeToLongRunningProcessMessages(final LongRunningProcessConsumer longRunningProcessConsumer) {
+        try {
+            ensureBroadcastExchange();
+
+            this.channel.queueDeclare(LONG_RUNNING_PROCESS_QUEUE_NAME, true, false, false, null);
+
+            final QueueingConsumer callback = new QueueingConsumer(this.channel);
+            this.channel.basicConsume(LONG_RUNNING_PROCESS_QUEUE_NAME, false, callback);
+
+            final Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (true) {
+                            QueueingConsumer.Delivery delivery = callback.nextDelivery();
+                            try {
+                                JSONObject queueItem = new JSONObject(new String(delivery.getBody()));
+                                LOGGER.debug("received message from long running process queue [%s]: %s", LONG_RUNNING_PROCESS_QUEUE_NAME, queueItem.toString());
+                                long startTime = System.currentTimeMillis();
+                                longRunningProcessConsumer.longRunningProcessReceived(queueItem);
+                                long endTime = System.currentTimeMillis();
+                                LOGGER.debug("ack'ing message from long running process queue [%s]: %s (work time: %dms)", LONG_RUNNING_PROCESS_QUEUE_NAME, queueItem.toString(), endTime - startTime);
+                                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                            } catch (Throwable ex) {
+                                LOGGER.error("problem in long running process thread", ex);
+                                try {
+                                    channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);
+                                } catch (IOException e) {
+                                    LOGGER.error("Could not nack message: " + delivery.getEnvelope().getDeliveryTag(), e);
+                                }
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        throw new LumifyException("long running process listener has died", e);
+                    }
+                }
+            });
+            t.setName("rabbitmq-subscribe-" + longRunningProcessConsumer.getClass().getName());
+            t.setDaemon(true);
+            t.start();
+        } catch (IOException e) {
+            throw new LumifyException("Could not subscribe to long running process queue", e);
+        }
+    }
 }

@@ -25,6 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class WorkQueueRepository {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
     public static final String GRAPH_PROPERTY_QUEUE_NAME = "graphProperty";
+    public static final String LONG_RUNNING_PROCESS_QUEUE_NAME = "longRunningProcess";
     private final Graph graph;
 
     @Inject
@@ -88,6 +89,18 @@ public abstract class WorkQueueRepository {
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
 
         broadcastPropertyChange(element, propertyKey, propertyName, workspaceId);
+    }
+
+    public void pushLongRunningProcessQueue(JSONObject queueItem) {
+        queueItem.put("enqueueTime", System.currentTimeMillis());
+        pushOnQueue(LONG_RUNNING_PROCESS_QUEUE_NAME, FlushFlag.DEFAULT, queueItem);
+    }
+
+    public void broadcastLongRunningProcessChange(JSONObject longRunningProcessQueueItem) {
+        JSONObject json = new JSONObject();
+        json.put("type", "longRunningProcessChange");
+        json.put("data", longRunningProcessQueueItem);
+        broadcastJson(json);
     }
 
     public void pushElement(Element element) {
@@ -178,7 +191,7 @@ public abstract class WorkQueueRepository {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceChange");
         json.put("permissions", getPermissionsWithUsers(workspace));
-        json.put("data", new JSONObject(ClientApiConverter.clientApiObjectToJsonString(workspace)));
+        json.put("data", new JSONObject(ClientApiConverter.clientApiToString(workspace)));
         broadcastJson(json);
     }
 
@@ -323,6 +336,8 @@ public abstract class WorkQueueRepository {
 
     public abstract void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer);
 
+    public abstract void subscribeToLongRunningProcessMessages(LongRunningProcessConsumer longRunningProcessConsumer);
+
     public void shutdown() {
 
     }
@@ -333,5 +348,9 @@ public abstract class WorkQueueRepository {
 
     public static abstract class GraphPropertyConsumer {
         public abstract void graphPropertyReceived(JSONObject json) throws Exception;
+    }
+
+    public static abstract class LongRunningProcessConsumer {
+        public abstract void longRunningProcessReceived(JSONObject longRunningProcessQueueItem) throws Exception;
     }
 }

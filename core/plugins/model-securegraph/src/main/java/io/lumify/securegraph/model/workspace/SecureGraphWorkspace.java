@@ -14,7 +14,7 @@ public class SecureGraphWorkspace implements Workspace {
 
     public SecureGraphWorkspace(Vertex workspaceVertex) {
         this.displayTitle = WorkspaceLumifyProperties.TITLE.getPropertyValue(workspaceVertex);
-        this.workspaceId = workspaceVertex.getId().toString();
+        this.workspaceId = workspaceVertex.getId();
         this.workspaceVertex = workspaceVertex;
     }
 

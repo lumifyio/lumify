@@ -46,4 +46,9 @@ public class NoOpWorkQueueRepository extends WorkQueueRepository {
     public void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer) {
 
     }
+
+    @Override
+    public void subscribeToLongRunningProcessMessages(LongRunningProcessConsumer longRunningProcessConsumer) {
+
+    }
 }
