@@ -861,14 +861,17 @@ define([
                 }
 
                 if (WorkspaceExporters.exporters.length) {
-                    $('<li class="dropdown-submenu"><a>' +
-                      i18n('graph.contextmenu.export_workspace') +
-                      '</a>' +
-                      '<ul class="dropdown-menu"></ul></li>'
-                     )
-                        .appendTo(menu)
-                        .find('ul')
-                        .append('<li><a></a></li>').find('a').text('PNG');
+                    var $exporters = menu.find('.exporters');
+
+                    if ($exporters.length === 0) {
+                        $exporters = $('<li class="dropdown-submenu"><a>' +
+                          i18n('graph.contextmenu.export_workspace') +
+                          '</a>' +
+                          '<ul class="dropdown-menu exporters"></ul></li>'
+                         ).appendTo(menu).find('ul');
+                    }
+
+                    $exporters.empty().append('<li><a></a></li>').find('a').text('Analysts Notebook');
                 }
 
                 this.toggleMenu({positionUsingEvent: event}, menu);
