@@ -337,9 +337,9 @@ define([
         this.animateBadge = function(badge, formattedCount) {
             badge.text(formattedCount).css('width', 'auto');
 
-            var previousWidth = badge.width(),
-                html = '<span class="number">' + formattedCount + '</span>' +
+            var html = '<span class="number">' + formattedCount + '</span>' +
                     '<span class="suffix"> ' + i18n('workspaces.diff.unpublished') + '</span>',
+                previousWidth = badge.outerWidth(),
                 findWidth = function() {
                     return (
                         badge.find('.number').outerWidth(true) +
