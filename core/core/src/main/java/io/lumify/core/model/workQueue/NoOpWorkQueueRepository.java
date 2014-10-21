@@ -1,10 +1,10 @@
 package io.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
-import io.lumify.core.config.Configuration;
-import org.securegraph.Graph;
 import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
 import org.json.JSONObject;
+import org.securegraph.Graph;
 
 public class NoOpWorkQueueRepository extends WorkQueueRepository {
     @Inject
@@ -39,6 +39,11 @@ public class NoOpWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer) {
+
+    }
+
+    @Override
+    public void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer) {
 
     }
 }

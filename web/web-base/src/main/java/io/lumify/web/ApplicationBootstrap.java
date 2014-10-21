@@ -8,8 +8,10 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
+import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.atmosphere.cache.UUIDBroadcasterCache;
@@ -17,6 +19,7 @@ import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereInterceptor;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
+import org.json.JSONObject;
 import org.securegraph.Graph;
 
 import javax.servlet.*;
@@ -48,6 +51,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
             setupInjector(context, config);
             setupWebApp(context, config);
+            setupGraphPropertyRunner(context, config);
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
         }
@@ -161,5 +165,22 @@ public final class ApplicationBootstrap implements ServletContextListener {
             initParameters.put(initParameterName, context.getInitParameter(initParameterName));
         }
         return initParameters;
+    }
+
+    private void setupGraphPropertyRunner(ServletContext context, Configuration config) {
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.GRAPH_PROPERTY_RUNNER_ENABLED, "false"));
+        if (!enabled) {
+            return;
+        }
+
+        final GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
+        graphPropertyRunner.prepare(config.toMap());
+        WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
+        workQueueRepository.subscribeToGraphPropertyMessages(new WorkQueueRepository.GraphPropertyConsumer() {
+            @Override
+            public void graphPropertyReceived(JSONObject json) throws Exception {
+                graphPropertyRunner.process(json);
+            }
+        });
     }
 }
