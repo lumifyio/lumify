@@ -112,6 +112,27 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         });
     }
 
+    @Override
+    public JSONObject findById(String longRunningProcessId, User user) {
+        Authorizations authorizations = getAuthorizations(user);
+        Vertex vertex = this.graph.getVertex(longRunningProcessId, authorizations);
+        if (vertex == null) {
+            return null;
+        }
+        return QUEUE_ITEM_JSON_PROPERTY.getPropertyValue(vertex);
+    }
+
+    @Override
+    public void cancel(String longRunningProcessId, User user) {
+        Authorizations authorizations = getAuthorizations(userRepository.getSystemUser());
+        Vertex vertex = this.graph.getVertex(longRunningProcessId, authorizations);
+        checkNotNull(vertex, "Could not find long running process vertex: " + longRunningProcessId);
+        JSONObject json = QUEUE_ITEM_JSON_PROPERTY.getPropertyValue(vertex);
+        json.put("canceled", true);
+        QUEUE_ITEM_JSON_PROPERTY.setProperty(vertex, json, getVisibility(), getAuthorizations(user));
+        this.graph.flush();
+    }
+
     private Visibility getVisibility() {
         return new Visibility(VISIBILITY_STRING);
     }

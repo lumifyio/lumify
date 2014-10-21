@@ -9,7 +9,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.ClientApiLongRunningProcessResponse;
+import io.lumify.web.clientapi.model.ClientApiLongRunningProcessSubmitResponse;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -58,7 +58,7 @@ public class VertexFindPath extends BaseRequestHandler {
         FindPathLongRunningProcessQueueItem findPathQueueItem = new FindPathLongRunningProcessQueueItem(sourceVertex.getId(), destVertex.getId(), hops, workspaceId, authorizations);
         String id = this.longRunningProcessRepository.enqueue(findPathQueueItem.toJson(), user, authorizations);
 
-        respondWithClientApiObject(response, new ClientApiLongRunningProcessResponse(id));
+        respondWithClientApiObject(response, new ClientApiLongRunningProcessSubmitResponse(id));
     }
 }
 

@@ -1,13 +1,13 @@
 package io.lumify.web.clientapi.model;
 
-public class ClientApiLongRunningProcessResponse implements ClientApiObject {
+public class ClientApiLongRunningProcessSubmitResponse implements ClientApiObject {
     private String id;
 
-    public ClientApiLongRunningProcessResponse() {
+    public ClientApiLongRunningProcessSubmitResponse() {
 
     }
 
-    public ClientApiLongRunningProcessResponse(String id) {
+    public ClientApiLongRunningProcessSubmitResponse(String id) {
         this.id = id;
     }
 
