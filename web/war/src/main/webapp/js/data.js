@@ -407,14 +407,16 @@ define([
                 });
                 this.throttledUpdatesByVertex = {};
 
-                this.workspaceService.save(this.workspaceId, updateJson).done(function(data) {
-                    self.newlyAddedIds.length = 0;
-                    self.trigger('refreshRelationships');
-                    self.trigger('workspaceSaved', ws);
-                    _.values(self.workspaceVertices).forEach(function(wv) {
-                        delete wv.dropPosition;
+                this.workspaceService.save(this.workspaceId, updateJson)
+                    .always(function(data) {
+                        self.newlyAddedIds.length = 0;
+                        self.trigger('workspaceSaved', ws);
+                        _.values(self.workspaceVertices).forEach(function(wv) {
+                            delete wv.dropPosition;
+                        });
+                    }).done(function() {
+                        self.trigger('refreshRelationships');
                     });
-                });
             });
         };
 
