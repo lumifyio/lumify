@@ -106,7 +106,12 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public org.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet) {
-        return new AccumuloAuthorizations(toArray(authorizationsSet, String.class));
+        return createAuthorizations(toArray(authorizationsSet, String.class));
+    }
+
+    @Override
+    public org.securegraph.Authorizations createAuthorizations(String[] authorizations) {
+        return new AccumuloAuthorizations(authorizations);
     }
 
     @Override

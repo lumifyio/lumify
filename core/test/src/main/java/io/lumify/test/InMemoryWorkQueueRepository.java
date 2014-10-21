@@ -57,6 +57,11 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
         throw new UnsupportedOperationException("subscribing to graph property messages is not supported");
     }
 
+    @Override
+    public void subscribeToLongRunningProcessMessages(LongRunningProcessConsumer longRunningProcessConsumer) {
+        throw new UnsupportedOperationException("subscribing to long running process messages is not supported");
+    }
+
     public static void clearQueue() {
         queues.clear();
     }

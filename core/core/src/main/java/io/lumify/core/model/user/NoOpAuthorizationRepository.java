@@ -5,6 +5,8 @@ import org.securegraph.Visibility;
 
 import java.util.*;
 
+import static org.securegraph.util.IterableUtils.toArray;
+
 public class NoOpAuthorizationRepository implements AuthorizationRepository {
     @Override
     public void addAuthorizationToGraph(String auth) {
@@ -23,6 +25,11 @@ public class NoOpAuthorizationRepository implements AuthorizationRepository {
 
     @Override
     public Authorizations createAuthorizations(Set<String> authorizationsSet) {
+        return createAuthorizations(toArray(authorizationsSet, String.class));
+    }
+
+    @Override
+    public Authorizations createAuthorizations(String[] authorizations) {
         return new Authorizations() {
             @Override
             public boolean canRead(Visibility visibility) {

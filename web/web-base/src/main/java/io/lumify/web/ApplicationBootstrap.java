@@ -9,6 +9,7 @@ import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRunner;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -52,6 +53,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
             setupInjector(context, config);
             setupWebApp(context, config);
             setupGraphPropertyRunner(context, config);
+            setupLongRunningProcessRunner(context, config);
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
         }
@@ -180,6 +182,23 @@ public final class ApplicationBootstrap implements ServletContextListener {
             @Override
             public void graphPropertyReceived(JSONObject json) throws Exception {
                 graphPropertyRunner.process(json);
+            }
+        });
+    }
+
+    private void setupLongRunningProcessRunner(ServletContext context, Configuration config) {
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
+        if (!enabled) {
+            return;
+        }
+
+        final LongRunningProcessRunner longRunningProcessRunner = InjectHelper.getInstance(LongRunningProcessRunner.class);
+        longRunningProcessRunner.prepare(config.toMap());
+        WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
+        workQueueRepository.subscribeToLongRunningProcessMessages(new WorkQueueRepository.LongRunningProcessConsumer() {
+            @Override
+            public void longRunningProcessReceived(JSONObject longRunningProcessQueueItem) throws Exception {
+                longRunningProcessRunner.process(longRunningProcessQueueItem);
             }
         });
     }

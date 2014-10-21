@@ -2,36 +2,35 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.longRunningProcess.FindPathLongRunningProcessQueueItem;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.ClientApiConverter;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.ClientApiElement;
-import io.lumify.web.clientapi.model.ClientApiVertex;
-import io.lumify.web.clientapi.model.ClientApiVertexFindPathResponse;
+import io.lumify.web.clientapi.model.ClientApiLongRunningProcessResponse;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
-import org.securegraph.Path;
 import org.securegraph.Vertex;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 public class VertexFindPath extends BaseRequestHandler {
     private final Graph graph;
+    private final LongRunningProcessRepository longRunningProcessRepository;
 
     @Inject
     public VertexFindPath(
             final Graph graph,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final LongRunningProcessRepository longRunningProcessRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
+        this.longRunningProcessRepository = longRunningProcessRepository;
     }
 
     @Override
@@ -56,19 +55,10 @@ public class VertexFindPath extends BaseRequestHandler {
             return;
         }
 
-        ClientApiVertexFindPathResponse results = new ClientApiVertexFindPathResponse();
+        FindPathLongRunningProcessQueueItem findPathQueueItem = new FindPathLongRunningProcessQueueItem(sourceVertex.getId(), destVertex.getId(), hops, workspaceId, authorizations);
+        String id = this.longRunningProcessRepository.enqueue(findPathQueueItem.toJson(), user, authorizations);
 
-        Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, authorizations);
-        for (Path path : paths) {
-            List<ClientApiElement> clientApiElementPath = ClientApiConverter.toClientApi(graph.getVerticesInOrder(path, authorizations), workspaceId, authorizations);
-            List<ClientApiVertex> clientApiVertexPath = new ArrayList<ClientApiVertex>();
-            for (ClientApiElement e : clientApiElementPath) {
-                clientApiVertexPath.add((ClientApiVertex) e);
-            }
-            results.getPaths().add(clientApiVertexPath);
-        }
-
-        respondWithClientApiObject(response, results);
+        respondWithClientApiObject(response, new ClientApiLongRunningProcessResponse(id));
     }
 }
 
