@@ -1,11 +1,11 @@
 package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.lumify.analystsNotebook.AnalystsNotebookVersion;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
-import org.securegraph.Property;
 import org.securegraph.Vertex;
 
 public class ChartItem {
@@ -18,8 +18,9 @@ public class ChartItem {
     @JacksonXmlProperty(isAttribute = true)
     private boolean dateSet;
 
+    // located in End for version 6
     @JacksonXmlProperty(isAttribute = true)
-    private int xPosition;
+    private Integer xPosition;
 
     private End end;
 
@@ -49,11 +50,11 @@ public class ChartItem {
         this.dateSet = dateSet;
     }
 
-    public int getxPosition() {
+    public Integer getxPosition() {
         return xPosition;
     }
 
-    public void setxPosition(int xPosition) {
+    public void setxPosition(Integer xPosition) {
         this.xPosition = xPosition;
     }
 
@@ -73,7 +74,7 @@ public class ChartItem {
         this.link = link;
     }
 
-    public static ChartItem createEntity(String conceptType, String vertexId, String title, int x, int y) {
+    public static ChartItem createEntity(AnalystsNotebookVersion version, String conceptType, String vertexId, String title, int x, int y) {
         IconStyle iconStyle = new IconStyle();
         iconStyle.setType(conceptType);
 
@@ -86,30 +87,38 @@ public class ChartItem {
         entity.setIcon(icon);
 
         End end = new End();
+        if (version == AnalystsNotebookVersion.VERSION_6) {
+            end.setX(x);
+        }
         end.setY(y);
         end.setEntity(entity);
 
         ChartItem chartItem = new ChartItem();
         chartItem.setLabel(title);
         chartItem.setDateSet(false);
-        chartItem.setxPosition(x);
+        if (version == AnalystsNotebookVersion.VERSION_7_OR_8) {
+            chartItem.setxPosition(x);
+        }
         chartItem.setEnd(end);
 
         return chartItem;
     }
 
-    public static ChartItem createFromVertexAndWorkspaceEntity(Vertex vertex, WorkspaceEntity workspaceEntity) {
+    public static ChartItem createFromVertexAndWorkspaceEntity(AnalystsNotebookVersion version, Vertex vertex, WorkspaceEntity workspaceEntity) {
         String conceptType = (String) vertex.getPropertyValue(LumifyProperties.CONCEPT_TYPE.getPropertyName());
         String vertexId = vertex.getId();
         String title = (String) vertex.getPropertyValue(LumifyProperties.TITLE.getPropertyName()); // TODO: use title formula
         int x = workspaceEntity.getGraphPositionX();
         int y = workspaceEntity.getGraphPositionY();
 
-        return createEntity(conceptType, vertexId, title, x, y);
+        return createEntity(version, conceptType, vertexId, title, x, y);
     }
 
-    public static ChartItem createLink(String from, String to) {
+    public static ChartItem createLink(AnalystsNotebookVersion version, String from, String to) {
         LinkStyle linkStyle = new LinkStyle();
+        if (version == AnalystsNotebookVersion.VERSION_6) {
+            linkStyle.setStrength(1);
+        }
         linkStyle.setArrowStyle(LinkStyle.ARROW_STYLE_ARROW_NONE);
         linkStyle.setType(LinkStyle.TYPE_LINK);
 
@@ -125,28 +134,10 @@ public class ChartItem {
         return chartItem;
     }
 
-    public static ChartItem createFromEdge(Edge edge) {
+    public static ChartItem createFromEdge(AnalystsNotebookVersion version, Edge edge) {
         String from = edge.getVertexId(Direction.OUT);
         String to = edge.getVertexId(Direction.IN);
 
-        return createLink(from, to);
-    }
-
-    public static ChartItem createLabel(String title, String labelId, int x, int y) {
-        Label label = new Label();
-        label.setLabelId(labelId);
-
-        End end = new End();
-        end.setY(y);
-        end.setLabel(label);
-
-        ChartItem chartItem = new ChartItem();
-        chartItem.setLabel(title);
-        chartItem.setDescription(title);
-        chartItem.setDateSet(false);
-        chartItem.setxPosition(x);
-        chartItem.setEnd(end);
-
-        return chartItem;
+        return createLink(version, from, to);
     }
 }

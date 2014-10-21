@@ -2,6 +2,7 @@ package io.lumify.analystsNotebook.routes;
 
 import com.google.inject.Inject;
 import io.lumify.analystsNotebook.AnalystsNotebookExporter;
+import io.lumify.analystsNotebook.AnalystsNotebookVersion;
 import io.lumify.analystsNotebook.model.Chart;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.config.Configuration;
@@ -20,6 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 public class AnalystsNotebookExport extends BaseRequestHandler {
+    private static final String VERSION_PARAMETER_NAME = "version";
+    private static final AnalystsNotebookVersion DEFAULT_VERSION = AnalystsNotebookVersion.VERSION_7_OR_8;
     private WorkspaceRepository workspaceRepository;
     private AnalystsNotebookExporter analystsNotebookExporter;
 
@@ -39,12 +42,18 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
-        Chart chart = analystsNotebookExporter.toChart(workspace, user, authorizations);
+        AnalystsNotebookVersion version = DEFAULT_VERSION;
+        String versionParameter = getOptionalParameter(request, VERSION_PARAMETER_NAME);
+        if (versionParameter != null) {
+            version = AnalystsNotebookVersion.valueOf(versionParameter);
+        }
+
+        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations);
 
         List<String> comments = new ArrayList<String>();
         comments.add(workspace.getDisplayTitle());
-        comments.add("https://lumify/w=" + workspaceId);
-        comments.add(String.format("Exported from Lumify %1$tF %1$tT %1$tz", new Date()));
+        comments.add("https://lumify/#w=" + workspaceId);
+        comments.add(String.format("Exported from Lumify on %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
 
         String xml = AnalystsNotebookExporter.toXml(chart, comments);
 

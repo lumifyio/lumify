@@ -1,5 +1,6 @@
 package io.lumify.analystsNotebook;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -53,10 +54,6 @@ public class AnalystsNotebookExporter {
         }
     }
 
-    public static String toXml(Chart chart, String... comments) {
-        return toXml(chart, Arrays.asList(comments));
-    }
-
     public static StringBuilder appendComments(StringBuilder sb, List<String> comments) {
         if (comments != null && comments.size() > 0) {
             if (comments.size() == 1) {
@@ -71,7 +68,7 @@ public class AnalystsNotebookExporter {
         return sb;
     }
 
-    public Chart toChart(Workspace workspace, User user, Authorizations authorizations) {
+    public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations) {
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
 
         Iterable<String> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
@@ -95,18 +92,19 @@ public class AnalystsNotebookExporter {
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
-            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(entry.getKey(), entry.getValue()));
+            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue()));
         }
         for (Edge edge : edges) {
-            chartItems.add(ChartItem.createFromEdge(edge));
+            chartItems.add(ChartItem.createFromEdge(version, edge));
         }
         chartItems.add(getLabelChartItem(classificationBanner, 4889, 7, "class_header"));
         chartItems.add(getLabelChartItem(classificationBanner, 4889, 6667, "class_footer"));
         chart.setChartItemCollection(chartItems);
 
-        chart.setSummary(getSummary(classificationBanner));
-
-        chart.setPrintSettings(getPrintSettings());
+        if (version == AnalystsNotebookVersion.VERSION_7_OR_8) {
+            chart.setSummary(getSummary(classificationBanner));
+            chart.setPrintSettings(getPrintSettings());
+        }
 
         return chart;
     }
@@ -217,6 +215,8 @@ public class AnalystsNotebookExporter {
         XmlMapper mapper = new XmlMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper;
     }
 

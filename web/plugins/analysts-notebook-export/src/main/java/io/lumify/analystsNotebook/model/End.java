@@ -3,18 +3,30 @@ package io.lumify.analystsNotebook.model;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class End {
+    // located in ChartItem for version 7 and 8
     @JacksonXmlProperty(isAttribute = true)
-    private int y;
+    private Integer x;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private Integer y;
 
     private Entity entity;
 
     private Label label;
 
-    public int getY() {
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(Integer y) {
         this.y = y;
     }
 

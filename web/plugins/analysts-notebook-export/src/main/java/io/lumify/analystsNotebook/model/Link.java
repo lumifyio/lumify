@@ -1,5 +1,6 @@
 package io.lumify.analystsNotebook.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Link {
