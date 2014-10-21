@@ -13,6 +13,8 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
     private static Map<String, Queue<JSONObject>> queues = new HashMap<String, Queue<JSONObject>>();
     private List<BroadcastConsumer> broadcastConsumers = new ArrayList<BroadcastConsumer>();
+    private List<GraphPropertyConsumer> graphPropertyConsumers = new ArrayList<GraphPropertyConsumer>();
+    private List<LongRunningProcessConsumer> longRunningProcessConsumers = new ArrayList<LongRunningProcessConsumer>();
 
     @Inject
     public InMemoryWorkQueueRepository(Graph graph) {
@@ -30,6 +32,15 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
     public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json) {
         LOGGER.debug("push on queue: %s: %s", queueName, json);
         getQueue(queueName).add(json);
+        if (queueName.equals(LONG_RUNNING_PROCESS_QUEUE_NAME)) {
+            for (LongRunningProcessConsumer consumer : longRunningProcessConsumers) {
+                consumer.longRunningProcessReceived(json);
+            }
+        } else if (queueName.equals(GRAPH_PROPERTY_QUEUE_NAME)) {
+            for (GraphPropertyConsumer graphPropertyConsumer : graphPropertyConsumers) {
+                graphPropertyConsumer.graphPropertyReceived(json);
+            }
+        }
     }
 
     @Override
@@ -54,12 +65,12 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer) {
-        throw new UnsupportedOperationException("subscribing to graph property messages is not supported");
+        graphPropertyConsumers.add(graphPropertyConsumer);
     }
 
     @Override
     public void subscribeToLongRunningProcessMessages(LongRunningProcessConsumer longRunningProcessConsumer) {
-        throw new UnsupportedOperationException("subscribing to long running process messages is not supported");
+        longRunningProcessConsumers.add(longRunningProcessConsumer);
     }
 
     public static void clearQueue() {

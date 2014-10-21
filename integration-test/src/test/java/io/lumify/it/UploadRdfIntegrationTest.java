@@ -1,5 +1,6 @@
 package io.lumify.it;
 
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
@@ -151,7 +152,12 @@ public class UploadRdfIntegrationTest extends TestBase {
     }
 
     private void assertFindPath(LumifyApi lumifyApi) throws ApiException {
-        ClientApiVertexFindPathResponse paths = lumifyApi.getVertexApi().findPath(joeFernerVertexId, daveSingleyVertexId, 2);
+        ClientApiLongRunningProcessSubmitResponse longRunningProcessResponse = lumifyApi.getVertexApi().findPath(joeFernerVertexId, daveSingleyVertexId, 2);
+        ClientApiLongRunningProcess longRunningProcess = lumifyApi.getLongRunningProcessApi().waitById(longRunningProcessResponse.getId());
+        String resultsString = longRunningProcess.getResultsString();
+        assertNotNull("resultsString was null", resultsString);
+        ClientApiVertexFindPathResponse paths = ClientApiConverter.toClientApi(resultsString, ClientApiVertexFindPathResponse.class);
+
         LOGGER.info("paths: %s", paths.toString());
         assertEquals(2, paths.getPaths().size());
         boolean foundAltamiraCorporation = false;

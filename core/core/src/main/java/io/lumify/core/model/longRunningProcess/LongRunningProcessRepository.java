@@ -22,4 +22,8 @@ public abstract class LongRunningProcessRepository {
     public abstract void nak(JSONObject longRunningProcessQueueItem, Throwable ex);
 
     public abstract List<JSONObject> getLongRunningProcesses(User user);
+
+    public abstract JSONObject findById(String longRunningProcessId, User user);
+
+    public abstract void cancel(String longRunningProcessId, User user);
 }

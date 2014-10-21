@@ -347,10 +347,10 @@ public abstract class WorkQueueRepository {
     }
 
     public static abstract class GraphPropertyConsumer {
-        public abstract void graphPropertyReceived(JSONObject json) throws Exception;
+        public abstract void graphPropertyReceived(JSONObject json);
     }
 
     public static abstract class LongRunningProcessConsumer {
-        public abstract void longRunningProcessReceived(JSONObject longRunningProcessQueueItem) throws Exception;
+        public abstract void longRunningProcessReceived(JSONObject longRunningProcessQueueItem);
     }
 }

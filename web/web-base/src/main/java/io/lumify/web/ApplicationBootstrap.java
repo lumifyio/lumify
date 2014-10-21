@@ -180,8 +180,12 @@ public final class ApplicationBootstrap implements ServletContextListener {
         WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
         workQueueRepository.subscribeToGraphPropertyMessages(new WorkQueueRepository.GraphPropertyConsumer() {
             @Override
-            public void graphPropertyReceived(JSONObject json) throws Exception {
-                graphPropertyRunner.process(json);
+            public void graphPropertyReceived(JSONObject json) {
+                try {
+                    graphPropertyRunner.process(json);
+                } catch (Throwable e) {
+                    LOGGER.error("Failed to process graph property work: %s", json);
+                }
             }
         });
     }
@@ -197,8 +201,12 @@ public final class ApplicationBootstrap implements ServletContextListener {
         WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
         workQueueRepository.subscribeToLongRunningProcessMessages(new WorkQueueRepository.LongRunningProcessConsumer() {
             @Override
-            public void longRunningProcessReceived(JSONObject longRunningProcessQueueItem) throws Exception {
-                longRunningProcessRunner.process(longRunningProcessQueueItem);
+            public void longRunningProcessReceived(JSONObject longRunningProcessQueueItem) {
+                try {
+                    longRunningProcessRunner.process(longRunningProcessQueueItem);
+                } catch (Throwable e) {
+                    LOGGER.error("Failed to process long running process: %s", longRunningProcessQueueItem);
+                }
             }
         });
     }
