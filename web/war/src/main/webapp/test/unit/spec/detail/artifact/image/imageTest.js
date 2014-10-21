@@ -10,8 +10,8 @@ describeComponent('detail/artifact/image/image', function() {
             return x / EXPECTED_WIDTH * 100
         };
 
-    beforeEach(function(done) {
-        setupComponent({
+    beforeEach(function() {
+        setupComponent(this, {
             data: {
                 id: 'avertexid',
                 src: SRC
@@ -20,11 +20,6 @@ describeComponent('detail/artifact/image/image', function() {
 
         this.$facebox = this.$node.find('.facebox:not(.editing)')
         this.$faceboxEdit = this.$node.find('.facebox.editing')
-
-        this.component.imageReady().done(function(image) {
-            image.style.width = '300px';
-            done();
-        })
     });
 
     describe('image', function() {

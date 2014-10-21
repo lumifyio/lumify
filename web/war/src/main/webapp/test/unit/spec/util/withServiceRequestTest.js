@@ -2,7 +2,7 @@
 describeMixin('util/withServiceRequest', function() {
 
     beforeEach(function() {
-        setupComponent()
+        setupComponent(this)
     })
 
     describe('Service Requests', function() {

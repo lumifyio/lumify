@@ -28,11 +28,13 @@ public class UploadRdfIntegrationTest extends TestBase {
     public void testUploadRdf() throws IOException, ApiException {
         uploadAndProcessRdf();
         assertUser2CanSeeRdfVertices();
+        assertGetEdgesWithVisibilities();
     }
 
     public void uploadAndProcessRdf() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth2");
 
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "sample.rdf", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         artifactVertexId = artifact.getVertexIds().get(0);
@@ -72,6 +74,7 @@ public class UploadRdfIntegrationTest extends TestBase {
         assertFindPath(lumifyApi);
         assertFindRelated(lumifyApi);
         assertFindMultiple(lumifyApi);
+        assertWorkspace(lumifyApi);
 
         lumifyApi.logout();
     }
@@ -164,5 +167,80 @@ public class UploadRdfIntegrationTest extends TestBase {
         }
         assertTrue(foundAltamiraCorporation, "could not find AltamiraCorporation in path");
         assertTrue(foundRdfDocument, "could not find rdf in path");
+    }
+
+    private void assertWorkspace(LumifyApi lumifyApi) throws ApiException {
+        addAllVerticesExceptArtifactToWorkspace(lumifyApi);
+        assertWorkspaceVertices(lumifyApi);
+        assertWorkspaceEdges(lumifyApi);
+    }
+
+    private void addAllVerticesExceptArtifactToWorkspace(LumifyApi lumifyApi) throws ApiException {
+        ClientApiVertexSearchResponse vertices = lumifyApi.getVertexApi().vertexSearch("*");
+        ClientApiWorkspaceUpdateData workspaceUpdateData = new ClientApiWorkspaceUpdateData();
+        for (ClientApiVertex v : vertices.getVertices()) {
+            if (v.getId().equals(artifactVertexId)) {
+                continue;
+            }
+            ClientApiWorkspaceUpdateData.EntityUpdate entityUpdate = new ClientApiWorkspaceUpdateData.EntityUpdate();
+            entityUpdate.setVertexId(v.getId());
+            entityUpdate.setGraphPosition(new GraphPosition(10, 10));
+            workspaceUpdateData.getEntityUpdates().add(entityUpdate);
+        }
+        lumifyApi.getWorkspaceApi().update(workspaceUpdateData);
+    }
+
+    private void assertWorkspaceVertices(LumifyApi lumifyApi) throws ApiException {
+        ClientApiWorkspaceVertices vertices = lumifyApi.getWorkspaceApi().getVertices();
+        LOGGER.info("workspace vertices: %s", vertices.toString());
+        assertEquals(3, vertices.getVertices().size());
+    }
+
+    private void assertWorkspaceEdges(LumifyApi lumifyApi) throws ApiException {
+        List<String> additionalIds = new ArrayList<String>();
+        additionalIds.add(artifactVertexId);
+        ClientApiWorkspaceEdges edges = lumifyApi.getWorkspaceApi().getEdges(additionalIds);
+        LOGGER.info("workspace edges: %s", edges.toString());
+        assertEquals(5, edges.getEdges().size());
+    }
+
+    private void assertGetEdgesWithVisibilities() throws ApiException {
+        int existingEdgeCount = 0;
+        long existingEdgeTotalCount = 0;
+        String altamiraCorporationVertexId = null;
+
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiVertexSearchResponse vertices = lumifyApi.getVertexApi().vertexSearch("*");
+        boolean foundAndChangedVertexVisibility = false;
+        for (ClientApiVertex v : vertices.getVertices()) {
+            if (v.getId().contains("PERSON_Joe_Ferner")) {
+                lumifyApi.getVertexApi().setVisibility(v.getId(), "auth2");
+                foundAndChangedVertexVisibility = true;
+            } else if (v.getId().contains("COMPANY_Altamira_Corporation")) {
+                altamiraCorporationVertexId = v.getId();
+                ClientApiVertexEdges existingEdges = lumifyApi.getVertexApi().getEdges(altamiraCorporationVertexId, null, 0, 100);
+                existingEdgeCount = existingEdges.getRelationships().size();
+                existingEdgeTotalCount = existingEdges.getTotalReferences();
+            }
+        }
+        assertTrue(foundAndChangedVertexVisibility, "could not find or change vertex visibility");
+        assertNotNull("altamiraCorporationVertexId was null", altamiraCorporationVertexId);
+        assertEquals(3, existingEdgeCount);
+        assertEquals(3, existingEdgeTotalCount);
+
+        lumifyApi.logout();
+
+        lumifyApi = login(USERNAME_TEST_USER_2);
+
+        ClientApiVertexEdges existingEdges = lumifyApi.getVertexApi().getEdges(altamiraCorporationVertexId, null, 0, 100);
+        assertEquals(2, existingEdges.getRelationships().size());
+        assertEquals(2, existingEdges.getTotalReferences());
+
+        existingEdges = lumifyApi.getVertexApi().getEdges(altamiraCorporationVertexId, null, 0, 1);
+        assertEquals(1, existingEdges.getRelationships().size());
+        assertEquals(2, existingEdges.getTotalReferences());
+
+        lumifyApi.logout();
     }
 }

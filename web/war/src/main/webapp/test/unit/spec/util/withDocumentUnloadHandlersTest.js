@@ -4,7 +4,7 @@ describeMixin('util/withDocumentUnloadHandlers', function() {
         thirdCallback = function(){};
 
     beforeEach(function() {
-        setupComponent();
+        setupComponent(this);
     });
 
     describe('onDocumentUnload', function() {

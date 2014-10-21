@@ -114,12 +114,17 @@ define([], function() {
                     });
                     break;
 
+                /* FIXME: disable since this will logout a user if they open
+                 * another window and close it
                 case 'userStatusChange':
-                    if (message.data && message.data.status && message.data.status === "OFFLINE"
-                        && message.data.id && message.data.id === currentUser.id) {
+                    if (message.data && message.data.status &&
+                        message.data.status === 'OFFLINE' &&
+                        message.data.id &&
+                        message.data.id === currentUser.id) {
                         $(document).trigger('logout', {  message: i18n('lumify.session.expired') });
                     }
                     break;
+                */
             }
         };
     }

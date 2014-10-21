@@ -13,6 +13,10 @@ import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class VertexEdges extends BaseRequestHandler {
     private final Graph graph;
@@ -53,7 +57,16 @@ public class VertexEdges extends BaseRequestHandler {
 
         ClientApiVertexEdges result = new ClientApiVertexEdges();
         long referencesAdded = 0, skipped = 0, totalReferences = 0;
+
+        Map<String, Vertex> accessibleVertexIds = getAccessibleVertices(vertex, edges, authorizations);
+
         for (Edge edge : edges) {
+            String otherVertexId = edge.getOtherVertexId(vertex.getId());
+            Vertex otherVertex = accessibleVertexIds.get(otherVertexId);
+            if (otherVertex == null) {
+                continue;
+            }
+
             totalReferences++;
             if (referencesAdded >= size) {
                 continue;
@@ -61,11 +74,6 @@ public class VertexEdges extends BaseRequestHandler {
 
             if (skipped < offset) {
                 skipped++;
-                continue;
-            }
-
-            Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
-            if (otherVertex == null) { // user doesn't have access to other side of edge
                 continue;
             }
 
@@ -78,5 +86,20 @@ public class VertexEdges extends BaseRequestHandler {
         result.setTotalReferences(totalReferences);
 
         respondWithClientApiObject(response, result);
+    }
+
+    // a user may have access to an edge but not the vertex on the other end.
+    // so we need to get all the vertices to see if we have access.
+    public Map<String, Vertex> getAccessibleVertices(Vertex vertex, Iterable<Edge> edges, Authorizations authorizations) {
+        List<String> vertexIds = new ArrayList<String>();
+        for (Edge edge : edges) {
+            vertexIds.add(edge.getOtherVertexId(vertex.getId()));
+        }
+        Iterable<Vertex> accessibleVertices = graph.getVertices(vertexIds, authorizations);
+        Map<String, Vertex> accessibleVertexIds = new HashMap<String, Vertex>();
+        for (Vertex v : accessibleVertices) {
+            accessibleVertexIds.put(v.getId(), v);
+        }
+        return accessibleVertexIds;
     }
 }
