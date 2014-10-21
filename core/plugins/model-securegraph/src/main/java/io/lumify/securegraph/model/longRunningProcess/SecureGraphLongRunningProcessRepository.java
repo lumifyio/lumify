@@ -62,7 +62,7 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         this.graph.flush();
 
         longRunningProcessQueueItem.put("id", longRunningProcessVertex.getId());
-        this.workQueueRepository.pushLongRunningProcessQueue(longRunningProcessQueueItem);
+        this.workQueueRepository.pushLongRunningProcessQueue(longRunningProcessQueueItem, user.getUserId());
 
         return longRunningProcessVertex.getId();
     }

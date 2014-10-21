@@ -91,14 +91,22 @@ public abstract class WorkQueueRepository {
         broadcastPropertyChange(element, propertyKey, propertyName, workspaceId);
     }
 
-    public void pushLongRunningProcessQueue(JSONObject queueItem) {
+    public void pushLongRunningProcessQueue(JSONObject queueItem, String userId) {
         queueItem.put("enqueueTime", System.currentTimeMillis());
+        queueItem.put("userId", userId);
         pushOnQueue(LONG_RUNNING_PROCESS_QUEUE_NAME, FlushFlag.DEFAULT, queueItem);
     }
 
     public void broadcastLongRunningProcessChange(JSONObject longRunningProcessQueueItem) {
+        String userId = longRunningProcessQueueItem.optString("userId");
+        checkNotNull(userId, "userId cannot be null");
         JSONObject json = new JSONObject();
         json.put("type", "longRunningProcessChange");
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        json.put("permissions", permissions);
         json.put("data", longRunningProcessQueueItem);
         broadcastJson(json);
     }
