@@ -18,6 +18,7 @@ define([
     'util/retina',
     'util/withContextMenu',
     'util/withAsyncQueue',
+    'configuration/plugins/exportWorkspace/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -38,6 +39,7 @@ define([
     retina,
     withContextMenu,
     withAsyncQueue,
+    WorkspaceExporters,
     colorjs) {
     'use strict';
 
@@ -856,6 +858,17 @@ define([
                     menu.find('.layout-multi').show();
                 } else {
                     menu.find('.layout-multi').hide();
+                }
+
+                if (WorkspaceExporters.exporters.length) {
+                    $('<li class="dropdown-submenu"><a>' +
+                      i18n('graph.contextmenu.export_workspace') +
+                      '</a>' +
+                      '<ul class="dropdown-menu"></ul></li>'
+                     )
+                        .appendTo(menu)
+                        .find('ul')
+                        .append('<li><a></a></li>').find('a').text('PNG');
                 }
 
                 this.toggleMenu({positionUsingEvent: event}, menu);

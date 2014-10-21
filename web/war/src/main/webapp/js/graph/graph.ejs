@@ -36,11 +36,17 @@
     </ul>
   </li>
 
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom') %></a>
+    <ul class="dropdown-menu">
+      <li><a data-func="zoom" data-args="[2]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.x2') %></a></li>
+      <li><a data-func="zoom" data-args="[1]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.x1') %></a></li>
+      <li><a data-func="zoom" data-args="[0.5]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.half') %></a></li>
+    </ul>
+  </li>
+
   <li class="divider"></li>
 
-  <li><a data-func="zoom" data-args="[2]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.x2') %></a></li>
-  <li><a data-func="zoom" data-args="[1]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.x1') %></a></li>
-  <li><a data-func="zoom" data-args="[0.5]" tabindex="-1" href="#"><%= i18n('graph.contextmenu.zoom.half') %></a></li>
 </ul>
 </div>
 
