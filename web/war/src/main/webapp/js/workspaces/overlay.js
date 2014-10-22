@@ -64,6 +64,7 @@ define([
             this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
             this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
             this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
@@ -159,6 +160,10 @@ define([
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
             this.updateDiffBadge();
+        };
+
+        this.onWorkspaceUpdated = function(event, data) {
+            this.onWorkspaceLoaded(event, data.workspace);
         };
 
         this.onRelationshipsLoaded = function(event, data) {
@@ -337,13 +342,14 @@ define([
         this.animateBadge = function(badge, formattedCount) {
             badge.text(formattedCount).css('width', 'auto');
 
-            var previousWidth = badge.width(),
-                html = formattedCount + ' <span>' + i18n('workspaces.diff.unpublished') + '</span>',
+            var html = '<span class="number">' + formattedCount + '</span>' +
+                    '<span class="suffix"> ' + i18n('workspaces.diff.unpublished') + '</span>',
+                previousWidth = badge.outerWidth(),
                 findWidth = function() {
                     return (
-                        badge[0].scrollWidth - (
-                        parseInt(badge.css('paddingLeft'),10) + parseInt(badge.css('paddingRight'),10)
-                        )
+                        badge.find('.number').outerWidth(true) +
+                        badge.find('.suffix').outerWidth(true) +
+                        parseInt(badge.css('paddingRight'), 10) * 2
                     ) + 'px';
                 };
 
@@ -356,35 +362,36 @@ define([
                 return badge.html(html).css({ width: findWidth() })
             }
 
+            var duration = '0.5s';
             badge.css({
                 width: previousWidth + 'px',
                 backgroundColor: '#0088cc',
-                transition: 'all cubic-bezier(.29,.79,0,1.48) 0.5s',
-                overflow: 'hidden',
+                transition: 'all cubic-bezier(.29,.79,0,1.48) ' + duration,
                 position: 'relative',
-                top: '4px'
             }).html(html);
 
-            badge.css({
-                backgroundColor: '#1ab2ff',
-                width: findWidth()
-            }).find('span').css({
-                transition: 'opacity ease-out 0.5s',
-            })
+            requestAnimationFrame(function() {
+                badge.css({
+                    backgroundColor: '#1ab2ff',
+                    width: findWidth()
+                }).find('.suffix').css({
+                    transition: 'opacity ease-out ' + duration,
+                })
 
-            animateTimer = _.delay((badgeReset = function(previousWidth, formattedCount) {
-                animateTimer = null;
-                badge.on(TRANSITION_END, function(e) {
-                    if (e.originalEvent.propertyName === 'width') {
-                        badge.off(TRANSITION_END);
-                        badge.text(formattedCount).css('width', 'auto');
-                    }
-                }).css({
-                    transition: 'all cubic-bezier(.92,-0.42,.37,1.31) 0.5s',
-                    backgroundColor: '#0088cc',
-                    width: previousWidth + 'px'
-                }).find('span').css('opacity',0);
-            }).bind(null, previousWidth, formattedCount), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);
+                animateTimer = _.delay((badgeReset = function(previousWidth, formattedCount) {
+                    animateTimer = null;
+                    badge.on(TRANSITION_END, function(e) {
+                        if (e.originalEvent.propertyName === 'width') {
+                            badge.off(TRANSITION_END);
+                            badge.text(formattedCount).css('width', 'auto');
+                        }
+                    }).css({
+                        transition: 'all cubic-bezier(.92,-0.42,.37,1.31) ' + duration,
+                        backgroundColor: '#0088cc',
+                        width: previousWidth + 'px'
+                    }).find('.suffix').css('opacity',0);
+                }).bind(null, previousWidth, formattedCount), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);
+            })
         };
 
         this.updateUserTooltip = function(data) {

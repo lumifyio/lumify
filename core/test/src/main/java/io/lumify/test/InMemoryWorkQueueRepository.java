@@ -12,7 +12,7 @@ import java.util.*;
 public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
     private static Map<String, Queue<JSONObject>> queues = new HashMap<String, Queue<JSONObject>>();
-    private List<BroadcastConsumer> consumers = new ArrayList<BroadcastConsumer>();
+    private List<BroadcastConsumer> broadcastConsumers = new ArrayList<BroadcastConsumer>();
 
     @Inject
     public InMemoryWorkQueueRepository(Graph graph) {
@@ -21,7 +21,7 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     protected void broadcastJson(JSONObject json) {
-        for (BroadcastConsumer consumer : consumers) {
+        for (BroadcastConsumer consumer : broadcastConsumers) {
             consumer.broadcastReceived(json);
         }
     }
@@ -49,7 +49,12 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer) {
-        consumers.add(broadcastConsumer);
+        broadcastConsumers.add(broadcastConsumer);
+    }
+
+    @Override
+    public void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer) {
+        throw new UnsupportedOperationException("subscribing to graph property messages is not supported");
     }
 
     public static void clearQueue() {

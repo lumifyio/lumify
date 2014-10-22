@@ -103,8 +103,14 @@ define([], function() {
                     break;
 
                 case 'workspaceChange':
+                    var workspace = $.extend({}, message.data),
+                        user = _.findWhere(message.data.users, { userId: currentUser.id });
+
+                    workspace.editable = /WRITE/i.test(user && user.access);
+                    workspace.isSharedToUser = workspace.createdBy !== currentUser.id;
+
                     self.trigger('workspaceUpdated', {
-                        workspace: message.data
+                        workspace: workspace
                     });
                     break;
 
@@ -114,6 +120,8 @@ define([], function() {
                     });
                     break;
 
+                /* FIXME: disable since this will logout a user if they open
+                 * another window and close it
                 case 'userStatusChange':
                     if (message.data && message.data.status &&
                         message.data.status === 'OFFLINE' &&
@@ -122,6 +130,7 @@ define([], function() {
                         $(document).trigger('logout', {  message: i18n('lumify.session.expired') });
                     }
                     break;
+                */
             }
         };
     }

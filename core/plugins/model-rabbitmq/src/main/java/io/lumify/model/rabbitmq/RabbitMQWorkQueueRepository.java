@@ -119,7 +119,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
                                 JSONObject json = new JSONObject(new String(delivery.getBody()));
                                 LOGGER.debug("received message from broadcast exchange [%s]: %s", BROADCAST_EXCHANGE_NAME, json.toString());
                                 broadcastConsumer.broadcastReceived(json);
-                            } catch (Exception ex) {
+                            } catch (Throwable ex) {
                                 LOGGER.error("problem in broadcast thread", ex);
                             }
                         }
@@ -133,6 +133,52 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
             t.start();
         } catch (IOException e) {
             throw new LumifyException("Could not subscribe to broadcasts", e);
+        }
+    }
+
+    @Override
+    public void subscribeToGraphPropertyMessages(final GraphPropertyConsumer graphPropertyConsumer) {
+        try {
+            ensureBroadcastExchange();
+
+            this.channel.queueDeclare(GRAPH_PROPERTY_QUEUE_NAME, true, false, false, null);
+
+            final QueueingConsumer callback = new QueueingConsumer(this.channel);
+            this.channel.basicConsume(GRAPH_PROPERTY_QUEUE_NAME, false, callback);
+
+            final Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (true) {
+                            QueueingConsumer.Delivery delivery = callback.nextDelivery();
+                            try {
+                                JSONObject json = new JSONObject(new String(delivery.getBody()));
+                                LOGGER.debug("received message from graph property queue [%s]: %s", GRAPH_PROPERTY_QUEUE_NAME, json.toString());
+                                long startTime = System.currentTimeMillis();
+                                graphPropertyConsumer.graphPropertyReceived(json);
+                                long endTime = System.currentTimeMillis();
+                                LOGGER.debug("ack'ing message from graph property queue [%s]: %s (work time: %dms)", GRAPH_PROPERTY_QUEUE_NAME, json.toString(), endTime - startTime);
+                                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                            } catch (Throwable ex) {
+                                LOGGER.error("problem in graph property thread", ex);
+                                try {
+                                    channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);
+                                } catch (IOException e) {
+                                    LOGGER.error("Could not nack message: " + delivery.getEnvelope().getDeliveryTag(), e);
+                                }
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        throw new LumifyException("graph property listener has died", e);
+                    }
+                }
+            });
+            t.setName("rabbitmq-subscribe-" + graphPropertyConsumer.getClass().getName());
+            t.setDaemon(true);
+            t.start();
+        } catch (IOException e) {
+            throw new LumifyException("Could not subscribe to graph property queue", e);
         }
     }
 }

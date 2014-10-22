@@ -7,13 +7,13 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.systemNotification.SystemNotification;
 import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.util.ClientApiConverter;
-import io.lumify.web.clientapi.model.ClientApiWorkspace;
-import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -321,11 +321,17 @@ public abstract class WorkQueueRepository {
 
     public abstract void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer);
 
+    public abstract void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer);
+
     public void shutdown() {
 
     }
 
     public static abstract class BroadcastConsumer {
         public abstract void broadcastReceived(JSONObject json);
+    }
+
+    public static abstract class GraphPropertyConsumer {
+        public abstract void graphPropertyReceived(JSONObject json) throws Exception;
     }
 }

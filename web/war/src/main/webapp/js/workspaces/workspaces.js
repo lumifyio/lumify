@@ -227,40 +227,8 @@ define([
                 workspace.editable = (/write/i).test(userAccess && userAccess.access);
                 workspace.sharedToUser = workspace.createdBy !== currentUser.id;
 
-                if (self.workspaceId === workspace.workspaceId) {
-                    appData.loadWorkspace(workspace);
-                } else {
-                    self.updateListItemWithData(workspace);
-                }
+                self.updateListItemWithData(workspace);
             })
-        };
-
-        this.onWorkspaceRemoteSave = function(event, data) {
-            var self = this;
-
-            if (!data || !data.remoteEvent) return;
-
-            this.currentUserReady(function(currentUser) {
-                self.workspaceService.getByRowKey(data.workspaceId)
-                    .fail(function() {
-                        if (self.workspaceId === data.workspaceId) {
-                            self.loadWorkspaceList(true);
-                        } else {
-                            self.loadWorkspaceList();
-                        }
-                    })
-                    .done(function(data) {
-                        var userAccess = _.findWhere(data.users, { userId: currentUser.id });
-                        data.editable = (/write/i).test(userAccess && userAccess.access);
-                        data.sharedToUser = data.createdBy !== currentUser.id;
-
-                        if (self.workspaceId === data.workspaceId) {
-                            appData.loadWorkspace(data);
-                        } else {
-                            self.updateListItemWithData(data);
-                        }
-                    });
-            });
         };
 
         this.onWorkspaceNotAvailable = function(event, data) {
