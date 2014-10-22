@@ -16,5 +16,8 @@ public class AnalystsNotebookExportWebPlugin implements WebAppPlugin {
         Class<? extends Handler> csrfHandlerClass = LumifyCsrfHandler.class;
 
         app.get("/export/analysts-notebook", authenticationHandlerClass, csrfHandlerClass, ReadPrivilegeFilter.class, AnalystsNotebookExport.class);
+
+        app.registerJavaScript("/io/lumify/analystsNotebook/analystsNotebook.js");
+        app.registerResourceBundle("/io/lumify/analystsNotebook/messages.properties");
     }
 }

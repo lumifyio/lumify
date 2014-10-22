@@ -526,6 +526,27 @@ define([
             this.trigger(document, 'searchByRelatedEntity', { vertexId: menu.data('currentVertexGraphVertexId')});
         };
 
+        this.onContextMenuExportWorkspace = function(exporterId) {
+            var exporter = WorkspaceExporters.exportersById[exporterId],
+                $node = this.$node,
+                workspaceId = this.previousWorkspace;
+
+            if (exporter) {
+                require(['util/popovers/exportWorkspace/exportWorkspace'], function(ExportWorkspace) {
+                    ExportWorkspace.attachTo($node, {
+                        exporter: exporter,
+                        workspaceId: workspaceId,
+                        anchorTo: {
+                            page: {
+                                x: window.lastMousePositionX,
+                                y: window.lastMousePositionY
+                            }
+                        }
+                    });
+                });
+            }
+        };
+
         this.onContextMenuZoom = function(level) {
             this.cytoscapeReady(function(cy) {
                 cy.zoom(level);
@@ -871,7 +892,17 @@ define([
                          ).appendTo(menu).find('ul');
                     }
 
-                    $exporters.empty().append('<li><a></a></li>').find('a').text('Analysts Notebook');
+                    $exporters.empty();
+                    WorkspaceExporters.exporters.forEach(function(exporter) {
+                        $exporters.append(
+                            $('<li><a href="#"></a></li>')
+                                .find('a')
+                                    .text(exporter.menuItem)
+                                    .attr('data-func', 'exportWorkspace')
+                                    .attr('data-args', JSON.stringify([exporter._identifier]))
+                                .end()
+                        );
+                    });
                 }
 
                 this.toggleMenu({positionUsingEvent: event}, menu);
