@@ -40,6 +40,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     public void defineOntology(Configuration config, Authorizations authorizations) throws Exception {
         Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root", null);
         Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing", null);
+        clearCache();
         addEntityGlyphIcon(entityConcept);
         importBaseOwlFile(authorizations);
 
@@ -73,6 +74,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     private void importResourceOwl(String fileName, String iri, Authorizations authorizations) {
+        LOGGER.debug("importResourceOwl %s (iri: %s)", fileName, iri);
         InputStream baseOwlFile = OntologyRepositoryBase.class.getResourceAsStream(fileName);
         checkNotNull(baseOwlFile, "Could not load resource " + OntologyRepositoryBase.class.getResource(fileName));
 
@@ -183,32 +185,72 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
 
-        for (OWLClass ontologyClass : o.getClassesInSignature()) {
-            if (!o.isDeclared(ontologyClass, false)) {
+        long totalStartTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
+        importOntologyClasses(o, inDir, authorizations);
+        clearCache(); // this is required to cause a new lookup of classes for data and object properties.
+        long endTime = System.currentTimeMillis();
+        long importConceptsTime = endTime - startTime;
+
+        startTime = System.currentTimeMillis();
+        importDataProperties(o);
+        endTime = System.currentTimeMillis();
+        long importDataPropertiesTime = endTime - startTime;
+
+        startTime = System.currentTimeMillis();
+        importObjectProperties(o);
+        clearCache(); // needed to find the relationship for inverse of
+        endTime = System.currentTimeMillis();
+        long importObjectPropertiesTime = endTime - startTime;
+
+        startTime = System.currentTimeMillis();
+        importInverseOfObjectProperties(o);
+        endTime = System.currentTimeMillis();
+        long importInverseOfObjectPropertiesTime = endTime - startTime;
+        long totalEndTime = System.currentTimeMillis();
+
+        LOGGER.debug("import concepts time: %dms", importConceptsTime);
+        LOGGER.debug("import data properties time: %dms", importDataPropertiesTime);
+        LOGGER.debug("import object properties time: %dms", importObjectPropertiesTime);
+        LOGGER.debug("import inverse of object properties time: %dms", importInverseOfObjectPropertiesTime);
+        LOGGER.debug("import total time: %dms", totalEndTime - totalStartTime);
+
+        clearCache();
+    }
+
+    private void importInverseOfObjectProperties(OWLOntology o) {
+        for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
+            if (!o.isDeclared(objectProperty, false)) {
                 continue;
             }
-            importOntologyClass(o, ontologyClass, inDir, authorizations);
+            importInverseOf(o, objectProperty);
         }
+    }
 
-        for (OWLDataProperty dataTypeProperty : o.getDataPropertiesInSignature()) {
-            if (!o.isDeclared(dataTypeProperty, false)) {
-                continue;
-            }
-            importDataProperty(o, dataTypeProperty);
-        }
-
+    private void importObjectProperties(OWLOntology o) {
         for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
             if (!o.isDeclared(objectProperty, false)) {
                 continue;
             }
             importObjectProperty(o, objectProperty);
         }
+    }
 
-        for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
-            if (!o.isDeclared(objectProperty, false)) {
+    private void importDataProperties(OWLOntology o) {
+        for (OWLDataProperty dataTypeProperty : o.getDataPropertiesInSignature()) {
+            if (!o.isDeclared(dataTypeProperty, false)) {
                 continue;
             }
-            importInverseOf(o, objectProperty);
+            importDataProperty(o, dataTypeProperty);
+        }
+    }
+
+    private void importOntologyClasses(OWLOntology o, File inDir, Authorizations authorizations) throws IOException {
+        for (OWLClass ontologyClass : o.getClassesInSignature()) {
+            if (!o.isDeclared(ontologyClass, false)) {
+                continue;
+            }
+            importOntologyClass(o, ontologyClass, inDir, authorizations);
         }
     }
 
@@ -360,23 +402,24 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
 
+        List<Concept> domainConcepts = new ArrayList<Concept>();
         for (OWLClassExpression domainClassExpr : dataTypeProperty.getDomains(o)) {
             OWLClass domainClass = domainClassExpr.asOWLClass();
             String domainClassUri = domainClass.getIRI().toString();
             Concept domainConcept = getConceptByIRI(domainClassUri);
-            checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
-
+            checkNotNull(domainConcepts, "Could not find class with uri: " + domainClassUri);
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
-
-            Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
-            Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
+            domainConcepts.add(domainConcept);
         }
+
+        Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
+        Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
+        addPropertyTo(domainConcepts, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
     }
 
     protected abstract OntologyProperty addPropertyTo(
-            Concept concept,
-            String propertyIRI,
+            List<Concept> concepts,
+            String propertyIri,
             String displayName,
             PropertyType dataType,
             Map<String, String> possibleValues,
@@ -393,11 +436,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         checkNotNull(label, "label cannot be null or empty for " + iri);
         LOGGER.info("Importing ontology object property " + iri + " (label: " + label + ")");
 
-        for (Concept domain : getDomainsConcepts(o, objectProperty)) {
-            for (Concept range : getRangesConcepts(o, objectProperty)) {
-                getOrCreateRelationshipType(domain, range, iri, label);
-            }
-        }
+        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label);
     }
 
     protected void importInverseOf(OWLOntology o, OWLObjectProperty objectProperty) {
@@ -654,7 +693,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             JSONObject filter = filterJson.getJSONObject(i);
             if (filter.has("propertyId") && !filter.has("propertyName")) {
                 String propertyVertexId = filter.getString("propertyId");
-                OntologyProperty property = getProperty(propertyVertexId);
+                OntologyProperty property = getPropertyByIRI(propertyVertexId);
                 if (property == null) {
                     throw new RuntimeException("Could not find property with id: " + propertyVertexId);
                 }
@@ -662,6 +701,35 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 filter.put("propertyDataType", property.getDataType());
             }
         }
+    }
+
+    @Override
+    public Concept getConceptByIRI(String conceptIRI) {
+        for (Concept concept : getConceptsWithProperties()) {
+            if (concept.getIRI().equals(conceptIRI)) {
+                return concept;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public OntologyProperty getPropertyByIRI(String propertyIRI) {
+        for (OntologyProperty prop : getProperties()) {
+            if (prop.getTitle().equals(propertyIRI)) {
+                return prop;
+            }
+        }
+        return null;
+    }
+
+    public Relationship getRelationshipByIRI(String relationshipIRI) {
+        for (Relationship rel : getRelationships()) {
+            if (rel.getIRI().equals(relationshipIRI)) {
+                return rel;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -674,7 +742,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         Iterable<OntologyProperty> properties = getProperties();
         ontology.addAllProperties(OntologyProperty.toClientApiProperties(properties));
 
-        Iterable<Relationship> relationships = getRelationshipLabels();
+        Iterable<Relationship> relationships = getRelationships();
         ontology.addAllRelationships(Relationship.toClientApiRelationships(relationships));
 
         return ontology;

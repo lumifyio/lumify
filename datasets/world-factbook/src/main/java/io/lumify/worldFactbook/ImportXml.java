@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.ingest.FileImport;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.Relationship;
 import io.lumify.core.model.properties.LumifyProperties;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -96,8 +95,7 @@ public class ImportXml extends CommandLineBase {
             System.err.println("ontology.iri.entityHasImage is required.");
             return 1;
         }
-        Relationship entityHasImageRelationship = ontologyRepository.getRelationshipByIRI(entityHasImageIri);
-        if (entityHasImageRelationship == null) {
+        if (!ontologyRepository.hasRelationshipByIRI(entityHasImageIri)) {
             System.err.println("could not find relationship: " + entityHasImageIri + ".");
             return 1;
         }

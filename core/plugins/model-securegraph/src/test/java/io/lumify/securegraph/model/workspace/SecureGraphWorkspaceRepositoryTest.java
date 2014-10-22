@@ -5,9 +5,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.lock.LocalLockRepository;
 import io.lumify.core.model.lock.LockRepository;
-import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.Relationship;
+import io.lumify.core.model.ontology.ReadOnlyInMemoryOntologyRepository;
 import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
@@ -35,28 +33,13 @@ import java.util.Map;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.when;
 import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SecureGraphWorkspaceRepositoryTest {
     private InMemoryGraph graph;
 
-    @Mock
-    private OntologyRepository ontologyRepository;
-
-    @Mock
-    private Concept rootConcept;
-
-    @Mock
-    private Concept workspaceConcept;
-
-    @Mock
-    private Relationship workspaceToEntityRelationship;
-
-    @Mock
-    private Relationship workspaceToUserRelationship;
+    private ReadOnlyInMemoryOntologyRepository ontologyRepository;
 
     @Mock
     private WorkspaceDiffHelper workspaceDiff;
@@ -92,16 +75,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         user2 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
-        when(ontologyRepository.getConceptByIRI(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);
-
-        when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(WorkspaceRepository.WORKSPACE_CONCEPT_NAME), anyString(), (java.io.File) anyObject())).thenReturn(workspaceConcept);
-        when(workspaceConcept.getTitle()).thenReturn(WorkspaceRepository.WORKSPACE_CONCEPT_NAME);
-
-        when(workspaceToEntityRelationship.getIRI()).thenReturn("workspaceToEntityRelationshipId");
-        when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToEntityRelationship);
-
-        when(workspaceToUserRelationship.getIRI()).thenReturn("workspaceToUserRelationshipId");
-        when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
+        ontologyRepository = new ReadOnlyInMemoryOntologyRepository();
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 
@@ -292,7 +266,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users
         boolean foundRemovedEdge = false;
         for (InMemoryEdge edge : edgesAfterDelete.values()) {
-            if (edge.getLabel().equals(workspaceToEntityRelationship.getIRI())) {
+            if (edge.getLabel().equals(SecureGraphWorkspaceRepository.WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI)) {
                 assertEquals(false, WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.getPropertyValue(edge));
                 foundRemovedEdge = true;
             }

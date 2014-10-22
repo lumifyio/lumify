@@ -119,7 +119,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
 
-        OntologyProperty property = ontologyRepository.getProperty(propertyName);
+        OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }

@@ -32,7 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.lumify.core.model.properties.LumifyProperties.*;
-import static org.securegraph.util.IterableUtils.*;
+import static org.securegraph.util.IterableUtils.singleOrDefault;
+import static org.securegraph.util.IterableUtils.toList;
 
 @Singleton
 public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
@@ -159,9 +160,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Iterable<Relationship> getRelationshipLabels() {
+    public Iterable<Relationship> getRelationships() {
         try {
-            return relationshipLabelsCache.get("", new TimingCallable<List<Relationship>>("getRelationshipLabels") {
+            return relationshipLabelsCache.get("", new TimingCallable<List<Relationship>>("getRelationships") {
                 @Override
                 public List<Relationship> callWithTime() throws Exception {
                     Iterable<Vertex> vertices = graph.query(getAuthorizations())
@@ -172,14 +173,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                     return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
                         @Override
                         protected Relationship convert(Vertex vertex) {
-                            Vertex sourceVertex = single(vertex.getVertices(Direction.IN, LabelName.HAS_EDGE.toString(), getAuthorizations()));
-                            String sourceConceptIRI = ONTOLOGY_TITLE.getPropertyValue(sourceVertex);
-
-                            Vertex destVertex = single(vertex.getVertices(Direction.OUT, LabelName.HAS_EDGE.toString(), getAuthorizations()));
-                            String destConceptIRI = ONTOLOGY_TITLE.getPropertyValue(destVertex);
-
-                            final List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(vertex);
-                            return new SecureGraphRelationship(vertex, sourceConceptIRI, destConceptIRI, inverseOfIRIs);
+                            return toSecureGraphRelationship(vertex);
                         }
                     });
                 }
@@ -187,6 +181,27 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         } catch (ExecutionException e) {
             throw new LumifyException("Could not get relationship labels");
         }
+    }
+
+    private Relationship toSecureGraphRelationship(Vertex relationshipVertex) {
+        Iterable<Vertex> domainVertices = relationshipVertex.getVertices(Direction.IN, LabelName.HAS_EDGE.toString(), getAuthorizations());
+        List<String> domainConceptIris = toList(new ConvertingIterable<Vertex, String>(domainVertices) {
+            @Override
+            protected String convert(Vertex domainVertex) {
+                return ONTOLOGY_TITLE.getPropertyValue(domainVertex);
+            }
+        });
+
+        Iterable<Vertex> rangeVertices = relationshipVertex.getVertices(Direction.OUT, LabelName.HAS_EDGE.toString(), getAuthorizations());
+        List<String> rangeConceptIris = toList(new ConvertingIterable<Vertex, String>(rangeVertices) {
+            @Override
+            protected String convert(Vertex rangeVertex) {
+                return ONTOLOGY_TITLE.getPropertyValue(rangeVertex);
+            }
+        });
+
+        final List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(relationshipVertex);
+        return new SecureGraphRelationship(relationshipVertex, domainConceptIris, rangeConceptIris, inverseOfIRIs);
     }
 
     private List<String> getRelationshipInverseOfIRIs(final Vertex vertex) {
@@ -238,48 +253,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public OntologyProperty getProperty(String propertyIRI) {
-        try {
-            Vertex propVertex = singleOrDefault(graph.query(getAuthorizations())
-                    .has(CONCEPT_TYPE.getPropertyName(), TYPE_PROPERTY)
-                    .has(ONTOLOGY_TITLE.getPropertyName(), propertyIRI)
-                    .limit(QUERY_LIMIT)
-                    .vertices(), null);
-            return propVertex != null ? new SecureGraphOntologyProperty(propVertex) : null;
-        } catch (IllegalArgumentException iae) {
-            throw new IllegalStateException(String.format("Too many \"%s\" properties", propertyIRI), iae);
-        }
-    }
-
-    @Override
-    public Relationship getRelationshipByIRI(String relationshipIRI) {
-        Vertex relationshipVertex = singleOrDefault(graph.query(getAuthorizations())
-                .has(CONCEPT_TYPE.getPropertyName(), TYPE_RELATIONSHIP)
-                .has(ONTOLOGY_TITLE.getPropertyName(), relationshipIRI)
-                .limit(QUERY_LIMIT)
-                .vertices(), null);
-        if (relationshipVertex == null) {
-            return null;
-        }
-        String from;
-        String to;
-        try {
-            from = single(relationshipVertex.getVertexIds(Direction.IN, new String[]{LabelName.HAS_EDGE.toString()}, getAuthorizations()));
-        } catch (IllegalStateException ex) {
-            throw new IllegalStateException(String.format("Wrong number of 'IN' vertices for \"%s\"", relationshipIRI), ex);
-        }
-        try {
-            to = single(relationshipVertex.getVertexIds(Direction.OUT, new String[]{LabelName.HAS_EDGE.toString()}, getAuthorizations()));
-        } catch (IllegalStateException ex) {
-            throw new IllegalStateException(String.format("Wrong number of 'OUT' vertices for \"%s\"", relationshipIRI), ex);
-        }
-        List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(relationshipVertex);
-        return new SecureGraphRelationship(relationshipVertex, from, to, inverseOfIRIs);
-    }
-
-    @Override
-    public Iterable<Concept> getConcepts() {
-        return getConcepts(false);
+    public boolean hasRelationshipByIRI(String relationshipIRI) {
+        return getRelationshipByIRI(relationshipIRI) != null;
     }
 
     @Override
@@ -288,7 +263,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return allConceptsWithPropertiesCache.get("", new TimingCallable<List<Concept>>("getConceptsWithProperties") {
                 @Override
                 public List<Concept> callWithTime() throws Exception {
-                    return toList(getConcepts(true));
+                    return toList(getConcepts());
                 }
             });
         } catch (ExecutionException e) {
@@ -296,21 +271,17 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         }
     }
 
-    private Iterable<Concept> getConcepts(final boolean withProperties) {
+    private Iterable<Concept> getConcepts() {
         return new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
                 .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
                 .limit(QUERY_LIMIT)
                 .vertices()) {
             @Override
             protected Concept convert(Vertex vertex) {
-                if (withProperties) {
-                    List<OntologyProperty> conceptProperties = getPropertiesByVertexNoRecursion(vertex);
-                    Vertex parentConceptVertex = getParentConceptVertex(vertex);
-                    String parentConceptIRI = ONTOLOGY_TITLE.getPropertyValue(parentConceptVertex);
-                    return new SecureGraphConcept(vertex, parentConceptIRI, conceptProperties);
-                } else {
-                    return new SecureGraphConcept(vertex);
-                }
+                List<OntologyProperty> conceptProperties = getPropertiesByVertexNoRecursion(vertex);
+                Vertex parentConceptVertex = getParentConceptVertex(vertex);
+                String parentConceptIRI = ONTOLOGY_TITLE.getPropertyValue(parentConceptVertex);
+                return new SecureGraphConcept(vertex, parentConceptIRI, conceptProperties);
             }
         };
     }
@@ -344,18 +315,6 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             concepts.add(new SecureGraphConcept(vertex));
         }
         return concepts;
-    }
-
-    @Override
-    public Concept getConceptByIRI(String conceptIRI) {
-        // use the query API instead of the getVertex API to ensure we use the search index
-        // to ensure the ontology has been indexed.
-        Vertex conceptVertex = singleOrDefault(graph.query(getAuthorizations())
-                .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
-                .has(ONTOLOGY_TITLE.getPropertyName(), conceptIRI)
-                .limit(QUERY_LIMIT)
-                .vertices(), null);
-        return conceptVertex != null ? new SecureGraphConcept(conceptVertex) : null;
     }
 
     private List<OntologyProperty> getPropertiesByVertexNoRecursion(Vertex vertex) {
@@ -438,8 +397,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public OntologyProperty addPropertyTo(
-            Concept concept,
-            String propertyIRI,
+            List<Concept> concepts,
+            String propertyIri,
             String displayName,
             PropertyType dataType,
             Map<String, String> possibleValues,
@@ -449,11 +408,13 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost) {
-        checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
-        checkNotNull(property, "Could not find property: " + propertyIRI);
+        checkNotNull(concepts, "vertex was null");
+        OntologyProperty property = getOrCreatePropertyType(concepts, propertyIri, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
+        checkNotNull(property, "Could not find property: " + propertyIri);
 
-        findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
+        for (Concept concept : concepts) {
+            findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
+        }
 
         graph.flush();
         return property;
@@ -478,30 +439,50 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName) {
+    public Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName) {
         Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_RELATIONSHIP + relationshipIRI + "-" + from.getIRI() + "-" + to.getIRI(), VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_RELATIONSHIP + relationshipIRI, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
         Vertex relationshipVertex = builder.save(getAuthorizations());
 
-        findOrAddEdge(((SecureGraphConcept) from).getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
-        findOrAddEdge(relationshipVertex, ((SecureGraphConcept) to).getVertex(), LabelName.HAS_EDGE.toString());
+        for (Concept domainConcept : domainConcepts) {
+            findOrAddEdge(((SecureGraphConcept) domainConcept).getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
+        }
+
+        for (Concept rangeConcept : rangeConcepts) {
+            findOrAddEdge(relationshipVertex, ((SecureGraphConcept) rangeConcept).getVertex(), LabelName.HAS_EDGE.toString());
+        }
 
         List<String> inverseOfIRIs = new ArrayList<String>(); // no inverse of because this relationship is new
 
         graph.flush();
-        return new SecureGraphRelationship(relationshipVertex, from.getTitle(), to.getTitle(), inverseOfIRIs);
+
+        List<String> domainConceptIris = toList(new ConvertingIterable<Concept, String>(domainConcepts) {
+            @Override
+            protected String convert(Concept o) {
+                return o.getIRI();
+            }
+        });
+
+        List<String> rangeConceptIris = toList(new ConvertingIterable<Concept, String>(rangeConcepts) {
+            @Override
+            protected String convert(Concept o) {
+                return o.getIRI();
+            }
+        });
+
+        return new SecureGraphRelationship(relationshipVertex, domainConceptIris, rangeConceptIris, inverseOfIRIs);
     }
 
     private OntologyProperty getOrCreatePropertyType(
-            final Concept concept,
-            final String propertyName,
+            final List<Concept> concepts,
+            final String propertyIri,
             final PropertyType dataType,
             final String displayName,
             Map<String, String> possibleValues,
@@ -511,9 +492,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost) {
-        OntologyProperty typeProperty = getProperty(propertyName);
+        OntologyProperty typeProperty = getPropertyByIRI(propertyIri);
         if (typeProperty == null) {
-            DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyName);
+            DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyIri);
             definePropertyBuilder.dataType(PropertyType.getTypeClass(dataType));
             if (dataType == PropertyType.STRING) {
                 definePropertyBuilder.textIndexHint(textIndexHints);
@@ -527,9 +508,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             definePropertyBuilder.define();
 
-            VertexBuilder builder = graph.prepareVertex(ID_PREFIX_PROPERTY + concept.getIRI() + "_" + propertyName, VISIBILITY.getVisibility());
+            VertexBuilder builder = graph.prepareVertex(ID_PREFIX_PROPERTY + propertyIri, VISIBILITY.getVisibility());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
-            ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
+            ONTOLOGY_TITLE.setProperty(builder, propertyIri, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
             USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
             SEARCHABLE.setProperty(builder, searchable, VISIBILITY.getVisibility());
@@ -546,7 +527,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                 DISPLAY_TYPE.setProperty(builder, displayType, VISIBILITY.getVisibility());
             }
             if (propertyGroup != null && !propertyGroup.trim().isEmpty()) {
-               PROPERTY_GROUP.setProperty(builder, propertyGroup, VISIBILITY.getVisibility());
+                PROPERTY_GROUP.setProperty(builder, propertyGroup, VISIBILITY.getVisibility());
             }
             typeProperty = new SecureGraphOntologyProperty(builder.save(getAuthorizations()));
             graph.flush();
