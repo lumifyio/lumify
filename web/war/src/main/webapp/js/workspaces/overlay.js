@@ -64,6 +64,7 @@ define([
             this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
             this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
             this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
@@ -159,6 +160,10 @@ define([
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
             this.updateDiffBadge();
+        };
+
+        this.onWorkspaceUpdated = function(event, data) {
+            this.onWorkspaceLoaded(event, data.workspace);
         };
 
         this.onRelationshipsLoaded = function(event, data) {
