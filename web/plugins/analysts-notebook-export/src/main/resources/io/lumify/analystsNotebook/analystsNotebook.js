@@ -22,7 +22,7 @@ require([
 
         Object.getOwnPropertyNames(versions).forEach(function(label) {
             p.registerWorkspaceExporter({
-                menuItem: i18n('analystsnotebook.menuitem.title') + " " + label,
+                menuItem: i18n('analystsnotebook.menuitem.title', label),
                 componentPath: componentPath
             });
         });
