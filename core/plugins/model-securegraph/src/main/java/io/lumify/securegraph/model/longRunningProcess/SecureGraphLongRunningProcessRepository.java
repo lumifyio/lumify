@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.util.ConvertingIterable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -41,7 +42,11 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         Concept userConcept = ontologyRepository.getConceptByIRI(UserRepository.USER_CONCEPT_IRI);
 
         Concept longRunningProcessConcept = ontologyRepository.getOrCreateConcept(null, LONG_RUNNING_PROCESS_CONCEPT_IRI, "workspace", null);
-        ontologyRepository.getOrCreateRelationshipType(userConcept, longRunningProcessConcept, LONG_RUNNING_PROCESS_TO_USER_EDGE_IRI, "longRunningProcess to user");
+        List<Concept> userConceptList = new ArrayList<Concept>();
+        userConceptList.add(userConcept);
+        List<Concept> longRunningProcessConceptList = new ArrayList<Concept>();
+        longRunningProcessConceptList.add(longRunningProcessConcept);
+        ontologyRepository.getOrCreateRelationshipType(userConceptList, longRunningProcessConceptList, LONG_RUNNING_PROCESS_TO_USER_EDGE_IRI, "longRunningProcess to user");
     }
 
     @Override
