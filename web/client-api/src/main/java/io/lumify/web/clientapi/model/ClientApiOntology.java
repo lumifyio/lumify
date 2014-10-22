@@ -239,8 +239,8 @@ public class ClientApiOntology implements ClientApiObject {
     public static class Relationship {
         private String title;
         private String displayName;
-        private String source;
-        private String dest;
+        private List<String> domainConceptIris = new ArrayList<String>();
+        private List<String> rangeConceptIris = new ArrayList<String>();
         private List<InverseOf> inverseOfs = new ArrayList<InverseOf>();
 
         public String getTitle() {
@@ -259,20 +259,20 @@ public class ClientApiOntology implements ClientApiObject {
             this.displayName = displayName;
         }
 
-        public String getSource() {
-            return source;
+        public List<String> getDomainConceptIris() {
+            return domainConceptIris;
         }
 
-        public void setSource(String source) {
-            this.source = source;
+        public void setDomainConceptIris(List<String> domainConceptIris) {
+            this.domainConceptIris = domainConceptIris;
         }
 
-        public String getDest() {
-            return dest;
+        public List<String> getRangeConceptIris() {
+            return rangeConceptIris;
         }
 
-        public void setDest(String dest) {
-            this.dest = dest;
+        public void setRangeConceptIris(List<String> rangeConceptIris) {
+            this.rangeConceptIris = rangeConceptIris;
         }
 
         @JsonInclude(JsonInclude.Include.NON_EMPTY)

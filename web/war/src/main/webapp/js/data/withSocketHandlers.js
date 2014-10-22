@@ -103,8 +103,14 @@ define([], function() {
                     break;
 
                 case 'workspaceChange':
+                    var workspace = $.extend({}, message.data),
+                        user = _.findWhere(message.data.users, { userId: currentUser.id });
+
+                    workspace.editable = /WRITE/i.test(user && user.access);
+                    workspace.isSharedToUser = workspace.createdBy !== currentUser.id;
+
                     self.trigger('workspaceUpdated', {
-                        workspace: message.data
+                        workspace: workspace
                     });
                     break;
 

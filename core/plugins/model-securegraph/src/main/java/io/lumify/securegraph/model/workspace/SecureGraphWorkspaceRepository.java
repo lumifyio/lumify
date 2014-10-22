@@ -21,14 +21,15 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.securegraph.model.user.SecureGraphUserRepository;
-import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
+import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.util.ConvertingIterable;
 import org.securegraph.util.VerticesToEdgeIdsIterable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -74,13 +75,19 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
         Concept rootConcept = ontologyRepository.getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
 
-        Concept workspaceConcept = ontologyRepository.getOrCreateConcept(null, WORKSPACE_CONCEPT_NAME, "workspace", null);
+        Concept workspaceConcept = ontologyRepository.getOrCreateConcept(null, WORKSPACE_CONCEPT_IRI, "workspace", null);
         workspaceConceptId = workspaceConcept.getTitle();
 
-        Relationship workspaceToEntityRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConcept, rootConcept, WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME, "workspace to entity");
+        ArrayList<Concept> workspaceConceptList = new ArrayList<Concept>();
+        workspaceConceptList.add(workspaceConcept);
+
+        ArrayList<Concept> rootConceptList = new ArrayList<Concept>();
+        rootConceptList.add(rootConcept);
+
+        Relationship workspaceToEntityRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConceptList, rootConceptList, WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI, "workspace to entity");
         workspaceToEntityRelationshipId = workspaceToEntityRelationship.getIRI();
 
-        Relationship workspaceToUserRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConcept, rootConcept, WORKSPACE_TO_USER_RELATIONSHIP_NAME, "workspace to user");
+        Relationship workspaceToUserRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConceptList, rootConceptList, WORKSPACE_TO_USER_RELATIONSHIP_IRI, "workspace to user");
         workspaceToUserRelationshipId = workspaceToUserRelationship.getIRI();
     }
 

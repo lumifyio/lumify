@@ -22,5 +22,6 @@
         <module>gdelt</module>
         <module>the-movie-db</module>
         <module>dbpedia</module>
+        <module>palantir</module>
     </modules>
 </project>

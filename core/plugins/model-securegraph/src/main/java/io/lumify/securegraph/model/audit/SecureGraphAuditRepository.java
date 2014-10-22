@@ -455,7 +455,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     private String checkAndConvertForDateType(String propertyName, Object value) {
-        OntologyProperty ontologyProperty = ontologyRepository.getProperty(propertyName);
+        OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(propertyName);
         if (ontologyProperty != null && ontologyProperty.getDataType() == PropertyType.DATE) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyy");
             try {

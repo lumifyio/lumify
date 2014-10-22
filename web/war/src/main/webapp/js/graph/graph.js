@@ -1105,6 +1105,15 @@ define([
             }
         };
 
+        this.onWorkspaceUpdated = function(event, data) {
+            if (this.previousWorkspace === data.workspace.workspaceId) {
+                this.isWorkspaceEditable = data.workspace.editable;
+                this.cytoscapeReady(function(cy) {
+                    cy.nodes()[data.workspace.editable ? 'grabify' : 'ungrabify']();
+                });
+            }
+        }
+
         this.onWorkspaceLoaded = function(evt, workspace) {
             this.resetGraph();
             this.isWorkspaceEditable = workspace.editable;
@@ -1320,6 +1329,7 @@ define([
             this.$node.html(loadingTemplate({}));
 
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
             this.on(document, 'verticesHoveringEnded', this.onVerticesHoveringEnded);
             this.on(document, 'verticesAdded', this.onVerticesAdded);

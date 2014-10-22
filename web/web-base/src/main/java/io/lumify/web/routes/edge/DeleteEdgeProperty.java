@@ -12,9 +12,7 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
@@ -22,8 +20,6 @@ import org.securegraph.Property;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DeleteEdgeProperty extends BaseRequestHandler {
     private final Graph graph;
@@ -60,7 +56,7 @@ public class DeleteEdgeProperty extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        OntologyProperty property = ontologyRepository.getProperty(propertyName);
+        OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }
