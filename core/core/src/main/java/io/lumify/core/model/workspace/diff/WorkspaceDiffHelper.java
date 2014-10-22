@@ -132,7 +132,8 @@ public class WorkspaceDiffHelper {
                 workspaceProperty.getKey(),
                 oldData,
                 newData,
-                sandboxStatus
+                sandboxStatus,
+                workspaceProperty.getVisibility().getVisibilityString()
         );
     }
 

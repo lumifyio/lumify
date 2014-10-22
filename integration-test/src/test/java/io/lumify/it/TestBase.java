@@ -28,7 +28,9 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.mongodb.util.MyAsserts.assertTrue;
@@ -134,6 +136,16 @@ public class TestBase {
             }
         }
         return null;
+    }
+
+    protected List<ClientApiProperty> getProperties(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName) {
+        List<ClientApiProperty> propertyList = new ArrayList<ClientApiProperty>();
+        for (ClientApiProperty property : properties) {
+            if (propertyKey.equals(property.getKey()) && propertyName.equals(property.getName())) {
+                propertyList.add(property);
+            }
+        }
+        return propertyList;
     }
 
     protected void assertHasProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName, Object expectedValue) {

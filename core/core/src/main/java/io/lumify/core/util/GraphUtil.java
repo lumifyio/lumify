@@ -61,12 +61,18 @@ public class GraphUtil {
             if (sandboxStatuses[i] != SandboxStatus.PRIVATE) {
                 continue;
             }
+            VisibilityJson propertyVisibilityJson = LumifyProperties.VISIBILITY_JSON.getMetadataValue(property.getMetadata());
             for (int j = 0; j < properties.size(); j++) {
                 Property p = properties.get(j);
-                if (i == j || !property.getName().equals(p.getName())) {
+                VisibilityJson pVisibilityJson = LumifyProperties.VISIBILITY_JSON.getMetadataValue(p.getMetadata());
+                if (i == j) {
                     continue;
                 }
-                if (sandboxStatuses[j] == SandboxStatus.PUBLIC) {
+
+                if (sandboxStatuses[j] == SandboxStatus.PUBLIC &&
+                        property.getName().equals(p.getName()) &&
+                        property.getKey().equals(p.getKey()) &&
+                        (propertyVisibilityJson == null || pVisibilityJson == null || (propertyVisibilityJson.getSource().equals(pVisibilityJson.getSource())))) {
                     sandboxStatuses[i] = SandboxStatus.PUBLIC_CHANGED;
                 }
             }
@@ -130,7 +136,11 @@ public class GraphUtil {
             JSONObject sourceObject,
             User user,
             Authorizations authorizations) {
-        Property oldProperty = element.getProperty(propertyKey, propertyName);
+        VisibilityJson visibilityJson = new VisibilityJson();
+        visibilityJson.setSource(visibilitySource);
+        visibilityJson.addWorkspace(workspaceId);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+        Property oldProperty = element.getProperty(propertyKey, propertyName, lumifyVisibility.getVisibility());
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {
             propertyMetadata = oldProperty.getMetadata();
@@ -146,14 +156,13 @@ public class GraphUtil {
 
         ExistingElementMutation<T> elementMutation = element.prepareMutation();
 
-        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getMetadataValue(propertyMetadata);
         visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
         LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
         LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, new Date());
         LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId());
         LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, SET_PROPERTY_CONFIDENCE);
 
-        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+        lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);

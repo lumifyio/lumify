@@ -36,6 +36,7 @@ public class WorkspaceApiExt extends io.lumify.web.clientapi.codegen.WorkspaceAp
             publishItem.setElementId(propertyDiffItem.getElementId());
             publishItem.setKey(propertyDiffItem.getKey());
             publishItem.setName(propertyDiffItem.getName());
+            publishItem.setVisibilityString (propertyDiffItem.getVisibilityString());
             return publishItem;
         } else if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.EdgeItem) {
             ClientApiWorkspaceDiff.EdgeItem edgeDiffItem = (ClientApiWorkspaceDiff.EdgeItem) workspaceDiffItem;

@@ -24,10 +24,6 @@ import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.*;
 import org.securegraph.*;
-import org.securegraph.Edge;
-import org.securegraph.Element;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import javax.servlet.http.HttpServletRequest;
@@ -183,6 +179,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
                 String propertyKey = propertyPublishItem.getKey();
                 String propertyName = propertyPublishItem.getName();
+                String propertyVisibilityString = propertyPublishItem.getVisibilityString();
 
                 OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(propertyName);
                 checkNotNull(ontologyProperty, "Could not find ontology property: " + propertyName);
@@ -190,12 +187,13 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
 
-                List<Property> properties = toList(element.getProperties(propertyName));
+                List<Property> properties = toList(element.getProperties(propertyKey, propertyName));
                 SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
                 boolean propertyFailed = false;
                 for (int propertyIndex = 0; propertyIndex < properties.size(); propertyIndex++) {
                     Property property = properties.get(propertyIndex);
-                    if (!property.getKey().equals(propertyKey)) {
+                    if (propertyVisibilityString != null &&
+                            !property.getVisibility().getVisibilityString().equals(propertyVisibilityString)) {
                         continue;
                     }
                     SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
@@ -314,6 +312,8 @@ public class WorkspacePublish extends BaseRequestHandler {
             }
             termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
+
+        graph.flush();
     }
 
     private void publishProperty(Element element, ClientApiPublishItem.Action action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
@@ -329,6 +329,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             }
             if (publishProperty(elementMutation, property, workspaceId, user)) {
                 elementMutation.save(authorizations);
+                graph.flush();
                 return;
             }
         }

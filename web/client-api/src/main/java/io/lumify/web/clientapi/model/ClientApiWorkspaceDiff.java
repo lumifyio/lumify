@@ -137,7 +137,7 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         private String elementId;
         private String name;
         private String key;
-
+        private String visibilityString;
         @JsonProperty("old")
         private JsonNode oldData;
 
@@ -148,13 +148,14 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
             super("PropertyDiffItem", SandboxStatus.PRIVATE);
         }
 
-        public PropertyItem(String elementId, String name, String key, JsonNode oldData, JsonNode newData, SandboxStatus sandboxStatus) {
+        public PropertyItem(String elementId, String name, String key, JsonNode oldData, JsonNode newData, SandboxStatus sandboxStatus, String visibilityString) {
             super("PropertyDiffItem", sandboxStatus);
             this.elementId = elementId;
             this.name = name;
             this.key = key;
             this.oldData = oldData;
             this.newData = newData;
+            this.visibilityString = visibilityString;
         }
 
         public String getElementId() {
@@ -176,5 +177,7 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         public JsonNode getNewData() {
             return newData;
         }
+
+        public String getVisibilityString () { return visibilityString; }
     }
 }
