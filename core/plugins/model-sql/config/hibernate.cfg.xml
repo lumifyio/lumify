@@ -17,6 +17,7 @@
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
         <mapping class="io.lumify.sql.model.user.SqlUser"/>
+        <mapping class="io.lumify.sql.model.longRunningProcess.SqlLongRunningProcess"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspace"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUser"/>
