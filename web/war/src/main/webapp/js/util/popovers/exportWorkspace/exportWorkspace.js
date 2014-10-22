@@ -22,7 +22,8 @@ define([
             this.after('setupWithTemplate', function() {
                 var self = this,
                     node = this.popover.find('.plugin-content'),
-                    workspaceId = this.attr.workspaceId;
+                    workspaceId = this.attr.workspaceId,
+                    exporter = this.attr.exporter;
 
                 this.on(this.popover, 'click', {
                     cancelButtonSelector: this.onCancel
@@ -30,7 +31,8 @@ define([
 
                 require([this.attr.exporter.componentPath], function(C) {
                     C.attachTo(node, {
-                        workspaceId: workspaceId
+                        workspaceId: workspaceId,
+                        exporter: exporter
                     });
 
                     self.positionDialog();
