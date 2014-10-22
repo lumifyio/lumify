@@ -355,6 +355,22 @@ define([
                 return resolvedName;
             },
 
+            longestProp: function(vertex) {
+                var properties = vertex.properties
+                    .filter(function(a) {
+                        var ontologyProperty = propertiesByTitle[a.name];
+                        return ontologyProperty && ontologyProperty.userVisible;
+                    })
+                    .sort(function(a, b) {
+                        return V.displayProp(b).length - V.displayProp(a).length;
+                    });
+                if (properties.length > 0) {
+                    return V.displayProp(properties[0]);
+                } else {
+                    return null;
+                }
+            },
+
             displayProp: function(vertexOrProperty, optionalName) {
                 var name = _.isUndefined(optionalName) ? vertexOrProperty.name : optionalName,
                     value = V.prop(vertexOrProperty, name),

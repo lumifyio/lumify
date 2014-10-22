@@ -17,12 +17,15 @@ define([], function() {
                 'prop',
                 // Get actual raw property value
                 'propRaw',
+                // Get the longest property value and converted to string displayValue
+                'longestProp',
                 // Vertex Json
                 'vertex',
                 // Inner function string
                 formula)(
                     V.displayProp.bind(undefined, vertex),
                     V.prop.bind(undefined, vertex),
+                    V.longestProp.bind(undefined, vertex),
                     vertex);
 
         } catch(e) {
