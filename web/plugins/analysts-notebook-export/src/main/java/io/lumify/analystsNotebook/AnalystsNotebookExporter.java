@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.lumify.analystsNotebook.aggregateClassification.AggregateClassificationClient;
+import io.lumify.analystsNotebook.aggregateClassification.AggregateClassificationConfiguration;
 import io.lumify.analystsNotebook.model.*;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -16,6 +19,9 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.codec.binary.Base64;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
@@ -23,23 +29,31 @@ import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.util.LookAheadIterable;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toList;
 
 @Singleton
 public class AnalystsNotebookExporter {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AnalystsNotebookExporter.class);
     private static final String XML_DECLARATION = "<?xml version='1.0' encoding='UTF-8'?>";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private Graph graph;
     private WorkspaceRepository workspaceRepository;
     private OntologyRepository ontologyRepository;
+    private AggregateClassificationClient aggregateClassificationClient;
 
     @Inject
-    public AnalystsNotebookExporter(Graph graph, WorkspaceRepository workspaceRepository, OntologyRepository ontologyRepository) {
+    public AnalystsNotebookExporter(Graph graph,
+                                    WorkspaceRepository workspaceRepository,
+                                    OntologyRepository ontologyRepository,
+                                    Configuration configuration) {
         this.graph = graph;
         this.workspaceRepository = workspaceRepository;
         this.ontologyRepository = ontologyRepository;
+        aggregateClassificationClient = new AggregateClassificationClient(configuration);
     }
 
     public static String toXml(Chart chart, List<String> comments) {
@@ -69,6 +83,8 @@ public class AnalystsNotebookExporter {
     }
 
     public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations) {
+        LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
+
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
 
         Iterable<String> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
@@ -78,7 +94,7 @@ public class AnalystsNotebookExporter {
 
         List<Edge> edges = toList(graph.getEdges(graph.findRelatedEdges(vertexIds, authorizations), authorizations));
 
-        String classificationBanner = "CLASSIFICATION BANNER"; // TODO: get the aggregate visibility with a service?
+        String classificationBanner = aggregateClassificationClient.getClassificationBanner(vertices);
 
         Chart chart = new Chart();
 
@@ -91,17 +107,22 @@ public class AnalystsNotebookExporter {
         chart.setEntityTypeCollection(entityTypes);
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
+        LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
             chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue()));
         }
+        LOGGER.debug("adding %d edges", edges.size());
         for (Edge edge : edges) {
             chartItems.add(ChartItem.createFromEdge(version, edge));
         }
-        chartItems.add(getLabelChartItem(classificationBanner, 4889, 7, "class_header"));
-        chartItems.add(getLabelChartItem(classificationBanner, 4889, 6667, "class_footer"));
+        if (classificationBanner != null) {
+            // TODO: select x,y
+            chartItems.add(getLabelChartItem(classificationBanner, 4889, 7, "class_header"));
+            chartItems.add(getLabelChartItem(classificationBanner, 4889, 6667, "class_footer"));
+        }
         chart.setChartItemCollection(chartItems);
 
-        if (version == AnalystsNotebookVersion.VERSION_7_OR_8) {
+        if (version == AnalystsNotebookVersion.VERSION_7_OR_8 && classificationBanner != null) {
             chart.setSummary(getSummary(classificationBanner));
             chart.setPrintSettings(getPrintSettings());
         }

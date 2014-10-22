@@ -7,7 +7,7 @@ require([
     p.registerWorkspaceExporter({
         menuItem: i18n('analystsnotebook.menuitem.title'),
         componentPath: componentPath
-    })
+    });
 
     define(componentPath, ['flight/lib/component'], function(defineComponent) {
 
@@ -17,13 +17,13 @@ require([
 
             this.defaultAttrs({
                 buttonSelector: 'button'
-            })
+            });
 
             this.after('initialize', function() {
 
                 this.on('click', {
                     buttonSelector: this.onExport
-                })
+                });
 
                 this.$node.html(
                     '<button class="btn btn-primary">' + i18n('analystsnotebook.menuitem.button') + '</button>'
@@ -31,11 +31,11 @@ require([
             });
 
             this.onExport = function() {
-                window.open('export/analysts-notebook?' + $.param({
+                window.open('analysts-notebook/export?' + $.param({
                     workspaceId: this.attr.workspaceId
-                }))
+                }));
                 this.trigger('closePopover')
             }
         }
     })
-})
+});

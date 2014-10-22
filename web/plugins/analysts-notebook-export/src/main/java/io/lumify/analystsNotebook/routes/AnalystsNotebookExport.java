@@ -51,12 +51,31 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
         Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations);
 
         List<String> comments = new ArrayList<String>();
-        comments.add(workspace.getDisplayTitle());
-        comments.add("https://lumify/#w=" + workspaceId);
-        comments.add(String.format("Exported from Lumify on %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
+        comments.add(String.format("Lumify Workspace: %s", workspace.getDisplayTitle()));
+        comments.add(String.format("%s/#w=%s", getBaseUrl(request), workspaceId));
+        comments.add(String.format("Exported %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
 
         String xml = AnalystsNotebookExporter.toXml(chart, comments);
 
         respondWithPlaintext(response, xml);
+    }
+
+    private String getBaseUrl(HttpServletRequest request) {
+
+        // TODO: check for proxy
+        // TODO: move to BaseRequestHandler
+
+        String scheme = request.getScheme();
+        String serverName = request.getServerName();
+        int port = request.getServerPort();
+        String contextPath = request.getContextPath();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(scheme).append("://").append(serverName);
+        if (!(scheme.equals("http") && port == 80 || scheme.equals("https") && port == 443)) {
+            sb.append(":").append(port);
+        }
+        sb.append(contextPath);
+        return sb.toString();
     }
 }

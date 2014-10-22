@@ -107,7 +107,8 @@ public class ChartItem {
     public static ChartItem createFromVertexAndWorkspaceEntity(AnalystsNotebookVersion version, Vertex vertex, WorkspaceEntity workspaceEntity) {
         String conceptType = (String) vertex.getPropertyValue(LumifyProperties.CONCEPT_TYPE.getPropertyName());
         String vertexId = vertex.getId();
-        String title = (String) vertex.getPropertyValue(LumifyProperties.TITLE.getPropertyName()); // TODO: use title formula
+        // TODO: use title formula
+        String title = (String) vertex.getPropertyValue(LumifyProperties.TITLE.getPropertyName());
         int x = workspaceEntity.getGraphPositionX();
         int y = workspaceEntity.getGraphPositionY();
 
