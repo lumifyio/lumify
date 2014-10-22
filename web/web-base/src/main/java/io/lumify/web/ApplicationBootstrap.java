@@ -8,7 +8,6 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
-import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRunner;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -20,7 +19,6 @@ import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereInterceptor;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
-import org.json.JSONObject;
 import org.securegraph.Graph;
 
 import javax.servlet.*;
@@ -29,6 +27,9 @@ import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 public final class ApplicationBootstrap implements ServletContextListener {
     public static final String CONFIG_HTTP_TRANSPORT_GUARANTEE = "http.transportGuarantee";
@@ -52,7 +53,6 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
             setupInjector(context, config);
             setupWebApp(context, config);
-            setupGraphPropertyRunner(context, config);
             setupLongRunningProcessRunner(context, config);
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
@@ -169,43 +169,37 @@ public final class ApplicationBootstrap implements ServletContextListener {
         return initParameters;
     }
 
-    private void setupGraphPropertyRunner(ServletContext context, Configuration config) {
-        boolean enabled = Boolean.parseBoolean(config.get(Configuration.GRAPH_PROPERTY_RUNNER_ENABLED, "false"));
-        if (!enabled) {
-            return;
-        }
-
-        final GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
-        graphPropertyRunner.prepare(config.toMap());
-        WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
-        workQueueRepository.subscribeToGraphPropertyMessages(new WorkQueueRepository.GraphPropertyConsumer() {
-            @Override
-            public void graphPropertyReceived(JSONObject json) {
-                try {
-                    graphPropertyRunner.process(json);
-                } catch (Throwable e) {
-                    LOGGER.error("Failed to process graph property work: %s", json);
-                }
-            }
-        });
-    }
-
     private void setupLongRunningProcessRunner(ServletContext context, Configuration config) {
         boolean enabled = Boolean.parseBoolean(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
         if (!enabled) {
             return;
         }
 
+        int threadCount = Integer.parseInt(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, "4"));
+
         final LongRunningProcessRunner longRunningProcessRunner = InjectHelper.getInstance(LongRunningProcessRunner.class);
         longRunningProcessRunner.prepare(config.toMap());
-        WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
-        workQueueRepository.subscribeToLongRunningProcessMessages(new WorkQueueRepository.LongRunningProcessConsumer() {
+        final WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
+
+        ExecutorService exec = Executors.newFixedThreadPool(threadCount,
+                new ThreadFactory() {
+                    public Thread newThread(Runnable r) {
+                        Thread t = new Thread(r);
+                        t.setName("long-running-process-runner-" + t.getId());
+                        t.setDaemon(true);
+                        return t;
+                    }
+                });
+        exec.execute(new Runnable() {
             @Override
-            public void longRunningProcessReceived(JSONObject longRunningProcessQueueItem) {
+            public void run() {
+                WorkQueueRepository.LongRunningProcessMessage longRunningProcessMessage = workQueueRepository.getNextLongRunningProcessMessage();
                 try {
-                    longRunningProcessRunner.process(longRunningProcessQueueItem);
-                } catch (Throwable e) {
-                    LOGGER.error("Failed to process long running process: %s", longRunningProcessQueueItem);
+                    longRunningProcessRunner.process(longRunningProcessMessage.getMessage());
+                    longRunningProcessMessage.complete();
+                } catch (Throwable ex) {
+                    LOGGER.error("Failed to process long running process: %s", longRunningProcessMessage.getMessage());
+                    longRunningProcessMessage.complete(ex);
                 }
             }
         });

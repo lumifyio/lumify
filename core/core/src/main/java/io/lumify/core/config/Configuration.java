@@ -35,8 +35,8 @@ public final class Configuration {
     public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
     public static final String LONG_RUNNING_PROCESS_REPOSITORY = "repository.longRunningProcess";
     public static final String SYSTEM_NOTIFICATION_REPOSITORY = "repository.systemNotification";
-    public static final String GRAPH_PROPERTY_RUNNER_ENABLED = "graphPropertyRunner.enabled";
     public static final String LONG_RUNNING_PROCESS_RUNNER_ENABLED = "longRunningProcessRunner.enabled";
+    public static final String LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT = "longRunningProcessRunner.threadCount";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
     public static final String ONTOLOGY_IRI_PREFIX = "ontology.iri.";
     public static final String ONTOLOGY_IRI_ENTITY_IMAGE = ONTOLOGY_IRI_PREFIX + "entityImage";

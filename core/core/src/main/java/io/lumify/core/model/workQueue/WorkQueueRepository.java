@@ -342,9 +342,7 @@ public abstract class WorkQueueRepository {
 
     public abstract void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer);
 
-    public abstract void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer);
-
-    public abstract void subscribeToLongRunningProcessMessages(LongRunningProcessConsumer longRunningProcessConsumer);
+    public abstract LongRunningProcessMessage getNextLongRunningProcessMessage();
 
     public void shutdown() {
 
@@ -354,11 +352,21 @@ public abstract class WorkQueueRepository {
         public abstract void broadcastReceived(JSONObject json);
     }
 
-    public static abstract class GraphPropertyConsumer {
-        public abstract void graphPropertyReceived(JSONObject json);
-    }
+    public static abstract class LongRunningProcessMessage {
+        private final JSONObject message;
 
-    public static abstract class LongRunningProcessConsumer {
-        public abstract void longRunningProcessReceived(JSONObject longRunningProcessQueueItem);
+        public LongRunningProcessMessage(JSONObject message) {
+            this.message = message;
+        }
+
+        public JSONObject getMessage() {
+            return message;
+        }
+
+        public abstract void complete(Throwable ex);
+
+        public void complete() {
+            complete(null);
+        }
     }
 }
