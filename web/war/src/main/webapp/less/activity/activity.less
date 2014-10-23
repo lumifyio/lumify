@@ -1,0 +1,81 @@
+@import (reference) "../util/constants";
+
+background: #efefef;
+position: absolute;
+height: 20em;
+width: 25em;  
+
+.content {
+  position: relative;
+  display: block;
+  max-width: none;  
+  box-sizing: border-box;
+  white-space: normal;
+  overflow: hidden;
+  
+  & > h1 {
+    font-size: 100%;
+    margin: 0;
+    padding: 0.5em 0;
+    line-height: 1em;
+    text-align: center;
+  }
+
+  section {    
+    & > h1 {
+      line-height: 1em;
+      margin: 0;
+      padding-top: 0.25em;
+      padding-bottom: 0.25em;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0;
+        padding: 0.5em 1em;
+
+        & > * {
+          margin: 0.5em 0;
+        }
+
+        .type-container {
+          font-weight: bold;
+          color: #555;
+        }
+
+        .progress-container {
+
+          button {
+            float: right;
+            margin-left: 0.5em;
+            border: 0;            
+            display: inline-block;
+            width: 1.3em;
+            height: 1.3em;
+            border-radius: 50%;
+            margin-top: -0.6ex;
+            //background: #ccc url(../img/glyphicons/white/glyphicons_192_circle_remove@2x.png) no-repeat;
+            background: url(../img/glyphicons/glyphicons_192_circle_remove@2x.png) no-repeat;
+            background-size: contain;
+            background-position: center;
+            .opacity(50);
+          }
+        
+          .progress {
+            height: 10px;
+            margin: 0;          
+          }
+        }
+
+        .progress-description {
+          color: #777;
+          font-size: 95%;
+        }        
+      }
+    }
+  }
+}

@@ -25,7 +25,8 @@ define([
         // Which cannot both be active
         MUTALLY_EXCLUSIVE_SWITCHES = [
             { names: ['dashboard', 'graph','map'], options: { allowCollapse: false } },
-            { names: ['workspaces', 'search', 'admin'], options: { } }
+            { names: ['workspaces', 'search', 'admin'], options: { } },
+            { names: ['chat', 'activity'], options: { } }
         ],
 
         ACTION_TYPES = {
@@ -34,9 +35,9 @@ define([
         },
 
         // Don't change state to highlighted on click
-        DISABLE_ACTIVE_SWITCH = 'activity logout'.split(' '),
+        DISABLE_ACTIVE_SWITCH = 'logout'.split(' '),
 
-        DISABLE_HIDE_TOOLTIP_ON_CLICK = 'activity logout'.split(' ');
+        DISABLE_HIDE_TOOLTIP_ON_CLICK = 'logout'.split(' ');
 
     return defineComponent(Menubar);
 

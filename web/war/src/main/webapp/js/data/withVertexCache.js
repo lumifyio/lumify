@@ -100,7 +100,7 @@ define([
                 } else {
                     request = this.vertexService.getVertexProperties(vertex)
                         .done(function(data) {
-                            deferred.resolve(data[0]);
+                            deferred.resolve(data);
                         })
                 }
             } else {
@@ -126,19 +126,16 @@ define([
 
         this.getVertexTitle = function(vertexId) {
             var deferredTitle = $.Deferred(),
-                v,
-                vertexTitle;
+                v;
 
             v = this.vertex(vertexId);
             if (v) {
-                vertexTitle = F.vertex.title(v);
-                return deferredTitle.resolve(vertexTitle);
+                deferredTitle.resolve(F.vertex.title(v));
+            } else {
+                this.refresh(vertexId).done(function(vertex) {
+                    deferredTitle.resolve(F.vertex.title(vertex));
+                });
             }
-
-            this.refresh(vertexId).done(function(vertex) {
-                vertexTitle = F.vertex.title(vertex);
-                deferredTitle.resolve(vertexTitle);
-            });
 
             return deferredTitle;
         };
