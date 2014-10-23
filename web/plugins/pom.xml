@@ -24,5 +24,6 @@
         <module>import-export-workspaces</module>
         <module>opennlp-dictionary-extractor</module>
         <module>terms-of-use</module>
+        <module>analysts-notebook-export</module>
     </modules>
 </project>

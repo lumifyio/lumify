@@ -58,7 +58,7 @@ public class SecureGraphWorkspaceRepositoryTest {
     private UserListenerUtil userListenerUtil;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         Visibility visibility = new Visibility("");
         Authorizations authorizations = new InMemoryAuthorizations();
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
@@ -76,6 +76,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
         ontologyRepository = new ReadOnlyInMemoryOntologyRepository();
+        ontologyRepository.init(lumifyConfiguration);
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 

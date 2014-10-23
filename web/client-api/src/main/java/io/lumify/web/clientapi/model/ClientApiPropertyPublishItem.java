@@ -6,6 +6,7 @@ public class ClientApiPropertyPublishItem extends ClientApiPublishItem {
     private String edgeId;
     private String vertexId;
     private String elementId;
+    private String visibilityString;
 
     public String getKey() {
         return key;
@@ -45,6 +46,14 @@ public class ClientApiPropertyPublishItem extends ClientApiPublishItem {
 
     public void setElementId(String elementId) {
         this.elementId = elementId;
+    }
+
+    public String getVisibilityString() {
+        return visibilityString;
+    }
+
+    public void setVisibilityString(String visibilityString) {
+        this.visibilityString = visibilityString;
     }
 
     @Override

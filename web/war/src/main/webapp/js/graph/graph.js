@@ -18,6 +18,7 @@ define([
     'util/retina',
     'util/withContextMenu',
     'util/withAsyncQueue',
+    'configuration/plugins/exportWorkspace/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -38,6 +39,7 @@ define([
     retina,
     withContextMenu,
     withAsyncQueue,
+    WorkspaceExporters,
     colorjs) {
     'use strict';
 
@@ -524,6 +526,27 @@ define([
             this.trigger(document, 'searchByRelatedEntity', { vertexId: menu.data('currentVertexGraphVertexId')});
         };
 
+        this.onContextMenuExportWorkspace = function(exporterId) {
+            var exporter = WorkspaceExporters.exportersById[exporterId],
+                $node = this.$node,
+                workspaceId = this.previousWorkspace;
+
+            if (exporter) {
+                require(['util/popovers/exportWorkspace/exportWorkspace'], function(ExportWorkspace) {
+                    ExportWorkspace.attachTo($node, {
+                        exporter: exporter,
+                        workspaceId: workspaceId,
+                        anchorTo: {
+                            page: {
+                                x: window.lastMousePositionX,
+                                y: window.lastMousePositionY
+                            }
+                        }
+                    });
+                });
+            }
+        };
+
         this.onContextMenuZoom = function(level) {
             this.cytoscapeReady(function(cy) {
                 cy.zoom(level);
@@ -856,6 +879,30 @@ define([
                     menu.find('.layout-multi').show();
                 } else {
                     menu.find('.layout-multi').hide();
+                }
+
+                if (WorkspaceExporters.exporters.length) {
+                    var $exporters = menu.find('.exporters');
+
+                    if ($exporters.length === 0) {
+                        $exporters = $('<li class="dropdown-submenu"><a>' +
+                          i18n('graph.contextmenu.export_workspace') +
+                          '</a>' +
+                          '<ul class="dropdown-menu exporters"></ul></li>'
+                         ).appendTo(menu).find('ul');
+                    }
+
+                    $exporters.empty();
+                    WorkspaceExporters.exporters.forEach(function(exporter) {
+                        $exporters.append(
+                            $('<li><a href="#"></a></li>')
+                                .find('a')
+                                    .text(exporter.menuItem)
+                                    .attr('data-func', 'exportWorkspace')
+                                    .attr('data-args', JSON.stringify([exporter._identifier]))
+                                .end()
+                        );
+                    });
                 }
 
                 this.toggleMenu({positionUsingEvent: event}, menu);

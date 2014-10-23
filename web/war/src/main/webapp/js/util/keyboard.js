@@ -154,8 +154,8 @@ define([
         }
 
         this.onMouseMove = function(e) {
-            this.mousePageX = e.pageX;
-            this.mousePageY = e.pageY;
+            window.lastMousePositionX = this.mousePageX = e.pageX || 0;
+            window.lastMousePositionY = this.mousePageY = e.pageY || 0;
         }
 
         this.pushToStackIfNotLast = function(el) {
@@ -183,8 +183,8 @@ define([
 
         this.fireEvent = function(name, data) {
             var te = this.getTriggerElement();
-            data.pageX = this.mousePageX || 0;
-            data.pageY = this.mousePageY || 0;
+            data.pageX = this.mousePageX;
+            data.pageY = this.mousePageY;
             this.trigger(te, name, data);
         }
     }
