@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -28,15 +29,18 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
     private final HibernateSessionManager sessionManager;
     private final UserRepository userRepository;
     private final Graph graph;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public SqlLongRunningProcessRepository(
             final HibernateSessionManager sessionManager,
             final UserRepository userRepository,
-            final Graph graph) {
+            final Graph graph,
+            final WorkQueueRepository workQueueRepository) {
         this.sessionManager = sessionManager;
         this.userRepository = userRepository;
         this.graph = graph;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
             longRunningProcess.setCanceled(false);
             longRunningProcess.setLongRunningProcessId(longRunningProcessId);
             longRunningProcessQueueItem.put("id", longRunningProcessId);
-            longRunningProcess.setMessage(longRunningProcessQueueItem.toString());
+            longRunningProcess.setJson(longRunningProcessQueueItem.toString());
             if (user instanceof ProxyUser) {
                 user = userRepository.findById(user.getUserId());
             }
@@ -128,6 +132,21 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
     }
 
     @Override
+    public void reportProgress(JSONObject longRunningProcessQueueItem, final double progressPercent, final String message) {
+        final JSONObject[] json = new JSONObject[1];
+        updateLongRunningProcess(longRunningProcessQueueItem, new UpdateLongRunningProcessAction() {
+            @Override
+            public void run(SqlLongRunningProcess longRunningProcess) {
+                json[0] = new JSONObject(longRunningProcess.getJson());
+                json[0].put("progress", progressPercent);
+                json[0].put("progressMessage", message);
+                longRunningProcess.setJson(json[0].toString());
+            }
+        });
+        workQueueRepository.broadcastLongRunningProcessChange(json[0]);
+    }
+
+    @Override
     public List<JSONObject> getLongRunningProcesses(User user) {
         Session session = sessionManager.getSession();
         List longRunningProcesses = session.createCriteria(SqlLongRunningProcess.class)
@@ -137,7 +156,7 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
             @Override
             protected JSONObject convert(Object longRunningProcessObj) {
                 SqlLongRunningProcess longRunningProcess = (SqlLongRunningProcess) longRunningProcessObj;
-                return new JSONObject(longRunningProcess.getMessage());
+                return new JSONObject(longRunningProcess.getJson());
             }
         });
     }
@@ -159,7 +178,7 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
     @Override
     public JSONObject findById(String longRunningProcessId, User user) {
         SqlLongRunningProcess sqlLongRunningProcess = findSqlLongRunningProcessById(longRunningProcessId);
-        return new JSONObject(sqlLongRunningProcess.getMessage());
+        return new JSONObject(sqlLongRunningProcess.getJson());
     }
 
     public void updateLongRunningProcess(String longRunningProcessId, UpdateLongRunningProcessAction updateLongRunningProcessAction) {
