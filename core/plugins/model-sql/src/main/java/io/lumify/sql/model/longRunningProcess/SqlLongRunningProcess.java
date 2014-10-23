@@ -13,7 +13,7 @@ public class SqlLongRunningProcess {
     private Long endTime;
     private boolean erred;
     private boolean canceled;
-    private String message;
+    private String json;
 
     @Id
     @Column(name = "long_running_process_id", unique = true)
@@ -35,13 +35,13 @@ public class SqlLongRunningProcess {
         this.user = user;
     }
 
-    @Column(name = "message")
-    public String getMessage() {
-        return message;
+    @Column(name = "json")
+    public String getJson() {
+        return json;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setJson(String json) {
+        this.json = json;
     }
 
     @Column(name = "start_time")

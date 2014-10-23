@@ -26,4 +26,6 @@ public abstract class LongRunningProcessRepository {
     public abstract JSONObject findById(String longRunningProcessId, User user);
 
     public abstract void cancel(String longRunningProcessId, User user);
+
+    public abstract void reportProgress(JSONObject longRunningProcessQueueItem, double progressPercent, String message);
 }

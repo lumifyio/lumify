@@ -138,6 +138,22 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         this.graph.flush();
     }
 
+    @Override
+    public void reportProgress(JSONObject longRunningProcessQueueItem, double progressPercent, String message) {
+        String longRunningProcessGraphVertexId = longRunningProcessQueueItem.getString("id");
+        Authorizations authorizations = getAuthorizations(userRepository.getSystemUser());
+        Vertex vertex = this.graph.getVertex(longRunningProcessGraphVertexId, authorizations);
+        checkNotNull(vertex, "Could not find long running process vertex: " + longRunningProcessGraphVertexId);
+
+        JSONObject json = QUEUE_ITEM_JSON_PROPERTY.getPropertyValue(vertex);
+        json.put("progress", progressPercent);
+        json.put("progressMessage", message);
+        QUEUE_ITEM_JSON_PROPERTY.setProperty(vertex, json, getVisibility(), authorizations);
+        this.graph.flush();
+
+        workQueueRepository.broadcastLongRunningProcessChange(json);
+    }
+
     private Visibility getVisibility() {
         return new Visibility(VISIBILITY_STRING);
     }
