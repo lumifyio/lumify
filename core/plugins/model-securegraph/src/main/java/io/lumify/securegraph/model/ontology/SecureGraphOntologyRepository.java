@@ -43,6 +43,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     public static final String ID_PREFIX_RELATIONSHIP = ID_PREFIX + "rel_";
     public static final String ID_PREFIX_CONCEPT = ID_PREFIX + "concept_";
     private static final int QUERY_LIMIT = 10000;
+    public static final String ONTOLOGY_FILE_PROPERTY_NAME = "http://lumify.io#ontologyFile";
     private Graph graph;
     private Authorizations authorizations;
     private Cache<String, List<Concept>> allConceptsWithPropertiesCache = CacheBuilder.newBuilder()
@@ -114,8 +115,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         value.searchIndex(false);
         Map<String, Object> metadata = new HashMap<String, Object>();
         Vertex rootConceptVertex = ((SecureGraphConcept) getRootConcept()).getVertex();
-        metadata.put("index", toList(rootConceptVertex.getProperties("ontologyFile")).size());
-        rootConceptVertex.addPropertyValue(documentIRI.toString(), "ontologyFile", value, metadata, VISIBILITY.getVisibility(), authorizations);
+        metadata.put("index", toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME)).size());
+        rootConceptVertex.addPropertyValue(documentIRI.toString(), ONTOLOGY_FILE_PROPERTY_NAME, value, metadata, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -147,7 +148,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private Iterable<Property> getOntologyFiles() {
-        List<Property> ontologyFiles = toList(((SecureGraphConcept) getRootConcept()).getVertex().getProperties("ontologyFile"));
+        List<Property> ontologyFiles = toList(((SecureGraphConcept) getRootConcept()).getVertex().getProperties(ONTOLOGY_FILE_PROPERTY_NAME));
         Collections.sort(ontologyFiles, new Comparator<Property>() {
             @Override
             public int compare(Property ontologyFile1, Property ontologyFile2) {

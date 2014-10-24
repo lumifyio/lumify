@@ -14,6 +14,7 @@
      xml:base="http://lumify.io/dev"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:lumify="http://lumify.io#"
+     xmlns:analystsNotebook="http://lumify.io/analystsNotebook#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -693,6 +694,7 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_020_home@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
+        <analystsNotebook:iconFile>location</analystsNotebook:iconFile>
     </owl:Class>
     
 
