@@ -28,4 +28,6 @@ public abstract class LongRunningProcessRepository {
     public abstract void cancel(String longRunningProcessId, User user);
 
     public abstract void reportProgress(JSONObject longRunningProcessQueueItem, double progressPercent, String message);
+
+    public abstract void delete(String longRunningProcessId, User authUser);
 }
