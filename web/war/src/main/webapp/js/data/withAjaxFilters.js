@@ -26,6 +26,7 @@ define([], function() {
             /^vertex\/import/,
             /^vertex\/audit/,
             /^vertex\/property/,
+            /^vertex\/find-path/,
             /^long-running-process/,
             /^edge/
         ],

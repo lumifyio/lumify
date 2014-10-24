@@ -32,7 +32,7 @@ define([
     };
 
     LongRunningService.prototype.cancel = function(id) {
-        return this._ajaxGet({
+        return this._ajaxPost({
             url: 'long-running-process/cancel',
             data: {
                 longRunningProcessId: id

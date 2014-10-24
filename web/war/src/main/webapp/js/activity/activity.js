@@ -2,31 +2,45 @@
 define([
     'flight/lib/component',
     'hbs!./template',
-    './formatters',
+    './handlers',
     'd3',
+    'configuration/plugins/activity/plugin',
     'util/formatters',
+    'util/withCollapsibleSections',
     'service/longRunningProcess'
 ], function(
     defineComponent,
     template,
-    activityFormatters,
+    builtinHandlers,
     d3,
+    ActivityHandlers,
     F,
+    withCollapsibleSections,
     LongRunningProcessService) {
     'use strict';
 
-    var longRunningProcessService = new LongRunningProcessService();
+    var AUTO_UPDATE_INTERVAL_SECONDS = 60,
+        longRunningProcessService = new LongRunningProcessService();
 
-    return defineComponent(Activity);
+    return defineComponent(Activity, withCollapsibleSections);
 
     function Activity() {
 
         this.defaultAttrs({
             typesSelector: '.types',
-            deleteButtonSelector: '.progress-container button'
+            deleteButtonSelector: 'button.delete',
+            cancelButtonSelector: 'button.cancel',
+            noActivitySelector: '.no-activity'
         })
 
+        this.before('teardown', function() {
+            clearInterval(this.autoUpdateTimer);
+        });
+
         this.after('initialize', function() {
+            ActivityHandlers.registerActivityHandlers(builtinHandlers);
+
+            this.removedTasks = {};
             this.$node.html(template({}));
 
             this.tasks = window.currentUser && window.currentUser.longRunningProcesses || [];
@@ -36,16 +50,32 @@ define([
             this.on(document, 'socketMessage', this.onSocketMessage);
 
             this.on('click', {
-                deleteButtonSelector: this.onDelete
+                deleteButtonSelector: this.onDelete,
+                cancelButtonSelector: this.onCancel
             })
         });
 
+        this.onCancel = function(event) {
+            this.callServiceMethodRemove(event, 'cancel');
+        };
+
         this.onDelete = function(event) {
+            this.callServiceMethodRemove(event, 'delete');
+        };
+
+        this.callServiceMethodRemove = function(event, name) {
             var self = this,
-                processId = $(event.target).closest('li').data('processId');
+                $button = $(event.target),
+                processId = $button.closest('li').data('processId');
+
             if (processId) {
-                longRunningProcessService.delete(processId)
+                $button.addClass('loading');
+                longRunningProcessService[name](processId)
+                    .always(function() {
+                        $button.removeClass('loading');
+                    })
                     .done(function() {
+                        self.removedTasks[processId] = true;
                         var task = self.tasksById[processId];
                         delete self.tasksById[processId];
                         self.tasks.splice(self.tasks.indexOf(task), 1);
@@ -58,6 +88,10 @@ define([
             if (message && message.type === 'longRunningProcessChange') {
                 var task = message.data,
                     existingTask = this.tasksById[task.id];
+
+                if (this.removedTasks[task.id]) {
+                    return;
+                }
 
                 if (existingTask) {
                     this.tasks.splice(this.tasks.indexOf(existingTask), 1, task);
@@ -78,7 +112,18 @@ define([
 
             if (openingActivity) {
                 this.update();
+                this.startAutoUpdate();
+            } else {
+                this.pauseAutoUpdate();
             }
+        };
+
+        this.pauseAutoUpdate = function() {
+            clearInterval(this.autoUpdateTimer);
+        };
+
+        this.startAutoUpdate = function() {
+            this.autoUpdateTimer = setInterval(this.update.bind(this), AUTO_UPDATE_INTERVAL_SECONDS * 1000)
         };
 
         this.update = function() {
@@ -86,11 +131,42 @@ define([
                 return;
             }
 
-            var processes = this.tasks,
-                data = _.chain(processes)
+            console.log('updating', this.tasks)
+
+            var data = _.chain(this.tasks)
+                    .filter(function(p) {
+                        return !p.canceled;
+                    })
                     .groupBy('type')
                     .pairs()
+                    .value(),
+                uniqueTypes = _.chain(data)
+                    .map(function(p) {
+                        return p[0];
+                    })
+                    .unique()
+                    .map(function(type) {
+                        var byType = ActivityHandlers.activityHandlersByType;
+                        if (type in byType) {
+                            if (byType[type].finishedComponentPath) {
+                                return byType[type].finishedComponentPath;
+                            }
+
+                            return console.warn('No finishedComponentPath property for activity handler', byType[type]);
+                        }
+
+                        console.warn('No activity handler registered for type:', type);
+                    })
+                    .compact()
                     .value();
+
+            require(uniqueTypes, this.updateWithDependencies.bind(this, data, uniqueTypes));
+        };
+
+        this.updateWithDependencies = function(data, requirePaths) {
+            var finishedComponents = _.object(requirePaths, Array.prototype.slice.call(arguments, 2))
+
+            this.select('noActivitySelector').toggle(data.length === 0);
 
             d3.select(this.select('typesSelector').get(0))
                 .selectAll('section')
@@ -103,13 +179,20 @@ define([
                             this.attr('class', 'collapsible expanded')
                             this.append('h1')
                                 .attr('class', 'collapsible-header')
-                                .append('strong')
-                            this.append('ul')
+                                .call(function() {
+                                    this.append('strong');
+                                    this.append('span').attr('class', 'badge');
+                                })
+                            this.append('ul').attr('class', 'collapsible-section')
                         });
                     this.exit().remove();
 
                     this.select('.collapsible-header strong').text(function(pair) {
                         return i18n('activity.tasks.type.' + pair[0]);
+                    })
+
+                    this.select('.collapsible-header .badge').text(function(pair) {
+                        return F.number.pretty(pair[1].length);
                     })
 
                     this.select('ul')
@@ -125,11 +208,20 @@ define([
                                 .append('li')
                                 .call(function() {
                                     this.append('div')
+                                        .attr('class', 'actions-container')
+                                        .call(function() {
+                                            this.append('div')
+                                                .attr('class', 'actions-plugin')
+                                            this.append('button')
+                                                .attr('class', 'btn btn-mini btn-danger delete')
+                                                .text('Delete')
+                                        })
+                                    this.append('div')
                                         .attr('class', 'type-container')
                                     this.append('div')
                                         .attr('class', 'progress-container')
                                         .call(function() {
-                                            this.append('button')
+                                            this.append('button').attr('class', 'cancel')
                                             this.append('div').attr('class', 'progress')
                                                 .append('div')
                                                     .attr('class', 'bar')
@@ -140,12 +232,27 @@ define([
                             this.exit().remove();
 
                             this.attr('data-process-id', _.property('id'));
+                            this.attr('class', function(process) {
+                                if (process.cancelled || process.endTime) {
+                                    return 'finished';
+                                }
+                            })
+
+                            this.select('.actions-plugin').each(function() {
+                                var datum = d3.select(this).datum(),
+                                    handler = ActivityHandlers.activityHandlersByType[datum.type],
+                                    Component = finishedComponents[handler.finishedComponentPath];
+
+                                Component.attachTo(this, {
+                                    process: datum
+                                });
+                            })
 
                             this.select('.type-container').each(function() {
                                 var datum = d3.select(this).datum();
 
-                                if (datum.type && datum.type in activityFormatters) {
-                                    activityFormatters[datum.type](this, datum);
+                                if (datum.type && datum.type in ActivityHandlers.activityHandlersByType) {
+                                    ActivityHandlers.activityHandlersByType[datum.type].titleRenderer(this, datum);
                                 } else if (datum.type) {
                                     console.warn('No activity formatter for ', datum.type);
                                 } else {
@@ -154,7 +261,7 @@ define([
                             });
 
                             this.select('.bar').style('width', function(process) {
-                                return (process.progress * 100) + '%';
+                                return ((process.progress || 0) * 100) + '%';
                             });
 
                             this.select('.progress-description').text(function(process) {
