@@ -84,11 +84,13 @@ public class SqlSystemNotification implements SystemNotification {
         return endDate;
     }
 
+    @Transient
     @Override
     public JSONObject toJSONObject() {
         return SystemNotificationRepository.toJSONObject(this);
     }
 
+    @Transient
     @Override
     public boolean isActive() {
         return SystemNotificationRepository.isActive(this);
