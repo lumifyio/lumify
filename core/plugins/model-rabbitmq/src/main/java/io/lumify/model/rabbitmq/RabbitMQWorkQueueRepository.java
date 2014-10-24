@@ -15,37 +15,31 @@ import org.securegraph.Graph;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RabbitMQWorkQueueRepository.class);
     private static final String BROADCAST_EXCHANGE_NAME = "exBroadcast";
-    private final Channel channel;
     private final Connection connection;
-    private HashSet<String> declaredQueues = new HashSet<String>();
+    private final Channel channel;
     private QueueingConsumer longRunningProcessCallback;
+    private Set<String> declaredQueues = new HashSet<String>();
 
     @Inject
     public RabbitMQWorkQueueRepository(Graph graph, Configuration configuration) throws IOException {
         super(graph);
         this.connection = RabbitMQUtils.openConnection(configuration);
         this.channel = RabbitMQUtils.openChannel(this.connection);
+        this.channel.exchangeDeclare(BROADCAST_EXCHANGE_NAME, "fanout");
     }
 
     @Override
     protected void broadcastJson(JSONObject json) {
         try {
-            ensureBroadcastExchange();
             LOGGER.debug("publishing message to broadcast exchange [%s]: %s", BROADCAST_EXCHANGE_NAME, json.toString());
             channel.basicPublish(BROADCAST_EXCHANGE_NAME, "", null, json.toString().getBytes());
         } catch (IOException ex) {
             throw new LumifyException("Could not broadcast json", ex);
-        }
-    }
-
-    private void ensureBroadcastExchange() throws IOException {
-        if (!declaredQueues.contains(BROADCAST_EXCHANGE_NAME)) {
-            channel.exchangeDeclare(BROADCAST_EXCHANGE_NAME, "fanout");
-            declaredQueues.add(BROADCAST_EXCHANGE_NAME);
         }
     }
 
@@ -102,8 +96,6 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     @Override
     public void subscribeToBroadcastMessages(final BroadcastConsumer broadcastConsumer) {
         try {
-            ensureBroadcastExchange();
-
             String queueName = this.channel.queueDeclare().getQueue();
             this.channel.queueBind(queueName, BROADCAST_EXCHANGE_NAME, "");
 
@@ -140,12 +132,17 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     @Override
     public LongRunningProcessMessage getNextLongRunningProcessMessage() {
         try {
-            if (longRunningProcessCallback == null) {
-                this.channel.queueDeclare(LONG_RUNNING_PROCESS_QUEUE_NAME, true, false, false, null);
-                longRunningProcessCallback = new QueueingConsumer(this.channel);
-                this.channel.basicConsume(LONG_RUNNING_PROCESS_QUEUE_NAME, false, longRunningProcessCallback);
+            synchronized (this) {
+                if (longRunningProcessCallback == null) {
+                    channel.queueDeclare(LONG_RUNNING_PROCESS_QUEUE_NAME, true, false, false, null);
+                    longRunningProcessCallback = new QueueingConsumer(channel);
+                    channel.basicConsume(LONG_RUNNING_PROCESS_QUEUE_NAME, false, longRunningProcessCallback);
+                }
             }
-            QueueingConsumer.Delivery delivery = longRunningProcessCallback.nextDelivery();
+            QueueingConsumer.Delivery delivery = longRunningProcessCallback.nextDelivery(1000);
+            if (delivery == null) {
+                return null;
+            }
             JSONObject queueItem = new JSONObject(new String(delivery.getBody()));
             long deliveryTag = delivery.getEnvelope().getDeliveryTag();
             LOGGER.debug("received message from long running process queue [%s]: %s", LONG_RUNNING_PROCESS_QUEUE_NAME, queueItem.toString());
