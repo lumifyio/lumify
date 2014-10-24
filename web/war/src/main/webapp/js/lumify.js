@@ -136,7 +136,7 @@ function(jQuery,
     function configureApplication() {
         // Flight Logging
         try {
-            debug.enable(true);
+            debug.enable(false);
             DEBUG.events.logNone();
         } catch(e) {
             console.warn('Error enabling DEBUG mode for flight, probably because Safari Private Browsing enabled', e);
