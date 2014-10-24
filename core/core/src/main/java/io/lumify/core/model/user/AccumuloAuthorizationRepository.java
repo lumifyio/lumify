@@ -62,7 +62,7 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
                         AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
                         String principal = accumuloGraph.getConnector().whoami();
                         Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
-                        if (!currentAuthorizations.contains(auth)) {
+                        if (!currentAuthorizations.toString().contains(auth)) {
                             return;
                         }
                         byte[] authBytes = auth.getBytes(Constants.UTF8);

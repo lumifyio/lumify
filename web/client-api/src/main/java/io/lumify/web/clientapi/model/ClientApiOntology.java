@@ -49,6 +49,7 @@ public class ClientApiOntology implements ClientApiObject {
         private String color;
         private List<String> addRelatedConceptWhiteList = new ArrayList<String>();
         private List<String> properties = new ArrayList<String>();
+        private Map<String, String> metadata = new HashMap<String, String>();
 
         public String getId() {
             return id;
@@ -152,6 +153,11 @@ public class ClientApiOntology implements ClientApiObject {
 
         public void setColor(String color) {
             this.color = color;
+        }
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public Map<String, String> getMetadata() {
+            return metadata;
         }
 
         @JsonInclude(JsonInclude.Include.NON_EMPTY)

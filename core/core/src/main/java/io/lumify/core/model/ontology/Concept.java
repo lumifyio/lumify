@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Concept {
     private final String parentConceptIRI;
@@ -39,6 +40,8 @@ public abstract class Concept {
     public abstract String getTimeFormula();
 
     public abstract boolean getUserVisible();
+
+    public abstract Map<String, String> getMetadata();
 
     public abstract List<String> getAddRelatedConceptWhiteList();
 
@@ -93,6 +96,9 @@ public abstract class Concept {
                 for (OntologyProperty property : this.properties) {
                     concept.getProperties().add(property.getTitle());
                 }
+            }
+            for (Map.Entry<String, String> additionalProperty : getMetadata().entrySet()) {
+                concept.getMetadata().put(additionalProperty.getKey(), additionalProperty.getValue());
             }
             return concept;
         } catch (UnsupportedEncodingException e) {

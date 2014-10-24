@@ -6,7 +6,9 @@ import io.lumify.core.util.JSONUtil;
 import org.securegraph.Authorizations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryConcept extends Concept {
     private String title;
@@ -22,6 +24,7 @@ public class InMemoryConcept extends Concept {
     private byte[] mapGlyphIcon;
     private boolean userVisible;
     private Boolean searchable;
+    private Map<String, String> metadata = new HashMap<String, String>();
 
     protected InMemoryConcept(String conceptIRI, String parentIRI) {
         super(parentIRI, new ArrayList<OntologyProperty>());
@@ -84,6 +87,11 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
+    public Map<String, String> getMetadata() {
+        return this.metadata;
+    }
+
+    @Override
     public List<String> getAddRelatedConceptWhiteList() {
         return addRelatedConceptWhiteList;
     }
@@ -119,7 +127,7 @@ public class InMemoryConcept extends Concept {
                 this.searchable = Boolean.parseBoolean((String) value);
             }
         } else {
-            throw new LumifyException("Set not implemented for property " + name);
+            metadata.put(name, value.toString());
         }
     }
 

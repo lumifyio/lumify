@@ -303,46 +303,31 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         Concept parent = getParentConcept(o, ontologyClass, inDir, authorizations);
         Concept result = getOrCreateConcept(parent, uri, label, inDir);
 
-        String color = getColor(o, ontologyClass);
-        if (color != null) {
-            result.setProperty(LumifyProperties.COLOR.getPropertyName(), color, authorizations);
-        }
+        for (OWLAnnotation annotation : ontologyClass.getAnnotations(o)) {
+            String annotationIri = annotation.getProperty().getIRI().toString();
+            OWLLiteral valueLiteral = (OWLLiteral) annotation.getValue();
+            String valueString = valueLiteral.getLiteral();
 
-        String displayType = getDisplayType(o, ontologyClass);
-        if (displayType != null) {
-            result.setProperty(LumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
-        }
-
-        boolean searchable = getSearchable(o, ontologyClass);
-        result.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
-
-        String titleFormula = getTitleFormula(o, ontologyClass);
-        if (titleFormula != null) {
-            result.setProperty(LumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);
-        }
-
-        String subtitleFormula = getSubtitleFormula(o, ontologyClass);
-        if (subtitleFormula != null) {
-            result.setProperty(LumifyProperties.SUBTITLE_FORMULA.getPropertyName(), subtitleFormula, authorizations);
-        }
-
-        String timeFormula = getTimeFormula(o, ontologyClass);
-        if (timeFormula != null) {
-            result.setProperty(LumifyProperties.TIME_FORMULA.getPropertyName(), timeFormula, authorizations);
-        }
-
-        boolean userVisible = getUserVisible(o, ontologyClass);
-        result.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
-
-        String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
-        setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getPropertyName(), authorizations);
-
-        String mapGlyphIconFileName = getMapGlyphIconFileName(o, ontologyClass);
-        setIconProperty(result, inDir, mapGlyphIconFileName, LumifyProperties.MAP_GLYPH_ICON.getPropertyName(), authorizations);
-
-        String addRelatedWhiteList = getAddRelatedConceptWhiteList(o, ontologyClass);
-        if (addRelatedWhiteList != null) {
-            result.setProperty(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName(), addRelatedWhiteList, authorizations);
+            if (annotationIri.equals("http://lumify.io#searchable")) {
+                boolean searchable = valueString == null || Boolean.parseBoolean(valueString);
+                result.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
+            } else if (annotationIri.equals(LumifyProperties.USER_VISIBLE.getPropertyName())) {
+                boolean userVisible = valueString == null || Boolean.parseBoolean(valueString);
+                result.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
+            } else if (annotationIri.equals(LumifyProperties.GLYPH_ICON_FILE_NAME.getPropertyName())) {
+                setIconProperty(result, inDir, valueString, LumifyProperties.GLYPH_ICON.getPropertyName(), authorizations);
+            } else if (annotationIri.equals(LumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName())) {
+                setIconProperty(result, inDir, valueString, LumifyProperties.MAP_GLYPH_ICON.getPropertyName(), authorizations);
+            } else if (annotationIri.equals(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName())) {
+                if (valueString == null || valueString.trim().length() == 0) {
+                    continue;
+                }
+                result.setProperty(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName(), valueString.trim(), authorizations);
+            } else if (annotationIri.equals("http://www.w3.org/2000/01/rdf-schema#label")) {
+                continue;
+            } else {
+                result.setProperty(annotationIri, valueString, authorizations);
+            }
         }
 
         return result;
