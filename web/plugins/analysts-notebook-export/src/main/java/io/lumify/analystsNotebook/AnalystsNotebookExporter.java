@@ -38,6 +38,7 @@ import static org.securegraph.util.IterableUtils.toList;
 @Singleton
 public class AnalystsNotebookExporter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AnalystsNotebookExporter.class);
+    private static final String CONCEPT_METADATA_ICON_FILE_KEY = "http://lumify.io/analystsNotebook#iconFile";
     private static final String XML_DECLARATION = "<?xml version='1.0' encoding='UTF-8'?>";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private Graph graph;
@@ -113,7 +114,7 @@ public class AnalystsNotebookExporter {
         }
         LOGGER.debug("adding %d edges", edges.size());
         for (Edge edge : edges) {
-            chartItems.add(ChartItem.createFromEdge(version, edge));
+            chartItems.add(ChartItem.createFromEdge(version, edge, ontologyRepository));
         }
         if (classificationBanner != null) {
             // TODO: select x,y
@@ -151,7 +152,7 @@ public class AnalystsNotebookExporter {
             String conceptType = (String) vertex.getPropertyValue(LumifyProperties.CONCEPT_TYPE.getPropertyName());
             if (!map.containsKey(conceptType)) {
                 Concept concept = ontologyRepository.getConceptByIRI(conceptType);
-                String iconFile = getGlyphIcon(concept);
+                String iconFile = getMetadataIconFile(concept);
                 if (iconFile == null) {
                     iconFile = EntityType.ICON_FILE_DEFAULT;
                 }
@@ -174,6 +175,21 @@ public class AnalystsNotebookExporter {
             }
         }
     }
+
+    private String getMetadataIconFile(Concept concept) {
+        Map<String, String> metadata = concept.getMetadata();
+        if (metadata.containsKey(CONCEPT_METADATA_ICON_FILE_KEY)) {
+            return metadata.get(CONCEPT_METADATA_ICON_FILE_KEY);
+        } else {
+            concept = ontologyRepository.getParentConcept(concept);
+            if (concept != null) {
+                return getMetadataIconFile(concept);
+            } else {
+                return null;
+            }
+        }
+    }
+
 
     private Map<Vertex, WorkspaceEntity> createVertexWorkspaceEntityMap(Iterable<Vertex> vertices, List<WorkspaceEntity> workspaceEntities) {
         Map<Vertex, WorkspaceEntity> map = new HashMap<Vertex, WorkspaceEntity>();

@@ -694,7 +694,7 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_020_home@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
-        <analystsNotebook:iconFile>location</analystsNotebook:iconFile>
+        <analystsNotebook:iconFile>address</analystsNotebook:iconFile>
     </owl:Class>
     
 
@@ -809,6 +809,7 @@
         <rdfs:label xml:lang="en">Location</rdfs:label>
         <lumify:glyphIconFileName xml:lang="en">pin@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(160, 7, 206)</lumify:color>
+        <analystsNotebook:iconFile>location</analystsNotebook:iconFile>
     </owl:Class>
     
 
@@ -832,6 +833,7 @@
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
+        <analystsNotebook:iconFile>person</analystsNotebook:iconFile>
     </owl:Class>
     
 

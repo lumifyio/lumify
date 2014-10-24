@@ -2,6 +2,7 @@ package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.lumify.analystsNotebook.AnalystsNotebookVersion;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import org.securegraph.Direction;
@@ -115,7 +116,7 @@ public class ChartItem {
         return createEntity(version, conceptType, vertexId, title, x, y);
     }
 
-    public static ChartItem createLink(AnalystsNotebookVersion version, String from, String to) {
+    public static ChartItem createLink(AnalystsNotebookVersion version, String label, String from, String to) {
         LinkStyle linkStyle = new LinkStyle();
         if (version == AnalystsNotebookVersion.VERSION_6) {
             linkStyle.setStrength(1);
@@ -129,16 +130,18 @@ public class ChartItem {
         link.setLinkStyle(linkStyle);
 
         ChartItem chartItem = new ChartItem();
+        chartItem.setLabel(label);
         chartItem.setDateSet(false);
         chartItem.setLink(link);
 
         return chartItem;
     }
 
-    public static ChartItem createFromEdge(AnalystsNotebookVersion version, Edge edge) {
+    public static ChartItem createFromEdge(AnalystsNotebookVersion version, Edge edge, OntologyRepository ontologyRepository) {
+        String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
         String from = edge.getVertexId(Direction.OUT);
         String to = edge.getVertexId(Direction.IN);
 
-        return createLink(version, from, to);
+        return createLink(version, label, from, to);
     }
 }
