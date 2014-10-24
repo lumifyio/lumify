@@ -13,21 +13,24 @@ width: 25em;
   white-space: normal;
   overflow: auto;
   
-  & > h1 {
-    display: none;
-    font-size: 100%;
-    margin: 0;
-    padding: 0.5em 0;
-    line-height: 1em;
+  h1.no-activity {
+    position: absolute;
+    top: 50%;
+    left: 0;    
+    margin: -1em 0 0 0;
+    padding: 0;    
+    width: 100%;
     text-align: center;
+    font-size: 140%;
+    color: darken(white, 15%);
   }
 
   section {    
     & > h1 {
       line-height: 1em;
       margin: 0;
-      padding-top: 0.25em;
-      padding-bottom: 0.25em;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
     }
 
     ul {
@@ -38,6 +41,31 @@ width: 25em;
       li {
         margin: 0;
         padding: 0.5em 1em;
+        border-bottom: 1px solid darken(white, 10%);
+        position: relative;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .actions-container {
+          display: none;
+          float: right;                              
+          button {
+            width: 100%;
+            margin: 0.5em 0;            
+            display: block;
+          }
+        }
+
+        &.finished {
+          .actions-container {
+            display: block;
+          }
+          .progress-container {
+            display: none;
+          }
+        }
 
         & > * {
           margin: 0.35em 0;
