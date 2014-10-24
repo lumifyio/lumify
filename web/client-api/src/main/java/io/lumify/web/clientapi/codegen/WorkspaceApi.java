@@ -1,8 +1,8 @@
 package io.lumify.web.clientapi.codegen;
 
-import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
+import io.lumify.web.clientapi.model.ClientApiWorkspaceUndoResponse;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceVertices;
 import io.lumify.web.clientapi.model.ClientApiWorkspacePublishResponse;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceEdges;
@@ -13,7 +13,6 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
 
-import java.io.File;
 import java.util.*;
 
 public class WorkspaceApi {
@@ -283,6 +282,53 @@ public class WorkspaceApi {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (ClientApiWorkspacePublishResponse) ApiInvoker.deserialize(response, "", ClientApiWorkspacePublishResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiWorkspaceUndoResponse undo (String undoData) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(undoData == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/workspace/undo".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    String[] contentTypes = {
+      "multipart/form-data"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      hasFields = true;
+      mp.field("undoData", undoData, MediaType.MULTIPART_FORM_DATA_TYPE);
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      formParams.put("undoData", undoData);}
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiWorkspaceUndoResponse) ApiInvoker.deserialize(response, "", ClientApiWorkspaceUndoResponse.class);
       }
       else {
         return null;
