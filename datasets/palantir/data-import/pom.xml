@@ -9,13 +9,38 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>palantir-ontology-to-owl</artifactId>
-    <name>Lumify: Datasets: Palantir: Ontology to OWL</name>
+    <artifactId>palantir-data-import</artifactId>
+    <name>Lumify: Datasets: Palantir: Data Import</name>
 
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-fs-hdfs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-bigtable-queue</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-rabbitmq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-securegraph</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-bigtable</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -53,7 +78,7 @@
                     <descriptor>src/main/assembly/descriptor.xml</descriptor>
                     <archive>
                         <manifest>
-                            <mainClass>io.lumify.palantir.ontologyToOwl.OntologyToOwl</mainClass>
+                            <mainClass>io.lumify.palantir.dataImport.DataImport</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

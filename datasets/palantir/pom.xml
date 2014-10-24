@@ -15,5 +15,6 @@
 
     <modules>
         <module>ontology-to-owl</module>
+        <module>data-import</module>
     </modules>
 </project>
