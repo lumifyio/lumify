@@ -4,12 +4,13 @@ define([
     'util/vertex/formatters'
 ], function(VertexService, F) {
 
-    var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
-        'visibilitySource',
-        'properties',
-        'sandboxStatus',
-        'edgeLabels'
-    ];
+    var ROOT_CONCEPT = 'http://www.w3.org/2002/07/owl#Thing',
+        PROPERTIES_TO_INSPECT_FOR_CHANGES = [
+            'visibilitySource',
+            'properties',
+            'sandboxStatus',
+            'edgeLabels'
+        ];
 
     return withVertexCache;
 
@@ -171,7 +172,11 @@ define([
                 this.workspaceVertices[id] = cache.workspace;
             }
 
-            var conceptType = F.vertex.prop(cache, 'conceptType', 'http://www.w3.org/2002/07/owl#Thing');
+            var conceptType = F.vertex.prop(cache, 'conceptType', ROOT_CONCEPT);
+            if (conceptType === 'Unknown') {
+                console.warn('Concept type is Unknown', cache);
+                conceptType = ROOT_CONCEPT;
+            }
             cache.concept = this.cachedConcepts.byId[conceptType];
             if (cache.concept) {
                 setPreviewsForVertex(cache, this.workspaceId);
