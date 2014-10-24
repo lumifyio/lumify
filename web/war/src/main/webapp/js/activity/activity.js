@@ -131,14 +131,15 @@ define([
                 return;
             }
 
-            console.log('updating', this.tasks)
-
             var data = _.chain(this.tasks)
                     .filter(function(p) {
                         return !p.canceled;
                     })
                     .groupBy('type')
                     .pairs()
+                    .sortBy(function(pair) {
+                        return pair[0].toLowerCase();
+                    })
                     .value(),
                 uniqueTypes = _.chain(data)
                     .map(function(p) {
