@@ -135,6 +135,9 @@ define([
                     .filter(function(p) {
                         return !p.canceled;
                     })
+                    .sortBy(function(p) {
+                        return p.enqueueTime * -1;
+                    })
                     .groupBy('type')
                     .pairs()
                     .sortBy(function(pair) {
