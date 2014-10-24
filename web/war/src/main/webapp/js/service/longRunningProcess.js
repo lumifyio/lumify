@@ -23,6 +23,14 @@ define([
         })
     };
 
+    LongRunningService.prototype['delete'] = function(id) {
+        return this._ajaxDelete({
+            url: 'long-running-process?' + $.param({
+                longRunningProcessId: id
+            })
+        })
+    };
+
     LongRunningService.prototype.cancel = function(id) {
         return this._ajaxGet({
             url: 'long-running-process/cancel',
@@ -32,4 +40,5 @@ define([
         })
     };
 
+    return LongRunningService;
 });

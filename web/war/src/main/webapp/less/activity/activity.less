@@ -11,9 +11,10 @@ width: 25em;
   max-width: none;  
   box-sizing: border-box;
   white-space: normal;
-  overflow: hidden;
+  overflow: auto;
   
   & > h1 {
+    display: none;
     font-size: 100%;
     margin: 0;
     padding: 0.5em 0;
@@ -39,7 +40,7 @@ width: 25em;
         padding: 0.5em 1em;
 
         & > * {
-          margin: 0.5em 0;
+          margin: 0.35em 0;
         }
 
         .type-container {
@@ -57,23 +58,24 @@ width: 25em;
             width: 1.3em;
             height: 1.3em;
             border-radius: 50%;
-            margin-top: -0.6ex;
-            //background: #ccc url(../img/glyphicons/white/glyphicons_192_circle_remove@2x.png) no-repeat;
+            margin-top: -0.8ex;            
             background: url(../img/glyphicons/glyphicons_192_circle_remove@2x.png) no-repeat;
             background-size: contain;
             background-position: center;
-            .opacity(50);
+            .opacity(30);
           }
         
           .progress {
-            height: 10px;
-            margin: 0;          
+            border-radius: 0.5ex;
+            background: darken(white, 5%);
+            height: 1ex;
+            margin: 0;                      
           }
         }
 
         .progress-description {
           color: #777;
-          font-size: 95%;
+          font-size: 90%;          
         }        
       }
     }
