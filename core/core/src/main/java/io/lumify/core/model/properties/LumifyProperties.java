@@ -39,7 +39,6 @@ public class LumifyProperties {
     public static final StringLumifyProperty DISPLAY_NAME = new StringLumifyProperty("http://lumify.io#displayName");
     public static final StringLumifyProperty DISPLAY_TYPE = new StringLumifyProperty("http://lumify.io#displayType");
     public static final StringLumifyProperty PROPERTY_GROUP = new StringLumifyProperty("http://lumify.io#propertyGroup");
-    public static final StringLumifyProperty ENTITY_HAS_IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
     public static final StringLumifyProperty FILE_NAME = new StringLumifyProperty("http://lumify.io#fileName");
     public static final StringLumifyProperty FILE_NAME_EXTENSION = new StringLumifyProperty("http://lumify.io#fileNameExtension");
     public static final StringLumifyProperty GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#glyphIconFileName");

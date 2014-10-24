@@ -215,7 +215,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         for (Edge edge : vertex.getEdges(Direction.BOTH, entityHasImageIri, authorizations)) {
             if (edge.getVertexId(Direction.IN).equals(vertex.getId())) {
                 Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
-                Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+                Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
                 outVertex.removeProperty(entityHasImage.getName(), authorizations);
                 this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage);
             }

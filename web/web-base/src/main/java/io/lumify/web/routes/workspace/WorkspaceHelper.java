@@ -71,7 +71,7 @@ public class WorkspaceHelper {
         graph.removeEdge(edge, authorizations);
 
         if (edge.getLabel().equals(imageRelationshipLabel)) {
-            Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+            Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
             sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
             this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
         }
