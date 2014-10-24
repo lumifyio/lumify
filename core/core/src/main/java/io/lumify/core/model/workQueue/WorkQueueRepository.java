@@ -107,7 +107,14 @@ public abstract class WorkQueueRepository {
         users.put(userId);
         permissions.put("users", users);
         json.put("permissions", permissions);
-        json.put("data", longRunningProcessQueueItem);
+        JSONObject dataJson = new JSONObject(longRunningProcessQueueItem.toString());
+
+        /// because results can get quite large we don't want this going on in a web socket message
+        if (dataJson.has("results")) {
+            dataJson.remove("results");
+        }
+
+        json.put("data", dataJson);
         broadcastJson(json);
     }
 
