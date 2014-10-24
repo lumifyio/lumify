@@ -154,6 +154,14 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         workQueueRepository.broadcastLongRunningProcessChange(json);
     }
 
+    @Override
+    public void delete(String longRunningProcessId, User authUser) {
+        Authorizations authorizations = getAuthorizations(authUser);
+        Vertex vertex = this.graph.getVertex(longRunningProcessId, authorizations);
+        this.graph.removeVertex(vertex, authorizations);
+        this.graph.flush();
+    }
+
     private Visibility getVisibility() {
         return new Visibility(VISIBILITY_STRING);
     }

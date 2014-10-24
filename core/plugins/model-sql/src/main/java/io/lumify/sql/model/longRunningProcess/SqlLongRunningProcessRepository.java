@@ -181,6 +181,23 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
         return new JSONObject(sqlLongRunningProcess.getJson());
     }
 
+    @Override
+    public void delete(String longRunningProcessId, User authUser) {
+        Session session = sessionManager.getSession();
+        SqlLongRunningProcess sqlLongRunningProcess = findSqlLongRunningProcessById(longRunningProcessId);
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.delete(sqlLongRunningProcess);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
     public void updateLongRunningProcess(String longRunningProcessId, UpdateLongRunningProcessAction updateLongRunningProcessAction) {
         SqlLongRunningProcess longRunningProcess = findSqlLongRunningProcessById(longRunningProcessId);
         Session session = sessionManager.getSession();

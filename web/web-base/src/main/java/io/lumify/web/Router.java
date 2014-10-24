@@ -19,6 +19,7 @@ import io.lumify.web.routes.config.Configuration;
 import io.lumify.web.routes.edge.*;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessById;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessCancel;
+import io.lumify.web.routes.longRunningProcess.LongRunningProcessDelete;
 import io.lumify.web.routes.notification.Notifications;
 import io.lumify.web.routes.notification.SystemNotificationCreate;
 import io.lumify.web.routes.ontology.Ontology;
@@ -125,6 +126,7 @@ public class Router extends HttpServlet {
             app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
 
             app.get("/long-running-process", authenticator, csrfProtector, LongRunningProcessById.class);
+            app.delete("/long-running-process", authenticator, csrfProtector, LongRunningProcessDelete.class);
             app.post("/long-running-process/cancel", authenticator, csrfProtector, LongRunningProcessCancel.class);
 
             app.get("/admin/all", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminList.class);
