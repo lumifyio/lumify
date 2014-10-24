@@ -27,9 +27,6 @@ import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 public final class ApplicationBootstrap implements ServletContextListener {
     public static final String CONFIG_HTTP_TRANSPORT_GUARANTEE = "http.transportGuarantee";
@@ -169,7 +166,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
         return initParameters;
     }
 
-    private void setupLongRunningProcessRunner(ServletContext context, Configuration config) {
+    private void setupLongRunningProcessRunner(ServletContext context, final Configuration config) {
         boolean enabled = Boolean.parseBoolean(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
         if (!enabled) {
             return;
@@ -181,27 +178,28 @@ public final class ApplicationBootstrap implements ServletContextListener {
         longRunningProcessRunner.prepare(config.toMap());
         final WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
 
-        ExecutorService exec = Executors.newFixedThreadPool(threadCount,
-                new ThreadFactory() {
-                    public Thread newThread(Runnable r) {
-                        Thread t = new Thread(r);
-                        t.setName("long-running-process-runner-" + t.getId());
-                        t.setDaemon(true);
-                        return t;
+        for (int i = 0; i < threadCount; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        WorkQueueRepository.LongRunningProcessMessage longRunningProcessMessage = workQueueRepository.getNextLongRunningProcessMessage();
+                        if (longRunningProcessMessage == null) {
+                            continue;
+                        }
+                        try {
+                            longRunningProcessRunner.process(longRunningProcessMessage.getMessage());
+                            longRunningProcessMessage.complete();
+                        } catch (Throwable ex) {
+                            LOGGER.error("Failed to process long running process: %s", longRunningProcessMessage.getMessage());
+                            longRunningProcessMessage.complete(ex);
+                        }
                     }
-                });
-        exec.execute(new Runnable() {
-            @Override
-            public void run() {
-                WorkQueueRepository.LongRunningProcessMessage longRunningProcessMessage = workQueueRepository.getNextLongRunningProcessMessage();
-                try {
-                    longRunningProcessRunner.process(longRunningProcessMessage.getMessage());
-                    longRunningProcessMessage.complete();
-                } catch (Throwable ex) {
-                    LOGGER.error("Failed to process long running process: %s", longRunningProcessMessage.getMessage());
-                    longRunningProcessMessage.complete(ex);
                 }
-            }
-        });
+            });
+            t.setName("long-running-process-runner-" + t.getId());
+            t.setDaemon(true);
+            t.start();
+        }
     }
 }
