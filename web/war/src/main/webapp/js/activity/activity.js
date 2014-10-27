@@ -48,12 +48,21 @@ define([
 
             this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
             this.on(document, 'socketMessage', this.onSocketMessage);
+            this.on(document, 'showActivityDisplay', this.onShowActivityDisplay);
 
             this.on('click', {
                 deleteButtonSelector: this.onDelete,
                 cancelButtonSelector: this.onCancel
             })
         });
+
+        this.onShowActivityDisplay = function(event) {
+            var visible = this.$node.closest('.visible').length > 0;
+
+            if (!visible) {
+                this.trigger('menubarToggleDisplay', { name: 'activity' });
+            }
+        };
 
         this.onCancel = function(event) {
             this.callServiceMethodRemove(event, 'cancel');
@@ -189,7 +198,11 @@ define([
                                 })
                             this.append('ul').attr('class', 'collapsible-section')
                         });
-                    this.exit().remove();
+                    this.exit()
+                        .each(function() {
+                            $('.actions-plugin', this).teardownAllComponents();
+                        })
+                        .remove();
 
                     this.select('.collapsible-header strong').text(function(pair) {
                         return i18n('activity.tasks.type.' + pair[0]);
@@ -233,7 +246,11 @@ define([
                                     this.append('div')
                                         .attr('class', 'progress-description')
                                 });
-                            this.exit().remove();
+                            this.exit()
+                                .each(function() {
+                                    $('.actions-plugin', this).teardownAllComponents();
+                                })
+                                .remove();
 
                             this.attr('data-process-id', _.property('id'));
                             this.attr('class', function(process) {
@@ -247,10 +264,11 @@ define([
                                     handler = ActivityHandlers.activityHandlersByType[datum.type],
                                     Component = finishedComponents[handler.finishedComponentPath];
 
-                                $(this).teardownAllComponents();
-                                Component.attachTo(this, {
-                                    process: datum
-                                });
+                                if (datum.endTime) {
+                                    Component.attachTo(this, {
+                                        process: datum
+                                    });
+                                }
                             })
 
                             this.select('.type-container').each(function() {

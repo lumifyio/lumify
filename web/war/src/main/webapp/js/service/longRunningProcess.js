@@ -7,7 +7,10 @@ define([
     function LongRunningService() {
         ServiceBase.call(this);
 
-        this.serviceName = 'user';
+        this.serviceName = 'longRunningProcess';
+        this.memoizeFunctions(this.serviceName, [
+            'get'
+        ]);
 
         return this;
     }
