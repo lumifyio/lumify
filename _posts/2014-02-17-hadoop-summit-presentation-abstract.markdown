@@ -2,9 +2,9 @@
 layout: post
 title: "Hadoop Summit Presentation Abstract"
 author: Charlie Greenbacker
-excerpt: We recently submitted an abstract to give a presentation on Lumify at the 2014 Hadoop Summit in San Jose. I figured it wouldn't hurt to post it here on our blog as a shorter version of Jeff's earlier article "What is Lumify?"
+excerpt: We recently submitted an abstract to give a presentation on Lumify at the 2014 Hadoop Summit in San Jose. I figured it wouldn't hurt to post it here on our blog as a shorter version of an earlier article "What is Lumify?"
 ---
-We recently submitted an abstract to give a presentation on **Lumify** at the **[2014 Hadoop Summit](http://hadoopsummit.org/san-jose/)** in San Jose. I figured it wouldn't hurt to post it here on our blog as a shorter version of Jeff's earlier article "[What is Lumify?]({{site.url}}/blog/2014/01/21/what-is-lumify/)"
+We recently submitted an abstract to give a presentation on **Lumify** at the **[2014 Hadoop Summit](http://hadoopsummit.org/san-jose/)** in San Jose. I figured it wouldn't hurt to post it here on our blog as a shorter version of an earlier article "[What is Lumify?]({{site.url}}/blog/2014/01/21/what-is-lumify/)"
 
 The process of selecting presentations for the Hadoop Summit includes a public voting period. We'll let you know when that vote is open for you to show your support for Lumify.
 

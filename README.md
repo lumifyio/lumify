@@ -20,9 +20,9 @@ It's easiest to create a blog post by copying an existing one in the `_posts` di
 ```yaml
 ---
 layout: post
-title:  "What is Lumify?"
+title:  "Lumify helps combat spread infection diseases"
 author: Jeff Kunkle
-excerpt: It seems fitting that the first post to the Lumify blog...
+excerpt: Lumify has been used by the CDC to unravel...
 ---
 ```
 
@@ -42,7 +42,7 @@ public class MyCode {
 {% endhighlight %}
 ```
 
-Pygments supports a large number of programming languages, template languages, and other markup formats. See the [list of supported formats](http://pygments.org/languages/) for more information. 
+Pygments supports a large number of programming languages, template languages, and other markup formats. See the [list of supported formats](http://pygments.org/languages/) for more information.
 
 Publishing the Website
 ----------------------

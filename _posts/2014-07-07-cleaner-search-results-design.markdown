@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Cleaner Search Results Design for Lumify"
-author: Jeff Kunkle
 excerpt: The recently improved search results display is now ready for you to kick the tires. Read on to hear about what we've changed.
 ---
 We recently took a look at our search results display and decided it was time
