@@ -8,10 +8,8 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.apache.commons.codec.binary.Base64;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
-import org.securegraph.Property;
 import org.securegraph.Vertex;
 
 public class ChartItem {

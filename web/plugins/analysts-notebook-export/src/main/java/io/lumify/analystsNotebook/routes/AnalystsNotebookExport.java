@@ -12,10 +12,14 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +27,8 @@ import java.util.List;
 public class AnalystsNotebookExport extends BaseRequestHandler {
     private static final String VERSION_PARAMETER_NAME = "version";
     private static final AnalystsNotebookVersion DEFAULT_VERSION = AnalystsNotebookVersion.VERSION_7_OR_8;
+    private static final String FILE_EXT = "anx";
+    private static final String CONTENT_TYPE = "application/xml";
     private WorkspaceRepository workspaceRepository;
     private AnalystsNotebookExporter analystsNotebookExporter;
 
@@ -56,8 +62,19 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
         comments.add(String.format("Exported %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
 
         String xml = AnalystsNotebookExporter.toXml(chart, comments);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        response.setContentType(CONTENT_TYPE);
+        setMaxAge(response, EXPIRES_1_HOUR);
+        String filename = workspace.getDisplayTitle().replaceAll("[^A-Za-z0-9]", "_") + "_" + simpleDateFormat.format(new Date()) + "." + FILE_EXT;
+        response.addHeader("Content-Disposition", "attachment; filename=" + filename.replaceAll("_{2,}", "_"));
 
-        respondWithPlaintext(response, xml);
+        InputStream in = new ByteArrayInputStream(xml.getBytes());
+        try {
+            IOUtils.copy(in, response.getOutputStream());
+        } finally {
+            in.close();
+        }
+        chain.next(request, response);
     }
 
     private String getBaseUrl(HttpServletRequest request) {
