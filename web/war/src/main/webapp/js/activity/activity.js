@@ -247,6 +247,7 @@ define([
                                     handler = ActivityHandlers.activityHandlersByType[datum.type],
                                     Component = finishedComponents[handler.finishedComponentPath];
 
+                                $(this).teardownAllComponents();
                                 Component.attachTo(this, {
                                     process: datum
                                 });

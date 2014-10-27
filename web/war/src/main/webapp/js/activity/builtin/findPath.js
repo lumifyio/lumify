@@ -1,9 +1,11 @@
 define([
     'flight/lib/component',
-    'service/longRunningProcess'
+    'service/longRunningProcess',
+    'util/formatters'
 ], function(
     defineComponent,
-    LongRunningProcessService) {
+    LongRunningProcessService,
+    F) {
     'use strict';
 
     var longRunningProcessService = new LongRunningProcessService();
@@ -16,11 +18,14 @@ define([
         });
 
         this.after('initialize', function() {
-            if (_.isNumber(this.attr.process.resultsCount)) {
-                this.$node.html('<button class="btn btn-mini btn-primary">Add ' +
-                                this.attr.process.resultsCount +
-                                ' Vertices</button>');
-            }
+            var count = this.attr.process.resultsCount || 0;
+
+            this.$node.html(
+                '<button class="btn btn-mini btn-primary"' +
+                (count === 0 ? ' disabled' : '') + '>' +
+                (count === 0 ? 'No Entities' : ('Add ' + F.number.pretty(count) + ' Entities')) +
+                '</button>'
+            );
         });
     }
 });
