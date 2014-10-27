@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -107,6 +108,9 @@ public class SqlRunnerQueryIterable<T> implements Iterable<T> {
             } else if (columnValue instanceof Clob && parameterType == String.class) {
                 Clob clob = (Clob) columnValue;
                 columnValue = IOUtils.toString(clob.getAsciiStream());
+            } else if (columnValue instanceof Blob && parameterType == byte[].class) {
+                Blob blob = (Blob) columnValue;
+                columnValue = IOUtils.toByteArray(blob.getBinaryStream());
             }
             setter.invoke(obj, columnValue);
         } catch (Throwable ex) {

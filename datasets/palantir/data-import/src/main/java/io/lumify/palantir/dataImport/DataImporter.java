@@ -1,11 +1,14 @@
 package io.lumify.palantir.dataImport;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.dataImport.model.*;
 import io.lumify.palantir.dataImport.sqlrunner.SqlRunner;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
@@ -90,9 +93,11 @@ public class DataImporter {
             loadPropertyTypeCache();
             loadLinkTypeCache();
             loadNodeDisplayTypeCache();
+            loadImageInfos();
+            loadOntologyResources();
             loadLinkRelations();
 
-            //loadObjects();
+            loadObjects();
             loadProperties();
         } finally {
             sqlRunner.close();
@@ -181,6 +186,50 @@ public class DataImporter {
         File f = new File(this.outputDirectory, "pt_link_relation.xml");
         f.getParentFile().mkdirs();
         FileUtils.write(f, xml.toString());
+    }
+
+    private void loadImageInfos() throws IOException {
+        LOGGER.info("loadImageInfos");
+        Iterable<PtImageInfo> ptImageInfos = sqlRunner.select("select * from {namespace}.PT_IMAGE_INFO", PtImageInfo.class);
+        StringBuilder xml = new StringBuilder();
+        xml.append("<?xml version=\"1.0\" ?>\n");
+        xml.append("<image_infos>\n");
+        for (PtImageInfo ptImageInfo : ptImageInfos) {
+            xml.append("  <image_info_config>\n");
+            xml.append("    <name>" + ptImageInfo.getName() + "</name>\n");
+            xml.append("    <uri>" + ptImageInfo.getUri() + "</uri>\n");
+            xml.append("    <description>" + ptImageInfo.getDescription() + "</description>\n");
+            xml.append("    <path>" + ptImageInfo.getPath() + "</path>\n");
+            xml.append("  </image_info_config>\n");
+        }
+        xml.append("</image_infos>\n");
+
+        File f = new File(this.outputDirectory, "pt_image_info.xml");
+        f.getParentFile().mkdirs();
+        FileUtils.write(f, xml.toString());
+    }
+
+    private void loadOntologyResources() throws IOException {
+        LOGGER.info("loadOntologyResources");
+        Iterable<PtOntologyResource> ptOntologyResources = sqlRunner.select("select * from {namespace}.PT_ONTOLOGY_RESOURCE", PtOntologyResource.class);
+        for (PtOntologyResource ptOntologyResource : ptOntologyResources) {
+            StringBuilder xml = new StringBuilder();
+
+            String contentsBase64 = Base64.encodeBase64String(ptOntologyResource.getContents());
+            contentsBase64 = Joiner.on('\n').join(Splitter.fixedLength(76).split(contentsBase64));
+
+            xml.append("<?xml version=\"1.0\" ?>\n");
+            xml.append("<ontology_resource_config>\n");
+            xml.append("  <type>" + ptOntologyResource.getType() + "</type>\n");
+            xml.append("  <path>" + ptOntologyResource.getPath() + "</path>\n");
+            xml.append("  <deleted>" + ptOntologyResource.isDeleted() + "</deleted>\n");
+            xml.append("  <contents>" + contentsBase64 + "</contents>\n");
+            xml.append("</ontology_resource_config>\n");
+
+            File f = new File(this.outputDirectory, "image/OntologyResource" + ptOntologyResource.getId() + ".xml");
+            f.getParentFile().mkdirs();
+            FileUtils.write(f, xml.toString());
+        }
     }
 
     private void loadObjects() {
