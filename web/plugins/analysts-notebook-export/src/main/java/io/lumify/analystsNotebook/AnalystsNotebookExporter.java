@@ -38,8 +38,10 @@ import static org.securegraph.util.IterableUtils.toList;
 @Singleton
 public class AnalystsNotebookExporter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AnalystsNotebookExporter.class);
-    private static final String CONCEPT_METADATA_ICON_FILE_KEY = "http://lumify.io/analystsNotebook#iconFile";
     private static final String XML_DECLARATION = "<?xml version='1.0' encoding='UTF-8'?>";
+    private static final String XML_COMMENT_START = "<!-- ";
+    private static final String XML_COMMENT_END = " -->";
+    private static final String XML_COMMENT_INDENT = "     ";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private Graph graph;
     private WorkspaceRepository workspaceRepository;
@@ -69,20 +71,6 @@ public class AnalystsNotebookExporter {
         }
     }
 
-    public static StringBuilder appendComments(StringBuilder sb, List<String> comments) {
-        if (comments != null && comments.size() > 0) {
-            if (comments.size() == 1) {
-                return sb.append("<!-- ").append(comments.get(0)).append(" -->").append(LINE_SEPARATOR);
-            } else {
-                for (int i = 0; i < comments.size(); i++) {
-                    sb.append(i == 0 ? "<!-- " : "     ").append(comments.get(i)).append(LINE_SEPARATOR);
-                }
-                sb.append(" -->").append(LINE_SEPARATOR);
-            }
-        }
-        return sb;
-    }
-
     public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations) {
         LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
 
@@ -91,7 +79,6 @@ public class AnalystsNotebookExporter {
         Iterable<String> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
         Iterable<Vertex> vertices = graph.getVertices(vertexIds, authorizations);
         Map<Vertex, WorkspaceEntity> vertexWorkspaceEntityMap = createVertexWorkspaceEntityMap(vertices, workspaceEntities);
-        Map<String, String> conceptTypeIconFileMap = createConceptTypeIconFileMap(vertices);
 
         List<Edge> edges = toList(graph.getEdges(graph.findRelatedEdges(vertexIds, authorizations), authorizations));
 
@@ -101,16 +88,12 @@ public class AnalystsNotebookExporter {
 
         chart.setLinkTypeCollection(getLinkTypes());
 
-        List<EntityType> entityTypes = new ArrayList<EntityType>();
-        for (Map.Entry<String, String> entry : conceptTypeIconFileMap.entrySet()) {
-            entityTypes.add(new EntityType(entry.getKey(), entry.getValue()));
-        }
-        chart.setEntityTypeCollection(entityTypes);
+        chart.setEntityTypeCollection(EntityType.createForVertices(vertices, ontologyRepository));
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
         LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
-            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue()));
+            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository));
         }
         LOGGER.debug("adding %d edges", edges.size());
         for (Edge edge : edges) {
@@ -145,51 +128,6 @@ public class AnalystsNotebookExporter {
         chartItem.setEnd(end);
         return chartItem;
     }
-
-    private Map<String, String> createConceptTypeIconFileMap(Iterable<Vertex> vertices) {
-        Map<String, String> map = new HashMap<String, String>();
-        for (Vertex vertex : vertices) {
-            String conceptType = (String) vertex.getPropertyValue(LumifyProperties.CONCEPT_TYPE.getPropertyName());
-            if (!map.containsKey(conceptType)) {
-                Concept concept = ontologyRepository.getConceptByIRI(conceptType);
-                String iconFile = getMetadataIconFile(concept);
-                if (iconFile == null) {
-                    iconFile = EntityType.ICON_FILE_DEFAULT;
-                }
-                map.put(conceptType, iconFile);
-            }
-        }
-        return map;
-    }
-
-    private String getGlyphIcon(Concept concept) {
-        if (concept.hasGlyphIconResource()) {
-            byte[] glyphIcon = concept.getGlyphIcon();
-            return Base64.encodeBase64String(glyphIcon);
-        } else {
-            concept = ontologyRepository.getParentConcept(concept);
-            if (concept != null) {
-                return getGlyphIcon(concept);
-            } else {
-                return null;
-            }
-        }
-    }
-
-    private String getMetadataIconFile(Concept concept) {
-        Map<String, String> metadata = concept.getMetadata();
-        if (metadata.containsKey(CONCEPT_METADATA_ICON_FILE_KEY)) {
-            return metadata.get(CONCEPT_METADATA_ICON_FILE_KEY);
-        } else {
-            concept = ontologyRepository.getParentConcept(concept);
-            if (concept != null) {
-                return getMetadataIconFile(concept);
-            } else {
-                return null;
-            }
-        }
-    }
-
 
     private Map<Vertex, WorkspaceEntity> createVertexWorkspaceEntityMap(Iterable<Vertex> vertices, List<WorkspaceEntity> workspaceEntities) {
         Map<Vertex, WorkspaceEntity> map = new HashMap<Vertex, WorkspaceEntity>();
@@ -255,6 +193,20 @@ public class AnalystsNotebookExporter {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper;
+    }
+
+    private static StringBuilder appendComments(StringBuilder sb, List<String> comments) {
+        if (comments != null && comments.size() > 0) {
+            if (comments.size() == 1) {
+                return sb.append(XML_COMMENT_START).append(comments.get(0)).append(XML_COMMENT_END).append(LINE_SEPARATOR);
+            } else {
+                for (int i = 0; i < comments.size(); i++) {
+                    sb.append(i == 0 ? XML_COMMENT_START : XML_COMMENT_INDENT).append(comments.get(i)).append(LINE_SEPARATOR);
+                }
+                sb.append(XML_COMMENT_END).append(LINE_SEPARATOR);
+            }
+        }
+        return sb;
     }
 
     // TODO: this is copied from io.lumify.web.routes.workspace.WorkspaceVertices
