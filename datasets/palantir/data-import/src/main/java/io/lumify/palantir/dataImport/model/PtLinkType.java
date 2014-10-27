@@ -1,6 +1,6 @@
 package io.lumify.palantir.dataImport.model;
 
-public class PtObjectType extends PtOntologyType {
+public class PtLinkType extends PtOntologyType {
     private long type;
     private boolean hidden;
     private long createdBy;

@@ -1,26 +1,26 @@
 package io.lumify.palantir.dataImport.model;
 
-public class PtObjectType extends PtOntologyType {
-    private long type;
-    private boolean hidden;
+public class PtNodeDisplayType extends PtOntologyType {
+    private long id;
+    private String name;
     private long createdBy;
     private long timeCreated;
     private long lastModified;
 
-    public long getType() {
-        return type;
+    public long getId() {
+        return id;
     }
 
-    public void setType(long type) {
-        this.type = type;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    public String getName() {
+        return name;
     }
 
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getCreatedBy() {

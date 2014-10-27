@@ -392,9 +392,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             OWLClass domainClass = domainClassExpr.asOWLClass();
             String domainClassUri = domainClass.getIRI().toString();
             Concept domainConcept = getConceptByIRI(domainClassUri);
-            checkNotNull(domainConcepts, "Could not find class with uri: " + domainClassUri);
-            LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
-            domainConcepts.add(domainConcept);
+            if (domainConcept == null) {
+                LOGGER.error("Could not find class with uri: %s", domainClassUri);
+            } else {
+                LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
+                domainConcepts.add(domainConcept);
+            }
         }
 
         Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
@@ -451,8 +454,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
             Concept ontologyClass = getConceptByIRI(rangeClassUri);
-            checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
-            ranges.add(ontologyClass);
+            if (ontologyClass == null) {
+                LOGGER.error("Could not find class with uri: %s", rangeClassUri);
+            } else {
+                ranges.add(ontologyClass);
+            }
         }
         return ranges;
     }
@@ -463,8 +469,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             OWLClass rangeClass = domainClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
             Concept ontologyClass = getConceptByIRI(rangeClassUri);
-            checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
-            domains.add(ontologyClass);
+            if (ontologyClass == null) {
+                LOGGER.error("Could not find class with uri: %s", rangeClassUri);
+            } else {
+                domains.add(ontologyClass);
+            }
         }
         return domains;
     }

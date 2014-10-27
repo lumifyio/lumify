@@ -13,7 +13,8 @@ public class DataImport extends CommandLineBase {
     private static final String CMD_OPT_USERNAME = "username";
     private static final String CMD_OPT_PASSWORD = "password";
     private static final String CMD_OPT_ID_PREFIX = "idPrefix";
-    private static final String CMD_OPT_CONCEPT_TYPE_PREFIX = "concepttypeprefix";
+    private static final String CMD_OPT_OWL_PREFIX = "owlprefix";
+    private static final String CMD_OPT_OUT_DIR = "outdir";
 
     public static void main(String[] args) throws Exception {
         int res = new DataImport().run(args);
@@ -64,7 +65,7 @@ public class DataImport extends CommandLineBase {
 
         opts.addOption(
                 OptionBuilder
-                        .withLongOpt(CMD_OPT_CONCEPT_TYPE_PREFIX)
+                        .withLongOpt(CMD_OPT_OWL_PREFIX)
                         .withDescription("URI prefix used when converting the ontology")
                         .hasArg()
                         .isRequired()
@@ -79,6 +80,14 @@ public class DataImport extends CommandLineBase {
                         .create()
         );
 
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_OUT_DIR)
+                        .withDescription("Output directory for ontology items")
+                        .hasArg()
+                        .create()
+        );
+
         return opts;
     }
 
@@ -89,11 +98,12 @@ public class DataImport extends CommandLineBase {
         String username = cmd.getOptionValue(CMD_OPT_USERNAME);
         String password = cmd.getOptionValue(CMD_OPT_PASSWORD);
         String idPrefix = cmd.getOptionValue(CMD_OPT_ID_PREFIX, "palantir");
-        String conceptTypePrefix = cmd.getOptionValue(CMD_OPT_CONCEPT_TYPE_PREFIX);
+        String outdir = cmd.getOptionValue(CMD_OPT_OUT_DIR);
+        String owlPrefix = cmd.getOptionValue(CMD_OPT_OWL_PREFIX);
         Visibility visibility = new Visibility("");
         Authorizations authorizations = getAuthorizations();
 
-        new DataImporter(connectionString, username, password, tableNamespace, idPrefix, conceptTypePrefix, getGraph(), visibility, authorizations).run();
+        new DataImporter(connectionString, username, password, tableNamespace, idPrefix, owlPrefix, outdir, getGraph(), visibility, authorizations).run();
 
         return 0;
     }
