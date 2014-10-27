@@ -15,6 +15,7 @@ public class LumifyApi {
     private final VertexApiExt vertexApi;
     private final OntologyApiExt ontologyApi;
     private final EdgeApiExt edgeApi;
+    private final LongRunningProcessApiExt longRunningProcessApi;
     private final String basePath;
     private ClientApiUser me;
 
@@ -38,6 +39,9 @@ public class LumifyApi {
 
         ontologyApi = new OntologyApiExt();
         ontologyApi.setBasePath(basePath);
+
+        longRunningProcessApi = new LongRunningProcessApiExt();
+        longRunningProcessApi.setBasePath(basePath);
     }
 
     public UserApiExt getUserApi() {
@@ -62,6 +66,10 @@ public class LumifyApi {
 
     public EdgeApiExt getEdgeApi() {
         return edgeApi;
+    }
+
+    public LongRunningProcessApiExt getLongRunningProcessApi() {
+        return longRunningProcessApi;
     }
 
     public String getCurrentWorkspaceId() {

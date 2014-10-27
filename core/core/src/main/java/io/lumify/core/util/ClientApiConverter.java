@@ -170,20 +170,4 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
         }
         return null;
     }
-
-    public static String clientApiObjectToJsonString(Object value) {
-        try {
-            return ObjectMapperFactory.getInstance().writeValueAsString(value);
-        } catch (JsonProcessingException e) {
-            throw new LumifyException("Could not convert object " + value + " to json string", e);
-        }
-    }
-
-    public static <T> T toClientApi(String str, Class<T> clazz) {
-        try {
-            return ObjectMapperFactory.getInstance().readValue(str, clazz);
-        } catch (IOException e) {
-            throw new LumifyException("Could not parse '" + str + "' to class '" + clazz.getName() + "'", e);
-        }
-    }
 }

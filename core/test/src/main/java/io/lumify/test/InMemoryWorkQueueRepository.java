@@ -3,6 +3,7 @@ package io.lumify.test;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import org.json.JSONObject;
 import org.securegraph.Graph;
@@ -29,7 +30,15 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
     @Override
     public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json) {
         LOGGER.debug("push on queue: %s: %s", queueName, json);
-        getQueue(queueName).add(json);
+        addToQueue(queueName, json);
+    }
+
+    public void addToQueue(String queueName, JSONObject json) {
+        final Queue<JSONObject> queue = getQueue(queueName);
+        synchronized (queue) {
+            queue.add(json);
+            queue.notifyAll();
+        }
     }
 
     @Override
@@ -53,8 +62,35 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer) {
-        throw new UnsupportedOperationException("subscribing to graph property messages is not supported");
+    public LongRunningProcessMessage getNextLongRunningProcessMessage() {
+        final Queue<JSONObject> longRunningProcessMessageQueue = getQueue(LONG_RUNNING_PROCESS_QUEUE_NAME);
+        synchronized (longRunningProcessMessageQueue) {
+            while (true) {
+                if (longRunningProcessMessageQueue.size() > 0) {
+                    JSONObject message = longRunningProcessMessageQueue.remove();
+                    return new InMemoryLongRunningProcessMessage(message);
+                }
+                try {
+                    longRunningProcessMessageQueue.wait();
+                } catch (InterruptedException ex) {
+                    throw new LumifyException("Could not get next long running process message", ex);
+                }
+            }
+        }
+    }
+
+    private class InMemoryLongRunningProcessMessage extends LongRunningProcessMessage {
+        public InMemoryLongRunningProcessMessage(JSONObject message) {
+            super(message);
+        }
+
+        @Override
+        public void complete(Throwable ex) {
+            if (ex != null) {
+                LOGGER.error("Failed to process long running process message ", ex);
+                addToQueue(LONG_RUNNING_PROCESS_QUEUE_NAME, getMessage());
+            }
+        }
     }
 
     public static void clearQueue() {

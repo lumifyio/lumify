@@ -3,11 +3,11 @@ package io.lumify.web.clientapi.codegen;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
+import io.lumify.web.clientapi.model.ClientApiLongRunningProcessSubmitResponse;
 import io.lumify.web.clientapi.model.ClientApiDetectedObjects;
 import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
 import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import io.lumify.web.clientapi.model.ClientApiElement;
-import io.lumify.web.clientapi.model.ClientApiVertexFindPathResponse;
 import io.lumify.web.clientapi.model.ClientApiVertexEdges;
 import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
 import io.lumify.web.clientapi.model.ClientApiVertexMultipleResponse;
@@ -844,7 +844,7 @@ public class VertexApi {
       }
     }
   }
-  public ClientApiVertexFindPathResponse findPath (String sourceGraphVertexId, String destGraphVertexId, Integer hops) throws ApiException {
+  public ClientApiLongRunningProcessSubmitResponse findPath (String sourceGraphVertexId, String destGraphVertexId, Integer hops) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(sourceGraphVertexId == null || destGraphVertexId == null || hops == null ) {
@@ -881,7 +881,7 @@ public class VertexApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (ClientApiVertexFindPathResponse) ApiInvoker.deserialize(response, "", ClientApiVertexFindPathResponse.class);
+        return (ClientApiLongRunningProcessSubmitResponse) ApiInvoker.deserialize(response, "", ClientApiLongRunningProcessSubmitResponse.class);
       }
       else {
         return null;

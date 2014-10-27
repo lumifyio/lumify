@@ -11,6 +11,7 @@ define([
     'admin/admin',
     'sync/sync',
     'chat/chat',
+    'activity/activity',
     'graph/graph',
     'detail/detail',
     'map/map',
@@ -36,6 +37,7 @@ define([
     Admin,
     Sync,
     Chat,
+    Activity,
     Graph,
     Detail,
     Map,
@@ -73,6 +75,7 @@ define([
             adminSelector: '.admin-pane',
             helpDialogSelector: '.help-dialog',
             chatSelector: '.chat-pane',
+            activitySelector: '.activity-pane',
             graphSelector: '.graph-pane',
             mapSelector: '.map-pane',
             detailPaneSelector: '.detail-pane'
@@ -173,6 +176,7 @@ define([
                 workspacesPane = content.filter('.workspaces-pane').data(DATA_MENUBAR_NAME, 'workspaces'),
                 adminPane = content.filter('.admin-pane').data(DATA_MENUBAR_NAME, 'admin'),
                 chatPane = content.filter('.chat-pane').data(DATA_MENUBAR_NAME, 'chat'),
+                activityPane = content.filter('.activity-pane').data(DATA_MENUBAR_NAME, 'activity'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
                 detailPane = content.filter('.detail-pane').data(DATA_MENUBAR_NAME, 'detail'),
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
@@ -198,6 +202,7 @@ define([
             Workspaces.attachTo(workspacesPane.find('.content'));
             Admin.attachTo(adminPane.find('.content'));
             Chat.attachTo(chatPane.find('.content'));
+            Activity.attachTo(activityPane.find('.content'));
             Graph.attachTo(graphPane.filter('.graph-pane-2d'));
             Map.attachTo(mapPane);
             Detail.attachTo(detailPane.find('.content'));

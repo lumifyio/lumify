@@ -8,7 +8,7 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
-import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRunner;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -19,7 +19,6 @@ import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereInterceptor;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
-import org.json.JSONObject;
 import org.securegraph.Graph;
 
 import javax.servlet.*;
@@ -51,7 +50,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
             setupInjector(context, config);
             setupWebApp(context, config);
-            setupGraphPropertyRunner(context, config);
+            setupLongRunningProcessRunner(context, config);
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
         }
@@ -167,20 +166,40 @@ public final class ApplicationBootstrap implements ServletContextListener {
         return initParameters;
     }
 
-    private void setupGraphPropertyRunner(ServletContext context, Configuration config) {
-        boolean enabled = Boolean.parseBoolean(config.get(Configuration.GRAPH_PROPERTY_RUNNER_ENABLED, "false"));
+    private void setupLongRunningProcessRunner(ServletContext context, final Configuration config) {
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
         if (!enabled) {
             return;
         }
 
-        final GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
-        graphPropertyRunner.prepare(config.toMap());
-        WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
-        workQueueRepository.subscribeToGraphPropertyMessages(new WorkQueueRepository.GraphPropertyConsumer() {
-            @Override
-            public void graphPropertyReceived(JSONObject json) throws Exception {
-                graphPropertyRunner.process(json);
-            }
-        });
+        int threadCount = Integer.parseInt(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, "4"));
+
+        final LongRunningProcessRunner longRunningProcessRunner = InjectHelper.getInstance(LongRunningProcessRunner.class);
+        longRunningProcessRunner.prepare(config.toMap());
+        final WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
+
+        for (int i = 0; i < threadCount; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        WorkQueueRepository.LongRunningProcessMessage longRunningProcessMessage = workQueueRepository.getNextLongRunningProcessMessage();
+                        if (longRunningProcessMessage == null) {
+                            continue;
+                        }
+                        try {
+                            longRunningProcessRunner.process(longRunningProcessMessage.getMessage());
+                            longRunningProcessMessage.complete();
+                        } catch (Throwable ex) {
+                            LOGGER.error("Failed to process long running process: %s", longRunningProcessMessage.getMessage());
+                            longRunningProcessMessage.complete(ex);
+                        }
+                    }
+                }
+            });
+            t.setName("long-running-process-runner-" + t.getId());
+            t.setDaemon(true);
+            t.start();
+        }
     }
 }

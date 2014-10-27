@@ -93,6 +93,7 @@ html.fullscreenDetails {
 
 .fullscreenApp {
   .chat-pane,
+  .activity-pane,
   .search-pane,
   .workspaces-pane,
   .admin-pane,
@@ -183,6 +184,16 @@ html.fullscreenDetails {
   height: 200px;
 
   @import "chat/chat";
+}
+
+.fullscreenApp .activity-pane {
+  @padding: 10px;
+  .above-graph(2);
+  .left-pane(@padding);
+
+  bottom: @padding;
+
+  @import "activity/activity";
 }
 
 .graph-pane {
@@ -324,6 +335,9 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 
 .dropdown-menu li.disabled:hover > a > span {
   color: #777;
+}
+.progress .bar {
+  background: lighten(@blue-color, 5%);
 }
 
 @import "util/badge-loading.less";

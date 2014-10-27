@@ -49,8 +49,6 @@ public abstract class ClientApiElement implements ClientApiObject {
         this.visibilitySource = visibilitySource;
     }
 
-    public abstract String getType();
-
     @Override
     public String toString() {
         return ClientApiConverter.clientApiToString(this);
