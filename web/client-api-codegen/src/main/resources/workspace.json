@@ -106,6 +106,29 @@
             ]
         },
         {
+            "path": "/workspace/undo",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "undo diff items",
+                    "type": "ClientApiWorkspaceUndoResponse",
+                    "nickname": "undo",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "undoData",
+                            "description": "data to undo",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "path": "/workspace/edges",
             "operations": [
                 {

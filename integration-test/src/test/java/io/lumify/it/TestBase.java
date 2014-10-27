@@ -10,6 +10,7 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.ClientApiProperty;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 import io.lumify.web.clientapi.model.ClientApiWorkspacePublishResponse;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceUndoResponse;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -177,6 +178,20 @@ public class TestBase {
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
         LOGGER.info("diff after publish: %s", diff.toString());
+        assertEquals(0, diff.getDiffs().size());
+    }
+
+    protected void assertUndoAll(LumifyApi lumifyApi, int expectedDiffsBeforeUndo) throws ApiException {
+        ClientApiWorkspaceDiff diff = lumifyApi.getWorkspaceApi().getDiff();
+        LOGGER.info("diff before undo: %s", diff.toString());
+        assertEquals(expectedDiffsBeforeUndo, diff.getDiffs().size());
+        ClientApiWorkspaceUndoResponse undoAllResult = lumifyApi.getWorkspaceApi().undoAll(diff.getDiffs());
+        LOGGER.info("undo all results: %s", undoAllResult.toString());
+        Assert.assertTrue("undo all failed: " + undoAllResult, undoAllResult.isSuccess());
+        assertEquals("undo all expected 0 failures: " + undoAllResult, 0, undoAllResult.getFailures().size());
+
+        diff = lumifyApi.getWorkspaceApi().getDiff();
+        LOGGER.info("diff after undo: %s", diff.toString());
         assertEquals(0, diff.getDiffs().size());
     }
 

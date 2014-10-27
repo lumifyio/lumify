@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
-    private static final String MULTI_VALUE_PROPERTY_KEY = ZipCodeResolverTermMentionFilter.class.getName();
+    public static final String MULTI_VALUE_PROPERTY_KEY = ZipCodeResolverTermMentionFilter.class.getName();
     private static final String CONFIG_ZIP_CODE_IRI = "ontology.iri.zipCode";
     private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
     private String zipCodeIri;
@@ -103,7 +103,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             }
 
             String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
-            String sign = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
+            String title = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
             VisibilityJson sourceVertexVisibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
             Map<String, Object> metadata = new HashMap<String, Object>();
             LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, sourceVertexVisibilityJson);
@@ -112,7 +112,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
                     .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, metadata, sourceVertex.getVisibility());
             LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, zipCodeIri, metadata, sourceVertex.getVisibility());
             LumifyProperties.SOURCE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, "Zip Code Resolver", metadata, sourceVertex.getVisibility());
-            LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, sign, metadata, sourceVertex.getVisibility());
+            LumifyProperties.TITLE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, title, metadata, sourceVertex.getVisibility());
             LumifyProperties.VISIBILITY_JSON.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, sourceVertexVisibilityJson, metadata, sourceVertex.getVisibility());
             Vertex zipCodeVertex = resolvedToVertexBuilder.save(authorizations);
             getGraph().flush();
@@ -130,7 +130,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
 
             new TermMentionBuilder(termMention, sourceVertex)
                     .resolvedTo(zipCodeVertex, resolvedEdge)
-                    .title(sign)
+                    .title(title)
                     .conceptIri(zipCodeIri)
                     .process(getClass().getName())
                     .visibilityJson(LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(termMention))

@@ -182,10 +182,12 @@ public class TermMentionBuilder {
         Vertex termMentionVertex = vertexBuilder.save(authorizations);
 
         String hasTermMentionId = vertexId + "_hasTermMention";
-        graph.addEdge(hasTermMentionId, this.sourceVertex, termMentionVertex, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, visibility, authorizations);
+        Edge termMentionEdge = graph.addEdge(hasTermMentionId, this.sourceVertex, termMentionVertex, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, visibility, authorizations);
+        LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(termMentionEdge, this.visibilityJson, visibility, authorizations);
         if (this.resolvedToVertex != null) {
             String resolvedToId = vertexId + "_resolvedTo";
-            graph.addEdge(resolvedToId, termMentionVertex, this.resolvedToVertex, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, visibility, authorizations);
+            Edge resolvedToEdge = graph.addEdge(resolvedToId, termMentionVertex, this.resolvedToVertex, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, visibility, authorizations);
+            LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(resolvedToEdge, this.visibilityJson, visibility, authorizations);
         }
 
         return termMentionVertex;
