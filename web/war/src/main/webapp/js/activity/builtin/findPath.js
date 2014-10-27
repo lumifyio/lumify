@@ -17,7 +17,9 @@ define([
 
         this.after('initialize', function() {
             if (_.isNumber(this.attr.process.resultsCount)) {
-                this.$node.html('<button class="btn btn-mini btn-primary">Add ' + this.attr.process.resultsCount + ' Vertices</button>');
+                this.$node.html('<button class="btn btn-mini btn-primary">Add ' +
+                                this.attr.process.resultsCount +
+                                ' Vertices</button>');
             }
         });
     }
