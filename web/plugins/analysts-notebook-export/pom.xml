@@ -11,7 +11,6 @@
 
     <artifactId>lumify-analysts-notebook-export</artifactId>
     <name>Lumify: Web: Plugin: Analyst's Notebook Export</name>
-    <packaging>jar</packaging>
 
     <properties>
         <jackson.version>2.3.0</jackson.version>
@@ -54,7 +53,6 @@
             <artifactId>woodstox-core-asl</artifactId>
             <version>${woodstox.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
