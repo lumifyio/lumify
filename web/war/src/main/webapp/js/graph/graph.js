@@ -973,18 +973,27 @@ define([
                 vertices = this.grabbedVertices;
 
             if (!vertices || vertices.length === 0) return;
-            vertices.each(function(i, e) {
-                var p = retina.pixelsToPoints(this.position());
-                if (!e.data('freed')) {
+
+            var cy = vertices[0].cy(),
+                updateData = {};
+
+            vertices.each(function(i, vertex) {
+                var p = retina.pixelsToPoints(vertex.position());
+                if (!vertex.data('freed')) {
                     dup = false;
                 }
-                e.data('targetPosition', {x: p.x, y: p.y});
-                e.data('freed', true);
+
+                updateData[vertex.id()] = {
+                    targetPosition: {x: p.x, y: p.y},
+                    freed: true
+                };
             });
 
             if (dup) {
                 return;
             }
+
+            cy.batchData(updateData);
 
             // If the user didn't drag more than a few pixels, select the
             // object, it could be an accidental mouse move
@@ -998,14 +1007,6 @@ define([
             if (distance < 5) {
                 event.cyTarget.select();
             }
-
-            // Cache these positions since data attr could be overidden
-            // then submit to undo manager
-            var originalPositions = [], targetPositions = [];
-            vertices.each(function(i, e) {
-                originalPositions.push(e.data('originalPosition'));
-                targetPositions.push(e.data('targetPosition'));
-            });
 
             var previousData = {
                     vertices: $.map(vertices, function(vertex) {
