@@ -296,7 +296,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         // we need to alter the visibility of the json property, otherwise we'll have two json properties, one with the old visibility and one with the new.
         LumifyProperties.VISIBILITY_JSON.alterVisibility(vertexElementMutation, visibilityJsonProperty.getKey(), lumifyVisibility.getVisibility());
         LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
-        LumifyProperties.VISIBILITY_JSON.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_JSON.addPropertyValue(vertexElementMutation, visibilityJsonProperty.getKey(), visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save(authorizations);
 
         auditRepository.auditVertex(AuditAction.PUBLISH, vertex.getId(), "", "", user, lumifyVisibility.getVisibility());

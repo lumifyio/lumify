@@ -2,13 +2,21 @@ package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.lumify.analystsNotebook.AnalystsNotebookVersion;
+import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceEntity;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.commons.codec.binary.Base64;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
+import org.securegraph.Property;
 import org.securegraph.Vertex;
 
 public class ChartItem {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ChartItem.class);
+
     @JacksonXmlProperty(isAttribute = true)
     private String label;
 
@@ -104,22 +112,59 @@ public class ChartItem {
         return chartItem;
     }
 
-    public static ChartItem createFromVertexAndWorkspaceEntity(AnalystsNotebookVersion version, Vertex vertex, WorkspaceEntity workspaceEntity) {
-        String conceptType = (String) vertex.getPropertyValue(LumifyProperties.CONCEPT_TYPE.getPropertyName());
+    public static ChartItem createFromVertexAndWorkspaceEntity(AnalystsNotebookVersion version, Vertex vertex, WorkspaceEntity workspaceEntity, OntologyRepository ontologyRepository) {
+        String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptType);
         String vertexId = vertex.getId();
-        // TODO: use title formula
-        String title = (String) vertex.getPropertyValue(LumifyProperties.TITLE.getPropertyName());
+        String title = LumifyProperties.TITLE.getPropertyValue(vertex);
+        String titleFormula = concept.getTitleFormula();
+        if (titleFormula != null) {
+            LOGGER.debug("vertex has a titleFormula");
+            // TODO: evaluate title formula
+            // TODO: do we look for parent title formulas?
+        }
         int x = workspaceEntity.getGraphPositionX();
         int y = workspaceEntity.getGraphPositionY();
+        String imageUrl = LumifyProperties.ENTITY_IMAGE_URL.getPropertyValue(vertex);
+        if (imageUrl != null) {
+            LOGGER.debug("vertex has a an imageUrl");
+            // TODO: find a place to provide an image URL
+        } else {
+            String imageVertexId = LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyValue(vertex);
+            if (imageVertexId != null) {
+                LOGGER.debug("vertex has an entity image");
+                // TODO: get thumbnail, see VertexThumbnail
+                // TODO: find a way to embed image data
+            } else {
+                LOGGER.debug("vertex will use glyph icon (if we could put it in the XML)");
+                byte[] glyphIcon = getGlyphIcon(concept, ontologyRepository);
+                // TODO: find a way to embed image data
+            }
+        }
+        // TODO: add other properties
 
         return createEntity(version, conceptType, vertexId, title, x, y);
     }
 
-    public static ChartItem createLink(AnalystsNotebookVersion version, String from, String to) {
+    private static byte[] getGlyphIcon(Concept concept, OntologyRepository ontologyRepository) {
+        if (concept.hasGlyphIconResource()) {
+            return concept.getGlyphIcon();
+        } else {
+            concept = ontologyRepository.getParentConcept(concept);
+            if (concept != null) {
+                return getGlyphIcon(concept, ontologyRepository);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public static ChartItem createLink(AnalystsNotebookVersion version, String label, String from, String to) {
         LinkStyle linkStyle = new LinkStyle();
         if (version == AnalystsNotebookVersion.VERSION_6) {
             linkStyle.setStrength(1);
         }
+        // TODO: use directional arrow
         linkStyle.setArrowStyle(LinkStyle.ARROW_STYLE_ARROW_NONE);
         linkStyle.setType(LinkStyle.TYPE_LINK);
 
@@ -129,16 +174,18 @@ public class ChartItem {
         link.setLinkStyle(linkStyle);
 
         ChartItem chartItem = new ChartItem();
+        chartItem.setLabel(label);
         chartItem.setDateSet(false);
         chartItem.setLink(link);
 
         return chartItem;
     }
 
-    public static ChartItem createFromEdge(AnalystsNotebookVersion version, Edge edge) {
+    public static ChartItem createFromEdge(AnalystsNotebookVersion version, Edge edge, OntologyRepository ontologyRepository) {
+        String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
         String from = edge.getVertexId(Direction.OUT);
         String to = edge.getVertexId(Direction.IN);
 
-        return createLink(version, from, to);
+        return createLink(version, label, from, to);
     }
 }

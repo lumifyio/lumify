@@ -1,9 +1,8 @@
 package io.lumify.web;
 
-import io.lumify.core.bootstrap.InjectHelper;
-import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.HandlerChain;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

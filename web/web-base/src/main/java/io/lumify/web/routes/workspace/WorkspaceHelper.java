@@ -41,6 +41,9 @@ public class WorkspaceHelper {
 
     public void unresolveTerm(Vertex resolvedVertex, Vertex termMention, LumifyVisibility visibility, User user, Authorizations authorizations) {
         Vertex sourceVertex = termMentionRepository.findSourceVertex(termMention, authorizations);
+        if (sourceVertex == null) {
+            return;
+        }
         List<Edge> edges = toList(sourceVertex.getEdges(Direction.BOTH, authorizations));
 
         if (edges.size() == 1) {
@@ -71,7 +74,7 @@ public class WorkspaceHelper {
         graph.removeEdge(edge, authorizations);
 
         if (edge.getLabel().equals(imageRelationshipLabel)) {
-            Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+            Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
             sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
             this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
         }

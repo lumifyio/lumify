@@ -44,7 +44,7 @@ import static org.securegraph.util.IterableUtils.count;
 public class ClavinTermMentionFilter extends TermMentionFilter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ClavinTermMentionFilter.class);
 
-    private static final String MULTI_VALUE_PROPERTY_KEY = ClavinTermMentionFilter.class.getName();
+    public static final String MULTI_VALUE_PROPERTY_KEY = ClavinTermMentionFilter.class.getName();
 
     /**
      * The CLAVIN index directory configuration key.

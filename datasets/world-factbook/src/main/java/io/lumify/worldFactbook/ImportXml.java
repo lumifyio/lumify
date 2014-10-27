@@ -137,7 +137,7 @@ public class ImportXml extends CommandLineBase {
         LumifyProperties.TITLE.addPropertyValue(flagVertex, MULTI_VALUE_KEY, flagTitle, flagImageMetadata, visibility, getAuthorizations());
 
         getGraph().addEdge(FLAG_EDGE_ID_PREFIX + countryId, countryVertex, flagVertex, entityHasImageIri, visibility, getAuthorizations());
-        LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(countryVertex, MULTI_VALUE_KEY, flagVertex.getId().toString(), visibility, getAuthorizations());
+        LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(countryVertex, MULTI_VALUE_KEY, flagVertex.getId().toString(), visibility, getAuthorizations());
 
         return flagVertex;
     }
