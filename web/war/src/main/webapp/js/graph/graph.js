@@ -714,6 +714,9 @@ define([
                     sourceId = data.sourceId,
                     targetId = data.targetId;
 
+                cy.$('.path-edge').removeClass('path-edge path-hidden-verts');
+                cy.$('.path-temp').remove();
+
                 paths.forEach(function(path, i) {
                     var vertexIds = _.chain(path)
                                 .filter(function(v) {
@@ -734,8 +737,10 @@ define([
                                     data: {
                                         source: node1.id(),
                                         target: node2.id(),
-                                        label: count ?
-                                            F.string.plural(count, 'vertex', 'vertices') : ''
+                                        label: count === 0 ? '' :
+                                            i18n('graph.path.edge.label.' + (
+                                                count === 1 ? 'one' : 'some'
+                                            ), F.number.pretty(count))
                                     }
                                 });
                             }
@@ -826,6 +831,8 @@ define([
         };
 
         this.graphTap = throttle('selection', SELECTION_THROTTLE, function(event) {
+            this.trigger('defocusPaths');
+
             if (event.cyTarget === event.cy) {
                 this.trigger('selectObjects');
             }
@@ -956,6 +963,7 @@ define([
 
         this.graphGrab = function(event) {
             var self = this;
+            this.trigger('defocusPaths');
             this.cytoscapeReady(function(cy) {
                 var vertices = event.cyTarget.selected() ? cy.nodes().filter(':selected').not('.temp') : event.cyTarget;
                 this.grabbedVertices = vertices.each(function() {

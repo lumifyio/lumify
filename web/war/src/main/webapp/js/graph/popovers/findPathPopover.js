@@ -56,6 +56,7 @@ define([
                     this.vertexService.findPath(parameters)
                         .done(function() {
                             self.teardown();
+                            self.trigger('showActivityDisplay');
                         })
                         .fail(function() {
                             buttons.removeAttr('disabled');
