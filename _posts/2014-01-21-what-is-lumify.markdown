@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "What is Lumify?"
-author: Jeff Kunkle
 excerpt: It seems fitting that the first post to the Lumify blog spend some time explaining what Lumify is. What problem does Lumify address? What are the key concepts? What can you do with Lumify? Read the full post for answers to these questions and more.
 ---
 It seems fitting that the first post to the Lumify blog spend some additional time explaining what Lumify is. Summarized in one sentence,
@@ -62,7 +61,7 @@ Data comes in all shapes and sizes. Out of the box, Lumify comes with specific i
 
 ### Histogram Analysis
 
-Sometimes it's difficult to understand your data when looking at it one item at a time. Using the histogram feature in Lumify, users can select any number of items on their graph and quickly see a histogram of all property values for the selected entities. 
+Sometimes it's difficult to understand your data when looking at it one item at a time. Using the histogram feature in Lumify, users can select any number of items on their graph and quickly see a histogram of all property values for the selected entities.
 
 ### Knowledge Building
 
@@ -93,7 +92,7 @@ Lumify was built to be a general purpose data analysis platform, so it can be us
 
 ## Who develops and supports Lumify?
 
-At it's core, Lumify is an integration of popular open source, big data technologies like Hadoop and Accumulo, overlaid with a graph datastore and web-based analysis and visualization interface. A small team from [Altamira Technologies](http://altamiracorp.com) oversees the development, but contributions from all are welcome and encouraged. 
+At it's core, Lumify is an integration of popular open source, big data technologies like Hadoop and Accumulo, overlaid with a graph datastore and web-based analysis and visualization interface. A small team from [Altamira Technologies](http://altamiracorp.com) oversees the development, but contributions from all are welcome and encouraged.
 
 ## Why choose Lumify?
 

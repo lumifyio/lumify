@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Analyzing Threat Networks at the Sochi Olympics"
-author: Charlie Greenbacker
 excerpt: One of the demo scenarios we've been developing to showcase the capabilities of Lumify is based on the various terrorist networks threatening the upcoming Winter Olympic Games in Sochi, Russia. See how Lumify can help stop potential attacks.
 ---
 One of the demo scenarios we've been developing to showcase the capabilities of **Lumify** is based on the various terrorist networks threatening the upcoming **[Winter Olympic Games](http://en.wikipedia.org/wiki/2014_Winter_Olympics)** in Sochi, Russia.
