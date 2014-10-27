@@ -231,7 +231,7 @@ define([
                                                 .attr('class', 'actions-plugin')
                                             this.append('button')
                                                 .attr('class', 'btn btn-mini btn-danger delete')
-                                                .text('Delete')
+                                                .text(i18n('activity.process.button.dismiss'))
                                         })
                                     this.append('div')
                                         .attr('class', 'type-container')
