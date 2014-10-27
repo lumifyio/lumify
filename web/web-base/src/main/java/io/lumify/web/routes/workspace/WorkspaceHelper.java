@@ -41,6 +41,9 @@ public class WorkspaceHelper {
 
     public void unresolveTerm(Vertex resolvedVertex, Vertex termMention, LumifyVisibility visibility, User user, Authorizations authorizations) {
         Vertex sourceVertex = termMentionRepository.findSourceVertex(termMention, authorizations);
+        if (sourceVertex == null) {
+            return;
+        }
         List<Edge> edges = toList(sourceVertex.getEdges(Direction.BOTH, authorizations));
 
         if (edges.size() == 1) {

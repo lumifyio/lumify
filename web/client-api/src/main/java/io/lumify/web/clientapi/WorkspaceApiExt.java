@@ -48,6 +48,42 @@ public class WorkspaceApiExt extends io.lumify.web.clientapi.codegen.WorkspaceAp
         }
     }
 
+    public ClientApiWorkspaceUndoResponse undoAll(List<ClientApiWorkspaceDiff.Item> diffItems) throws ApiException {
+        List<ClientApiUndoItem> undoItems = new ArrayList<ClientApiUndoItem>();
+        for (ClientApiWorkspaceDiff.Item diffItem : diffItems) {
+            undoItems.add(workspaceDiffItemToUndoItem(diffItem));
+        }
+        return undo(undoItems);
+    }
+
+    public ClientApiWorkspaceUndoResponse undo(List<ClientApiUndoItem> undoItems) throws ApiException {
+        return undo(ApiInvoker.serialize(undoItems));
+    }
+
+    public ClientApiUndoItem workspaceDiffItemToUndoItem(ClientApiWorkspaceDiff.Item workspaceDiffItem) {
+        if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.VertexItem) {
+            ClientApiWorkspaceDiff.VertexItem vertexDiffItem = (ClientApiWorkspaceDiff.VertexItem) workspaceDiffItem;
+            ClientApiVertexUndoItem undoItem = new ClientApiVertexUndoItem();
+            undoItem.setVertexId(vertexDiffItem.getVertexId());
+            return undoItem;
+        } else if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem) {
+            ClientApiWorkspaceDiff.PropertyItem propertyDiffItem = (ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem;
+            ClientApiPropertyUndoItem undoItem = new ClientApiPropertyUndoItem();
+            undoItem.setElementId(propertyDiffItem.getElementId());
+            undoItem.setKey(propertyDiffItem.getKey());
+            undoItem.setName(propertyDiffItem.getName());
+            undoItem.setVisibilityString(propertyDiffItem.getVisibilityString());
+            return undoItem;
+        } else if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.EdgeItem) {
+            ClientApiWorkspaceDiff.EdgeItem edgeDiffItem = (ClientApiWorkspaceDiff.EdgeItem) workspaceDiffItem;
+            ClientApiRelationshipUndoItem undoItem = new ClientApiRelationshipUndoItem();
+            undoItem.setEdgeId(edgeDiffItem.getEdgeId());
+            return undoItem;
+        } else {
+            throw new LumifyClientApiException("Unhandled WorkspaceDiffItem type: " + workspaceDiffItem.getType());
+        }
+    }
+
     public void setUserAccess(String userId, WorkspaceAccess access) throws ApiException {
         ClientApiWorkspaceUpdateData addUser2WorkspaceUpdate = new ClientApiWorkspaceUpdateData();
         ClientApiWorkspaceUpdateData.UserUpdate addUser2Update = new ClientApiWorkspaceUpdateData.UserUpdate();

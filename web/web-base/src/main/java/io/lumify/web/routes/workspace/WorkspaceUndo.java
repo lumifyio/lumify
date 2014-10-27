@@ -137,6 +137,9 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
                 ClientApiRelationshipUndoItem relationshipUndoItem = (ClientApiRelationshipUndoItem) data;
                 Edge edge = graph.getEdge(relationshipUndoItem.getEdgeId(), authorizations);
+                if (edge == null) {
+                    continue;
+                }
                 Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
                 Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
                 if (sourceVertex == null || destVertex == null) {

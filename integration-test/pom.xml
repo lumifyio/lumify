@@ -117,5 +117,15 @@
             <artifactId>lumify-model-bigtable</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-clavin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-zipcode-resolver</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
