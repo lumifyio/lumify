@@ -10,29 +10,52 @@ To register an activity item:
             ActivityPlugin.registerActivityHandler({
 
                 // Required Attributes
-                type: [name of activity (unique)]
-                kind: [kind of activity (eventWatcher|longRunningProcess)]
+                type: (string)
+                kind: (string)
                 titleRenderer: function(el, task)
 
                 // Optional
-                autoDismiss: boolean (remove on finish)
-                allowCancel: boolean (allow cancel button to show)
+                autoDismiss: (boolean)
+                allowCancel: (boolean)
             })
         })
 
-# Kinds of Activities
+# Properties
 
-1. eventWatcher
+* `type`: (String) Name of activity type. 
+
+    Define `activity.tasks.type.[MY_ACTIVITY_TYPE]` message bundle string for localized display.
+    
+        // Handler definition
+        { type: 'saveWorkspace', ... }
+        
+        // MessageBundle.properties
+        activity.tasks.type.saveWorkspace=Save Workspace
+
+* `kind`: (String) Kind of activity. Currently allows `eventWatcher`, `longRunningProcess`
+* `titleRenderer`: (function) Responsible for rendering the rows title. (Can be async)
+
+        function myRenderer(el, task) {
+            el.textContent = task.id;
+        }
+        
+* `autoDismiss`: (boolean) True to auto remove row on complete
+* `allowCancel`: (boolean) True to show cancel button (default false for eventWatcher, true for longRunningProcess)
+
+
+# Activity Kind Specific Properties
+
+1. `eventWatcher`
 
     Required properties:
+    * `eventNames`: (Array) 2 event names `[startEventName, endEventName]`
     
-        1. `eventNames`: Array of 2 event names [startEventName, endEventName]
+    Note: Task object in `titleRenderer` contains `eventData` property containing the triggered events data.
 
-1. longRunningProcess
+1. `longRunningProcess`
 
     Optional properties:
-        
-        1. `finishedComponentPath`: Path to flight component for finished button
+    * `finishedComponentPath`: (String) Path to flight component for finished button
 
 
 
