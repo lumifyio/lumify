@@ -24,6 +24,25 @@ define([
 
     return defineComponent(Activity, withCollapsibleSections);
 
+    function processIsIndeterminate(process) {
+        var handler = ActivityHandlers.activityHandlersByType[process.type];
+        return (handler.kind === 'eventWatcher' || handler.indeterminateProgress);
+    }
+
+    function processIsFinished(process) {
+        return process.cancelled || process.endTime;
+    }
+
+    function processShouldAutoDismiss(process) {
+        var handler = ActivityHandlers.activityHandlersByType[process.type];
+        return handler.autoDismiss === true;
+    }
+
+    function processAllowCancel(process) {
+        var handler = ActivityHandlers.activityHandlersByType[process.type];
+        return (handler.kind === 'longRunningProcess' || handler.allowCancel === true);
+    }
+
     function Activity() {
 
         this.defaultAttrs({
@@ -46,9 +65,12 @@ define([
             this.tasks = window.currentUser && window.currentUser.longRunningProcesses || [];
             this.tasksById = _.indexBy(this.tasks, 'id');
 
+            this.updateEventWatchers();
+
             this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
             this.on(document, 'socketMessage', this.onSocketMessage);
             this.on(document, 'showActivityDisplay', this.onShowActivityDisplay);
+            this.on(document, 'activityHandlersUpdated', this.onActivityHandlersUpdated);
 
             this.on('click', {
                 deleteButtonSelector: this.onDelete,
@@ -95,23 +117,73 @@ define([
 
         this.onSocketMessage = function(event, message) {
             if (message && message.type === 'longRunningProcessChange') {
-                var task = message.data,
-                    existingTask = this.tasksById[task.id];
+                var task = message.data;
 
-                if (this.removedTasks[task.id]) {
-                    return;
-                }
-
-                if (existingTask) {
-                    this.tasks.splice(this.tasks.indexOf(existingTask), 1, task);
-                } else {
-                    this.tasks.splice(0, 0, task);
-                }
-
-                this.tasksById[task.id] = task;
-
+                this.addOrUpdateTask(task);
                 this.update();
             }
+        };
+
+        this.onActivityHandlersUpdated = function(event) {
+            this.updateEventWatchers();
+            this.update();
+        };
+
+        this.updateEventWatchers = function() {
+            var self = this,
+                namespace = '.ACTIVITY_HANDLER',
+                eventWatchers = ActivityHandlers.activityHandlersByKind.eventWatcher;
+
+            this.off(document, namespace);
+            eventWatchers.forEach(function(activityHandler) {
+                self.on(
+                    document,
+                    activityHandler.eventNames[0] + namespace,
+                    self.onActivityHandlerStart.bind(self, activityHandler)
+                );
+                self.on(
+                    document,
+                    activityHandler.eventNames[1] + namespace,
+                    self.onActivityHandlerEnd.bind(self, activityHandler)
+                );
+            });
+        };
+
+        this.addOrUpdateTask = function(task) {
+            var existingTask = this.tasksById[task.id];
+
+            if (this.removedTasks[task.id]) {
+                return;
+            }
+
+            if (existingTask) {
+                this.tasks.splice(this.tasks.indexOf(existingTask), 1, task);
+            } else {
+                this.tasks.splice(0, 0, task);
+            }
+
+            this.tasksById[task.id] = task;
+        };
+
+        this.onActivityHandlerStart = function(handler, event, data) {
+            this.addOrUpdateTask({
+                id: handler.type,
+                type: handler.type,
+                enqueueTime: Date.now(),
+                startTime: Date.now(),
+                eventData: data
+            });
+            this.update();
+        };
+
+        this.onActivityHandlerEnd = function(handler, event, data) {
+            this.addOrUpdateTask({
+                id: handler.type,
+                type: handler.type,
+                endTime: Date.now(),
+                eventData: data
+            });
+            this.update();
         };
 
         this.onToggleDisplay = function(event, data) {
@@ -135,43 +207,69 @@ define([
             this.autoUpdateTimer = setInterval(this.update.bind(this), AUTO_UPDATE_INTERVAL_SECONDS * 1000)
         };
 
-        this.update = function() {
-            if (!this.isOpen) {
-                return;
-            }
+        this.notifyActivityMonitors = function(tasks) {
+            var count = _.reduce(tasks, function(count, task) {
+                if (processIsFinished(task)) {
+                    return count;
+                }
 
-            var data = _.chain(this.tasks)
+                return count + 1;
+            }, 0);
+
+            if (!this.previousCountForNotify || count !== this.previousCountForNotify) {
+                this.trigger('activityUpdated', { count: count });
+            }
+        }
+
+        this.update = function() {
+            var tasks = _.chain(this.tasks)
                     .filter(function(p) {
-                        return !p.canceled;
+                        if (p.canceled) {
+                            return false;
+                        }
+
+                        if (processIsFinished(p) && processShouldAutoDismiss(p)) {
+                            return false;
+                        }
+
+                        return true;
                     })
                     .sortBy(function(p) {
                         return p.enqueueTime * -1;
                     })
+                    .value(),
+                data = _.chain(tasks)
                     .groupBy('type')
                     .pairs()
                     .sortBy(function(pair) {
                         return pair[0].toLowerCase();
                     })
-                    .value(),
-                uniqueTypes = _.chain(data)
-                    .map(function(p) {
-                        return p[0];
-                    })
-                    .unique()
-                    .map(function(type) {
-                        var byType = ActivityHandlers.activityHandlersByType;
-                        if (type in byType) {
-                            if (byType[type].finishedComponentPath) {
-                                return byType[type].finishedComponentPath;
-                            }
-
-                            return console.warn('No finishedComponentPath property for activity handler', byType[type]);
-                        }
-
-                        console.warn('No activity handler registered for type:', type);
-                    })
-                    .compact()
                     .value();
+
+            this.notifyActivityMonitors(tasks);
+
+            if (!this.isOpen) {
+                return;
+            }
+
+            var uniqueTypes = _.chain(data)
+                .map(function(p) {
+                    return p[0];
+                })
+                .unique()
+                .map(function(type) {
+                    var byType = ActivityHandlers.activityHandlersByType;
+                    if (type in byType) {
+                        if (byType[type].finishedComponentPath) {
+                            return byType[type].finishedComponentPath;
+                        }
+                        return;
+                    }
+
+                    console.warn('No activity handler registered for type:', type);
+                })
+                .compact()
+                .value();
 
             require(uniqueTypes, this.updateWithDependencies.bind(this, data, uniqueTypes));
         };
@@ -253,23 +351,27 @@ define([
                                 .remove();
 
                             this.attr('data-process-id', _.property('id'));
+                            // TODO: add transition to delay this?
                             this.attr('class', function(process) {
-                                if (process.cancelled || process.endTime) {
+                                if (processIsFinished(process)) {
                                     return 'finished';
                                 }
-                            })
+                            });
 
                             this.select('.actions-plugin').each(function() {
                                 var datum = d3.select(this).datum(),
                                     handler = ActivityHandlers.activityHandlersByType[datum.type],
-                                    Component = finishedComponents[handler.finishedComponentPath];
+                                    componentPath = handler.finishedComponentPath
+                                    Component = componentPath && finishedComponents[componentPath];
 
-                                if (datum.endTime) {
+                                if (Component && datum.endTime) {
                                     Component.attachTo(this, {
                                         process: datum
                                     });
+                                } else {
+                                    $(this).teardownAllComponents();
                                 }
-                            })
+                            });
 
                             this.select('.type-container').each(function() {
                                 var datum = d3.select(this).datum();
@@ -284,7 +386,28 @@ define([
                             });
 
                             this.select('.bar').style('width', function(process) {
+                                if (processIsIndeterminate(process)) {
+                                    return '100%';
+                                }
                                 return ((process.progress || 0) * 100) + '%';
+                            });
+
+                            this.select('.progress-container').attr('class', function(process) {
+                                var cls = 'progress-container ';
+                                if (processAllowCancel(process)) {
+                                    return cls;
+                                }
+
+                                return cls + 'no-cancel';
+                            });
+
+                            this.select('.progress').attr('class', function(process) {
+                                var cls = 'progress ';
+
+                                if (processIsIndeterminate(process)) {
+                                    return cls + 'active progress-striped';
+                                }
+                                return cls + ' determinate';
                             });
 
                             this.select('.progress-description').text(function(process) {
