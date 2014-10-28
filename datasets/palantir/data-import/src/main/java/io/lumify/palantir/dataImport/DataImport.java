@@ -15,6 +15,7 @@ public class DataImport extends CommandLineBase {
     private static final String CMD_OPT_ID_PREFIX = "idPrefix";
     private static final String CMD_OPT_OWL_PREFIX = "owlprefix";
     private static final String CMD_OPT_OUT_DIR = "outdir";
+    private static final String CMD_OPT_ONTOLOGY_EXPORT = "ontologyexport";
 
     public static void main(String[] args) throws Exception {
         int res = new DataImport().run(args);
@@ -88,6 +89,13 @@ public class DataImport extends CommandLineBase {
                         .create()
         );
 
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_ONTOLOGY_EXPORT)
+                        .withDescription("Export the ontology and then exit")
+                        .create()
+        );
+
         return opts;
     }
 
@@ -100,10 +108,23 @@ public class DataImport extends CommandLineBase {
         String idPrefix = cmd.getOptionValue(CMD_OPT_ID_PREFIX, "palantir");
         String outdir = cmd.getOptionValue(CMD_OPT_OUT_DIR);
         String owlPrefix = cmd.getOptionValue(CMD_OPT_OWL_PREFIX);
+        boolean ontologyExport = cmd.hasOption(CMD_OPT_ONTOLOGY_EXPORT);
         Visibility visibility = new Visibility("");
         Authorizations authorizations = getAuthorizations();
 
-        new DataImporter(connectionString, username, password, tableNamespace, idPrefix, owlPrefix, outdir, getGraph(), visibility, authorizations).run();
+        DataImporterInitParameters p = new DataImporterInitParameters()
+                .setConnectionString(connectionString)
+                .setUsername(username)
+                .setPassword(password)
+                .setTableNamespace(tableNamespace)
+                .setIdPrefix(idPrefix)
+                .setOwlPrefix(owlPrefix)
+                .setOutputDirectory(outdir)
+                .setOntologyExport(ontologyExport)
+                .setGraph(getGraph())
+                .setVisibility(visibility)
+                .setAuthorizations(authorizations);
+        new DataImporter(p).run();
 
         return 0;
     }

@@ -34,40 +34,36 @@ public class DataImporter {
     private String owlPrefix;
     private final List<PtImporterBase> importers = new ArrayList<PtImporterBase>();
 
-    public DataImporter(
-            String connectionString,
-            String username,
-            String password,
-            String tableNamespace,
-            String idPrefix,
-            String owlPrefix,
-            String outputDirectory,
-            Graph graph,
-            Visibility visibility,
-            Authorizations authorizations) {
-//        importers.add(new PtObjectTypeImporter(this));
-//        importers.add(new PtPropertyTypeImporter(this));
+    public DataImporter(DataImporterInitParameters p) {
+        importers.add(new PtObjectTypeImporter(this));
+        importers.add(new PtPropertyTypeImporter(this));
         importers.add(new PtLinkTypeImporter(this));
-//        importers.add(new PtNodeDisplayTypeImporter(this));
-//        importers.add(new PtImageInfoImporter(this));
-//        importers.add(new PtOntologyResourceImporter(this));
-//        importers.add(new PtLinkRelationImporter(this));
-//        importers.add(new PtObjectImporter(this));
-//        importers.add(new PtPropertyAndValueImporter(this));
-        importers.add(new PtObjectObjectImporter(this));
+        importers.add(new PtNodeDisplayTypeImporter(this));
+        importers.add(new PtImageInfoImporter(this));
+        importers.add(new PtOntologyResourceImporter(this));
+        importers.add(new PtLinkRelationImporter(this));
+        if (!p.isOntologyExport()) {
+            importers.add(new PtObjectImporter(this));
+            importers.add(new PtPropertyAndValueImporter(this));
+            importers.add(new PtObjectObjectImporter(this));
+        }
 
         File f = null;
-        if (outputDirectory != null) {
-            f = new File(outputDirectory);
+        if (p.getOutputDirectory() != null) {
+            f = new File(p.getOutputDirectory());
         }
         this.outputDirectory = f;
 
-        this.visibility = visibility;
-        this.authorizations = authorizations;
-        sqlRunner = new SqlRunner(connectionString, username, password, tableNamespace);
-        this.idPrefix = idPrefix;
-        this.owlPrefix = owlPrefix;
-        this.graph = graph;
+        this.visibility = p.getVisibility();
+        this.authorizations = p.getAuthorizations();
+        sqlRunner = new SqlRunner(
+                p.getConnectionString(),
+                p.getUsername(),
+                p.getPassword(),
+                p.getTableNamespace());
+        this.idPrefix = p.getIdPrefix();
+        this.owlPrefix = p.getOwlPrefix();
+        this.graph = p.getGraph();
     }
 
     public void run() throws ClassNotFoundException, SQLException, IOException, ExecutionException {
