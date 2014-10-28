@@ -1,4 +1,4 @@
-define(['jquery', 'underscore'], function($, _) {
+define([], function() {
     'use strict';
 
     var activityHandlers = [],
