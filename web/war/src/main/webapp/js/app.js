@@ -139,6 +139,7 @@ define([
             }
 
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
+            this.on(document, 'toggleActivityPane', this.toggleActivityPane);
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
@@ -162,6 +163,13 @@ define([
                 scope: i18n('lumify.help.scope'),
                 shortcuts: {
                     'alt-l': { fire: 'logout', desc: i18n('lumify.help.logout') }
+                }
+            });
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: i18n('activity.help.scope'),
+                shortcuts: {
+                    'alt-a': { fire: 'toggleActivityPane', desc: i18n('activity.help.toggle') }
                 }
             });
 
@@ -335,6 +343,10 @@ define([
                     });
                 }
             });
+        };
+
+        this.toggleActivityPane = function() {
+            this.trigger(document, 'menubarToggleDisplay', { name: 'activity' });
         };
 
         this.toggleSearchPane = function() {
@@ -725,7 +737,8 @@ define([
                 this.select('searchSelector'),
                 this.select('workspacesSelector'),
                 this.select('adminSelector'),
-                this.select('detailPaneSelector')
+                this.select('detailPaneSelector'),
+                this.select('activitySelector')
             ]);
 
             $('.search-results').hide();
