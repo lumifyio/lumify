@@ -47,12 +47,20 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
                 fixFiles(f);
             } else {
                 String fileContents = FileUtils.readFileToString(f);
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.model.Object;", "");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.model.TResult;", "");
+                fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.model.RawString;", "");
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.Object;", "");
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.model.LinkedHashMap;", "import java.util.Map;");
                 fileContents = fileContents.replaceAll("import io.lumify.web.clientapi.codegen.ApiInvoker;", "import io.lumify.web.clientapi.ApiInvoker;");
                 fileContents = fileContents.replaceAll("String basePath =", "protected String basePath =");
                 fileContents = fileContents.replaceAll("ApiInvoker apiInvoker =", "protected ApiInvoker apiInvoker =");
                 fileContents = fileContents.replaceAll("LinkedHashMap", "Map<String,Object>");
+
+                fileContents = fileContents.replaceAll("return \\(RawString\\) ApiInvoker\\.deserialize\\(response, \"\", RawString\\.class\\);", "return response;");
+                fileContents = fileContents.replaceAll("RawString", "String");
+
+                fileContents = fileContents.replaceAll("TResult\\.class", "resultType");
 
                 fileContents = fileContents.replaceAll("mp.field\\(\"vertexIds\\[\\]\", vertexIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String vertexId:vertexIds) { mp.field(\"vertexIds[]\", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
                 fileContents = fileContents.replaceAll("formParams\\.put\\(\"vertexIds\\[\\]\", vertexIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");

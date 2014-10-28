@@ -26,6 +26,10 @@
         {
             "path": "/ontology.json",
             "description": "Ontology operations"
+        },
+        {
+            "path": "/longRunningProcess.json",
+            "description": "Long running process operations"
         }
     ]
 }

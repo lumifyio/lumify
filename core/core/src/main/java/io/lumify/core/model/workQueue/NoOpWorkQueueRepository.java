@@ -43,7 +43,12 @@ public class NoOpWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer) {
+    public LongRunningProcessMessage getNextLongRunningProcessMessage() {
+        return new LongRunningProcessMessage(new JSONObject()) {
+            @Override
+            public void complete(Throwable ex) {
 
+            }
+        };
     }
 }

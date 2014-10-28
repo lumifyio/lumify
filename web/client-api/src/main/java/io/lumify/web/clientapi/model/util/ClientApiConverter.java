@@ -5,6 +5,7 @@ import io.lumify.web.clientapi.model.VisibilityJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +76,14 @@ public class ClientApiConverter {
             return ObjectMapperFactory.getInstance().writeValueAsString(o);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Could not convert object '" + o.getClass().getName() + "' to string", e);
+        }
+    }
+
+    public static <T> T toClientApi(String str, Class<T> clazz) {
+        try {
+            return ObjectMapperFactory.getInstance().readValue(str, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not parse '" + str + "' to class '" + clazz.getName() + "'", e);
         }
     }
 }

@@ -33,7 +33,12 @@ public class InMemoryAuthorizationRepository implements AuthorizationRepository 
 
     @Override
     public Authorizations createAuthorizations(Set<String> authorizationsSet) {
-        return new InMemoryAuthorizations(toArray(authorizationsSet, String.class));
+        return createAuthorizations(toArray(authorizationsSet, String.class));
+    }
+
+    @Override
+    public Authorizations createAuthorizations(String[] authorizations) {
+        return new InMemoryAuthorizations(authorizations);
     }
 
     @Override

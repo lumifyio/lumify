@@ -2,10 +2,13 @@ package io.lumify.core.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
+import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.web.clientapi.model.ClientApiUser;
 import io.lumify.web.clientapi.model.Privilege;
@@ -16,15 +19,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.securegraph.util.IterableUtils.toList;
 
 public abstract class UserRepository {
     public static final String VISIBILITY_STRING = "user";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
-    public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
+    public static final String USER_CONCEPT_IRI = "http://lumify.io/user";
     private final Set<Privilege> defaultPrivileges;
+    private LongRunningProcessRepository longRunningProcessRepository; // can't inject this because of circular dependencies
 
     @Inject
     protected UserRepository(Configuration configuration) {
@@ -96,11 +103,19 @@ public abstract class UserRepository {
         return json;
     }
 
-    public ClientApiUser toClientApiWithAuths(User user) {
+    /**
+     * This is different from the non-private method in that it returns authorizations,
+     * long running processes, etc for that user.
+     */
+    public ClientApiUser toClientApiPrivate(User user) {
         ClientApiUser u = toClientApi(user);
 
         for (String a : getAuthorizations(user).getAuthorizations()) {
             u.addAuthorization(a);
+        }
+
+        for (JSONObject json : getLongRunningProcesses(user)) {
+            u.getLongRunningProcesses().add(ClientApiConverter.toClientApiValue(json));
         }
 
         u.setUiPreferences(JSONUtil.toJsonNode(user.getUiPreferences()));
@@ -109,6 +124,17 @@ public abstract class UserRepository {
         u.getPrivileges().addAll(privileges);
 
         return u;
+    }
+
+    private List<JSONObject> getLongRunningProcesses(User user) {
+        return getLongRunningProcessRepository().getLongRunningProcesses(user);
+    }
+
+    private LongRunningProcessRepository getLongRunningProcessRepository() {
+        if (this.longRunningProcessRepository == null) {
+            this.longRunningProcessRepository = InjectHelper.getInstance(LongRunningProcessRepository.class);
+        }
+        return this.longRunningProcessRepository;
     }
 
     private ClientApiUser toClientApi(User user) {

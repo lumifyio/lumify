@@ -25,6 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class WorkQueueRepository {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
     public static final String GRAPH_PROPERTY_QUEUE_NAME = "graphProperty";
+    public static final String LONG_RUNNING_PROCESS_QUEUE_NAME = "longRunningProcess";
     private final Graph graph;
 
     @Inject
@@ -88,6 +89,33 @@ public abstract class WorkQueueRepository {
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
 
         broadcastPropertyChange(element, propertyKey, propertyName, workspaceId);
+    }
+
+    public void pushLongRunningProcessQueue(JSONObject queueItem, String userId) {
+        queueItem.put("enqueueTime", System.currentTimeMillis());
+        queueItem.put("userId", userId);
+        pushOnQueue(LONG_RUNNING_PROCESS_QUEUE_NAME, FlushFlag.DEFAULT, queueItem);
+    }
+
+    public void broadcastLongRunningProcessChange(JSONObject longRunningProcessQueueItem) {
+        String userId = longRunningProcessQueueItem.optString("userId");
+        checkNotNull(userId, "userId cannot be null");
+        JSONObject json = new JSONObject();
+        json.put("type", "longRunningProcessChange");
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        json.put("permissions", permissions);
+        JSONObject dataJson = new JSONObject(longRunningProcessQueueItem.toString());
+
+        /// because results can get quite large we don't want this going on in a web socket message
+        if (dataJson.has("results")) {
+            dataJson.remove("results");
+        }
+
+        json.put("data", dataJson);
+        broadcastJson(json);
     }
 
     public void pushElement(Element element) {
@@ -178,7 +206,7 @@ public abstract class WorkQueueRepository {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceChange");
         json.put("permissions", getPermissionsWithUsers(workspace));
-        json.put("data", new JSONObject(ClientApiConverter.clientApiObjectToJsonString(workspace)));
+        json.put("data", new JSONObject(ClientApiConverter.clientApiToString(workspace)));
         broadcastJson(json);
     }
 
@@ -321,7 +349,7 @@ public abstract class WorkQueueRepository {
 
     public abstract void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer);
 
-    public abstract void subscribeToGraphPropertyMessages(GraphPropertyConsumer graphPropertyConsumer);
+    public abstract LongRunningProcessMessage getNextLongRunningProcessMessage();
 
     public void shutdown() {
 
@@ -331,7 +359,21 @@ public abstract class WorkQueueRepository {
         public abstract void broadcastReceived(JSONObject json);
     }
 
-    public static abstract class GraphPropertyConsumer {
-        public abstract void graphPropertyReceived(JSONObject json) throws Exception;
+    public static abstract class LongRunningProcessMessage {
+        private final JSONObject message;
+
+        public LongRunningProcessMessage(JSONObject message) {
+            this.message = message;
+        }
+
+        public JSONObject getMessage() {
+            return message;
+        }
+
+        public abstract void complete(Throwable ex);
+
+        public void complete() {
+            complete(null);
+        }
     }
 }

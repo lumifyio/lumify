@@ -1,5 +1,8 @@
 package io.lumify.web.clientapi.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("edge")
 public class ClientApiEdge extends ClientApiElement {
     private String label;
     private String sourceVertexId;
@@ -27,10 +30,5 @@ public class ClientApiEdge extends ClientApiElement {
 
     public void setDestVertexId(String destVertexId) {
         this.destVertexId = destVertexId;
-    }
-
-    @Override
-    public String getType() {
-        return "edge";
     }
 }
