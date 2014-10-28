@@ -94,12 +94,21 @@ width: 25em;
             background-position: center;
             .opacity(30);
           }
+
+          &.no-cancel button {
+            display: none;
+          }
         
           .progress {
             border-radius: 0.5ex;
-            background: darken(white, 5%);
             height: 1ex;
             margin: 0;                      
+            background: darken(white, 5%);            
+            &.determinate {            
+              .bar {
+                background: lighten(@blue-color, 5%);
+              }
+            }
           }
         }
 
