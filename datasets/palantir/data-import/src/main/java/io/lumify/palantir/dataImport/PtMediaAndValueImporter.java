@@ -6,14 +6,21 @@ import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.property.StreamingPropertyValue;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.zip.InflaterInputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
-    public static final int ZLIB_COMPRESSED_TYPE_START = 2000; // TODO need to verify these numbers with other installations of Palantir
-    public static final int ZLIB_COMPRESSED_TYPE_END = 3000;
+    private static final byte[] ZLIB_HEADER = new byte[2];
+
+    static {
+        ZLIB_HEADER[0] = (byte) 0x78;
+        ZLIB_HEADER[1] = (byte) 0x9c;
+    }
 
     public PtMediaAndValueImporter(DataImporter dataImporter) {
         super(dataImporter, PtMediaAndValue.class);
@@ -28,11 +35,8 @@ public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
     @Override
     protected void processRow(PtMediaAndValue row) throws Exception {
         String propertyKey = getDataImporter().getIdPrefix() + row.getId();
-        InputStream in = row.getContents();
+        InputStream in = getContentInputStream(row);
         try {
-            if (row.getType() >= ZLIB_COMPRESSED_TYPE_START && row.getType() < ZLIB_COMPRESSED_TYPE_END) {
-                in = new InflaterInputStream(in);
-            }
             StreamingPropertyValue propertyValue = new StreamingPropertyValue(in, byte[].class);
             propertyValue.store(true);
             propertyValue.searchIndex(false);
@@ -51,6 +55,20 @@ public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
         } finally {
             in.close();
         }
+    }
+
+    private InputStream getContentInputStream(PtMediaAndValue row) throws IOException {
+        byte[] header = new byte[2];
+        InputStream in = new BufferedInputStream(row.getContents(), 100);
+
+        in.mark(2);
+        in.read(header);
+        in.reset();
+
+        if (Arrays.equals(header, ZLIB_HEADER)) {
+            in = new InflaterInputStream(in);
+        }
+        return in;
     }
 
     private String getEdgeLabel(PtMediaAndValue row) {
