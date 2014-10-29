@@ -84,7 +84,7 @@ public class ValueEvaluator {
                 if (v == null) {
                     return null; // could not find a value to match replacement
                 }
-                matcher.appendReplacement(output, v);
+                matcher.appendReplacement(output, Matcher.quoteReplacement(v));
             }
             matcher.appendTail(output);
             return output.toString();
