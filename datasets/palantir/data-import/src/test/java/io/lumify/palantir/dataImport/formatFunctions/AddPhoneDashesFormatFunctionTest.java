@@ -23,9 +23,15 @@ public class AddPhoneDashesFormatFunctionTest {
     }
 
     @Test
-    public void testPhoneNumber() {
+    public void testPhoneNumber10Digit() {
         String found = fn.format("1231231234");
         assertEquals("123-123-1234", found);
+    }
+
+    @Test
+    public void testPhoneNumber7Digit() {
+        String found = fn.format("1231234");
+        assertEquals("123-1234", found);
     }
 
     @Test

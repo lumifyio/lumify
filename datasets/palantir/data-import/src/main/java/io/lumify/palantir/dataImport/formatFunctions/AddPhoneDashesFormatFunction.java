@@ -11,6 +11,9 @@ public class AddPhoneDashesFormatFunction extends FormatFunctionBase {
         if (value.length() == 10) {
             return value.substring(0, 3) + "-" + value.substring(3, 6) + "-" + value.substring(6);
         }
+        if (value.length() == 7) {
+            return value.substring(0, 3) + "-" + value.substring(3);
+        }
         LOGGER.warn("Invalid phone number: %s", value);
         return value;
     }
