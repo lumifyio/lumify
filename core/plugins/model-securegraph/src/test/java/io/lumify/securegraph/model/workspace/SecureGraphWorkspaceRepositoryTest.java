@@ -62,12 +62,12 @@ public class SecureGraphWorkspaceRepositoryTest {
         Visibility visibility = new Visibility("");
         Authorizations authorizations = new InMemoryAuthorizations();
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
-        LockRepository lockRepository = new LocalLockRepository();
         idGenerator = new QueueIdGenerator();
         graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(new HashMap()).createConfiguration();
+        LockRepository lockRepository = new LocalLockRepository(lumifyConfiguration);
         InMemoryUserRepository userRepository = new InMemoryUserRepository(lumifyConfiguration, userListenerUtil);
         user1 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user1.getUserId(), visibility, authorizations);
