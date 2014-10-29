@@ -1,6 +1,10 @@
 package io.lumify.palantir.dataImport;
 
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.dataImport.model.PtLinkType;
 import io.lumify.palantir.dataImport.model.PtNodeDisplayType;
 import io.lumify.palantir.dataImport.model.PtObjectType;
@@ -10,9 +14,12 @@ import org.apache.commons.io.FileUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Visibility;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
-import java.io.File;
-import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +28,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class DataImporter {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DataImporter.class);
     private final Graph graph;
     private final String idPrefix;
     private final SqlRunner sqlRunner;
@@ -114,6 +122,8 @@ public class DataImporter {
     public void writeFile(String fileName, String data) {
         try {
             if (this.outputDirectory != null) {
+                data = tryXmlFormatting(data);
+
                 File f = new File(this.outputDirectory, fileName);
                 if (!f.getParentFile().exists() && !f.getParentFile().mkdirs()) {
                     throw new LumifyException("Could not create directory: " + f.getParentFile().getAbsolutePath());
@@ -122,6 +132,34 @@ public class DataImporter {
             }
         } catch (IOException ex) {
             throw new LumifyException("Could not write file: " + fileName + " with contents: " + data, ex);
+        }
+    }
+
+    private String tryXmlFormatting(String data) {
+        Document doc;
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(data));
+            doc = db.parse(is);
+        } catch (Exception ex) {
+            // not an xml document probably
+            return data;
+        }
+
+        try {
+            OutputFormat format = new OutputFormat(doc);
+            format.setLineWidth(65);
+            format.setIndenting(true);
+            format.setIndent(2);
+            Writer out = new StringWriter();
+            XMLSerializer serializer = new XMLSerializer(out, format);
+            serializer.serialize(doc);
+
+            return out.toString();
+        } catch (Exception ex) {
+            LOGGER.warn("Could not pretty print xml: %s", data);
+            return data;
         }
     }
 
