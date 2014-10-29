@@ -10,7 +10,6 @@ public abstract class PtImporterBase<T> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtImporterBase.class);
     private final Class<T> ptClass;
     private final DataImporter dataImporter;
-    private final static ValueEvaluator valueEvaluator = new ValueEvaluator();
 
     protected PtImporterBase(DataImporter dataImporter, Class<T> ptClass) {
         this.dataImporter = dataImporter;
@@ -53,10 +52,6 @@ public abstract class PtImporterBase<T> {
 
     protected DataImporter getDataImporter() {
         return dataImporter;
-    }
-
-    protected ValueEvaluator getValueEvaluator() {
-        return valueEvaluator;
     }
 
     protected abstract void processRow(T row) throws Exception;

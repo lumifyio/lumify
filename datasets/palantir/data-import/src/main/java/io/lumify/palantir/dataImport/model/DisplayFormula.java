@@ -1,7 +1,9 @@
-package io.lumify.palantir.dataImport;
+package io.lumify.palantir.dataImport.model;
 
 import io.lumify.core.exception.LumifyException;
-import io.lumify.palantir.dataImport.model.PtPropertyType;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.palantir.dataImport.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,16 +13,21 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ValueEvaluator {
+public class DisplayFormula {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DisplayFormula.class);
     private static Pattern VALUE_BODY_PATTERN = Pattern.compile("^<VALUE>(.*)</VALUE>$", Pattern.DOTALL);
     private static Pattern UNPARSED_VALUE_BODY_PATTERN = Pattern.compile("^<UNPARSED_VALUE>(.*)</UNPARSED_VALUE>$", Pattern.DOTALL);
     private static Pattern VALUE_SUBSTITUTION = Pattern.compile("\\{(.*?)\\}");
     private static final DocumentBuilder dBuilder;
+    private boolean prettyPrint;
+    private List<String> formulas = new ArrayList<String>();
 
     static {
         try {
@@ -31,7 +38,39 @@ public class ValueEvaluator {
         }
     }
 
-    protected Object toValue(String value, PtPropertyType propertyType) {
+    public DisplayFormula(Element displayElement) {
+        if (displayElement == null) {
+            return;
+        }
+
+        Element argsElement = XmlUtil.getChildByTagName(displayElement, "args");
+        if (argsElement == null) {
+            return;
+        }
+
+        NodeList argElements = argsElement.getChildNodes();
+        for (int i = 0; i < argElements.getLength(); i++) {
+            Node argElement = argElements.item(i);
+            if (!(argElement instanceof Element)) {
+                continue;
+            }
+            if (!((Element) argElement).getTagName().equals("arg")) {
+                continue;
+            }
+            String arg = argElement.getTextContent();
+            if (arg.startsWith("prettyprint=")) {
+                prettyPrint = Boolean.parseBoolean(arg.substring("prettyprint=".length()));
+                continue;
+            }
+            if (arg.startsWith("tokens=")) {
+                formulas.add(arg.substring("tokens=".length()));
+                continue;
+            }
+            throw new LumifyException("Could not parse arg formula " + arg);
+        }
+    }
+
+    public Object toValue(String value) {
         if (value == null) {
             return null;
         }
@@ -52,9 +91,9 @@ public class ValueEvaluator {
             return m.group(1).trim();
         }
 
-        if (propertyType.getDisplayFormulas().size() > 0) {
+        if (formulas.size() > 0) {
             Map<String, String> values = getValuesFromValue(value);
-            String formattedValue = formatValues(values, propertyType);
+            String formattedValue = formatValues(values);
             if (formattedValue != null) {
                 return formattedValue;
             }
@@ -63,8 +102,8 @@ public class ValueEvaluator {
         return value;
     }
 
-    private String formatValues(Map<String, String> values, PtPropertyType propertyType) {
-        for (String displayFormula : propertyType.getDisplayFormulas()) {
+    private String formatValues(Map<String, String> values) {
+        for (String displayFormula : formulas) {
             String r = formatValues(values, displayFormula);
             if (r != null) {
                 return r;
@@ -84,6 +123,10 @@ public class ValueEvaluator {
                 if (v == null) {
                     return null; // could not find a value to match replacement
                 }
+                if (exprParts.length > 1) {
+                    String fn = exprParts[1].trim();
+                    v = applyFormatFunction(fn, v);
+                }
                 matcher.appendReplacement(output, Matcher.quoteReplacement(v));
             }
             matcher.appendTail(output);
@@ -91,6 +134,22 @@ public class ValueEvaluator {
         } catch (Exception ex) {
             throw new LumifyException("Could not format using formula: " + displayFormula, ex);
         }
+    }
+
+    private String applyFormatFunction(String fn, String value) {
+        if ("add_ssn_dashes".equals(fn)) {
+            return applyAddSsnDashes(value);
+        }
+        LOGGER.error("Unknown format function: %s", fn);
+        return value;
+    }
+
+    private String applyAddSsnDashes(String value) {
+        if (value.length() == 9) {
+            return value.substring(0, 3) + "-" + value.substring(3, 5) + "-" + value.substring(5);
+        }
+        LOGGER.error("Invalid SSN to add ssn dashes to: %s", value);
+        return value;
     }
 
     private Map<String, String> getValuesFromValue(String value) {

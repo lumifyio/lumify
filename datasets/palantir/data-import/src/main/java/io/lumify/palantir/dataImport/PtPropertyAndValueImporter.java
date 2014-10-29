@@ -20,7 +20,7 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
 
         String propertyKey = getDataImporter().getIdPrefix() + row.getPropertyValueId();
         String propertyName = getPropertyName(propertyType.getUri());
-        Object propertyValue = getValueEvaluator().toValue(row.getValue(), propertyType);
+        Object propertyValue = propertyType.getDisplayFormula().toValue(row.getValue());
 
         if (propertyValue == null) {
             // skip null values
