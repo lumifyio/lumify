@@ -5,16 +5,16 @@ var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'S
 var shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-function padLeft(str, char, totalWidth) {
+function padLeft(str, ch, totalWidth) {
   while (str.length < totalWidth) {
-    str = char + str;
+    str = ch + str;
   }
   return str;
 }
 
-function padRight(str, char, totalWidth) {
+function padRight(str, ch, totalWidth) {
   while (str.length < totalWidth) {
-    str = str + char;
+    str = str + ch;
   }
   return str;
 }
@@ -600,27 +600,27 @@ function getStringLength(str, options) {
   return str.length;
 }
 
-function isSpace(char) {
-  if (char.match(/\s/)) {
+function isSpace(ch) {
+  if (ch.match(/\s/)) {
     return true;
   }
   return false;
 }
 
-function isSplitable(char) {
-  if (isSpace(char)) {
+function isSplitable(ch) {
+  if (isSpace(ch)) {
     return true;
   }
-  if (char == '(' || char == ')' || char == '.' || char == ',' || char == '?' || char == '!') {
+  if (ch == '(' || ch == ')' || ch == '.' || ch == ',' || ch == '?' || ch == '!') {
     return false;
   }
-  if (char >= 'a' && char <= 'z') {
+  if (ch >= 'a' && ch <= 'z') {
     return false;
   }
-  if (char >= 'A' && char <= 'Z') {
+  if (ch >= 'A' && ch <= 'Z') {
     return false;
   }
-  if (char >= '0' && char <= '9') {
+  if (ch >= '0' && ch <= '9') {
     return false;
   }
 
