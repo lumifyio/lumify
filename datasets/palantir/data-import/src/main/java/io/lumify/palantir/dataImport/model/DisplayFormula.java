@@ -3,6 +3,7 @@ package io.lumify.palantir.dataImport.model;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.palantir.dataImport.formatFunctions.*;
 import io.lumify.palantir.dataImport.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,6 +27,7 @@ public class DisplayFormula {
     private static Pattern UNPARSED_VALUE_BODY_PATTERN = Pattern.compile("^<UNPARSED_VALUE>(.*)</UNPARSED_VALUE>$", Pattern.DOTALL);
     private static Pattern VALUE_SUBSTITUTION = Pattern.compile("\\{(.*?)\\}");
     private static final DocumentBuilder dBuilder;
+    private static Map<String, FormatFunctionBase> formatFunctions = new HashMap<String, FormatFunctionBase>();
     private boolean prettyPrint;
     private List<String> formulas = new ArrayList<String>();
 
@@ -36,6 +38,12 @@ public class DisplayFormula {
         } catch (ParserConfigurationException e) {
             throw new LumifyException("Could not create document builder", e);
         }
+
+        formatFunctions.put("add_ssn_dashes", new AddSsnDashesFormatFunction());
+        formatFunctions.put("uppercase", new UppercaseFormatFunction());
+        formatFunctions.put("lowercase", new LowercaseFormatFunction());
+        formatFunctions.put("add_number_commas", new AddNumberCommasFormatFunction());
+        formatFunctions.put("add_phone_dashes", new AddPhoneDashesFormatFunction());
     }
 
     public DisplayFormula(Element displayElement) {
@@ -142,18 +150,12 @@ public class DisplayFormula {
     }
 
     private String applyFormatFunction(String fn, String value) {
-        if ("add_ssn_dashes".equals(fn)) {
-            return applyAddSsnDashes(value);
+        fn = fn.trim().toLowerCase();
+        FormatFunctionBase formatFn = formatFunctions.get(fn);
+        if (formatFn != null) {
+            return formatFn.format(value);
         }
         LOGGER.error("Unknown format function: %s", fn);
-        return value;
-    }
-
-    private String applyAddSsnDashes(String value) {
-        if (value.length() == 9) {
-            return value.substring(0, 3) + "-" + value.substring(3, 5) + "-" + value.substring(5);
-        }
-        LOGGER.error("Invalid SSN to add ssn dashes to: %s", value);
         return value;
     }
 
