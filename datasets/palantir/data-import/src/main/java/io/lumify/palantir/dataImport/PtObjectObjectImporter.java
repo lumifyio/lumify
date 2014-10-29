@@ -56,6 +56,7 @@ public class PtObjectObjectImporter extends PtImporterBase<PtObjectObject> {
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_OBJECT_OBJECT";
+        // order by parent_object_id to improve cache hits
+        return "select * from {namespace}.PT_OBJECT_OBJECT ORDER BY parent_object_id";
     }
 }
