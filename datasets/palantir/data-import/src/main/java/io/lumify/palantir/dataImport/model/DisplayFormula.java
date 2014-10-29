@@ -127,6 +127,11 @@ public class DisplayFormula {
                     String fn = exprParts[1].trim();
                     v = applyFormatFunction(fn, v);
                 }
+                if (prettyPrint) {
+                    if (v.length() > 0) {
+                        v = Character.toUpperCase(v.charAt(0)) + v.substring(1);
+                    }
+                }
                 matcher.appendReplacement(output, Matcher.quoteReplacement(v));
             }
             matcher.appendTail(output);
