@@ -31,6 +31,14 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
         }
     }
 
+    protected String getObjectId(PtPropertyAndValue ptPropertyAndValue) {
+        return getDataImporter().getIdPrefix() + ptPropertyAndValue.getLinkObjectId();
+    }
+
+    protected String getPropertyName(String uri) {
+        return getDataImporter().getOwlPrefix() + uri;
+    }
+
     @Override
     protected String getSql() {
         return "select p.ID" +
@@ -58,7 +66,7 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
                 ", pv.CREATED_BY" +
                 ", pv.TIME_CREATED" +
                 ", pv.GEOMETRY_GIS" +
-                " FROM CLEATPR.PT_PROPERTY p, CLEATPR.PT_PROPERTY_VALUE pv" +
+                " FROM {namespace}.PT_PROPERTY p, {namespace}.PT_PROPERTY_VALUE pv" +
                 " WHERE p.PROPERTY_VALUE_ID = pv.ID";
     }
 }

@@ -1,19 +1,30 @@
 package io.lumify.palantir.dataImport;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.palantir.dataImport.model.PtObject;
-import io.lumify.palantir.dataImport.model.PtObjectObject;
-import io.lumify.palantir.dataImport.model.PtPropertyAndValue;
+import org.securegraph.Vertex;
 
 public abstract class PtImporterBase<T> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtImporterBase.class);
     private final Class<T> ptClass;
     private final DataImporter dataImporter;
+    private final LoadingCache<String, Vertex> vertexCache;
 
-    protected PtImporterBase(DataImporter dataImporter, Class<T> ptClass) {
+    protected PtImporterBase(final DataImporter dataImporter, Class<T> ptClass) {
         this.dataImporter = dataImporter;
         this.ptClass = ptClass;
+
+        vertexCache = CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .build(new CacheLoader<String, Vertex>() {
+                    @Override
+                    public Vertex load(String key) throws Exception {
+                        return dataImporter.getGraph().getVertex(key, dataImporter.getAuthorizations());
+                    }
+                });
     }
 
     public void run() {
@@ -58,33 +69,11 @@ public abstract class PtImporterBase<T> {
 
     protected abstract String getSql();
 
-    protected String getConceptTypeUri(String uri) {
-        return getDataImporter().getOwlPrefix() + uri;
-    }
-
-    protected String getPropertyName(String uri) {
-        return getDataImporter().getOwlPrefix() + uri;
-    }
-
-    protected String getLinkTypeUri(String uri) {
-        return getDataImporter().getOwlPrefix() + uri;
-    }
-
-    protected String getEdgeId(PtObjectObject ptObjectObject) {
-        return getDataImporter().getIdPrefix() + ptObjectObject.getLinkId();
+    public LoadingCache<String, Vertex> getVertexCache() {
+        return vertexCache;
     }
 
     protected String getObjectId(long objectId) {
         return getDataImporter().getIdPrefix() + objectId;
     }
-
-    protected String getObjectId(PtPropertyAndValue ptPropertyAndValue) {
-        return getDataImporter().getIdPrefix() + ptPropertyAndValue.getLinkObjectId();
-    }
-
-    protected String getObjectId(PtObject ptObject) {
-        return getDataImporter().getIdPrefix() + ptObject.getObjectId();
-    }
-
-
 }

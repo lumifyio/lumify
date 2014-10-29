@@ -1,0 +1,94 @@
+package io.lumify.palantir.dataImport;
+
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.palantir.dataImport.model.PtMediaAndValue;
+import org.securegraph.Vertex;
+import org.securegraph.VertexBuilder;
+import org.securegraph.property.StreamingPropertyValue;
+
+import java.io.InputStream;
+import java.util.zip.InflaterInputStream;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
+    public static final int ZLIB_COMPRESSED_TYPE_START = 2000; // TODO need to verify these numbers with other installations of Palantir
+    public static final int ZLIB_COMPRESSED_TYPE_END = 3000;
+
+    public PtMediaAndValueImporter(DataImporter dataImporter) {
+        super(dataImporter, PtMediaAndValue.class);
+    }
+
+    @Override
+    protected void beforeProcessRows() {
+        super.beforeProcessRows();
+        getDataImporter().getGraph().flush();
+    }
+
+    @Override
+    protected void processRow(PtMediaAndValue row) throws Exception {
+        String propertyKey = getDataImporter().getIdPrefix() + row.getId();
+        InputStream in = row.getContents();
+        try {
+            if (row.getType() >= ZLIB_COMPRESSED_TYPE_START && row.getType() < ZLIB_COMPRESSED_TYPE_END) {
+                in = new InflaterInputStream(in);
+            }
+            StreamingPropertyValue propertyValue = new StreamingPropertyValue(in, byte[].class);
+            propertyValue.store(true);
+            propertyValue.searchIndex(false);
+
+            VertexBuilder vertexBuilder = getDataImporter().getGraph().prepareVertex(getMediaId(row), getDataImporter().getVisibility());
+            LumifyProperties.RAW.addPropertyValue(vertexBuilder, propertyKey, propertyValue, getDataImporter().getVisibility());
+            LumifyProperties.TITLE.setProperty(vertexBuilder, row.getTitle(), getDataImporter().getVisibility());
+            Vertex mediaVertex = vertexBuilder.save(getDataImporter().getAuthorizations());
+
+            Vertex sourceVertex = getVertexCache().get(getObjectId(row.getLinkObjectId()));
+            checkNotNull(sourceVertex, "Could not find source vertex for media object: " + row.getLinkObjectId());
+
+            String edgeId = getEdgeId(row);
+            String edgeLabel = getEdgeLabel(row);
+            getDataImporter().getGraph().addEdge(edgeId, sourceVertex, mediaVertex, edgeLabel, getDataImporter().getVisibility(), getDataImporter().getAuthorizations());
+        } finally {
+            in.close();
+        }
+    }
+
+    private String getEdgeLabel(PtMediaAndValue row) {
+        return getDataImporter().getHasMediaConceptTypeIri();
+    }
+
+    private String getEdgeId(PtMediaAndValue row) {
+        return getDataImporter().getIdPrefix() + "_media_" + row.getLinkObjectId() + "_to_" + row.getId();
+    }
+
+    private String getMediaId(PtMediaAndValue row) {
+        return getDataImporter().getIdPrefix() + "_media_" + row.getId();
+    }
+
+    @Override
+    protected String getSql() {
+        return "select m.ID" +
+                ", m.REALM_ID" +
+                ", m.LINK_OBJECT_ID" +
+                ", m.DATA_EVENT_ID" +
+                ", m.ORIGIN_DATA_EVENT_ID" +
+                ", m.DELETED" +
+                ", m.MEDIA_VALUE_ID" +
+                ", m.CROSS_RESOLUTION_ID" +
+                ", m.ACCESS_CONTROL_LIST_ID" +
+                ", m.CREATED_BY" +
+                ", m.TIME_CREATED" +
+                ", m.LAST_MODIFIED_BY" +
+                ", m.LAST_MODIFIED" +
+                ", m.TITLE" +
+                ", m.DESCRIPTION" +
+                ", m.LINK_TYPE" +
+                ", mv.TYPE" +
+                ", mv.CONTENTS" +
+                ", mv.CONTENTS_HASH" +
+                " FROM {namespace}.PT_MEDIA m, {namespace}.PT_MEDIA_VALUE mv" +
+                " WHERE " +
+                "  m.MEDIA_VALUE_ID = mv.ID" +
+                "  AND m.LINK_OBJECT_ID != -1";
+    }
+}

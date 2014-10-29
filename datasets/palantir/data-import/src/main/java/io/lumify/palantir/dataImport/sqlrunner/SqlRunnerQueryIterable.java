@@ -3,6 +3,7 @@ package io.lumify.palantir.dataImport.sqlrunner;
 import io.lumify.core.exception.LumifyException;
 import org.apache.commons.io.IOUtils;
 
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -111,6 +112,9 @@ public class SqlRunnerQueryIterable<T> implements Iterable<T> {
             } else if (columnValue instanceof Blob && parameterType == byte[].class) {
                 Blob blob = (Blob) columnValue;
                 columnValue = IOUtils.toByteArray(blob.getBinaryStream());
+            } else if (columnValue instanceof Blob && parameterType == InputStream.class) {
+                Blob blob = (Blob) columnValue;
+                columnValue = blob.getBinaryStream();
             }
             setter.invoke(obj, columnValue);
         } catch (Throwable ex) {

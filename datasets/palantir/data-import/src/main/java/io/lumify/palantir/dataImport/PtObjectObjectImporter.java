@@ -1,8 +1,5 @@
 package io.lumify.palantir.dataImport;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.palantir.dataImport.model.PtLinkType;
 import io.lumify.palantir.dataImport.model.PtObjectObject;
@@ -13,19 +10,8 @@ import java.util.concurrent.ExecutionException;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class PtObjectObjectImporter extends PtImporterBase<PtObjectObject> {
-    private final LoadingCache<String, Vertex> vertexCache;
-
     protected PtObjectObjectImporter(final DataImporter dataImporter) {
         super(dataImporter, PtObjectObject.class);
-
-        vertexCache = CacheBuilder.newBuilder()
-                .maximumSize(1000)
-                .build(new CacheLoader<String, Vertex>() {
-                    @Override
-                    public Vertex load(String key) throws Exception {
-                        return dataImporter.getGraph().getVertex(key, dataImporter.getAuthorizations());
-                    }
-                });
     }
 
     @Override
@@ -43,15 +29,23 @@ public class PtObjectObjectImporter extends PtImporterBase<PtObjectObject> {
         String linkTypeUri = getLinkTypeUri(ptLinkType.getUri());
 
         String sourceObjectId = getObjectId(row.getParentObjectId());
-        Vertex sourceVertex = vertexCache.get(sourceObjectId);
+        Vertex sourceVertex = getVertexCache().get(sourceObjectId);
         checkNotNull(sourceVertex, "Could not find source vertex: " + sourceObjectId);
 
         String destObjectId = getObjectId(row.getChildObjectId());
-        Vertex destVertex = vertexCache.get(destObjectId);
+        Vertex destVertex = getVertexCache().get(destObjectId);
         checkNotNull(destVertex, "Could not find dest vertex: " + destObjectId);
 
         String edgeId = getEdgeId(row);
         getDataImporter().getGraph().addEdge(edgeId, sourceVertex, destVertex, linkTypeUri, getDataImporter().getVisibility(), getDataImporter().getAuthorizations());
+    }
+
+    protected String getEdgeId(PtObjectObject ptObjectObject) {
+        return getDataImporter().getIdPrefix() + ptObjectObject.getLinkId();
+    }
+
+    protected String getLinkTypeUri(String uri) {
+        return getDataImporter().getOwlPrefix() + uri;
     }
 
     @Override

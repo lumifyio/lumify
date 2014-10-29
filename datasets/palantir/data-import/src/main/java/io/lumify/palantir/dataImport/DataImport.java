@@ -112,6 +112,8 @@ public class DataImport extends CommandLineBase {
         Visibility visibility = new Visibility("");
         Authorizations authorizations = getAuthorizations();
 
+        String hasMediaConceptTypeIri = getConfiguration().get("ontology.iri.hasMedia");
+
         DataImporterInitParameters p = new DataImporterInitParameters()
                 .setConnectionString(connectionString)
                 .setUsername(username)
@@ -121,6 +123,7 @@ public class DataImport extends CommandLineBase {
                 .setOwlPrefix(owlPrefix)
                 .setOutputDirectory(outdir)
                 .setOntologyExport(ontologyExport)
+                .setHasMediaConceptTypeIri(hasMediaConceptTypeIri)
                 .setGraph(getGraph())
                 .setVisibility(visibility)
                 .setAuthorizations(authorizations);

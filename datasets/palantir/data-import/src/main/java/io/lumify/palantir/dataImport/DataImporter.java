@@ -41,6 +41,7 @@ public class DataImporter {
     private final Map<Long, PtNodeDisplayType> nodeDisplayTypes = new HashMap<Long, PtNodeDisplayType>();
     private String owlPrefix;
     private final List<PtImporterBase> importers = new ArrayList<PtImporterBase>();
+    private final String hasMediaConceptTypeIri;
 
     public DataImporter(DataImporterInitParameters p) {
         importers.add(new PtObjectTypeImporter(this));
@@ -54,6 +55,7 @@ public class DataImporter {
             importers.add(new PtObjectImporter(this));
             importers.add(new PtPropertyAndValueImporter(this));
             importers.add(new PtObjectObjectImporter(this));
+            importers.add(new PtMediaAndValueImporter(this));
         }
 
         File f = null;
@@ -71,6 +73,7 @@ public class DataImporter {
                 p.getTableNamespace());
         this.idPrefix = p.getIdPrefix();
         this.owlPrefix = p.getOwlPrefix();
+        this.hasMediaConceptTypeIri = p.getHasMediaConceptTypeIri();
         this.graph = p.getGraph();
     }
 
@@ -173,5 +176,9 @@ public class DataImporter {
 
     public String getIdPrefix() {
         return idPrefix;
+    }
+
+    public String getHasMediaConceptTypeIri() {
+        return hasMediaConceptTypeIri;
     }
 }

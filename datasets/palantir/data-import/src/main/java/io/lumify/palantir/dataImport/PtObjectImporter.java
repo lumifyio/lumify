@@ -25,6 +25,14 @@ public class PtObjectImporter extends PtImporterBase<PtObject> {
         v.save(getDataImporter().getAuthorizations());
     }
 
+    protected String getObjectId(PtObject ptObject) {
+        return getDataImporter().getIdPrefix() + ptObject.getObjectId();
+    }
+
+    protected String getConceptTypeUri(String uri) {
+        return getDataImporter().getOwlPrefix() + uri;
+    }
+
     @Override
     protected String getSql() {
         return "select * from {namespace}.PT_OBJECT";

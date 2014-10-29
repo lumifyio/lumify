@@ -16,6 +16,7 @@ public class DataImporterInitParameters {
     private Visibility visibility;
     private Authorizations authorizations;
     private boolean ontologyExport;
+    private String hasMediaConceptTypeIri;
 
     public String getConnectionString() {
         return connectionString;
@@ -114,5 +115,14 @@ public class DataImporterInitParameters {
 
     public boolean isOntologyExport() {
         return ontologyExport;
+    }
+
+    public String getHasMediaConceptTypeIri() {
+        return hasMediaConceptTypeIri;
+    }
+
+    public DataImporterInitParameters setHasMediaConceptTypeIri(String hasMediaConceptTypeIri) {
+        this.hasMediaConceptTypeIri = hasMediaConceptTypeIri;
+        return this;
     }
 }
