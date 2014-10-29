@@ -54,6 +54,7 @@ public final class Configuration {
     public static final String WEB_GEOCODER_ENABLED = WEB_PROPERTIES_PREFIX + "geocoder.enabled";
     public static final String DEV_MODE = "devMode";
     public static final String DEFAULT_SEARCH_RESULT_COUNT = "search.defaultSearchCount";
+    public static final String LOCK_REPOSITORY_PATH_PREFIX="lockRepository.pathPrefix";
     private final ConfigurationLoader configurationLoader;
 
     private Map<String, String> config = new HashMap<String, String>();

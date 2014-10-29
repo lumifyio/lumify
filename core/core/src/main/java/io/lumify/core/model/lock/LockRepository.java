@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.recipes.locks.InterProcessLock;
 import com.netflix.curator.framework.recipes.locks.InterProcessMutex;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 
@@ -19,9 +20,10 @@ public class LockRepository {
     private final Map<String, Object> localLocks = new HashMap<String, Object>();
 
     @Inject
-    public LockRepository(final CuratorFramework curatorFramework) {
+    public LockRepository(final CuratorFramework curatorFramework,
+                          final Configuration configuration) {
         this.curatorFramework = curatorFramework;
-        this.pathPrefix = DEFAULT_PATH_PREFIX;
+        this.pathPrefix = configuration.get(Configuration.LOCK_REPOSITORY_PATH_PREFIX, DEFAULT_PATH_PREFIX);
     }
 
     public Lock createLock(String lockName) {
