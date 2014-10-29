@@ -1,10 +1,14 @@
 package io.lumify.core.model.lock;
 
+import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
+
 import java.util.concurrent.Callable;
 
 public class LocalLockRepository extends LockRepository {
-    public LocalLockRepository() {
-        super(null);
+    @Inject
+    public LocalLockRepository(Configuration configuration) {
+        super(null, configuration);
     }
 
     @Override
