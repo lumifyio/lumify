@@ -1,16 +1,14 @@
 package io.lumify.web.routes.config;
 
+import com.google.inject.Inject;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.miniweb.HandlerChain;
-import com.google.inject.Inject;
-import io.lumify.web.WebApp;
+import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Configuration extends BaseRequestHandler {
@@ -25,24 +23,8 @@ public class Configuration extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        JSONObject properties = new JSONObject();
-        for (String key : getConfiguration().getKeys()) {
-            if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
-                properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), getConfiguration().get(key, ""));
-            } else if (key.startsWith(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PREFIX)) {
-                properties.put(key, getConfiguration().get(key, ""));
-            }
-        }
-
-        JSONObject messages = new JSONObject();
         ResourceBundle resourceBundle = getBundle(request);
-        for (String key : resourceBundle.keySet()) {
-            messages.put(key, resourceBundle.getString(key));
-        }
-
-        JSONObject configuration = new JSONObject();
-        configuration.put("properties", properties);
-        configuration.put("messages", messages);
+        JSONObject configuration = getConfiguration().toJSON(resourceBundle);
 
         respondWithJson(response, configuration);
     }

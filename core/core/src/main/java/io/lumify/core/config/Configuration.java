@@ -5,6 +5,7 @@ import io.lumify.core.util.ClassUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -268,5 +269,33 @@ public final class Configuration {
     public File resolveFileName(String fileName) {
         return this.configurationLoader.resolveFileName(fileName);
     }
-}
 
+
+    public JSONObject toJSON() {
+        return toJSON(null);
+    }
+
+    public JSONObject toJSON(ResourceBundle resourceBundle) {
+        JSONObject properties = new JSONObject();
+        for (String key : getKeys()) {
+            if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
+                properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
+            } else if (key.startsWith(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PREFIX)) {
+                properties.put(key, get(key, ""));
+            }
+        }
+
+        JSONObject messages = new JSONObject();
+        if (resourceBundle != null) {
+            for (String key : resourceBundle.keySet()) {
+                messages.put(key, resourceBundle.getString(key));
+            }
+        }
+
+        JSONObject configuration = new JSONObject();
+        configuration.put("properties", properties);
+        configuration.put("messages", messages);
+
+        return configuration;
+    }
+}
