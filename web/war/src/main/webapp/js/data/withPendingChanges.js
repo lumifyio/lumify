@@ -1,4 +1,4 @@
-define([], function() {
+define(['util/messages'], function(i18n) {
     'use strict';
 
     return withPendingChanges;
@@ -38,7 +38,7 @@ define([], function() {
 
         this.onBeforeUnload = function() {
             if (this.pendingChangesPresent()) {
-                return 'Some changes have not yet finished saving.';
+                return i18n('lumify.beforeclose.prompt');
             }
         };
 
