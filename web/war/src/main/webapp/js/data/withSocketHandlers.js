@@ -169,7 +169,9 @@ define(['underscore'], function(_) {
                 message.data.status === 'OFFLINE' &&
                 message.data.id &&
                 message.data.id === currentUser.id) {
+
                 //$(document).trigger('logout', {  message: i18n('lumify.session.expired') });
+                console.warn('Should logout');
             }
         };
 
