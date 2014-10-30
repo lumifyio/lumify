@@ -39,8 +39,6 @@ define(['underscore'], function(_) {
         });
 
         this.onSocketMessage = function(evt, message) {
-            var self = this;
-
             if (message.type in TYPES) {
                 var handler = typeToHandlerName(message.type);
                 if (handler in this) {
@@ -169,9 +167,7 @@ define(['underscore'], function(_) {
                 message.data.status === 'OFFLINE' &&
                 message.data.id &&
                 message.data.id === currentUser.id) {
-
-                //$(document).trigger('logout', {  message: i18n('lumify.session.expired') });
-                console.warn('Should logout');
+                $(document).trigger('logout', {  message: i18n('lumify.session.expired') });
             }
         };
 
