@@ -56,6 +56,7 @@ public final class Configuration {
     public static final String DEV_MODE = "devMode";
     public static final String DEFAULT_SEARCH_RESULT_COUNT = "search.defaultSearchCount";
     private final ConfigurationLoader configurationLoader;
+    private final LumifyResourceBundleManager lumifyResourceBundleManager;
 
     private Map<String, String> config = new HashMap<String, String>();
 
@@ -66,6 +67,7 @@ public final class Configuration {
 
     Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
+        this.lumifyResourceBundleManager = new LumifyResourceBundleManager();
         for (Map.Entry entry : config.entrySet()) {
             if (entry.getValue() != null) {
                 set(entry.getKey().toString(), entry.getValue());
@@ -271,8 +273,11 @@ public final class Configuration {
     }
 
 
-    public JSONObject toJSON() {
-        return toJSON(null);
+    public JSONObject toJSON(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return toJSON(lumifyResourceBundleManager.getBundle(locale));
     }
 
     public JSONObject toJSON(ResourceBundle resourceBundle) {

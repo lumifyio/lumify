@@ -88,7 +88,9 @@ public class AnalystsNotebookExporter {
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
         LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
-        FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository);
+
+        // TODO: pass in users locale
+        FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository, null);
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
             chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations));
         }

@@ -20,6 +20,7 @@ import org.securegraph.Vertex;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 /**
  * Not Thread Safe, Do not share instance across threads
@@ -30,12 +31,14 @@ public class FormulaEvaluator {
     private OntologyRepository ontologyRepository;
     private Context context;
     private ScriptableObject scope;
+    private Locale locale;
 
     @Inject
-    public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository) {
+    public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository, Locale locale) {
         this.configuration = configuration;
         this.ontologyRepository = ontologyRepository;
         this.context = Context.enter();
+        this.locale = locale == null ? Locale.getDefault() : locale;
 
         setupContext();
         loadJavaScript();
@@ -105,7 +108,7 @@ public class FormulaEvaluator {
     }
 
     private String getConfigurationJson() throws Exception {
-        return configuration.toJSON().toString();
+        return configuration.toJSON(this.locale).toString();
     }
 
     private Object evaluateFile(String filename) {
