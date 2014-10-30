@@ -94,6 +94,8 @@ public class AnalystsNotebookExporter {
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
             chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations));
         }
+        formulaEvaluator.close();
+
         LOGGER.debug("adding %d edges", edges.size());
         for (Edge edge : edges) {
             chartItems.add(ChartItem.createFromEdge(version, edge, ontologyRepository));
