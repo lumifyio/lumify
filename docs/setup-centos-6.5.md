@@ -1,4 +1,4 @@
-# Lumify on CentOS 6.4
+# Lumify on CentOS 6.5
 
 ## Performance Considerations
 
