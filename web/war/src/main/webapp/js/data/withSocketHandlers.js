@@ -3,9 +3,12 @@ define(['underscore'], function(_) {
 
     // Define this.[type]SocketHandler for each of these
     var TYPES = _.indexBy([
+        'chatMessage',
         'edgeDeletion',
         'entityImageUpdated',
+        'longRunningProcessChange',
         'propertiesChange',
+        'sync',
         'textUpdated',
         'userStatusChange',
         'userWorkspaceChange',
@@ -172,6 +175,11 @@ define(['underscore'], function(_) {
             }
         };
 
+        // TODO: move external handled socket messages here, then trigger local
+        // events
         this.userWorkspaceChangeSocketHandler = _.identity;
+        this.longRunningProcessChangeSocketHandler = _.identity;
+        this.chatMessageSocketHandler = _.identity;
+        this.syncSocketHandler = _.identity;
     }
 });
