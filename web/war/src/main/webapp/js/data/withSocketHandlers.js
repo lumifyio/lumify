@@ -8,6 +8,7 @@ define(['underscore'], function(_) {
         'propertiesChange',
         'textUpdated',
         'userStatusChange',
+        'userWorkspaceChange',
         'verticesDeleted',
         'workspaceChange',
         'workspaceDelete',
@@ -171,5 +172,6 @@ define(['underscore'], function(_) {
             }
         };
 
+        this.userWorkspaceChangeSocketHandler = _.identity;
     }
 });
