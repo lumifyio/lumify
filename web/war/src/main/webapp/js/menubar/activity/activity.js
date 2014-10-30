@@ -27,7 +27,6 @@ define([
                     .appendTo(this.$node);
             }
 
-            console.log($badge[0], count > 0)
             $badge
                 .toggle(count > 0)
                 .text(F.number.pretty(count));
