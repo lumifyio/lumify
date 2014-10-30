@@ -26,6 +26,13 @@ require.config({
 $ = { extend: _.extend };
 window = this;
 navigator = { userAgent: ''};
+console = {
+    log: print,
+    info: print,
+    debug: print,
+    warn: consoleWarn,
+    error: consoleError
+};
 
 // Fix service methods
 require(['service/ontology', 'service/config'], function(OntologyService, ConfigService) {

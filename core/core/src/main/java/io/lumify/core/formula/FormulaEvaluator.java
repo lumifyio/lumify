@@ -90,7 +90,8 @@ public class FormulaEvaluator {
             throw new LumifyException("Json resource not available", e);
         }
 
-        browserSupport.defineFunctionProperties(new String[]{"print", "load"}, scope.getClass(), ScriptableObject.DONTENUM);
+        String[] names = new String[] { "print", "load", "consoleWarn", "consoleError" };
+        browserSupport.defineFunctionProperties(names, scope.getClass(), ScriptableObject.DONTENUM);
 
         Scriptable argsObj = context.newArray(scope, new Object[]{});
         scope.defineProperty("arguments", argsObj, ScriptableObject.DONTENUM);

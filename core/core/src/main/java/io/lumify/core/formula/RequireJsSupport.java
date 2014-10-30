@@ -16,26 +16,35 @@ public class RequireJsSupport extends ScriptableObject {
 
     private static final long serialVersionUID = 1L;
     private static LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RequireJsSupport.class);
-    private static final boolean silent = false;
 
     @Override
     public String getClassName() {
-        return "JsRuntime";
+        return "RequireJsSupport";
     }
 
     public static void print(Context cx, Scriptable thisObj, Object[] args,
                              Function funObj) {
-        if (silent)
-            return;
         for (int i = 0; i < args.length; i++)
-            LOGGER.info(Context.toString(args[i]));
+            LOGGER.debug(Context.toString(args[i]));
+    }
+
+    public static void consoleWarn(Context cx, Scriptable thisObj, Object[] args,
+                                  Function funObj) {
+        for (int i = 0; i < args.length; i++)
+            LOGGER.warn(Context.toString(args[i]));
+    }
+
+    public static void consoleError(Context cx, Scriptable thisObj, Object[] args,
+                                  Function funObj) {
+        for (int i = 0; i < args.length; i++)
+            LOGGER.error(Context.toString(args[i]));
     }
 
     public static void load(Context cx, Scriptable thisObj, Object[] args,
                             Function funObj) throws FileNotFoundException, IOException {
         RequireJsSupport shell = (RequireJsSupport) getTopLevelScope(thisObj);
         for (int i = 0; i < args.length; i++) {
-            LOGGER.info("Loading file " + Context.toString(args[i]));
+            LOGGER.debug("Loading file " + Context.toString(args[i]));
             shell.processSource(cx, Context.toString(args[i]));
         }
     }
@@ -50,10 +59,9 @@ public class RequireJsSupport extends ScriptableObject {
         InputStream is = RequireJsSupport.class.getResourceAsStream(file);
         if (is != null) {
             try {
-                String s = IOUtils.toString(is);
-                return s;
+                return IOUtils.toString(is);
             } catch (IOException e) {
-                LOGGER.error("File not found %s", file, e);
+                LOGGER.error("File not readable %s", file, e);
             }
         } else LOGGER.error("File not found %s", file);
         return "";
