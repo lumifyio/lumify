@@ -1,5 +1,7 @@
 package io.lumify.palantir.dataImport.model;
 
+import java.sql.Struct;
+
 public class PtPropertyAndValue {
     private long id;
     private long realmId;
@@ -25,7 +27,7 @@ public class PtPropertyAndValue {
     private long propertyStatus;
     private long createdBy;
     private long timeCreated;
-    private Object geometryGis;
+    private Struct geometryGis;
 
     public long getId() {
         return id;
@@ -219,11 +221,11 @@ public class PtPropertyAndValue {
         this.timeCreated = timeCreated;
     }
 
-    public Object getGeometryGis() {
+    public Struct getGeometryGis() {
         return geometryGis;
     }
 
-    public void setGeometryGis(Object geometryGis) {
+    public void setGeometryGis(Struct geometryGis) {
         this.geometryGis = geometryGis;
     }
 }

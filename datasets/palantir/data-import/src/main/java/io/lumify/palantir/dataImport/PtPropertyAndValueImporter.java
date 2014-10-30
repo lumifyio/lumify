@@ -1,11 +1,18 @@
 package io.lumify.palantir.dataImport;
 
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.dataImport.model.PtPropertyAndValue;
 import io.lumify.palantir.dataImport.model.PtPropertyType;
+import io.lumify.palantir.dataImport.util.JGeometryWrapper;
 import org.securegraph.VertexBuilder;
+import org.securegraph.type.GeoPoint;
+
+import java.awt.geom.Point2D;
 
 public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValue> {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtPropertyAndValueImporter.class);
 
     protected PtPropertyAndValueImporter(DataImporter dataImporter) {
         super(dataImporter, PtPropertyAndValue.class);
@@ -21,6 +28,8 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
         String propertyKey = getDataImporter().getIdPrefix() + row.getPropertyValueId();
         String propertyName = getPropertyName(propertyType.getUri());
         Object propertyValue = propertyType.getDisplayFormula().toValue(row.getValue());
+        // TODO securegraph has a hard time with mixed types. ie GeoPoint and string with the same name.
+        // propertyValue = toValueGeo(row, propertyValue);
 
         if (propertyValue == null) {
             // skip null values
@@ -29,6 +38,22 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
             v.addPropertyValue(propertyKey, propertyName, propertyValue, getDataImporter().getVisibility());
             v.save(getDataImporter().getAuthorizations());
         }
+    }
+
+    private Object toValueGeo(PtPropertyAndValue row, Object propertyValue) {
+        JGeometryWrapper geometryGis = JGeometryWrapper.load(row.getGeometryGis());
+        if (geometryGis.getType() == JGeometryWrapper.Type.POINT) {
+            if (propertyValue == null) {
+                propertyValue = "";
+            }
+            Point2D pt = geometryGis.getJavaPoint();
+            double lon = pt.getX();
+            double lat = pt.getY();
+            propertyValue = new GeoPoint(lat, lon, propertyValue.toString());
+        } else {
+            LOGGER.error("Unhandled geometry gis type: " + geometryGis.getType());
+        }
+        return propertyValue;
     }
 
     protected String getObjectId(PtPropertyAndValue ptPropertyAndValue) {
