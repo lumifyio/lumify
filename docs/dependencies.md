@@ -12,11 +12,11 @@ less likely to get out of sync than this document.
 | Dependency | Version |
 | ---------- | ------- |
 | [Cloudera CDH](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) | 4.4 |
-| [Apache Accumulo](http://accumulo.apache.org) | 1.5.1 |
+| [Apache Accumulo](http://accumulo.apache.org) | 1.5.2 |
 | [Elasticsearch](http://www.elasticsearch.org/) | 1.1.2 |
 | [Apache Storm](https://storm.incubator.apache.org/) | 0.9.0.1 |
 | [RabbitMQ](http://www.rabbitmq.com/) | 3.2.3 |
-| [Jetty](http://www.eclipse.org/jetty/) | 8.1.14.v20131031 |
+| [Jetty](http://www.eclipse.org/jetty/) | 8.1.15.v20140411 |
 
 ## Example Installation on CentOS 6.5
 
