@@ -5,9 +5,12 @@ require.config({
         'promise': 'libs/promise',
         'sf': 'libs/sf',
         'timezone-js': 'libs/timezone-js',
+        'underscore': 'libs/underscore',
 
         // MOCKS
         'service/serviceBase': 'mocks/serviceBase',
+        'jquery': 'mocks/jquery',
+        'jstz': 'mocks/jstz',
 
         // SRC
         'service/config': 'service_config',
