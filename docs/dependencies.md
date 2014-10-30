@@ -18,9 +18,9 @@ less likely to get out of sync than this document.
 | [RabbitMQ](http://www.rabbitmq.com/) | 3.2.3 |
 | [Jetty](http://www.eclipse.org/jetty/) | 8.1.14.v20131031 |
 
-## Example Installation on CentOS 6.4
+## Example Installation on CentOS 6.5
 
-For step-by-step instructions on installing Lumify and all it's dependencies on CentOS 6.4, please see [setup-centos-6.4.md](setup-centos-6.4.md).
+For step-by-step instructions on installing Lumify and all it's dependencies on CentOS 6.5, please see [setup-centos-6.5.md](setup-centos-6.5.md).
 
 ## Lumify Dependencies by Feature
 

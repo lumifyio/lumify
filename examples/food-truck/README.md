@@ -1,8 +1,8 @@
 Getting Started
 ===============
 
-1. [Load](https://github.com/lumifyio/lumify/blob/master/docs/setup-centos-6.4.md#upload-the-dev-ontology) the Twitter ontology [datasets/twitter/ontology](https://github.com/lumifyio/lumify/tree/master/datasets/twitter/ontology)
-1. [Load](https://github.com/lumifyio/lumify/blob/master/docs/setup-centos-6.4.md#upload-the-dev-ontology) the Food Truck ontology [examples/food-truck/ontology](https://github.com/lumifyio/lumify/tree/master/examples/food-truck/ontology) 
+1. [Load](https://github.com/lumifyio/lumify/blob/master/docs/setup-centos-6.5.md#upload-the-dev-ontology) the Twitter ontology [datasets/twitter/ontology](https://github.com/lumifyio/lumify/tree/master/datasets/twitter/ontology)
+1. [Load](https://github.com/lumifyio/lumify/blob/master/docs/setup-centos-6.5.md#upload-the-dev-ontology) the Food Truck ontology [examples/food-truck/ontology](https://github.com/lumifyio/lumify/tree/master/examples/food-truck/ontology) 
 1. [Configure and run Twitter](https://github.com/lumifyio/lumify/tree/master/datasets/twitter)
 1. Setup a new Twitter account or use your existing account and follow some food trucks
    - [ChefonWheels11](https://twitter.com/ChefonWheels11)
