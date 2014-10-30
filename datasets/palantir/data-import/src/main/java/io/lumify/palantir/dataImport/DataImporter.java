@@ -1,8 +1,13 @@
 package io.lumify.palantir.dataImport;
 
+import com.google.inject.Inject;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.dataImport.model.PtLinkType;
@@ -39,11 +44,17 @@ public class DataImporter {
     private final Map<Long, PtPropertyType> propertyTypes = new HashMap<Long, PtPropertyType>();
     private final Map<Long, PtLinkType> linkTypes = new HashMap<Long, PtLinkType>();
     private final Map<Long, PtNodeDisplayType> nodeDisplayTypes = new HashMap<Long, PtNodeDisplayType>();
+    private final Map<Long, User> users = new HashMap<Long, User>();
+    private final Map<Long, Workspace> workspaces = new HashMap<Long, Workspace>();
+    private User systemUser;
+    private UserRepository userRepository;
     private String owlPrefix;
     private final List<PtImporterBase> importers = new ArrayList<PtImporterBase>();
     private final String hasMediaConceptTypeIri;
 
     public DataImporter(DataImporterInitParameters p) {
+        InjectHelper.inject(this);
+
         importers.add(new PtObjectTypeImporter(this));
         importers.add(new PtPropertyTypeImporter(this));
         importers.add(new PtLinkTypeImporter(this));
@@ -52,10 +63,17 @@ public class DataImporter {
         importers.add(new PtOntologyResourceImporter(this));
         importers.add(new PtLinkRelationImporter(this));
         if (!p.isOntologyExport()) {
+            importers.add(new PtUserImporter(this));
+            importers.add(new PtGraphImporter(this));
             importers.add(new PtObjectImporter(this));
+            importers.add(new PtGraphObjectImporter(this));
             importers.add(new PtPropertyAndValueImporter(this));
             importers.add(new PtObjectObjectImporter(this));
             importers.add(new PtMediaAndValueImporter(this));
+        }
+
+        for (PtImporterBase importer : importers) {
+            InjectHelper.inject(importer);
         }
 
         File f = null;
@@ -64,6 +82,7 @@ public class DataImporter {
         }
         this.outputDirectory = f;
 
+        this.systemUser = userRepository.getSystemUser();
         this.visibility = p.getVisibility();
         this.authorizations = p.getAuthorizations();
         sqlRunner = new SqlRunner(
@@ -107,6 +126,14 @@ public class DataImporter {
 
     public Map<Long, PtNodeDisplayType> getNodeDisplayTypes() {
         return nodeDisplayTypes;
+    }
+
+    public Map<Long, User> getUsers() {
+        return users;
+    }
+
+    public Map<Long, Workspace> getWorkspacesByGraphId() {
+        return workspaces;
     }
 
     public Graph getGraph() {
@@ -180,5 +207,14 @@ public class DataImporter {
 
     public String getHasMediaConceptTypeIri() {
         return hasMediaConceptTypeIri;
+    }
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User getSystemUser() {
+        return systemUser;
     }
 }

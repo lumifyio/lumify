@@ -28,11 +28,11 @@ public class PtObjectObjectImporter extends PtImporterBase<PtObjectObject> {
         }
         String linkTypeUri = getLinkTypeUri(ptLinkType.getUri());
 
-        String sourceObjectId = getObjectId(row.getParentObjectId());
+        String sourceObjectId = getObjectVertexId(row.getParentObjectId());
         Vertex sourceVertex = getVertexCache().get(sourceObjectId);
         checkNotNull(sourceVertex, "Could not find source vertex: " + sourceObjectId);
 
-        String destObjectId = getObjectId(row.getChildObjectId());
+        String destObjectId = getObjectVertexId(row.getChildObjectId());
         Vertex destVertex = getVertexCache().get(destObjectId);
         checkNotNull(destVertex, "Could not find dest vertex: " + destObjectId);
 

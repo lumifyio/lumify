@@ -10,6 +10,7 @@ import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.Graph;
 import org.securegraph.util.ConvertingIterable;
 
 import java.util.List;
@@ -23,6 +24,11 @@ public abstract class WorkspaceRepository {
     public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace/toEntity";
     public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace/toUser";
     public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
+    private final Graph graph;
+
+    protected WorkspaceRepository(Graph graph) {
+        this.graph = graph;
+    }
 
     public abstract void delete(Workspace workspace, User user);
 
@@ -44,7 +50,12 @@ public abstract class WorkspaceRepository {
         };
     }
 
-    public abstract Workspace add(String title, User user);
+    public abstract Workspace add(String workspaceId, String title, User user);
+
+    public Workspace add(String title, User user) {
+        String workspaceId = WORKSPACE_ID_PREFIX + graph.getIdGenerator().nextId();
+        return add(workspaceId, title, user);
+    }
 
     public abstract Iterable<Workspace> findAll(User user);
 
@@ -207,6 +218,10 @@ public abstract class WorkspaceRepository {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected Graph getGraph() {
+        return graph;
     }
 }
 

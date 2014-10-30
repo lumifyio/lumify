@@ -15,8 +15,8 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
-import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
+import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -37,14 +37,13 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlWorkspaceRepository.class);
     private final SqlUserRepository userRepository;
     private final HibernateSessionManager sessionManager;
-    private final Graph graph;
 
     @Inject
     public SqlWorkspaceRepository(final SqlUserRepository userRepository, final HibernateSessionManager sessionManager,
                                   final Graph graph) {
+        super(graph);
         this.userRepository = userRepository;
         this.sessionManager = sessionManager;
-        this.graph = graph;
     }
 
     @Override
@@ -87,7 +86,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public Workspace add(String title, User user) {
+    public Workspace add(String workspaceId, String title, User user) {
         Session session = sessionManager.getSession();
 
         Transaction transaction = null;
@@ -95,7 +94,6 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         try {
             transaction = session.beginTransaction();
             newWorkspace = new SqlWorkspace();
-            String workspaceId = WORKSPACE_ID_PREFIX + graph.getIdGenerator().nextId();
             newWorkspace.setDisplayTitle(title);
             if (user instanceof ProxyUser) {
                 user = userRepository.findById(user.getUserId());

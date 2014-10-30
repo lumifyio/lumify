@@ -73,7 +73,7 @@ public abstract class PtImporterBase<T> {
         return vertexCache;
     }
 
-    protected String getObjectId(long objectId) {
+    protected String getObjectVertexId(long objectId) {
         return getDataImporter().getIdPrefix() + objectId;
     }
 }
