@@ -73,14 +73,4 @@ require(['util/vertex/formatters'], function(F) {
     window.evaluateTitleFormulaJson = createFunction('title');
     window.evaluateTimeFormulaJson = createFunction('time');
     window.evaluateSubtitleFormulaJson = createFunction('subtitle');
-
-
-//    java.lang.System.out.println(
-//        F.vertex.time({
-//            properties:[
-//                {name:'http://lumify.io/dev#birthDate',value:new Date()},
-//                {name:'http://lumify.io#conceptType',value:'http://lumify.io/dev#person'}
-//            ]
-//        })
-//    )
-})
+});
