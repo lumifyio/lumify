@@ -76,7 +76,7 @@ require([
             this.handleSubmitButton(
                 this.select('buttonSelector'),
                 this.adminService.ontologyEdit({
-                    concept: this.select('conceptSelector').val(),
+                    concept: this.currentConcept,
                     displayName: this.$node.find('.displayName').val(),
                     color: hexToRgb(this.$node.find('.color').val()),
                     titleFormula: this.$node.find('.titleFormula').val(),
@@ -96,6 +96,7 @@ require([
             var self = this;
 
             if (data.concept) {
+                this.currentConcept = data.concept.id;
                 this.$node.find('.btn-primary').removeAttr('disabled');
 
                 _.each(data.concept, function(value, key) {
