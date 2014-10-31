@@ -63,29 +63,84 @@ define([
 		context.save();
         context.globalAlpha = node._private.style.opacity.value;
 
-        // Draw outline and clip to it based on node shape css
-        if (node._private.style.shape.value !== 'none') {
-            var shapeName = self.getNodeShape(node),
-                shape = nodeShapes[shapeName];
+        if (img.nodeName === 'IMG' && (!img.naturalWidth || !img.naturalHeight)) {
+            drawError(context, nodeX, nodeY, nodeWidth, nodeHeight);
+        } else {
 
-            if (shape && shape.drawBackground) {
-                context.save();
-                context.fillStyle = context.strokeStyle;
-                shape.drawBackground(context, nodeX, nodeY, fitW, fitH);
-                context.restore();
+            // Draw outline and clip to it based on node shape css
+            if (node._private.style.shape.value !== 'none') {
+                var shapeName = self.getNodeShape(node),
+                    shape = nodeShapes[shapeName];
+
+                if (shape && shape.drawBackground) {
+                    context.save();
+                    context.fillStyle = context.strokeStyle;
+                    shape.drawBackground(context, nodeX, nodeY, fitW, fitH);
+                    context.restore();
+                }
+                shape.drawPath(context, nodeX, nodeY, fitW, fitH);
+                context.clip();
             }
-            shape.drawPath(context, nodeX, nodeY, fitW, fitH);
-            context.clip();
-        }
 
-		context.drawImage(img,
-				nodeX - fitW / 2,
-				nodeY - fitH / 2,
-				fitW,
-				fitH);
+            context.drawImage(img,
+                    nodeX - fitW / 2,
+                    nodeY - fitH / 2,
+                    fitW,
+                    fitH);
+        }
 
 		context.restore();
 	};
 
     return Renderer;
+
+    function drawError(context, nodeX, nodeY, nodeWidth, nodeHeight) {
+        var lineWidth = Math.round(nodeWidth * 0.01),
+            minDim = Math.round(Math.min(nodeWidth, nodeHeight) * 0.75 / 2);
+        nodeWidth = nodeHeight = minDim;
+
+        // Draw circle background
+        context.beginPath();
+        context.arc(
+            nodeX,
+            nodeY,
+            minDim,
+            2 * Math.PI,
+            false
+        );
+        context.fillStyle = '#FFF9F9';
+        context.strokeStyle = '#AD8E8E';
+        context.lineWidth = lineWidth;
+        context.fill();
+        context.strokeWidth = Math.round(nodeWidth * 0.1);
+        context.stroke();
+
+        var padding = Math.round(nodeHeight * 0.1),
+            errorWidth = Math.round(nodeWidth * 0.2),
+            errorHeight = Math.round(nodeWidth * 0.8),
+            errorBottomHeight = Math.round(nodeWidth * 0.2);
+
+        // Top of exclamation
+        context.beginPath();
+        context.translate(
+            nodeX - errorWidth / 2,
+            nodeY - (errorHeight + errorBottomHeight + padding) / 2
+        );
+        context.rect(
+            0, 0,
+            errorWidth,
+            errorHeight
+        );
+        context.fillStyle = context.strokeStyle;
+        context.fill();
+
+        // Bottom of exclamation
+        context.beginPath();
+        context.rect(
+            0, errorHeight + padding,
+            errorWidth,
+            errorBottomHeight
+        );
+        context.fill();
+    }
 });

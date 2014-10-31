@@ -3,13 +3,13 @@ package io.lumify.web;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.commons.lang.StringUtils;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.client.TrackMessageSizeInterceptor;
@@ -20,7 +20,9 @@ import org.atmosphere.interceptor.BroadcastOnPostAtmosphereInterceptor;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 @AtmosphereHandlerService(
@@ -127,11 +129,39 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     }
 
     public void onDisconnect(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
-        setStatus(event.getResource(), UserStatus.OFFLINE);
+        setUserStatusToOffline(event);
+    }
+
+    private void setUserStatusToOffline(AtmosphereResourceEvent event) {
+        AtmosphereResource thisResource = event.getResource();
+        Collection<AtmosphereResource> atmosphereResources = thisResource.getBroadcaster().getAtmosphereResources();
+        HttpSession thisSession = thisResource.session();
+
+        int thisUsersConnections = 0;
+
+        if (thisSession != null) {
+            String thisUser = (String) thisSession.getAttribute(CurrentUser.STRING_ATTRIBUTE_NAME);
+            for (AtmosphereResource r : atmosphereResources) {
+                HttpSession session = r.session();
+                if (session != null) {
+                    String username = (String) session.getAttribute(CurrentUser.STRING_ATTRIBUTE_NAME);
+                    if (username.equals(thisUser)) {
+                        thisUsersConnections++;
+                        if (thisUsersConnections > 1) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (thisUsersConnections <= 1) {
+            setStatus(event.getResource(), UserStatus.OFFLINE);
+        }
     }
 
     public void onClose(AtmosphereResourceEvent event, AtmosphereResponse response) {
-        setStatus(event.getResource(), UserStatus.OFFLINE);
+        setUserStatusToOffline(event);
     }
 
     public void onMessage(AtmosphereResourceEvent event, AtmosphereResponse response, String message) throws IOException {

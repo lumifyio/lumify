@@ -85,7 +85,9 @@ define(['atmosphere'],
                             self.subscribe(config);
                         },
                         onClose: function(req) {
-                            console.error('closed', req.reasonPhrase, req.error);
+                            if (req && req.error) {
+                                console.error('Websocket closed', req.reasonPhrase, req.error);
+                            }
                         },
                         onMessage: function(response) {
                             var body = response.responseBody,

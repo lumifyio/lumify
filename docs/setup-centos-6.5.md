@@ -24,20 +24,20 @@
 
 See [Lumify Dependencies by Feature](dependencies.md) for additional optional dependencies.
 
-### Java 6
+### Java 7
 
-1. browse to http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html
-1. find `jdk-6u45-linux-x64-rpm.bin`
+1. browse to http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+1. find `jdk-7u71-linux-x64.rpm`
 1. accept the license agreement
-1. click on `jdk-6u45-linux-x64-rpm.bin`
+1. click on `jdk-7u71-linux-x64.rpm`
 1. login and the file will download
 
 *as root:*
 
         cd ~
-        chmod u+x jdk-6u45-linux-x64-rpm.bin
-        ./jdk-6u45-linux-x64-rpm.bin
-        echo "export JAVA_HOME=/usr/java/jdk1.6.0_45; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
+        chmod u+x jdk-7u71-linux-x64.rpm
+        rpm -ivh jdk-7u71-linux-x64.rpm
+        echo "export JAVA_HOME=/usr/java/jdk1.7.0_71; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
         source /etc/profile.d/java.sh
 
 
@@ -62,10 +62,10 @@ See [Lumify Dependencies by Feature](dependencies.md) for additional optional de
 *as root:*
 
         cd ~
-        curl http://archive.apache.org/dist/maven/binaries/apache-maven-3.0.5-bin.tar.gz -O
+        curl http://apache.mirrors.pair.com/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz -O
         cd /opt
-        tar xzf ~/apache-maven-3.0.5-bin.tar.gz
-        ln -s apache-maven-3.0.5 maven
+        tar xzf ~/apache-maven-3.2.3-bin.tar.gz
+        ln -s apache-maven-3.2.3 maven
         echo "export MVN_HOME=/opt/maven; export PATH=\$MVN_HOME/bin:\$PATH" > /etc/profile.d/maven.sh
         source /etc/profile.d/maven.sh
 
@@ -117,16 +117,16 @@ See [Lumify Dependencies by Feature](dependencies.md) for additional optional de
         useradd -g hadoop accumulo
 
         cd ~
-        curl http://www.us.apache.org/dist/accumulo/1.5.1/accumulo-1.5.1-bin.tar.gz -O
+        curl http://apache.spinellicreations.com/accumulo/1.5.2/accumulo-1.5.2-bin.tar.gz -O
         cd /usr/lib
-        tar xzf ~/accumulo-1.5.1-bin.tar.gz
-        ln -s accumulo-1.5.1 accumulo
+        tar xzf ~/accumulo-1.5.2-bin.tar.gz
+        ln -s accumulo-1.5.2 accumulo
         cp accumulo/conf/examples/1GB/standalone/* accumulo/conf
         
         chown -R accumulo:hadoop accumulo/
         
         sed -i -e "s|HADOOP_PREFIX=/path/to/hadoop|HADOOP_PREFIX=/usr/lib/hadoop|" \
-               -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/usr/java/jdk1.6.0_45/jre|" \
+               -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/usr/java/jdk1.7.0_71/jre|" \
                -e "s|ZOOKEEPER_HOME=/path/to/zookeeper|ZOOKEEPER_HOME=/usr/lib/zookeeper|" \
           accumulo/conf/accumulo-env.sh
 
@@ -228,7 +228,7 @@ See [Lumify Dependencies by Feature](dependencies.md) for additional optional de
 *as root:*
 
         cd ~
-        curl -L 'http://eclipse.org/downloads/download.php?file=/jetty/stable-8/dist/jetty-distribution-8.1.15.v20140411.tar.gz&r=1' \
+        curl -L 'http://eclipse.org/downloads/download.php?file=/jetty/8.1.15.v20140411/dist/jetty-distribution-8.1.15.v20140411.tar.gz&r=1' \
              -o jetty-distribution-8.1.15.v20140411.tar.gz
         cd /opt
         tar xzf ~/jetty-distribution-8.1.15.v20140411.tar.gz

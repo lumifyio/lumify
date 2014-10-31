@@ -2,10 +2,12 @@
 define([
     './urlFormatters',
     './formula',
+    'util/messages',
     'promise!../service/ontologyPromise'
 ], function(
     F,
     formula,
+    i18n,
     ontology) {
     'use strict';
 

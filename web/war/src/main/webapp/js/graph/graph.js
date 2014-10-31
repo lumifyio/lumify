@@ -401,12 +401,16 @@ define([
         };
 
         this.classesForVertex = function(vertex) {
-            if (vertex.imageSrcIsFromConcept === false) return 'hasCustomGlyph';
+            var cls = [];
+
+            if (vertex.imageSrcIsFromConcept === false) {
+                cls.push('hasCustomGlyph');
+            }
             if (~['video', 'image'].indexOf(vertex.concept.displayType)) {
-                return vertex.concept.displayType;
+                cls.push(vertex.concept.displayType);
             }
 
-            return '';
+            return cls.join(' ');
         };
 
         this.updateCyNodeData = function(data, vertex) {

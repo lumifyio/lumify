@@ -151,7 +151,7 @@ define([
             }
         },
 
-        boolean: {
+        'boolean': {
             pretty: function(bool) {
                 return bool ? i18n('boolean.true') : i18n('boolean.false');
             }

@@ -140,6 +140,7 @@ define([
 
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'toggleActivityPane', this.toggleActivityPane);
+            this.on(document, 'toggleChatPane', this.toggleChatPane);
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
@@ -170,6 +171,13 @@ define([
                 scope: i18n('activity.help.scope'),
                 shortcuts: {
                     'alt-a': { fire: 'toggleActivityPane', desc: i18n('activity.help.toggle') }
+                }
+            });
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: i18n('chat.help.scope'),
+                shortcuts: {
+                    'alt-c': { fire: 'toggleChatPane', desc: i18n('chat.help.toggle') }
                 }
             });
 
@@ -343,6 +351,10 @@ define([
                     });
                 }
             });
+        };
+
+        this.toggleChatPane = function() {
+            this.trigger(document, 'menubarToggleDisplay', { name: 'chat' });
         };
 
         this.toggleActivityPane = function() {
@@ -738,7 +750,8 @@ define([
                 this.select('workspacesSelector'),
                 this.select('adminSelector'),
                 this.select('detailPaneSelector'),
-                this.select('activitySelector')
+                this.select('activitySelector'),
+                this.select('chatSelector')
             ]);
 
             $('.search-results').hide();

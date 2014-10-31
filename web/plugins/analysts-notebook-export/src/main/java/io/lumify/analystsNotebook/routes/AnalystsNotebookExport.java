@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AnalystsNotebookExport extends BaseRequestHandler {
     private static final String VERSION_PARAMETER_NAME = "version";
@@ -54,7 +55,8 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
             version = AnalystsNotebookVersion.valueOf(versionParameter);
         }
 
-        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations);
+        Locale locale = getLocale(request);
+        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations, locale);
 
         List<String> comments = new ArrayList<String>();
         comments.add(String.format("Lumify Workspace: %s", workspace.getDisplayTitle()));

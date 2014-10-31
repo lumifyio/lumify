@@ -4,14 +4,17 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.user.*;
-import io.lumify.web.clientapi.model.Privilege;
+import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.model.user.UserListenerUtil;
+import io.lumify.core.model.user.UserPasswordUtil;
+import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.workspace.SqlWorkspace;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.web.clientapi.model.UserStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -19,7 +22,10 @@ import org.hibernate.Transaction;
 import org.json.JSONObject;
 import org.securegraph.Graph;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -360,7 +366,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public Set<Privilege> getPrivileges(User user) {
-        return EnumSet.of(Privilege.READ);
+        return sqlUser(user).getPrivileges();
     }
 
     @Override
