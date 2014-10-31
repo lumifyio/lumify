@@ -34,7 +34,7 @@ public class FormulaEvaluator {
     private Locale locale;
 
     @Inject
-    public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository, Locale locale) {
+    public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository, Locale locale, String timeZone) {
         this.configuration = configuration;
         this.ontologyRepository = ontologyRepository;
         this.context = Context.enter();

@@ -56,7 +56,8 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
         }
 
         Locale locale = getLocale(request);
-        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations, locale);
+        String timeZone = getTimeZone(request);
+        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations, locale, timeZone);
 
         List<String> comments = new ArrayList<String>();
         comments.add(String.format("Lumify Workspace: %s", workspace.getDisplayTitle()));

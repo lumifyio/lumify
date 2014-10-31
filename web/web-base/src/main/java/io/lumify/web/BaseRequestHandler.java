@@ -36,6 +36,9 @@ import java.util.*;
  */
 public abstract class BaseRequestHandler implements Handler {
     public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
+    public static final String LUMIFY_TIME_ZONE_HEADER_NAME = "Lumify-TimeZone";
+    public static final String TIME_ZONE_ATTRIBUTE_NAME = "timeZone";
+    public static final String TIME_ZONE_PARAMETER_NAME = "timeZone";
     public static final String LOCALE_LANGUAGE_PARAMETER = "localeLanguage";
     public static final String LOCALE_COUNTRY_PARAMETER = "localeCountry";
     public static final String LOCALE_VARIANT_PARAMETER = "localeVariant";
@@ -230,6 +233,20 @@ public abstract class BaseRequestHandler implements Handler {
             }
         }
         return workspaceId;
+    }
+
+    protected String getTimeZone(final HttpServletRequest request) {
+        String timeZone = (String) request.getAttribute(TIME_ZONE_ATTRIBUTE_NAME);
+        if (timeZone == null || timeZone.trim().length() == 0) {
+            timeZone = request.getHeader(LUMIFY_TIME_ZONE_HEADER_NAME);
+            if (timeZone == null || timeZone.trim().length() == 0) {
+                timeZone = getOptionalParameter(request, TIME_ZONE_PARAMETER_NAME);
+                if (timeZone == null || timeZone.trim().length() == 0) {
+                    timeZone = configuration.get(Configuration.DEFAULT_TIME_ZONE, TimeZone.getDefault().getDisplayName());
+                }
+            }
+        }
+        return timeZone;
     }
 
     protected Authorizations getAuthorizations(final HttpServletRequest request, final User user) {

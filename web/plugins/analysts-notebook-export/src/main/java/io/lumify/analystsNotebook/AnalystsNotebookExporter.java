@@ -67,7 +67,7 @@ public class AnalystsNotebookExporter {
         }
     }
 
-    public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale) {
+    public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale, String timeZone) {
         LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
 
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
@@ -89,7 +89,7 @@ public class AnalystsNotebookExporter {
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
         LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
 
-        FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository, locale);
+        FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository, locale, timeZone);
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
             chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations));
         }
