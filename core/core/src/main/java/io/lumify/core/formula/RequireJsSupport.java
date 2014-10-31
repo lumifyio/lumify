@@ -49,6 +49,15 @@ public class RequireJsSupport extends ScriptableObject {
         }
     }
 
+    public static String readFile(Context cx, Scriptable thisObj, Object[] args,
+                            Function funObj) throws FileNotFoundException, IOException {
+        RequireJsSupport shell = (RequireJsSupport) getTopLevelScope(thisObj);
+        if (args.length == 1) {
+            return shell.getFileContents(Context.toString(args[0]));
+        }
+        return null;
+    }
+
     private void processSource(Context cx, String filename)
             throws FileNotFoundException, IOException {
         String fileContents = getFileContents(filename);

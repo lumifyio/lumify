@@ -32,6 +32,8 @@ public class FormulaEvaluator {
     private Context context;
     private ScriptableObject scope;
     private Locale locale;
+    private String timeZone;
+    private boolean skipCloseWarning;
 
     @Inject
     public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository, Locale locale, String timeZone) {
@@ -39,6 +41,8 @@ public class FormulaEvaluator {
         this.ontologyRepository = ontologyRepository;
         this.context = Context.enter();
         this.locale = locale == null ? Locale.getDefault() : locale;
+        this.timeZone = timeZone;
+        this.skipCloseWarning = false;
 
         setupContext();
         loadJavaScript();
@@ -47,12 +51,15 @@ public class FormulaEvaluator {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        LOGGER.warn("close() method not called to clean up JavaScript Context");
-        this.close();
+        if (!skipCloseWarning) {
+            LOGGER.warn("close() method not called to clean up JavaScript Context");
+            this.close();
+        }
     }
 
     public void close() {
         context.exit();
+        this.skipCloseWarning = true;
     }
 
     public String evaluateTitleFormula(Vertex vertex, String workspaceId, Authorizations authorizations) {
@@ -86,11 +93,12 @@ public class FormulaEvaluator {
         try {
             scope.put("ONTOLOGY_JSON", scope, Context.toObject(getOntologyJson(), scope));
             scope.put("CONFIG_JSON", scope, Context.toObject(getConfigurationJson(), scope));
+            scope.put("USERS_TIMEZONE", scope, Context.toObject(timeZone, scope));
         } catch (Exception e) {
             throw new LumifyException("Json resource not available", e);
         }
 
-        String[] names = new String[] { "print", "load", "consoleWarn", "consoleError" };
+        String[] names = new String[] { "print", "load", "consoleWarn", "consoleError", "readFile" };
         browserSupport.defineFunctionProperties(names, scope.getClass(), ScriptableObject.DONTENUM);
 
         Scriptable argsObj = context.newArray(scope, new Object[]{});
