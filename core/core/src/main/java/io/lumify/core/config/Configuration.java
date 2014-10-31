@@ -5,6 +5,7 @@ import io.lumify.core.util.ClassUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -56,6 +57,7 @@ public final class Configuration {
     public static final String DEFAULT_SEARCH_RESULT_COUNT = "search.defaultSearchCount";
     public static final String LOCK_REPOSITORY_PATH_PREFIX="lockRepository.pathPrefix";
     private final ConfigurationLoader configurationLoader;
+    private final LumifyResourceBundleManager lumifyResourceBundleManager;
 
     private Map<String, String> config = new HashMap<String, String>();
 
@@ -66,6 +68,7 @@ public final class Configuration {
 
     Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
+        this.lumifyResourceBundleManager = new LumifyResourceBundleManager();
         for (Map.Entry entry : config.entrySet()) {
             if (entry.getValue() != null) {
                 set(entry.getKey().toString(), entry.getValue());
@@ -269,5 +272,36 @@ public final class Configuration {
     public File resolveFileName(String fileName) {
         return this.configurationLoader.resolveFileName(fileName);
     }
-}
 
+
+    public JSONObject toJSON(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return toJSON(lumifyResourceBundleManager.getBundle(locale));
+    }
+
+    public JSONObject toJSON(ResourceBundle resourceBundle) {
+        JSONObject properties = new JSONObject();
+        for (String key : getKeys()) {
+            if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
+                properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
+            } else if (key.startsWith(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PREFIX)) {
+                properties.put(key, get(key, ""));
+            }
+        }
+
+        JSONObject messages = new JSONObject();
+        if (resourceBundle != null) {
+            for (String key : resourceBundle.keySet()) {
+                messages.put(key, resourceBundle.getString(key));
+            }
+        }
+
+        JSONObject configuration = new JSONObject();
+        configuration.put("properties", properties);
+        configuration.put("messages", messages);
+
+        return configuration;
+    }
+}

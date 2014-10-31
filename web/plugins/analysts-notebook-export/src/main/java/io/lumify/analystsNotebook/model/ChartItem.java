@@ -2,12 +2,14 @@ package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.lumify.analystsNotebook.AnalystsNotebookVersion;
+import io.lumify.core.formula.FormulaEvaluator;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.securegraph.Authorizations;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
 import org.securegraph.Vertex;
@@ -110,17 +112,18 @@ public class ChartItem {
         return chartItem;
     }
 
-    public static ChartItem createFromVertexAndWorkspaceEntity(AnalystsNotebookVersion version, Vertex vertex, WorkspaceEntity workspaceEntity, OntologyRepository ontologyRepository) {
+    public static ChartItem createFromVertexAndWorkspaceEntity(AnalystsNotebookVersion version,
+                                                               Vertex vertex,
+                                                               WorkspaceEntity workspaceEntity,
+                                                               OntologyRepository ontologyRepository,
+                                                               FormulaEvaluator formulaEvaluator,
+                                                               String workspaceId,
+                                                               Authorizations authorizations) {
         String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
         Concept concept = ontologyRepository.getConceptByIRI(conceptType);
         String vertexId = vertex.getId();
-        String title = LumifyProperties.TITLE.getPropertyValue(vertex);
-        String titleFormula = concept.getTitleFormula();
-        if (titleFormula != null) {
-            LOGGER.debug("vertex has a titleFormula");
-            // TODO: evaluate title formula
-            // TODO: do we look for parent title formulas?
-        }
+        // String title = LumifyProperties.TITLE.getPropertyValue(vertex);
+        String title = formulaEvaluator.evaluateTitleFormula(vertex, workspaceId, authorizations);
         int x = workspaceEntity.getGraphPositionX();
         int y = workspaceEntity.getGraphPositionY();
         String imageUrl = LumifyProperties.ENTITY_IMAGE_URL.getPropertyValue(vertex);

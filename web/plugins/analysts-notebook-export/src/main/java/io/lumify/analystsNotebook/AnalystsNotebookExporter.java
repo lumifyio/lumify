@@ -8,29 +8,23 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.analystsNotebook.aggregateClassification.AggregateClassificationClient;
-import io.lumify.analystsNotebook.aggregateClassification.AggregateClassificationConfiguration;
 import io.lumify.analystsNotebook.model.*;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.formula.FormulaEvaluator;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.web.clientapi.model.VisibilityJson;
-import org.apache.commons.codec.binary.Base64;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.util.LookAheadIterable;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toList;
@@ -46,6 +40,7 @@ public class AnalystsNotebookExporter {
     private Graph graph;
     private WorkspaceRepository workspaceRepository;
     private OntologyRepository ontologyRepository;
+    private Configuration configuration;
     private AggregateClassificationClient aggregateClassificationClient;
 
     @Inject
@@ -56,6 +51,7 @@ public class AnalystsNotebookExporter {
         this.graph = graph;
         this.workspaceRepository = workspaceRepository;
         this.ontologyRepository = ontologyRepository;
+        this.configuration = configuration;
         aggregateClassificationClient = new AggregateClassificationClient(configuration);
     }
 
@@ -71,7 +67,7 @@ public class AnalystsNotebookExporter {
         }
     }
 
-    public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations) {
+    public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale) {
         LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
 
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
@@ -92,9 +88,13 @@ public class AnalystsNotebookExporter {
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
         LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
+
+        FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository, locale);
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
-            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository));
+            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations));
         }
+        formulaEvaluator.close();
+
         LOGGER.debug("adding %d edges", edges.size());
         for (Edge edge : edges) {
             chartItems.add(ChartItem.createFromEdge(version, edge, ontologyRepository));
