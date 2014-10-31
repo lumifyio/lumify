@@ -28,8 +28,7 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
         String propertyKey = getDataImporter().getIdPrefix() + row.getPropertyValueId();
         String propertyName = getPropertyName(propertyType.getUri());
         Object propertyValue = propertyType.getDisplayFormula().toValue(row.getValue());
-        // TODO securegraph has a hard time with mixed types. ie GeoPoint and string with the same name.
-        // propertyValue = toValueGeo(row, propertyValue);
+        propertyValue = toValueGeo(row, propertyValue);
 
         if (propertyValue == null) {
             // skip null values
