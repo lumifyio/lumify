@@ -294,22 +294,15 @@ define([
         };
 
         this.onHideMenu = function() {
-            var key = 'hideContextMenuWarning' + window.currentUser.displayName,
-                shouldWithholdWarning = false;
-
-            try {
-                shouldWithholdWarning = sessionStorage.getItem(key);
-            } catch(e) { }
-
-            if (shouldWithholdWarning !== 'true') {
-                try {
-                    sessionStorage.setItem(key, true);
-                } catch(e) { }
-                var warning = this.$node.find('.context-menu-warning').show();
-                _.delay(function() {
-                    warning.hide();
-                }, 5000)
+            if (this.shouldWithholdContextMenuWarning) {
+                return;
             }
+            this.shouldWithholdContextMenuWarning = true;
+
+            var warning = this.$node.find('.context-menu-warning').show();
+            _.delay(function() {
+                warning.hide();
+            }, 5000)
         };
 
         this.handleAddToWorkspace = function(addVertexIds) {
