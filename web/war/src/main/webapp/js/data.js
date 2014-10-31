@@ -120,7 +120,7 @@ define([
                 }
 
                 if (!self.currentTimezone) {
-                    self.currentTimezone = F.timezone.currentTimezone(Date.now);
+                    self.currentTimezone = F.timezone.currentTimezone();
                 }
                 options.headers['Lumify-TimeZone'] = self.currentTimezone && self.currentTimezone.name;
             });

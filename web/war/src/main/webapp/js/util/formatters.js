@@ -497,7 +497,7 @@ define([
                 return $.extend({}, tz, tzInfo);
             },
 
-            currentTimezone: function(withOffsetForDate) {
+            currentTimezone: function() {
                 return FORMATTERS.timezone.lookupTimezone(jstz.determine().name());
             }
         }

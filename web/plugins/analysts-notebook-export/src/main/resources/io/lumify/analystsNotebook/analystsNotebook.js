@@ -1,8 +1,9 @@
 require([
     'configuration/plugins/exportWorkspace/plugin',
     'util/messages',
+    'util/formatters',
     'service/config'
-], function(p, i18n, ConfigService) {
+], function(p, i18n, F, ConfigService) {
     var componentPath = 'io.lumify.analystsNotebook.AnalystsNotebook',
         configService = new ConfigService();
 
@@ -12,8 +13,8 @@ require([
         Object.getOwnPropertyNames(config).forEach(function(key) {
             var labelMatch = key.match(/analystsNotebookExport\.menuOption\.(\w+)\.label/);
             if (labelMatch && labelMatch.length == 2) {
-                var label = config["analystsNotebookExport.menuOption." + labelMatch[1] + ".label"],
-                    value = config["analystsNotebookExport.menuOption." + labelMatch[1] + ".value"];
+                var label = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.label'],
+                    value = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.value'];
                 if (label && value) {
                     versions[label] = value;
                 }
@@ -50,10 +51,17 @@ require([
             });
 
             this.onExport = function() {
-                window.open('analysts-notebook/export?' + $.param({
-                    workspaceId: this.attr.workspaceId
-                }));
-                this.trigger('closePopover')
+                var timeZone = F.timezone.currentTimezone(),
+                    params = {
+                        workspaceId: this.attr.workspaceId
+                    };
+
+                if (timeZone && timeZone.name) {
+                    params.timeZone = timeZone.name;
+                }
+
+                window.open('analysts-notebook/export?' + $.param(params));
+                this.trigger('closePopover');
             }
         }
     })
