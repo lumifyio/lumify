@@ -107,7 +107,7 @@ define([
             ClipboardManager.attachTo(this.node);
             Keyboard.attachTo(this.node);
 
-            // Set Current WorkspaceId header on all ajax requests
+            // Set Current WorkspaceId, and timezone header on all ajax requests
             $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
                 var requestContainsWorkspaceParameter =
                     originalOptions &&
@@ -118,6 +118,11 @@ define([
                 if (self.workspaceId && !requestContainsWorkspaceParameter) {
                     options.headers['Lumify-Workspace-Id'] = self.workspaceId;
                 }
+
+                if (!self.currentTimezone) {
+                    self.currentTimezone = F.timezone.currentTimezone(Date.now);
+                }
+                options.headers['Lumify-TimeZone'] = self.currentTimezone && self.currentTimezone.name;
             });
 
             // Vertices
