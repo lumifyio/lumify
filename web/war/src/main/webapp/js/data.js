@@ -960,6 +960,12 @@ define([
 
             self.socketSubscribeReady()
                 .done(function() {
+
+                    self.cachedVertices = {};
+                    self.workspaceVertices = {};
+                    self.selectedVertices = [];
+                    self.selectedVertexIds = [];
+
                     $.when(
                         self.getWorkspace(workspaceId)
                             .done(function() {
