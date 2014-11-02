@@ -15,7 +15,7 @@ import java.util.zip.InflaterInputStream;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
-    private static final byte[] ZLIB_HEADER = new byte[2];
+    public static final byte[] ZLIB_HEADER = new byte[2];
 
     static {
         ZLIB_HEADER[0] = (byte) 0x78;

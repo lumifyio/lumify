@@ -5,6 +5,9 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.palantir.dataImport.model.PtGraphObject;
+import io.lumify.palantir.dataImport.model.awstateProto.AwstateProto;
+import io.lumify.palantir.dataImport.model.awstateProto.AwstateProtoObject;
+import io.lumify.web.clientapi.model.GraphPosition;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,9 +29,16 @@ public class PtGraphObjectImporter extends PtImporterBase<PtGraphObject> {
         Workspace workspace = getDataImporter().getWorkspacesByGraphId().get(row.getGraphId());
         checkNotNull(workspace, "Could not find workspace with graph id: " + row.getGraphId());
 
+        AwstateProto awstateProto = getDataImporter().getAwstateProtosByGraphId().get(row.getGraphId());
+        checkNotNull(awstateProto, "Could not find awstateProto with graph id: " + row.getGraphId());
+
+        AwstateProtoObject awstateProtoObject = awstateProto.findObject(row.getObjectId());
+        checkNotNull(awstateProtoObject, "Could not find awstateProtoObject: " + row.getObjectId());
+        GraphPosition graphPosition = new GraphPosition(awstateProtoObject.getX() / 3, awstateProtoObject.getY() / 3);
+
         User user = getDataImporter().getSystemUser();
 
-        workspaceRepository.updateEntityOnWorkspace(workspace, getObjectVertexId(row), true, null, user);
+        workspaceRepository.updateEntityOnWorkspace(workspace, getObjectVertexId(row), true, graphPosition, user);
     }
 
     private String getObjectVertexId(PtGraphObject row) {
