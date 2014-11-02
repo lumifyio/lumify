@@ -55,7 +55,8 @@ public final class Configuration {
     public static final String WEB_GEOCODER_ENABLED = WEB_PROPERTIES_PREFIX + "geocoder.enabled";
     public static final String DEV_MODE = "devMode";
     public static final String DEFAULT_SEARCH_RESULT_COUNT = "search.defaultSearchCount";
-    public static final String LOCK_REPOSITORY_PATH_PREFIX="lockRepository.pathPrefix";
+    public static final String LOCK_REPOSITORY_PATH_PREFIX = "lockRepository.pathPrefix";
+    public static final String DEFAULT_TIME_ZONE = "default.timeZone";
     private final ConfigurationLoader configurationLoader;
     private final LumifyResourceBundleManager lumifyResourceBundleManager;
 
@@ -140,7 +141,7 @@ public final class Configuration {
                     throw new LumifyException("Invalid method to be configurable. Expected 1 argument. Found " + m.getParameterTypes().length + " arguments");
                 }
 
-                String propName = m.getName().substring("set".length());
+                String propName = m.getName().substring("set" .length());
                 if (propName.length() > 1) {
                     propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
                 }

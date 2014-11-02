@@ -37,7 +37,27 @@ define([
 
             this.on(document, 'focusPaths', this.onFocusPaths);
             this.on(document, 'defocusPaths', this.onDefocusPaths);
+            this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
         });
+
+        this.updateButton = function($button, workspaceId) {
+            var onDifferentWorkspace = workspaceId !== this.attr.process.workspaceId,
+                disabled = onDifferentWorkspace || (this.attr.process.resultsCount || 0) === 0;
+
+            if (disabled) {
+                $button.attr('disabled', true);
+            } else {
+                $button.removeAttr('disabled');
+            }
+
+            $button.attr('title', disabled ?
+                i18n('popovers.find_path.wrong_workspace') :
+                i18n('popovers.find_path.show_path'));
+        };
+
+        this.onWorkspaceLoaded = function(event, data) {
+            this.updateButton(this.select('pathsSelector'), data.workspaceId);
+        };
 
         this.loadDefaultContent = function() {
             var count = this.attr.process.resultsCount || 0,
@@ -48,9 +68,7 @@ define([
                         ), F.number.pretty(count))
                     );
 
-            if (count === 0) {
-                $button.attr('disabled', true);
-            }
+            this.updateButton($button, appData.workspaceId);
 
             this.$node.empty().append($button);
         }
@@ -108,10 +126,14 @@ define([
                         pathLoop: for (var j = 0; j < paths.length; j++) {
                             for (var x = 0; x < paths[j].length; x++) {
                                 if (paths[j][x].id === vertices[i]) {
-                                    map[vertices[i]] = {
-                                        sourceId: paths[j][x - 1].id,
-                                        targetId: paths[j][x + 1].id
-                                    };
+                                    // If first or last in path the source/dest
+                                    // aren't in the graph
+                                    if (x !== 0 || x !== (paths[j].length - 1)) {
+                                        map[vertices[i]] = {
+                                            sourceId: paths[j][x - 1].id,
+                                            targetId: paths[j][x + 1].id
+                                        };
+                                    }
                                     break pathLoop;
                                 }
                             }

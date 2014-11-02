@@ -1,10 +1,10 @@
 require.config({
-    baseUrl: "",
+    baseUrl: '',
     paths: {
         // LIBS
         'promise': 'libs/promise',
         'sf': 'libs/sf',
-        'timezone-js': 'libs/timezone-js',
+        'timezone-js': 'libs/date',
         'underscore': 'libs/underscore',
 
         // MOCKS
@@ -23,6 +23,28 @@ require.config({
         'util/vertex/formula': 'util_vertex_formula',
         'util/vertex/urlFormatters': 'util_vertex_urlFormatters'
     }
+});
+
+require(['timezone-js'], function(timezoneJS) {
+    timezoneJS.timezone.zoneFileBasePath = 'tz';
+    timezoneJS.timezone.defaultZoneFile = ['northamerica'];
+    timezoneJS.timezone.loadZoneFile = function(fileName, opts) {
+        if (this.loadedZones[fileName]) return;
+        this.loadedZones[fileName] = true;
+
+        var url = 'tz/' + fileName,
+            file = readFile(url);
+
+        if (!opts || !opts.async) {
+            return this.parseZones(file);
+        }
+
+        var parsedZones = this.parseZones(file);
+        if (opts && opts.callback) {
+            ops.callback();
+        }
+    };
+    timezoneJS.timezone.init({ async: false });
 });
 
 // Global Mocks

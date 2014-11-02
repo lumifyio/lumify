@@ -37,8 +37,8 @@ define([
         };
 
     timezoneJS.timezone.zoneFileBasePath = '/tz';
-    timezoneJS.timezone.defaultZoneFile = [];
-    timezoneJS.timezone.init();
+    timezoneJS.timezone.defaultZoneFile = ['northamerica'];
+    timezoneJS.timezone.init({ async: false });
 
     function checkIfMac() {
         return ~navigator.userAgent.indexOf('Mac OS X');
@@ -497,7 +497,7 @@ define([
                 return $.extend({}, tz, tzInfo);
             },
 
-            currentTimezone: function(withOffsetForDate) {
+            currentTimezone: function() {
                 return FORMATTERS.timezone.lookupTimezone(jstz.determine().name());
             }
         }

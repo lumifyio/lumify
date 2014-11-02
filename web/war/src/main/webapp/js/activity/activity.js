@@ -65,12 +65,14 @@ define([
             this.tasks = window.currentUser && window.currentUser.longRunningProcesses || [];
             this.tasksById = _.indexBy(this.tasks, 'id');
 
+            this.throttledUpdate = _.debounce(this.update.bind(this), 100);
             this.updateEventWatchers();
 
             this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
             this.on(document, 'socketMessage', this.onSocketMessage);
             this.on(document, 'showActivityDisplay', this.onShowActivityDisplay);
             this.on(document, 'activityHandlersUpdated', this.onActivityHandlersUpdated);
+            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
             this.on('click', {
                 deleteButtonSelector: this.onDelete,
@@ -122,6 +124,10 @@ define([
                 this.addOrUpdateTask(task);
                 this.update();
             }
+        };
+
+        this.onVerticesUpdated = function(event, data) {
+            this.throttledUpdate();
         };
 
         this.onActivityHandlersUpdated = function(event) {

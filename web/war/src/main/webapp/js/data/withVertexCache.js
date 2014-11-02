@@ -125,7 +125,7 @@ define([
             return deferred;
         };
 
-        this.getVertexTitle = function(vertexId) {
+        this.getVertexTitle = function(vertexId, workspaceId) {
             var deferredTitle = $.Deferred(),
                 v;
 
@@ -133,9 +133,10 @@ define([
             if (v) {
                 deferredTitle.resolve(F.vertex.title(v));
             } else {
-                this.refresh(vertexId).done(function(vertex) {
-                    deferredTitle.resolve(F.vertex.title(vertex));
-                });
+                this.vertexService.getVertexProperties(vertexId, workspaceId)
+                    .done(function(vertex) {
+                        deferredTitle.resolve(F.vertex.title(vertex));
+                    })
             }
 
             return deferredTitle;
