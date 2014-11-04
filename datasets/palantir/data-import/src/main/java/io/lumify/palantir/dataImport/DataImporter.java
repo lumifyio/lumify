@@ -14,7 +14,7 @@ import io.lumify.palantir.dataImport.model.PtLinkType;
 import io.lumify.palantir.dataImport.model.PtNodeDisplayType;
 import io.lumify.palantir.dataImport.model.PtObjectType;
 import io.lumify.palantir.dataImport.model.PtPropertyType;
-import io.lumify.palantir.dataImport.model.awstateProto.AwstateProto;
+import io.lumify.palantir.dataImport.model.protobuf.AWState;
 import io.lumify.palantir.dataImport.sqlrunner.SqlRunner;
 import org.apache.commons.io.FileUtils;
 import org.securegraph.Authorizations;
@@ -47,7 +47,7 @@ public class DataImporter {
     private final Map<Long, PtNodeDisplayType> nodeDisplayTypes = new HashMap<Long, PtNodeDisplayType>();
     private final Map<Long, User> users = new HashMap<Long, User>();
     private final Map<Long, Workspace> workspaces = new HashMap<Long, Workspace>();
-    private final Map<Long, AwstateProto> awstateProtosByGraphId = new HashMap<Long, AwstateProto>();
+    private final Map<Long, AWState.Wrapper1> awstateProtosByGraphId = new HashMap<Long, AWState.Wrapper1>();
     private User systemUser;
     private UserRepository userRepository;
     private String owlPrefix;
@@ -220,7 +220,7 @@ public class DataImporter {
         return systemUser;
     }
 
-    public Map<Long, AwstateProto> getAwstateProtosByGraphId() {
+    public Map<Long, AWState.Wrapper1> getAwstateProtosByGraphId() {
         return awstateProtosByGraphId;
     }
 }

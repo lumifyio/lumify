@@ -6,7 +6,7 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.palantir.dataImport.model.PtGraph;
-import io.lumify.palantir.dataImport.model.awstateProto.AwstateProto;
+import io.lumify.palantir.dataImport.model.protobuf.AWState;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
@@ -42,7 +42,8 @@ public class PtGraphImporter extends PtImporterBase<PtGraph> {
         } catch (Exception ex) {
             // ignore. Probably not compresses
         }
-        getDataImporter().getAwstateProtosByGraphId().put(row.getId(), new AwstateProto(awstateProto));
+        AWState.Wrapper1 awstate = AWState.Wrapper1.parseFrom(awstateProto);
+        getDataImporter().getAwstateProtosByGraphId().put(row.getId(), awstate);
 
         if (getDataImporter().getWorkspacesByGraphId().containsKey(row.getId())) {
             return;

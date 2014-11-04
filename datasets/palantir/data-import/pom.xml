@@ -12,6 +12,10 @@
     <artifactId>palantir-data-import</artifactId>
     <name>Lumify: Datasets: Palantir: Data Import</name>
 
+    <properties>
+        <protobuf.version>2.6.1</protobuf.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
@@ -42,6 +46,11 @@
             <groupId>io.lumify</groupId>
             <artifactId>lumify-model-bigtable</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
         </dependency>
     </dependencies>
 

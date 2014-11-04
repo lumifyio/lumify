@@ -7,8 +7,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.dataImport.model.PtGraphObject;
-import io.lumify.palantir.dataImport.model.awstateProto.AwstateProto;
-import io.lumify.palantir.dataImport.model.awstateProto.AwstateProtoObject;
+import io.lumify.palantir.dataImport.model.protobuf.AWState;
 import io.lumify.web.clientapi.model.GraphPosition;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -32,21 +31,30 @@ public class PtGraphObjectImporter extends PtImporterBase<PtGraphObject> {
         Workspace workspace = getDataImporter().getWorkspacesByGraphId().get(row.getGraphId());
         checkNotNull(workspace, "Could not find workspace with graph id: " + row.getGraphId());
 
-        AwstateProto awstateProto = getDataImporter().getAwstateProtosByGraphId().get(row.getGraphId());
-        checkNotNull(awstateProto, "Could not find awstateProto with graph id: " + row.getGraphId());
+        AWState.Wrapper1 awstate = getDataImporter().getAwstateProtosByGraphId().get(row.getGraphId());
+        checkNotNull(awstate, "Could not find awstate with graph id: " + row.getGraphId());
 
         GraphPosition graphPosition = null;
         try {
-            AwstateProtoObject awstateProtoObject = awstateProto.findObject(row.getObjectId());
-            checkNotNull(awstateProtoObject, "Could not find awstateProtoObject: " + row.getObjectId());
-            graphPosition = new GraphPosition(awstateProtoObject.getX() / 3, awstateProtoObject.getY() / 3);
+            AWState.VertexInner awstateVertex = findObject(awstate, row.getObjectId());
+            checkNotNull(awstateVertex, "Could not find awstateVertex: " + row.getObjectId());
+            graphPosition = new GraphPosition(awstateVertex.getX() / 2, awstateVertex.getY() / 2);
         } catch (Throwable ex) {
-            LOGGER.error("Could not parse graph position from awstate proto", ex);
+            LOGGER.error("Could not parse graph position from awstate proto: graphId: " + row.getGraphId() + ", objectId: " + row.getObjectId(), ex);
         }
 
         User user = getDataImporter().getSystemUser();
 
         workspaceRepository.updateEntityOnWorkspace(workspace, getObjectVertexId(row), true, graphPosition, user);
+    }
+
+    private AWState.VertexInner findObject(AWState.Wrapper1 awstate, long objectId) {
+        for (AWState.Vertex v : awstate.getWrapper2().getWrapper3().getVertexList()) {
+            if (v.getVertexInner().getObjectId() == objectId) {
+                return v.getVertexInner();
+            }
+        }
+        return null;
     }
 
     private String getObjectVertexId(PtGraphObject row) {
@@ -55,7 +63,7 @@ public class PtGraphObjectImporter extends PtImporterBase<PtGraphObject> {
 
     @Override
     protected String getSql() {
-        return "SELECT * FROM {namespace}.PT_GRAPH_OBJECT";
+        return "SELECT * FROM {namespace}.PT_GRAPH_OBJECT ORDER BY GRAPH_ID";
     }
 
     @Inject
