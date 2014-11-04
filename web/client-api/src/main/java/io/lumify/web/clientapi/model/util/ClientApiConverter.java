@@ -6,10 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ClientApiConverter {
     public static Object toClientApiValue(Object value) {
@@ -48,6 +45,8 @@ public class ClientApiConverter {
             } catch (Exception ex) {
                 // ignore this exception it just mean the string wasn't really json
             }
+        } else if (value instanceof Date) {
+            return toClientApiValue(((Date) value).getTime());
         }
         return value;
     }
