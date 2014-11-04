@@ -41,6 +41,9 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
 
     private Object toValueGeo(PtPropertyAndValue row, Object propertyValue) {
         JGeometryWrapper geometryGis = JGeometryWrapper.load(row.getGeometryGis());
+        if (geometryGis == null) {
+            return propertyValue;
+        }
         if (geometryGis.getType() == JGeometryWrapper.Type.POINT) {
             if (propertyValue == null) {
                 propertyValue = "";
