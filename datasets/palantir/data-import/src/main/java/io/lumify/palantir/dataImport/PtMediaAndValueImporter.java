@@ -2,26 +2,16 @@ package io.lumify.palantir.dataImport;
 
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.palantir.dataImport.model.PtMediaAndValue;
+import io.lumify.palantir.dataImport.util.TryInflaterInputStream;
 import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.property.StreamingPropertyValue;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.zip.InflaterInputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
-    public static final byte[] ZLIB_HEADER = new byte[2];
-
-    static {
-        ZLIB_HEADER[0] = (byte) 0x78;
-        ZLIB_HEADER[1] = (byte) 0x9c;
-    }
-
     public PtMediaAndValueImporter(DataImporter dataImporter) {
         super(dataImporter, PtMediaAndValue.class);
     }
@@ -35,7 +25,7 @@ public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
     @Override
     protected void processRow(PtMediaAndValue row) throws Exception {
         String propertyKey = getDataImporter().getIdPrefix() + row.getId();
-        InputStream in = getContentInputStream(row);
+        InputStream in = new TryInflaterInputStream(row.getContents());
         try {
             StreamingPropertyValue propertyValue = new StreamingPropertyValue(in, byte[].class);
             propertyValue.store(true);
@@ -55,20 +45,6 @@ public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
         } finally {
             in.close();
         }
-    }
-
-    private InputStream getContentInputStream(PtMediaAndValue row) throws IOException {
-        byte[] header = new byte[2];
-        InputStream in = new BufferedInputStream(row.getContents(), 100);
-
-        in.mark(2);
-        in.read(header);
-        in.reset();
-
-        if (Arrays.equals(header, ZLIB_HEADER)) {
-            in = new InflaterInputStream(in);
-        }
-        return in;
     }
 
     private String getEdgeLabel(PtMediaAndValue row) {
