@@ -84,7 +84,7 @@ public class AnalystsNotebookExporter {
 
         chart.setLinkTypeCollection(getLinkTypes());
 
-        chart.setEntityTypeCollection(EntityType.createForVertices(vertices, ontologyRepository));
+        chart.setEntityTypeCollection(EntityType.createForVertices(vertices, ontologyRepository, version));
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
         LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
