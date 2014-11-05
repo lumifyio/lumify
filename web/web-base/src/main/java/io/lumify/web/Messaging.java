@@ -2,7 +2,7 @@ package io.lumify.web;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.netflix.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFramework;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;

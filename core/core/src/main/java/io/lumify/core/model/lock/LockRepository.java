@@ -1,9 +1,9 @@
 package io.lumify.core.model.lock;
 
 import com.google.inject.Inject;
-import com.netflix.curator.framework.CuratorFramework;
-import com.netflix.curator.framework.recipes.locks.InterProcessLock;
-import com.netflix.curator.framework.recipes.locks.InterProcessMutex;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.locks.InterProcessLock;
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
