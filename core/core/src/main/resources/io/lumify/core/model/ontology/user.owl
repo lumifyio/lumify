@@ -39,7 +39,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#authorizations">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -49,7 +49,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#createDate">
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
     
@@ -59,7 +59,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#currentLoginDate">
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
     
@@ -70,7 +70,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#currentLoginRemoteAddr">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -81,7 +81,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#currentWorkspace">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -92,7 +92,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#displayName">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -102,7 +102,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#loginCount">
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
     
@@ -112,7 +112,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#passwordHash">
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
     </owl:DatatypeProperty>
     
@@ -122,7 +122,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#passwordSalt">
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
     </owl:DatatypeProperty>
     
@@ -132,7 +132,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#previousLoginDate">
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
     
@@ -143,7 +143,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#previousLoginRemoteAddr">
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -154,7 +154,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#privileges">
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -165,7 +165,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#status">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -176,7 +176,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#uiPreferences">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -187,7 +187,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/user#username">
         <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
         <lumify:userVisible>false</lumify:userVisible>
-        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:domain rdf:resource="http://lumify.io/user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -204,9 +204,9 @@
     
 
 
-    <!-- http://lumify.io/user#user -->
+    <!-- http://lumify.io/user -->
 
-    <owl:Class rdf:about="http://lumify.io/user#user">
+    <owl:Class rdf:about="http://lumify.io/user">
         <lumify:userVisible>false</lumify:userVisible>
     </owl:Class>
 </rdf:RDF>
