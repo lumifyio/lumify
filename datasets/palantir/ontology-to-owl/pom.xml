@@ -18,6 +18,10 @@
             <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -48,24 +52,16 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${plugin.maven.shade.version}</version>
                 <configuration>
-                    <descriptor>src/main/assembly/descriptor.xml</descriptor>
-                    <archive>
-                        <manifest>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>io.lumify.palantir.ontologyToOwl.OntologyToOwl</mainClass>
-                        </manifest>
-                    </archive>
+                        </transformer>
+                    </transformers>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
