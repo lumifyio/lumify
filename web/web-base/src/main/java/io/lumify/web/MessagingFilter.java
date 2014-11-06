@@ -6,6 +6,7 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.atmosphere.cpr.AtmosphereResource;
+import org.atmosphere.cpr.BroadcastFilter;
 import org.atmosphere.cpr.PerRequestBroadcastFilter;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,8 +18,14 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MessagingFilter.class);
     private UserRepository userRepository;
 
+
     @Override
-    public BroadcastAction filter(AtmosphereResource r, Object originalMessage, Object message) {
+    public BroadcastAction filter(String broadcasterId, Object originalMessage, Object message) {
+        return new BroadcastAction(message);
+    }
+
+    @Override
+    public BroadcastAction filter(String broadcasterId, AtmosphereResource r, Object originalMessage, Object message) {
         ensureInitialized();
 
         try {
@@ -81,13 +88,9 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
         return false;
     }
 
-    @Override
-    public BroadcastAction filter(Object originalMessage, Object message) {
-        return new BroadcastAction(message);
-    }
-
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
 }

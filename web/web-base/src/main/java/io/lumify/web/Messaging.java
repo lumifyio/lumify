@@ -18,6 +18,7 @@ import org.atmosphere.cpr.*;
 import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor;
 import org.atmosphere.interceptor.BroadcastOnPostAtmosphereInterceptor;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
+import org.atmosphere.interceptor.JavaScriptProtocol;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpSession;
@@ -32,7 +33,8 @@ import java.util.List;
                 AtmosphereResourceLifecycleInterceptor.class,
                 BroadcastOnPostAtmosphereInterceptor.class,
                 TrackMessageSizeInterceptor.class,
-                HeartbeatInterceptor.class
+                HeartbeatInterceptor.class,
+                JavaScriptProtocol.class
         })
 public class Messaging implements AtmosphereHandler { //extends AbstractReflectorAtmosphereHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Messaging.class);
