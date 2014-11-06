@@ -16,6 +16,7 @@ var require = {
         'ejs':  '../libs/ejs/ejs',
         'es5shim': '../libs/es5-shim/es5-shim',
         'es5sham': '../libs/es5-shim/es5-sham',
+        'promise-polyfill': '../libs/promise-polyfill/polyfills/output/promise-6.0.0',
         'flight': '../libs/flight',
         'goog': '../libs/requirejs-plugins/src/goog',
         'gremlins': '../libs/gremlins.js/gremlins.min',
@@ -25,6 +26,7 @@ var require = {
         'jstz': '../libs/jstz-detect/jstz.min',
         'jquery': '../libs/jquery/jquery',
         'jqueryui': '../libs/jquery-ui/ui/minified/jquery-ui.min',
+        'jscache': '../libs/jscache/cache',
         'less': 'util/requirejs/less',
         'lessc': '../libs/require-less/lessc',
         'normalize': '../libs/require-less/normalize',
@@ -77,8 +79,10 @@ var require = {
 };
 
 
-if ('define' in window) {
-    define([], function() {
-        return require;
-    });
+if (typeof window !== 'undefined') {
+    if ('define' in window) {
+        define([], function() {
+            return require;
+        });
+    }
 }

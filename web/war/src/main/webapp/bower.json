@@ -10,6 +10,7 @@
     "color-js": "~1.0.1",
     "cytoscape.js": "git://github.com/altamiracorp/cytoscape.js.git#57264f71b8c6e9b5bb8c1d336760b8e160a095cc",
     "d3": "3.4.10",
+    "promise-polyfill": "git://github.com/ForbesLindesay/promisejs.org",
     "flight": "~1.1.1",
     "intercom": "~0.1.4",
     "jquery": "~2.0.3",
@@ -32,7 +33,8 @@
     "video.js": "4.5.2",
     "bootstrap-timepicker": "~0.2.6",
     "jstz-detect": "~1.0.5",
-    "timezone-js": "~0.4.11"
+    "timezone-js": "~0.4.11",
+    "jscache": "ba01cdcf3e8a426782e0c297832b6c81286c9e8a"
   },
   "devDependencies": {
     "sinon": "~1.10.3",

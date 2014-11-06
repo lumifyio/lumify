@@ -2,7 +2,6 @@
 define([
     'flight/lib/component',
     'tpl!app',
-    'data',
     'menubar/menubar',
     'dashboard/dashboard',
     'search/search',
@@ -24,11 +23,11 @@ define([
     'util/privileges',
     'util/withAsyncQueue',
     'service/user',
-    'service/vertex'
+    'service/vertex',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     appTemplate,
-    data,
     Menubar,
     Dashboard,
     Search,
@@ -50,10 +49,11 @@ define([
     Privileges,
     withAsyncQueue,
     UserService,
-    VertexService) {
+    VertexService,
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(App, withFileDrop, withAsyncQueue);
+    return defineComponent(App, withFileDrop, withAsyncQueue, withDataRequest);
 
     function App() {
         var Graph3D,
@@ -102,8 +102,6 @@ define([
             if (Graph3D) {
                 Graph3D.teardownAll();
             }
-
-            data.teardown();
 
             this.$node.empty();
         });
@@ -234,33 +232,34 @@ define([
             this.setupWindowResizeTrigger();
 
             this.triggerPaneResized();
-            if (self.attr.animateFromLogin) {
-                $(document.body).on(TRANSITION_END, function(e) {
-                    var oe = e.originalEvent;
-                    if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
-                        $(document.body).off(TRANSITION_END);
-                        data.loadActiveWorkspace();
-                        self.trigger(document, 'applicationReady');
-                        graphPane.focus();
-                    }
-                });
-                _.defer(function() {
-                    $(document.body).addClass('animateloginstart');
-                })
-            } else {
-                data.loadActiveWorkspace();
-                self.trigger(document, 'applicationReady');
-            }
 
-            _.delay(function() {
-                if (self.attr.addVertexIds) {
-                    self.handleAddToWorkspace(self.attr.addVertexIds);
-                }
-                if (self.attr.openAdminTool && Privileges.canADMIN) {
-                    self.trigger('menubarToggleDisplay', { name: 'admin' });
-                    self.trigger('showAdminPlugin', self.attr.openAdminTool);
-                }
-            }, 500);
+            //if (self.attr.animateFromLogin) {
+                //$(document.body).on(TRANSITION_END, function(e) {
+                    //var oe = e.originalEvent;
+                    //if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
+                        //$(document.body).off(TRANSITION_END);
+                        //data.loadActiveWorkspace();
+                        //self.trigger(document, 'applicationReady');
+                        //graphPane.focus();
+                    //}
+                //});
+                //_.defer(function() {
+                    //$(document.body).addClass('animateloginstart');
+                //})
+            //} else {
+                //data.loadActiveWorkspace();
+                //self.trigger(document, 'applicationReady');
+            //}
+
+            //_.delay(function() {
+                //if (self.attr.addVertexIds) {
+                    //self.handleAddToWorkspace(self.attr.addVertexIds);
+                //}
+                //if (self.attr.openAdminTool && Privileges.canADMIN) {
+                    //self.trigger('menubarToggleDisplay', { name: 'admin' });
+                    //self.trigger('showAdminPlugin', self.attr.openAdminTool);
+                //}
+            //}, 500);
         });
 
         this.onCurrentUserChanged = function(event, user) {
@@ -448,8 +447,11 @@ define([
             this.trigger('willLogout');
 
             if (LogoutExtensions.executeHandlers()) {
-                userService.logout()
-                    .fail(function() {
+                this.dataRequest('user', 'logout')
+                    .then(function() {
+                        window.location.reload();
+                    })
+                    .catch(function() {
                         require(['login'], function(Login) {
                             $(document.body)
                                 .removeClass('animatelogin animateloginstart')
@@ -462,9 +464,6 @@ define([
                                 self.teardown();
                             });
                         });
-                    })
-                    .done(function() {
-                        window.location.reload();
                     });
             }
         };

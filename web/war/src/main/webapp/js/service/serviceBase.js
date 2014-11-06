@@ -1,5 +1,5 @@
 
-define(['atmosphere'],
+define(['jquery', 'underscore'],
     function(atmosphere) {
         'use strict';
 
@@ -57,68 +57,68 @@ define(['atmosphere'],
         };
 
         ServiceBase.prototype.subscribe = function(config) {
-            var self = this;
+            //var self = this;
 
-            require(['util/offlineOverlay'], function(Overlay) {
-                if (window.DEBUG) {
-                    DEBUG.socketMessages = DEBUG.socketMessages || false;
-                }
+            //require(['util/offlineOverlay'], function(Overlay) {
+                //if (window.DEBUG) {
+                    //DEBUG.socketMessages = DEBUG.socketMessages || false;
+                //}
 
-                var req = {
-                        url: 'messaging',
-                        transport: 'websocket',
-                        fallbackTransport: 'long-polling',
-                        contentType: 'application/json',
-                        trackMessageLength: true,
-                        suspend: false,
-                        shared: false,
-                        connectTimeout: -1,
-                        enableProtocol: true,
-                        maxReconnectOnClose: 2,
-                        maxStreamingLength: 2000,
-                        logLevel: 'debug',
-                        onOpen: function(response) {
-                            if (config.onOpen) config.onOpen.apply(null, arguments);
-                        },
-                        onClientTimeout: function() {
-                            console.error('timeout');
-                            self.subscribe(config);
-                        },
-                        onClose: function(req) {
-                            if (req && req.error) {
-                                console.error('Websocket closed', req.reasonPhrase, req.error);
-                            }
-                        },
-                        onMessage: function(response) {
-                            var body = response.responseBody,
-                                data = JSON.parse(body);
+                //var req = {
+                        //url: 'messaging',
+                        //transport: 'websocket',
+                        //fallbackTransport: 'long-polling',
+                        //contentType: 'application/json',
+                        //trackMessageLength: true,
+                        //suspend: false,
+                        //shared: false,
+                        //connectTimeout: -1,
+                        //enableProtocol: true,
+                        //maxReconnectOnClose: 2,
+                        //maxStreamingLength: 2000,
+                        //logLevel: 'debug',
+                        //onOpen: function(response) {
+                            //if (config.onOpen) config.onOpen.apply(null, arguments);
+                        //},
+                        //onClientTimeout: function() {
+                            //console.error('timeout');
+                            //self.subscribe(config);
+                        //},
+                        //onClose: function(req) {
+                            //if (req && req.error) {
+                                //console.error('Websocket closed', req.reasonPhrase, req.error);
+                            //}
+                        //},
+                        //onMessage: function(response) {
+                            //var body = response.responseBody,
+                                //data = JSON.parse(body);
 
-                            if (window.DEBUG && DEBUG.socketMessages) {
-                                console.info(data);
-                            }
+                            //if (window.DEBUG && DEBUG.socketMessages) {
+                                //console.info(data);
+                            //}
 
-                            if (data && data.sourceId == document.subSocketId) {
-                                return;
-                            }
+                            //if (data && data.sourceId == document.subSocketId) {
+                                //return;
+                            //}
 
-                            if (config.onMessage) config.onMessage(null, data);
-                        },
-                        onError: function(response) {
-                            console.error('subscribe error:', response);
-                            if (config.onMessage) config.onMessage(response.error, null);
+                            //if (config.onMessage) config.onMessage(null, data);
+                        //},
+                        //onError: function(response) {
+                            //console.error('subscribe error:', response);
+                            //if (config.onMessage) config.onMessage(response.error, null);
 
-                            // Might be closing because of browser refresh, delay
-                            // so it only happens if server went down
-                            _.delay(function() {
-                                Overlay.attachTo(document);
-                            }, 1000);
-                        }
-                    };
-                document.$subSocket = self.getSocket().subscribe(req);
-                document.subSocketId = $.atmosphere.guid();
+                            //// Might be closing because of browser refresh, delay
+                            //// so it only happens if server went down
+                            //_.delay(function() {
+                                //Overlay.attachTo(document);
+                            //}, 1000);
+                        //}
+                    //};
+                //document.$subSocket = self.getSocket().subscribe(req);
+                //document.subSocketId = $.atmosphere.guid();
 
-                $(document).trigger('registerBeforeUnloadHandler', self.disconnect);
-            });
+                //$(document).trigger('registerBeforeUnloadHandler', self.disconnect);
+            //});
         };
 
         ServiceBase.prototype.disconnect = function() {

@@ -37,7 +37,7 @@ define([
         });
 
         this.stateForVertex = function(vertex) {
-            var inWorkspace = appData.inWorkspace(vertex);
+            var inWorkspace = false; //appData.inWorkspace(vertex);
             return {
                 inGraph: inWorkspace,
                 inMap: inWorkspace && _.some(vertex.properties, function(p) {

@@ -1,7 +1,7 @@
 
 define([
     'flight/lib/component',
-    'data',
+    //'data',
     'tpl!./template',
     'tpl!./instructions/regionCenter',
     'tpl!./instructions/regionRadius',
@@ -15,7 +15,7 @@ define([
     'util/withAsyncQueue',
     'util/withContextMenu'
 ], function(defineComponent,
-    appData,
+    //appData,
     template,
     centerTemplate,
     radiusTemplate,
@@ -96,10 +96,13 @@ define([
 
             this.attachToZoomPanControls();
 
+            // TODO: Fix
+            /*
             var verticesInWorkspace = appData.verticesInWorkspace();
             if (verticesInWorkspace.length) {
                 this.updateOrAddVertices(verticesInWorkspace, { adding: true, preventShake: true });
             }
+            */
         });
 
         this.attachToZoomPanControls = function() {

@@ -75,16 +75,21 @@ define([
                 });
         };
 
-        this.triggerRequest = function() {
+        this.triggerRequest = function(query, propertyFilters, conceptFilter, paging) {
             if (this.currentRequest) {
                 this.currentRequest.cancel();
                 this.currentRequest = null;
             }
 
             return (
-                this.currentRequest = this.serviceRequest.apply(
+                this.currentRequest = this.dataRequest.apply(
                     this,
-                    ['vertex', 'search'].concat(_.toArray(arguments))
+                    ['vertex', 'search'].concat([{
+                        query: query,
+                        propertyFilters: propertyFilters,
+                        conceptFilter: conceptFilter,
+                        paging: paging
+                    }])
                 )
             );
         };
