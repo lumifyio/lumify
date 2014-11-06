@@ -16,7 +16,6 @@ import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
-import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -220,7 +219,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, GraphPosition graphPosition, User user) {
+    public void updateEntitiesOnWorkspace(Workspace workspace, Iterable<Update> updates, User user) {
         checkNotNull(workspace, "Workspace cannot be null");
 
         if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
@@ -231,28 +230,32 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            List vertices = session.createCriteria(SqlWorkspaceVertex.class)
-                    .add(Restrictions.eq("vertexId", vertexId))
-                    .add(Restrictions.eq("workspace.workspaceId", workspace.getWorkspaceId()))
-                    .list();
-            SqlWorkspaceVertex sqlWorkspaceVertex;
-            if (vertices.size() > 1) {
-                throw new LumifyException("more than one vertex was returned");
-            } else if (vertices.size() == 0) {
-                sqlWorkspaceVertex = new SqlWorkspaceVertex();
-                sqlWorkspaceVertex.setVertexId(vertexId);
-                sqlWorkspaceVertex.setWorkspace((SqlWorkspace) workspace);
-                ((SqlWorkspace) workspace).getSqlWorkspaceVertices().add(sqlWorkspaceVertex);
-                session.update(workspace);
-            } else {
-                sqlWorkspaceVertex = (SqlWorkspaceVertex) vertices.get(0);
+
+            for (Update update : updates) {
+                List vertices = session.createCriteria(SqlWorkspaceVertex.class)
+                        .add(Restrictions.eq("vertexId", update.getVertexId()))
+                        .add(Restrictions.eq("workspace.workspaceId", workspace.getWorkspaceId()))
+                        .list();
+                SqlWorkspaceVertex sqlWorkspaceVertex;
+                if (vertices.size() > 1) {
+                    throw new LumifyException("more than one vertex was returned");
+                } else if (vertices.size() == 0) {
+                    sqlWorkspaceVertex = new SqlWorkspaceVertex();
+                    sqlWorkspaceVertex.setVertexId(update.getVertexId());
+                    sqlWorkspaceVertex.setWorkspace((SqlWorkspace) workspace);
+                    ((SqlWorkspace) workspace).getSqlWorkspaceVertices().add(sqlWorkspaceVertex);
+                    session.update(workspace);
+                } else {
+                    sqlWorkspaceVertex = (SqlWorkspaceVertex) vertices.get(0);
+                }
+                sqlWorkspaceVertex.setVisible(update.getVisible());
+                if (update.getGraphPosition() != null) {
+                    sqlWorkspaceVertex.setGraphPositionX(update.getGraphPosition().getX());
+                    sqlWorkspaceVertex.setGraphPositionY(update.getGraphPosition().getY());
+                }
+                session.saveOrUpdate(sqlWorkspaceVertex);
             }
-            sqlWorkspaceVertex.setVisible(visible);
-            if (graphPosition != null) {
-                sqlWorkspaceVertex.setGraphPositionX(graphPosition.getX());
-                sqlWorkspaceVertex.setGraphPositionY(graphPosition.getY());
-            }
-            session.saveOrUpdate(sqlWorkspaceVertex);
+
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -345,7 +348,6 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         }
         return false;
     }
-
 
     protected List<SqlWorkspaceUser> getSqlWorkspaceUserLists(String workspaceId) {
         Session session = sessionManager.getSession();

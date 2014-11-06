@@ -5,7 +5,7 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.palantir.dataImport.model.PtUser;
 
-public class PtUserImporter extends PtImporterBase<PtUser> {
+public class PtUserImporter extends PtRowImporterBase<PtUser> {
     private UserRepository userRepository;
 
     protected PtUserImporter(DataImporter dataImporter) {

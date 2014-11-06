@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class PtMediaAndValueImporter extends PtImporterBase<PtMediaAndValue> {
+public class PtMediaAndValueImporter extends PtRowImporterBase<PtMediaAndValue> {
     public PtMediaAndValueImporter(DataImporter dataImporter) {
         super(dataImporter, PtMediaAndValue.class);
     }

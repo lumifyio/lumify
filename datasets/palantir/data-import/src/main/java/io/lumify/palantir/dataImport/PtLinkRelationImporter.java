@@ -2,7 +2,7 @@ package io.lumify.palantir.dataImport;
 
 import io.lumify.palantir.dataImport.model.PtLinkRelation;
 
-public class PtLinkRelationImporter extends PtImporterBase<PtLinkRelation> {
+public class PtLinkRelationImporter extends PtRowImporterBase<PtLinkRelation> {
     private StringBuilder xml;
 
     protected PtLinkRelationImporter(DataImporter dataImporter) {

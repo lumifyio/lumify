@@ -2,7 +2,7 @@ package io.lumify.palantir.dataImport;
 
 import io.lumify.palantir.dataImport.model.PtImageInfo;
 
-public class PtImageInfoImporter extends PtImporterBase<PtImageInfo> {
+public class PtImageInfoImporter extends PtRowImporterBase<PtImageInfo> {
     private StringBuilder xml;
 
     protected PtImageInfoImporter(DataImporter dataImporter) {

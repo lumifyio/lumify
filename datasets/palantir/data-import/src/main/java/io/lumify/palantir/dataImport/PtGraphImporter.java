@@ -9,8 +9,8 @@ import io.lumify.palantir.dataImport.model.PtGraph;
 import io.lumify.palantir.dataImport.model.protobuf.AWState;
 import io.lumify.palantir.dataImport.util.TryInflaterInputStream;
 
-public class PtGraphImporter extends PtImporterBase<PtGraph> {
-    private static final String PALANTIR_WORKSPACE_ID_PREFIX = "WORKSPACE_PALANTIR_";
+public class PtGraphImporter extends PtRowImporterBase<PtGraph> {
+    private static final String PALANTIR_WORKSPACE_ID_PREFIX = "PALANTIR_";
     private WorkspaceRepository workspaceRepository;
 
     public PtGraphImporter(DataImporter dataImporter) {

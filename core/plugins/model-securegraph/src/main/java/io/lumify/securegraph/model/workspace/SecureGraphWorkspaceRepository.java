@@ -24,6 +24,9 @@ import io.lumify.securegraph.model.user.SecureGraphUserRepository;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
+import org.elasticsearch.common.base.Function;
+import org.elasticsearch.common.collect.ImmutableMap;
+import org.elasticsearch.common.collect.Maps;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.util.ConvertingIterable;
@@ -127,10 +130,6 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             return ((SecureGraphWorkspace) workspace).getVertex(getGraph(), authorizations);
         }
         return getGraph().getVertex(workspace.getWorkspaceId(), authorizations);
-    }
-
-    private Vertex getVertexFromWorkspaceId(String workspaceId, Authorizations authorizations) {
-        return getGraph().getVertex(workspaceId, authorizations);
     }
 
     @Override
@@ -284,7 +283,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(final Workspace workspace, final String vertexId, final Boolean visible, final GraphPosition graphPosition, final User user) {
+    public void updateEntitiesOnWorkspace(final Workspace workspace, final Iterable<Update> updates, final User user) {
         if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
@@ -299,38 +298,31 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                     throw new LumifyResourceNotFoundException("Could not find workspace vertex: " + workspace.getWorkspaceId(), workspace.getWorkspaceId());
                 }
 
-                createEdge(workspaceVertex, vertexId, graphPosition, visible, authorizations);
-            }
-        });
-    }
+                Iterable<String> vertexIds = new ConvertingIterable<Update, String>(updates) {
+                    @Override
+                    protected String convert(Update o) {
+                        return o.getVertexId();
+                    }
+                };
+                Iterable<Vertex> vertices = getGraph().getVertices(vertexIds, authorizations);
+                ImmutableMap<String, Vertex> verticesMap = Maps.uniqueIndex(vertices, new Function<Vertex, String>() {
+                    @Override
+                    public String apply(Vertex vertex) {
+                        return vertex.getId();
+                    }
+                });
 
-    @Override
-    public void updateEntityOnWorkspace(final String workspaceId, final String vertexId, final Boolean visible, final GraphPosition graphPosition, final User user) {
-        if (!hasWritePermissions(workspaceId, user)) {
-            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspaceId, user, workspaceId);
-        }
-
-        lockRepository.lock(getLockName(workspaceId), new Runnable() {
-            @Override
-            public void run() {
-                Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspaceId);
-
-                Vertex workspaceVertex = getVertexFromWorkspaceId(workspaceId, authorizations);
-                if (workspaceVertex == null) {
-                    throw new LumifyResourceNotFoundException("Could not find workspace vertex: " + workspaceId, workspaceId);
+                for (Update update : updates) {
+                    Vertex otherVertex = verticesMap.get(update.getVertexId());
+                    checkNotNull(otherVertex, "Could not find vertex with id: " + update.getVertexId());
+                    createEdge(workspaceVertex, otherVertex, update.getGraphPosition(), update.getVisible(), authorizations);
                 }
-
-                createEdge(workspaceVertex, vertexId, graphPosition, visible, authorizations);
+                getGraph().flush();
             }
         });
     }
 
-    public void createEdge(Vertex workspaceVertex, String vertexId, GraphPosition graphPosition, Boolean visible, Authorizations authorizations) {
-        Vertex otherVertex = getGraph().getVertex(vertexId, authorizations);
-        if (otherVertex == null) {
-            throw new LumifyResourceNotFoundException("Could not find vertex: " + vertexId, vertexId);
-        }
-
+    private void createEdge(Vertex workspaceVertex, Vertex otherVertex, GraphPosition graphPosition, Boolean visible, Authorizations authorizations) {
         List<Edge> existingEdges = toList(workspaceVertex.getEdges(otherVertex, Direction.BOTH, authorizations));
         if (existingEdges.size() > 0) {
             for (Edge existingEdge : existingEdges) {
@@ -355,7 +347,6 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             }
             edgeBuilder.save(authorizations);
         }
-        getGraph().flush();
     }
 
     @Override
