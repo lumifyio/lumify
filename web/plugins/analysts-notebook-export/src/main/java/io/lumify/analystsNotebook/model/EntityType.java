@@ -1,6 +1,7 @@
 package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.lumify.analystsNotebook.AnalystsNotebookVersion;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -47,13 +48,13 @@ public class EntityType {
         this.iconFile = iconFile;
     }
 
-    public static List<EntityType> createForVertices(Iterable<Vertex> vertices, OntologyRepository ontologyRepository) {
+    public static List<EntityType> createForVertices(Iterable<Vertex> vertices, OntologyRepository ontologyRepository, AnalystsNotebookVersion version) {
         Map<String, String> conceptTypeIconFileMap = new HashMap<String, String>();
         for (Vertex vertex : vertices) {
             String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
             if (!conceptTypeIconFileMap.containsKey(conceptType)) {
                 Concept concept = ontologyRepository.getConceptByIRI(conceptType);
-                String iconFile = getMetadataIconFile(concept, ontologyRepository);
+                String iconFile = getMetadataIconFile(concept, ontologyRepository, version);
                 if (iconFile == null) {
                     iconFile = EntityType.ICON_FILE_DEFAULT;
                 }
@@ -68,14 +69,15 @@ public class EntityType {
         return entityTypes;
     }
 
-    private static String getMetadataIconFile(Concept concept, OntologyRepository ontologyRepository) {
+    private static String getMetadataIconFile(Concept concept, OntologyRepository ontologyRepository, AnalystsNotebookVersion version) {
         Map<String, String> metadata = concept.getMetadata();
-        if (metadata.containsKey(ONTOLOGY_CONCEPT_METADATA_ICON_FILE_KEY)) {
-            return metadata.get(ONTOLOGY_CONCEPT_METADATA_ICON_FILE_KEY);
+        String ontologyConceptMetadataIconFileKey = version.getOntologyConceptMetadataIconFileKey();
+        if (metadata.containsKey(ontologyConceptMetadataIconFileKey)) {
+            return metadata.get(ontologyConceptMetadataIconFileKey);
         } else {
             concept = ontologyRepository.getParentConcept(concept);
             if (concept != null) {
-                return getMetadataIconFile(concept, ontologyRepository);
+                return getMetadataIconFile(concept, ontologyRepository, version);
             } else {
                 return null;
             }
