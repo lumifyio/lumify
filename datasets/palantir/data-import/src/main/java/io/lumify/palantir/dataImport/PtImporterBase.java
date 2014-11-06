@@ -34,12 +34,14 @@ public abstract class PtImporterBase<T> {
     }
 
     public void run() {
+        long startTime = System.currentTimeMillis();
         LOGGER.info(this.getClass().getName());
         Iterable<T> rows = dataImporter.getSqlRunner().select(getSql(), ptClass);
         beforeProcessRows();
         long count = run(rows);
         afterProcessRows();
-        LOGGER.info("Imported %d %s", count, this.ptClass.getSimpleName());
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("Imported %d %s (time: %dms)", count, this.ptClass.getSimpleName(), endTime - startTime);
     }
 
     protected abstract long run(Iterable<T> rows);
