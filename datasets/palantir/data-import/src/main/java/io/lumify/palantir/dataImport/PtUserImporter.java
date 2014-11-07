@@ -5,6 +5,8 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.palantir.dataImport.model.PtUser;
 
+import java.util.UUID;
+
 public class PtUserImporter extends PtRowImporterBase<PtUser> {
     private UserRepository userRepository;
 
@@ -23,7 +25,7 @@ public class PtUserImporter extends PtRowImporterBase<PtUser> {
     }
 
     private String getPassword(PtUser row) {
-        return "";
+        return UUID.randomUUID().toString();
     }
 
     private String getDisplayName(PtUser row) {
