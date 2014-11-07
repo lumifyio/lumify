@@ -66,6 +66,10 @@ public class OntologyToOwl {
         String baseIri = args[1];
         File outFile = new File(args[2]);
 
+        if (baseIri.endsWith("#")) {
+            baseIri = baseIri.substring(0, baseIri.length() - 1);
+        }
+
         new OntologyToOwl(baseIri, outFile).run(inDir);
     }
 

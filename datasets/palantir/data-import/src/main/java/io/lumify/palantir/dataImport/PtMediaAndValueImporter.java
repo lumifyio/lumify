@@ -31,9 +31,14 @@ public class PtMediaAndValueImporter extends PtRowImporterBase<PtMediaAndValue> 
             propertyValue.store(true);
             propertyValue.searchIndex(false);
 
+            String title = row.getTitle();
+            if (title == null) {
+                title = "";
+            }
+
             VertexBuilder vertexBuilder = getDataImporter().getGraph().prepareVertex(getMediaId(row), getDataImporter().getVisibility());
             LumifyProperties.RAW.addPropertyValue(vertexBuilder, propertyKey, propertyValue, getDataImporter().getVisibility());
-            LumifyProperties.TITLE.setProperty(vertexBuilder, row.getTitle(), getDataImporter().getVisibility());
+            LumifyProperties.TITLE.setProperty(vertexBuilder, title, getDataImporter().getVisibility());
             Vertex mediaVertex = vertexBuilder.save(getDataImporter().getAuthorizations());
 
             Vertex sourceVertex = getVertexCache().get(getObjectVertexId(row.getLinkObjectId()));
