@@ -42,18 +42,22 @@ define(['util/promise'], function() {
                     try {
                         var json = JSON.parse(jsonStr);
                         if (typeof ajaxPostfilter !== 'undefined') {
-                            ajaxPostfilter(null, r, json, method, url, parameters);
+                            ajaxPostfilter(r, json, {
+                                method: method,
+                                url: url,
+                                parameters: parameters
+                            });
                         }
                         fulfill(json);
                     } catch(e) {
-                        reject(e);
+                        reject(Error(e.message));
                     }
                 } else {
-                    reject(r.statusText);
+                    reject(Error(r.statusText));
                 }
             };
             r.onerror = function() {
-                reject();
+                reject(Error('Network Error'));
             };
             r.open(method || 'get', resolvedUrl, true);
 

@@ -368,7 +368,7 @@ define([
             raw: function(vertex, optionalWorkspaceId) {
             },
 
-            imageFramesSrc: function(vertex, optionalWorkspaceId) {
+            imageFrames: function(vertex, optionalWorkspaceId) {
             },
 
             /*

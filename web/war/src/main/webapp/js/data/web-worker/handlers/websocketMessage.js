@@ -5,5 +5,6 @@ define([], function() {
             data = JSON.parse(body);
 
         console.info('message', data);
+        // TODO: propagate to main in terms of events
     }
 });

@@ -2,6 +2,7 @@ define([], function() {
     'use strict';
     return function(message) {
         if (typeof atmosphere !== 'undefined') {
+            // TODO: add sourceId to filter current users requests
             publicData.socket = atmosphere.subscribe(_.extend(message.configuration, {
                 onOpen: function() {
                     if (atmosphere.util.__socketPromiseFulfill) {

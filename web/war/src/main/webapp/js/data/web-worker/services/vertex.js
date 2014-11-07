@@ -24,6 +24,10 @@ define(['../util/ajax'], function(ajax) {
             params.filter = JSON.stringify(options.propertyFilters || []);
 
             return ajax('GET', '/vertex/search', params);
+        },
+
+        cached: function(vertexId) {
+
         }
     };
 });

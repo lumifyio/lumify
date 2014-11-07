@@ -22,7 +22,6 @@ define(['../services/workspace'], function(Workspace) {
                 workspace: workspace,
                 vertices: vertices
             });
-            //var changes = cache.cacheAjaxResult(jsonResponse, url, workspaceId);
         });
     }
 });

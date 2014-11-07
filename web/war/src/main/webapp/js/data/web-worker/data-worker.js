@@ -9,8 +9,10 @@ setupRequireJs();
 onmessage = function(event) {
     require([
         'underscore',
-        'util/promise'
-    ], function() {
+        'util/promise',
+        'data/web-worker/util/store'
+    ], function(_, Promise, store) {
+        self.store = store;
         onMessageHandler(event);
     })
 };
@@ -126,11 +128,17 @@ function ajaxPrefilter(xmlHttpRequest, method, url, parameters) {
     }
 }
 
-function ajaxPostfilter(xmlHttpRequest, jsonResponse, method, url, parameters) {
-    if (method === 'GET') {
-        require(['data/web-worker/util/cache'], function(cache) {
-            //var changes = cache.cacheAjaxResult(jsonResponse, url, workspaceId);
-            // TODO: broadcast these
-        });
+function ajaxPostfilter(xmlHttpRequest, jsonResponse, request) {
+    if (!jsonResponse) {
+        return;
     }
+
+    var params = request.parameters,
+        workspaceId = params && params.workspaceId;
+
+    if (!workspaceId) {
+        workspaceId = publicData.currentWorkspaceId;
+    }
+
+    store.checkAjaxForPossibleCaching(xmlHttpRequest, jsonResponse, workspaceId, request);
 }
