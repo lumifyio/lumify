@@ -301,20 +301,22 @@ define([
                                 id: toCyId(vertex),
                             },
                             grabbable: self.isWorkspaceEditable,
-                            selected: !!vertex.workspace.selected
+                            selected: false // TODO: check selected?
                         };
                         self.updateCyNodeData(cyNodeData.data, vertex);
 
                         var needsAdding = false,
                             needsUpdating = false;
 
-                        if (vertex.workspace.graphPosition) {
-                            cyNodeData.position = retina.pointsToPixels(vertex.workspace.graphPosition);
-                        } else if (vertex.workspace.dropPosition) {
+                        if (self.workspaceVertices[vertex.id].graphPosition) {
+                            cyNodeData.position = retina.pointsToPixels(
+                                self.workspaceVertices[vertex.id].graphPosition
+                            );
+                        } else if (self.workspaceVertices[vertex.id].dropPosition) {
                             var offset = self.$node.offset();
                             cyNodeData.renderedPosition = retina.pointsToPixels({
-                                x: vertex.workspace.dropPosition.x - offset.left,
-                                y: vertex.workspace.dropPosition.y - offset.top
+                                x: self.workspaceVertices[vertex.id].dropPosition.x - offset.left,
+                                y: self.workspaceVertices[vertex.id].dropPosition.y - offset.top
                             });
                             needsAdding = true;
                         } else if (layoutPositions[vertex.id]) {
@@ -349,7 +351,8 @@ define([
 
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
-                        v.workspace.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
+                        self.workspaceVertices[v.id].graphPosition =
+                            retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
                     });
 
                     if (options.fit && cy.nodes().length) {
@@ -406,8 +409,8 @@ define([
             if (vertex.imageSrcIsFromConcept === false) {
                 cls.push('hasCustomGlyph');
             }
-            if (~['video', 'image'].indexOf(vertex.concept.displayType)) {
-                cls.push(vertex.concept.displayType);
+            if (~['video', 'image'].indexOf(F.vertex.concept(vertex).displayType)) {
+                cls.push(F.vertex.concept(vertex).displayType);
             }
 
             return cls.join(' ');
@@ -420,6 +423,7 @@ define([
             merged.truncatedTitle = truncatedTitle;
             merged.imageSrc = vertex.imageSrc;
             merged.conceptType = F.vertex.prop(vertex, 'conceptType');
+            merged.imageSrc = F.vertex.image(vertex);
 
             return merged;
         };
@@ -1130,6 +1134,7 @@ define([
         this.onWorkspaceLoaded = function(evt, workspace) {
             this.resetGraph();
             this.isWorkspaceEditable = workspace.editable;
+            this.workspaceVertices = workspace.vertices;
             if (workspace.data.vertices.length) {
                 var newWorkspace = !this.previousWorkspace || this.previousWorkspace != workspace.workspaceId;
                 this.addVertices(workspace.data.vertices, {

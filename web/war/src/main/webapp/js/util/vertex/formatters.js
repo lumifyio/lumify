@@ -199,6 +199,16 @@ define([
                 );
             },
 
+            concept: function(vertex) {
+                var conceptType = vertex && V.prop(vertex, 'conceptType');
+
+                if (!conceptType) {
+                    conceptType = 'http://www.w3.org/2002/07/owl#Thing';
+                }
+
+                return ontology.conceptsById[conceptType];
+            },
+
             isKindOfConcept: function(vertex, conceptTypeFilter) {
                 var conceptType = V.prop(vertex, 'conceptType');
 
@@ -344,6 +354,73 @@ define([
                     return compareFunction(values.map(transformFunction), transformFunction(vertexProperty));
                 });
             },
+
+            image: function(vertex, optionalWorkspaceId) {
+                return V.concept(vertex).glyphIconHref;
+            },
+
+            imageIsFromConcept: function(vertex, optionalWorkspaceId) {
+            },
+
+            detailImage: function(vertex, optionalWorkspaceId) {
+            },
+
+            raw: function(vertex, optionalWorkspaceId) {
+            },
+
+            imageFramesSrc: function(vertex, optionalWorkspaceId) {
+            },
+
+            /*
+            function setPreviewsForVertex(vertex, currentWorkspace) {
+                var params = {
+                        workspaceId: currentWorkspace,
+                        graphVertexId: vertex.id
+                    },
+                    artifactUrl = function(type, p) {
+                        return _.template('vertex/{ type }?' + $.param($.extend(params, p || {})), { type: type });
+                    },
+                    entityImageUrl = F.vertex.prop(vertex, 'entityImageUrl'),
+                    entityImageVertexId = F.vertex.prop(vertex, 'entityImageVertexId');
+
+                vertex.imageSrcIsFromConcept = false;
+
+                if (entityImageUrl) {
+                    vertex.imageSrc = entityImageUrl;
+                    vertex.imageDetailSrc = entityImageUrl;
+                } else if (entityImageVertexId) {
+                    vertex.imageSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 150 });
+                    vertex.imageDetailSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
+                } else {
+
+                    // TODO: scale glyphs
+                    vertex.imageSrc = vertex.concept.glyphIconHref;
+                    vertex.imageDetailSrc = vertex.concept.glyphIconHref;
+                    vertex.imageRawSrc = artifactUrl('raw');
+                    vertex.imageSrcIsFromConcept = true;
+
+                    switch (vertex.concept.displayType) {
+
+                        case 'image':
+                            vertex.imageSrc = artifactUrl('thumbnail', { width: 150 });
+                            vertex.imageSrcIsFromConcept = false;
+                            vertex.imageDetailSrc = artifactUrl('thumbnail', { width: 800 });
+                            break;
+
+                        case 'video':
+                            vertex.properties.forEach(function(p) {
+                                if (p.name === 'http://lumify.io#rawPosterFrame') {
+                                    vertex.imageSrc = artifactUrl('poster-frame');
+                                    vertex.imageDetailSrc = artifactUrl('poster-frame');
+                                    vertex.imageSrcIsFromConcept = false;
+                                } else if (p.name === 'http://lumify.io#videoPreviewImage') {
+                                    vertex.imageFramesSrc = artifactUrl('video-preview');
+                                }
+                            });
+                            break;
+                    }
+                }
+            */
 
             propName: function(name) {
                 var autoExpandedName = (/^http:\/\/lumify.io/).test(name) ?

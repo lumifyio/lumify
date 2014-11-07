@@ -16,6 +16,9 @@ define(['../util/ajax'], function(ajax) {
         get: function(workspaceId) {
             return ajax('GET', '/workspace', {
                 workspaceId: workspaceId
+            }).then(function(workspace) {
+                workspace.vertices = _.indexBy(workspace.vertices, 'vertexId');
+                return workspace;
             });
         },
 
