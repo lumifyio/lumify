@@ -4,6 +4,8 @@ define([
 ], function(Cache) {
     'use strict';
 
+    var workspaces = {};
+
     return {
         cacheAjaxResult: function(result, url, workspaceId) {
 

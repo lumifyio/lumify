@@ -4,6 +4,10 @@ define([], function() {
     return function(message) {
         require(['data/web-worker/services/' + message.data.service],
         function(Service) {
+            if (!(message.data.method in Service)) {
+                throw new Error('Service: ' + message.data.service + ' is missing method: ' + message.data.method);
+            }
+
             Service[message.data.method].apply(undefined, message.data.parameters || [])
                 .then(function(result) {
                     dispatchMain('dataRequestCompleted', {

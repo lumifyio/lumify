@@ -190,7 +190,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             return;
         }
 
-        if ("changedWorkspace".equals(type)) {
+        if ("setActiveWorkspace".equals(type)) {
             String authUserId = CurrentUser.get(resource.session());
             if (authUserId == null) {
                 throw new RuntimeException("Could not find user in session");

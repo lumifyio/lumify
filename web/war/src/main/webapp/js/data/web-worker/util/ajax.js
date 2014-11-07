@@ -7,7 +7,16 @@ define(['util/promise'], function() {
     function toQueryString(params) {
         var str = '', key;
         for (key in params) {
-            str += key + '=' + encodeURIComponent(params[key]) + '&';
+            if (typeof params[key] !== 'undefined') {
+
+                if (_.isArray(params[key])) {
+                    str += _.map(params[key], function(v) {
+                        return key + '[]' + '=' + encodeURIComponent(v);
+                    }).join('&') + '&';
+                } else {
+                    str += key + '=' + encodeURIComponent(params[key]) + '&';
+                }
+            }
         }
         return str.slice(0, str.length - 1);
     }
@@ -17,12 +26,14 @@ define(['util/promise'], function() {
 
         return new Promise(function(fulfill, reject) {
             var r = new XMLHttpRequest(),
+                params = toQueryString(parameters),
                 resolvedUrl = BASE_URL +
                     url +
-                    (parameters ?
-                        '?' + toQueryString(parameters) :
+                    ((method === 'GET' && parameters) ?
+                        '?' + params :
                         ''
-                    );
+                    ),
+                formData;
 
             r.onload = function() {
                 var jsonStr = r.status === 200 && r.responseText;
@@ -38,7 +49,7 @@ define(['util/promise'], function() {
                         reject(e);
                     }
                 } else {
-                    reject(r.status);
+                    reject(r.statusText);
                 }
             };
             r.onerror = function() {
@@ -46,11 +57,16 @@ define(['util/promise'], function() {
             };
             r.open(method || 'get', resolvedUrl, true);
 
+            if (method === 'POST' && parameters) {
+                formData = params;
+                r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            }
+
             if (typeof ajaxPrefilter !== 'undefined') {
                 ajaxPrefilter.call(null, r, method, url, parameters);
             }
 
-            r.send();
+            r.send(formData);
         });
     }
 })

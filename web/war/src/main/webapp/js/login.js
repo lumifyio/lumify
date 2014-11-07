@@ -38,11 +38,13 @@ define([
             if ((/^#?[a-z]+=/i).test(location.hash)) {
                 window.location.reload();
             } else {
-                debugger;
                 this.dataRequest('user', 'me')
                     .then(function() {
-                        debugger;
                         require(['app'], function(App) {
+
+                            self.select('authenticationSelector')
+                                .find('button.loading').removeClass('loading');
+
                             App.attachTo('#app', {
                                 animateFromLogin: true,
                                 addVertexIds: self.attr.toOpen &&
@@ -57,10 +59,7 @@ define([
                                 self.teardown();
                             });
                         });
-                    })
-                    .catch(function(e) {
-                        debugger;
-                    })
+                    });
             }
         };
 

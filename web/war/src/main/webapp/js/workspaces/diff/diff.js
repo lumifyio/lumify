@@ -5,16 +5,14 @@ define([
     'service/ontology',
     'service/workspace',
     'util/vertex/formatters',
-    'util/privileges',
-    'data'
+    'util/privileges'
 ], function(
     defineComponent,
     template,
     OntologyService,
     WorkspaceService,
     F,
-    Privileges,
-    appData) {
+    Privileges) {
     'use strict';
 
     var SHOW_CHANGES_TEXT_SECONDS = 3;
@@ -58,6 +56,7 @@ define([
                     });
                 };
 
+            return;
             self.processDiffs(self.attr.diffs).done(function(processDiffs) {
                 self.$node.html(template({
                     diffs: processDiffs,
@@ -140,6 +139,8 @@ define([
                 }),
                 output = [];
 
+            // TODO:
+            /*
             return appData.refresh(referencedVertices).then(function() {
 
                 self.diffsForVertexId = {};
@@ -234,6 +235,7 @@ define([
                 }
                 self.undoDiffDependencies[diff.id].push(id);
             }
+            */
         }
 
         this.onObjectsSelected = function(event, data) {
@@ -253,15 +255,17 @@ define([
         };
 
         this.onRowClick = function(event) {
-            var $target = $(event.target).not('button').closest('tr'),
-                vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
-                vertexId = vertexRow.data('vertexId'),
-                vertex = vertexId && appData.vertex(vertexId),
-                alreadySelected = vertexRow.is('.active');
+            // TODO: fix appData
+            
+            //var $target = $(event.target).not('button').closest('tr'),
+                //vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
+                //vertexId = vertexRow.data('vertexId'),
+                //vertex = vertexId && appData.vertex(vertexId),
+                //alreadySelected = vertexRow.is('.active');
 
-            this.trigger('selectObjects', {
-                vertices: (!alreadySelected && vertex) ? [vertex] : []
-            });
+            //this.trigger('selectObjects', {
+                //vertices: (!alreadySelected && vertex) ? [vertex] : []
+            //});
         };
 
         this.onButtonClick = function(event) {

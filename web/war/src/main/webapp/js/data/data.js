@@ -2,11 +2,13 @@
 define([
     'flight/lib/component',
     './withPublicApi',
+    './withBrokenWorkerConsole',
     './withDataRequestHandler',
     './withCurrentUser',
     './withWebsocket',
     './withLegacyWebsocket',
     './withObjectSelection',
+    './withWorkspaces',
     'util/withDataRequest'
 ], function(
     defineComponent

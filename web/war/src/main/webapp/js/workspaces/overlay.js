@@ -220,6 +220,7 @@ define([
         };
 
         this.updateDiffBadge = function(event, data) {
+            return;
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');

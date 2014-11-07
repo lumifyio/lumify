@@ -8,7 +8,6 @@ define([
     'workspaces/workspaces',
     'workspaces/overlay',
     'admin/admin',
-    'sync/sync',
     'chat/chat',
     'activity/activity',
     'graph/graph',
@@ -34,7 +33,6 @@ define([
     Workspaces,
     WorkspaceOverlay,
     Admin,
-    Sync,
     Chat,
     Activity,
     Graph,
@@ -86,7 +84,6 @@ define([
             _.invoke([
                 WorkspaceOverlay,
                 MouseOverlay,
-                Sync,
                 Menubar,
                 Dashboard,
                 Search,
@@ -109,8 +106,6 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            window.lumifyApp = this;
-
             this.setupAsyncQueue('currentUser');
 
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
@@ -122,7 +117,6 @@ define([
             this.on(document, 'chatMessage', this.onChatMessage);
             this.on(document, 'selectUser', this.onChatMessage);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
-            this.on(document, 'syncStarted', this.onSyncStarted);
             this.on(document, 'paneResized', this.onInternalPaneResize);
             this.on(document, 'toggleGraphDimensions', this.onToggleGraphDimensions);
             this.on(document, 'resizestart', this.onResizeStart);
@@ -209,7 +203,6 @@ define([
             ContextMenu.attachTo(document);
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
             MouseOverlay.attachTo(document);
-            Sync.attachTo(window);
             Menubar.attachTo(menubarPane.find('.content'));
             Dashboard.attachTo(dashboardPane);
             Search.attachTo(searchPane.find('.content'));
@@ -233,33 +226,35 @@ define([
 
             this.triggerPaneResized();
 
-            //if (self.attr.animateFromLogin) {
-                //$(document.body).on(TRANSITION_END, function(e) {
-                    //var oe = e.originalEvent;
-                    //if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
-                        //$(document.body).off(TRANSITION_END);
+            if (this.attr.animateFromLogin) {
+                $(document.body).on(TRANSITION_END, function(e) {
+                    var oe = e.originalEvent;
+                    if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
+                        $(document.body).off(TRANSITION_END);
+                        self.trigger('loadCurrentWorkspace');
                         //data.loadActiveWorkspace();
                         //self.trigger(document, 'applicationReady');
-                        //graphPane.focus();
-                    //}
-                //});
-                //_.defer(function() {
-                    //$(document.body).addClass('animateloginstart');
-                //})
-            //} else {
+                        graphPane.focus();
+                    }
+                });
+                _.defer(function() {
+                    $(document.body).addClass('animateloginstart');
+                })
+            } else {
+                this.trigger('loadCurrentWorkspace');
                 //data.loadActiveWorkspace();
                 //self.trigger(document, 'applicationReady');
-            //}
+            }
 
-            //_.delay(function() {
-                //if (self.attr.addVertexIds) {
-                    //self.handleAddToWorkspace(self.attr.addVertexIds);
-                //}
-                //if (self.attr.openAdminTool && Privileges.canADMIN) {
-                    //self.trigger('menubarToggleDisplay', { name: 'admin' });
-                    //self.trigger('showAdminPlugin', self.attr.openAdminTool);
-                //}
-            //}, 500);
+            _.delay(function() {
+                if (self.attr.addVertexIds) {
+                    self.handleAddToWorkspace(self.attr.addVertexIds);
+                }
+                if (self.attr.openAdminTool && Privileges.canADMIN) {
+                    self.trigger('menubarToggleDisplay', { name: 'admin' });
+                    self.trigger('showAdminPlugin', self.attr.openAdminTool);
+                }
+            }, 500);
         });
 
         this.onCurrentUserChanged = function(event, user) {
@@ -721,18 +716,6 @@ define([
                 userService.setPreference('pane-' + sizePaneName, ui.element.width() + ',' + ui.element.height());
             } else if (widthPaneName) {
                 userService.setPreference('pane-' + widthPaneName, ui.element.width());
-            }
-        };
-
-        this.onSyncStarted = function() {
-            this.collapseAllPanes();
-
-            var graph = this.select('graphSelector');
-            if (!graph.is('.visible')) {
-                self.trigger(document, 'menubarToggleDisplay', {
-                    name: graph.data(DATA_MENUBAR_NAME),
-                    syncToRemote: false
-                });
             }
         };
 

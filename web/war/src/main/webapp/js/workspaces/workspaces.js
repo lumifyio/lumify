@@ -1,32 +1,22 @@
 
 define([
     'flight/lib/component',
-    'data',
-    'service/workspace',
-    'service/user',
     './form/form',
     'tpl!./workspaces',
     'tpl!./list',
     'tpl!./item',
-    'util/jquery.flight',
-    'util/withAsyncQueue'
+    'util/withDataRequest'
 ], function(defineComponent,
-    appData,
-    WorkspaceService,
-    UserService,
     WorkspaceForm,
     workspacesTemplate,
     listTemplate,
     itemTemplate,
-    jqueryFlight,
-    withAsyncQueue) {
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(Workspaces, withAsyncQueue);
+    return defineComponent(Workspaces, withDataRequest);
 
     function Workspaces() {
-        this.workspaceService = new WorkspaceService();
-        this.userService = new UserService();
 
         this.defaultAttrs({
             listSelector: 'ul.nav-list',
@@ -44,32 +34,34 @@ define([
             if ($target.closest('.workspace-form').length) return;
 
             var li = $(event.target).closest('li'),
-                workspaceId = li.data('workspaceId').toString();
+                workspaceId = li.data('workspaceId');
 
             if (workspaceId) {
-                this.switchToWorkspace(workspaceId);
+                this.switchToWorkspace(workspaceId.toString());
             }
         };
 
         this.switchToWorkspace = function(workspaceId) {
-            if (workspaceId === appData.workspaceId) return;
-            this.trigger(document, 'switchWorkspace', { workspaceId: workspaceId });
+            if (workspaceId !== lumifyData.currentWorkspaceId) {
+                this.trigger('switchWorkspace', { workspaceId: workspaceId });
+            }
         };
 
         this.onAddNew = function(event) {
             var self = this,
-                title = $(event.target).parents('li').find('input').val();
+                $input = $(event.target).parents('li').find('input'),
+                title = $.trim($input.val());
 
             if (!title) return;
 
-            this.workspaceService.create(title)
-                .done(function(workspace) {
-                    self.loadWorkspaceList()
-                        .done(function() {
-                            self.onWorkspaceLoad(null, workspace);
-                            self.switchToWorkspace(workspace.workspaceId)
-                        });
-                });
+            this.dataRequest('workspace', 'create', { title: title })
+                .then(function(workspace) {
+                    $input.val('')
+                    self.trigger('switchWorkspace', { workspaceId: workspace.workspaceId });
+                })
+                .catch(function() {
+                    $input.focus();
+                })
         };
 
         this.onInputKeyUp = function(event) {
@@ -141,8 +133,10 @@ define([
         };
 
         this.onWorkspaceLoad = function(event, data) {
-            this.updateListItemWithData(data);
-            this.switchActive(data.workspaceId);
+            if (this.$node.closest('.visible').length) {
+                this.updateListItemWithData(data);
+                this.switchActive(data.workspaceId);
+            }
         };
 
         this.findWorkspaceRow = function(workspaceId) {
@@ -162,43 +156,44 @@ define([
         };
 
         this.updateListItemWithData = function(data, timestamp) {
-            var self = this;
+            var self = this,
+                currentUser = lumifyData.currentUser,
+                li = this.findWorkspaceRow(data.workspaceId);
 
-            this.currentUserReady(function(currentUser) {
-                var li = this.findWorkspaceRow(data.workspaceId);
-                if (data.createdBy === currentUser.id ||
-                    _.contains(_.pluck(data.users, 'userId'), currentUser.id)
-                ) {
-                    li.find('.badge').removeClass('loading').hide().next().show();
-                    this.workspaceDataForItemRow(data)
-                        .done(function(data) {
-                            var content = $(itemTemplate({ workspace: data, selected: self.workspaceId }));
-                            if (li.length === 0) {
-                                self.$node.find('li.nav-header').eq(data.sharedToUser ? 1 : 0).after(content);
-                            } else {
-                                li.replaceWith(content);
-                            }
+            if (data.createdBy === currentUser.id ||
+                _.contains(_.pluck(data.users, 'userId'), currentUser.id)
+            ) {
+                li.find('.badge').removeClass('loading').hide().next().show();
+                this.workspaceDataForItemRow(data)
+                    .done(function(data) {
+                        var content = $(itemTemplate({ workspace: data, selected: self.workspaceId }));
+                        if (li.length === 0) {
+                            self.$node.find('li.nav-header').eq(data.sharedToUser ? 1 : 0).after(content);
+                        } else {
+                            li.replaceWith(content);
+                        }
 
-                            // Sort section because title might be renamed
-                            var lis = self.getWorkspaceListItemsInSection(data.sharedToUser),
-                                titleGetter = function() {
-                                    return $(this).data('title');
-                                },
-                                lowerCase = function(s) {
-                                    return s.toLowerCase();
-                                },
-                                titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
-                                insertIndex = _.indexOf(titles, data.title),
-                                currentIndex = lis.index(content);
+                        // Sort section because title might be renamed
+                        var lis = self.getWorkspaceListItemsInSection(data.sharedToUser),
+                            titleGetter = function() {
+                                return $(this).data('title');
+                            },
+                            lowerCase = function(s) {
+                                return s.toLowerCase();
+                            },
+                            titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
+                            insertIndex = _.indexOf(titles, data.title),
+                            currentIndex = lis.index(content);
 
-                            if (currentIndex < insertIndex) {
-                                content.insertAfter(lis.eq(insertIndex));
-                            } else if (currentIndex > insertIndex) {
-                                content.insertBefore(lis.eq(insertIndex));
-                            }
-                        });
-                } else li.remove();
-            });
+                        if (currentIndex < insertIndex) {
+                            content.insertAfter(lis.eq(insertIndex));
+                        } else if (currentIndex > insertIndex) {
+                            content.insertBefore(lis.eq(insertIndex));
+                        }
+                    });
+            } else {
+                li.remove();
+            }
         };
 
         this.getWorkspaceListItemsInSection = function(shared) {
@@ -211,11 +206,6 @@ define([
                     .children('.nav-header').eq(0)
                     .nextUntil('.new-workspace');
             }
-        };
-
-        this.onWorkspaceCopied = function(event, data) {
-            this.collapseEditForm();
-            this.loadWorkspaceList();
         };
 
         this.onWorkspaceUpdated = function(event, data) {
@@ -259,8 +249,9 @@ define([
         this.loadWorkspaceList = function(switchToFirst) {
             var self = this;
 
-            return this.workspaceService.list()
-                .then(function(workspaceResponse) {
+            // TODO: convert to d3
+            this.dataRequest('workspace', 'all')
+                .done(function(workspaceResponse) {
                     var workspaces = workspaceResponse.workspaces || [],
                         users = _.chain(workspaces)
                             .map(function(workspace) {
@@ -301,10 +292,14 @@ define([
                         };
 
                     if (users.length) {
-                        self.userService.userInfo(users).done(function(result) {
-                            self.usersById = $.extend(self.usersById, result.users);
-                            updateHtml();
-                        });
+                        self.dataRequest('user', 'info', users)
+                            .then(function(result) {
+                                self.usersById = $.extend(self.usersById, result.users);
+                                updateHtml();
+                            })
+                            .catch(function() {
+                                debugger;
+                            });
                     } else {
                         updateHtml();
                     }
@@ -315,7 +310,7 @@ define([
             var deferred = $.Deferred(),
                 row = $.extend({}, w),
                 usersNotCurrent = row.users.filter(function(u) {
-                    return u.userId != window.currentUser.id;
+                    return u.userId != lumifyData.currentUser.id;
                 }),
                 people = usersNotCurrent.length;
 
@@ -349,34 +344,19 @@ define([
             if (data.name === 'workspaces') {
                 if (this.$node.closest('.visible').length) {
                     this.loadWorkspaceList();
+                    this.switchActive(lumifyData.currentWorkspaceId);
                 } else {
                     this.collapseEditForm();
                 }
             }
         };
 
-        this.registerForCurrentUser = function() {
-            var self = this;
-
-            this.setupAsyncQueue('currentUser');
-            if (window.currentUser) {
-                this.currentUserMarkReady(window.currentUser);
-            } else {
-                this.on(document, 'currentUserChanged', function(event, data) {
-                    self.currentUserMarkReady(data.user);
-                });
-            }
-        }
-
         this.after('initialize', function() {
-
-            this.registerForCurrentUser();
 
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoad);
             this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
             this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
             this.on(document, 'workspaceDeleted', this.onWorkspaceDeleted);
-            this.on(document, 'workspaceCopied', this.onWorkspaceCopied);
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'workspaceNotAvailable', this.onWorkspaceNotAvailable);
 
@@ -384,11 +364,13 @@ define([
             this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
 
             this.on('workspaceDeleting', this.onWorkspaceDeleting);
+
             this.on('click', {
                 workspaceListItemSelector: this.onWorkspaceItemClick,
                 addNewSelector: this.onAddNew,
                 disclosureSelector: this.onDisclosure
             });
+
             this.on('keyup', {
                 addNewInputSelector: this.onInputKeyUp
             });

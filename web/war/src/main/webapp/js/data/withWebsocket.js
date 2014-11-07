@@ -12,6 +12,13 @@ define([], function() {
             })
         });
 
+        this.pushSocket = function(message) {
+            this.worker.postMessage({
+                type: 'websocketSend',
+                message: message
+            });
+        };
+
         this.getAtmosphereConfiguration = function() {
             return {
                 url: 'messaging',

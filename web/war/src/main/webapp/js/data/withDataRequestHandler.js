@@ -6,8 +6,8 @@ define([], function() {
     function withDataRequestHandler() {
 
         this.after('initialize', function() {
-            this.on(document, 'dataRequest', this.handleDataRequest);
-            this.on(document, 'dataRequestCancel', this.handleDataRequestCancel);
+            this.on('dataRequest', this.handleDataRequest);
+            this.on('dataRequestCancel', this.handleDataRequestCancel);
         });
 
         this.handleDataRequestCancel = function(event, data) {

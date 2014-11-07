@@ -1,24 +1,73 @@
 var BASE_URL = '../../..',
     self = this,
-    publicData = {},
-    WORKER_WEBSOCKETS = !!(this.WebSocket || this.MozWebSocket);
+    publicData = {};
 
-this.BASE_URL = BASE_URL;
-
-if (WORKER_WEBSOCKETS) {
-    this.window = this;
-    window.addEventListener = function() {};
-    importScripts('/libs/atmosphere/atmosphere.js')
-    atmosphere.util.getAbsoluteURL = function() {
-        return location.origin + '/messaging';
-    }
-} else {
-    dispatchMain('websocketNotSupportedInWorker');
-}
-
+setupConsole();
+setupWebsocket();
 setupRequireJs();
 
-onmessage = onMessageHandler;
+onmessage = function(event) {
+    require([
+        'underscore',
+        'util/promise'
+    ], function() {
+        onMessageHandler(event);
+    })
+};
+
+function setupConsole() {
+    if (typeof console === 'undefined') {
+        console = {
+            log: log('log'),
+            info: log('info'),
+            debug: log('debug'),
+            error: log('error'),
+            warn: log('warn'),
+        };
+    }
+    function log(type) {
+        return function() {
+            dispatchMain('brokenWorkerConsole', {
+                logType: type,
+                messages: Array.prototype.slice.call(arguments, 0)
+            });
+        }
+    }
+}
+
+function setupWebsocket() {
+    var supportedInWorker = !!(this.WebSocket || this.MozWebSocket);
+
+    if (supportedInWorker) {
+        self.window = self;
+        importScripts('/libs/atmosphere/atmosphere.js')
+        atmosphere.util.getAbsoluteURL = function() {
+            return location.origin + '/messaging';
+        }
+        self.pushSocketMessage = function(message) {
+            Promise.all([
+                Promise.require('util/websocket'),
+                new Promise(function(fulfill, reject) {
+                    if (atmosphere.util.__socketOpened) {
+                        fulfill(publicData.socket);
+                    }
+                    atmosphere.util.__socketPromiseFulfill = fulfill;
+                    atmosphere.util.__socketPromiseReject = reject;
+                })
+            ]).done(function(results) {
+                var pushDataToSocket = results[0],
+                    socket = results[1];
+
+                pushDataToSocket(socket, message);
+            });
+        }
+    } else {
+        dispatchMain('websocketNotSupportedInWorker');
+        self.pushSocketMessage = function(message) {
+            dispatchMain('websocketFromWorker', { message: message });
+        }
+    }
+}
 
 function setupRequireJs() {
     importScripts(BASE_URL + '/jsc/require.config.js');
@@ -27,15 +76,16 @@ function setupRequireJs() {
 }
 
 function onMessageHandler(event) {
-    require(['underscore'], function() {
-        var data = event.data;
+    var data = event.data;
+    processMainMessage(data);
+}
 
-        if (data.type) {
-            require(['data/web-worker/handlers/' + data.type], function(handler) {
-                handler(data);
-            });
-        } else console.warn('Unhandled message to worker', event);
-    });
+function processMainMessage(data) {
+    if (data.type) {
+        require(['data/web-worker/handlers/' + data.type], function(handler) {
+            handler(data);
+        });
+    } else console.warn('Unhandled message to worker', event);
 }
 
 function dispatchMain(type, message) {
@@ -60,7 +110,8 @@ function ajaxPrefilter(xmlHttpRequest, method, url, parameters) {
     }
 
     function setWorkspaceHeader() {
-        if (!parameters || !('workspaceId' in parameters)) {
+        var hasWorkspaceParam = typeof (parameters && parameters.workspaceId) !== 'undefined';
+        if (publicData.currentWorkspaceId && !hasWorkspaceParam) {
             xmlHttpRequest.setRequestHeader('Lumify-Workspace-Id', publicData.currentWorkspaceId);
         }
     }

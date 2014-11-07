@@ -12,6 +12,12 @@ define(['../util/ajax'], function(ajax) {
                 })
         },
 
+        info: function(userIds) {
+            return ajax(userIds.length > 1 ? 'POST' : 'GET', '/user/info', {
+                userIds: userIds
+            });
+        },
+
         logout: function(options) {
             return ajax('POST', '/logout');
         }

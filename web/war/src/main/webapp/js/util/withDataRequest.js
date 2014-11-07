@@ -78,7 +78,6 @@ define(['util/promise'], function() {
         }
 
         function triggerEvent() {
-            console.log('triggering event on', $node)
             $node.trigger('dataRequest', {
                 requestId: thisRequestId,
                 service: service,
