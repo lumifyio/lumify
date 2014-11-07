@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -263,5 +265,9 @@ public abstract class UserRepository {
             skip += limit;
         }
         return foundUsers;
+    }
+
+    public static String createRandomPassword() {
+        return new BigInteger(120, new SecureRandom()).toString(32);
     }
 }
