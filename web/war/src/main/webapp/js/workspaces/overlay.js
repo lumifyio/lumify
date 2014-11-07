@@ -5,16 +5,14 @@ define([
     'util/formatters',
     'util/withDataRequest',
     'service/workspace',
-    'service/ontology',
-    'data'
+    'service/ontology'
 ], function(
     defineComponent,
     template,
     F,
     withDataRequest,
     WorkspaceService,
-    OntologyService,
-    appData) {
+    OntologyService) {
     'use strict';
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30,
@@ -49,25 +47,15 @@ define([
                 MENUBAR_WIDTH = $('.menubar-pane').width();
             })
 
-            this.userDeferred = $.Deferred();
-            if (window.currentUser) {
-                this.userDeferred.resolve();
-            }
-
-            this.workspaceDeferred = $.Deferred();
             this.updateDiffBadge = _.throttle(this.updateDiffBadge.bind(this), UPDATE_WORKSPACE_DIFF_SECONDS * 1000)
 
-            $.when(this.userDeferred, this.workspaceDeferred).done(function() {
-                self.$node.show();
-
-                self.updateUserTooltip({user: window.currentUser});
-
-                requestAnimationFrame(function() {
-                    self.$node.addClass('visible');
-                });
-            })
-
             this.$node.hide().html(template({}));
+
+            this.updateUserTooltip({user: lumifyData.currentUser});
+
+            requestAnimationFrame(function() {
+                self.$node.addClass('visible');
+            });
 
             this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
             this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
@@ -75,7 +63,6 @@ define([
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
-            this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
             this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
 
             this.on(document, 'verticesUpdated', this.updateDiffBadge);
@@ -107,11 +94,6 @@ define([
                 badge.popover('hide');
             }
         };
-
-        this.onCurrentUserChanged = function(event, data) {
-            this.userDeferred.resolve();
-            this.updateUserTooltip(data);
-        }
 
         this.onGraphPaddingUpdated = function(event, data) {
             this.$node.css('left', data.padding.l + MENUBAR_WIDTH);
@@ -163,7 +145,7 @@ define([
         };
 
         this.onWorkspaceLoaded = function(event, data) {
-            this.workspaceDeferred.resolve();
+            this.$node.show();
             this.setContent(data.title, data.editable, i18n('workspaces.overlay.no_changes'));
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
