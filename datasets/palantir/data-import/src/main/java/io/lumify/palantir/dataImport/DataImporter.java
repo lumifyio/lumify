@@ -99,6 +99,7 @@ public class DataImporter {
     }
 
     public void run() throws ClassNotFoundException, SQLException, IOException, ExecutionException {
+        long startTime = System.currentTimeMillis();
         sqlRunner.connect();
         try {
             for (PtImporterBase importer : importers) {
@@ -107,6 +108,8 @@ public class DataImporter {
         } finally {
             sqlRunner.close();
         }
+        long endTime = System.currentTimeMillis();
+        LOGGER.debug("complete (time: %dms)", endTime - startTime);
     }
 
     public SqlRunner getSqlRunner() {
