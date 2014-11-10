@@ -39,6 +39,7 @@ import static org.securegraph.util.IterableUtils.toList;
 public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoFrameExtractGraphPropertyWorker.class);
     private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
+    private Double defaultFPSToExtract = 1.0;
     private ProcessRunner processRunner;
 
     @Override
@@ -52,11 +53,10 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         IntegerLumifyProperty videoRotationProperty = new IntegerLumifyProperty(config.clockwiseRotationIri);
         Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement(), 0);
 
-        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data, 0.1);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
-            extractFrames(data.getLocalFile(), tempDir, data, framesPerSecondToExtract, videoRotation);
+            extractFrames(data.getLocalFile(), tempDir, data, defaultFPSToExtract, videoRotation);
 
             List<String> propertyKeys = new ArrayList<String>();
             long videoDuration = 0;
@@ -65,7 +65,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                 if (!m.matches()) {
                     continue;
                 }
-                long frameStartTime = (long) ((Double.parseDouble(m.group(1)) / framesPerSecondToExtract) * 1000.0);
+                long frameStartTime = (long) ((Double.parseDouble(m.group(1)) / defaultFPSToExtract) * 1000.0);
                 if (frameStartTime > videoDuration) {
                     videoDuration = frameStartTime;
                 }
@@ -249,20 +249,6 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         }
         return results;
     }
-
-    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data, double defaultFPSToExtract) {
-        int numberOfFrames = 20;
-        DoubleLumifyProperty durationProperty = new DoubleLumifyProperty(config.durationIri);
-        Double duration = durationProperty.getPropertyValue(data.getElement(), 0);
-        if (duration != null && duration != 0) {
-            double framesPerSecondToExtract = numberOfFrames / duration;
-            return framesPerSecondToExtract;
-        }
-
-        //Upon failure to calculate FPS, return defaultFPS.
-        return defaultFPSToExtract;
-    }
-
 
     @Inject
     public void setProcessRunner(ProcessRunner processRunner) {
