@@ -4,17 +4,19 @@ define(['util/promise'], function() {
 
     return ajax;
 
+    function paramPair(key, value) {
+        return key + '=' + encodeURIComponent(v);
+    }
+
     function toQueryString(params) {
         var str = '', key;
         for (key in params) {
             if (typeof params[key] !== 'undefined') {
 
                 if (_.isArray(params[key])) {
-                    str += _.map(params[key], function(v) {
-                        return key + '[]' + '=' + encodeURIComponent(v);
-                    }).join('&') + '&';
+                    str += _.map(params[key], _.partial(key + '[]', paramPair)).join('&') + '&';
                 } else {
-                    str += key + '=' + encodeURIComponent(params[key]) + '&';
+                    str += paramPair(key, params[key]) + '&';
                 }
             }
         }
@@ -50,14 +52,14 @@ define(['util/promise'], function() {
                         }
                         fulfill(json);
                     } catch(e) {
-                        reject(Error(e.message));
+                        reject(new Error(e.message));
                     }
                 } else {
-                    reject(Error(r.statusText));
+                    reject(new Error(r.statusText));
                 }
             };
             r.onerror = function() {
-                reject(Error('Network Error'));
+                reject(new Error('Network Error'));
             };
             r.open(method || 'get', resolvedUrl, true);
 

@@ -2,9 +2,9 @@ define([], function() {
     'use strict';
     return function(data) {
         var body = data.responseBody,
-            data = JSON.parse(body);
+            json = JSON.parse(body);
 
-        console.info('message', data);
+        console.info('message', json);
         // TODO: propagate to main in terms of events
     }
 });
