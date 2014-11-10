@@ -24,8 +24,6 @@ public class BackupRestore {
     private String accumuloUserName;
     private String accumuloPassword;
     private String zookeeperServers;
-    private String hdfsBackupDirectory;
-    private String hdfsRestoreDirectory;
     private String hdfsLocation;
 
     public static void main(String[] args) {
@@ -55,13 +53,6 @@ public class BackupRestore {
             return;
         }
 
-        hdfsRestoreDirectory = cmd.getOptionValue(CMD_OPT_HDFS_RESTORE_DIRECTORY);
-
-        hdfsBackupDirectory = cmd.getOptionValue(CMD_OPT_HDFS_BACKUP_DIRECTORY);
-        if (hdfsBackupDirectory == null) {
-            hdfsBackupDirectory = "/backup/" + backupDirectoryFormat.format(new Date());
-        }
-
         String[] restOfArgs = cmd.getArgs();
         if (restOfArgs.length != 1) {
             System.out.print("Either backup or restore must be specified.");
@@ -83,7 +74,13 @@ public class BackupRestore {
         switch (action) {
             case BACKUP:
                 try {
+                    String hdfsBackupDirectory = cmd.getOptionValue(CMD_OPT_HDFS_BACKUP_DIRECTORY);
+                    if (hdfsBackupDirectory == null) {
+                        hdfsBackupDirectory = "/backup/" + backupDirectoryFormat.format(new Date());
+                    }
+
                     BackupOptions backupOptions = new BackupOptions()
+                            .setHdfsBackupDirectory(hdfsBackupDirectory)
                             .setTableNamePrefix(tableNamePrefix);
                     setCommonOptions(backupOptions);
                     new Backup().run(backupOptions);
@@ -95,6 +92,8 @@ public class BackupRestore {
                 break;
             case RESTORE:
                 try {
+                    String hdfsRestoreDirectory = cmd.getOptionValue(CMD_OPT_HDFS_RESTORE_DIRECTORY);
+
                     if (hdfsRestoreDirectory == null) {
                         System.out.println(CMD_OPT_HDFS_RESTORE_DIRECTORY + " is required for restore");
                         System.exit(-1);
@@ -121,7 +120,6 @@ public class BackupRestore {
                 .setAccumuloUserName(accumuloUserName)
                 .setAccumuloPassword(accumuloPassword)
                 .setZookeeperServers(zookeeperServers)
-                .setHdfsBackupDirectory(hdfsBackupDirectory)
                 .setHdfsLocation(hdfsLocation);
     }
 

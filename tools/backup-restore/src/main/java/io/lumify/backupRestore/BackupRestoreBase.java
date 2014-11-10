@@ -25,7 +25,7 @@ public abstract class BackupRestoreBase {
         String zooServers = options.getZookeeperServers();
         Instance inst = new ZooKeeperInstance(instanceName, zooServers);
         ConfigurationCopy conf = new ConfigurationCopy(inst.getConfiguration());
-        conf.set(Property.INSTANCE_DFS_URI, "hdfs://" + options.getHdfsLocation());
+        conf.set(Property.INSTANCE_DFS_URI, options.getHdfsLocation());
         inst.setConfiguration(conf);
 
         AuthenticationToken authenticationToken = new PasswordToken(options.getAccumuloPassword());
@@ -34,7 +34,7 @@ public abstract class BackupRestoreBase {
 
     protected FileSystem getHdfsFileSystem(BackupRestoreOptionsBase options) throws IOException {
         Configuration conf = new Configuration();
-        conf.set("fs.default.name", "hdfs://" + options.getHdfsLocation());
+        conf.set("fs.default.name", options.getHdfsLocation());
         return FileSystem.get(conf);
     }
 

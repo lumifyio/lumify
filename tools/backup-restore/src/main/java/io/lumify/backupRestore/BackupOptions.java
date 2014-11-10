@@ -2,6 +2,7 @@ package io.lumify.backupRestore;
 
 public class BackupOptions extends BackupRestoreOptionsBase {
     private String tableNamePrefix;
+    private String hdfsBackupDirectory;
 
     public BackupOptions setTableNamePrefix(String tableNamePrefix) {
         this.tableNamePrefix = tableNamePrefix;
@@ -10,5 +11,14 @@ public class BackupOptions extends BackupRestoreOptionsBase {
 
     public String getTableNamePrefix() {
         return tableNamePrefix;
+    }
+
+    public String getHdfsBackupDirectory() {
+        return hdfsBackupDirectory;
+    }
+
+    public BackupOptions setHdfsBackupDirectory(String hdfsBackupDirectory) {
+        this.hdfsBackupDirectory = hdfsBackupDirectory;
+        return this;
     }
 }

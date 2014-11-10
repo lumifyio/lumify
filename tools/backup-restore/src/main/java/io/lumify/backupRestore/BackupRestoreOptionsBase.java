@@ -5,7 +5,6 @@ public abstract class BackupRestoreOptionsBase {
     private String accumuloUserName;
     private String accumuloInstanceName;
     private String zookeeperServers;
-    private String hdfsBackupDirectory;
     private String hdfsLocation;
 
     public String getAccumuloPassword() {
@@ -44,21 +43,25 @@ public abstract class BackupRestoreOptionsBase {
         return this;
     }
 
-    public String getHdfsBackupDirectory() {
-        return hdfsBackupDirectory;
-    }
-
-    public BackupRestoreOptionsBase setHdfsBackupDirectory(String hdfsBackupDirectory) {
-        this.hdfsBackupDirectory = hdfsBackupDirectory;
-        return this;
-    }
-
     public String getHdfsLocation() {
+        if (!hdfsLocation.startsWith("hdfs://")) {
+            return "hdfs://" + hdfsLocation;
+        }
         return hdfsLocation;
     }
 
     public BackupRestoreOptionsBase setHdfsLocation(String hdfsLocation) {
         this.hdfsLocation = hdfsLocation;
         return this;
+    }
+
+    protected String getWithHdfsLocation(String dir) {
+        if (!dir.startsWith("hdfs:")) {
+            if (!dir.startsWith("/")) {
+                dir = "/" + dir;
+            }
+            return getHdfsLocation() + dir;
+        }
+        return dir;
     }
 }

@@ -4,7 +4,7 @@ public class RestoreOptions extends BackupRestoreOptionsBase {
     private String hdfsRestoreDirectory;
 
     public String getHdfsRestoreDirectory() {
-        return hdfsRestoreDirectory;
+        return getWithHdfsLocation(hdfsRestoreDirectory);
     }
 
     public RestoreOptions setHdfsRestoreDirectory(String hdfsRestoreDirectory) {
