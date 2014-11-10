@@ -17,9 +17,9 @@ public class X509IdentityWebAppPlugin implements WebAppPlugin {
         StaticResourceHandler lessHandler = new StaticResourceHandler(this.getClass(), "/x509/less/login.less", "text/plain");
 
         app.registerJavaScript("/x509/logout.js");
+        app.registerCss("/x509/css/logout.css");
 
         app.get("/logout.html", new StaticResourceHandler(this.getClass(), "/x509/logout.html", "text/html"));
-        app.get("/jsc/configuration/plugins/authentication/css/logout.css", new StaticResourceHandler(this.getClass(), "/x509/css/logout.css", "text/css"));
         app.get("/jsc/configuration/plugins/authentication/authentication.js", jsHandler);
         app.get("/jsc/configuration/plugins/authentication/templates/login.hbs", loginTemplateHandler);
         app.get("/jsc/configuration/plugins/authentication/less/login.less", lessHandler);
