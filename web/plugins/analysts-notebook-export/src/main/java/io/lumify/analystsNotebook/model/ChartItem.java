@@ -1,21 +1,33 @@
 package io.lumify.analystsNotebook.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.lumify.analystsNotebook.AnalystsNotebookVersion;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.formula.FormulaEvaluator;
+import io.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
+import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceEntity;
+import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Authorizations;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
 import org.securegraph.Vertex;
+import org.securegraph.property.StreamingPropertyValue;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 public class ChartItem {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ChartItem.class);
+    private static final int THUMBNAIL_WIDTH = 200;
+    private static final int THUMBNAIL_HEIGHT = 200;
 
     @JacksonXmlProperty(isAttribute = true)
     private String label;
@@ -33,6 +45,13 @@ public class ChartItem {
     private End end;
 
     private Link link;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private String sourceReference;
+
+    @JacksonXmlElementWrapper(localName = "AttributeCollection")
+    @JacksonXmlProperty(localName = "Attribute")
+    private List<Attribute> attributeCollection;
 
     public String getLabel() {
         return label;
@@ -82,16 +101,44 @@ public class ChartItem {
         this.link = link;
     }
 
-    public static ChartItem createEntity(AnalystsNotebookVersion version, String conceptType, String vertexId, String title, int x, int y) {
+    public String getSourceReference() {
+        return sourceReference;
+    }
+
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
+    }
+
+    public List<Attribute> getAttributeCollection() {
+        return attributeCollection;
+    }
+
+    public void setAttributeCollection(List<Attribute> attributeCollection) {
+        this.attributeCollection = attributeCollection;
+    }
+
+    public static ChartItem createEntity(AnalystsNotebookVersion version,
+                                         String conceptType,
+                                         String vertexId,
+                                         String title,
+                                         int x,
+                                         int y,
+                                         IconPicture iconPicture,
+                                         List<Attribute> attributeCollection,
+                                         String baseUrl,
+                                         String workspaceId) {
         IconStyle iconStyle = new IconStyle();
         iconStyle.setType(conceptType);
+        if (iconPicture != null) {
+            iconStyle.setIconPicture(iconPicture);
+        }
 
         Icon icon = new Icon();
         icon.setIconStyle(iconStyle);
 
         Entity entity = new Entity();
         entity.setEntityId(vertexId);
-        entity.setIdentity(title);
+        entity.setIdentity(vertexId);
         entity.setIcon(icon);
 
         End end = new End();
@@ -109,6 +156,10 @@ public class ChartItem {
         }
         chartItem.setEnd(end);
 
+        chartItem.setSourceReference(String.format("%s/#v=%s&w=%s", baseUrl, vertexId, workspaceId));
+
+        chartItem.setAttributeCollection(attributeCollection);
+
         return chartItem;
     }
 
@@ -116,48 +167,70 @@ public class ChartItem {
                                                                Vertex vertex,
                                                                WorkspaceEntity workspaceEntity,
                                                                OntologyRepository ontologyRepository,
+                                                               ArtifactThumbnailRepository artifactThumbnailRepository,
                                                                FormulaEvaluator formulaEvaluator,
                                                                String workspaceId,
-                                                               Authorizations authorizations) {
+                                                               Authorizations authorizations,
+                                                               User user,
+                                                               String baseUrl) {
         String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
-        Concept concept = ontologyRepository.getConceptByIRI(conceptType);
         String vertexId = vertex.getId();
-        // String title = LumifyProperties.TITLE.getPropertyValue(vertex);
         String title = formulaEvaluator.evaluateTitleFormula(vertex, workspaceId, authorizations);
         int x = workspaceEntity.getGraphPositionX();
         int y = workspaceEntity.getGraphPositionY();
+
+        List<Attribute> attributeCollection = Attribute.createCollectionFromVertex(vertex, ontologyRepository);
+
+        String subtitle = formulaEvaluator.evaluateSubtitleFormula(vertex, workspaceId, authorizations);
+        if (subtitle != null && subtitle.trim().length() > 0) {
+            Attribute subtitleAttribute = new Attribute("subtitle", subtitle);
+            attributeCollection.add(subtitleAttribute);
+        }
+
+        String time = formulaEvaluator.evaluateTimeFormula(vertex, workspaceId, authorizations);
+        if (time != null && time.trim().length() > 0) {
+            Attribute timeAttribute = new Attribute("time", time);
+            attributeCollection.add(timeAttribute);
+        }
+
         String imageUrl = LumifyProperties.ENTITY_IMAGE_URL.getPropertyValue(vertex);
         if (imageUrl != null) {
-            LOGGER.debug("vertex has a an imageUrl");
-            // TODO: find a place to provide an image URL
-        } else {
-            String imageVertexId = LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyValue(vertex);
-            if (imageVertexId != null) {
-                LOGGER.debug("vertex has an entity image");
-                // TODO: get thumbnail, see VertexThumbnail
-                // TODO: find a way to embed image data
-            } else {
-                LOGGER.debug("vertex will use glyph icon (if we could put it in the XML)");
-                byte[] glyphIcon = getGlyphIcon(concept, ontologyRepository);
-                // TODO: find a way to embed image data
+            Attribute imageUrlAttribute = new Attribute("imageUrl", imageUrl);
+            attributeCollection.add(imageUrlAttribute);
+        }
+
+        String imageVertexId = LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyValue(vertex);
+        IconPicture iconPicture = null;
+        if (imageVertexId != null) {
+            byte[] entityImage = getEntityImage(vertex, artifactThumbnailRepository, user);
+            if (entityImage != null) {
+                // TODO: broken in 8.5.1
+                iconPicture = new IconPicture(entityImage);
             }
         }
-        // TODO: add other properties
 
-        return createEntity(version, conceptType, vertexId, title, x, y);
+        return createEntity(version, conceptType, vertexId, title, x, y, iconPicture, attributeCollection, baseUrl, workspaceId);
     }
 
-    private static byte[] getGlyphIcon(Concept concept, OntologyRepository ontologyRepository) {
-        if (concept.hasGlyphIconResource()) {
-            return concept.getGlyphIcon();
-        } else {
-            concept = ontologyRepository.getParentConcept(concept);
-            if (concept != null) {
-                return getGlyphIcon(concept, ontologyRepository);
-            } else {
+    private static byte[] getEntityImage(Vertex vertex, ArtifactThumbnailRepository artifactThumbnailRepository, User user) {
+        int[] dimensions = new int[]{THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT};
+        String type = "raw";
+
+        ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(vertex.getId(), type, dimensions[0], dimensions[1], user);
+        if (thumbnail == null) {
+            StreamingPropertyValue rawPropertyValue = LumifyProperties.RAW.getPropertyValue(vertex);
+            if (rawPropertyValue == null) {
                 return null;
             }
+            InputStream in = rawPropertyValue.getInputStream();
+            try {
+                thumbnail = artifactThumbnailRepository.createThumbnail(vertex, type, in, dimensions, user);
+            } catch (IOException e) {
+                throw new LumifyException("error creating thumbnail", e);
+            }
         }
+
+        return thumbnail.getThumbnailData();
     }
 
     public static ChartItem createLink(AnalystsNotebookVersion version, String label, String from, String to) {
@@ -165,8 +238,7 @@ public class ChartItem {
         if (version == AnalystsNotebookVersion.VERSION_6) {
             linkStyle.setStrength(1);
         }
-        // TODO: use directional arrow
-        linkStyle.setArrowStyle(LinkStyle.ARROW_STYLE_ARROW_NONE);
+        linkStyle.setArrowStyle(LinkStyle.ARROW_STYLE_ARROW_ON_HEAD);
         linkStyle.setType(LinkStyle.TYPE_LINK);
 
         Link link = new Link();

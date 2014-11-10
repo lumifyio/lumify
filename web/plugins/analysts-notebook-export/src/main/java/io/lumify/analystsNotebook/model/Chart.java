@@ -26,6 +26,10 @@ public class Chart {
     @JacksonXmlProperty(localName = "EntityType")
     private List<EntityType> entityTypeCollection;
 
+    @JacksonXmlElementWrapper(localName = "CustomImageCollection")
+    @JacksonXmlProperty(localName = "CustomImage")
+    private List<CustomImage> customImageCollection;
+
     @JacksonXmlElementWrapper(localName = "ChartItemCollection")
     @JacksonXmlProperty(localName = "ChartItem")
     private List<ChartItem> chartItemCollection;
@@ -72,6 +76,14 @@ public class Chart {
 
     public void setEntityTypeCollection(List<EntityType> entityTypeCollection) {
         this.entityTypeCollection = entityTypeCollection;
+    }
+
+    public List<CustomImage> getCustomImageCollection() {
+        return customImageCollection;
+    }
+
+    public void setCustomImageCollection(List<CustomImage> customImageCollection) {
+        this.customImageCollection = customImageCollection;
     }
 
     public List<ChartItem> getChartItemCollection() {

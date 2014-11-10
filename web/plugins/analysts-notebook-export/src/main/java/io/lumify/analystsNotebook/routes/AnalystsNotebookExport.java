@@ -57,11 +57,12 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
 
         Locale locale = getLocale(request);
         String timeZone = getTimeZone(request);
-        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations, locale, timeZone);
+        String baseUrl = getBaseUrl(request);
+        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations, locale, timeZone, baseUrl);
 
         List<String> comments = new ArrayList<String>();
         comments.add(String.format("Lumify Workspace: %s", workspace.getDisplayTitle()));
-        comments.add(String.format("%s/#w=%s", getBaseUrl(request), workspaceId));
+        comments.add(String.format("%s/#w=%s", baseUrl, workspaceId));
         comments.add(String.format("Exported %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
 
         String xml = AnalystsNotebookExporter.toXml(chart, comments);
