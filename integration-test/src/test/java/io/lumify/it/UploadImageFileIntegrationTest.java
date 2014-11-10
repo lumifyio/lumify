@@ -61,7 +61,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         }
         assertTrue("could not find TesseractText", foundTesseractText);
 
-        assertPublishAll(lumifyApi, 26);
+        assertPublishAll(lumifyApi, 41);
 
         lumifyApi.logout();
     }

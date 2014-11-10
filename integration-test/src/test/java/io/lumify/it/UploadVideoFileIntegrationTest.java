@@ -60,13 +60,13 @@ public class UploadVideoFileIntegrationTest extends TestBase {
                 LOGGER.info("highlightedText: %s: %s: %s", prop.getName(), prop.getKey(), highlightedText);
                 if (prop.getKey().equals(TesseractGraphPropertyWorker.TEXT_PROPERTY_KEY)) {
                     foundTesseractVideoTranscript = true;
-                    assertTrue("invalid highlighted text for tesseract", highlightedText.contains("Test") && highlightedText.contains("40000"));
+                    assertTrue("invalid highlighted text for tesseract", highlightedText.contains("Test") && highlightedText.contains("12000"));
                 }
             }
         }
         assertTrue("foundTesseractVideoTranscript", foundTesseractVideoTranscript);
 
-        assertPublishAll(lumifyApi, 17);
+        assertPublishAll(lumifyApi, 37);
 
         lumifyApi.logout();
     }
