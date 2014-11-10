@@ -23,5 +23,6 @@
         <module>reindex-mr</module>
         <module>format</module>
         <module>rdf-import</module>
+        <module>backup-restore</module>
     </modules>
 </project>
