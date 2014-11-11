@@ -1,7 +1,6 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'data',
     '../withTypeContent',
     '../toolbar/toolbar',
     'service/vertex',
@@ -10,11 +9,11 @@ define([
     'tpl!./multiple',
     'tpl!./histogram',
     'util/vertex/list',
-    'util/vertex/formatters'
+    'util/vertex/formatters',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     registry,
-    appData,
     withTypeContent,
     Toolbar,
     VertexService,
@@ -23,7 +22,8 @@ define([
     template,
     histogramTemplate,
     VertexList,
-    F) {
+    F,
+    withDataRequest) {
     'use strict';
 
     var HISTOGRAM_STYLE = 'max', // max or sum
@@ -41,7 +41,7 @@ define([
         MAX_BINS_FOR_NON_HISTOGRAM_TYPES = 5,
         OTHER_PLACEHOLDER = '${OTHER-CATEGORY}';
 
-    return defineComponent(Multiple, withTypeContent);
+    return defineComponent(Multiple, withTypeContent, withDataRequest);
 
     function propertyDisplayName(properties, pair) {
         var o = properties.byTitle[pair[0]];
@@ -164,14 +164,17 @@ define([
             this.onGraphPaddingUpdated = _.debounce(this.onGraphPaddingUpdated.bind(this), 100);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
-            var d3Deferred = $.Deferred();
-            require(['d3'], d3Deferred.resolve);
-            $.when(
-                this.handleCancelling(appData.refresh(ids)),
-                this.handleCancelling(this.ontologyService.concepts()),
-                this.handleCancelling(this.ontologyService.properties()),
-                d3Deferred
-            ).done(function(vertices, concepts, properties, _d3) {
+            Promise.all([
+                Promise.require('d3'),
+                this.dataRequest('vertex', 'store', { vertexIds: ids }),
+                Promise.resolve(this.ontologyService.concepts()),
+                Promise.resolve(this.ontologyService.properties())
+            ]).done(function(results) {
+                var _d3 = results.shift(),
+                    vertices = results.shift(),
+                    concepts = results.shift(),
+                    properties = results.shift();
+
                 d3 = _d3;
 
                 VertexList.attachTo(self.select('vertexListSelector'), {

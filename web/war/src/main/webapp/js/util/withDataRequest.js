@@ -95,11 +95,10 @@ define(['util/promise'], function() {
     function withDataRequest() {
 
         if (!('dataRequest' in this)) {
-            console.info('CREATING dataRequest', this.node)
             this.dataRequest = function(service, method /*, args */) {
                 Array.prototype.splice.call(arguments, 0, 0, this.$node);
                 return dataRequestFromNode.apply(this, arguments);
             }
-        }else console.info('NOT CREATING dataRequest', this.node)
+        }
     }
 });
