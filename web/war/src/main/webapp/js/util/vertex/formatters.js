@@ -393,7 +393,7 @@ define([
                 } else if (entityImageVertexId) {
                     vertex.imageSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 150 });
                     vertex.imageDetailSrc =
-                    artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
+                        artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
                 } else {
 
                     // TODO: scale glyphs
