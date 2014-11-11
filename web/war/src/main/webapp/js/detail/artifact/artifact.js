@@ -15,6 +15,7 @@ define([
     'hbs!./transcriptEntries',
     'tpl!util/alert',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'service/ontology',
     'service/vertex',
     'service/config',
@@ -34,13 +35,14 @@ define([
     transcriptEntriesTemplate,
     alertTemplate,
     F,
+    withDataRequest,
     OntologyService,
     VertexService,
     ConfigService,
     d3) {
     'use strict';
 
-    return defineComponent(Artifact, withTypeContent, withHighlighting);
+    return defineComponent(Artifact, withTypeContent, withHighlighting, withDataRequest);
 
     function Artifact() {
 
@@ -221,11 +223,13 @@ define([
                 }
             });
 
-            $.when(
-                appData.refresh(needsLoading),
-                this.ontologyService.concepts()
-            ).done(function(vertices, concepts) {
-                var verticesById = _.indexBy(vertices, 'id'),
+            Promise.all([
+                this.dataRequest('vertex', 'store', { vertexIds: needsLoading }),
+                Promise.resolve(this.ontologyService.concepts())
+            ]).done(function(results) {
+                var vertices = results[0],
+                    concepts = results[1],
+                    verticesById = _.indexBy(vertices, 'id'),
                     detectedObjectKey = _.property('key');
 
                 d3.select(container.get(0))

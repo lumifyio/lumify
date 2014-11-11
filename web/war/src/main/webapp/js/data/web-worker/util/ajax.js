@@ -24,7 +24,13 @@ define(['util/promise'], function() {
     }
 
     function ajax(method, url, parameters) {
+        var isJson = true;
         method = method.toUpperCase();
+
+        if (method === 'GET->HTML') {
+            isJson = false;
+            method = 'GET';
+        }
 
         return new Promise(function(fulfill, reject) {
             var r = new XMLHttpRequest(),
@@ -38,21 +44,25 @@ define(['util/promise'], function() {
                 formData;
 
             r.onload = function() {
-                var jsonStr = r.status === 200 && r.responseText;
+                var text = r.status === 200 && r.responseText;
 
-                if (jsonStr) {
-                    try {
-                        var json = JSON.parse(jsonStr);
-                        if (typeof ajaxPostfilter !== 'undefined') {
-                            ajaxPostfilter(r, json, {
-                                method: method,
-                                url: url,
-                                parameters: parameters
-                            });
+                if (text) {
+                    if (isJson) {
+                        try {
+                            var json = JSON.parse(text);
+                            if (typeof ajaxPostfilter !== 'undefined') {
+                                ajaxPostfilter(r, json, {
+                                    method: method,
+                                    url: url,
+                                    parameters: parameters
+                                });
+                            }
+                            fulfill(json);
+                        } catch(e) {
+                            reject(new Error(e.message));
                         }
-                        fulfill(json);
-                    } catch(e) {
-                        reject(new Error(e.message));
+                    } else {
+                        fulfill(text)
                     }
                 } else {
                     reject(r);

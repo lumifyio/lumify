@@ -93,12 +93,11 @@ define(['util/promise'], function() {
     return withDataRequest;
 
     function withDataRequest() {
-        this.dataRequest = function(service, method /*, args */) {
-            Array.prototype.splice.call(arguments, 0, 0, this.$node);
-            return dataRequestFromNode.apply(this, arguments);
-        }
-
-        this.requestStoreVertices = function(ids) {
+        if (!('dataRequest' in this)) {
+            this.dataRequest = function(service, method /*, args */) {
+                Array.prototype.splice.call(arguments, 0, 0, this.$node);
+                return dataRequestFromNode.apply(this, arguments);
+            }
         }
     }
 });

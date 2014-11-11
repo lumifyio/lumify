@@ -7,8 +7,8 @@ define([
     'util/privileges',
     'util/range',
     'colorjs',
-    'service/vertex',
     'service/ontology',
+    'util/withDataRequest',
     'util/vertex/formatters',
     'util/popovers/withElementScrollingPositionUpdates',
     'util/range',
@@ -21,8 +21,8 @@ define([
     Privileges,
     rangeUtils,
     colorjs,
-    VertexService,
     OntologyService,
+    withDataRequest,
     F,
     withPositionUpdates,
     range) {
@@ -46,8 +46,8 @@ define([
     function WithHighlighting() {
 
         withPositionUpdates.call(this);
+        withDataRequest.call(this);
 
-        this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
@@ -696,21 +696,21 @@ define([
                 this.openTextRequest.abort();
             }
 
-            return this.handleCancelling(
-                this.openTextRequest = this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
-            ).done(function(artifactText) {
-                var html = self.processArtifactText(artifactText);
-                if (expand) {
-                    $section.find('.text').html(html);
-                    $section.addClass('expanded');
-                    $badge.removeClass('loading');
+            // TODO: support cancelling
+            return this.dataRequest('vertex', 'highlighted-text', this.attr.data.id, propertyKey)
+                .then(function(artifactText) {
+                    var html = self.processArtifactText(artifactText);
+                    if (expand) {
+                        $section.find('.text').html(html);
+                        $section.addClass('expanded');
+                        $badge.removeClass('loading');
 
-                    self.updateEntityAndArtifactDraggables();
-                    if (!options || options.scrollToSection !== false) {
-                        self.scrollToRevealSection($section);
+                        self.updateEntityAndArtifactDraggables();
+                        if (!options || options.scrollToSection !== false) {
+                            self.scrollToRevealSection($section);
+                        }
                     }
-                }
-            });
+                });
         };
 
         this.offsetsForText = function(input, parentSelector, offsetTransform) {

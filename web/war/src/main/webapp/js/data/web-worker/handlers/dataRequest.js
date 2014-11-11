@@ -8,7 +8,7 @@ define([], function() {
                 throw new Error('Service: ' + message.data.service + ' is missing method: ' + message.data.method);
             }
 
-            Service[message.data.method].apply(undefined, message.data.parameters || [])
+            Service[message.data.method].apply(undefined, message.data.parameters)
                 .then(function(result) {
                     dispatchMain('dataRequestCompleted', {
                         success: true,

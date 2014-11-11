@@ -33,6 +33,13 @@ define([
             return ajax('POST', '/vertex/multiple', options);
         },
 
+        'highlighted-text': function(vertexId, propertyKey) {
+            return ajax('GET->HTML', '/vertex/highlighted-text', {
+                graphVertexId: vertexId,
+                propertyKey: propertyKey
+            });
+        },
+
         store: function(opts) {
             var options = _.extend({
                     workspaceId: publicData.currentWorkspaceId
@@ -43,6 +50,10 @@ define([
             if (!_.isArray(vertexIds)) {
                 returnSingular = true;
                 vertexIds = [vertexIds];
+            }
+
+            if (!returnSingular && vertexIds.length === 0) {
+                return Promise.resolve([]);
             }
 
             var vertices = store.getObjects(options.workspaceId, 'vertex', vertexIds),
