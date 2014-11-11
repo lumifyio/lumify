@@ -124,7 +124,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             if (visibilityJson != null && visibilityJson.getWorkspaces().size() > 0) {
                 Set<String> workspaceIds = visibilityJson.getWorkspaces();
                 for (String workspaceId : workspaceIds) {
-                    workspaceRepository.updateEntityOnWorkspace(workspaceRepository.findById(workspaceId, user), id, null, null, user);
+                    workspaceRepository.updateEntityOnWorkspace(workspaceRepository.findById(workspaceId, user), id, false, null, user);
                 }
             }
 

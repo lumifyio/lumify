@@ -109,20 +109,20 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
         BufferedImage bImage = ImageIO.read(in);
 
         List<ArtifactDetectedObject> detectedObjects = detectObjects(bImage);
-        saveDetectedObjects((Vertex) data.getElement(), detectedObjects);
+        saveDetectedObjects((Vertex) data.getElement(), data.getProperty(), detectedObjects);
     }
 
-    private void saveDetectedObjects(Vertex artifactVertex, List<ArtifactDetectedObject> detectedObjects) {
+    private void saveDetectedObjects(Vertex artifactVertex, Property property, List<ArtifactDetectedObject> detectedObjects) {
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactVertex,
                 getClass().getSimpleName(), getUser(), artifactVertex.getVisibility());
         for (ArtifactDetectedObject detectedObject : detectedObjects) {
-            saveDetectedObject(artifactVertex, detectedObject);
+            saveDetectedObject(artifactVertex, property, detectedObject);
         }
     }
 
-    private void saveDetectedObject(Vertex artifactVertex, ArtifactDetectedObject detectedObject) {
+    private void saveDetectedObject(Vertex artifactVertex, Property property, ArtifactDetectedObject detectedObject) {
         String multiKey = detectedObject.getMultivalueKey(MULTI_VALUE_KEY_PREFIX);
-        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, multiKey, detectedObject, new LumifyVisibility().getVisibility(), getAuthorizations());
+        LumifyProperties.DETECTED_OBJECT.addPropertyValue(artifactVertex, multiKey, detectedObject, property.getMetadata(), new LumifyVisibility().getVisibility(), getAuthorizations());
     }
 
     public List<ArtifactDetectedObject> detectObjects(BufferedImage bImage) {

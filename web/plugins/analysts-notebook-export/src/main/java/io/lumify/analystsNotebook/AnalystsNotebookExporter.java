@@ -12,6 +12,7 @@ import io.lumify.analystsNotebook.model.*;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.formula.FormulaEvaluator;
+import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
@@ -40,6 +41,7 @@ public class AnalystsNotebookExporter {
     private Graph graph;
     private WorkspaceRepository workspaceRepository;
     private OntologyRepository ontologyRepository;
+    private ArtifactThumbnailRepository artifactThumbnailRepository;
     private Configuration configuration;
     private AggregateClassificationClient aggregateClassificationClient;
 
@@ -47,10 +49,12 @@ public class AnalystsNotebookExporter {
     public AnalystsNotebookExporter(Graph graph,
                                     WorkspaceRepository workspaceRepository,
                                     OntologyRepository ontologyRepository,
+                                    ArtifactThumbnailRepository artifactThumbnailRepository,
                                     Configuration configuration) {
         this.graph = graph;
         this.workspaceRepository = workspaceRepository;
         this.ontologyRepository = ontologyRepository;
+        this.artifactThumbnailRepository = artifactThumbnailRepository;
         this.configuration = configuration;
         aggregateClassificationClient = new AggregateClassificationClient(configuration);
     }
@@ -67,7 +71,7 @@ public class AnalystsNotebookExporter {
         }
     }
 
-    public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale, String timeZone) {
+    public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale, String timeZone, String baseUrl) {
         LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
 
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
@@ -82,16 +86,24 @@ public class AnalystsNotebookExporter {
 
         Chart chart = new Chart();
 
+        List<AttributeClass> attributeClasses = AttributeClass.createForVertices(vertices, ontologyRepository);
+        attributeClasses.add(new AttributeClass("subtitle", AttributeClass.TYPE_TEXT, true));
+        attributeClasses.add(new AttributeClass("time", AttributeClass.TYPE_TEXT, true));
+        chart.setAttributeClassCollection(attributeClasses);
+
         chart.setLinkTypeCollection(getLinkTypes());
 
         chart.setEntityTypeCollection(EntityType.createForVertices(vertices, ontologyRepository, version));
+
+        // TODO: broken in 8.5.1
+        // chart.setCustomImageCollection(CustomImage.createForVertices(vertices, ontologyRepository));
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
         LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
 
         FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository, locale, timeZone);
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
-            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations));
+            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, artifactThumbnailRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations, user, baseUrl));
         }
         formulaEvaluator.close();
 

@@ -446,7 +446,6 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#birthDate">
         <rdfs:label xml:lang="en">Birth Date</rdfs:label>
-        <lumify:propertyGroup xml:lang="en">Geographical Characteristics</lumify:propertyGroup>
         <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
@@ -563,7 +562,6 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#nationality">
         <rdfs:label xml:lang="en">Nationality</rdfs:label>
-        <lumify:propertyGroup xml:lang="en">Geographical Characteristics</lumify:propertyGroup>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -695,8 +693,6 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_020_home@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
-        <analystsNotebook6:iconFile>address</analystsNotebook6:iconFile>
-        <analystsNotebook7or8:iconFile>address</analystsNotebook7or8:iconFile>
     </owl:Class>
     
 
@@ -769,6 +765,8 @@
         <lumify:displayType xml:lang="en">document</lumify:displayType>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
         <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io#author&apos;) || &apos;&apos;</lumify:subtitleFormula>
+        <analystsNotebook6:iconFile>Document</analystsNotebook6:iconFile>
+        <analystsNotebook7or8:iconFile>Document</analystsNotebook7or8:iconFile>
     </owl:Class>
     
 
@@ -811,8 +809,8 @@
         <rdfs:label xml:lang="en">Location</rdfs:label>
         <lumify:glyphIconFileName xml:lang="en">pin@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(160, 7, 206)</lumify:color>
-        <analystsNotebook6:iconFile>location</analystsNotebook6:iconFile>
-        <analystsNotebook7or8:iconFile>location</analystsNotebook7or8:iconFile>
+        <analystsNotebook6:iconFile>Place</analystsNotebook6:iconFile>
+        <analystsNotebook7or8:iconFile>Place</analystsNotebook7or8:iconFile>
     </owl:Class>
     
 
@@ -836,8 +834,8 @@
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
-        <analystsNotebook6:iconFile>person</analystsNotebook6:iconFile>
-        <analystsNotebook7or8:iconFile>person</analystsNotebook7or8:iconFile>
+        <analystsNotebook6:iconFile>Person</analystsNotebook6:iconFile>
+        <analystsNotebook7or8:iconFile>Person</analystsNotebook7or8:iconFile>
     </owl:Class>
     
 

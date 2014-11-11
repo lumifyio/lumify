@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class EntityType {
-    private static final String ONTOLOGY_CONCEPT_METADATA_ICON_FILE_KEY = "http://lumify.io/analystsNotebook#iconFile";
-    public static final String ICON_FILE_DEFAULT = "Default";
-
     @JacksonXmlProperty(isAttribute = true)
     private String name;
 
@@ -56,7 +53,7 @@ public class EntityType {
                 Concept concept = ontologyRepository.getConceptByIRI(conceptType);
                 String iconFile = getMetadataIconFile(concept, ontologyRepository, version);
                 if (iconFile == null) {
-                    iconFile = EntityType.ICON_FILE_DEFAULT;
+                    iconFile = version.getDefaultIconFile();
                 }
                 conceptTypeIconFileMap.put(conceptType, iconFile);
             }

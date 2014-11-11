@@ -153,7 +153,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), false, null, user);
 
         // TODO: use property key from client when we implement multi-valued properties
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId, visibilitySource);
