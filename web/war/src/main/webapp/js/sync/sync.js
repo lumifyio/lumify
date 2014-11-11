@@ -2,15 +2,13 @@ define([
     'flight/lib/component',
     'data',
     'service/sync',
-    './syncCursor',
     'util/withAsyncQueue'
-], function(defineComponent, appData, SyncService, SyncCursor, withAsyncQueue) {
+], function(defineComponent, appData, SyncService, withAsyncQueue) {
     'use strict';
 
     return defineComponent(Sync, withAsyncQueue);
 
     function Sync() {
-        this.syncCursors = false; // TODO should we sync cursors? Maybe allow enabling/disabling.
         this.syncService = new SyncService();
 
         //PUT EVENTS YOU WANT TO SYNC HERE!
@@ -20,12 +18,6 @@ define([
             'deleteVertices'
         ];
 
-        if (this.syncCursors) {
-            this.events.push('syncCursorMove');
-            this.events.push('syncCursorFocus');
-            this.events.push('syncCursorBlur');
-        }
-
         this.after('initialize', function() {
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'socketMessage', this.onSocketMessage);
@@ -34,9 +26,6 @@ define([
 
             for (var i in this.events) {
                 this.on(document, this.events[i], this.onSyncedEvent);
-            }
-            if (this.syncCursors) {
-                SyncCursor.attachTo(window);
             }
 
             this.setupAsyncQueue('users');
