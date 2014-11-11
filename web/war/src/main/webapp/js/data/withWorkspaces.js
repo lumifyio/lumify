@@ -17,6 +17,7 @@ define([], function() {
 
         this.onSwitchWorkspace = function(event, data) {
             this.setPublicApi('currentWorkspaceId', data.workspaceId);
+            this.setPublicApi('currentWorkspaceEditable', data.editable);
             this.worker.postMessage({
                 type: 'switchWorkspace',
                 workspaceId: data.workspaceId
