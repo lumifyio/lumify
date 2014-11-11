@@ -149,7 +149,7 @@ define([
                 var user = _.findWhere(self.currentUsers, { id: userPermission.userId });
                 return user && user.displayName || 0;
             }).forEach(function(userPermission) {
-                if (userPermission.userId != window.currentUser.id) {
+                if (userPermission.userId != lumifyData.currentUser.id) {
                     var data = self.shareRowDataForPermission(userPermission);
                     if (data) {
                         html = html.add(shareRowTemplate(data));

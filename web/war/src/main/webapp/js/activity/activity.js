@@ -62,7 +62,7 @@ define([
             this.removedTasks = {};
             this.$node.html(template({}));
 
-            this.tasks = window.currentUser && window.currentUser.longRunningProcesses || [];
+            this.tasks = lumifyData.currentUser && lumifyData.currentUser.longRunningProcesses || [];
             this.tasksById = _.indexBy(this.tasks, 'id');
 
             this.throttledUpdate = _.debounce(this.update.bind(this), 100);

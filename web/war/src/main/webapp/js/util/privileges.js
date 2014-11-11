@@ -25,7 +25,7 @@ define([
         };
 
         this.update = function() {
-            var user = window.currentUser,
+            var user = lumifyData.currentUser,
                 editable = this.workspaceEditable,
                 cls = [];
 

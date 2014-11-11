@@ -20,9 +20,6 @@ define([
     'util/vertex/menu',
     'util/contextMenu',
     'util/privileges',
-    'util/withAsyncQueue',
-    'service/user',
-    'service/vertex',
     'util/withDataRequest'
 ], function(
     defineComponent,
@@ -45,20 +42,15 @@ define([
     VertexMenu,
     ContextMenu,
     Privileges,
-    withAsyncQueue,
-    UserService,
-    VertexService,
     withDataRequest) {
     'use strict';
 
-    return defineComponent(App, withFileDrop, withAsyncQueue, withDataRequest);
+    return defineComponent(App, withFileDrop, withDataRequest);
 
     function App() {
         var Graph3D,
             MAX_RESIZE_TRIGGER_INTERVAL = 250,
-            DATA_MENUBAR_NAME = 'menubar-name',
-            userService = new UserService(),
-            vertexService = new VertexService();
+            DATA_MENUBAR_NAME = 'menubar-name';
 
         this.onError = function(evt, err) {
             alert('Error: ' + err.message); // TODO better error handling
@@ -106,8 +98,6 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.setupAsyncQueue('currentUser');
-
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
 
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
@@ -124,12 +114,6 @@ define([
             this.on(document, 'windowResize', this.onWindowResize);
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
-            this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
-
-            if (window.currentUser) {
-                this.currentUserMarkReady(window.currentUser);
-            }
-
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'toggleActivityPane', this.toggleActivityPane);
             this.on(document, 'toggleChatPane', this.toggleChatPane);
@@ -256,13 +240,6 @@ define([
                 }
             }, 500);
         });
-
-        this.onCurrentUserChanged = function(event, user) {
-            if (user) {
-                this.currentUserUnload();
-                this.currentUserMarkReady(user);
-            }
-        };
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
@@ -673,32 +650,31 @@ define([
         };
 
         this.onResizeCreateLoad = function(event, ui) {
-            this.currentUserReady(function(user) {
-                var $pane = $(event.target),
-                    sizePaneName = $pane.data('sizePreference'),
-                    widthPaneName = !sizePaneName && $pane.data('widthPreference'),
-                    nameToPref = function(name) {
-                        return name && ('pane-' + name);
-                    },
-                    prefName = nameToPref(sizePaneName || widthPaneName),
-                    userPrefs = user.uiPreferences,
-                    value = userPrefs && prefName in userPrefs && userPrefs[prefName];
+            var user = lumifyData.currentUser,
+                $pane = $(event.target),
+                sizePaneName = $pane.data('sizePreference'),
+                widthPaneName = !sizePaneName && $pane.data('widthPreference'),
+                nameToPref = function(name) {
+                    return name && ('pane-' + name);
+                },
+                prefName = nameToPref(sizePaneName || widthPaneName),
+                userPrefs = user.uiPreferences,
+                value = userPrefs && prefName in userPrefs && userPrefs[prefName];
 
-                if (sizePaneName && value) {
-                    var size = value.split(',');
-                    if (size.length === 2) {
-                        $pane.width(parseInt(size[0], 10));
-                        $pane.height(parseInt(size[1], 10));
-                    }
-                } else if (widthPaneName && value) {
-                    $pane.width(parseInt(value, 10));
-                } else if (!prefName && !$pane.is('.facebox')) {
-                    console.warn(
-                        'No data-width-preference or data-size-preference ' +
-                        'attribute for resizable pane', $pane[0]
-                    );
+            if (sizePaneName && value) {
+                var size = value.split(',');
+                if (size.length === 2) {
+                    $pane.width(parseInt(size[0], 10));
+                    $pane.height(parseInt(size[1], 10));
                 }
-            });
+            } else if (widthPaneName && value) {
+                $pane.width(parseInt(value, 10));
+            } else if (!prefName && !$pane.is('.facebox')) {
+                console.warn(
+                    'No data-width-preference or data-size-preference ' +
+                    'attribute for resizable pane', $pane[0]
+                );
+            }
         };
 
         this.onResizeStartHandleMaxWidths = function(event, ui) {
@@ -710,13 +686,19 @@ define([
 
         this.onResizeStopSave = function(event, ui) {
             var sizePaneName = ui.helper.data('sizePreference'),
-                widthPaneName = ui.helper.data('widthPreference');
+                widthPaneName = ui.helper.data('widthPreference'),
+                key = 'pane-',
+                value;
 
             if (sizePaneName) {
-                userService.setPreference('pane-' + sizePaneName, ui.element.width() + ',' + ui.element.height());
+                key += sizePaneName;
+                value = ui.element.width() + ',' + ui.element.height();
             } else if (widthPaneName) {
-                userService.setPreference('pane-' + widthPaneName, ui.element.width());
+                key += widthPaneName;
+                value = ui.element.width();
             }
+
+            this.dataRequest('user', 'preference', key, value)
         };
 
         this.collapseAllPanes = function() {

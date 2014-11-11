@@ -209,16 +209,13 @@ define([
         };
 
         this.onWorkspaceUpdated = function(event, data) {
-            var self = this;
+            var currentUser = lumifyData.currentUser,
+                workspace = data.workspace,
+                userAccess = _.findWhere(workspace.users, { userId: currentUser.id });
+            workspace.editable = (/write/i).test(userAccess && userAccess.access);
+            workspace.sharedToUser = workspace.createdBy !== currentUser.id;
 
-            this.currentUserReady(function(currentUser) {
-                var workspace = data.workspace,
-                     userAccess = _.findWhere(workspace.users, { userId: currentUser.id });
-                workspace.editable = (/write/i).test(userAccess && userAccess.access);
-                workspace.sharedToUser = workspace.createdBy !== currentUser.id;
-
-                self.updateListItemWithData(workspace);
-            })
+            this.updateListItemWithData(workspace);
         };
 
         this.onWorkspaceNotAvailable = function(event, data) {

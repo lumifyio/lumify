@@ -39,7 +39,7 @@ require([
             this.updatePrivileges = _.debounce(this.updatePrivileges.bind(this), 1000);
 
             this.$node.html(template({
-                user: window.currentUser
+                user: lumifyData.currentUser
             }));
 
             this.on('keyup', {
@@ -59,7 +59,7 @@ require([
 
             this.setupTypeahead();
 
-            this.loadUserDetails(window.currentUser.displayName);
+            this.loadUserDetails(lumifyData.currentUser.displayName);
         });
 
         this.loadUserDetails = function(userName) {
@@ -209,7 +209,7 @@ require([
                             return {
                                 name: p,
                                 lower: p.toLowerCase(),
-                                disabled: user.displayName === window.currentUser.displayName,
+                                disabled: user.displayName === lumifyData.currentUser.displayName,
                                 has: user.privileges.indexOf(p) >= 0
                             };
                         });

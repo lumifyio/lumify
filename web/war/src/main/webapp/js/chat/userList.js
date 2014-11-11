@@ -100,7 +100,7 @@ define([
                 UNKNOWN = 'Unknown',
                 groupedUsers = _.chain(self.users)
                     .reject(function(user) {
-                        return (/OFFLINE/i.test(user.status)) || user.id === window.currentUser.id;
+                        return (/OFFLINE/i.test(user.status)) || user.id === lumifyData.currentUser.id;
                     })
                     .groupBy(function(user) {
                         user.cls = F.className.to(user.id);

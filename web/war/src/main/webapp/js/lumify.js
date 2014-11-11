@@ -190,8 +190,6 @@ function(jQuery,
 
         withDataRequest.dataRequest('user', 'me')
             .then(function(user) {
-                //window.currentUser = user;
-                //$(document).trigger('currentUserChanged', { user: user });
                 attachApplication(false);
             })
             .catch(function() {
@@ -199,7 +197,7 @@ function(jQuery,
             })
 
         function attachApplication(loginRequired, message, options) {
-            var user = !loginRequired && window.currentUser;
+            var user = !loginRequired && lumifyData.currentUser;
 
             if (!event) {
                 $('html')

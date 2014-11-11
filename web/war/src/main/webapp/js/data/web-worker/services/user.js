@@ -12,6 +12,13 @@ define(['../util/ajax'], function(ajax) {
                 })
         },
 
+        preference: function(name, value) {
+            return ajax('POST', '/user/ui-preferences', {
+                name: name,
+                value: value
+            });
+        },
+
         info: function(userIds) {
             return ajax(userIds.length > 1 ? 'POST' : 'GET', '/user/info', {
                 userIds: userIds
