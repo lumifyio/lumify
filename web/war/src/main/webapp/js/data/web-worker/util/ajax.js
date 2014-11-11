@@ -5,7 +5,7 @@ define(['util/promise'], function() {
     return ajax;
 
     function paramPair(key, value) {
-        return key + '=' + encodeURIComponent(v);
+        return key + '=' + encodeURIComponent(value);
     }
 
     function toQueryString(params) {
@@ -14,7 +14,7 @@ define(['util/promise'], function() {
             if (typeof params[key] !== 'undefined') {
 
                 if (_.isArray(params[key])) {
-                    str += _.map(params[key], _.partial(key + '[]', paramPair)).join('&') + '&';
+                    str += _.map(params[key], _.partial(paramPair, key + '[]')).join('&') + '&';
                 } else {
                     str += paramPair(key, params[key]) + '&';
                 }
@@ -55,7 +55,7 @@ define(['util/promise'], function() {
                         reject(new Error(e.message));
                     }
                 } else {
-                    reject(new Error(r.statusText));
+                    reject(r);
                 }
             };
             r.onerror = function() {

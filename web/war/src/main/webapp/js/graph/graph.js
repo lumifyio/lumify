@@ -1,7 +1,6 @@
 
 define([
     'flight/lib/component',
-    'data',
     'cytoscape',
     './renderer',
     './stylesheet',
@@ -18,11 +17,11 @@ define([
     'util/retina',
     'util/withContextMenu',
     'util/withAsyncQueue',
+    'util/withDataRequest',
     'configuration/plugins/exportWorkspace/plugin',
     'colorjs'
 ], function(
     defineComponent,
-    appData,
     cytoscape,
     Renderer,
     stylesheet,
@@ -39,6 +38,7 @@ define([
     retina,
     withContextMenu,
     withAsyncQueue,
+    withDataRequest,
     WorkspaceExporters,
     colorjs) {
     'use strict';
@@ -52,7 +52,7 @@ define([
         GRID_LAYOUT_X_INCREMENT = 175,
         GRID_LAYOUT_Y_INCREMENT = 100;
 
-    return defineComponent(Graph, withAsyncQueue, withContextMenu, withControlDrag);
+    return defineComponent(Graph, withAsyncQueue, withContextMenu, withControlDrag, withDataRequest);
 
     function Graph() {
         this.vertexService = new VertexService();
@@ -406,7 +406,7 @@ define([
         this.classesForVertex = function(vertex) {
             var cls = [];
 
-            if (vertex.imageSrcIsFromConcept === false) {
+            if (F.vertex.imageIsFromConcept(vertex) === false) {
                 cls.push('hasCustomGlyph');
             }
             if (~['video', 'image'].indexOf(F.vertex.concept(vertex).displayType)) {
@@ -421,7 +421,6 @@ define([
                 merged = data;
 
             merged.truncatedTitle = truncatedTitle;
-            merged.imageSrc = vertex.imageSrc;
             merged.conceptType = F.vertex.prop(vertex, 'conceptType');
             merged.imageSrc = F.vertex.image(vertex);
 
@@ -941,32 +940,37 @@ define([
         });
 
         this.updateVertexSelections = function(cy) {
-            var nodes = cy.nodes().filter(':selected').not('.temp'),
+            var self = this,
+                nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
-                vertices = [];
+                vertexIds = [];
 
             nodes.each(function(index, cyNode) {
                 if (!cyNode.hasClass('temp') && !cyNode.hasClass('path-edge')) {
-                    vertices.push(appData.vertex(fromCyId(cyNode.id())));
+                    vertexIds.push(fromCyId(cyNode.id()));
                 }
             });
 
-            edges.each(function(index, cyEdge) {
-                if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                    var vertex = cyEdge.data('vertex');
-                    vertices.push(vertex)
-                }
-            });
+            this.dataRequest('vertex', 'store', { vertexIds: vertexIds })
+                .done(function(vertices) {
 
-            // Only allow one edge selected
-            if (nodes.length === 0 && edges.length > 1) {
-                vertices = [vertices[0]];
-            }
-            if (vertices.length > 0){
-                this.trigger('selectObjects', { vertices: vertices });
-            } else {
-                this.trigger('selectObjects');
-            }
+                    edges.each(function(index, cyEdge) {
+                        if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
+                            var vertex = cyEdge.data('vertex');
+                            vertices.push(vertex)
+                        }
+                    });
+
+                    // Only allow one edge selected
+                    if (nodes.length === 0 && edges.length > 1) {
+                        vertices = [vertices[0]];
+                    }
+                    if (vertices.length > 0){
+                        self.trigger('selectObjects', { vertices: vertices });
+                    } else {
+                        self.trigger('selectObjects');
+                    }
+                })
         };
 
         this.graphGrab = function(event) {
@@ -1052,7 +1056,8 @@ define([
         };
 
         this.graphMouseOver = function(event) {
-            var cyNode = event.cyTarget;
+            var self = this,
+                cyNode = event.cyTarget;
 
             clearTimeout(this.mouseoverTimeout);
 
@@ -1062,13 +1067,16 @@ define([
                     if (/^NEW/.test(nId)) {
                         return;
                     }
-                    var vertex = appData.vertex(fromCyId(nId)),
-                    truncatedTitle = cyNode.data('truncatedTitle');
 
-                    if (vertex) {
-                        cyNode.data('previousTruncated', truncatedTitle);
-                        cyNode.data('truncatedTitle', F.vertex.title(vertex));
-                    }
+                    self.dataRequest('vertex', 'store', { vertexIds: fromCyId(nId) })
+                        .done(function(vertex) {
+                            truncatedTitle = cyNode.data('truncatedTitle');
+
+                            if (vertex) {
+                                cyNode.data('previousTruncated', truncatedTitle);
+                                cyNode.data('truncatedTitle', F.vertex.title(vertex));
+                            }
+                        })
                 }, 500);
             }
         };

@@ -2,7 +2,6 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'data',
     'tpl!./list',
     'tpl!./item',
     'tpl!util/alert',
@@ -10,13 +9,13 @@ define([
     'util/deferredImage',
     'util/video/scrubber',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'util/popovers/withElementScrollingPositionUpdates',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
 ], function(
     defineComponent,
     registry,
-    appData,
     template,
     vertexTemplate,
     alertTemplate,
@@ -24,10 +23,11 @@ define([
     deferredImage,
     VideoScrubber,
     F,
+    withDataRequest,
     withPositionUpdates) {
     'use strict';
 
-    return defineComponent(List, withPositionUpdates);
+    return defineComponent(List, withPositionUpdates, withDataRequest);
 
     function List() {
 
@@ -37,7 +37,7 @@ define([
         });
 
         this.stateForVertex = function(vertex) {
-            var inWorkspace = false; //appData.inWorkspace(vertex);
+            var inWorkspace = false; // TODO: appData.inWorkspace(vertex);
             return {
                 inGraph: inWorkspace,
                 inMap: inWorkspace && _.some(vertex.properties, function(p) {
@@ -65,7 +65,7 @@ define([
                 if (vertexState.inGraph) classes.push('graph-displayed');
                 if (vertexState.inMap) classes.push('map-displayed');
 
-                if (!v.imageSrcIsFromConcept) {
+                if (!F.vertex.imageIsFromConcept(v)) {
                     classes.push('non_concept_preview');
                 }
 
@@ -104,7 +104,7 @@ define([
 
             this.setupDraggables();
 
-            this.onObjectsSelected(null, { edges: [], vertices: appData.selectedVertices});
+            // TODO: this.onObjectsSelected(null, { edges: [], vertices: appData.selectedVertices});
 
             this.on('selectAll', this.onSelectAll);
             this.on('down', this.move);
@@ -286,48 +286,55 @@ define([
             }
 
             lisVisible.each(function() {
-                var li = $(this),
-                    vertex = appData.vertex(li.data('vertexId'));
+                var li = $(this);
 
-                if (vertex && !li.data('previewLoaded')) {
+                // TODO: Move outside loop?
+                self.dataRequest('vertex', 'store', { vertexIds: li.data('vertexId') })
+                    .done(function(vertex) {
+                        if (vertex && !li.data('previewLoaded')) {
 
-                    var preview = li.data('previewLoaded', true)
-                                    .find('.preview');
+                            var preview = li.data('previewLoaded', true)
+                                            .find('.preview');
 
-                    if (vertex.imageFramesSrc) {
-                        VideoScrubber.attachTo(preview, {
-                            posterFrameUrl: vertex.imageSrc,
-                            videoPreviewImageUrl: vertex.imageFramesSrc
-                        });
-                    } else {
-                        var conceptImage = vertex.concept.glyphIconHref,
-                            clsName = 'non_concept_preview';
+                            if (vertex.imageFramesSrc) {
+                                VideoScrubber.attachTo(preview, {
+                                    posterFrameUrl: vertex.imageSrc,
+                                    videoPreviewImageUrl: vertex.imageFramesSrc
+                                });
+                            } else {
+                                var conceptImage = F.vertex.concept(vertex).glyphIconHref,
+                                    clsName = 'non_concept_preview';
 
-                        if ((preview.css('background-image') || '').indexOf(vertex.imageSrc) >= 0) {
-                            return;
-                        }
-
-                        li.removeClass(clsName).addClass('loading');
-
-                        deferredImage(conceptImage)
-                            .always(function() {
-                                preview.css('background-image', 'url(' + conceptImage + ')')
-                            })
-                            .done(function() {
-                                if (conceptImage === vertex.imageSrc) {
-                                    li.toggleClass(clsName, !vertex.imageSrcIsFromConcept).removeClass('loading');
-                                } else {
-                                    _.delay(function() {
-                                        deferredImage(vertex.imageSrc).always(function() {
-                                            preview.css('background-image', 'url(' + vertex.imageSrc + ')');
-                                            li.toggleClass(clsName, !vertex.imageSrcIsFromConcept)
-                                                .removeClass('loading');
-                                        })
-                                    }, 500);
+                                if ((preview.css('background-image') || '').indexOf(F.vertex.image(vertex)) >= 0) {
+                                    return;
                                 }
-                            });
-                    }
-                }
+
+                                li.removeClass(clsName).addClass('loading');
+
+                                deferredImage(conceptImage)
+                                    .always(function() {
+                                        preview.css('background-image', 'url(' + conceptImage + ')')
+                                    })
+                                    .done(function() {
+                                        if (conceptImage === F.vertex.image(vertex)) {
+                                            li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
+                                                .removeClass('loading');
+                                        } else {
+                                            _.delay(function() {
+                                                deferredImage(F.vertex.image(vertex)).always(function() {
+                                                    preview.css(
+                                                        'background-image',
+                                                        'url(' + F.vertex.image(vertex) + ')'
+                                                    );
+                                                    li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
+                                                        .removeClass('loading');
+                                                })
+                                            }, 500);
+                                        }
+                                    });
+                            }
+                        }
+                    })
             });
         };
 
@@ -403,9 +410,9 @@ define([
                         F: F
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = vertex.imageSrc;
+                    src = F.vertex.image(vertex);
 
-                li.toggleClass('non_concept_preview', !vertex.imageSrcIsFromConcept)
+                li.toggleClass('non_concept_preview', !F.vertex.imageIsFromConcept(vertex))
                     .toggleClass('has-subtitle', !!F.vertex.subtitle(vertex))
                     .toggleClass('has-timeSubtitle', !!F.vertex.time(vertex));
 

@@ -245,7 +245,7 @@ define([
             }
 
             var self = this,
-                type = first.concept.displayType;
+                type = F.vertex.concept(first).displayType;
 
             if (type === 'relationship') {
                 moduleName = type;

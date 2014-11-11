@@ -293,13 +293,10 @@ define([
 
                     if (users.length) {
                         self.dataRequest('user', 'info', users)
-                            .then(function(result) {
+                            .done(function(result) {
                                 self.usersById = $.extend(self.usersById, result.users);
                                 updateHtml();
                             })
-                            .catch(function() {
-                                debugger;
-                            });
                     } else {
                         updateHtml();
                     }

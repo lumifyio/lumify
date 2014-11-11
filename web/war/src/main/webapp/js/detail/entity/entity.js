@@ -1,7 +1,6 @@
 
 define([
     'flight/lib/component',
-    'data',
     './image/image',
     '../properties/properties',
     '../withTypeContent',
@@ -12,6 +11,7 @@ define([
     'tpl!util/alert',
     'util/vertex/list',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'detail/dropdowns/propertyForm/propForm',
     'service/ontology',
     'service/vertex',
@@ -19,7 +19,6 @@ define([
     'sf',
     'd3'
 ], function(defineComponent,
-    appData,
     Image,
     Properties,
     withTypeContent,
@@ -30,6 +29,7 @@ define([
     alertTemplate,
     VertexList,
     F,
+    withDataRequest,
     PropertyForm,
     OntologyService,
     VertexService,
@@ -43,7 +43,7 @@ define([
         vertexService = new VertexService(),
         configService = new ConfigService();
 
-    return defineComponent(Entity, withTypeContent, withHighlighting);
+    return defineComponent(Entity, withTypeContent, withHighlighting, withDataRequest);
 
     function defaultSort(x,y) {
         return x === y ? 0 : x < y ? -1 : 1;
@@ -194,7 +194,7 @@ define([
             if (matching) {
                 this.select('titleSelector').text(F.vertex.title(matching))
                     .next('.subtitle')
-                    .text(matching.concept.displayName);
+                    .text(F.vertex.concept(matching).displayName);
 
                 this.attr.data = matching;
                 this.updateRelationships();
@@ -202,54 +202,48 @@ define([
         };
 
         this.loadEntity = function() {
-            var self = this,
-                vertexRefresh = this.handleCancelling(appData.refresh(this.attr.data));
+            var vertex = this.attr.data;
 
-            this.vertexRefresh = vertexRefresh;
+            this.vertex = vertex;
+            this.attr.data = vertex;
+            this.$node.html(template({
+                vertex: vertex,
+                F: F
+            }));
 
-            vertexRefresh
-                .done(function(vertex) {
-                    self.vertex = vertex;
-                    self.attr.data = vertex;
-                    self.$node.html(template({
-                        vertex: vertex,
-                        F: F
-                    }));
-
-                    Toolbar.attachTo(self.select('toolbarSelector'), {
-                        toolbar: [
-                            {
-                                title: i18n('detail.toolbar.open'),
-                                submenu: [
-                                    Toolbar.ITEMS.FULLSCREEN,
-                                    self.sourceUrlToolbarItem()
-                                ]
-                            },
-                            {
-                                title: i18n('detail.toolbar.add'),
-                                cls: 'requires-EDIT',
-                                submenu: [
-                                    Toolbar.ITEMS.ADD_PROPERTY,
-                                    Toolbar.ITEMS.ADD_IMAGE
-                                ]
-                            },
-                            Toolbar.ITEMS.AUDIT
+            Toolbar.attachTo(this.select('toolbarSelector'), {
+                toolbar: [
+                    {
+                        title: i18n('detail.toolbar.open'),
+                        submenu: [
+                            Toolbar.ITEMS.FULLSCREEN,
+                            this.sourceUrlToolbarItem()
                         ]
-                    });
+                    },
+                    {
+                        title: i18n('detail.toolbar.add'),
+                        cls: 'requires-EDIT',
+                        submenu: [
+                            Toolbar.ITEMS.ADD_PROPERTY,
+                            Toolbar.ITEMS.ADD_IMAGE
+                        ]
+                    },
+                    Toolbar.ITEMS.AUDIT
+                ]
+            });
 
-                    Image.attachTo(self.select('glyphIconSelector'), {
-                        data: vertex,
-                        service: vertexService
-                    });
+            Image.attachTo(this.select('glyphIconSelector'), {
+                data: vertex,
+                service: vertexService
+            });
 
-                   Properties.attachTo(self.select('propertiesSelector'), {
-                       data: vertex
-                   });
+           Properties.attachTo(this.select('propertiesSelector'), {
+               data: vertex
+           });
 
-                   self.updateRelationships();
-                   self.updateEntityAndArtifactDraggables();
-                   self.updateText();
-                });
+           this.updateRelationships();
+           this.updateEntityAndArtifactDraggables();
+           this.updateText();
         };
 
         this.updateRelationships = function() {

@@ -3,7 +3,7 @@
   <div class="entity-glyphIcon"/>
 
   <h1 title="<%= F.vertex.title(vertex) %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= F.vertex.title(vertex) %></h1>
-  <div class="subtitle"><%= vertex.concept.displayName %></div>
+  <div class="subtitle"><%= F.vertex.concept(vertex).displayName %></div>
   <div class="comp-toolbar"></div>
 
 </div>

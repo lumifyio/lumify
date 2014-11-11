@@ -360,9 +360,11 @@ define([
             },
 
             imageIsFromConcept: function(vertex, optionalWorkspaceId) {
+                return true;
             },
 
-            detailImage: function(vertex, optionalWorkspaceId) {
+            imageDetail: function(vertex, optionalWorkspaceId) {
+                return V.concept(vertex).glyphIconHref;
             },
 
             raw: function(vertex, optionalWorkspaceId) {
@@ -390,7 +392,8 @@ define([
                     vertex.imageDetailSrc = entityImageUrl;
                 } else if (entityImageVertexId) {
                     vertex.imageSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 150 });
-                    vertex.imageDetailSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
+                    vertex.imageDetailSrc =
+                    artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
                 } else {
 
                     // TODO: scale glyphs

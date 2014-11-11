@@ -5,11 +5,11 @@ define(['../services/workspace'], function(Workspace) {
         Promise.all([
             Workspace.get(message.workspaceId),
             Workspace.vertices(message.workspaceId),
-            Promise.require('data/web-worker/util/cache')
+            Promise.require('data/web-worker/util/store')
         ]).done(function(results) {
             var workspace = results[0],
                 vertices = results[1].vertices,
-                cache = results[2];
+                store = results[2];
 
             pushSocketMessage({
                 type: 'setActiveWorkspace',
@@ -22,6 +22,8 @@ define(['../services/workspace'], function(Workspace) {
                 workspace: workspace,
                 vertices: vertices
             });
+
+            store.setVerticesInWorkspace(workspace.workspaceId, _.pluck(workspace.vertices, 'vertexId'));
         });
     }
 });

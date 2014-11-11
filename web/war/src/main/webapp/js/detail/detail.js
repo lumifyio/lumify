@@ -87,7 +87,8 @@ define([
                 moduleData = vertices;
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
-                    type = vertex.concept && vertex.concept.displayType ||
+                    concept = F.vertex.concept(vertex),
+                    type = concept && concept.displayType ||
                         (F.vertex.isEdge(vertex) ? 'relationship' : 'entity');
 
                 if (type === 'relationship') {

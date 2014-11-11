@@ -13,7 +13,29 @@ define([], function() {
         });
 
         this.onSelectObjects = function(event, data) {
-            if (data && data.remoteEvent) return;
+            var self = this,
+                promises = [];
+
+            if (data && data.vertexIds) {
+                promises.push(
+                    this.dataRequest('vertex', 'store', { vertexIds: data.vertices })
+                )
+            } else promises.push(Promise.resolve([]));
+
+            // TODO: edges
+
+            Promise.all(promises)
+                .done(function(result) {
+                    var vertices = result[0],
+                        edges = result[1];
+
+                    self.trigger('objectsSelected', {
+                        vertices: (data && data.vertices) || vertices || [],
+                        edges: []
+                    });
+                })
+
+                /*
 
             var self = this,
                 vertices = data && data.vertices || [],
@@ -77,7 +99,7 @@ define([], function() {
                 $.extend(selected, _.pick(data || {}, 'focus'));
 
                 self.trigger('objectsSelected', selected);
-            })
+            })*/
         };
     }
 });

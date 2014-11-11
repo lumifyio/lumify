@@ -8,6 +8,7 @@ define([
     './withWebsocket',
     './withLegacyWebsocket',
     './withObjectSelection',
+    './withObjectsUpdated',
     './withWorkspaces',
     'util/withDataRequest'
 ], function(

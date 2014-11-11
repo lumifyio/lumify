@@ -5,7 +5,7 @@ define(['../util/ajax'], function(ajax) {
     return {
         diff: function(workspaceId) {
             return ajax('GET', '/workspace/diff', {
-                workspaceId: workspaceId
+                workspaceId: workspaceId || publicData.currentWorkspaceId
             });
         },
 

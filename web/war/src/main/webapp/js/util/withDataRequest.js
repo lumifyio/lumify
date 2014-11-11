@@ -5,7 +5,7 @@
 define(['util/promise'], function() {
     'use strict';
 
-    var NO_DATA_RESPONSE_TIMEOUT_SECONDS = 1,
+    var NO_DATA_RESPONSE_TIMEOUT_SECONDS = 4,
         currentDataRequestId = 0,
         requests = {};
 
@@ -96,6 +96,9 @@ define(['util/promise'], function() {
         this.dataRequest = function(service, method /*, args */) {
             Array.prototype.splice.call(arguments, 0, 0, this.$node);
             return dataRequestFromNode.apply(this, arguments);
+        }
+
+        this.requestStoreVertices = function(ids) {
         }
     }
 });

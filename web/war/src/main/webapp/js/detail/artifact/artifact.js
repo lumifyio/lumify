@@ -18,7 +18,6 @@ define([
     'service/ontology',
     'service/vertex',
     'service/config',
-    'data',
     'd3'
 ], function(
     defineComponent,
@@ -38,7 +37,6 @@ define([
     OntologyService,
     VertexService,
     ConfigService,
-    appData,
     d3) {
     'use strict';
 
@@ -119,15 +117,16 @@ define([
             var self = this,
                 vertex = self.attr.data;
 
-            $.when(
-                this.handleCancelling(appData.refresh(vertex)),
-                new ConfigService().getProperties()
-            ).done(this.handleVertexLoaded.bind(this));
+            new ConfigService().getProperties()
+                .done(function(config) {
+                    self.handleVertexLoaded(self.attr.data, config);
+                })
         };
 
         this.handleVertexLoaded = function(vertex, config) {
             var self = this,
-                displayType = this.attr.data.concept.displayType,
+                concept = F.vertex.concept(vertex),
+                displayType = concept.displayType,
                 properties = vertex && vertex.properties;
 
             this.attr.data = vertex;
@@ -144,6 +143,7 @@ define([
 
             this.$node.html(template({
                 vertex: vertex,
+                concept: concept,
                 F: F
             }));
 
@@ -197,7 +197,7 @@ define([
             this.select('titleSelector')
                 .text(F.vertex.title(this.attr.data))
                 .next('.subtitle')
-                .text(this.attr.data.concept.displayName);
+                .text(F.vertex.concept(this.attr.data).displayName);
         };
 
         this.updateDetectedObjects = function() {
@@ -489,7 +489,7 @@ define([
         this.imageSetup = function(vertex) {
             var self = this,
                 data = {
-                    src: vertex.imageDetailSrc,
+                    src: F.vertex.imageDetail(vertex),
                     id: vertex.id
                 };
             Image.attachTo(this.select('imagePreviewSelector'), { data: data });

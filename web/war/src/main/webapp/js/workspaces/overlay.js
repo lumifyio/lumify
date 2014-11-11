@@ -202,7 +202,6 @@ define([
         };
 
         this.updateDiffBadge = function(event, data) {
-            return;
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
@@ -219,11 +218,12 @@ define([
                     .on('mouseenter mouseleave', this.onDiffBadgeMouse.bind(this))
             }
 
-            $.when(
-                this.dataRequest('workspace', 'diff', appData.workspaceId),
-                ontologyService.properties()
-            ).done(function(diffResults, ontologyProperties) {
-                var diffs = diffResults.diffs,
+            Promise.all([
+                this.dataRequest('workspace', 'diff'),
+                Promise.resolve(ontologyService.properties()),
+            ]).done(function(results) {
+                var ontologyProperties = results[1],
+                    diffs = results[0].diffs,
                     diffsWithoutVisibleProperty = _.map(diffs, function(d) {
                         return _.omit(d, 'visible');
                     });
@@ -321,117 +321,6 @@ define([
                     badge.popover('destroy');
                 }
             })
-
-            /*
-            $.when(
-                workspaceService.diff(appData.workspaceId),
-                ontologyService.properties())
-                .fail(function() {
-                    badge.removePrefixedClasses('badge-').addClass('badge-important')
-                        .popover('destroy')
-                        .attr('title', i18n('workspaces.overlay.error'))
-                        .text('!');
-                })
-                .done(function(response, ontologyProperties) {
-                    var diffs = response[0].diffs,
-                        diffsWithoutVisibleProperty = _.map(diffs, function(d) {
-                            return _.omit(d, 'visible');
-                        });
-
-                    // Check if same
-                    if (self.previousDiff && _.isEqual(diffsWithoutVisibleProperty, self.previousDiff)) {
-                        return;
-                    }
-                    self.previousDiff = diffsWithoutVisibleProperty;
-
-                    var vertexDiffsById = _.indexBy(diffs, function(diff) {
-                            return diff.vertexId;
-                        }),
-                        countOfTitleChanges = 0,
-                        filteredDiffs = _.filter(diffs, function(diff) {
-                            if (diff.type !== 'PropertyDiffItem') return true;
-
-                            var ontologyProperty = ontologyProperties.byTitle[diff.name];
-                            if (!ontologyProperty || !ontologyProperty.userVisible) return false;
-                            if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
-                                countOfTitleChanges++;
-                            }
-                            return true;
-                        }),
-                        count = filteredDiffs.length - countOfTitleChanges,
-                        formattedCount = F.number.pretty(count);
-
-                    self.currentDiffIds = _.uniq(filteredDiffs.map(function(diff) {
-                        return diff.vertexId || diff.elementId || diff.edgeId;
-                    }));
-
-                    require(['workspaces/diff/diff'], function(Diff) {
-                        var popover = badge.data('popover'),
-                            tip = popover && popover.tip();
-
-                        if (tip && tip.is(':visible')) {
-                            self.trigger(popover.tip().find('.popover-content'),
-                                 'diffsChanged',
-                                 { diffs: filteredDiffs });
-                            popover.show();
-                        } else {
-                            badge
-                                .popover('destroy')
-                                .popover({
-                                    placement: 'top',
-                                    content: i18n('workspaces.diff.loading'),
-                                    title: i18n('workspaces.diff.header.unpublished_changes')
-                                });
-
-                            popover = badge.data('popover');
-                            tip = popover.tip();
-
-                            var left = 10;
-                            tip.css({
-                                    width: '400px',
-                                    height: '250px'
-                                })
-                                .data('sizePreference', 'diff')
-                                .find('.arrow').css({
-                                    left: parseInt(badge.position().left - (left / 2) + 1, 10) + 'px',
-                                    marginLeft: 0
-                                })
-
-                            // We fill in our own content
-                            popover.setContent = function() {}
-                            badge.on('shown', function() {
-                                var css = {
-                                    top: (parseInt(tip.css('top')) - 10) + 'px'
-                                };
-                                tip.resizable({
-                                    handles: 'n, e, ne',
-                                    maxWidth: self.popoverCss.maxWidth,
-                                    maxHeight: self.popoverCss.maxHeight
-                                }).css({top: top});
-
-                                self.updatePopoverSize(tip);
-                            })
-
-                            Diff.teardownAll();
-                            Diff.attachTo(tip.find('.popover-content'), {
-                                diffs: filteredDiffs
-                            });
-                        }
-                    });
-
-                    badge.removePrefixedClasses('badge-').addClass('badge-info')
-                        .attr('title', i18n('workspaces.diff.unpublished_change.' + (
-                            formattedCount === 1 ?
-                            'one' : 'some'), formattedCount))
-                        .text(count > 0 ? formattedCount : '');
-
-                    if (count > 0) {
-                        self.animateBadge(badge, formattedCount);
-                    } else if (count === 0) {
-                        badge.popover('destroy');
-                    }
-                })
-        */
         };
 
         var badgeReset, animateTimer;

@@ -6,6 +6,7 @@ define([
     'util/retina',
     'util/withFileDrop',
     'util/privileges',
+    'util/vertex/formatters',
     'service/vertex'
 ], function(
     defineComponent,
@@ -14,6 +15,7 @@ define([
     retina,
     withFileDrop,
     Privileges,
+    F,
     VertexService) {
     'use strict';
 
@@ -124,7 +126,7 @@ define([
         }
 
         this.srcForGlyphIconUrl = function(url) {
-            if (url === this.attr.data.imageDetailSrc) {
+            if (url === F.vertex.imageDetail(this.attr.data)) {
                 return url;
             }
             return url ? url.replace(/\/thumbnail/, '/raw') : '';
@@ -132,8 +134,8 @@ define([
 
         this.updateImageBackground = function(src) {
             var self = this,
-                imageUrl = this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc),
-                customImage = !!(src || !this.attr.data.imageSrcIsFromConcept);
+                imageUrl = this.srcForGlyphIconUrl(src || F.vertex.imageDetail(this.attr.data)),
+                customImage = !!(src || !F.vertex.imageIsFromConcept(this.attr.data));
 
             if (imageUrl && customImage) {
                 self.$node.closest('.entity-background').addClass('loading');
@@ -184,7 +186,7 @@ define([
         this.onUpdateIcon = function(e, data) {
             var src = this.srcForGlyphIconUrl(data.src);
 
-            if (src !== this.srcForGlyphIconUrl(this.attr.data.imageDetailSrc)) {
+            if (src !== this.srcForGlyphIconUrl(F.vertex.imageDetail(this.attr.data))) {
                 this.updateImageBackground(src);
             }
         };
@@ -280,7 +282,7 @@ define([
                 this.cleanup(true);
             }
 
-            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageDetailSrc));
+            this.updateImageBackground(this.srcForGlyphIconUrl(F.vertex.imageDetail(data.vertex)));
 
             this.trigger(document, 'updateVertices', { vertices: [data.vertex] });
         };

@@ -56,7 +56,7 @@ define([
                     });
                 };
 
-            return;
+            /*
             self.processDiffs(self.attr.diffs).done(function(processDiffs) {
                 self.$node.html(template({
                     diffs: processDiffs,
@@ -125,6 +125,7 @@ define([
             self.on('markPublishDiffItem', self.onMarkPublish);
             self.on('markUndoDiffItem', self.onMarkUndo);
             self.on(document, 'objectsSelected', self.onObjectsSelected);
+            */
         };
 
         this.processDiffs = function(diffs) {
@@ -255,17 +256,19 @@ define([
         };
 
         this.onRowClick = function(event) {
-            // TODO: fix appData
-            
-            //var $target = $(event.target).not('button').closest('tr'),
-                //vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
-                //vertexId = vertexRow.data('vertexId'),
-                //vertex = vertexId && appData.vertex(vertexId),
-                //alreadySelected = vertexRow.is('.active');
+            var $target = $(event.target).not('button').closest('tr'),
+                vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
+                vertexId = vertexRow.data('vertexId');
 
-            //this.trigger('selectObjects', {
-                //vertices: (!alreadySelected && vertex) ? [vertex] : []
-            //});
+            if (vertexId) {
+                this.dataRequset('vertex', 'store', { vertexIds: vertexId })
+                    .done(function(vertex) {
+                        var alreadySelected = vertexRow.is('.active');
+                        this.trigger('selectObjects', {
+                            vertices: (!alreadySelected && vertex) ? [vertex] : []
+                        });
+                    });
+            }
         };
 
         this.onButtonClick = function(event) {

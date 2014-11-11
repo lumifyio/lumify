@@ -26,7 +26,8 @@ define([
 
         this.after('initialize', function() {
             var self = this,
-                previousConcept = this.attr.data.concept && this.attr.data.concept.id;
+                previousConcept = F.vertex.concept(this.attr.data),
+                previousConceptId = previousConcept && previousConcept.id;
 
             this.auditDisplayed = false;
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
@@ -38,8 +39,10 @@ define([
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
                 if (data && data.vertices) {
-                    var current = _.findWhere(data.vertices, { id: this.attr.data.id });
-                    if (current && current.concept && current.concept.id !== previousConcept) {
+                    var current = _.findWhere(data.vertices, { id: this.attr.data.id }),
+                        concept = current && F.vertex.concept(current);
+
+                    if (concept && concept.id !== previousConceptId) {
                         self.debouncedConceptTypeChange(current);
                     }
                 }
@@ -104,11 +107,12 @@ define([
 
         this.classesForVertex = function(vertex) {
             var cls = [],
-                props = vertex.properties || vertex;
+                props = vertex.properties || vertex,
+                concept = F.vertex.concept(vertex);
 
-            if (vertex.concept.displayType === 'document' ||
-                vertex.concept.displayType === 'image' ||
-                vertex.concept.displayType === 'video') {
+            if (concept.displayType === 'document' ||
+                concept.displayType === 'image' ||
+                concept.displayType === 'video') {
                 cls.push('artifact entity resolved');
                 if (props['http://lumify.io#conceptType']) cls.push(props['http://lumify.io#conceptType'].value);
             } else {
