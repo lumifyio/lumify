@@ -132,6 +132,7 @@ define([
                 properties = vertex && vertex.properties;
 
             this.attr.data = vertex;
+            this.trigger('finishedLoadingTypeContent');
 
             if (properties && displayType) {
                 var durationProperty = _.findWhere(properties, {

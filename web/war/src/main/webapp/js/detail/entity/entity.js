@@ -204,6 +204,8 @@ define([
         this.loadEntity = function() {
             var vertex = this.attr.data;
 
+            this.trigger('finishedLoadingTypeContent');
+
             this.vertex = vertex;
             this.attr.data = vertex;
             this.$node.html(template({
@@ -237,13 +239,13 @@ define([
                 service: vertexService
             });
 
-           Properties.attachTo(this.select('propertiesSelector'), {
-               data: vertex
-           });
+            Properties.attachTo(this.select('propertiesSelector'), {
+                data: vertex
+            });
 
-           this.updateRelationships();
-           this.updateEntityAndArtifactDraggables();
-           this.updateText();
+            this.updateRelationships();
+            this.updateEntityAndArtifactDraggables();
+            this.updateText();
         };
 
         this.updateRelationships = function() {

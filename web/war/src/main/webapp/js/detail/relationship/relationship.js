@@ -69,7 +69,9 @@ define([
                 this.relationship.target = target;
             }
 
-            this.update();
+            if (source || target) {
+                this.update();
+            }
         };
 
         this.update = function() {
@@ -104,6 +106,8 @@ define([
                 self.handleCancelling(edgeService.properties(data.id))
             ).done(function(ontology, ontologyRelationships, relationshipData) {
                 var relationship = relationshipData[0];
+
+                self.trigger('finishedLoadingTypeContent');
 
                 self.ontology = ontology;
                 self.ontologyRelationships = ontologyRelationships;

@@ -21,7 +21,19 @@ define([
         });
 
         this.before('initialize', function(node) {
+            var self = this;
+
             $(node).removeClass('custom-entity-image')
+
+            this.around('dataRequest', function(func) {
+                var promise = func.apply(this, Array.prototype.slice.call(arguments, 1))
+
+                promise.then(function() {
+                    self.trigger('finishedLoadingTypeContent');
+                })
+
+                return promise;
+            })
         });
 
         this.after('initialize', function() {
