@@ -110,7 +110,7 @@ define([
             var self = this,
                 vertex = self.attr.data;
 
-            new ConfigService().getProperties()
+            this.dataRequest('config', 'properties')
                 .done(function(config) {
                     self.handleVertexLoaded(self.attr.data, config);
                 })
@@ -217,7 +217,7 @@ define([
 
             Promise.all([
                 this.dataRequest('vertex', 'store', { vertexIds: needsLoading }),
-                Promise.resolve(this.ontologyService.concepts())
+                this.dataRequest('ontology', 'concepts')
             ]).done(function(results) {
                 var vertices = results[0],
                     concepts = results[1],
