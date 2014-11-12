@@ -37,7 +37,13 @@ define(['promise-polyfill'], function() {
     function addFinally() {
         if (typeof Promise.prototype.finally !== 'function') {
             Promise.prototype.finally = function(onEither) {
-                this.then(onEither, onEither);
+                this.then(function(result) {
+                    onEither();
+                    return result;
+                }, function(error) {
+                    onEither();
+                    throw error;
+                });
             };
         } else console.warn('Native implementation of finally');
     }
