@@ -12,7 +12,6 @@ define(['util/promise', 'underscore'], function(Promise, _) {
     $(function() {
         $(document)
             .on('dataRequestStarted', function(event, data) {
-                console.log('dataRequestStarted', data)
                 var request = requests[data.requestId];
                 if (request) {
                     clearTimeout(request.timeoutTimer);
@@ -52,21 +51,20 @@ define(['util/promise', 'underscore'], function(Promise, _) {
             args = arguments.length > argsStartIndex ? _.rest(arguments, argsStartIndex) : [];
             promise = Promise.require('util/requirejs/promise!util/service/dataPromise')
                 .then(function() {
-                    console.log('requesting', service, method, args, thisRequestId)
-                        promise = new Promise(function(fulfill, reject) {
-                            requests[thisRequestId] = {
-                                promiseFulfill: fulfill,
-                                promiseReject: reject,
-                                timeoutTimer: _.delay(function() {
-                                    console.error('Data request went unhandled', service + '->' + method);
-                                    $nodeInDom.trigger('dataRequestCompleted', {
-                                        requestId: thisRequestId,
-                                        success: false,
-                                        error: 'No data request handler responded'
-                                    })
-                                }, NO_DATA_RESPONSE_TIMEOUT_SECONDS * 1000)
-                            };
-                        });
+                    var promise = new Promise(function(fulfill, reject) {
+                        requests[thisRequestId] = {
+                            promiseFulfill: fulfill,
+                            promiseReject: reject,
+                            timeoutTimer: _.delay(function() {
+                                console.error('Data request went unhandled', service + '->' + method);
+                                $nodeInDom.trigger('dataRequestCompleted', {
+                                    requestId: thisRequestId,
+                                    success: false,
+                                    error: 'No data request handler responded'
+                                })
+                            }, NO_DATA_RESPONSE_TIMEOUT_SECONDS * 1000)
+                        };
+                    });
 
                     $nodeInDom.trigger('dataRequest', {
                         requestId: thisRequestId,

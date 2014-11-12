@@ -15,7 +15,7 @@ define(['../util/ajax'], function(ajax) {
 
         get: function(workspaceId) {
             return ajax('GET', '/workspace', {
-                workspaceId: workspaceId
+                workspaceId: workspaceId || publicData.currentWorkspaceId
             }).then(function(workspace) {
                 workspace.vertices = _.indexBy(workspace.vertices, 'vertexId');
                 return workspace;
@@ -24,8 +24,16 @@ define(['../util/ajax'], function(ajax) {
 
         vertices: function(workspaceId) {
             return ajax('GET', '/workspace/vertices', {
-                workspaceId: workspaceId
+                workspaceId: workspaceId || publicData.currentWorkspaceId
             });
+        },
+
+        edges: function(workspaceId, additionalVertices) {
+            return ajax('GET', '/workspace/edges', {
+                workspaceId: workspaceId || publicData.currentWorkspaceId
+            }).then(function(result) {
+                return result.edges;
+            })
         },
 
         create: function(options) {

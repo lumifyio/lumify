@@ -24,6 +24,10 @@ define([], function() {
             });
         };
 
+        this.edgesLoaded = function(message) {
+            this.trigger('edgesLoaded', message);
+        };
+
         this.workspaceLoaded = function(message) {
             var workspace = message.workspace;
             workspace.data = {

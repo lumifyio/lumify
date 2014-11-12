@@ -402,8 +402,8 @@ define([
             }
             if (this.verticesCount === 0) {
                 this.edgesCount = 0;
-            } else if (data.relationships) {
-                this.edgesCount = data.relationships.length;
+            } else if (data.edges) {
+                this.edgesCount = data.edges.length;
             } else {
                 this.edgesCount = $('.cytoscape-container').cytoscape('get').edges().length;
             }

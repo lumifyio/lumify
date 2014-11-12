@@ -164,9 +164,9 @@ define([
         this.onEdgesLoaded = function(event, data) {
             var graph = this.graph;
 
-            if (data.relationships) {
-                this.relationships = data.relationships;
-                this.addEdges(data.relationships);
+            if (data.edges) {
+                this.relationships = data.edges;
+                this.addEdges(data.edges);
                 this.graph.needsUpdate = true;
             }
         };

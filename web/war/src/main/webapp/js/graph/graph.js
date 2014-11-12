@@ -1150,9 +1150,9 @@ define([
 
         this.onEdgesLoaded = function(evt, relationshipData) {
             this.cytoscapeReady(function(cy) {
-                if (relationshipData.relationships) {
+                if (relationshipData.edges) {
                     var relationshipEdges = [];
-                    relationshipData.relationships.forEach(function(relationship) {
+                    relationshipData.edges.forEach(function(relationship) {
                         var sourceNode = cy.getElementById(toCyId(relationship.from)),
                             destNode = cy.getElementById(toCyId(relationship.to));
 
