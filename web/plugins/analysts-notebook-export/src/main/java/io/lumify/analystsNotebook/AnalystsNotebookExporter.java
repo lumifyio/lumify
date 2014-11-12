@@ -74,8 +74,6 @@ public class AnalystsNotebookExporter {
         }
     }
 
-
-
     public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale, String timeZone, String baseUrl) {
         LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
 
