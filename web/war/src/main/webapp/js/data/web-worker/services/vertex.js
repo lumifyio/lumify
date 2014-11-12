@@ -80,8 +80,7 @@ define([
                             return vertex;
                         }
 
-                        debugger;
-                        return requested.shift();
+                        return requested.vertices.shift();
                     });
                     return returnSingular ? results[0] : results;
                 })
