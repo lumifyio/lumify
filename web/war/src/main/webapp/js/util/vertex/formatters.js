@@ -584,7 +584,10 @@ define([
             },
 
             isEdge: function(vertex) {
-                return V.prop(vertex, 'conceptType') === 'relationship' ||
+                var propsIsObjectNotArray = _.isObject(vertex && vertex.properties) &&
+                    vertex.properties['http://lumify.io#conceptType'] === 'relationship';
+                return propsIsObjectNotArray ||
+                    V.prop(vertex, 'conceptType') === 'relationship' ||
                     (_.has(vertex, 'sourceVertexId') && _.has(vertex, 'destVertexId'));
             }
         }
