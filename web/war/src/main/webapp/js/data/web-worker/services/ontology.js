@@ -30,6 +30,39 @@ define([
                     });
             }),
 
+            propertiesByConceptId: memoize(function(conceptId) {
+                return api.ontology()
+                    .then(function(ontology) {
+                        var propertyIds = [],
+                            collectPropertyIds = function(conceptId) {
+                                var concept = ontology.conceptsById[conceptId],
+                                properties = concept && concept.properties,
+                                parentConceptId = concept && concept.parentConcept;
+
+                                if (properties && properties.length) {
+                                    propertyIds.push.apply(propertyIds, properties);
+                                }
+                                if (parentConceptId) {
+                                    collectPropertyIds(parentConceptId);
+                                }
+                            };
+
+                        collectPropertyIds(conceptId);
+
+                        var properties = _.chain(propertyIds)
+                            .uniq()
+                            .map(function(pId) {
+                                return ontology.propertiesByTitle[pId];
+                            })
+                            .value();
+
+                        return {
+                            list: _.sortBy(properties, 'displayName'),
+                            byTitle: _.indexBy(properties, 'title')
+                        };
+                    });
+            }),
+
             concepts: memoize(function() {
                 var clsIndex = 0;
 

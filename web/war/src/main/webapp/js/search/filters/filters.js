@@ -8,6 +8,7 @@ define([
     'data',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
+    'util/withDataRequest',
     'fields/selection/selection'
 ], function(
     defineComponent,
@@ -18,12 +19,13 @@ define([
     appData,
     F,
     ConceptSelector,
+    withDataRequest,
     FieldSelection) {
     'use strict';
 
     var FILTER_SEARCH_DELAY_SECONDS = 0.5;
 
-    return defineComponent(Filters);
+    return defineComponent(Filters, withDataRequest);
 
     function Filters() {
         this.propertyFilters = {};
@@ -90,7 +92,7 @@ define([
 
             // Publish change to filter properties typeaheads
             if (this.conceptFilter) {
-                this.ontologyService.propertiesByConceptId(this.conceptFilter)
+                this.dataRequest('ontology', 'propertiesByConceptId', this.conceptFilter)
                     .done(deferred.resolve);
             } else {
                 deferred.resolve();
@@ -238,11 +240,12 @@ define([
         this.loadPropertyFilters = function() {
             var self = this;
 
-            this.ontologyService.properties().done(function(properties) {
-                self.properties = properties.list;
-                self.$node.find('.prop-filter-header').after(itemTemplate({}));
-                self.createFieldSelection();
-            });
+            this.dataRequest('ontology', 'properties')
+                .done(function(properties) {
+                    self.properties = properties.list;
+                    self.$node.find('.prop-filter-header').after(itemTemplate({}));
+                    self.createFieldSelection();
+                })
         };
     }
 });
