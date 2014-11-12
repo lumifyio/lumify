@@ -285,16 +285,20 @@ define([
                 lisVisible = lisVisible.withinScrollable(this.scrollNode);
             }
 
-            lisVisible.each(function() {
-                var li = $(this);
+            var vertexIds = lisVisible.map(function() {
+                return $(this).data('vertexId');
+            }).toArray();
 
-                // TODO: Move outside loop?
-                self.dataRequest('vertex', 'store', { vertexIds: li.data('vertexId') })
-                    .done(function(vertex) {
+            this.dataRequest('vertex', 'store', { vertexIds: vertexIds })
+                .done(function(vertices) {
+                    lisVisible.each(function(i) {
+                        var li = $(this),
+                            vertex = vertices[i];
+
                         if (vertex && !li.data('previewLoaded')) {
 
                             var preview = li.data('previewLoaded', true)
-                                            .find('.preview');
+                            .find('.preview');
 
                             if (vertex.imageFramesSrc) {
                                 VideoScrubber.attachTo(preview, {
@@ -303,7 +307,7 @@ define([
                                 });
                             } else {
                                 var conceptImage = F.vertex.concept(vertex).glyphIconHref,
-                                    clsName = 'non_concept_preview';
+                                clsName = 'non_concept_preview';
 
                                 if ((preview.css('background-image') || '').indexOf(F.vertex.image(vertex)) >= 0) {
                                     return;
@@ -312,26 +316,26 @@ define([
                                 li.removeClass(clsName).addClass('loading');
 
                                 deferredImage(conceptImage)
-                                    .always(function() {
-                                        preview.css('background-image', 'url(' + conceptImage + ')')
-                                    })
-                                    .done(function() {
-                                        if (conceptImage === F.vertex.image(vertex)) {
-                                            li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
+                                .always(function() {
+                                    preview.css('background-image', 'url(' + conceptImage + ')')
+                                })
+                                .done(function() {
+                                    if (conceptImage === F.vertex.image(vertex)) {
+                                        li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
+                                        .removeClass('loading');
+                                    } else {
+                                        _.delay(function() {
+                                            deferredImage(F.vertex.image(vertex)).always(function() {
+                                                preview.css(
+                                                    'background-image',
+                                                    'url(' + F.vertex.image(vertex) + ')'
+                                                );
+                                                li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
                                                 .removeClass('loading');
-                                        } else {
-                                            _.delay(function() {
-                                                deferredImage(F.vertex.image(vertex)).always(function() {
-                                                    preview.css(
-                                                        'background-image',
-                                                        'url(' + F.vertex.image(vertex) + ')'
-                                                    );
-                                                    li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
-                                                        .removeClass('loading');
-                                                })
-                                            }, 500);
-                                        }
-                                    });
+                                            })
+                                        }, 500);
+                                    }
+                                });
                             }
                         }
                     })
