@@ -1,16 +1,12 @@
 define([
     'flight/lib/component',
     'hbs!./userSelectTpl',
-    'tpl!./user',
-    'service/user'
+    'tpl!./user'
 ], function(
     defineComponent,
     template,
-    userTemplate,
-    UserService) {
+    userTemplate) {
     'use strict';
-
-    var userService = new UserService();
 
     return defineComponent(UserSelect);
 

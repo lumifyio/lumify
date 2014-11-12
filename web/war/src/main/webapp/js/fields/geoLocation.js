@@ -2,10 +2,8 @@
 define([
     'flight/lib/component',
     'tpl!./geoLocation',
-    './withPropertyField',
-    'service/map',
-    'service/config'
-], function(defineComponent, template, withPropertyField, MapService, ConfigService) {
+    './withPropertyField'
+], function(defineComponent, template, withPropertyField) {
     'use strict';
 
     return defineComponent(GeoLocationField, withPropertyField);

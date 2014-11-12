@@ -92,9 +92,6 @@ require([
 
     'util/visibility',
     'util/privileges',
-    'util/vertex/urlFormatters',
-    'util/messages',
-    'util/withDataRequest',
 
     'easing',
     'scrollStop',
@@ -102,8 +99,6 @@ require([
     'bootstrap-timepicker',
     'util/jquery.flight',
     'util/jquery.removePrefixedClasses',
-
-    'util/handlebars/helpers',
 
     'util/promise'
 ],
@@ -119,16 +114,10 @@ function(jQuery,
          debug,
          _,
          Visibility,
-         Privileges,
-         F,
-         messages,
-         withDataRequest) {
+         Privileges) {
     'use strict';
 
-    // Make localization global
-    window.i18n = messages;
-
-    var App, FullScreenApp, Login;
+    var App, FullScreenApp, Login, F, withDataRequest;
 
     require(['data/data'], configureApplication);
 
@@ -155,7 +144,17 @@ function(jQuery,
         Privileges.attachTo(document);
         $(window).on('hashchange', loadApplicationTypeBasedOnUrlHash);
 
-        loadApplicationTypeBasedOnUrlHash();
+        require([
+            'util/messages',
+            'util/vertex/urlFormatters',
+            'util/withDataRequest',
+            'util/handlebars/helpers'
+        ], function(i18n, _F, _withDataRequest) {
+            window.i18n = i18n;
+            F = _F;
+            withDataRequest = _withDataRequest;
+            loadApplicationTypeBasedOnUrlHash();
+        });
     }
 
     /**

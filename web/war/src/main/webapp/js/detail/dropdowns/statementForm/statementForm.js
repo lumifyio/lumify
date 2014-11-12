@@ -2,16 +2,12 @@ define([
     'flight/lib/component',
     '../withDropdown',
     'tpl!./statementForm',
-    'tpl!./relationship-options',
-    'service/edge',
-    'service/ontology'
+    'tpl!./relationship-options'
 ], function(
     defineComponent,
     withDropdown,
     statementFormTemplate,
-    relationshipTypeTemplate,
-    EdgeService,
-    OntologyService) {
+    relationshipTypeTemplate) {
     'use strict';
 
     return defineComponent(StatementForm, withDropdown);

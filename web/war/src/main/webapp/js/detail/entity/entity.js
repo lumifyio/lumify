@@ -13,10 +13,6 @@ define([
     'util/vertex/formatters',
     'util/withDataRequest',
     'detail/dropdowns/propertyForm/propForm',
-    'service/ontology',
-    'service/vertex',
-    'service/config',
-    'sf',
     'd3'
 ], function(defineComponent,
     Image,
@@ -31,17 +27,10 @@ define([
     F,
     withDataRequest,
     PropertyForm,
-    OntologyService,
-    VertexService,
-    ConfigService,
-    sf,
     d3) {
     'use strict';
 
-    var MAX_RELATIONS_TO_DISPLAY,
-        ontologyService = new OntologyService(),
-        vertexService = new VertexService(),
-        configService = new ConfigService();
+    var MAX_RELATIONS_TO_DISPLAY; // Loaded with configuration parameters
 
     return defineComponent(Entity, withTypeContent, withHighlighting, withDataRequest);
 

@@ -1,13 +1,11 @@
 define([
     'flight/lib/component',
-    'service/chat',
     'hbs!./windowTpl',
     'hbs!./message',
     'sf',
     'util/formatters'
 ], function(
     defineComponent,
-    ChatService,
     chatWindowTemplate,
     chatMessageTemplate,
     sf,
@@ -17,7 +15,6 @@ define([
     return defineComponent(Chat);
 
     function Chat() {
-        this.chatService = new ChatService();
         this.openChats = {};
 
         this.defaultAttrs({

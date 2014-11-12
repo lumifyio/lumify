@@ -4,7 +4,7 @@ require([
     'util/messages',
     'util/formatters',
     'd3',
-    'service/vertex',
+    'util/withDataRequest',
     'less!io/lumify/web/devTools/less/vertex-editor'
 ], function(
     defineLumifyAdminPlugin,
@@ -12,14 +12,13 @@ require([
     i18n,
     F,
     d3,
-    VertexService,
+    withDataRequest,
     less) {
     'use strict';
 
-    var vertexService = new VertexService();
-
     defineLumifyAdminPlugin(VertexEditor, {
         less: less,
+        mixins: [withDataRequest],
         section: i18n('admin.vertex.editor.section'),
         name: i18n('admin.vertex.editor.name'),
         subtitle: i18n('admin.vertex.editor.subtitle')
@@ -54,12 +53,10 @@ require([
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
-            require(['data'], function(appData) {
-                self.$node.html(template({
-                    workspaceId: appData.workspaceId,
-                    vertexId: appData.selectedVertexIds[0] || ''
-                }));
-            });
+            this.$node.html(template({
+                workspaceId: lumifyData.currentWorkspaceId,
+                vertexId: ''
+            }));
         });
 
         this.onEdit = function(event) {
@@ -74,18 +71,18 @@ require([
 
             this.handleSubmitButton(
                 button,
-                vertexService.deleteProperty(
-                    this.$node.find('.vertexId').val(),
-                    li.data('property'),
-                    this.$node.find('.workspaceId').val()
-                )
-                    .fail(function() {
+                this.dataRequest('vertex', 'deleteProperty', {
+                    vertexId: this.$node.find('.vertexId').val(),
+                    property: li.data('property'),
+                    workspaceId: this.$node.find('.workspaceId').val()
+                })
+                    .then(function() {
+                        li.removeClass('show-hover-items');
+                        self.onLoad();
+                    })
+                    .catch(function() {
                         self.showError();
                     })
-                    .done(function() {
-                        li.removeClass('show-hover-items');
-                    })
-                    .done(this.onLoad.bind(this))
             );
         };
 
@@ -97,6 +94,7 @@ require([
 
             this.handleSubmitButton(
                 button,
+
                 vertexService.setProperty(
                     this.$node.find('.vertexId').val(),
                     li.find('input[name=key]').val(),

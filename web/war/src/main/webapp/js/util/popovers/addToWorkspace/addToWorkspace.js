@@ -3,22 +3,13 @@ define([
     'flight/lib/component',
     '../withPopover',
     'util/vertex/formatters',
-    'service/vertex',
-    'service/workspace',
     'd3',
-    'data'
 ], function(
     defineComponent,
     withPopover,
     F,
-    VertexService,
-    WorkspaceService,
-    d3,
-    appData) {
+    d3) {
     'use strict';
-
-    var vertexService = new VertexService(),
-        workspaceService = new WorkspaceService();
 
     return defineComponent(AddToWorkspace, withPopover);
 

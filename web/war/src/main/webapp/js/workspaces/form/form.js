@@ -4,25 +4,18 @@ define([
     'tpl!./form',
     'tpl!./shareRow',
     'tpl!./permissions',
-    'util/users/userSelect',
-    'service/user',
-    'service/workspace'
+    'util/users/userSelect'
 ], function(
     defineComponent,
     template,
     shareRowTemplate,
     permissionsTemplate,
-    UserSelect,
-    UserService,
-    WorkspaceService) {
+    UserSelect) {
     'use strict';
 
     return defineComponent(Form);
 
     function Form() {
-
-        this.userService = new UserService();
-        this.workspaceService = new WorkspaceService();
 
         this.defaultAttrs({
             titleSelector: '.workspace-title',

@@ -2,19 +2,15 @@ require([
     'configuration/admin/plugin',
     'hbs!io/lumify/web/devTools/templates/user',
     'hbs!io/lumify/web/devTools/templates/user-details',
-    'service/user',
     'util/formatters'
 ], function(
     defineLumifyAdminPlugin,
     template,
     userTemplate,
-    UserService,
     F,
     d3
     ) {
     'use strict';
-
-    var userService = new UserService();
 
     return defineLumifyAdminPlugin(UserAdmin, {
         section: 'User',

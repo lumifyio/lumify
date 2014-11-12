@@ -1,7 +1,6 @@
-define(['service/ontology'], function(OntologyService) {
+define([
+    'util/withDataRequest'
+], function(withDataRequest) {
     'use strict';
-
-    var ontologyService = new OntologyService();
-
-    return ontologyService.ontology();
+    return withDataRequest.dataRequest('ontology', 'ontology')
 });

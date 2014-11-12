@@ -48,8 +48,12 @@ define([
                 vertexIds = options.vertexIds;
 
             if (!_.isArray(vertexIds)) {
-                returnSingular = true;
-                vertexIds = [vertexIds];
+                if (vertexIds) {
+                    returnSingular = true;
+                    vertexIds = [vertexIds];
+                } else {
+                    throw new Error('vertexIds must contain an object');
+                }
             }
 
             if (!returnSingular && vertexIds.length === 0) {
@@ -76,6 +80,7 @@ define([
                             return vertex;
                         }
 
+                        debugger;
                         return requested.shift();
                     });
                     return returnSingular ? results[0] : results;

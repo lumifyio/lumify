@@ -4,21 +4,18 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'service/admin',
     'tpl!util/alert',
     'util/messages',
     'util/formatters',
     'util/handlebars/helpers'
 ], function(defineComponent,
     registry,
-    AdminService,
     alertTemplate,
     i18n,
     F) {
     'use strict';
 
     var NODE_CLS_FOR_LESS_CONTAINMENT = 'admin_less_cls_',
-        adminService = new AdminService(),
         componentInc = 0;
 
     defineLumifyAdminPlugin.ALL_COMPONENTS = [];
@@ -27,7 +24,7 @@ define([
 
     function defineLumifyAdminPlugin(Component, options) {
 
-        var FlightComponent = defineComponent(Component),
+        var FlightComponent = defineComponent.apply(null, [Component].concat(options && options.mixins || [])),
             attachTo = FlightComponent.attachTo,
             cls = NODE_CLS_FOR_LESS_CONTAINMENT + (componentInc++);
 
@@ -60,7 +57,7 @@ define([
                         .progress(function(v) {
                             button.text(F.number.percent(v) + ' ' + text);
                         })
-                        .always(function() {
+                        .finally(function() {
                             button.removeAttr('disabled').text(text);
                         });
                 };

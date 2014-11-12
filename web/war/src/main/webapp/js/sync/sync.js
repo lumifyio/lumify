@@ -1,15 +1,13 @@
 define([
     'flight/lib/component',
     'data',
-    'service/sync',
     'util/withAsyncQueue'
-], function(defineComponent, appData, SyncService, withAsyncQueue) {
+], function(defineComponent, appData, withAsyncQueue) {
     'use strict';
 
     return defineComponent(Sync, withAsyncQueue);
 
     function Sync() {
-        this.syncService = new SyncService();
 
         //PUT EVENTS YOU WANT TO SYNC HERE!
         this.events = [

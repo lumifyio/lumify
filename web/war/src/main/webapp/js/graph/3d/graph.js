@@ -1,11 +1,10 @@
 
 define([
     'flight/lib/component',
-    'service/ontology',
     './3djs/3djs',
     'util/vertex/formatters',
     'tpl!util/alert'
-], function(defineComponent, OntologyService, $3djs, F, alertTemplate) {
+], function(defineComponent, $3djs, F, alertTemplate) {
     'use strict';
 
     var MAX_TITLE_LENGTH = 15,

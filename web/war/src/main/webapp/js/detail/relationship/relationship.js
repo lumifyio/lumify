@@ -5,12 +5,8 @@ define([
     '../withHighlighting',
     '../toolbar/toolbar',
     'tpl!./relationship',
-    'service/edge',
-    'service/vertex',
-    'service/ontology',
     'detail/properties/properties',
     'util/vertex/formatters',
-    'sf',
     'd3'
 ], function(
     defineComponent,
@@ -24,14 +20,10 @@ define([
     OntologyService,
     Properties,
     F,
-    sf,
     d3) {
     'use strict';
 
-    var predicate = { name: 'http://lumify.io#conceptType' },
-        edgeService = new EdgeService(),
-        vertexService = new VertexService(),
-        ontologyService = new OntologyService();
+    var predicate = { name: 'http://lumify.io#conceptType' };
 
     return defineComponent(Edge, withTypeContent, withHighlighting);
 

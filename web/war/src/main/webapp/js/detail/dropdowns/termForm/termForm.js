@@ -4,8 +4,6 @@ define([
     'detail/properties/properties',
     'tpl!./termForm',
     'tpl!./entity',
-    'service/vertex',
-    'service/ontology',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
     'tpl!util/alert',
@@ -16,8 +14,6 @@ define([
     Properties,
     dropdownTemplate,
     entityTemplate,
-    VertexService,
-    OntologyService,
     F,
     ConceptSelector,
     alertTemplate) {
@@ -26,8 +22,6 @@ define([
     return defineComponent(TermForm, withDropdown);
 
     function TermForm() {
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             entityConceptMenuSelector: '.underneath .dropdown-menu a',

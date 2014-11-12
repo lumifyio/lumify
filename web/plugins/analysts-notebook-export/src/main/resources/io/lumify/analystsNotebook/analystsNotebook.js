@@ -2,11 +2,11 @@ require([
     'configuration/plugins/exportWorkspace/plugin',
     'util/messages',
     'util/formatters',
-    'service/config'
-], function(p, i18n, F, ConfigService) {
-    var componentPath = 'io.lumify.analystsNotebook.AnalystsNotebook',
-        configService = new ConfigService();
+    'util/withDataRequest'
+], function(p, i18n, F, withDataRequest) {
+    var componentPath = 'io.lumify.analystsNotebook.AnalystsNotebook';
 
+    debugger;
     configService.getProperties().done(function(config) {
         var versions = {};
 

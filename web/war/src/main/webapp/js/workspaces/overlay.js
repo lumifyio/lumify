@@ -3,16 +3,12 @@ define([
     'flight/lib/component',
     'tpl!./overlay',
     'util/formatters',
-    'util/withDataRequest',
-    'service/workspace',
-    'service/ontology'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     F,
-    withDataRequest,
-    WorkspaceService,
-    OntologyService) {
+    withDataRequest) {
     'use strict';
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30,
@@ -30,9 +26,6 @@ define([
     }
 
     function WorkspaceOverlay() {
-
-        var workspaceService = new WorkspaceService(),
-            ontologyService = new OntologyService();
 
         this.defaultAttrs({
             userSelector: '.user',
@@ -220,7 +213,7 @@ define([
 
             Promise.all([
                 this.dataRequest('workspace', 'diff'),
-                Promise.resolve(ontologyService.properties()),
+                this.dataRequest('ontology', 'properties')
             ]).done(function(results) {
                 var ontologyProperties = results[1],
                     diffs = results[0].diffs,

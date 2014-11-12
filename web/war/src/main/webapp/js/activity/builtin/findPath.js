@@ -1,16 +1,12 @@
 define([
     'flight/lib/component',
-    'service/longRunningProcess',
     'util/formatters',
     'data'
 ], function(
     defineComponent,
-    LongRunningProcessService,
     F,
     appData) {
     'use strict';
-
-    var longRunningProcessService = new LongRunningProcessService();
 
     return defineComponent(FindPath);
 

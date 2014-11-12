@@ -2,17 +2,11 @@
 define([
     'flight/lib/component',
     './withVertexPopover',
-    'service/vertex',
-    'service/ontology',
-    'service/edge',
     'util/withFormFieldErrors',
     'util/withTeardown'
 ], function(
     defineComponent,
     withVertexPopover,
-    VertexService,
-    OntologyService,
-    EdgeService,
     withFormFieldErrors,
     withTeardown) {
     'use strict';
@@ -25,10 +19,6 @@ define([
     );
 
     function CreateConnectionPopover() {
-
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
-        this.edgeService = new EdgeService();
 
         this.defaultAttrs({
             connectButtonSelector: '.connect-dialog .btn-primary',

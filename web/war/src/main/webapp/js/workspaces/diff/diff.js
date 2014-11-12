@@ -2,27 +2,22 @@
 define([
     'flight/lib/component',
     'tpl!./diff',
-    'service/ontology',
-    'service/workspace',
     'util/vertex/formatters',
-    'util/privileges'
+    'util/privileges',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
-    OntologyService,
-    WorkspaceService,
     F,
-    Privileges) {
+    Privileges,
+    withDataRequest) {
     'use strict';
 
     var SHOW_CHANGES_TEXT_SECONDS = 3;
 
-    return defineComponent(Diff);
+    return defineComponent(Diff, withDataRequest);
 
     function Diff() {
-
-        var ontologyService = new OntologyService(),
-            workspaceService = new WorkspaceService();
 
         this.defaultAttrs({
             buttonSelector: 'button',
@@ -34,12 +29,12 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            $.when(
-                ontologyService.properties(),
-                ontologyService.relationships()
-            ).done(function(properties, relationships) {
-                self.ontologyProperties = properties;
-                self.ontologyRelationships = relationships;
+            Promise.all([
+                this.dataRequest('ontology', 'properties'),
+                this.dataRequest('ontology', 'relationships')
+            ]).done(function(results) {
+                self.ontologyProperties = results[0];
+                self.ontologyRelationships = results[1];
                 self.setup();
             })
         });

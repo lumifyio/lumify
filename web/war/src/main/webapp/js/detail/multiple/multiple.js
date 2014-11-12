@@ -3,9 +3,6 @@ define([
     'flight/lib/registry',
     '../withTypeContent',
     '../toolbar/toolbar',
-    'service/vertex',
-    'service/ontology',
-    'sf',
     'tpl!./multiple',
     'tpl!./histogram',
     'util/vertex/list',
@@ -16,9 +13,6 @@ define([
     registry,
     withTypeContent,
     Toolbar,
-    VertexService,
-    OntologyService,
-    sf,
     template,
     histogramTemplate,
     VertexList,
@@ -127,8 +121,6 @@ define([
 
     function Multiple() {
         var d3;
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             histogramSelector: '.multiple .histogram',

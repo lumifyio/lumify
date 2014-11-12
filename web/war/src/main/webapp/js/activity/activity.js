@@ -6,8 +6,7 @@ define([
     'd3',
     'configuration/plugins/activity/plugin',
     'util/formatters',
-    'util/withCollapsibleSections',
-    'service/longRunningProcess'
+    'util/withCollapsibleSections'
 ], function(
     defineComponent,
     template,
@@ -15,12 +14,10 @@ define([
     d3,
     ActivityHandlers,
     F,
-    withCollapsibleSections,
-    LongRunningProcessService) {
+    withCollapsibleSections) {
     'use strict';
 
-    var AUTO_UPDATE_INTERVAL_SECONDS = 60,
-        longRunningProcessService = new LongRunningProcessService();
+    var AUTO_UPDATE_INTERVAL_SECONDS = 60;
 
     return defineComponent(Activity, withCollapsibleSections);
 

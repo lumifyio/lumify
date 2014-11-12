@@ -1,28 +1,20 @@
 
 define([
     'flight/lib/component',
-    //'data',
     'tpl!./template',
     'tpl!./instructions/regionCenter',
     'tpl!./instructions/regionRadius',
     'tpl!./instructions/regionLoading',
-    'service/vertex',
-    'service/ontology',
-    'service/config',
     'util/retina',
     'util/controls',
     'util/vertex/formatters',
     'util/withAsyncQueue',
     'util/withContextMenu'
 ], function(defineComponent,
-    //appData,
     template,
     centerTemplate,
     radiusTemplate,
     loadingTemplate,
-    VertexService,
-    OntologyService,
-    ConfigService,
     retina,
     Controls,
     F,
@@ -41,9 +33,6 @@ define([
 
         var ol, latlon, point;
 
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
-        this.configService = new ConfigService();
         this.mode = MODE_NORMAL;
 
         this.defaultAttrs({

@@ -1,18 +1,16 @@
 
 define([
     'flight/lib/component',
-    '../withPopover',
-    'service/vertex',
-    'util/formatters',
     'configuration/plugins/visibility/visibilityEditor',
+    '../withPopover',
+    'util/formatters',
     'util/withFormFieldErrors',
     'util/ontology/conceptSelect'
 ], function(
     defineComponent,
-    withPopover,
-    VertexService,
-    F,
     VisibilityEditor,
+    withPopover,
+    F,
     withFormFieldErrors,
     ConceptSelect) {
     'use strict';
@@ -20,8 +18,6 @@ define([
     return defineComponent(CreateVertex, withPopover, withFormFieldErrors);
 
     function CreateVertex() {
-
-        var vertexService = new VertexService();
 
         this.defaultAttrs({
             createSelector: '.btn-primary',

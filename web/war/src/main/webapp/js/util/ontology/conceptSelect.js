@@ -1,16 +1,12 @@
 define([
     'flight/lib/component',
     'hbs!./template',
-    'hbs!./concept',
-    'service/ontology'
+    'hbs!./concept'
 ], function(
     defineComponent,
     template,
-    conceptTemplate,
-    OntologyService) {
+    conceptTemplate) {
     'use strict';
-
-    var ontologyService = new OntologyService();
 
     return defineComponent(ConceptSelector);
 

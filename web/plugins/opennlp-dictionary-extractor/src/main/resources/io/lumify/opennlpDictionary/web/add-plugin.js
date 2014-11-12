@@ -2,18 +2,14 @@ require([
     'configuration/admin/plugin',
     'hbs!io/lumify/opennlpDictionary/web/templates/add',
     'util/formatters',
-    'service/ontology',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
     template,
     F,
-    OntologyService,
     d3
     ) {
     'use strict';
-
-    var ontologyService = new OntologyService();
 
     return defineLumifyAdminPlugin(DictionaryAdd, {
         section: 'Dictionary',

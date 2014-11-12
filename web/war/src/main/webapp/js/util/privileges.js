@@ -14,7 +14,6 @@ define([
 
         this.after('initialize', function() {
             this.workspaceEditable = true;
-            this.on('currentUserChanged', this.update);
             this.on('workspaceLoaded', this.onWorkspaceLoaded);
             this.update();
         });

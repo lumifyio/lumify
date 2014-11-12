@@ -16,9 +16,6 @@ define([
     'tpl!util/alert',
     'util/vertex/formatters',
     'util/withDataRequest',
-    'service/ontology',
-    'service/vertex',
-    'service/config',
     'd3'
 ], function(
     defineComponent,
@@ -36,18 +33,12 @@ define([
     alertTemplate,
     F,
     withDataRequest,
-    OntologyService,
-    VertexService,
-    ConfigService,
     d3) {
     'use strict';
 
     return defineComponent(Artifact, withTypeContent, withHighlighting, withDataRequest);
 
     function Artifact() {
-
-        this.ontologyService = new OntologyService();
-        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             previewSelector: '.preview',

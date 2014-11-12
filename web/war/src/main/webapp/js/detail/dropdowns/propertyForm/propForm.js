@@ -3,7 +3,6 @@ define([
     'flight/lib/component',
     '../withDropdown',
     'tpl!./propForm',
-    'service/ontology',
     'fields/selection/selection',
     'data',
     'tpl!util/alert',
@@ -14,7 +13,6 @@ define([
     defineComponent,
     withDropdown,
     template,
-    OntologyService,
     FieldSelection,
     appData,
     alertTemplate,
@@ -29,8 +27,6 @@ define([
     return defineComponent(PropertyForm, withDropdown, withTeardown);
 
     function PropertyForm() {
-
-        var ontologyService = new OntologyService();
 
         this.defaultAttrs({
             propertyListSelector: '.property-list',

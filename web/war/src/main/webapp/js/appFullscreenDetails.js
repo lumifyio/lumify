@@ -5,12 +5,10 @@ define([
     'flight/lib/registry',
     'tpl!./appFullscreenDetails',
     'tpl!./appFullscreenDetailsError',
-    'service/vertex',
-    'service/workspace',
     'detail/detail',
     'util/vertex/formatters',
     'util/jquery.removePrefixedClasses'
-], function(appData, defineComponent, registry, template, errorTemplate, VertexService, WorkspaceService, Detail, F) {
+], function(appData, defineComponent, registry, template, errorTemplate, Detail, F) {
     'use strict';
 
     return defineComponent(FullscreenDetails);

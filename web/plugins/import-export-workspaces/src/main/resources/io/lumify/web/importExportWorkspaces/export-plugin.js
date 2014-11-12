@@ -3,19 +3,15 @@ require([
     'hbs!io/lumify/web/importExportWorkspaces/export',
     'util/formatters',
     'util/messages',
-    'service/workspace',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
     template,
     F,
     i18n,
-    WorkspaceService,
     d3
     ) {
     'use strict';
-
-    var workspaceService = new WorkspaceService();
 
     return defineLumifyAdminPlugin(WorkspaceExport, {
         section: i18n('admin.workspace.section'),

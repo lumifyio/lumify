@@ -8,8 +8,7 @@ define([
     'data',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
-    'fields/selection/selection',
-    'service/ontology'
+    'fields/selection/selection'
 ], function(
     defineComponent,
     registry,
@@ -19,8 +18,7 @@ define([
     appData,
     F,
     ConceptSelector,
-    FieldSelection,
-    OntologyService) {
+    FieldSelection) {
     'use strict';
 
     var FILTER_SEARCH_DELAY_SECONDS = 0.5;
@@ -31,8 +29,6 @@ define([
         this.propertyFilters = {};
         this.entityFilters = {};
         this.filterId = 0;
-
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             fieldSelectionSelector: '.newrow .add-property',

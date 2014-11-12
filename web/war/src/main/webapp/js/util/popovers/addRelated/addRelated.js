@@ -2,23 +2,16 @@
 define([
     'flight/lib/component',
     'util/ontology/conceptSelect',
-    'service/config',
-    'service/vertex',
     'util/withFormFieldErrors',
     'data',
     '../withPopover'
 ], function(
     defineComponent,
     ConceptSelector,
-    ConfigService,
-    VertexService,
     withFormFieldErrors,
     appData,
     withPopover) {
     'use strict';
-
-    var configService = new ConfigService(),
-        vertexService = new VertexService();
 
     return defineComponent(AddRelatedPopover, withPopover, withFormFieldErrors);
 

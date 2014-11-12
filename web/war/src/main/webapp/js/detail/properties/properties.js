@@ -1,29 +1,19 @@
 
 define([
     'flight/lib/component',
-    'service/ontology',
-    'service/vertex',
-    'service/edge',
-    'service/config',
+    '../dropdowns/propertyForm/propForm',
     'util/vertex/formatters',
     'util/privileges',
-    '../dropdowns/propertyForm/propForm',
     'hbs!../audit/audit-list',
     'data',
-    'sf',
     'd3'
 ], function(
     defineComponent,
-    OntologyService,
-    VertexService,
-    EdgeService,
-    ConfigService,
+    PropertyForm,
     F,
     Privileges,
-    PropertyForm,
     auditsListTemplate,
     appData,
-    sf,
     d3) {
     'use strict';
 
@@ -39,11 +29,7 @@ define([
         // Property td types
         GROUP = 0, NAME = 1, VALUE = 2,
 
-        alreadyWarnedAboutMissingOntology = {},
-        ontologyService = new OntologyService(),
-        vertexService = new VertexService(),
-        edgeService = new EdgeService(),
-        configService = new ConfigService();
+        alreadyWarnedAboutMissingOntology = {};
 
     return component;
 

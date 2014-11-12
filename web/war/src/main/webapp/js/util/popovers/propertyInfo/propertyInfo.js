@@ -2,18 +2,14 @@
 define([
     'flight/lib/component',
     '../withPopover',
-    'service/config',
     'util/vertex/formatters',
     'd3'
 ], function(
     defineComponent,
     withPopover,
-    ConfigService,
     F,
     d3) {
     'use strict';
-
-    var configService = new ConfigService();
 
     return defineComponent(PropertyInfo, withPopover);
 

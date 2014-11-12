@@ -3,7 +3,7 @@ define([
     './urlFormatters',
     './formula',
     'util/messages',
-    'promise!../service/ontologyPromise'
+    'util/requirejs/promise!../service/ontologyPromise'
 ], function(
     F,
     formula,
@@ -46,15 +46,16 @@ define([
 
                 userAsync: function(el, userId) {
                     var d = $.Deferred();
-                    require(['service/user'], function(UserService) {
-                        new UserService().userInfo(userId)
-                            .fail(d.reject)
-                            .done(function(result) {
-                                var user = result.users[userId];
-                                el.textContent = user && user.displayName || i18n('user.unknown.displayName');
-                                d.resolve();
-                            });
-                    })
+                    throw new Error('not implemented')
+                    //require(['service/user'], function(UserService) {
+                        //new UserService().userInfo(userId)
+                            //.fail(d.reject)
+                            //.done(function(result) {
+                                //var user = result.users[userId];
+                                //el.textContent = user && user.displayName || i18n('user.unknown.displayName');
+                                //d.resolve();
+                            //});
+                    //})
                     return d.promise();
                 }
             },

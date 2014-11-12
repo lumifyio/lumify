@@ -2,18 +2,16 @@
 define([
     'flight/lib/component',
     'tpl!./menu',
-    'service/ontology',
     'util/vertex/formatters',
     'util/withDataRequest'
-], function(defineComponent, template, OntologyService, F, withDataRequest) {
+], function(defineComponent, template, F, withDataRequest) {
     'use strict';
 
     return defineComponent(Menu, withDataRequest);
 
     function Menu() {
 
-        var ontologyService = new OntologyService(),
-            DIVIDER = 'DIVIDER',
+        var DIVIDER = 'DIVIDER',
             items = [
                 {
                     cls: 'requires-EDIT',

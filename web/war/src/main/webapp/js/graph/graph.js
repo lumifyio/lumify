@@ -11,9 +11,6 @@ define([
     'util/throttle',
     'util/vertex/formatters',
     'util/privileges',
-    'service/vertex',
-    'service/ontology',
-    'service/config',
     'util/retina',
     'util/withContextMenu',
     'util/withAsyncQueue',
@@ -32,9 +29,6 @@ define([
     throttle,
     F,
     Privileges,
-    VertexService,
-    OntologyService,
-    ConfigService,
     retina,
     withContextMenu,
     withAsyncQueue,
@@ -55,9 +49,6 @@ define([
     return defineComponent(Graph, withAsyncQueue, withContextMenu, withControlDrag, withDataRequest);
 
     function Graph() {
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
-        this.configService = new ConfigService();
 
         var LAYOUT_OPTIONS = {
                 // Customize layout options
@@ -1399,26 +1390,27 @@ define([
                 this.addVertices(self.attr.vertices);
             }
 
-            this.ontologyService.concepts().done(function(concepts) {
-                var templateData = {
-                    firstLevelConcepts: concepts.entityConcept.children || [],
-                    pathHopOptions: ['2','3','4']
-                };
+            this.dataRequest('ontology', 'concepts')
+                .done(function(concepts) {
+                    var templateData = {
+                        firstLevelConcepts: concepts.entityConcept.children || [],
+                        pathHopOptions: ['2','3','4']
+                    };
 
-                // TODO: make context menus work better
-                self.$node.append(template(templateData)).find('.shortcut').each(function() {
-                    var $this = $(this), command = $this.text();
-                    $this.text(F.string.shortcut($this.text()));
+                    // TODO: make context menus work better
+                    self.$node.append(template(templateData)).find('.shortcut').each(function() {
+                        var $this = $(this), command = $this.text();
+                        $this.text(F.string.shortcut($this.text()));
+                    });
+
+                    self.bindContextMenuClickEvent();
+
+                    Controls.attachTo(self.select('graphToolsSelector'));
+
+                    stylesheet(function(style) {
+                        self.initializeGraph(style);
+                    });
                 });
-
-                self.bindContextMenuClickEvent();
-
-                Controls.attachTo(self.select('graphToolsSelector'));
-
-                stylesheet(function(style) {
-                    self.initializeGraph(style);
-                });
-            });
         });
 
         this.initializeGraph = function(style) {

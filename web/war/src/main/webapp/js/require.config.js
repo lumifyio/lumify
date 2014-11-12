@@ -33,7 +33,7 @@ var require = {
         'normalize': '../libs/require-less/normalize',
         'openlayers': '../libs/openlayers/OpenLayers.debug',
         'pathfinding': '../libs/PathFinding.js/lib/pathfinding-browser',
-        'promise': '../libs/requirejs-promise/requirejs-promise',
+        //'promise': '../libs/requirejs-promise/requirejs-promise',
         'propertyParser': '../libs/requirejs-plugins/src/propertyParser',
         'rangy': '../libs/rangy-1.3/rangy-core',
         'rangy-text': '../libs/rangy-1.3/rangy-textrange',

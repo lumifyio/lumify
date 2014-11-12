@@ -4,22 +4,18 @@ define([
     './withVertexPopover',
     'util/formatters',
     'util/withFormFieldErrors',
-    'service/vertex',
     'data'
 ], function(
     defineComponent,
     withVertexPopover,
     F,
     withFormFieldErrors,
-    VertexService,
     appData) {
     'use strict';
 
     return defineComponent(FindPathPopover, withVertexPopover, withFormFieldErrors);
 
     function FindPathPopover() {
-
-        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             buttonSelector: 'button',

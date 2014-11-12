@@ -1,7 +1,6 @@
-define(['service/config'], function(ConfigService) {
+define([
+    'util/withDataRequest'
+], function(withDataRequest) {
     'use strict';
-
-    var configService = new ConfigService();
-
-    return configService.getMessages();
+    return withDataRequest.dataRequest('config', 'messages')
 });

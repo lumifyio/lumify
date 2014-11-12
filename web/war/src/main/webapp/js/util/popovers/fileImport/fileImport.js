@@ -2,24 +2,20 @@
 define([
     'flight/lib/component',
     '../withPopover',
-    'service/vertex',
-    'util/formatters',
     'configuration/plugins/visibility/visibilityEditor',
+    'util/formatters',
     'util/withFormFieldErrors'
 ], function(
     defineComponent,
     withPopover,
-    VertexService,
-    F,
     VisibilityEditor,
+    F,
     withFormFieldErrors) {
     'use strict';
 
     return defineComponent(FileImport, withPopover, withFormFieldErrors);
 
     function FileImport() {
-
-        var vertexService = new VertexService();
 
         this.defaultAttrs({
             importSelector: '.btn-primary',

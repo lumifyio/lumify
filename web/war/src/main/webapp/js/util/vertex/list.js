@@ -5,7 +5,7 @@ define([
     'tpl!./list',
     'tpl!./item',
     'tpl!util/alert',
-    'promise!util/service/ontologyPromise',
+    'util/requirejs/promise!util/service/ontologyPromise',
     'util/deferredImage',
     'util/video/scrubber',
     'util/vertex/formatters',

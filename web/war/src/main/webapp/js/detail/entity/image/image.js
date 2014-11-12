@@ -6,8 +6,7 @@ define([
     'util/retina',
     'util/withFileDrop',
     'util/privileges',
-    'util/vertex/formatters',
-    'service/vertex'
+    'util/vertex/formatters'
 ], function(
     defineComponent,
     template,
@@ -15,8 +14,7 @@ define([
     retina,
     withFileDrop,
     Privileges,
-    F,
-    VertexService) {
+    F) {
     'use strict';
 
     // Limit previews to 1MB since it's a dataUri
@@ -25,8 +23,6 @@ define([
     return defineComponent(ImageView, withFileDrop);
 
     function ImageView() {
-
-        var vertexService = new VertexService();
 
         this.defaultAttrs({
             canvasSelector: 'canvas',
