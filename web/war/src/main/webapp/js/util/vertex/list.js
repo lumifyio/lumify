@@ -365,22 +365,15 @@ define([
         };
 
         this.selectItems = function(items) {
-            var vertices = appData.vertices(items.map(function() {
+            var vertexIds = items.map(function() {
                     return $(this).data('vertexId');
-                }).toArray());
+                }).toArray();
 
-            if (vertices.length > 1) {
-                vertices.forEach(function(vertex) {
-                    vertex.workspace = {
-                        selected: true
-                    };
-                });
-            }
-            if (vertices.length === 0) {
+            if (vertexIds.length === 0) {
                 return;
             }
             this.trigger(document, 'defocusVertices');
-            this.trigger('selectObjects', { vertices: vertices });
+            this.trigger('selectObjects', { vertexIds: vertexIds });
         };
 
         this.onWorkspaceLoaded = function(evt, workspace) {

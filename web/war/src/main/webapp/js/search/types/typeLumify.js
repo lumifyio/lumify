@@ -69,10 +69,10 @@ define([
                             ),
                             F.number.prettyApproximate(result.totalHits))
                     });
-                })
-                .catch(function() {
+                }, function() {
                     self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
                 })
+                .done()
         };
 
         this.triggerRequest = function(query, propertyFilters, conceptFilter, paging) {

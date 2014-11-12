@@ -7,20 +7,37 @@ define([
 
     var PARENT_CONCEPT = 'http://www.w3.org/2002/07/owl#Thing',
         ROOT_CONCEPT = 'http://lumify.io#root',
+        getOntology = memoize(function() {
+            return ajax('GET', '/ontology')
+                .then(function(ontology) {
+                    return _.extend({}, ontology, {
+                        conceptsById: _.indexBy(ontology.concepts, 'id'),
+                        propertiesByTitle: _.indexBy(ontology.properties, 'title')
+                    });
+                });
+        }),
         api = {
 
             ontology: memoize(function() {
-                return ajax('GET', '/ontology')
-                    .then(function(ontology) {
-                        return _.extend({}, ontology, {
-                            conceptsById: _.indexBy(ontology.concepts, 'id'),
-                            propertiesByTitle: _.indexBy(ontology.properties, 'title')
-                        });
-                    })
+                return Promise.all([
+                    api.concepts(),
+                    api.properties(),
+                    api.relationships()
+                ]).then(function(results) {
+                    var concepts = results.shift(),
+                        properties = results.shift(),
+                        relationships = results.shift();
+
+                    return {
+                        concepts: concepts,
+                        properties: properties,
+                        relationships: relationships
+                    };
+                })
             }),
 
             properties: memoize(function() {
-                return api.ontology()
+                return getOntology()
                     .then(function(ontology) {
                         return {
                             list: _.sortBy(ontology.properties, 'displayName'),
@@ -31,7 +48,7 @@ define([
             }),
 
             propertiesByConceptId: memoize(function(conceptId) {
-                return api.ontology()
+                return getOntology()
                     .then(function(ontology) {
                         var propertyIds = [],
                             collectPropertyIds = function(conceptId) {
@@ -66,7 +83,7 @@ define([
             concepts: memoize(function() {
                 var clsIndex = 0;
 
-                return api.ontology()
+                return getOntology()
                     .then(function(ontology) {
                         return {
                             entityConcept: buildTree(
@@ -177,7 +194,7 @@ define([
             }),
 
             relationships: memoize(function() {
-                return Promise.all([api.concepts(), api.ontology()])
+                return Promise.all([api.concepts(), getOntology()])
                     .then(function(results) {
                         var concepts = results[0],
                             ontology = results[1],

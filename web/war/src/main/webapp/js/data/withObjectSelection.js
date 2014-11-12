@@ -18,9 +18,11 @@ define([], function() {
 
             if (data && data.vertexIds) {
                 promises.push(
-                    this.dataRequest('vertex', 'store', { vertexIds: data.vertices })
+                    this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
                 )
-            } else promises.push(Promise.resolve([]));
+            } else if (data && data.vertices) {
+                promises.push(Promise.resolve(data.vertices));
+            }
 
             // TODO: edges
 
@@ -30,7 +32,7 @@ define([], function() {
                         edges = result[1];
 
                     self.trigger('objectsSelected', {
-                        vertices: (data && data.vertices) || vertices || [],
+                        vertices: vertices || [],
                         edges: []
                     });
                 })
