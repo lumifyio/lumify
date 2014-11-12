@@ -92,23 +92,12 @@ define([
 
             $badge.addClass('loading');
 
-            this.handleCancelling(
-                vertexService.getVertexRelationships(
-                    this.attr.data.id,
-                    paging,
-                    $section.data('label')
-                )
-            )
-                .always(function() {
-                    $badge.removeClass('loading');
-                    $section.addClass('expanded');
-                })
-                .fail(function() {
-                    $content.html(alertTemplate({
-                        error: i18n('detail.entity.relationships.error')
-                    }));
-                })
-                .done(function(result) {
+            this.dataRequest('vertex', 'edges', this.attr.data.id, {
+                offset: paging.offset,
+                size: paging.size,
+                label: $section.data('label')
+            })
+                .then(function(result) {
                     var relationships = result.relationships;
 
                     if (!relationships.length) {
@@ -152,7 +141,16 @@ define([
                             .append('<button class="next">')
                             .appendTo($content)
                     }
-                });
+                })
+                .catch(function() {
+                    $content.html(alertTemplate({
+                        error: i18n('detail.entity.relationships.error')
+                    }));
+                })
+                .finally(function() {
+                    $badge.removeClass('loading');
+                    $section.addClass('expanded');
+                })
         };
 
         this.onPageRelationships = function(event) {
@@ -224,8 +222,7 @@ define([
             });
 
             Image.attachTo(this.select('glyphIconSelector'), {
-                data: vertex,
-                service: vertexService
+                data: vertex
             });
 
             Properties.attachTo(this.select('propertiesSelector'), {
@@ -240,10 +237,13 @@ define([
         this.updateRelationships = function() {
             var self = this;
 
-            $.when(
-                this.handleCancelling(configService.getProperties()),
-                this.handleCancelling(ontologyService.relationships())
-            ).done(function(config, relationships) {
+            Promise.all([
+                this.dataRequest('config', 'properties'),
+                this.dataRequest('ontology', 'relationships')
+            ]).done(function(results) {
+                var config = results[0],
+                    relationships = results[1];
+
                 MAX_RELATIONS_TO_DISPLAY = parseInt(config['vertex.relationships.maxPerSection'], 10);
 
                 var hasEntityLabel = config['ontology.iri.artifactHasEntity'],

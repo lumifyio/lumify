@@ -40,9 +40,15 @@ define([
             },
 
             checkAjaxForPossibleCaching: function(xhr, json, workspaceId, request) {
+                if (resemblesVertex(json)) {
+                    cacheVertices(workspaceId, [json]);
+                }
                 if (resemblesVertices(json.vertices)) {
                     cacheVertices(workspaceId, json.vertices);
                 }
+                //if (resemblesEdges(json)) {
+
+                //}
             }
         };
 
@@ -106,10 +112,32 @@ define([
         console.log(vertexCache)
     }
 
+    function resemblesEdge(val) {
+        return (
+            _.isObject(val) &&
+            _.has(val, 'id') &&
+            _.has(val, 'label') &&
+            _.has(val, 'sourceVertexId') &&
+            _.has(val, 'destVertexId')
+        );
+    }
+
     function resemblesEdges(val) {
+        return _.isArray(val) && val.length && resemblesEdge(val[0]);
+    }
+
+    function resemblesVertex(val) {
+        return (
+            _.isObject(val) &&
+            _.has(val, 'id') &&
+            _.has(val, 'sandboxStatus') &&
+            _.has(val, 'properties') &&
+            !_.has(val, 'sourceVertexId') &&
+            !_.has(val, 'destVertexId')
+        );
     }
 
     function resemblesVertices(val) {
-        return val && val.length && val[0].id && val[0].properties;
+        return _.isArray(val) && val.length && resemblesVertex(val[0]);
     }
 });

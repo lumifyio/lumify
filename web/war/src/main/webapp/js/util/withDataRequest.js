@@ -46,52 +46,48 @@ define(['util/promise', 'underscore'], function(Promise, _) {
 
         var argsStartIndex = 3,
             thisRequestId = currentDataRequestId++,
+            $node = $(node),
+            nodeEl = $node[0],
+            $nodeInDom = $.contains(document.documentElement, nodeEl) ? $node : $(document),
             args = arguments.length > argsStartIndex ? _.rest(arguments, argsStartIndex) : [];
-
-        return Promise.require('util/requirejs/promise!util/service/dataPromise')
-            .then(function() {
-                console.log('requesting', service, method, args, thisRequestId)
-                var $node = $(node),
-                    nodeEl = $node[0],
-                    $nodeInDom = $.contains(document.documentElement, nodeEl) ? $node : $(document),
-                    promise = new Promise(function(fulfill, reject) {
-                        requests[thisRequestId] = {
-                            promiseFulfill: fulfill,
-                            promiseReject: reject,
-                            timeoutTimer: _.delay(function() {
-                                console.error('Data request went unhandled', service + '->' + method);
-                                $nodeInDom.trigger('dataRequestCompleted', {
-                                    requestId: thisRequestId,
-                                    success: false,
-                                    error: 'No data request handler responded'
-                                })
-                            }, NO_DATA_RESPONSE_TIMEOUT_SECONDS * 1000)
-                        };
-                    });
-
-                wrapPromise();
-                triggerEvent();
-
-                return promise;
-
-                function wrapPromise() {
-                    promise.cancel = function() {
-                        cleanRequest(thisRequestId);
-                        $nodeInDom.trigger('dataRequestCancel', {
-                            requestId: thisRequestId
+            promise = Promise.require('util/requirejs/promise!util/service/dataPromise')
+                .then(function() {
+                    console.log('requesting', service, method, args, thisRequestId)
+                        promise = new Promise(function(fulfill, reject) {
+                            requests[thisRequestId] = {
+                                promiseFulfill: fulfill,
+                                promiseReject: reject,
+                                timeoutTimer: _.delay(function() {
+                                    console.error('Data request went unhandled', service + '->' + method);
+                                    $nodeInDom.trigger('dataRequestCompleted', {
+                                        requestId: thisRequestId,
+                                        success: false,
+                                        error: 'No data request handler responded'
+                                    })
+                                }, NO_DATA_RESPONSE_TIMEOUT_SECONDS * 1000)
+                            };
                         });
-                    };
-                }
 
-                function triggerEvent() {
                     $nodeInDom.trigger('dataRequest', {
                         requestId: thisRequestId,
                         service: service,
                         method: method,
                         parameters: args
                     });
-                }
-        })
+
+                    return promise;
+                })
+
+        promise.cancel = function() {
+            var request = cleanRequest(thisRequestId);
+            if (request) {
+                $nodeInDom.trigger('dataRequestCancel', {
+                    requestId: thisRequestId
+                });
+            }
+        };
+
+        return promise;
     }
 
     withDataRequest.dataRequest = _.partial(dataRequestFromNode, document);

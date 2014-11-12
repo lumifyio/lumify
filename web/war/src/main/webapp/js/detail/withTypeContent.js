@@ -1,15 +1,17 @@
 
 define([
-    'data',
-    'util/vertex/formatters'
-], function(appData, F) {
+    'util/vertex/formatters',
+    'util/withDataRequest'
+], function(F, withDataRequest) {
     'use strict';
 
     return withTypeContent;
 
     function withTypeContent() {
 
-        this._xhrs = [];
+        withDataRequest.call(this);
+
+        this._promisesToCancel = [];
 
         this.defaultAttrs({
             auditSelector: '.audits'
@@ -27,6 +29,10 @@ define([
 
             this.around('dataRequest', function(func) {
                 var promise = func.apply(this, Array.prototype.slice.call(arguments, 1))
+
+                if (promise.cancel) {
+                    this._promisesToCancel.push(promise);
+                }
 
                 promise.then(function() {
                     self.trigger('finishedLoadingTypeContent');
@@ -72,7 +78,7 @@ define([
         this.onOpenFullscreen = function(event) {
             var url = F.vertexUrl.url(
                 _.isArray(this.attr.data) ? this.attr.data : [this.attr.data.id],
-                appData.workspaceId
+                lumifyData.currentWorkspaceId
             );
             window.open(url);
         };
@@ -139,29 +145,8 @@ define([
         };
 
         this.cancel = function() {
-            this._xhrs.forEach(function(xhr) {
-                if (xhr.state() !== 'complete' && typeof xhr.abort === 'function') {
-                    xhr.abort();
-                }
-            });
-            this._xhrs.length = 0;
-        };
-
-        // Pass a started XHR request to automatically cancel if detail pane
-        // changes
-        this.handleCancelling = function(xhr) {
-
-            // If this is an ajax request notify the detail pane to stop
-            // showing loading icon
-            var self = this;
-            if (_.isFunction(xhr.abort)) {
-                xhr.always(function() {
-                    self.trigger('finishedLoadingTypeContent');
-                });
-            }
-
-            this._xhrs.push(xhr);
-            return xhr;
+            _.invoke(this._promisesToCancel, 'cancel');
+            this._promisesToCancel.length = 0;
         };
     }
 });

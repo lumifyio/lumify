@@ -159,8 +159,8 @@ define([
             Promise.all([
                 Promise.require('d3'),
                 this.dataRequest('vertex', 'store', { vertexIds: ids }),
-                Promise.resolve(this.ontologyService.concepts()),
-                Promise.resolve(this.ontologyService.properties())
+                this.dataRequest('ontology', 'concepts'),
+                this.dataRequest('ontology', 'properties')
             ]).done(function(results) {
                 var _d3 = results.shift(),
                     vertices = results.shift(),

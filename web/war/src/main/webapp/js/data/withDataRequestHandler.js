@@ -15,6 +15,10 @@ define([], function() {
 
         this.handleDataRequestCancel = function(event, data) {
             // TODO
+            //this.worker.postMessage({
+                //type: 'cancelDataRequest',
+                //data: data
+            //});
         };
 
         this.handleDataRequest = function(event, data) {

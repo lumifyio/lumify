@@ -193,17 +193,13 @@ define([
                         };
                     });
 
-                function genKey(source, dest) {
-                    return [source, dest].join('>');
-                }
-
                 // Calculates cache with all possible mappings from source->dest
                 // including all possible combinations of source->children and
                 // dest->children
                 function conceptGrouping(concepts, relationships, groupedBySource) {
                     var groups = {},
                         addToAllSourceDestChildrenGroups = function(r, source, dest) {
-                            var key = genKey(source, dest);
+                            var key = genSourceDestKey(source, dest);
 
                             if (!groups[key]) {
                                 groups[key] = [];
@@ -242,8 +238,26 @@ define([
 
                     return groups;
                 }
-            })
+            }),
+
+            relationshipsBetween: memoize(function(source, dest) {
+                return api.relationships()
+                    .then(function(relationships) {
+                        var key = genSourceDestKey(source, dest);
+
+                        return _.chain(relationships.groupedBySourceDestConcepts[key] || [])
+                            .uniq(function(r) {
+                                return r.title
+                            })
+                            .sortBy('displayName')
+                            .value()
+                    });
+            }, genSourceDestKey)
         };
 
     return api;
+
+    function genSourceDestKey(source, dest) {
+        return [source, dest].join('>');
+    }
 });

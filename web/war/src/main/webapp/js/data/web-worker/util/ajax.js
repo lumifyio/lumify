@@ -59,7 +59,8 @@ define(['util/promise'], function() {
                             }
                             fulfill(json);
                         } catch(e) {
-                            reject(new Error(e.message));
+                            console.error(e);
+                            reject(new Error(e && e.message));
                         }
                     } else {
                         fulfill(text)

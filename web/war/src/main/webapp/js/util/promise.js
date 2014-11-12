@@ -32,6 +32,8 @@ define(['promise-polyfill'], function() {
     addTimeout();
     addRequire();
 
+    createDeferred();
+
     return Promise;
 
     function addFinally() {
@@ -61,7 +63,8 @@ define(['promise-polyfill'], function() {
         var OldPromise = Promise;
         Promise = function(callback) {
 
-            var self = new OldPromise(function(f, r) {
+            var reject,
+                self = new OldPromise(function(f, r) {
                 // Update progress is a function on fulfill function
                 f.updateProgress = updateProgress;
 
@@ -86,6 +89,7 @@ define(['promise-polyfill'], function() {
         'all race reject resolve'.split(' ').forEach(function(key) {
             Promise[key] = OldPromise[key];
         })
+        Promise.prototype = OldPromise.prototype;
     }
 
     function addTimeout() {
@@ -108,5 +112,25 @@ define(['promise-polyfill'], function() {
                 });
             };
         } else console.warn('Native implementation of require');
+    }
+
+    function createDeferred() {
+        if (typeof Deferred !== 'undefined') {
+            console.warn('Existing implementation of Deferred');
+        }
+
+        Deferred = function() {
+            var fulfill,
+                reject,
+                p = new Promise(function(f, r) {
+                    fulfill = f;
+                    reject = r;
+                });
+
+            return {
+                cancel: reject.bind(null, 'cancelled'),
+                promise: p
+            }
+        }
     }
 });

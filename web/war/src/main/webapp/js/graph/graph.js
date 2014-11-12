@@ -1148,7 +1148,7 @@ define([
             this.previousWorkspace = workspace.workspaceId;
         };
 
-        this.onRelationshipsLoaded = function(evt, relationshipData) {
+        this.onEdgesLoaded = function(evt, relationshipData) {
             this.cytoscapeReady(function(cy) {
                 if (relationshipData.relationships) {
                     var relationshipEdges = [];
@@ -1354,7 +1354,7 @@ define([
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
-            this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
+            this.on(document, 'edgesLoaded', this.onEdgesLoaded);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
             this.on(document, 'devicePixelRatioChanged', this.onDevicePixelRatioChanged);
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggleDisplay);

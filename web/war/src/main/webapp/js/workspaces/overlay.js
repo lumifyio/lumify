@@ -56,7 +56,7 @@ define([
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
-            this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
+            this.on(document, 'edgesLoaded', this.onEdgesLoaded);
 
             this.on(document, 'verticesUpdated', this.updateDiffBadge);
             this.on(document, 'verticesAdded', this.updateDiffBadge);
@@ -149,7 +149,7 @@ define([
             this.onWorkspaceLoaded(event, data.workspace);
         };
 
-        this.onRelationshipsLoaded = function(event, data) {
+        this.onEdgesLoaded = function(event, data) {
             this.updateWorkspaceTooltip(data);
         };
 

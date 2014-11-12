@@ -6,6 +6,13 @@ define([
     'use strict';
 
     var api = {
+
+        audit: function(vertexId) {
+            return ajax('GET', '/vertex/audit', {
+                graphVertexId: vertexId
+            });
+        },
+
         search: function(options) {
             var params = {},
                 q = _.isUndefined(options.query.query) ?
@@ -31,6 +38,27 @@ define([
 
         multiple: function(options) {
             return ajax('POST', '/vertex/multiple', options);
+        },
+
+        edges: function(vertexId, options) {
+            var parameters = {
+                graphVertexId: vertexId
+            };
+            if (options) {
+                if (options.offset) parameters.offset = options.offset;
+                if (options.size) parameters.size = options.size;
+                if (options.edgeLabel) parameters.edgeLabel = options.edgeLabel;
+            }
+
+            return ajax('GET', '/vertex/edges', parameters);
+        },
+
+        deleteProperty: function(vertexId, property) {
+            return ajax('DELETE', '/vertex/property', {
+                graphVertexId: vertexId,
+                propertyName: property.name,
+                propertyKey: property.key
+            })
         },
 
         'highlighted-text': function(vertexId, propertyKey) {

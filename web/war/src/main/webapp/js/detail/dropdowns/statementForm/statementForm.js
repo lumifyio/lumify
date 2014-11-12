@@ -13,8 +13,6 @@ define([
     return defineComponent(StatementForm, withDropdown);
 
     function StatementForm() {
-        this.edgeService = new EdgeService();
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             formSelector: '.form',

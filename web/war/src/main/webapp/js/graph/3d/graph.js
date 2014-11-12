@@ -57,7 +57,7 @@ define([
                 this.on(document, 'verticesDeleted', this.onVerticesDeleted);
                 this.on(document, 'verticesUpdated', this.onVerticesUpdated);
                 this.on(document, 'existingVerticesAdded', this.onExistingVerticesAdded);
-                this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
+                this.on(document, 'edgesLoaded', this.onEdgesLoaded);
 
                 this.on('showPanel', this.onShowPanel);
                 this.on('hidePanel', this.onHidePanel);
@@ -161,7 +161,7 @@ define([
         };
         this.onExistingVerticesAdded = function() {
         };
-        this.onRelationshipsLoaded = function(event, data) {
+        this.onEdgesLoaded = function(event, data) {
             var graph = this.graph;
 
             if (data.relationships) {

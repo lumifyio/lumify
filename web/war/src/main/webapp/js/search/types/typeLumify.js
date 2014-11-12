@@ -26,7 +26,7 @@ define([
         });
 
         this.onClearSearch = function() {
-            if (this.currentRequest) {
+            if (this.currentRequest && this.currentRequest.cancel) {
                 this.currentRequest.cancel();
                 this.currentRequest = null;
             }
@@ -76,7 +76,7 @@ define([
         };
 
         this.triggerRequest = function(query, propertyFilters, conceptFilter, paging) {
-            if (this.currentRequest) {
+            if (this.currentRequest && this.currentRequest.cancel) {
                 this.currentRequest.cancel();
                 this.currentRequest = null;
             }
