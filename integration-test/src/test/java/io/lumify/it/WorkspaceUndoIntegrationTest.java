@@ -47,7 +47,11 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
         ClientApiElement jeffKunkleVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "");
         lumifyApi.getVertexApi().setProperty(jeffKunkleVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Jeff Kunkle", "", "test", null, null);
 
-        ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(artifactVertexId, null, null, null);
+        lumifyApi.getEdgeApi().create(susanFengVertex.getId(), jeffKunkleVertex.getId(), TestOntology.WORKS_FOR, "");
+        ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(susanFengVertex.getId(), null, null, null);
+        assertEquals(1, edges.getRelationships().size());
+
+        edges = lumifyApi.getVertexApi().getEdges(artifactVertexId, null, null, null);
         assertEquals(2, edges.getRelationships().size());
         ClientApiElement restonVertex = edges.getRelationships().get(0).getVertex();
         assertHasProperty(restonVertex.getProperties(), ClavinTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.CONCEPT_TYPE.getPropertyName(), CONCEPT_TEST_CITY);
@@ -72,7 +76,7 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
 
     private void undoAll() throws IOException, ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        assertUndoAll(lumifyApi, 33);
+        assertUndoAll(lumifyApi, 34);
         lumifyApi.logout();
     }
 }

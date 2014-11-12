@@ -1,5 +1,6 @@
 package io.lumify.web.clientapi.codegen;
 
+import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.ApiInvoker;
 
 import io.lumify.web.clientapi.model.ClientApiWorkspaceUndoResponse;
@@ -13,6 +14,7 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.MediaType;
 
+import java.io.File;
 import java.util.*;
 
 public class WorkspaceApi {

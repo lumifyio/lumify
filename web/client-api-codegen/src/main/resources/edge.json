@@ -29,6 +29,61 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/edge/create",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates an edge",
+                    "type": "ClientApiEdgeWithVertexData",
+                    "nickname": "create",
+                    "parameters": [
+                        {
+                            "name": "sourceGraphVertexId",
+                            "description": "Source vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "destGraphVertexId",
+                            "description": "Destination vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "predicateLabel",
+                            "description": "Label to apply",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "visibility source of new edge",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "Justification for new edge",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "Source information",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {
