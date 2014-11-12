@@ -20,8 +20,19 @@ define(['../util/ajax'], function(ajax) {
         },
 
         info: function(userIds) {
+            var returnSingular = false;
+            if (!_.isArray(userIds)) {
+                returnSingular = true;
+                userIds = [userIds];
+            };
+
             return ajax(userIds.length > 1 ? 'POST' : 'GET', '/user/info', {
                 userIds: userIds
+            }).then(function(result) {
+                if (returnSingular) {
+                    return result.users[userIds[0]];
+                }
+                return result.users;
             });
         },
 

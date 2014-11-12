@@ -3,15 +3,17 @@ define([
     'flight/lib/component',
     '../withPopover',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineComponent,
     withPopover,
     F,
+    withDataRequest,
     d3) {
     'use strict';
 
-    return defineComponent(PropertyInfo, withPopover);
+    return defineComponent(PropertyInfo, withPopover, withDataRequest);
 
     function PropertyInfo() {
 
@@ -30,36 +32,37 @@ define([
             var self = this;
 
             this.after('setupWithTemplate', function() {
-                configService.getProperties().done(function(config) {
-                    var splitRegex = /\s*,\s*/,
-                        metadataDisplay =
-                            config['properties.metadata.propertyNamesDisplay'].split(splitRegex).map(i18n),
-                        metadataType =
-                            config['properties.metadata.propertyNamesType'].split(splitRegex);
+                this.dataRequest('config', 'properties')
+                    .done(function(config) {
+                        var splitRegex = /\s*,\s*/,
+                            metadataDisplay =
+                                config['properties.metadata.propertyNamesDisplay'].split(splitRegex).map(i18n),
+                            metadataType =
+                                config['properties.metadata.propertyNamesType'].split(splitRegex);
 
-                    self.metadataProperties =
-                        config['properties.metadata.propertyNames'].split(splitRegex);
+                        self.metadataProperties =
+                            config['properties.metadata.propertyNames'].split(splitRegex);
 
-                    if (self.metadataProperties.length !== metadataDisplay.length ||
-                        self.metadataProperties.length !== metadataType.length) {
-                        throw new Error('Metadata properties must have display names and types');
-                    }
-                    self.metadataPropertiesDisplayMap = _.object(self.metadataProperties, metadataDisplay);
-                    self.metadataPropertiesTypeMap = _.object(self.metadataProperties, metadataType);
+                        if (self.metadataProperties.length !== metadataDisplay.length ||
+                            self.metadataProperties.length !== metadataType.length) {
+                            throw new Error('Metadata properties must have display names and types');
+                        }
+                        self.metadataPropertiesDisplayMap = _.object(self.metadataProperties, metadataDisplay);
+                        self.metadataPropertiesTypeMap = _.object(self.metadataProperties, metadataType);
 
-                    self.on(self.popover, 'click', {
-                        deleteButtonSelector: self.onDelete,
-                        editButtonSelector: self.onEdit,
-                        addButtonSelector: self.onAdd,
-                        justificationValueSelector: self.teardown
+                        self.on(self.popover, 'click', {
+                            deleteButtonSelector: self.onDelete,
+                            editButtonSelector: self.onEdit,
+                            addButtonSelector: self.onAdd,
+                            justificationValueSelector: self.teardown
+                        });
+
+                        self.contentRoot = d3.select(self.popover.get(0))
+                            .select('.popover-content');
+                        self.update(self.attr.property);
+
+                        self.on(document, 'verticesUpdated', self.onVerticesUpdated);
                     });
-
-                    self.contentRoot = d3.select(self.popover.get(0))
-                        .select('.popover-content');
-                    self.update(self.attr.property);
-
-                    self.on(document, 'verticesUpdated', self.onVerticesUpdated);
-                });
             });
         });
 
@@ -71,13 +74,22 @@ define([
                 canEdit = F.vertex.sandboxStatus(property) ||
                     property.name === 'http://lumify.io#visibilityJson',
                 canDelete = canEdit && property.name !== 'http://lumify.io#visibilityJson',
-                metadata = _.pick.apply(_, [property].concat(this.metadataProperties)),
-                transformed = _.chain(metadata)
-                    .pairs()
-                    .value(),
+                metadata = _.chain(this.metadataProperties || [])
+                    .map(function(name) {
+                        if ('metadata' in property) {
+                            if (name in property.metadata) {
+                                return [name, property.metadata[name]];
+                            }
+                        }
+                        if (name in property) {
+                            return [name, property[name]];
+                        }
+                    })
+                    .compact()
+                    .value()
                 row = this.contentRoot.select('table')
                     .selectAll('tr')
-                    .data(transformed)
+                    .data(metadata)
                     .call(function() {
                         this.enter()
                             .append('tr')
@@ -118,10 +130,10 @@ define([
                                 formatter(this, value);
                             } else if (formatterAsync) {
                                 formatterAsync(self, value, property, vertexId)
-                                    .fail(function() {
+                                    .catch(function() {
                                         d3.select(self).text(i18n('popovers.property_info.error', value));
                                     })
-                                    .always(positionDialog);
+                                    .finally(positionDialog);
                                 d3.select(this).text(i18n('popovers.property_info.loading'));
                             } else {
                                 console.warn('No metadata type formatter: ' + typeName);
