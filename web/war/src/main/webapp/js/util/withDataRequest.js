@@ -45,20 +45,22 @@ define(['util/promise', 'underscore'], function(Promise, _) {
         }
 
         var argsStartIndex = 3,
+            thisRequestId = currentDataRequestId++,
             args = arguments.length > argsStartIndex ? _.rest(arguments, argsStartIndex) : [];
 
         return Promise.require('util/requirejs/promise!util/service/dataPromise')
             .then(function() {
-                console.log('requesting', service, method)
+                console.log('requesting', service, method, args, thisRequestId)
                 var $node = $(node),
-                    thisRequestId = currentDataRequestId++,
+                    nodeEl = $node[0],
+                    $nodeInDom = $.contains(document.documentElement, nodeEl) ? $node : $(document),
                     promise = new Promise(function(fulfill, reject) {
                         requests[thisRequestId] = {
                             promiseFulfill: fulfill,
                             promiseReject: reject,
                             timeoutTimer: _.delay(function() {
                                 console.error('Data request went unhandled', service + '->' + method);
-                                $node.trigger('dataRequestCompleted', {
+                                $nodeInDom.trigger('dataRequestCompleted', {
                                     requestId: thisRequestId,
                                     success: false,
                                     error: 'No data request handler responded'
@@ -75,14 +77,14 @@ define(['util/promise', 'underscore'], function(Promise, _) {
                 function wrapPromise() {
                     promise.cancel = function() {
                         cleanRequest(thisRequestId);
-                        $node.trigger('dataRequestCancel', {
+                        $nodeInDom.trigger('dataRequestCancel', {
                             requestId: thisRequestId
                         });
                     };
                 }
 
                 function triggerEvent() {
-                    $node.trigger('dataRequest', {
+                    $nodeInDom.trigger('dataRequest', {
                         requestId: thisRequestId,
                         service: service,
                         method: method,

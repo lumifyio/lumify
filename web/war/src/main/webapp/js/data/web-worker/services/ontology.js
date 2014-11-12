@@ -156,7 +156,6 @@ define([
                             byId: _.indexBy(ontology.relationships, 'id'),
                             byTitle: _.indexBy(ontology.relationships, 'title'),
                             groupedBySourceDestConcepts: conceptGrouping(concepts, list, groupedBySource),
-                            groupedBySourceDestConceptsKeyGen: genKey,
                             groupedBySourceConcept: groupedBySource
                         };
                     });
