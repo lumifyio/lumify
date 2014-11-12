@@ -43,6 +43,7 @@ public class AnalystsNotebookExporter {
     private OntologyRepository ontologyRepository;
     private ArtifactThumbnailRepository artifactThumbnailRepository;
     private Configuration configuration;
+    private AnalystsNotebookExportConfiguration analystsNotebookExportConfiguration;
     private AggregateClassificationClient aggregateClassificationClient;
 
     @Inject
@@ -56,6 +57,8 @@ public class AnalystsNotebookExporter {
         this.ontologyRepository = ontologyRepository;
         this.artifactThumbnailRepository = artifactThumbnailRepository;
         this.configuration = configuration;
+        analystsNotebookExportConfiguration = new AnalystsNotebookExportConfiguration();
+        configuration.setConfigurables(analystsNotebookExportConfiguration, AnalystsNotebookExportConfiguration.CONFIGURATION_PREFIX);
         aggregateClassificationClient = new AggregateClassificationClient(configuration);
     }
 
@@ -71,6 +74,8 @@ public class AnalystsNotebookExporter {
         }
     }
 
+
+
     public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale, String timeZone, String baseUrl) {
         LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
 
@@ -85,25 +90,19 @@ public class AnalystsNotebookExporter {
         String classificationBanner = aggregateClassificationClient.getClassificationBanner(vertices);
 
         Chart chart = new Chart();
-
-        List<AttributeClass> attributeClasses = AttributeClass.createForVertices(vertices, ontologyRepository);
-        attributeClasses.add(new AttributeClass("subtitle", AttributeClass.TYPE_TEXT, true));
-        attributeClasses.add(new AttributeClass("time", AttributeClass.TYPE_TEXT, true));
-        chart.setAttributeClassCollection(attributeClasses);
-
+        chart.setAttributeClassCollection(createAttributeClassCollection(vertices));
         chart.setLinkTypeCollection(getLinkTypes());
-
         chart.setEntityTypeCollection(EntityType.createForVertices(vertices, ontologyRepository, version));
-
-        // TODO: broken in 8.5.1
-        // chart.setCustomImageCollection(CustomImage.createForVertices(vertices, ontologyRepository));
+        if (version.supports(AnalystsNotebookFeature.CUSTOM_IMAGE_COLLECTION)) {
+            chart.setCustomImageCollection(CustomImage.createForVertices(vertices, ontologyRepository));
+        }
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
-        LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
 
+        LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
         FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository, locale, timeZone);
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
-            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, artifactThumbnailRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations, user, baseUrl));
+            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, artifactThumbnailRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations, user, baseUrl, analystsNotebookExportConfiguration));
         }
         formulaEvaluator.close();
 
@@ -118,12 +117,38 @@ public class AnalystsNotebookExporter {
         }
         chart.setChartItemCollection(chartItems);
 
-        if (version == AnalystsNotebookVersion.VERSION_7_OR_8 && classificationBanner != null) {
+        if (version.supports(AnalystsNotebookFeature.SUMMARY) && classificationBanner != null) {
             chart.setSummary(getSummary(classificationBanner));
+        }
+
+        if (version.supports(AnalystsNotebookFeature.PRINT_SETTINGS) && classificationBanner != null) {
             chart.setPrintSettings(getPrintSettings());
         }
 
         return chart;
+    }
+
+    private List<AttributeClass> createAttributeClassCollection(Iterable<Vertex> vertices) {
+        List<AttributeClass> attributeClasses = new ArrayList<AttributeClass>();
+
+        if (analystsNotebookExportConfiguration.includeProperties()) {
+            attributeClasses.addAll(AttributeClass.createForVertices(vertices, ontologyRepository));
+        }
+        if (analystsNotebookExportConfiguration.includeSubtitle()) {
+            attributeClasses.add(new AttributeClass(AttributeClass.NAME_SUBTITLE, AttributeClass.TYPE_TEXT, true));
+        }
+        if (analystsNotebookExportConfiguration.includeTime()) {
+            attributeClasses.add(new AttributeClass(AttributeClass.NAME_TIME, AttributeClass.TYPE_TEXT, true));
+        }
+        if (analystsNotebookExportConfiguration.includeImageUrl()) {
+            attributeClasses.add(new AttributeClass(AttributeClass.NAME_IMAGE_URL, AttributeClass.TYPE_TEXT, false));
+        }
+        if (analystsNotebookExportConfiguration.includeVisibility()) {
+            String label = analystsNotebookExportConfiguration.getVisibilityLabel();
+            attributeClasses.add(new AttributeClass(label, AttributeClass.TYPE_TEXT, true));
+        }
+
+        return attributeClasses;
     }
 
     private ChartItem getLabelChartItem(String chartItemLabelAndDescription, int x, int y, String labelId) {

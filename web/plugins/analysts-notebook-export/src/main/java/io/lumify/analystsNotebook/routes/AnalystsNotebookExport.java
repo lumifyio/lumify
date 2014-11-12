@@ -27,7 +27,7 @@ import java.util.Locale;
 
 public class AnalystsNotebookExport extends BaseRequestHandler {
     private static final String VERSION_PARAMETER_NAME = "version";
-    private static final AnalystsNotebookVersion DEFAULT_VERSION = AnalystsNotebookVersion.VERSION_7_OR_8;
+    private static final AnalystsNotebookVersion DEFAULT_VERSION = AnalystsNotebookVersion.VERSION_8_9;
     private static final String FILE_EXT = "anx";
     private static final String CONTENT_TYPE = "application/xml";
     private WorkspaceRepository workspaceRepository;

@@ -2,18 +2,18 @@ package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.lumify.analystsNotebook.AnalystsNotebookExportConfiguration;
+import io.lumify.analystsNotebook.AnalystsNotebookFeature;
 import io.lumify.analystsNotebook.AnalystsNotebookVersion;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.formula.FormulaEvaluator;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
-import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.user.User;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.Authorizations;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
@@ -22,13 +22,10 @@ import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChartItem {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ChartItem.class);
-    private static final int THUMBNAIL_WIDTH = 200;
-    private static final int THUMBNAIL_HEIGHT = 200;
-
     @JacksonXmlProperty(isAttribute = true)
     private String label;
 
@@ -142,7 +139,7 @@ public class ChartItem {
         entity.setIcon(icon);
 
         End end = new End();
-        if (version == AnalystsNotebookVersion.VERSION_6) {
+        if (version.supports(AnalystsNotebookFeature.END_X)) {
             end.setX(x);
         }
         end.setY(y);
@@ -151,7 +148,7 @@ public class ChartItem {
         ChartItem chartItem = new ChartItem();
         chartItem.setLabel(title);
         chartItem.setDateSet(false);
-        if (version == AnalystsNotebookVersion.VERSION_7_OR_8) {
+        if (version.supports(AnalystsNotebookFeature.CHART_ITEM_X_POSITION)) {
             chartItem.setxPosition(x);
         }
         chartItem.setEnd(end);
@@ -172,48 +169,70 @@ public class ChartItem {
                                                                String workspaceId,
                                                                Authorizations authorizations,
                                                                User user,
-                                                               String baseUrl) {
+                                                               String baseUrl,
+                                                               AnalystsNotebookExportConfiguration analystsNotebookExportConfiguration) {
         String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
         String vertexId = vertex.getId();
         String title = formulaEvaluator.evaluateTitleFormula(vertex, workspaceId, authorizations);
         int x = workspaceEntity.getGraphPositionX();
         int y = workspaceEntity.getGraphPositionY();
 
-        List<Attribute> attributeCollection = Attribute.createCollectionFromVertex(vertex, ontologyRepository);
-
-        String subtitle = formulaEvaluator.evaluateSubtitleFormula(vertex, workspaceId, authorizations);
-        if (subtitle != null && subtitle.trim().length() > 0) {
-            Attribute subtitleAttribute = new Attribute("subtitle", subtitle);
-            attributeCollection.add(subtitleAttribute);
+        List<Attribute> attributeCollection = new ArrayList<Attribute>();
+        if (analystsNotebookExportConfiguration.includeProperties()) {
+            attributeCollection.addAll(Attribute.createCollectionFromVertex(vertex, ontologyRepository));
+        }
+        if (analystsNotebookExportConfiguration.includeVisibility()) {
+            VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
+            if (visibilityJson != null) {
+                String visibilitySource = visibilityJson.getSource();
+                if (visibilitySource != null && visibilitySource.trim().length() > 0) {
+                    String label = analystsNotebookExportConfiguration.getVisibilityLabel();
+                    Attribute visibilityAttribute = new Attribute(label, visibilitySource);
+                    attributeCollection.add(visibilityAttribute);
+                }
+            }
+        }
+        if (analystsNotebookExportConfiguration.includeSubtitle()) {
+            String subtitle = formulaEvaluator.evaluateSubtitleFormula(vertex, workspaceId, authorizations);
+            if (subtitle != null && subtitle.trim().length() > 0) {
+                Attribute subtitleAttribute = new Attribute(AttributeClass.NAME_SUBTITLE, subtitle);
+                attributeCollection.add(subtitleAttribute);
+            }
+        }
+        if (analystsNotebookExportConfiguration.includeTime()) {
+            String time = formulaEvaluator.evaluateTimeFormula(vertex, workspaceId, authorizations);
+            if (time != null && time.trim().length() > 0) {
+                Attribute timeAttribute = new Attribute(AttributeClass.NAME_TIME, time);
+                attributeCollection.add(timeAttribute);
+            }
+        }
+        if (analystsNotebookExportConfiguration.includeImageUrl()) {
+            String imageUrl = LumifyProperties.ENTITY_IMAGE_URL.getPropertyValue(vertex);
+            if (imageUrl != null) {
+                Attribute imageUrlAttribute = new Attribute(AttributeClass.NAME_IMAGE_URL, imageUrl);
+                attributeCollection.add(imageUrlAttribute);
+            }
         }
 
-        String time = formulaEvaluator.evaluateTimeFormula(vertex, workspaceId, authorizations);
-        if (time != null && time.trim().length() > 0) {
-            Attribute timeAttribute = new Attribute("time", time);
-            attributeCollection.add(timeAttribute);
-        }
-
-        String imageUrl = LumifyProperties.ENTITY_IMAGE_URL.getPropertyValue(vertex);
-        if (imageUrl != null) {
-            Attribute imageUrlAttribute = new Attribute("imageUrl", imageUrl);
-            attributeCollection.add(imageUrlAttribute);
-        }
-
-        String imageVertexId = LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyValue(vertex);
         IconPicture iconPicture = null;
-        if (imageVertexId != null) {
-            byte[] entityImage = getEntityImage(vertex, artifactThumbnailRepository, user);
-            if (entityImage != null) {
-                // TODO: broken in 8.5.1
-                iconPicture = new IconPicture(entityImage);
+        if (version.supports(AnalystsNotebookFeature.ICON_PICTURE)) {
+            String mimeType = LumifyProperties.MIME_TYPE.getPropertyValue(vertex);
+            if (mimeType != null && mimeType.toLowerCase().startsWith("image/")) {
+                iconPicture = new IconPicture(getThumbnailBytes(vertex, artifactThumbnailRepository, user, analystsNotebookExportConfiguration));
+            } else {
+                String imageVertexId = LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyValue(vertex);
+                if (imageVertexId != null) {
+                    Vertex imageVertex = vertex.getGraph().getVertex(imageVertexId, authorizations);
+                    iconPicture = new IconPicture(getThumbnailBytes(imageVertex, artifactThumbnailRepository, user, analystsNotebookExportConfiguration));
+                }
             }
         }
 
         return createEntity(version, conceptType, vertexId, title, x, y, iconPicture, attributeCollection, baseUrl, workspaceId);
     }
 
-    private static byte[] getEntityImage(Vertex vertex, ArtifactThumbnailRepository artifactThumbnailRepository, User user) {
-        int[] dimensions = new int[]{THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT};
+    private static byte[] getThumbnailBytes(Vertex vertex, ArtifactThumbnailRepository artifactThumbnailRepository, User user, AnalystsNotebookExportConfiguration analystsNotebookExportConfiguration) {
+        int[] dimensions = new int[]{analystsNotebookExportConfiguration.getThumbnailWidth(), analystsNotebookExportConfiguration.getThumbnailHeight()};
         String type = "raw";
 
         ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(vertex.getId(), type, dimensions[0], dimensions[1], user);
@@ -235,7 +254,7 @@ public class ChartItem {
 
     public static ChartItem createLink(AnalystsNotebookVersion version, String label, String from, String to) {
         LinkStyle linkStyle = new LinkStyle();
-        if (version == AnalystsNotebookVersion.VERSION_6) {
+        if (version.supports(AnalystsNotebookFeature.LINK_STYLE_STRENGTH)) {
             linkStyle.setStrength(1);
         }
         linkStyle.setArrowStyle(LinkStyle.ARROW_STYLE_ARROW_ON_HEAD);

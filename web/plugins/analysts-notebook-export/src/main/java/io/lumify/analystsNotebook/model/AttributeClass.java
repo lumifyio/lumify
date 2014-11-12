@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 public class AttributeClass {
+    public static final String NAME_SUBTITLE = "subtitle";
+    public static final String NAME_TIME = "time";
+    public static final String NAME_IMAGE_URL = "imageUrl";
     public static final String TYPE_FLAG = "AttFlag";
     public static final String TYPE_NUMBER = "AttNumber";
     public static final String TYPE_TEXT = "AttText";
