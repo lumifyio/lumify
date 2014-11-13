@@ -986,18 +986,26 @@ define([
             if (!vertices || vertices.length === 0) return;
 
             var cy = vertices[0].cy(),
-                updateData = {};
+                updateData = {},
+                verticesMoved = [];
 
             vertices.each(function(i, vertex) {
-                var p = retina.pixelsToPoints(vertex.position());
+                var p = retina.pixelsToPoints(vertex.position()),
+                    cyId = vertex.id(),
+                    pCopy = {x: p.x, y: p.y};
+
                 if (!vertex.data('freed')) {
                     dup = false;
                 }
 
-                updateData[vertex.id()] = {
-                    targetPosition: {x: p.x, y: p.y},
+                updateData[cyId] = {
+                    targetPosition: pCopy,
                     freed: true
                 };
+                verticesMoved.push({
+                    vertexId: fromCyId(cyId),
+                    graphPosition: pCopy
+                });
             });
 
             if (dup) {
@@ -1019,31 +1027,10 @@ define([
                 event.cyTarget.select();
             }
 
-            var previousData = {
-                    vertices: $.map(vertices, function(vertex) {
-                        return {
-                            id: fromCyId(vertex.id()),
-                            workspace: {
-                                graphPosition: vertex.data('originalPosition')
-                            }
-                        };
-                    })
-                },
-                graphMovedVerticesData = {
-                    vertices: $.map(vertices, function(vertex) {
-                        return {
-                            id: fromCyId(vertex.id()),
-                            workspace: {
-                                graphPosition: vertex.data('targetPosition')
-                            }
-                        };
-                    })
-                };
-
-            if (!_.isEqual(previousData, graphMovedVerticesData)) {
-                self.trigger(document, 'updateVertices', graphMovedVerticesData);
-                this.setWorkspaceDirty();
-            }
+            this.trigger('updateWorkspace', {
+                entityUpdates: verticesMoved
+            });
+            this.setWorkspaceDirty();
         };
 
         this.graphMouseOver = function(event) {

@@ -24,10 +24,7 @@ define(['../services/workspace'], function(Workspace) {
                     workspace: workspace,
                     vertices: vertices
                 });
-                store.setVerticesInWorkspace(
-                    workspace.workspaceId,
-                    _.pluck(workspace.vertices, 'vertexId')
-                );
+                store.setWorkspace(workspace);
             })
         ]).done(function(result) {
             dispatchMain('edgesLoaded', {

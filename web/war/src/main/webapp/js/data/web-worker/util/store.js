@@ -7,18 +7,19 @@ define([
         // Object cache per workspace
     var KIND_TO_CACHE = {
             vertex: 'vertices',
-            edge: 'edges'
+            edge: 'edges',
+            workspace: 'workspace'
         },
         workspaceCaches = {},
-
-        // Need all vertices in current workspace somehow
-        workspaceVertices = {},
 
         api = {
 
             getObject: function(workspaceId, kind, objectId) {
-                var result = api.getObjects(workspaceId, kind, [objectId]);
-                return result.length ? result[0] : null;
+                var result = api.getObjects(workspaceId, kind, objectId ? [objectId] : null);
+                if (objectId) {
+                    return result.length ? result[0] : null;
+                }
+                return result;
             },
 
             getObjects: function(workspaceId, kind, objectIds) {
@@ -29,14 +30,60 @@ define([
                 var workspaceCache = cacheForWorkspace(workspaceId, { create: false }),
                     cache = workspaceCache && workspaceCache[KIND_TO_CACHE[kind]];
 
-                return objectIds.map(function(oId) {
-                    return cache && cache.getItem(oId);
-                })
+                if (objectIds) {
+                    return objectIds.map(function(oId) {
+                        return cache && cache.getItem(oId);
+                    });
+                }
+
+                return cache;
             },
 
-            setVerticesInWorkspace: function(workspaceId, vertexIds) {
-                var workspaceCache = cacheForWorkspace(workspaceId);
-                workspaceCache.onGraphVertexIds = _.indexBy(vertexIds);
+            setWorkspace: function(workspace) {
+                var workspaceCache = cacheForWorkspace(workspace.workspaceId);
+                workspaceCache.workspace = workspace;
+            },
+
+            updateWorkspace: function(workspaceId, changes) {
+                var workspace = api.getObject(workspaceId, 'workspace');
+                changes.entityUpdates.forEach(function(entityUpdate) {
+                    var workspaceVertex = workspace.vertices[entityUpdate.vertexId];
+                    if (workspaceVertex) {
+                        workspaceVertex.graphPosition = entityUpdate.graphPosition;
+                    } else {
+                        workspace.vertices[entityUpdate.vertexId] = {
+                            graphPosition: entityUpdate.graphPosition
+                        }
+                    }
+                });
+
+                return workspace;
+            },
+
+            workspaceWasChangedRemotely: function(remoteWorkspace) {
+                var workspace = api.getObject(remoteWorkspace.workspaceId, 'workspace');
+                if (!workspace) {
+                    debugger;
+                    return;
+                }
+                if (!_.isEqual(remoteWorkspace, workspace)) {
+                    console.debug('WORKSPACE UPDATED', remoteWorkspace, workspace)
+                }
+            },
+
+            workspaceWillChange: function(workspace, changes) {
+                var willChange = false;
+
+                willChange = willChange || _.any(changes.entityUpdates, function(entityUpdate) {
+                    var workspaceVertex = workspace.vertices[entityUpdate.vertexId];
+                    if (workspaceVertex) {
+                        return !_.isEqual(workspaceVertex.graphPosition, entityUpdate.graphPosition);
+                    } else {
+                        return true;
+                    }
+                });
+
+                return willChange;
             },
 
             checkAjaxForPossibleCaching: function(xhr, json, workspaceId, request) {

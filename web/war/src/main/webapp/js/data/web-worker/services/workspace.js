@@ -1,5 +1,5 @@
 
-define(['../util/ajax'], function(ajax) {
+define(['../util/ajax', '../util/store'], function(ajax, store) {
     'use strict';
 
     return {
@@ -29,16 +29,43 @@ define(['../util/ajax'], function(ajax) {
         },
 
         save: function(workspaceId, changes) {
-            return ajax('POST', '/workspace/update', {
-                workspaceId: workspaceId,
-                data: {
-                    entityUpdates: [],
-                    entityDeletes: [],
-                    userUpdates: [],
-                    userDeletes: []
+            if (arguments.length === 1) {
+                changes = workspaceId;
+                workspaceId = publicData.currentWorkspaceId;
+            }
+
+            var workspace = store.getObject(workspaceId, 'workspace');
+
+            if (_.isEmpty(changes)) {
+                console.warn('Workspace update called with no changes');
+                return Promise.resolve(workspace);
+            }
+
+            var allChanges = _.extend({}, {
+                entityUpdates: [],
+                entityDeletes: [],
+                userUpdates: [],
+                userDeletes: []
+            }, changes || {});
+
+            allChanges.entityUpdates.forEach(function(entityUpdate) {
+                var p = entityUpdate.graphPosition;
+                if (p) {
+                    p.x = Math.round(p.x);
+                    p.y = Math.round(p.y);
                 }
             })
 
+            if (!store.workspaceWillChange(workspace, allChanges)) {
+                return Promise.resolve(workspace);
+            }
+
+            return ajax('POST', '/workspace/update', {
+                workspaceId: workspaceId,
+                data: JSON.stringify(allChanges)
+            }).then(function() {
+                return store.updateWorkspace(workspaceId, allChanges)
+            })
         },
 
         vertices: function(workspaceId) {

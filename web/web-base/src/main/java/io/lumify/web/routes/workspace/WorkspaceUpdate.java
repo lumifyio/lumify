@@ -63,7 +63,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         updateUsers(workspace, updateData.getUserUpdates(), authUser);
 
         workspace = workspaceRepository.findById(workspaceId, authUser);
-        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, false);
+        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, true);
         workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
 
         deleteUsers(workspace, updateData.getUserDeletes(), authUser);

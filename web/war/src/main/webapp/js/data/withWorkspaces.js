@@ -10,6 +10,7 @@ define([], function() {
             this.on('loadCurrentWorkspace', this.onLoadCurrentWorkspace);
             this.on('switchWorkspace', this.onSwitchWorkspace);
             this.on('reloadWorkspace', this.onReloadWorkspace);
+            this.on('updateWorkspace', this.onUpdateWorkspace);
         });
 
         this.onLoadCurrentWorkspace = function(event) {
@@ -29,10 +30,23 @@ define([], function() {
             this.setPublicApi('currentWorkspaceId', data.workspaceId);
             this.setPublicApi('currentWorkspaceEditable', data.editable);
             this.worker.postMessage({
-                type: 'switchWorkspace',
+                type: 'workspaceSwitch',
                 workspaceId: data.workspaceId
             });
         };
+
+        this.onUpdateWorkspace = function(event, data) {
+            var self = this;
+
+            this.trigger('workspaceSaving', lastReloadedState.workspace);
+            this.dataRequest('workspace', 'save', data)
+                .finally(function() {
+                    self.trigger('workspaceSaved', lastReloadedState.workspace);
+                })
+                .done();
+        };
+
+        // Worker Handlers
 
         this.edgesLoaded = function(message) {
             lastReloadedState.edges = message;
