@@ -92,7 +92,6 @@ define([
             var self = this,
                 data = this.attr.data;
 
-            console.log(data);
             Promise.all([
                 this.dataRequest('ontology', 'ontology'),
                 this.dataRequest('edge', 'store', { edgeId: data.id })
