@@ -1,14 +1,16 @@
 define([
     'flight/lib/component',
     'hbs!./userSelectTpl',
-    'tpl!./user'
+    'tpl!./user',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
-    userTemplate) {
+    userTemplate,
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(UserSelect);
+    return defineComponent(UserSelect, withDataRequest);
 
     function UserSelect() {
 
@@ -61,14 +63,14 @@ define([
 
             this.select('inputSelector').typeahead({
                 source: function(query, callback) {
-                    userService.search(query)
-                        .done(function(response) {
-                            var users = response.users.filter(function(user) {
+                    self.dataRequest('user', 'search', query)
+                        .done(function(users) {
+                            var otherUsers = users.filter(function(user) {
                                     return self.attr.filterUserIds.indexOf(user.id) === -1;
                                 }),
-                                ids = _.pluck(users, 'id');
+                                ids = _.pluck(otherUsers, 'id');
 
-                            userMap = _.indexBy(users, 'id');
+                            userMap = _.indexBy(otherUsers, 'id');
 
                             callback(ids);
                         });

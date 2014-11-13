@@ -19,6 +19,20 @@ define(['../util/ajax'], function(ajax) {
             });
         },
 
+        search: function(query, optionalWorkspaceId) {
+            var data = {};
+            if (query) {
+                data.q = query;
+            }
+            if (optionalWorkspaceId) {
+                data.workspaceId = optionalWorkspaceId;
+            }
+            return ajax('GET', '/user/all', data)
+                .then(function(response) {
+                    return response.users;
+                })
+        },
+
         info: function(userIds) {
             var returnSingular = false;
             if (!_.isArray(userIds)) {
