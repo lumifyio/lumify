@@ -153,7 +153,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     workspaceUndoResponse.addFailure(data);
                     continue;
                 }
-                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+                workspaceHelper.deleteEdge(workspaceId, edge, sourceVertex, destVertex, entityHasImageIri, false, user, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);
                 data.setErrorMessage(ex.getMessage());

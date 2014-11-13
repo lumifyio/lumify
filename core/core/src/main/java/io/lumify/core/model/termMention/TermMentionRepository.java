@@ -74,6 +74,11 @@ public class TermMentionRepository {
         graph.removeVertex(termMention, authorizationsWithTermMention);
     }
 
+    public void markHidden(Vertex termMention, Visibility hiddenVisibility, Authorizations authorizations) {
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
+        graph.markVertexHidden(termMention, hiddenVisibility, authorizationsWithTermMention);
+    }
+
     public Iterable<Vertex> findByEdgeId(String sourceVertexId, final String edgeId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         Vertex sourceVertex = graph.getVertex(sourceVertexId, authorizationsWithTermMention);

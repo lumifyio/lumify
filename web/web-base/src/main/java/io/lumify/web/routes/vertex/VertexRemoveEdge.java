@@ -58,15 +58,11 @@ public class VertexRemoveEdge extends BaseRequestHandler {
         Vertex destVertex = graph.getVertex(targetId, authorizations);
         Edge edge = graph.getEdge(edgeId, authorizations);
 
-        SandboxStatus sandboxStatuses = GraphUtil.getSandboxStatus(edge, workspaceId);
+        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspaceId);
 
-        if (sandboxStatuses == SandboxStatus.PUBLIC) {
-            LOGGER.warn("Could not find non-public edge: %s", edgeId);
-            chain.next(request, response);
-            return;
-        }
+        boolean isPublicEdge = sandboxStatus == SandboxStatus.PUBLIC;
 
-        workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+        workspaceHelper.deleteEdge(workspaceId, edge, sourceVertex, destVertex, entityHasImageIri, isPublicEdge, user, authorizations);
         respondWithSuccessJson(response);
     }
 }

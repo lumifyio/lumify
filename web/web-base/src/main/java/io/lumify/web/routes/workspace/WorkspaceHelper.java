@@ -74,24 +74,41 @@ public class WorkspaceHelper {
         workQueueRepository.pushGraphPropertyQueue(vertex, property);
     }
 
-    public void deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String imageRelationshipLabel, User user, Authorizations authorizations) {
-        graph.removeEdge(edge, authorizations);
+    public void deleteEdge(String workspaceId, Edge edge, Vertex sourceVertex, Vertex destVertex, String imageRelationshipLabel, boolean isPublicEdge, User user, Authorizations authorizations) {
+        if (isPublicEdge) {
+            Visibility workspaceVisibility = new Visibility(workspaceId);
 
-        if (edge.getLabel().equals(imageRelationshipLabel)) {
-            Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
-            sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
-            this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+            graph.markEdgeHidden(edge, workspaceVisibility, authorizations);
+
+            if (edge.getLabel().equals(imageRelationshipLabel)) {
+                Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
+                sourceVertex.markPropertyHidden(entityHasImage, workspaceVisibility, authorizations);
+                this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+            }
+
+            for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
+                termMentionRepository.markHidden(termMention, workspaceVisibility, authorizations);
+                workQueueRepository.pushTextUpdated(sourceVertex.getId());
+            }
+        } else {
+            graph.removeEdge(edge, authorizations);
+
+            if (edge.getLabel().equals(imageRelationshipLabel)) {
+                Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
+                sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
+                this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+            }
+
+            for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
+                termMentionRepository.delete(termMention, authorizations);
+                workQueueRepository.pushTextUpdated(sourceVertex.getId());
+            }
+
+            this.workQueueRepository.pushEdgeDeletion(edge);
+
+            // TODO: replace "" when we implement commenting on ui
+            auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, new LumifyVisibility().getVisibility());
         }
-
-        for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
-            termMentionRepository.delete(termMention, authorizations);
-            workQueueRepository.pushTextUpdated(sourceVertex.getId());
-        }
-
-        this.workQueueRepository.pushEdgeDeletion(edge);
-
-        // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, new LumifyVisibility().getVisibility());
 
         graph.flush();
     }
