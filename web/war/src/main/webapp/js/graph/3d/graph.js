@@ -32,7 +32,6 @@ define([
     }
 
     function Graph3D() {
-        this.ontologyService = new OntologyService();
         this.defaultAttrs({ });
 
         this.after('teardown', function() {
@@ -94,7 +93,7 @@ define([
                 var node = new $3djs.Graph.Node(vertex.id);
 
                 node.data.vertex = vertex;
-                node.data.icon = vertex.imageSrc;
+                node.data.icon = F.vertex.image(vertex);
 
                 if (node.data.icon) {
                     deferredImages.push(
