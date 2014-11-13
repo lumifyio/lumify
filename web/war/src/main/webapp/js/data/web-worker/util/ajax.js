@@ -15,6 +15,8 @@ define(['util/promise'], function() {
 
                 if (_.isArray(params[key])) {
                     str += _.map(params[key], _.partial(paramPair, key + '[]')).join('&') + '&';
+                } else if (_.isObject(params[key])) {
+                    str += paramPair(key, JSON.stringify(params[key])) + '&';
                 } else {
                     str += paramPair(key, params[key]) + '&';
                 }

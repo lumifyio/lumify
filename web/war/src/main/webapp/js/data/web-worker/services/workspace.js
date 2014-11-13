@@ -22,6 +22,25 @@ define(['../util/ajax'], function(ajax) {
             });
         },
 
+        'delete': function(workspaceId) {
+            return ajax('DELETE', '/workspace', {
+                workspaceId: workspaceId
+            });
+        },
+
+        save: function(workspaceId, changes) {
+            return ajax('POST', '/workspace/update', {
+                workspaceId: workspaceId,
+                data: {
+                    entityUpdates: [],
+                    entityDeletes: [],
+                    userUpdates: [],
+                    userDeletes: []
+                }
+            })
+
+        },
+
         vertices: function(workspaceId) {
             return ajax('GET', '/workspace/vertices', {
                 workspaceId: workspaceId || publicData.currentWorkspaceId
