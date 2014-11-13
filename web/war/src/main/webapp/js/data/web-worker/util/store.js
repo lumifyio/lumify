@@ -46,9 +46,12 @@ define([
                 if (resemblesVertices(json.vertices)) {
                     cacheVertices(workspaceId, json.vertices);
                 }
-                //if (resemblesEdges(json)) {
-
-                //}
+                if (resemblesEdge(json)) {
+                    cacheEdges(workspaceId, [json]);
+                }
+                if (resemblesEdges(json.edges)) {
+                    cacheEdges(workspaceId, json.edges);
+                }
             }
         };
 
@@ -112,13 +115,46 @@ define([
         console.log(vertexCache)
     }
 
+    function cacheEdges(workspaceId, edges) {
+        var edgeCache = cacheForWorkspace(workspaceId).edges,
+            updated = _.compact(edges.map(function(e) {
+                var previous = edgeCache.getItem(e.id);
+                if (previous && _.isEqual(v, previous)) {
+                    return;
+                }
+
+                console.debug('Cache ', e.id, workspaceId)
+                edgeCache.setItem(e.id, e, {
+                    expirationAbsolute: null,
+                    expirationSliding: null,
+                    priority: Cache.Priority.HIGH,
+                    callback: function(k, v) {
+                        console.debug('removed ' + k);
+                    }
+                });
+
+                if (previous) {
+                    console.debug('Edge updated previous:', previous, 'new:', e)
+                    return e;
+                }
+            }));
+
+        if (updated.length && workspaceId === publicData.currentWorkspaceId) {
+            console.log('updated', updated)
+            dispatchMain('storeObjectsUpdated', { edges: updated });
+        }
+
+        console.log(edgeCache);
+    }
+
     function resemblesEdge(val) {
         return (
             _.isObject(val) &&
+            val.type === 'edge' &&
             _.has(val, 'id') &&
             _.has(val, 'label') &&
-            _.has(val, 'sourceVertexId') &&
-            _.has(val, 'destVertexId')
+            _.has(val, 'source') &&
+            _.has(val, 'target')
         );
     }
 
@@ -132,6 +168,7 @@ define([
             _.has(val, 'id') &&
             _.has(val, 'sandboxStatus') &&
             _.has(val, 'properties') &&
+            _.isArray(val, 'properties') &&
             !_.has(val, 'sourceVertexId') &&
             !_.has(val, 'destVertexId')
         );

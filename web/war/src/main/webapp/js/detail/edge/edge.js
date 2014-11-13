@@ -4,9 +4,10 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     '../toolbar/toolbar',
-    'tpl!./relationship',
+    'tpl!./edge',
     'detail/properties/properties',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineComponent,
@@ -15,17 +16,15 @@ define([
     withHighlighting,
     Toolbar,
     template,
-    EdgeService,
-    VertexService,
-    OntologyService,
     Properties,
     F,
+    withDataRequest,
     d3) {
     'use strict';
 
     var predicate = { name: 'http://lumify.io#conceptType' };
 
-    return defineComponent(Edge, withTypeContent, withHighlighting);
+    return defineComponent(Edge, withTypeContent, withHighlighting, withDataRequest);
 
     function Edge() {
 
@@ -51,14 +50,14 @@ define([
         });
 
         this.onVerticesUpdated = function(event, data) {
-            var source = _.findWhere(data.vertices, { id: this.relationship.source.id }),
-                target = _.findWhere(data.vertices, { id: this.relationship.target.id });
+            var source = _.findWhere(data.vertices, { id: this.edge.source.id }),
+                target = _.findWhere(data.vertices, { id: this.edge.target.id });
 
             if (source) {
-                this.relationship.source = source;
+                this.edge.source = source;
             }
             if (target) {
-                this.relationship.target = target;
+                this.edge.target = target;
             }
 
             if (source || target) {
@@ -67,9 +66,9 @@ define([
         };
 
         this.update = function() {
-            var relationship = this.relationship,
-                source = relationship.source,
-                target = relationship.target;
+            var edge = this.edge,
+                source = edge.source,
+                target = edge.target;
 
             d3.select(this.node).selectAll('.vertex-to-vertex-relationship')
                 .data([source, target])
@@ -92,34 +91,33 @@ define([
         this.loadRelationship = function() {
             var self = this,
                 data = this.attr.data;
-            $.when(
-                self.handleCancelling(self.ontologyService.ontology()),
-                self.handleCancelling(self.ontologyService.relationships()),
-                self.handleCancelling(edgeService.properties(data.id))
-            ).done(function(ontology, ontologyRelationships, relationshipData) {
-                var relationship = relationshipData[0];
 
-                self.trigger('finishedLoadingTypeContent');
+            console.log(data);
+            Promise.all([
+                this.dataRequest('ontology', 'ontology'),
+                this.dataRequest('edge', 'store', { edgeId: data.id })
+            ]).done(function(results) {
+                var ontology = results.shift(),
+                    edge = results.shift();
 
-                self.ontology = ontology;
-                self.ontologyRelationships = ontologyRelationships;
-                self.relationship = relationship;
-                $.extend(relationship.source, {
-                    concept: self.ontology.conceptsById[
-                        _.findWhere(relationship.source.properties, predicate).value
+                self.ontologyRelationships = ontology.relationships;
+                self.edge = edge;
+                $.extend(edge.source, {
+                    concept: ontology.concepts.byId[
+                        _.findWhere(edge.source.properties, predicate).value
                     ]
                 });
 
-                $.extend(relationship.target, {
-                    concept: self.ontology.conceptsById[
-                        _.findWhere(relationship.target.properties, predicate).value
+                $.extend(edge.target, {
+                    concept: ontology.concepts.byId[
+                        _.findWhere(edge.target.properties, predicate).value
                     ]
                 });
                 self.$node.html(template({}));
                 self.update();
 
                 Properties.attachTo(self.select('propertiesSelector'), {
-                    data: relationship
+                    data: edge
                 });
 
                 Toolbar.attachTo(self.select('toolbarSelector'), {

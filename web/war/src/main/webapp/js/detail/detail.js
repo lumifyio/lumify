@@ -89,9 +89,9 @@ define([
                 var vertex = vertices[0],
                     concept = F.vertex.concept(vertex),
                     type = concept && concept.displayType ||
-                        (F.vertex.isEdge(vertex) ? 'relationship' : 'entity');
+                        (F.vertex.isEdge(vertex) ? 'edge' : 'entity');
 
-                if (type === 'relationship') {
+                if (type === 'edge') {
                     moduleName = type;
                 } else {
                     moduleName = (((type != 'document' &&
@@ -102,7 +102,7 @@ define([
                 }
                 moduleData = vertex;
             } else {
-                moduleName = 'relationship';
+                moduleName = 'edge';
                 moduleData = edges[0];
             }
 
