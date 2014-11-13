@@ -10,7 +10,16 @@ define([], function() {
 
         this.after('initialize', function() {
             this.on('selectObjects', this.onSelectObjects);
+            this.on('deleteSelected', this.onDeleteSelected);
         });
+
+        this.onDeleteSelected = function(event, data) {
+            if (data && data.vertexId) {
+                this.trigger('updateWorkspace', {
+                    entityDeletes: [data.vertexId]
+                });
+            }
+        };
 
         this.onSelectObjects = function(event, data) {
             var self = this,

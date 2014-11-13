@@ -17,8 +17,7 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
             return ajax('GET', '/workspace', {
                 workspaceId: workspaceId || publicData.currentWorkspaceId
             }).then(function(workspace) {
-                workspace.vertices = _.indexBy(workspace.vertices, 'vertexId');
-                return workspace;
+                return store.setWorkspace(workspace);
             });
         },
 
@@ -56,7 +55,7 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
                 }
             })
 
-            if (!store.workspaceWillChange(workspace, allChanges)) {
+            if (!store.workspaceShouldSave(workspace, allChanges)) {
                 return Promise.resolve(workspace);
             }
 

@@ -24,7 +24,6 @@ define(['../services/workspace'], function(Workspace) {
                     workspace: workspace,
                     vertices: vertices
                 });
-                store.setWorkspace(workspace);
             })
         ]).done(function(result) {
             dispatchMain('edgesLoaded', {

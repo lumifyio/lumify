@@ -53,6 +53,14 @@ define([], function() {
             this.trigger('edgesLoaded', message);
         };
 
+        this.workspaceUpdated = function(message) {
+            if (lastReloadedState &&
+                lastReloadedState.workspace.workspaceId === message.workspace.workspaceId) {
+                lastReloadedState.workspace = message.workspace;
+            }
+            this.trigger('workspaceUpdated', message);
+        };
+
         this.workspaceLoaded = function(message) {
             lastReloadedState.workspace = message;
             var workspace = message.workspace;

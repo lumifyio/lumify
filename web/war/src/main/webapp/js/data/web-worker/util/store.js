@@ -40,42 +40,74 @@ define([
             },
 
             setWorkspace: function(workspace) {
+                workspace.vertices = _.indexBy(workspace.vertices, 'vertexId');
                 var workspaceCache = cacheForWorkspace(workspace.workspaceId);
                 workspaceCache.workspace = workspace;
+                return workspace;
             },
 
             updateWorkspace: function(workspaceId, changes) {
-                var workspace = api.getObject(workspaceId, 'workspace');
+                var workspace = JSON.parse(JSON.stringify(api.getObject(workspaceId, 'workspace')));
                 changes.entityUpdates.forEach(function(entityUpdate) {
-                    var workspaceVertex = workspace.vertices[entityUpdate.vertexId];
+                    var workspaceVertex = _.findWhere(workspace.vertices, { vertexId: entityUpdate.vertexId });
                     if (workspaceVertex) {
                         workspaceVertex.graphPosition = entityUpdate.graphPosition;
                     } else {
-                        workspace.vertices[entityUpdate.vertexId] = {
+                        workspace.vertices.push({
+                            vertexId: entityUpdate.vertexId,
                             graphPosition: entityUpdate.graphPosition
-                        }
+                        });
                     }
                 });
+                workspace.vertices = _.omit(workspace.vertices, changes.entityDeletes);
+                // TODO: userDeletes and Updates
 
+                api.workspaceWasChangedRemotely(workspace);
                 return workspace;
             },
 
             workspaceWasChangedRemotely: function(remoteWorkspace) {
+                remoteWorkspace.vertices = _.indexBy(remoteWorkspace.vertices, 'vertexId');
                 var workspace = api.getObject(remoteWorkspace.workspaceId, 'workspace');
                 if (!workspace) {
                     debugger;
                     return;
                 }
-                if (!_.isEqual(remoteWorkspace, workspace)) {
+                if (!_.isEqual(remoteWorkspace.vertices, workspace.vertices)) {
                     console.debug('WORKSPACE UPDATED', remoteWorkspace, workspace)
+
+                    var vertexIds = _.keys(remoteWorkspace.vertices),
+                        vertexIdsPrevious = _.keys(workspace.vertices),
+                        addedIds = _.difference(vertexIds, vertexIdsPrevious),
+                        removedIds = _.difference(vertexIdsPrevious, vertexIds),
+                        added = _.values(_.pick(remoteWorkspace.vertices, addedIds)),
+                        updated = _.compact(_.map(_.omit(vertexIds, addedIds), function(vId) {
+                            return _.isEqual(
+                                remoteWorkspace.vertices[vId].graphPosition,
+                                workspace.vertices[vId].graphPosition
+                            ) ? null : remoteWorkspace.vertices[vId];
+                        }));
+
+                    api.setWorkspace(remoteWorkspace);
+                    dispatchMain('workspaceUpdated', {
+                        workspace: remoteWorkspace,
+                        entityUpdates: updated,
+                        entityAdditions: added,
+                        entityDeletes: removedIds
+                    })
                 }
             },
 
-            workspaceWillChange: function(workspace, changes) {
+            workspaceShouldSave: function(workspace, changes) {
                 var willChange = false;
 
+                willChange = willChange || changes.entityDeletes.length;
+                willChange = willChange || changes.userDeletes.length;
+
+                // TODO: user updates
+
                 willChange = willChange || _.any(changes.entityUpdates, function(entityUpdate) {
-                    var workspaceVertex = workspace.vertices[entityUpdate.vertexId];
+                    var workspaceVertex = _.findWhere(workspace.vertices, { vertexId: entityUpdate.vertexId });
                     if (workspaceVertex) {
                         return !_.isEqual(workspaceVertex.graphPosition, entityUpdate.graphPosition);
                     } else {

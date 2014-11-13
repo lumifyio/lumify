@@ -565,14 +565,6 @@ define([
             });
         };
 
-        this.onContextMenuRemoveItem = function() {
-            var menu = this.select('vertexContextMenuSelector'),
-                vertex = {
-                    id: menu.data('currentVertexGraphVertexId')
-                };
-            this.trigger(document,'deleteVertices', {vertices: [vertex] });
-        };
-
         this.onContextMenuFitToWindow = function() {
             this.fit();
         };
@@ -1108,11 +1100,33 @@ define([
             }
         };
 
+        this.getNodesByVertexIds = function(cy, list, optionalVertexIdAccessor) {
+            if (list.length === 0) {
+                return cy.collection();
+            }
+
+            return cy.$(
+                list.map(function(obj) {
+                    return '#' + toCyId(optionalVertexIdAccessor ? obj[optionalVertexIdAccessor] : obj);
+                }).join(',')
+            );
+        };
+
         this.onWorkspaceUpdated = function(event, data) {
             if (this.previousWorkspace === data.workspace.workspaceId) {
                 this.isWorkspaceEditable = data.workspace.editable;
                 this.cytoscapeReady(function(cy) {
-                    cy.nodes()[data.workspace.editable ? 'grabify' : 'ungrabify']();
+                    var allNodes = cy.nodes();
+                    allNodes[data.workspace.editable ? 'grabify' : 'ungrabify']();
+
+                    data.entityUpdates.forEach(function(entityUpdate) {
+                        var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId));
+                        if (!cyNode.grabbed()) {
+                            cyNode.position(retina.pointsToPixels(entityUpdate.graphPosition));
+                        }
+                    });
+
+                    this.getNodesByVertexIds(cy, data.entityDeletes).remove();
                 });
             }
         }
