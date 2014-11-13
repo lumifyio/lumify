@@ -37,9 +37,9 @@ define([], function() {
                     'util/websocket'
                 ]).then(function(r) {
                     var socket = r[0],
-                    pushDataToSocket = r[1];
+                        websocketUtils = r[1];
 
-                    pushDataToSocket(socket, message);
+                    websocketUtils.pushDataToSocket(socket, lumifyData.socketSourceGuid, message);
                 });
             }
         }

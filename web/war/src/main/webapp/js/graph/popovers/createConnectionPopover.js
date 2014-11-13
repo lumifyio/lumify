@@ -193,10 +193,7 @@ define([
                         .add(inputs)
                         .removeAttr('disabled');
                     self.markFieldErrors(statusText);
-                });
-
-                debugger;
-            p
+                })
                 .finally(function() {
                     self.attr.teardownOnTap = true;
                 })

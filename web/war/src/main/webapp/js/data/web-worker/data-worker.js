@@ -57,10 +57,10 @@ function setupWebsocket() {
                     atmosphere.util.__socketPromiseReject = reject;
                 })
             ]).done(function(results) {
-                var pushDataToSocket = results[0],
+                var websocketUtils = results[0],
                     socket = results[1];
 
-                pushDataToSocket(socket, message);
+                websocketUtils.pushDataToSocket(socket, publicData.socketSourceGuid, message);
             });
         }
     } else {

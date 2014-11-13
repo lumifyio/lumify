@@ -253,99 +253,97 @@ define([
             this.highlightNode().addClass('highlight-' + style.selector);
 
             if (!style.styleApplied) {
+                this.dataRequest('ontology', 'concepts').done(function(concepts) {
+                    var styleFile = 'tpl!detail/highlight-styles/' + style.selector + '.css',
+                        detectedObjectStyleFile = 'tpl!detail/highlight-styles/detectedObject.css';
 
-                this.dataRequest('ontology', 'concepts')
-                    .done(function(concepts) {
-                        var styleFile = 'tpl!detail/highlight-styles/' + style.selector + '.css',
-                            detectedObjectStyleFile = 'tpl!detail/highlight-styles/detectedObject.css';
+                    require([styleFile, detectedObjectStyleFile], function(tpl, doTpl) {
+                        function apply(concept) {
+                            if (concept.color) {
+                                var STATES = {
+                                        NORMAL: 0,
+                                        HOVER: 1,
+                                        DIM: 2,
+                                        TERM: 3
+                                    },
+                                    className = concept.rawClassName ||
+                                        (concept.className && ('entity.' + concept.className)),
+                                    definition = function(state, template) {
+                                        return (template || tpl)({
+                                            STATES: STATES,
+                                            state: state,
+                                            concept: concept,
+                                            colorjs: colorjs
+                                        });
+                                    };
 
-                        require([styleFile, detectedObjectStyleFile], function(tpl, doTpl) {
-                            function apply(concept) {
-                                if (concept.color) {
-                                    var STATES = {
-                                            NORMAL: 0,
-                                            HOVER: 1,
-                                            DIM: 2,
-                                            TERM: 3
-                                        },
-                                        className = concept.rawClassName ||
-                                            (concept.className && ('entity.' + concept.className)),
-                                        definition = function(state, template) {
-                                            return (template || tpl)({
-                                                STATES: STATES,
-                                                state: state,
-                                                concept: concept,
-                                                colorjs: colorjs
-                                            });
-                                        };
-
-                                    if (!className) {
-                                        return;
-                                    }
-
-                                    // Dim
-                                    // (when dropdown is opened and it wasn't this entity)
-                                    stylesheet.addRule(
-                                        '.highlight-' + style.selector + ' .dropdown .' + className + ',' +
-                                        '.highlight-' + style.selector + ' .dropdown .resolved.' + className + ',' +
-                                        '.highlight-' + style.selector + ' .drag-focus .' + className,
-                                        definition(STATES.DIM)
-                                    );
-
-                                    stylesheet.addRule(
-                                       '.highlight-' + style.selector + ' .' + className,
-                                       definition(STATES.TERM)
-                                    );
-
-                                    // Default style (or focused)
-                                    stylesheet.addRule(
-                                        '.highlight-' + style.selector + ' .resolved.' + className + ',' +
-                                        '.highlight-' + style.selector + ' .drag-focus .resolved.' + className + ',' +
-                                        '.highlight-' + style.selector + ' .dropdown .focused.' + className,
-                                        definition(STATES.NORMAL)
-                                    );
-
-                                    // Drag-drop hover
-                                    stylesheet.addRule(
-                                        '.highlight-' + style.selector + ' .drop-hover.' + className,
-                                        definition(STATES.HOVER)
-                                    );
-
-                                    // Detected objects
-                                    stylesheet.addRule(
-                                        '.highlight-' + style.selector + ' .detected-object.' + className + ',' +
-                                        '.highlight-' + style.selector + ' .detected-object.resolved.' + className,
-                                        definition(STATES.DIM, doTpl)
-                                    );
-                                    stylesheet.addRule(
-                                        //'.highlight-' + style.selector + ' .detected-object.' + className + ',' +
-                                        //'.highlight-' + style.selector + ' .detected-object.resolved.' + className + ',' +
-                                        '.highlight-' + style.selector + ' .focused .detected-object.' + className + ',' +
-                                        '.highlight-' + style.selector + ' .focused .detected-object.resolved.' + className,
-                                        definition(STATES.NORMAL, doTpl)
-                                    );
-
-                                    stylesheet.addRule(
-                                        '.concepticon-' + (concept.className || concept.rawClassName),
-                                        'background-image: url(' + concept.glyphIconHref + ')'
-                                    );
+                                if (!className) {
+                                    return;
                                 }
-                                if (concept.children) {
-                                    concept.children.forEach(apply);
-                                }
+
+                                // Dim
+                                // (when dropdown is opened and it wasn't this entity)
+                                stylesheet.addRule(
+                                    '.highlight-' + style.selector + ' .dropdown .' + className + ',' +
+                                    '.highlight-' + style.selector + ' .dropdown .resolved.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .drag-focus .' + className,
+                                    definition(STATES.DIM)
+                                );
+
+                                stylesheet.addRule(
+                                   '.highlight-' + style.selector + ' .' + className,
+                                   definition(STATES.TERM)
+                                );
+
+                                // Default style (or focused)
+                                stylesheet.addRule(
+                                    '.highlight-' + style.selector + ' .resolved.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .drag-focus .resolved.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .dropdown .focused.' + className,
+                                    definition(STATES.NORMAL)
+                                );
+
+                                // Drag-drop hover
+                                stylesheet.addRule(
+                                    '.highlight-' + style.selector + ' .drop-hover.' + className,
+                                    definition(STATES.HOVER)
+                                );
+
+                                // Detected objects
+                                stylesheet.addRule(
+                                    '.highlight-' + style.selector + ' .detected-object.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .detected-object.resolved.' + className,
+                                    definition(STATES.DIM, doTpl)
+                                );
+                                stylesheet.addRule(
+                                    //'.highlight-' + style.selector + ' .detected-object.' + className + ',' +
+                                    //'.highlight-' + style.selector + ' .detected-object.resolved.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .focused .detected-object.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .focused .detected-object.resolved.' + className,
+                                    definition(STATES.NORMAL, doTpl)
+                                );
+
+                                stylesheet.addRule(
+                                    '.concepticon-' + (concept.className || concept.rawClassName),
+                                    'background-image: url(' + concept.glyphIconHref + ')'
+                                );
                             }
-                            apply(concepts.entityConcept);
+                            if (concept.children) {
+                                concept.children.forEach(apply);
+                            }
+                        }
+                        apply(concepts.entityConcept);
 
-                            // Artifacts
-                            apply({
-                                rawClassName: 'artifact',
-                                color: 'rgb(255,0,0)',
-                                glyphIconHref: '../img/glyphicons/glyphicons_036_file@2x.png'
-                            });
-
-                            style.styleApplied = true;
+                        // Artifacts
+                        apply({
+                            rawClassName: 'artifact',
+                            color: 'rgb(255,0,0)',
+                            glyphIconHref: '../img/glyphicons/glyphicons_036_file@2x.png'
                         });
+
+                        style.styleApplied = true;
                     });
+                });
             }
         };
 

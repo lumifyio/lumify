@@ -1,4 +1,4 @@
-define([], function() {
+define(['util/websocket'], function(websocketUtils) {
     'use strict';
 
     return withWebsocket;
@@ -6,6 +6,7 @@ define([], function() {
     function withWebsocket() {
 
         this.after('setupDataWorker', function() {
+            this.setPublicApi('socketSourceGuid', websocketUtils.generateSourceGuid());
             this.worker.postMessage({
                 type: 'atmosphereConfiguration',
                 configuration: this.getAtmosphereConfiguration()

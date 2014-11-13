@@ -4,7 +4,14 @@ define([], function() {
         var body = data.responseBody,
             json = JSON.parse(body);
 
-        console.info('message', json);
-        // TODO: propagate to main in terms of events
+        if (messageFromUs(json)) {
+            return;
+        }
+
+        console.info('socketmessage', json);
+    }
+
+    function messageFromUs(json) {
+        return json.sourceGuid && json.sourceGuid === publicData.socketSourceGuid;
     }
 });
