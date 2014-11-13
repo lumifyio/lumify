@@ -71,6 +71,10 @@ public class ClientApiWorkspace implements ClientApiObject {
         this.vertices.add(vertex);
     }
 
+    public void removeVertices() {
+        this.vertices = null;
+    }
+
     @Override
     public String toString() {
         return "Workspace{" +
