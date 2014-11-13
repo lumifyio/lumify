@@ -55,7 +55,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         List<Property> properties = toList(graphVertex.getProperties(propertyKey, propertyName));
 
         if (properties.size() == 0) {
-            LOGGER.warn("Could not find property: %s", propertyName);
+            LOGGER.warn("Could not find property %s:%s on %s", propertyName, propertyKey, graphVertexId);
             respondWithNotFound(response);
             return;
         }
@@ -63,24 +63,25 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
 
         Property property = null;
+        boolean propertyIsPublic = false;
         for (int i = 0; i < sandboxStatuses.length; i++) {
-            if (sandboxStatuses[i] == SandboxStatus.PUBLIC) {
-                continue;
-            }
             if (property != null) {
                 throw new LumifyException("Found multiple non public properties.");
             }
             property = properties.get(i);
+            if (sandboxStatuses[i] == SandboxStatus.PUBLIC) {
+                propertyIsPublic = true;
+            }
         }
 
         if (property == null) {
-            LOGGER.warn("Could not find non-public property: %s", propertyName);
+            LOGGER.warn("Could not find property %s:%s on %s", propertyName, propertyKey, graphVertexId);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             chain.next(request, response);
             return;
         }
 
-        workspaceHelper.deleteProperty(graphVertex, property, workspaceId, user, authorizations);
+        workspaceHelper.deleteProperty(graphVertex, property, propertyIsPublic, workspaceId, user, authorizations);
         respondWithSuccessJson(response);
     }
 }

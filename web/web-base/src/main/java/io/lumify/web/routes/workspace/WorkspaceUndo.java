@@ -19,7 +19,6 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.ClientApiWorkspaceUndoResponse;
 import io.lumify.web.clientapi.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -197,7 +196,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                         workspaceUndoResponse.addFailure(data);
                         continue;
                     }
-                    workspaceHelper.deleteProperty(vertex, property, workspaceId, user, authorizations);
+                    workspaceHelper.deleteProperty(vertex, property, false, workspaceId, user, authorizations);
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);

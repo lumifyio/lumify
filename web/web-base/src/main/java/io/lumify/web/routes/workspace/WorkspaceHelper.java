@@ -60,10 +60,14 @@ public class WorkspaceHelper {
         auditRepository.auditVertex(AuditAction.UNRESOLVE, resolvedVertex.getId(), "", "", user, visibility.getVisibility());
     }
 
-    public void deleteProperty(Vertex vertex, Property property, String workspaceId, User user, Authorizations authorizations) {
+    public void deleteProperty(Vertex vertex, Property property, boolean propertyIsPublic, String workspaceId, User user, Authorizations authorizations) {
         auditRepository.auditEntityProperty(AuditAction.DELETE, vertex.getId(), property.getKey(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
 
-        vertex.removeProperty(property.getKey(), property.getName(), authorizations);
+        if (propertyIsPublic) {
+            vertex.markPropertyHidden(property, new Visibility(workspaceId), authorizations);
+        } else {
+            vertex.removeProperty(property.getKey(), property.getName(), authorizations);
+        }
 
         graph.flush();
 
