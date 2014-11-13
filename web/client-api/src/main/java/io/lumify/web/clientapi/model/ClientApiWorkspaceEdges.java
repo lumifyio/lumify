@@ -21,38 +21,11 @@ public class ClientApiWorkspaceEdges implements ClientApiObject {
         return ClientApiConverter.clientApiToString(this);
     }
 
-    public static class Edge {
-        private String from;
-        private String to;
-        private String relationshipType;
+    public static class Edge extends ClientApiEdge {
         private String id;
         private SandboxStatus diffType;
         private VisibilityJson visibilityJson;
-
-        public String getFrom() {
-            return from;
-        }
-
-        public void setFrom(String from) {
-            this.from = from;
-        }
-
-        public String getTo() {
-            return to;
-        }
-
-        public void setTo(String to) {
-            this.to = to;
-        }
-
-        public String getRelationshipType() {
-            return relationshipType;
-        }
-
-        public void setRelationshipType(String relationshipType) {
-            this.relationshipType = relationshipType;
-        }
-
+        
         public String getId() {
             return id;
         }

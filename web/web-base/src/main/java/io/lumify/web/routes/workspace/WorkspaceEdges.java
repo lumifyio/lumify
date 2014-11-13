@@ -70,9 +70,9 @@ public class WorkspaceEdges extends BaseRequestHandler {
         ClientApiWorkspaceEdges results = new ClientApiWorkspaceEdges();
         for (Edge edge : edges) {
             ClientApiWorkspaceEdges.Edge e = new ClientApiWorkspaceEdges.Edge();
-            e.setFrom(edge.getVertexId(Direction.OUT));
-            e.setTo(edge.getVertexId(Direction.IN));
-            e.setRelationshipType(edge.getLabel());
+            e.setSourceVertexId(edge.getVertexId(Direction.OUT));
+            e.setDestVertexId(edge.getVertexId(Direction.IN));
+            e.setLabel(edge.getLabel());
             e.setId(edge.getId());
             e.setDiffType(GraphUtil.getSandboxStatus(edge, workspaceId));
             e.setVisibilityJson(LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge));
