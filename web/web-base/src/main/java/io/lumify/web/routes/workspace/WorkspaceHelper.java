@@ -112,4 +112,21 @@ public class WorkspaceHelper {
 
         graph.flush();
     }
+
+    public void deleteVertex(String workspaceId, Vertex vertex, boolean isPublicEdge, User user, Authorizations authorizations) {
+        if (isPublicEdge) {
+            Visibility workspaceVisibility = new Visibility(workspaceId);
+
+            graph.markVertexHidden(vertex, workspaceVisibility, authorizations);
+        } else {
+            graph.removeVertex(vertex, authorizations);
+
+            this.workQueueRepository.pushVertexDeletion(vertex);
+
+            // TODO: replace "" when we implement commenting on ui
+            auditRepository.auditVertex(AuditAction.DELETE, vertex.getId(), "", "", user, new LumifyVisibility().getVisibility());
+        }
+
+        graph.flush();
+    }
 }

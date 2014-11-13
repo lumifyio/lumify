@@ -140,6 +140,16 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
+    public void pushVertexDeletion(Vertex vertex) {
+        broadcastVertexDeletion(vertex);
+    }
+
+    protected void broadcastVertexDeletion(Vertex vertex) {
+        JSONArray vertexIds = new JSONArray();
+        vertexIds.put(vertex.getId());
+        broadcastVerticesDeletion(vertexIds);
+    }
+
     public void pushVerticesDeletion(JSONArray verticesDeleted) {
         broadcastVerticesDeletion(verticesDeleted);
     }
