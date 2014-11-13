@@ -38,7 +38,7 @@ define(['../util/ajax'], function(ajax) {
             if (!_.isArray(userIds)) {
                 returnSingular = true;
                 userIds = [userIds];
-            };
+            }
 
             return ajax(userIds.length > 1 ? 'POST' : 'GET', '/user/info', {
                 userIds: userIds
