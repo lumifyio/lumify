@@ -5,19 +5,33 @@ define([], function() {
 
     function withObjectSelection() {
 
-        var selectedObjects = {},
-            previousSelectedObjects = {};
+        var selectedObjects,
+            previousSelectedObjects;
 
         this.after('initialize', function() {
             this.on('selectObjects', this.onSelectObjects);
+            this.on('selectAll', this.onSelectAll);
             this.on('deleteSelected', this.onDeleteSelected);
         });
+
+        this.onSelectAll = function(event, data) {
+            // TODO: get all workspace vertices
+            this.trigger('selectObjects', { vertices: [] });
+        };
 
         this.onDeleteSelected = function(event, data) {
             if (data && data.vertexId) {
                 this.trigger('updateWorkspace', {
                     entityDeletes: [data.vertexId]
                 });
+            } else if (selectedObjects) {
+                if (selectedObjects.vertices) {
+                    this.trigger('updateWorkspace', {
+                        entityDeletes: _.pluck(selectedObjects.vertices, 'id')
+                    });
+                } else if (selectedObjects.edges && Privileges.canEDIT) {
+                    this.trigger('deleteEdges', { edges: selectedObjects.edges });
+                }
             }
         };
 
@@ -40,10 +54,20 @@ define([], function() {
                     var vertices = result[0],
                         edges = result[1];
 
-                    self.trigger('objectsSelected', {
+                    selectedObjects = {
                         vertices: vertices || [],
-                        edges: []
-                    });
+                        edges: edges || []
+                    };
+
+                    if (previousSelectedObjects &&
+                        selectedObjects &&
+                        _.isEqual(previousSelectedObjects, selectedObjects)) {
+                        return;
+                    }
+
+                    previousSelectedObjects = selectedObjects;
+
+                    self.trigger('objectsSelected', _.clone(selectedObjects));
                 })
 
                 /*

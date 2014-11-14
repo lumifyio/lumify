@@ -7,6 +7,7 @@ define([
     './withCurrentUser',
     './withWebsocket',
     './withLegacyWebsocket',
+    './withKeyboardRegistration',
     './withObjectSelection',
     './withObjectsUpdated',
     './withWorkspaces',
@@ -26,8 +27,17 @@ define([
     function Data() {
 
         this.after('initialize', function() {
+            var self = this;
+
             this.setupDataWorker();
+
+            // Late require since messages relies on data component
+            require(['util/messages'], this.setupMessages.bind(this));
         });
+
+        this.setupMessages = function(i18n) {
+            window.i18n = i18n;
+        };
 
         this.setupDataWorker = function() {
             this.worker = new Worker(PATH_TO_WORKER);

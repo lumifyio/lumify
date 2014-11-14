@@ -45,12 +45,24 @@ define([], function() {
         };
 
         this.onUpdateWorkspace = function(event, data) {
-            var self = this;
+            var self = this,
+                triggered = false,
+                buffer = _.delay(function() {
+                    triggered = true;
+                    self.trigger('workspaceSaving', lastReloadedState.workspace);
+                }, 250)
 
-            this.trigger('workspaceSaving', lastReloadedState.workspace);
             this.dataRequest('workspace', 'save', data)
+                .then(function(data) {
+                    clearTimeout(buffer);
+                    if (data.saved) {
+                        self.trigger('workspaceSaved', lastReloadedState.workspace);
+                    }
+                })
                 .finally(function() {
-                    self.trigger('workspaceSaved', lastReloadedState.workspace);
+                    if (triggered) {
+                        self.trigger('workspaceSaved', lastReloadedState.workspace);
+                    }
                 })
                 .done();
         };

@@ -37,7 +37,7 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
 
             if (_.isEmpty(changes)) {
                 console.warn('Workspace update called with no changes');
-                return Promise.resolve(workspace);
+                return Promise.resolve({ saved: false, workspace: workspace });
             }
 
             var allChanges = _.extend({}, {
@@ -56,14 +56,14 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
             })
 
             if (!store.workspaceShouldSave(workspace, allChanges)) {
-                return Promise.resolve(workspace);
+                return Promise.resolve({ saved: false, workspace: workspace });
             }
 
             return ajax('POST', '/workspace/update', {
                 workspaceId: workspaceId,
                 data: JSON.stringify(allChanges)
             }).then(function() {
-                return store.updateWorkspace(workspaceId, allChanges)
+                return { saved: true, workspace: store.updateWorkspace(workspaceId, allChanges) };
             })
         },
 

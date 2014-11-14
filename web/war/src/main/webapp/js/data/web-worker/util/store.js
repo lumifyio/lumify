@@ -256,7 +256,7 @@ define([
             _.has(val, 'id') &&
             _.has(val, 'sandboxStatus') &&
             _.has(val, 'properties') &&
-            _.isArray(val, 'properties') &&
+            _.isArray(val.properties) &&
             !_.has(val, 'sourceVertexId') &&
             !_.has(val, 'destVertexId')
         );

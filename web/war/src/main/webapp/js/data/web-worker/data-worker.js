@@ -103,7 +103,8 @@ function ajaxPrefilter(xmlHttpRequest, method, url, parameters) {
     if (publicData) {
         var filters = [
                 setWorkspaceHeader,
-                setCsrfHeader
+                setCsrfHeader,
+                // TODO: set timezone
             ], invoke = function(f) {
                 f();
             };
