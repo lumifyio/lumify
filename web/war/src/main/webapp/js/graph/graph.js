@@ -165,11 +165,11 @@ define([
             this.cytoscapeReady(function(cy) {
                 var self = this,
                     vertices = data.vertices,
+                    position = data.dropPosition,
                     toFitTo = [],
                     toAnimateTo = [],
                     toRemove = [],
-                    toAdd = [],
-                    position;
+                    entityUpdates = [];
 
                 vertices.forEach(function(vertex, i) {
                     var node = cy.getElementById('NEW-' + toCyId(vertex));
@@ -181,8 +181,10 @@ define([
                         toAnimateTo.push([node, existingNode]);
                         toFitTo.push(existingNode);
                     } else {
-                        vertex.workspace.graphPosition = retina.pixelsToPoints(node.position());
-                        toAdd.push(vertex);
+                        entityUpdates.push({
+                            vertexId: vertex.id,
+                            graphPosition: retina.pixelsToPoints(node.position())
+                        });
                         toRemove.push(node);
                     }
                 });
@@ -206,7 +208,10 @@ define([
 
                 function finished() {
                     cytoscape.Collection(cy, toRemove).remove();
-                    self.trigger('addVertices', { vertices: toAdd });
+                    //self.trigger('addVertices', { vertices: toAdd });
+                    self.trigger('updateWorkspace', {
+                        entityUpdates: entityUpdates
+                    });
                     cy.container().focus();
                 }
             });
@@ -1116,17 +1121,25 @@ define([
             if (this.previousWorkspace === data.workspace.workspaceId) {
                 this.isWorkspaceEditable = data.workspace.editable;
                 this.cytoscapeReady(function(cy) {
-                    var allNodes = cy.nodes();
+                    var self = this,
+                        allNodes = cy.nodes();
+
                     allNodes[data.workspace.editable ? 'grabify' : 'ungrabify']();
 
                     data.entityUpdates.forEach(function(entityUpdate) {
                         var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId));
-                        if (!cyNode.grabbed()) {
+                        if (cyNode.length && !cyNode.grabbed()) {
                             cyNode.position(retina.pointsToPixels(entityUpdate.graphPosition));
                         }
+                        self.workspaceVertices[entityUpdate.vertexId] = entityUpdate;
                     });
 
                     this.getNodesByVertexIds(cy, data.entityDeletes).remove();
+                    if (data.newVertices) {
+                        this.addVertices(data.newVertices)
+                    }
+                    this.setWorkspaceDirty();
+                    this.updateVertexSelections(cy);
                 });
             }
         }

@@ -10,6 +10,7 @@ define([
     './withObjectSelection',
     './withObjectsUpdated',
     './withWorkspaces',
+    './withWorkspaceVertexDrop',
     'util/withDataRequest'
 ], function(
     defineComponent

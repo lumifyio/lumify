@@ -1,7 +1,8 @@
 
 define([
+    'require',
     'jscache'
-], function(Cache) {
+], function(require, Cache) {
     'use strict';
 
         // Object cache per workspace
@@ -53,10 +54,10 @@ define([
                     if (workspaceVertex) {
                         workspaceVertex.graphPosition = entityUpdate.graphPosition;
                     } else {
-                        workspace.vertices.push({
+                        workspace.vertices[entityUpdate.vertexId] = {
                             vertexId: entityUpdate.vertexId,
                             graphPosition: entityUpdate.graphPosition
-                        });
+                        };
                     }
                 });
                 workspace.vertices = _.omit(workspace.vertices, changes.entityDeletes);
@@ -80,21 +81,29 @@ define([
                         vertexIdsPrevious = _.keys(workspace.vertices),
                         addedIds = _.difference(vertexIds, vertexIdsPrevious),
                         removedIds = _.difference(vertexIdsPrevious, vertexIds),
+                        updatedIds = _.without.apply(_, [vertexIds].concat(addedIds)),
                         added = _.values(_.pick(remoteWorkspace.vertices, addedIds)),
-                        updated = _.compact(_.map(_.omit(vertexIds, addedIds), function(vId) {
+                        updated = _.compact(_.map(updatedIds, function(vId) {
                             return _.isEqual(
                                 remoteWorkspace.vertices[vId].graphPosition,
                                 workspace.vertices[vId].graphPosition
                             ) ? null : remoteWorkspace.vertices[vId];
                         }));
 
-                    api.setWorkspace(remoteWorkspace);
-                    dispatchMain('workspaceUpdated', {
-                        workspace: remoteWorkspace,
-                        entityUpdates: updated,
-                        entityAdditions: added,
-                        entityDeletes: removedIds
-                    })
+                    require(['../services/vertex'], function(vertex) {
+                        vertex.store({ vertexIds: addedIds })
+                            .done(function(newVertices) {
+                                api.setWorkspace(remoteWorkspace);
+                                dispatchMain('workspaceUpdated', {
+                                    workspace: remoteWorkspace,
+                                    newVertices: newVertices,
+                                    entityUpdates: updated.concat(added),
+                                    entityDeletes: removedIds,
+                                    userUpdates: [],
+                                    userDeletes: []
+                                });
+                            });
+                    });
                 }
             },
 

@@ -11,19 +11,28 @@ define([], function() {
             this.on('switchWorkspace', this.onSwitchWorkspace);
             this.on('reloadWorkspace', this.onReloadWorkspace);
             this.on('updateWorkspace', this.onUpdateWorkspace);
+            this.on('loadEdges', this.onLoadEdges);
         });
 
         this.onLoadCurrentWorkspace = function(event) {
             var currentWorkspaceId = this.lumifyData.currentWorkspaceId;
             this.trigger('switchWorkspace', { workspaceId: currentWorkspaceId });
-        }
+        };
 
         this.onReloadWorkspace = function() {
             if (lastReloadedState) {
                 this.workspaceLoaded(lastReloadedState.workspace);
                 this.edgesLoaded(lastReloadedState.edges);
             }
-        }
+        };
+
+        this.onLoadEdges = function(event, data) {
+            var self = this;
+            this.dataRequest('workspace', 'edges', data && data.workspaceId)
+                .done(function(edges) {
+                    self.edgesLoaded({ edges:edges });
+                })
+        };
 
         this.onSwitchWorkspace = function(event, data) {
             lastReloadedState = {};
@@ -59,6 +68,11 @@ define([], function() {
                 lastReloadedState.workspace = message.workspace;
             }
             this.trigger('workspaceUpdated', message);
+            if (message.newVertices.length) {
+                this.trigger('loadEdges', {
+                    workspaceId: message.workspace.workspaceId
+                });
+            }
         };
 
         this.workspaceLoaded = function(message) {

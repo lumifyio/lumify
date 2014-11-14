@@ -132,6 +132,12 @@ define([
             );
         };
 
+        this.updateWithNewWorkspaceData = function(workspace) {
+            this.setContent(workspace.title, workspace.editable, i18n('workspaces.overlay.no_changes'));
+            clearTimeout(this.updateTimer);
+            this.updateWorkspaceTooltip(workspace);
+        };
+
         this.onSwitchWorkspace = function() {
             this.previousDiff = null;
             this.$node.find('.badge').popover('destroy').remove();
@@ -139,14 +145,12 @@ define([
 
         this.onWorkspaceLoaded = function(event, data) {
             this.$node.show();
-            this.setContent(data.title, data.editable, i18n('workspaces.overlay.no_changes'));
-            clearTimeout(this.updateTimer);
-            this.updateWorkspaceTooltip(data);
+            this.updateWithNewWorkspaceData(data);
             this.updateDiffBadge();
         };
 
         this.onWorkspaceUpdated = function(event, data) {
-            this.onWorkspaceLoaded(event, data.workspace);
+            this.updateWithNewWorkspaceData(data.workspace);
         };
 
         this.onEdgesLoaded = function(event, data) {
@@ -195,6 +199,7 @@ define([
         };
 
         this.updateDiffBadge = function(event, data) {
+            console.trace();
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');

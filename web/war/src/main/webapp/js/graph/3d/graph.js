@@ -140,6 +140,7 @@ define([
                 this.addVertices(workspace.data.vertices);
             }
         };
+
         this.onVerticesAdded = function(event, data) {
             if (!this.isWorkspaceEditable) return;
 
@@ -147,6 +148,7 @@ define([
                 this.addVertices(data.vertices);
             }
         };
+
         this.onVerticesDeleted = function(event, data) {
             var self = this;
 
