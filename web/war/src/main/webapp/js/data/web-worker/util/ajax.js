@@ -39,7 +39,7 @@ define(['util/promise'], function() {
                 params = toQueryString(parameters),
                 resolvedUrl = BASE_URL +
                     url +
-                    ((method === 'GET' && parameters) ?
+                    ((/GET|DELETE/.test(method) && parameters) ?
                         '?' + params :
                         ''
                     ),
