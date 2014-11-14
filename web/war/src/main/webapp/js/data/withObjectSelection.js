@@ -180,26 +180,32 @@ define([], function() {
             var self = this;
 
             if (!data || _.isUndefined(data.vertexId)) {
-                if (this.selectedVertexIds.length === 1) {
-                    data = { vertexId: this.selectedVertexIds[0] };
+                if (selectedObjects && selectedObjects.vertices.length === 1) {
+                    data = {
+                        vertexId: selectedObjects.vertices[0].id
+                    };
                 } else {
                     return;
                 }
             }
 
-            require(['util/popovers/addRelated/addRelated'], function(RP) {
-                var vertexId = data.vertexId;
+            Promise.all([
+                Promise.require('util/popovers/addRelated/addRelated'),
+                Promise.require('util/vertex/formatters'),
+                this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
+            ]).done(function(results) {
+                var RP = results.shift(),
+                    F = results.shift(),
+                    vertex = results.shift();
 
                 RP.teardownAll();
 
-                self.getVertexTitle(vertexId).done(function(title) {
-                    RP.attachTo(event.target, {
-                        title: title,
-                        relatedToVertexId: vertexId,
-                        anchorTo: {
-                            vertexId: vertexId
-                        }
-                    });
+                RP.attachTo(event.target, {
+                    vertex: vertex,
+                    relatedToVertexId: data.vertexId,
+                    anchorTo: {
+                        vertexId: data.vertexId
+                    }
                 });
             });
         };

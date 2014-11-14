@@ -68,6 +68,13 @@ define([
             });
         },
 
+        related: function(vertexId, options) {
+            return ajax('GET', '/vertex/find-related', {
+                graphVertexId: vertexId,
+                limitParentConceptId: options.limitParentConceptId
+            });
+        },
+
         store: storeHelper.createStoreAccessorOrDownloader(
             'vertex', 'vertexIds', 'vertices',
             function(toRequest) {
