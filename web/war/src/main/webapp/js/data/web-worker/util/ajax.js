@@ -25,7 +25,7 @@ define(['util/promise'], function() {
         return str.slice(0, str.length - 1);
     }
 
-    function ajax(method, url, parameters) {
+    function ajax(method, url, parameters, debugOptions) {
         var isJson = true;
         method = method.toUpperCase();
 
@@ -79,6 +79,16 @@ define(['util/promise'], function() {
             if (method === 'POST' && parameters) {
                 formData = params;
                 r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            }
+
+            if (debugOptions) {
+                console.warn('Request Debugging is set for ' + url)
+                if (debugOptions.error) {
+                    r.setRequestHeader('Lumify-Request-Error', debugOptions.error);
+                }
+                if (debugOptions.delay) {
+                    r.setRequestHeader('Lumify-Request-Delay-Millis', debugOptions.delay);
+                }
             }
 
             if (typeof ajaxPrefilter !== 'undefined') {

@@ -185,9 +185,13 @@ define([
                             vertexId: vertex.id,
                             graphPosition: retina.pixelsToPoints(node.position())
                         });
+                        node.ungrabify();
+                        node.unselectify();
                         toRemove.push(node);
                     }
                 });
+
+                self.cyNodesToRemoveOnWorkspaceUpdated = cytoscape.Collection(cy, toRemove);
 
                 if (toFitTo.length) {
                     cy.zoomOutToFit(cytoscape.Collection(cy, toFitTo), {
@@ -207,8 +211,6 @@ define([
                 }
 
                 function finished() {
-                    cytoscape.Collection(cy, toRemove).remove();
-                    //self.trigger('addVertices', { vertices: toAdd });
                     self.trigger('updateWorkspace', {
                         entityUpdates: entityUpdates
                     });
@@ -989,11 +991,18 @@ define([
             vertices.each(function(i, vertex) {
                 var p = retina.pixelsToPoints(vertex.position()),
                     cyId = vertex.id(),
-                    pCopy = {x: p.x, y: p.y};
+                    pCopy = {
+                        x: Math.round(p.x),
+                        y: Math.round(p.y)
+                    };
 
                 if (!vertex.data('freed')) {
                     dup = false;
                 }
+
+                // Rounding can cause vertex to jump 1/2 pixel
+                // Jump immediately instead of after save
+                vertex.position(retina.pointsToPixels(pCopy));
 
                 updateData[cyId] = {
                     targetPosition: pCopy,
@@ -1136,6 +1145,10 @@ define([
 
                     this.getNodesByVertexIds(cy, data.entityDeletes).remove();
                     if (data.newVertices) {
+                        if (this.cyNodesToRemoveOnWorkspaceUpdated) {
+                            this.cyNodesToRemoveOnWorkspaceUpdated.remove();
+                            this.cyNodesToRemoveOnWorkspaceUpdated = null;
+                        }
                         this.addVertices(data.newVertices)
                     }
                     this.setWorkspaceDirty();
