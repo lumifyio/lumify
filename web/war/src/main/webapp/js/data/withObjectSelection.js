@@ -11,7 +11,12 @@ define([], function() {
         this.after('initialize', function() {
             this.on('selectObjects', this.onSelectObjects);
             this.on('selectAll', this.onSelectAll);
+
             this.on('deleteSelected', this.onDeleteSelected);
+
+            this.on('searchTitle', this.onSearchTitle);
+            this.on('searchRelated', this.onSearchRelated);
+            this.on('addRelatedItems', this.onAddRelatedItems);
         });
 
         this.onSelectAll = function(event, data) {
@@ -135,6 +140,66 @@ define([], function() {
 
                 self.trigger('objectsSelected', selected);
             })*/
+        };
+
+        this.onSearchTitle = function(event, data) {
+            var self = this,
+                vertexId = data.vertexId || (
+                    selectedObjects &&
+                    selectedObjects.vertices.length === 1 &&
+                    selectedObjects.vertices[0]
+                );
+
+            if (vertexId) {
+                Promise.all([
+                    Promise.require('util/vertex/formatters'),
+                    this.dataRequest('vertex', 'store', { vertexIds: vertexId })
+                ]).done(function(results) {
+                    var F = results.shift(),
+                        vertex = results.shift(),
+                        title = F.vertex.title(vertex);
+
+                    self.trigger('searchByEntity', { query: title });
+                })
+            }
+        };
+
+        this.onSearchRelated = function(event, data) {
+            var vertexId = data.vertexId || (
+                this.selectedVertexIds.length === 1 && this.selectedVertexIds[0]
+            );
+
+            if (vertexId) {
+                this.trigger('searchByRelatedEntity', { vertexId: vertexId });
+            }
+        };
+
+        this.onAddRelatedItems = function(event, data) {
+            var self = this;
+
+            if (!data || _.isUndefined(data.vertexId)) {
+                if (this.selectedVertexIds.length === 1) {
+                    data = { vertexId: this.selectedVertexIds[0] };
+                } else {
+                    return;
+                }
+            }
+
+            require(['util/popovers/addRelated/addRelated'], function(RP) {
+                var vertexId = data.vertexId;
+
+                RP.teardownAll();
+
+                self.getVertexTitle(vertexId).done(function(title) {
+                    RP.attachTo(event.target, {
+                        title: title,
+                        relatedToVertexId: vertexId,
+                        anchorTo: {
+                            vertexId: vertexId
+                        }
+                    });
+                });
+            });
         };
     }
 });

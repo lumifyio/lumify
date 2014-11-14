@@ -199,6 +199,9 @@ define([
         }
 
         this.createNewRowIfNeeded = function() {
+            if (!this.properties) {
+                return;
+            }
             if (this.$node.find('.newrow').length === 0) {
                 this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
                 this.createFieldSelection();

@@ -339,8 +339,7 @@ define([
 
                         if (needsAdding || needsUpdating) {
                             (needsAdding ? addedVertices : updatedVertices).push({
-                                id: vertex.id,
-                                workspace: {}
+                                vertexId: vertex.id
                             });
                         }
 
@@ -349,8 +348,8 @@ define([
 
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
-                        self.workspaceVertices[v.id].graphPosition =
-                            retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
+                        v.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
+                        self.workspaceVertices[v.vertexId] = v;
                     });
 
                     if (options.fit && cy.nodes().length) {
@@ -387,11 +386,10 @@ define([
                         cloned.remove();
                     }
 
-                    if (updatedVertices.length) {
-                        self.trigger(document, 'updateVertices', { vertices: updatedVertices });
-                    } else if (addedVertices.length) {
-                        container.focus();
-                        self.trigger(document, 'addVertices', { vertices: addedVertices });
+                    if (updatedVertices.length || addedVertices.length) {
+                        self.trigger('updateWorkspace', {
+                            entityUpdates: updatedVertices.concat(addedVertices)
+                        });
                     }
 
                     self.hideLoading();
@@ -519,16 +517,6 @@ define([
             } else {
                 cyFromNode.remove();
             }
-        };
-
-        this.onContextMenuSearchFor = function() {
-            var menu = this.select('vertexContextMenuSelector');
-            this.trigger(document, 'searchByEntity', { query: menu.data('title')});
-        };
-
-        this.onContextMenuSearchRelated = function() {
-            var menu = this.select('vertexContextMenuSelector');
-            this.trigger(document, 'searchByRelatedEntity', { vertexId: menu.data('currentVertexGraphVertexId')});
         };
 
         this.onContextMenuExportWorkspace = function(exporterId) {
