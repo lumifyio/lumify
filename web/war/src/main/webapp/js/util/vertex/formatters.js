@@ -359,16 +359,30 @@ define([
                     return entityImageUrl;
                 }
 
-                var entityImageVertexId = V.prop(vertex, 'entityImageVertexId');
-                if (entityImageVertexId) {
-                    return 'vertex/thumnbail?' + $.param({
+                var entityImageVertexId = V.prop(vertex, 'entityImageVertexId'),
+                    concept = V.concept(vertex),
+                    isImage = /image/i.test(concept.displayType),
+                    isVideo = /video/i.test(concept.displayType);
+
+                if (entityImageVertexId || isImage) {
+                    return 'vertex/thumbnail?' + $.param({
                         workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
-                        graphVertexId: entityImageVertexId,
+                        graphVertexId: entityImageVertexId || vertex.id,
                         width: width || 150
                     });
                 }
 
-                return V.concept(vertex).glyphIconHref;
+                if (isVideo) {
+                    var posterFrame =  V.prop(vertex, 'http://lumify.io#rawPosterFrame');
+                    if (posterFrame) {
+                        return 'vertex/poster-frame?' + $.param({
+                            workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
+                            graphVertexId: vertex.id
+                        });
+                    }
+                }
+
+                return concept.glyphIconHref;
             },
 
             imageIsFromConcept: function(vertex, optionalWorkspaceId) {
@@ -387,7 +401,12 @@ define([
             },
 
             imageFrames: function(vertex, optionalWorkspaceId) {
-                throw new Error('Not implemented');
+                if (V.prop(vertex, 'http://lumify.io#videoPreviewImage')) {
+                    return 'vertex/video-preview?' + $.param({
+                        workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
+                        graphVertexId: vertex.id
+                    });
+                }
             },
 
             /*
