@@ -147,7 +147,7 @@ define([], function() {
                 vertexId = data.vertexId || (
                     selectedObjects &&
                     selectedObjects.vertices.length === 1 &&
-                    selectedObjects.vertices[0]
+                    selectedObjects.vertices[0].id
                 );
 
             if (vertexId) {
@@ -166,7 +166,9 @@ define([], function() {
 
         this.onSearchRelated = function(event, data) {
             var vertexId = data.vertexId || (
-                this.selectedVertexIds.length === 1 && this.selectedVertexIds[0]
+                selectedObjects &&
+                selectedObjects.vertices.length === 1 &&
+                selectedObjects.vertices[0].id
             );
 
             if (vertexId) {

@@ -5,7 +5,6 @@ define([
     'hbs!./filtersTpl',
     'tpl!./item',
     'tpl!./entityItem',
-    'data',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
     'util/withDataRequest',
@@ -16,7 +15,6 @@ define([
     template,
     itemTemplate,
     entityItemTemplate,
-    appData,
     F,
     ConceptSelector,
     withDataRequest,
@@ -62,20 +60,22 @@ define([
 
         this.onSearchByRelatedEntity = function(event, data) {
             event.stopPropagation();
+            var self = this;
+            this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
+                .done(function(vertex) {
+                    var title = vertex && F.vertex.title(vertex) || vertex.id;
 
-            this.onClearFilters();
+                    self.onClearFilters();
 
-            this.entityFilters.relatedToVertexId = data.vertexId;
-            this.conceptFilter = data.conceptId || '';
-            this.trigger(this.select('conceptDropdownSelector'), 'selectConceptId', {
-                conceptId: data.conceptId || ''
-            });
-            var vertex = appData.vertex(data.vertexId),
-                title = vertex && F.vertex.title(vertex) || data.vertexId;
-
-            this.$node.find('.entity-filters')
-                .append(entityItemTemplate({title: title})).show();
-            this.notifyOfFilters();
+                    self.entityFilters.relatedToVertexId = vertex.id;
+                    self.conceptFilter = data.conceptId || '';
+                    self.trigger(self.select('conceptDropdownSelector'), 'selectConceptId', {
+                        conceptId: data.conceptId || ''
+                    });
+                    self.$node.find('.entity-filters')
+                        .append(entityItemTemplate({title: title})).show();
+                    self.notifyOfFilters();
+                });
         };
 
         this.onConceptChange = function(event, data) {

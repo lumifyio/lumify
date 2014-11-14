@@ -820,6 +820,7 @@ define([
 
             if (event.cyTarget === event.cy) {
                 this.trigger('selectObjects');
+                event.cy.container().focus();
             }
         });
 
