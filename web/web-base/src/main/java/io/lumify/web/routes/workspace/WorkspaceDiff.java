@@ -34,7 +34,7 @@ public class WorkspaceDiff extends BaseRequestHandler {
     }
 
     public ClientApiWorkspaceDiff handle(String workspaceId, User user) {
-        Workspace workspace = workspaceRepository.findById(workspaceId, user);
+        Workspace workspace = workspaceRepository.findById(workspaceId, true, user);
         if (workspace == null) {
             return null;
         }

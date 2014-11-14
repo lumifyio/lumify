@@ -33,7 +33,11 @@ public abstract class WorkspaceRepository {
 
     public abstract void delete(Workspace workspace, User user);
 
-    public abstract Workspace findById(String workspaceId, User user);
+    public Workspace findById(String workspaceId, User user) {
+        return findById(workspaceId, false, user);
+    }
+
+    public abstract Workspace findById(String workspaceId, boolean includeHidden, User user);
 
     public Iterable<Workspace> findByIds(final Iterable<String> workspaceIds, final User user) {
         return new ConvertingIterable<String, Workspace>(workspaceIds) {

@@ -69,7 +69,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public Workspace findById(String workspaceId, User user) {
+    public Workspace findById(String workspaceId, boolean includeHidden, User user) {
+        // TODO support includeHidden
         Session session = sessionManager.getSession();
         List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("workspaceId", workspaceId)).list();
         if (workspaces.size() == 0) {

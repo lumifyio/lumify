@@ -3,6 +3,7 @@ package io.lumify.securegraph.model.workspace;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceLumifyProperties;
 import org.securegraph.Authorizations;
+import org.securegraph.FetchHint;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 
@@ -28,9 +29,9 @@ public class SecureGraphWorkspace implements Workspace {
         return displayTitle;
     }
 
-    public Vertex getVertex(Graph graph, Authorizations authorizations) {
+    public Vertex getVertex(Graph graph, boolean includeHidden, Authorizations authorizations) {
         if (this.workspaceVertex == null) {
-            this.workspaceVertex = graph.getVertex(getWorkspaceId(), authorizations);
+            this.workspaceVertex = graph.getVertex(getWorkspaceId(), includeHidden ? FetchHint.ALL_INCLUDING_HIDDEN : FetchHint.ALL, authorizations);
         }
         return this.workspaceVertex;
     }
