@@ -183,12 +183,13 @@ require([
 
             this.handleSubmitButton(
                 button,
-                this.adminService.vertexDelete(graphVertexId, workspaceId)
-                    .fail(function() {
-                        self.showError();
-                    }).done(function() {
+                this.dataRequest('admin', 'vertexDelete', graphVertexId, workspaceId)
+                    .then(function() {
                         self.$node.find('section').remove();
                         self.$node.find('.vertexId').val('');
+                    })
+                    .catch(function() {
+                        self.showError();
                     })
             );
         };

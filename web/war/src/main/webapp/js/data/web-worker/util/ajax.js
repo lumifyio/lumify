@@ -26,12 +26,14 @@ define(['util/promise'], function() {
     }
 
     function ajax(method, url, parameters, debugOptions) {
-        var isJson = true;
+        var isJson = true,
+            methodRegex = /^(.*)->HTML$/;
         method = method.toUpperCase();
 
-        if (method === 'GET->HTML') {
+        var matches = method.match(methodRegex);
+        if (matches && matches.length === 2) {
             isJson = false;
-            method = 'GET';
+            method = matches[1];
         }
 
         return new Promise(function(fulfill, reject) {

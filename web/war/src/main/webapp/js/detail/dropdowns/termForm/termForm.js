@@ -506,39 +506,39 @@ define([
             if (this.queryCache[query]) return this.queryCache[query];
 
             var badge = this.select('objectSignSelector').nextAll('.badge')
-                    .addClass('loading');
-
-            return request = this.dataRequest('vertex', 'search', {
-                query: query,
-                conceptFilter: this.attr.restrictConcept
-            })
-                .then(function(response) {
-                    var splitUpString = function(str) {
-                            return F.string.normalizeAccents(str.toLowerCase())
-                                .replace(/[^a-zA-Z0-9]/g, ' ')
-                                .split(/\s+/);
-                        },
-                        queryParts = splitUpString(query);
-                        vertices =  _.reject(response.vertices, function(v) {
-                            var queryPartsMissingFromTitle = _.difference(
-                                queryParts,
-                                splitUpString(F.vertex.title(v))
-                            ).length;
-
-                            return queryPartsMissingFromTitle;
-                        });
-
-                    self.updateQueryCountBadge(vertices);
-                    self.queryCache[query] = request;
-
-                    return vertices;
+                    .addClass('loading'),
+                request = this.dataRequest('vertex', 'search', {
+                    query: query,
+                    conceptFilter: this.attr.restrictConcept
                 })
-                .catch(function() {
-                    self.updateQueryCountBadge();
-                })
-                .finally(function() {
-                    badge.removeClass('loading');
-                })
+                    .then(function(response) {
+                        var splitUpString = function(str) {
+                                return F.string.normalizeAccents(str.toLowerCase())
+                                    .replace(/[^a-zA-Z0-9]/g, ' ')
+                                    .split(/\s+/);
+                            },
+                            queryParts = splitUpString(query);
+                            vertices =  _.reject(response.vertices, function(v) {
+                                var queryPartsMissingFromTitle = _.difference(
+                                    queryParts,
+                                    splitUpString(F.vertex.title(v))
+                                ).length;
+
+                                return queryPartsMissingFromTitle;
+                            });
+
+                        self.updateQueryCountBadge(vertices);
+                        self.queryCache[query] = request;
+
+                        return vertices;
+                    })
+                    .catch(function() {
+                        self.updateQueryCountBadge();
+                    })
+                    .finally(function() {
+                        badge.removeClass('loading');
+                    });
+            return request;
         };
 
         this.updateQueryCountBadge = function(vertices) {
