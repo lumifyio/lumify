@@ -511,14 +511,7 @@ define([
                     self.off('.actionbar')
                         .on('open.actionbar', function(event) {
                             event.stopPropagation();
-
-                            self.trigger('selectObjects', {
-                                vertices: [
-                                    {
-                                        id: $target.data('info').resolvedToVertexId
-                                    }
-                                ]
-                            });
+                            self.trigger('selectObjects', { vertexIds: $target.data('info').resolvedToVertexId });
                     });
                     self.on('unresolve.actionbar', function(event) {
                         event.stopPropagation();

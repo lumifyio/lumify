@@ -107,6 +107,10 @@ define([
                     params.workspaceId = optionalWorkspaceId;
                 }
             }));
+        },
+
+        resolveTerm: function(params) {
+            return ajax('POST', '/vertex/resolve-term', params);
         }
     };
 

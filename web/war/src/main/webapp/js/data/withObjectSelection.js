@@ -45,6 +45,9 @@ define([], function() {
                 promises = [];
 
             if (data && data.vertexIds) {
+                if (!_.isArray(data.vertexIds)) {
+                    data.vertexIds = [data.vertexIds];
+                }
                 promises.push(
                     this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
                 )

@@ -167,7 +167,7 @@ define([
                 })
                 .done(function(data) {
                     _.defer(self.teardown.bind(self));
-                    self.trigger(document, 'refreshRelationships');
+                    self.trigger(document, 'loadEdges');
                 });
         };
 

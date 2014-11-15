@@ -2,11 +2,12 @@ define([
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./detail',
-    'util/vertex/formatters'
-], function(defineComponent, registry, template, F) {
+    'util/vertex/formatters',
+    'util/withDataRequest'
+], function(defineComponent, registry, template, F, withDataRequest) {
     'use strict';
 
-    return defineComponent(Detail);
+    return defineComponent(Detail, withDataRequest);
 
     function Detail() {
 
@@ -22,7 +23,6 @@ define([
             this.on('finishedLoadingTypeContent', this.onFinishedTypeContent);
 
             this.on(document, 'objectsSelected', this.onObjectsSelected);
-            this.on('selectObjects', this.onSelectObjects);
             this.preventDropEventsFromPropagating();
 
             this.before('teardown', this.teardownComponents);
@@ -33,12 +33,6 @@ define([
                 this.onObjectsSelected(null, { vertices: [this.attr.loadGraphVertexData] });
             }
         });
-
-        this.onSelectObjects = function(event, data) {
-            if (!data.focus) {
-                this.onObjectsSelected(null, data);
-            }
-        };
 
         this.onFinishedTypeContent = function() {
             this.$node.removeClass('loading');

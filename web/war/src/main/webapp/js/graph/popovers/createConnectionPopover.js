@@ -181,12 +181,11 @@ define([
 
             var p = this.dataRequest('edge', 'create', parameters)
                 .then(function(data) {
-                    // FIXME: shouldn't be needed
-                    //self.on(document, 'edgesLoaded', function loaded() {
-                        //self.trigger('finishedVertexConnection');
-                        //self.off(document, 'edgesLoaded', loaded);
-                    //});
-                    //self.trigger('refreshRelationships');
+                    self.on(document, 'edgesLoaded', function loaded() {
+                        self.trigger('finishedVertexConnection');
+                        self.off(document, 'edgesLoaded', loaded);
+                    });
+                    self.trigger('loadEdges');
                 })
                 .catch(function(req, reason, statusText) {
                     $target.text(i18n('popovers.connection.button.connect'))

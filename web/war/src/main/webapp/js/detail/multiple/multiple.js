@@ -217,7 +217,8 @@ define([
             this.$node.find('.vertices-list').hide();
             this.$node.find('.multiple').addClass('viewing-vertex');
 
-            var detailsContainer = this.$node.find('.details-container'),
+            var self = this,
+                detailsContainer = this.$node.find('.details-container'),
                 detailsContent = detailsContainer.find('.content'),
                 instanceInfos = registry.findInstanceInfoByNode(detailsContent[0]);
             if (instanceInfos.length) {
@@ -226,39 +227,47 @@ define([
                 });
             }
 
-            var vertices = data.vertices,
-                first = vertices[0];
-
-            if (vertices.length === 0) {
-                return;
-            }
-            if (this._selectedGraphId === first.id) {
-                this.$node.find('.multiple').removeClass('viewing-vertex');
-                this.$node.find('.vertices-list').show().find('.active').removeClass('active');
-                this._selectedGraphId = null;
-                return;
-            }
-
-            var self = this,
-                type = F.vertex.concept(first).displayType;
-
-            if (type === 'relationship') {
-                moduleName = type;
+            if (data && data.vertexIds) {
+                if (!_.isArray(data.vertexIds)) {
+                    data.vertexIds = [data.vertexIds];
+                }
+                promise = this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds });
             } else {
-                moduleName = (((type != 'document' &&
-                                type != 'image' &&
-                                type != 'video') ? 'entity' : 'artifact'
-                ) || 'entity').toLowerCase();
+                promise = Promise.resolve(data && data.vertices || []);
             }
+            promise.done(function(vertices) {
+                if (vertices.length === 0) {
+                    return;
+                }
 
-            this._selectedGraphId = first.id;
-            require([
-                'detail/' + moduleName + '/' + moduleName,
-            ], function(Module) {
-                Module.attachTo(detailsContent, {
-                    data: first
+                var first = vertices[0];
+                if (this._selectedGraphId === first.id) {
+                    this.$node.find('.multiple').removeClass('viewing-vertex');
+                    this.$node.find('.vertices-list').show().find('.active').removeClass('active');
+                    this._selectedGraphId = null;
+                    return;
+                }
+
+                var type = F.vertex.concept(first).displayType;
+
+                if (type === 'relationship') {
+                    moduleName = type;
+                } else {
+                    moduleName = (((type != 'document' &&
+                                    type != 'image' &&
+                                    type != 'video') ? 'entity' : 'artifact'
+                    ) || 'entity').toLowerCase();
+                }
+
+                this._selectedGraphId = first.id;
+                require([
+                    'detail/' + moduleName + '/' + moduleName,
+                ], function(Module) {
+                    Module.attachTo(detailsContent, {
+                        data: first
+                    });
+                    self.$node.find('.vertices-list').show();
                 });
-                self.$node.find('.vertices-list').show();
             });
         };
 

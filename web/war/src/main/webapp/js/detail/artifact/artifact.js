@@ -372,14 +372,7 @@ define([
                     });
 
                     self.on('open.actionbar', function() {
-
-                        self.trigger('selectObjects', {
-                            vertices: [
-                                {
-                                    id: property.value.resolvedVertexId
-                                }
-                            ]
-                        });
+                        self.trigger('selectObjects', { vertexIds: property.value.resolvedVertexId });
                     });
                     self.on('unresolve.actionbar', function() {
                         _.defer(
