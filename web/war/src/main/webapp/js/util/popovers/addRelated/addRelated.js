@@ -123,7 +123,7 @@ define([
                 })
                 .then(function(results) {
                     var config = results.shift(),
-                        related = results.shift();
+                        related = results.shift(),
                         count = related.count,
                         vertices = related.vertices,
                         forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],

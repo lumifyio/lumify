@@ -8,7 +8,6 @@ define([], function() {
         this.after('initialize', function() {
             this.on('dataRequest', this.handleDataRequest);
             this.on('dataRequestCancel', this.handleDataRequestCancel);
-            console.log('listening')
             this.trigger('readyForDataRequests');
             this.lumifyData.readyForDataRequests = true;
         });

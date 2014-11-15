@@ -71,7 +71,7 @@ define([
                 remoteWorkspace.vertices = _.indexBy(remoteWorkspace.vertices, 'vertexId');
                 var workspace = api.getObject(remoteWorkspace.workspaceId, 'workspace');
                 if (!workspace) {
-                    debugger;
+                    // TODO: was just shared with user?
                     return;
                 }
                 if (!_.isEqual(remoteWorkspace.vertices, workspace.vertices)) {
