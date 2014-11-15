@@ -6,7 +6,6 @@ define([
     'util/privileges',
     'util/withDataRequest',
     'hbs!../audit/audit-list',
-    'data',
     'd3'
 ], function(
     defineComponent,
@@ -15,7 +14,6 @@ define([
     Privileges,
     withDataRequest,
     auditsListTemplate,
-    appData,
     d3) {
     'use strict';
 
@@ -396,15 +394,9 @@ define([
             if (info) {
                 event.preventDefault();
 
-                var vertexId = info.graphVertexId,
-                    vertex = appData.vertex(vertexId);
-                if (!vertex) {
-                    appData.refresh(vertexId).done(function(v) {
-                        self.trigger('selectObjects', { vertices: [v] });
-                    });
-                } else {
-                    this.trigger('selectObjects', { vertices: [vertex] });
-                }
+                var vertexId = info.graphVertexId;
+
+                this.trigger('selectObjects', { vertexIds: [vertexId] });
             }
         };
 
@@ -472,14 +464,14 @@ define([
                                 a.relationshipAudit.sourceIsCurrent =
                                     a.relationshipAudit.sourceId === self.attr.data.id;
                                 a.relationshipAudit.sourceHref = F.vertexUrl.fragmentUrl(
-                                    [a.relationshipAudit.sourceId], appData.workspaceId);
+                                    [a.relationshipAudit.sourceId], lumifyData.currentWorkspaceId);
                                 a.relationshipAudit.sourceInfo =
                                     self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
 
                                 a.relationshipAudit.destInfo =
                                     self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
                                 a.relationshipAudit.destHref = F.vertexUrl.fragmentUrl(
-                                    [a.relationshipAudit.destId], appData.workspaceId);
+                                    [a.relationshipAudit.destId], lumifyData.currentWorkspaceId);
                             }
 
                             return 'other';
@@ -591,24 +583,14 @@ define([
                         .fail(this.requestFailure.bind(this))
                         .done(this.closePropertyForm.bind(this));
                 } else {
-                    vertexService.setVisibility(
-                        this.attr.data.id,
-                        data.property.visibilitySource)
-                        .fail(this.requestFailure.bind(this))
-                        .done(this.closePropertyForm.bind(this));
+                    this.dataRequest('vertex', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                        .then(this.closePropertyForm.bind(this))
+                        .catch(this.requestFailure.bind(this));
                 }
             } else {
-                vertexService.setProperty(
-                        this.attr.data.id,
-                        data.property.key,
-                        data.property.name,
-                        data.property.value,
-                        data.property.visibilitySource,
-                        data.property.justificationText,
-                        data.property.sourceInfo,
-                        data.property.metadata)
-                    .fail(this.requestFailure.bind(this))
-                    .done(this.closePropertyForm.bind(this));
+                this.dataRequest('vertex', 'setProperty', this.attr.data.id, data.property)
+                    .then(this.closePropertyForm.bind(this))
+                    .catch(this.requestFailure.bind(this));
             }
 
         };

@@ -472,14 +472,11 @@ define([
         this.onVerticesUpdated = function(evt, data) {
             var self = this;
             this.cytoscapeReady(function(cy) {
+                // TODO: consider using batchData
                 data.vertices
                     .forEach(function(updatedVertex) {
                         var cyNode = cy.nodes().filter('#' + toCyId(updatedVertex));
                         if (cyNode.length) {
-                            if (updatedVertex.workspace.graphPosition) {
-                                cyNode.position(retina.pointsToPixels(updatedVertex.workspace.graphPosition));
-                            }
-
                             var newData = self.updateCyNodeData(cyNode.data(), updatedVertex);
                             cyNode.data(newData);
                             if (cyNode._private.classes) {

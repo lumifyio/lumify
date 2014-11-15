@@ -96,7 +96,7 @@ define([
                         })
                         .value()
                 });
-            } else if (F.vertex.isEdge) {
+            } else if (F.vertex.isEdge(this.attr.data)) {
                 throw new Error('Property form not supported for edges');
             } else {
                 this.dataRequest('ontology', 'propertiesByConceptId', F.vertex.prop(vertex, 'conceptType'))

@@ -81,7 +81,33 @@ define([
                 return api.multiple({
                     vertexIds: toRequest
                 });
-            })
+            }
+        ),
+
+        setVisibility: function() {},
+
+        setProperty: function(vertexId, property, optionalWorkspaceId) {
+            return ajax('POST', '/vertex/property', _.tap({
+                 graphVertexId: vertexId,
+                 propertyName: property.name,
+                 value: property.value,
+                 visibilitySource: property.visibilitySource,
+                 justificationText: property.justificationText
+            }, function(params) {
+                if (property.sourceInfo) {
+                    params.sourceInfo = JSON.stringify(property.sourceInfo);
+                }
+                if (property.key) {
+                    params.propertyKey = property.key;
+                }
+                if (property.metadata) {
+                    params.metadata = JSON.stringify(property.metadata)
+                }
+                if (optionalWorkspaceId) {
+                    params.workspaceId = optionalWorkspaceId;
+                }
+            }));
+        }
     };
 
     return api;
