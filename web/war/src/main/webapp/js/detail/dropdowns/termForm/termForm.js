@@ -409,7 +409,7 @@ define([
                     }
                 });
             } else if (vertex && !conceptId) {
-                updateCss(vertex.imageSrc);
+                updateCss(F.vertex.image(vertex));
             } else updateCss();
 
             function updateCss(src) {
@@ -687,7 +687,7 @@ define([
                                     F: F,
                                     // TODO: show some properties
                                     properties: [],
-                                    iconSrc: item.imageSrc,
+                                    iconSrc: F.vertex.image(item),
                                     concept: concept
                                 });
                             }

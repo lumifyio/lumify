@@ -298,18 +298,20 @@ define([
                         if (vertex && !li.data('previewLoaded')) {
 
                             var preview = li.data('previewLoaded', true)
-                            .find('.preview');
+                                            .find('.preview'),
+                                image = F.vertex.image(vertex),
+                                videoPreview = F.vertex.imageFrames(vertex);
 
-                            if (vertex.imageFramesSrc) {
+                            if (videoPreview) {
                                 VideoScrubber.attachTo(preview, {
-                                    posterFrameUrl: vertex.imageSrc,
-                                    videoPreviewImageUrl: vertex.imageFramesSrc
+                                    posterFrameUrl: image,
+                                    videoPreviewImageUrl: videoPreview
                                 });
                             } else {
                                 var conceptImage = F.vertex.concept(vertex).glyphIconHref,
                                 clsName = 'non_concept_preview';
 
-                                if ((preview.css('background-image') || '').indexOf(F.vertex.image(vertex)) >= 0) {
+                                if ((preview.css('background-image') || '').indexOf(image) >= 0) {
                                     return;
                                 }
 
@@ -320,15 +322,15 @@ define([
                                     preview.css('background-image', 'url(' + conceptImage + ')')
                                 })
                                 .done(function() {
-                                    if (conceptImage === F.vertex.image(vertex)) {
+                                    if (conceptImage === image) {
                                         li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
                                         .removeClass('loading');
                                     } else {
                                         _.delay(function() {
-                                            deferredImage(F.vertex.image(vertex)).always(function() {
+                                            deferredImage(image).always(function() {
                                                 preview.css(
                                                     'background-image',
-                                                    'url(' + F.vertex.image(vertex) + ')'
+                                                    'url(' + image + ')'
                                                 );
                                                 li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
                                                 .removeClass('loading');

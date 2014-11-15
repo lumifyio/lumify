@@ -95,26 +95,24 @@ require([
             this.handleSubmitButton(
                 button,
 
-                vertexService.setProperty(
-                    this.$node.find('.vertexId').val(),
-                    li.find('input[name=key]').val(),
-                    property.name || li.find('input[name=name]').val(),
-                    li.find('input[name=value]').val(),
-                    li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
-                    'admin graph vertex editor',
-                    null,
-                    JSON.parse(li.find('textarea[name=metadata]').val()),
-                    this.$node.find('.workspaceId').val()
-                )
-                    .fail(function() {
-                        self.showError();
-                    })
-                    .done(function() {
+                this.dataRequest('vertex', 'setProperty', {
+                    vertexId: this.$node.find('.vertexId').val(),
+                    propertyKey: li.find('input[name=key]').val(),
+                    propertyName: property.name || li.find('input[name=name]').val(),
+                    value: li.find('input[name=value]').val(),
+                    visibilitySource: li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
+                    justificationText: 'admin graph vertex editor',
+                    metadata: JSON.parse(li.find('textarea[name=metadata]').val()),
+                }, this.$node.find('.workspaceId').val())
+                    .then(function() {
                         if (li.closest('.collapsible').next('.collapsible').length) {
                             li.removeClass('editing');
                         }
+                        this.onLoad();
                     })
-                    .done(this.onLoad.bind(this))
+                    .catch(function() {
+                        self.showError();
+                    })
             );
         };
 
@@ -169,10 +167,10 @@ require([
         this.onLoad = function() {
             var self = this;
 
-            vertexService.getVertexProperties(
-                this.select('vertexInputSelector').val(),
-                this.select('workspaceInputSelector').val()
-            ).done(function(vertex) {
+            this.dataRequest('vertex', 'store', {
+                workspaceId: this.select('workspaceInputSelector').val(),
+                vertexIds: this.select('vertexInputSelector').val()
+            }).done(function(vertex) {
                 self.update(vertex);
             });
         };

@@ -467,9 +467,9 @@ define([
         this.videoSetup = function(vertex) {
             this.select('detectedObjectLabelsSelector').hide();
             VideoScrubber.attachTo(this.select('previewSelector'), {
-                rawUrl: vertex.imageRawSrc,
-                posterFrameUrl: vertex.imageSrc,
-                videoPreviewImageUrl: vertex.imageFramesSrc,
+                rawUrl: F.vertex.raw(vertex),
+                posterFrameUrl: F.vertex.image(vertex),
+                videoPreviewImageUrl: F.vertex.imageFrames(vertex),
                 duration: this.duration,
                 allowPlayback: true
             });

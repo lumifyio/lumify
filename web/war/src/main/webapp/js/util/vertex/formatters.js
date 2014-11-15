@@ -373,7 +373,9 @@ define([
                 }
 
                 if (isVideo) {
-                    var posterFrame =  V.prop(vertex, 'http://lumify.io#rawPosterFrame');
+                    var posterFrame =  _.any(vertex.properties, function(p) {
+                        return p.name === 'http://lumify.io#rawPosterFrame';
+                    });
                     if (posterFrame) {
                         return 'vertex/poster-frame?' + $.param({
                             workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
@@ -401,65 +403,16 @@ define([
             },
 
             imageFrames: function(vertex, optionalWorkspaceId) {
-                if (V.prop(vertex, 'http://lumify.io#videoPreviewImage')) {
+                var videoPreview =  _.any(vertex.properties, function(p) {
+                    return p.name === 'http://lumify.io#videoPreviewImage';
+                });
+                if (videoPreview) {
                     return 'vertex/video-preview?' + $.param({
                         workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
                         graphVertexId: vertex.id
                     });
                 }
             },
-
-            /*
-            function setPreviewsForVertex(vertex, currentWorkspace) {
-                var params = {
-                        workspaceId: currentWorkspace,
-                        graphVertexId: vertex.id
-                    },
-                    artifactUrl = function(type, p) {
-                        return _.template('vertex/{ type }?' + $.param($.extend(params, p || {})), { type: type });
-                    },
-                    entityImageUrl = F.vertex.prop(vertex, 'entityImageUrl'),
-                    entityImageVertexId = F.vertex.prop(vertex, 'entityImageVertexId');
-
-                vertex.imageSrcIsFromConcept = false;
-
-                if (entityImageUrl) {
-                    vertex.imageSrc = entityImageUrl;
-                    vertex.imageDetailSrc = entityImageUrl;
-                } else if (entityImageVertexId) {
-                    vertex.imageSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 150 });
-                    vertex.imageDetailSrc =
-                        artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
-                } else {
-
-                    // TODO: scale glyphs
-                    vertex.imageSrc = vertex.concept.glyphIconHref;
-                    vertex.imageDetailSrc = vertex.concept.glyphIconHref;
-                    vertex.imageRawSrc = artifactUrl('raw');
-                    vertex.imageSrcIsFromConcept = true;
-
-                    switch (vertex.concept.displayType) {
-
-                        case 'image':
-                            vertex.imageSrc = artifactUrl('thumbnail', { width: 150 });
-                            vertex.imageSrcIsFromConcept = false;
-                            vertex.imageDetailSrc = artifactUrl('thumbnail', { width: 800 });
-                            break;
-
-                        case 'video':
-                            vertex.properties.forEach(function(p) {
-                                if (p.name === 'http://lumify.io#rawPosterFrame') {
-                                    vertex.imageSrc = artifactUrl('poster-frame');
-                                    vertex.imageDetailSrc = artifactUrl('poster-frame');
-                                    vertex.imageSrcIsFromConcept = false;
-                                } else if (p.name === 'http://lumify.io#videoPreviewImage') {
-                                    vertex.imageFramesSrc = artifactUrl('video-preview');
-                                }
-                            });
-                            break;
-                    }
-                }
-            */
 
             propName: function(name) {
                 var autoExpandedName = (/^http:\/\/lumify.io/).test(name) ?

@@ -39,7 +39,6 @@ define([
 
             var self = this;
             this.prototype.initialize = _.wrap(this.prototype.initialize, function(init) {
-                this.adminService = adminService;
                 this.showSuccess = function(message) {
                     this.$node.find('.alert').remove();
                     this.$node.prepend(alertTemplate({ message: message || i18n('admin.plugin.success') }));
