@@ -2,7 +2,7 @@
  * Make data requests using events, but wrapped in promise interface
  * Depends on document level component to respond, or times out
  */
-define(['util/promise', 'underscore'], function(Promise, _) {
+define(['util/promise', 'underscore', 'jquery'], function(Promise, _, $) {
     'use strict';
 
     var NO_DATA_RESPONSE_TIMEOUT_SECONDS = 4,
