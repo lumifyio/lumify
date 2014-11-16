@@ -435,8 +435,8 @@ define([
                     )
                 ]).done(function(results) {
                     var ontology = results[0],
-                        auditResponse = results[1],
-                        audits = _.sortBy(auditResponse[0].auditHistory, function(a) {
+                        auditHistory = results[1],
+                        audits = _.sortBy(auditHistory, function(a) {
                             return new Date(a.dateTime).getTime() * -1;
                         }),
                         auditGroups = _.groupBy(audits, function(a) {

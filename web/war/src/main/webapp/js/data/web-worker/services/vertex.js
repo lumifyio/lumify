@@ -10,7 +10,7 @@ define([
         audit: function(vertexId) {
             return ajax('GET', '/vertex/audit', {
                 graphVertexId: vertexId
-            });
+            }).then(_.property('auditHistory'));
         },
 
         search: function(options) {
