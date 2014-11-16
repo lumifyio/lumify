@@ -83,7 +83,8 @@ define([
                         .append('div')
                         .attr('class', 'subtitle')
                         .text(function(d) {
-                            return d.concept.displayName;
+                            var concept = F.vertex.concept(d);
+                            return concept.displayName;
                         });
                 })
         };

@@ -1,28 +1,28 @@
 
 define([
-    'data',
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./appFullscreenDetails',
     'tpl!./appFullscreenDetailsError',
     'detail/detail',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'util/jquery.removePrefixedClasses'
-], function(appData, defineComponent, registry, template, errorTemplate, Detail, F) {
+], function(defineComponent, registry, template, errorTemplate, Detail, F, withDataRequest) {
     'use strict';
 
-    return defineComponent(FullscreenDetails);
+    return defineComponent(FullscreenDetails, withDataRequest);
 
     function filterEntity(v) {
-        return v.concept && !filterArtifacts(v);
+        return !filterArtifacts(v);
     }
 
     function filterArtifacts(v) {
-        return v.concept && (/^(document|image|video)$/).test(v.concept.displayType);
+        var concept = F.vertex.concept(v);
+        return concept && (/^(document|image|video)$/).test(concept.displayType) || false;
     }
 
     function FullscreenDetails() {
-        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             detailSelector: '.detail-pane .content',
@@ -56,7 +56,6 @@ define([
             this.fullscreenIdentifier = Math.floor((1 + Math.random()) * 0xFFFFFF).toString(16).substring(1);
             this.$node.addClass('fullscreen-details');
 
-            this.trigger(document, 'applicationReady');
             this.switchWorkspace(this.attr.workspaceId);
         });
 
@@ -114,7 +113,7 @@ define([
         };
 
         this.handleNoVertices = function() {
-            var requiredFallback = this.attr.workspaceId !== appData.workspaceId;
+            var requiredFallback = this.attr.workspaceId !== lumifyData.currentWorkspaceId;
 
             document.title = requiredFallback ?
                 i18n('fullscreen.unauthorized') :
@@ -133,9 +132,8 @@ define([
             this.handleNoVertices();
         };
 
-        this.handleVerticesLoaded = function(data) {
-            var vertices = data.vertices,
-                fallbackToPublic = this.attr.workspaceId !== appData.workspaceId;
+        this.handleVerticesLoaded = function(vertices) {
+            var fallbackToPublic = this.attr.workspaceId !== lumifyData.currentWorkspaceId;
 
             Detail.teardownAll();
             this.$node.find('.detail-pane').remove();
@@ -145,11 +143,12 @@ define([
             }
 
             this.vertices = _.sortBy(vertices, function(v) {
-                var descriptors = [];
+                var descriptors = [],
+                    concept = F.vertex.concept(v);
 
                 // Image/Video/Audio before documents
                 descriptors.push(
-                    /document/.test(v.concept.displayType) ? '1' : '0'
+                    /document/.test(concept.displayType) ? '1' : '0'
                 );
 
                 // Sort by title
@@ -190,7 +189,7 @@ define([
                         this.$node.find('.entities-container') :
                         this.$node.find('.artifacts-container'),
                     type = filterArtifacts(v) ? 'artifact' : 'entity',
-                    subType = v.concept.displayType,
+                    subType = F.vertex.concept(v).displayType,
                     $newPane = $('<div class="detail-pane visible highlight-none"><div class="content"/></div>')
                         .addClass('type-' + type +
                                   (subType ? (' subType-' + subType) : '') +
@@ -217,7 +216,7 @@ define([
         this.loadWorkspaces = function() {
             var self = this;
 
-            new WorkspaceService().list()
+            this.dataRequest('workspace', 'all')
                 .done(function(data) {
                     if (data.workspaces.length > 1) {
                         var template = _.template(
@@ -257,12 +256,10 @@ define([
                 self.workspaceTitle = workspace.title;
                 self.actualWorkspaceId = workspace.workspaceId;
                 self.off(document, 'workspaceLoaded', loaded);
-                appData.cachedConceptsDeferred.done(function() {
-                    self.vertexService
-                        .getMultiple(self.attr.graphVertexIds, true)
-                        .fail(self.handleVerticesFailed.bind(self))
-                        .done(self.handleVerticesLoaded.bind(self));
-                });
+
+                self.dataRequest('vertex', 'store', { vertexIds: self.attr.graphVertexIds })
+                    .then(self.handleVerticesLoaded.bind(self))
+                    .catch(self.handleVerticesFailed.bind(self))
             });
             this.trigger(document, 'switchWorkspace', { workspaceId: workspaceId });
         };
@@ -273,7 +270,7 @@ define([
 
             if (data.workspaceId) {
                 this.attr.workspaceId = data.workspaceId;
-                if (appData.workspaceId !== this.attr.workspaceId) {
+                if (lumifyData.currentWorkspaceId !== this.attr.workspaceId) {
                     this.on(document, 'workspaceLoaded', function loaded() {
                         self.off(document, 'workspaceLoaded', loaded);
                         deferred.resolve();
@@ -316,9 +313,11 @@ define([
             }
 
             if (willAdd) {
-                return appData.refresh(_.uniq(data.add.concat(_.pluck(this.vertices, 'id'))))
-                    .done(function(vertices) {
-                        self.handleVerticesLoaded({ vertices: vertices });
+                return this.dataRequest('vertex', 'store', {
+                    vertexIds: _.uniq(data.add.concat(_.pluck(this.vertices, 'id')))
+                })
+                    .then(function(vertices) {
+                        self.handleVerticesLoaded(vertices);
                     });
             }
 
@@ -367,10 +366,11 @@ define([
                 this.flashTitle(vertices);
             }
 
-            this.vertexService
-                .getMultiple(existingVertexIds.concat(newVertices))
-                .done(this.handleVerticesLoaded.bind(this))
-                .done(this.flashTitle.bind(this, newVertices));
+            this.dataRequest('vertex', 'store', { vertexIds: existingVertexIds.concat(newVertices) })
+                .done(function(vertices) {
+                    self.handleVerticesLoaded(vertices);
+                    self.flashTitle(newVertices);
+                })
         };
 
         this.flashTitle = function(newVertexIds, newVertices) {
