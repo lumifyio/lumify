@@ -13,9 +13,7 @@ public class CurrentUser {
 
     public static void set(HttpServletRequest request, String userId, String userName) {
         request.getSession().setAttribute(CurrentUser.SESSIONUSER_ATTRIBUTE_NAME, new SessionUser(userId));
-        if (LOGGER.isDebugEnabled()) {
-            request.getSession().setAttribute(CurrentUser.STRING_ATTRIBUTE_NAME, userName);
-        }
+        request.getSession().setAttribute(CurrentUser.STRING_ATTRIBUTE_NAME, userName);
     }
 
     public static String get(HttpSession session) {
