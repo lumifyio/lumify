@@ -919,6 +919,7 @@ define([
             var self = this,
                 nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
+                edgeIds = [];
                 vertexIds = [];
 
             nodes.each(function(index, cyNode) {
@@ -927,26 +928,17 @@ define([
                 }
             });
 
-            this.dataRequest('vertex', 'store', { vertexIds: vertexIds })
-                .done(function(vertices) {
+            edges.each(function(index, cyEdge) {
+                if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
+                    edgeIds.push(fromCyId(cyEdge.id()));
+                }
+            });
 
-                    edges.each(function(index, cyEdge) {
-                        if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                            var vertex = cyEdge.data('vertex');
-                            vertices.push(vertex)
-                        }
-                    });
+            this.trigger('selectObjects', {
+                vertexIds: vertexIds,
+                edgeIds: edgeIds
+            });
 
-                    // Only allow one edge selected
-                    if (nodes.length === 0 && edges.length > 1) {
-                        vertices = [vertices[0]];
-                    }
-                    if (vertices.length > 0){
-                        self.trigger('selectObjects', { vertices: vertices });
-                    } else {
-                        self.trigger('selectObjects');
-                    }
-                })
         };
 
         this.graphGrab = function(event) {

@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'util/clipboardManager'
+], function(ClipboardManager) {
     'use strict';
 
     return withObjectSelection;
@@ -9,6 +11,8 @@ define([], function() {
             previousSelectedObjects;
 
         this.after('initialize', function() {
+            ClipboardManager.attachTo(this.$node);
+
             this.on('selectObjects', this.onSelectObjects);
             this.on('selectAll', this.onSelectAll);
 
@@ -17,6 +21,7 @@ define([], function() {
             this.on('searchTitle', this.onSearchTitle);
             this.on('searchRelated', this.onSearchRelated);
             this.on('addRelatedItems', this.onAddRelatedItems);
+            this.on('objectsSelected', this.onObjectsSelected);
         });
 
         this.onSelectAll = function(event, data) {
@@ -50,21 +55,32 @@ define([], function() {
                 }
                 promises.push(
                     this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
-                )
+                );
             } else if (data && data.vertices) {
                 promises.push(Promise.resolve(data.vertices));
             }
 
-            // TODO: edges
+            if (data && data.edgeIds && data.edgeIds.length) {
+                // Only supports one
+                if (_.isArray(data.edgeIds)) {
+                    data.edgeIds = data.edgeIds[0];
+                }
+                promises.push(
+                    this.dataRequest('edge', 'store', { edgeId: data.edgeIds })
+                );
+            } else if (data && data.edges) {
+                promises.push(Promise.resolve(data.edges));
+            }
 
             Promise.all(promises)
                 .done(function(result) {
-                    var vertices = result[0],
-                        edges = result[1];
+                    var vertices = result[0] || [],
+                        edge = result[1],
+                        edges = edge ? [edge] : [];
 
                     selectedObjects = {
-                        vertices: vertices || [],
-                        edges: edges || []
+                        vertices: vertices,
+                        edges: vertices.length ? [] : edges
                     };
 
                     if (previousSelectedObjects &&
@@ -77,72 +93,24 @@ define([], function() {
 
                     self.trigger('objectsSelected', _.clone(selectedObjects));
                 })
+        };
 
-                /*
+        this.onObjectsSelected = function(event, data) {
+            var self = this;
 
-            var self = this,
-                vertices = data && data.vertices || [],
-                needsLoading = _.chain(vertices)
-                    .filter(function(v) {
-                        return _.isEqual(v, { id: v.id }) && _.isUndefined(self.vertex(v.id));
-                    })
-                    .value(),
-                deferred = $.Deferred();
-
-            if (needsLoading.length) {
-                this.vertexService.getMultiple(_.pluck(needsLoading, 'id'))
-                    .done(function() {
-                        deferred.resolve();
+            if (data.vertices.length) {
+                require(['util/vertex/urlFormatters'], function(F) {
+                    self.trigger('clipboardSet', {
+                        text: F.vertexUrl.url(data.vertices, lumifyData.currentWorkspaceId)
                     });
+                })
             } else {
-                deferred.resolve();
+                this.trigger('clipboardClear');
             }
 
-            deferred.done(function() {
-                var selectedIds = _.pluck(vertices, 'id'),
-                    loadedVertices = vertices.map(function(v) {
-                        return self.vertex(v.id) || v;
-                    }),
-                    selected = _.groupBy(loadedVertices, function(v) {
-                        return v.concept ? 'vertices' : 'edges';
-                    });
-
-                if ((!data || !data.options || data.options.forceSelectEvenIfSame !== true) &&
-                    _.isArray(self.previousSelection) &&
-                    _.isArray(selectedIds) &&
-                    _.isEqual(self.previousSelection, selectedIds)) {
-                    return;
-                }
-                self.previousSelection = selectedIds;
-
-                selected.vertices = selected.vertices || [];
-                selected.edges = selected.edges || [];
-
-                if (window.DEBUG) {
-                    DEBUG.selectedObjects = selected;
-                }
-
-                if (selected.vertices.length) {
-                    self.trigger('clipboardSet', {
-                        text: F.vertexUrl.url(selected.vertices, self.workspaceId)
-                    });
-                } else {
-                    self.trigger('clipboardClear');
-                }
-
-                self.selectedVertices = selected.vertices;
-                self.selectedVertexIds = _.pluck(selected.vertices, 'id');
-                self.selectedEdges = selected.edges;
-
-                _.keys(self.workspaceVertices).forEach(function(id) {
-                    var info = self.workspaceVertices[id];
-                    info.selected = selectedIds.indexOf(id) >= 0;
-                });
-
-                $.extend(selected, _.pick(data || {}, 'focus'));
-
-                self.trigger('objectsSelected', selected);
-            })*/
+            if (window.DEBUG) {
+                DEBUG.selectedObjects = data;
+            }
         };
 
         this.onSearchTitle = function(event, data) {
