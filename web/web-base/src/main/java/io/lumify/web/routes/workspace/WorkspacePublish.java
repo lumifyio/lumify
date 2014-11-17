@@ -101,7 +101,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 checkNotNull(vertexId);
                 Vertex vertex = graph.getVertex(vertexId, authorizations);
                 checkNotNull(vertex);
-                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
+                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC && !vertex.isHidden(authorizations)) {
                     String msg;
                     if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         msg = "Cannot delete public vertex " + vertexId;
@@ -135,7 +135,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), authorizations);
                 Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
                 Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
-                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
+                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC && !edge.isHidden(authorizations)) {
                     String error_msg;
                     if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         error_msg = "Cannot delete a public edge";
@@ -198,7 +198,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     }
                     SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
 
-                    if (propertySandboxStatus == SandboxStatus.PUBLIC) {
+                    if (propertySandboxStatus == SandboxStatus.PUBLIC && !property.isHidden(authorizations)) {
                         String error_msg;
                         if (data.getAction() == ClientApiPublishItem.Action.delete) {
                             error_msg = "Cannot delete a public property";
