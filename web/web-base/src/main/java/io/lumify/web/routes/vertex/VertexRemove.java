@@ -50,7 +50,7 @@ public class VertexRemove extends BaseRequestHandler {
 
         boolean isPublicEdge = sandboxStatus == SandboxStatus.PUBLIC;
 
-        workspaceHelper.deleteVertex(workspaceId, vertex, isPublicEdge, user, authorizations);
+        workspaceHelper.deleteVertex(vertex, workspaceId, isPublicEdge, authorizations, user);
         respondWithSuccessJson(response);
     }
 }

@@ -2,7 +2,6 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
@@ -25,7 +24,6 @@ public class VertexRemoveEdge extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexRemoveEdge.class);
     private final Graph graph;
     private final WorkspaceHelper workspaceHelper;
-    private final String entityHasImageIri;
 
     @Inject
     public VertexRemoveEdge(
@@ -37,11 +35,6 @@ public class VertexRemoveEdge extends BaseRequestHandler {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.workspaceHelper = workspaceHelper;
-
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        }
     }
 
     @Override
@@ -62,7 +55,7 @@ public class VertexRemoveEdge extends BaseRequestHandler {
 
         boolean isPublicEdge = sandboxStatus == SandboxStatus.PUBLIC;
 
-        workspaceHelper.deleteEdge(workspaceId, edge, sourceVertex, destVertex, entityHasImageIri, isPublicEdge, user, authorizations);
+        workspaceHelper.deleteEdge(workspaceId, edge, sourceVertex, destVertex, isPublicEdge, user, authorizations);
         respondWithSuccessJson(response);
     }
 }
