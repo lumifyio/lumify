@@ -309,13 +309,13 @@ define([
                 people = usersNotCurrent.length;
 
             if (row.sharedToUser) {
-                this.userService.userInfo(row.createdBy).done(function(result) {
-                    var createdBy = result.users && result.users[row.createdBy],
-                        name = createdBy && createdBy.displayName ||
-                            i18n('workspaces.shared_with_me.subtitle.unknown_user');
+                this.dataRequest('user', 'info', row.createdBy)
+                    .done(function(createdBy) {
+                        var name = createdBy && createdBy.displayName ||
+                                i18n('workspaces.shared_with_me.subtitle.unknown_user');
 
-                    deferred.resolve(i18n('workspaces.shared_with_me.subtitle.prefix', name));
-                });
+                        deferred.resolve(i18n('workspaces.shared_with_me.subtitle.prefix', name));
+                    });
             } else {
                 deferred.resolve(i18n('workspaces.sharing.subtitle.prefix'));
             }

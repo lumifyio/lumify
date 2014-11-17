@@ -12,6 +12,12 @@ define(['../util/ajax'], function(ajax) {
                 })
         },
 
+        get: function(userName) {
+            return ajax('GET', '/user', {
+                'user-name': userName
+            });
+        },
+
         preference: function(name, value) {
             return ajax('POST', '/user/ui-preferences', {
                 name: name,

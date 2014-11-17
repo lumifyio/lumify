@@ -2,17 +2,20 @@ require([
     'configuration/admin/plugin',
     'hbs!io/lumify/web/devTools/templates/user',
     'hbs!io/lumify/web/devTools/templates/user-details',
-    'util/formatters'
+    'util/formatters',
+    'util/withDataRequest'
 ], function(
     defineLumifyAdminPlugin,
     template,
     userTemplate,
     F,
+    withDataRequest,
     d3
     ) {
     'use strict';
 
     return defineLumifyAdminPlugin(UserAdmin, {
+        mixins: [withDataRequest],
         section: 'User',
         name: 'Admin',
         subtitle: 'Modify users and permissions'
@@ -55,11 +58,12 @@ require([
 
             this.setupTypeahead();
 
-            this.loadUserDetails(lumifyData.currentUser.displayName);
+            this.loadUserDetails(lumifyData.currentUser.userName);
         });
 
         this.loadUserDetails = function(userName) {
-            userService.getUser(userName).done(this.update.bind(this));
+            this.dataRequest('user', 'get', userName)
+                .done(this.update.bind(this))
         };
 
         this.onDelete = function(e) {
@@ -68,13 +72,13 @@ require([
 
             this.handleSubmitButton(
                 button,
-                this.adminService.userDelete(this.user.displayName)
-                    .fail(function() {
-                        self.showError();
-                    })
-                    .done(function() {
+                this.dataRequest('admin', 'userDelete', this.user.userName)
+                    .then(function() {
                         self.showSuccess('Deleted User');
                         self.$node.find('.details').empty();
+                    })
+                    .catch(function() {
+                        self.showError();
                     })
             );
         };
@@ -89,12 +93,12 @@ require([
 
             this.handleSubmitButton(
                 button,
-                this.adminService.workspaceShare(this.user.displayName, workspaceId)
-                    .fail(function() {
-                        self.showError();
+                this.dataRequest('admin', 'workspaceShare', workspaceId, this.user.userName)
+                    .then(function() {
+                        self.loadUserDetails(self.user.userName);
                     })
-                    .done(function() {
-                        self.loadUserDetails(self.user.displayName);
+                    .catch(function() {
+                        self.showError();
                     })
             );
         };
@@ -140,15 +144,13 @@ require([
             var self = this,
                 loading = this.$node.find('.priv-header .loading').show();
 
-            this.adminService.userUpdatePrivileges(
-                    this.user.displayName,
-                    this.user.privileges
-                ).always(function() {
+            this.dataRequest('admin', 'userUpdatePrivileges', this.user.userName, this.user.privileges)
+                .then(function(user) {
+                    self.loadUserDetails(user.userName);
+                })
+                .finally(function() {
                     loading.hide();
                 })
-                .done(function(user) {
-                    self.loadUserDetails(user.displayName);
-                });
         };
 
         this.onAuthorizationKeyUp = function(event) {
@@ -157,9 +159,9 @@ require([
             if (event.which === 13) {
                 var auth = $.trim(this.select('authorizationSelector').val());
                 if (auth.length) {
-                    this.adminService.userAuthAdd(this.user.displayName, auth)
+                    this.dataRequest('admin', 'userAuthAdd', this.user.userName, auth)
                         .done(function(user) {
-                            self.loadUserDetails(user.displayName);
+                            self.loadUserDetails(user.userName);
                         });
                 }
             }
@@ -175,9 +177,9 @@ require([
 
             this.handleSubmitButton(
                 button,
-                this.adminService.userAuthRemove(this.user.displayName, auth)
-                    .done(function(user) {
-                        self.loadUserDetails(user.displayName);
+                this.dataRequest('admin', 'userAuthRemove', this.user.userName, auth)
+                    .then(function(user) {
+                        self.loadUserDetails(user.userName);
                     })
             );
         };
@@ -215,21 +217,20 @@ require([
         };
 
         this.setupTypeahead = function() {
-            var self = this;
+            var self = this,
+                groupedByDisplayName;
 
             this.select('userSearchSelector').typeahead({
 
                 source: function(query, callback) {
-                    userService.search(query)
-                        .done(function(response) {
-                            var users = response.users,
-                                names = _.pluck(users, 'displayName');
-
-                            callback(names);
+                    self.dataRequest('user', 'search', query)
+                        .done(function(users) {
+                            groupedByDisplayName = _.indexBy(users, 'displayName');
+                            callback(_.keys(groupedByDisplayName));
                         });
                 },
                 updater: function(displayName) {
-                    self.loadUserDetails(displayName);
+                    self.loadUserDetails(groupedByDisplayName[displayName].userName);
                     return displayName;
                 }
             });
