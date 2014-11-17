@@ -297,12 +297,13 @@ define([
                             }).css({top: top});
 
                             self.updatePopoverSize(tip);
+
+                            Diff.attachTo(tip.find('.popover-content'), {
+                                diffs: filteredDiffs
+                            });
                         })
 
                         Diff.teardownAll();
-                        Diff.attachTo(tip.find('.popover-content'), {
-                            diffs: filteredDiffs
-                        });
                     }
                 });
 

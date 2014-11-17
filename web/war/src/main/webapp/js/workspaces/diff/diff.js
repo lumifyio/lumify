@@ -51,7 +51,6 @@ define([
                     });
                 };
 
-            /*
             self.processDiffs(self.attr.diffs).done(function(processDiffs) {
                 self.$node.html(template({
                     diffs: processDiffs,
@@ -120,7 +119,6 @@ define([
             self.on('markPublishDiffItem', self.onMarkPublish);
             self.on('markUndoDiffItem', self.onMarkUndo);
             self.on(document, 'objectsSelected', self.onObjectsSelected);
-            */
         };
 
         this.processDiffs = function(diffs) {
@@ -135,88 +133,88 @@ define([
                 }),
                 output = [];
 
-            // TODO:
-            /*
-            return appData.refresh(referencedVertices).then(function() {
+            return this.dataRequest('vertex', 'store', { vertexIds: referencedVertices })
+                .then(function(vertices) {
+                    var verticesById = _.indexBy(vertices, 'id');
 
-                self.diffsForVertexId = {};
-                self.diffsById = {};
-                self.diffDependencies = {};
-                self.undoDiffDependencies = {};
+                    self.diffsForVertexId = {};
+                    self.diffsById = {};
+                    self.diffDependencies = {};
+                    self.undoDiffDependencies = {};
 
-                _.keys(groupedByVertex).forEach(function(vertexId) {
-                    var diffs = groupedByVertex[vertexId],
-                        actionTypes = {
-                            CREATE: { type: 'create', display: i18n('workspaces.diff.action.types.create') },
-                            UPDATE: { type: 'update', display: i18n('workspaces.diff.action.types.update') },
-                            DELETE: { type: 'delete', display: i18n('workspaces.diff.action.types.delete') }
-                        },
-                        outputItem = {
-                            id: '',
-                            vertexId: vertexId,
-                            title: '',
-                            properties: [],
-                            edges: [],
-                            action: {},
-                            className: F.className.to(vertexId),
-                            vertex: appData.vertex(vertexId)
-                        };
+                    _.keys(groupedByVertex).forEach(function(vertexId) {
+                        var diffs = groupedByVertex[vertexId],
+                            actionTypes = {
+                                CREATE: { type: 'create', display: i18n('workspaces.diff.action.types.create') },
+                                UPDATE: { type: 'update', display: i18n('workspaces.diff.action.types.update') },
+                                DELETE: { type: 'delete', display: i18n('workspaces.diff.action.types.delete') }
+                            },
+                            outputItem = {
+                                id: '',
+                                vertexId: vertexId,
+                                title: '',
+                                properties: [],
+                                edges: [],
+                                action: {},
+                                className: F.className.to(vertexId),
+                                vertex: verticesById[vertexId]
+                            };
 
-                    diffs.forEach(function(diff) {
-                        switch (diff.type) {
-                            case 'VertexDiffItem':
-                                diff.id = outputItem.id = vertexId;
-                                if (outputItem.vertex) {
-                                    outputItem.title = F.vertex.title(outputItem.vertex);
-                                }
-                                outputItem.action = actionTypes.CREATE;
-                                self.diffsForVertexId[vertexId] = diff;
-                                self.diffsById[vertexId] = diff;
-                                break;
-
-                            case 'PropertyDiffItem':
-
-                                var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
-                                if (ontologyProperty && ontologyProperty.userVisible) {
-                                    diff.id = vertexId + diff.name + diff.key;
-                                    addDiffDependency(diff.elementId, diff);
-
-                                    if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
-                                        outputItem.title = diff['new'].value;
-                                    } else {
-                                        diff.className = F.className.to(diff.id);
-                                        outputItem.properties.push(diff)
+                        diffs.forEach(function(diff) {
+                            switch (diff.type) {
+                                case 'VertexDiffItem':
+                                    diff.id = outputItem.id = vertexId;
+                                    if (outputItem.vertex) {
+                                        outputItem.title = F.vertex.title(outputItem.vertex);
                                     }
+                                    outputItem.action = actionTypes.CREATE;
+                                    self.diffsForVertexId[vertexId] = diff;
+                                    self.diffsById[vertexId] = diff;
+                                    break;
+
+                                case 'PropertyDiffItem':
+
+                                    var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
+                                    if (ontologyProperty && ontologyProperty.userVisible) {
+                                        diff.id = vertexId + diff.name + diff.key;
+                                        addDiffDependency(diff.elementId, diff);
+
+                                        if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
+                                            outputItem.title = diff['new'].value;
+                                        } else {
+                                            diff.className = F.className.to(diff.id);
+                                            outputItem.properties.push(diff)
+                                        }
+                                        self.diffsById[diff.id] = diff;
+                                    }
+                                    break;
+
+                                case 'EdgeDiffItem':
+                                    diff.id = diff.edgeId;
+                                    diff.inVertex = verticesById[diff.inVertexId];
+                                    diff.className = F.className.to(diff.edgeId);
+                                    diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
+                                    addDiffDependency(diff.inVertexId, diff);
+                                    addDiffDependency(diff.outVertexId, diff);
+                                    outputItem.edges.push(diff);
                                     self.diffsById[diff.id] = diff;
-                                }
-                                break;
+                                    break;
 
-                            case 'EdgeDiffItem':
-                                diff.id = diff.edgeId;
-                                diff.inVertex = appData.vertex(diff.inVertexId);
-                                diff.className = F.className.to(diff.edgeId);
-                                diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
-                                addDiffDependency(diff.inVertexId, diff);
-                                addDiffDependency(diff.outVertexId, diff);
-                                outputItem.edges.push(diff);
-                                self.diffsById[diff.id] = diff;
-                                break;
+                                default:
+                                    console.warn('Unknown diff item type', diff.type)
+                            }
+                        });
 
-                            default:
-                                console.warn('Unknown diff item type', diff.type)
+                        if (!outputItem.title && outputItem.vertex) {
+                            outputItem.action = actionTypes.UPDATE;
+                            outputItem.title = F.vertex.title(outputItem.vertex)
+                            outputItem.id = outputItem.vertex.id;
                         }
+
+                        output.push(outputItem);
                     });
 
-                    if (!outputItem.title && outputItem.vertex) {
-                        outputItem.action = actionTypes.UPDATE;
-                        outputItem.title = F.vertex.title(outputItem.vertex)
-                        outputItem.id = outputItem.vertex.id;
-                    }
-
-                    output.push(outputItem);
-                });
-
-                return output;
+                    return output;
             });
 
             function addDiffDependency(id, diff) {
@@ -231,8 +229,7 @@ define([
                 }
                 self.undoDiffDependencies[diff.id].push(id);
             }
-            */
-        }
+        };
 
         this.onObjectsSelected = function(event, data) {
             var self = this,
@@ -251,18 +248,16 @@ define([
         };
 
         this.onRowClick = function(event) {
-            var $target = $(event.target).not('button').closest('tr'),
+            var self = this,
+                $target = $(event.target).not('button').closest('tr'),
                 vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
+                alreadySelected = vertexRow.is('.active'),
                 vertexId = vertexRow.data('vertexId');
 
             if (vertexId) {
-                this.dataRequset('vertex', 'store', { vertexIds: vertexId })
-                    .done(function(vertex) {
-                        var alreadySelected = vertexRow.is('.active');
-                        this.trigger('selectObjects', {
-                            vertices: (!alreadySelected && vertex) ? [vertex] : []
-                        });
-                    });
+                self.trigger('selectObjects', {
+                    vertexIds: (!alreadySelected && vertexId) ? [vertexId] : []
+                });
             }
         };
 
