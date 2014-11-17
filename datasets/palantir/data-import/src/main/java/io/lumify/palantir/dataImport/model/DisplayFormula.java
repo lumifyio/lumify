@@ -44,6 +44,8 @@ public class DisplayFormula {
         formatFunctions.put("lowercase", new LowercaseFormatFunction());
         formatFunctions.put("add_number_commas", new AddNumberCommasFormatFunction());
         formatFunctions.put("add_phone_dashes", new AddPhoneDashesFormatFunction());
+        formatFunctions.put("smart_spacer", new SmartSpacerFormatFunction());
+        formatFunctions.put("money", new MoneyFormatFunction());
     }
 
     public DisplayFormula(Element displayElement) {
