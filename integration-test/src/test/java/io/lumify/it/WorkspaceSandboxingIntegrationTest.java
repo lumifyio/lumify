@@ -18,7 +18,6 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceSandboxingIntegrationTest extends TestBase {
-    private static final String NAME_PROPERTY_IRI = "http://lumify.io/test#name";
     private String susanFengVertexId;
 
     @Test
@@ -41,14 +40,14 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "");
+        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "");
         susanFengVertexId = susanFengVertex.getId();
         lumifyApi.getVertexApi().setProperty(susanFengVertexId, TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Susan Feng", "", "test", null, null);
 
         lumifyTestCluster.processGraphPropertyQueue();
-        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key1", NAME_PROPERTY_IRI, "Joe", "A", "test", null, null);
-        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key2", NAME_PROPERTY_IRI, "Bob", "A", "test", null, null);
-        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key2", NAME_PROPERTY_IRI, "Sam", "B", "test", null, null);
+        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key1", TestOntology.PROPERTY_NAME, "Joe", "A", "test", null, null);
+        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key2", TestOntology.PROPERTY_NAME, "Bob", "A", "test", null, null);
+        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key2", TestOntology.PROPERTY_NAME, "Sam", "B", "test", null, null);
 
         assertPublishAll(lumifyApi, 17);
 
@@ -56,8 +55,8 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
         assertEquals(SandboxStatus.PUBLIC, susanFengVertex.getSandboxStatus());
         List<ClientApiProperty> properties = susanFengVertex.getProperties();
 
-        assertHasProperty(properties, "key1", NAME_PROPERTY_IRI, "Joe");
-        List<ClientApiProperty> key2Properties = getProperties(properties, "key2", NAME_PROPERTY_IRI);
+        assertHasProperty(properties, "key1", TestOntology.PROPERTY_NAME, "Joe");
+        List<ClientApiProperty> key2Properties = getProperties(properties, "key2", TestOntology.PROPERTY_NAME);
         assertEquals(2, key2Properties.size());
         assertEquals("Bob", key2Properties.get(0).getValue());
         assertEquals("Sam", key2Properties.get(1).getValue());
@@ -73,15 +72,15 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
 
     private void addPropertyWithPublicChangeSandboxStatus() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key1", NAME_PROPERTY_IRI, "Tom", "A", "test", null, null);
-        List<ClientApiProperty> key1Properties = getProperties(susanFengVertex.getProperties(), "key1", NAME_PROPERTY_IRI);
+        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key1", TestOntology.PROPERTY_NAME, "Tom", "A", "test", null, null);
+        List<ClientApiProperty> key1Properties = getProperties(susanFengVertex.getProperties(), "key1", TestOntology.PROPERTY_NAME);
         assertEquals(2, key1Properties.size());
         assertEquals("Tom", key1Properties.get(0).getValue());
         assertEquals(SandboxStatus.PUBLIC_CHANGED, key1Properties.get(0).getSandboxStatus());
         assertEquals("Joe", key1Properties.get(1).getValue());
         assertEquals(SandboxStatus.PUBLIC, key1Properties.get(1).getSandboxStatus());
 
-        List<ClientApiProperty> key2Properties = getProperties(susanFengVertex.getProperties(), "key2", NAME_PROPERTY_IRI);
+        List<ClientApiProperty> key2Properties = getProperties(susanFengVertex.getProperties(), "key2", TestOntology.PROPERTY_NAME);
         assertEquals("Bob", key2Properties.get(0).getValue());
         assertEquals(SandboxStatus.PUBLIC, key2Properties.get(0).getSandboxStatus());
         assertEquals("Sam", key2Properties.get(1).getValue());
@@ -91,16 +90,16 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
 
     private void addPropertyWithPrivateSandboxStatus() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key2", NAME_PROPERTY_IRI, "Dave", "C", "test", null, null);
-        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key3", NAME_PROPERTY_IRI, "Susan", "", "test", null, null);
+        lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key2", TestOntology.PROPERTY_NAME, "Dave", "C", "test", null, null);
+        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key3", TestOntology.PROPERTY_NAME, "Susan", "", "test", null, null);
 
-        List<ClientApiProperty> key1Properties = getProperties(susanFengVertex.getProperties(), "key1", NAME_PROPERTY_IRI);
+        List<ClientApiProperty> key1Properties = getProperties(susanFengVertex.getProperties(), "key1", TestOntology.PROPERTY_NAME);
         assertEquals(2, key1Properties.size());
         assertEquals("Tom", key1Properties.get(0).getValue());
         assertEquals(SandboxStatus.PUBLIC_CHANGED, key1Properties.get(0).getSandboxStatus());
         assertEquals(SandboxStatus.PUBLIC, key1Properties.get(1).getSandboxStatus());
 
-        List<ClientApiProperty> key2Properties = getProperties(susanFengVertex.getProperties(), "key2", NAME_PROPERTY_IRI);
+        List<ClientApiProperty> key2Properties = getProperties(susanFengVertex.getProperties(), "key2", TestOntology.PROPERTY_NAME);
         assertEquals(3, key2Properties.size());
         assertEquals("Bob", key2Properties.get(0).getValue());
         assertEquals(SandboxStatus.PUBLIC, key2Properties.get(0).getSandboxStatus());
@@ -109,7 +108,7 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
         assertEquals("Dave", key2Properties.get(2).getValue());
         assertEquals(SandboxStatus.PRIVATE, key2Properties.get(2).getSandboxStatus());
 
-        List<ClientApiProperty> key3Properties = getProperties(susanFengVertex.getProperties(), "key3", NAME_PROPERTY_IRI);
+        List<ClientApiProperty> key3Properties = getProperties(susanFengVertex.getProperties(), "key3", TestOntology.PROPERTY_NAME);
         assertEquals(1, key3Properties.size());
         assertEquals("Susan", key3Properties.get(0).getValue());
         assertEquals(SandboxStatus.PRIVATE, key3Properties.get(0).getSandboxStatus());
@@ -134,13 +133,13 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
 
         VisibilityJson visibilityJsonNoSource = new VisibilityJson();
 
-        List<ClientApiProperty> key1Properties = getProperties(susanFengVertex.getProperties(), "key1", NAME_PROPERTY_IRI);
+        List<ClientApiProperty> key1Properties = getProperties(susanFengVertex.getProperties(), "key1", TestOntology.PROPERTY_NAME);
         assertEquals(1, key1Properties.size());
-        assertHasProperty(key1Properties, "key1", NAME_PROPERTY_IRI, "Tom");
+        assertHasProperty(key1Properties, "key1", TestOntology.PROPERTY_NAME, "Tom");
         ClientApiProperty key1Property = key1Properties.get(0);
         checkVisibility(key1Property, visibilityJsonA);
 
-        List<ClientApiProperty> key2Properties = getProperties(susanFengVertex.getProperties(), "key2", NAME_PROPERTY_IRI);
+        List<ClientApiProperty> key2Properties = getProperties(susanFengVertex.getProperties(), "key2", TestOntology.PROPERTY_NAME);
         assertEquals(3, key2Properties.size());
         assertEquals("Bob", key2Properties.get(0).getValue());
         assertEquals("Sam", key2Properties.get(1).getValue());
@@ -149,9 +148,9 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
         checkVisibility(key2Properties.get(1), visibilityJsonB);
         checkVisibility(key2Properties.get(2), visibilityJsonC);
 
-        List<ClientApiProperty> key3Properties = getProperties(susanFengVertex.getProperties(), "key3", NAME_PROPERTY_IRI);
+        List<ClientApiProperty> key3Properties = getProperties(susanFengVertex.getProperties(), "key3", TestOntology.PROPERTY_NAME);
         assertEquals(1, key3Properties.size());
-        assertHasProperty(key3Properties, "key3", NAME_PROPERTY_IRI, "Susan");
+        assertHasProperty(key3Properties, "key3", TestOntology.PROPERTY_NAME, "Susan");
         ClientApiProperty key3Property = key3Properties.get(0);
         checkVisibility(key3Property, visibilityJsonNoSource);
         lumifyApi.logout();

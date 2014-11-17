@@ -190,7 +190,7 @@ public class UploadFileIntegrationTest extends TestBase {
         assertNotNull(highlightedText);
         LOGGER.info("highlightedText: %s", highlightedText);
         assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("class=\"entity\""));
-        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains(CONCEPT_TEST_PERSON));
+        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains(TestOntology.CONCEPT_PERSON));
     }
 
     private void assertRawRoute() throws ApiException, IOException {
@@ -225,7 +225,7 @@ public class UploadFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
         String geoPoint = ObjectMapperFactory.getInstance().writeValueAsString(new GeoPoint(38.8951, -77.0367));
-        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", TestOntology.GEO_LOCATION.getPropertyName(), geoPoint, "", "justification", null, null);
+        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", TestOntology.PROPERTY_GEO_LOCATION.getPropertyName(), geoPoint, "", "justification", null, null);
 
         ClientApiVertexSearchResponse geoSearchResults = lumifyApi.getVertexApi().vertexGeoSearch(38.8951, -77.0367, 1000.0);
         assertEquals(1, geoSearchResults.getVertices().size());

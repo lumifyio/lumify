@@ -22,8 +22,6 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceUndoIntegrationTest extends TestBase {
     public static final String FILE_CONTENTS = "Susan Feng knows Jeff Kunkle. They both worked in Reston, VA, 20191";
-    private static final String CONCEPT_TEST_CITY = "http://lumify.io/test#city";
-    private static final String CONCEPT_TEST_ZIP_CODE = "http://lumify.io/test#zipCode";
 
     @Test
     public void testWorkspaceUndo() throws IOException, ApiException {
@@ -41,20 +39,20 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "");
+        ClientApiElement susanFengVertex = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "");
         lumifyApi.getVertexApi().setProperty(susanFengVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Susan Feng", "", "test", null, null);
 
-        ClientApiElement jeffKunkleVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "");
+        ClientApiElement jeffKunkleVertex = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "");
         lumifyApi.getVertexApi().setProperty(jeffKunkleVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Jeff Kunkle", "", "test", null, null);
 
-        lumifyApi.getEdgeApi().create(susanFengVertex.getId(), jeffKunkleVertex.getId(), TestOntology.WORKS_FOR, "");
+        lumifyApi.getEdgeApi().create(susanFengVertex.getId(), jeffKunkleVertex.getId(), TestOntology.EDGE_LABEL_WORKS_FOR, "");
         ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(susanFengVertex.getId(), null, null, null);
         assertEquals(1, edges.getRelationships().size());
 
         edges = lumifyApi.getVertexApi().getEdges(artifactVertexId, null, null, null);
         assertEquals(2, edges.getRelationships().size());
         ClientApiElement restonVertex = edges.getRelationships().get(0).getVertex();
-        assertHasProperty(restonVertex.getProperties(), ClavinTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.CONCEPT_TYPE.getPropertyName(), CONCEPT_TEST_CITY);
+        assertHasProperty(restonVertex.getProperties(), ClavinTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.CONCEPT_TYPE.getPropertyName(), TestOntology.CONCEPT_CITY);
         assertHasProperty(restonVertex.getProperties(), ClavinTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "CLAVIN");
         assertHasProperty(restonVertex.getProperties(), ClavinTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.TITLE.getPropertyName(), "Reston (US, VA)");
         VisibilityJson visibilityJson = new VisibilityJson();
@@ -63,7 +61,7 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
         assertHasProperty(restonVertex.getProperties(), ClavinTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson);
 
         ClientApiElement zipCodeVertex = edges.getRelationships().get(1).getVertex();
-        assertHasProperty(zipCodeVertex.getProperties(), ZipCodeResolverTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.CONCEPT_TYPE.getPropertyName(), CONCEPT_TEST_ZIP_CODE);
+        assertHasProperty(zipCodeVertex.getProperties(), ZipCodeResolverTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.CONCEPT_TYPE.getPropertyName(), TestOntology.CONCEPT_ZIP_CODE);
         assertHasProperty(zipCodeVertex.getProperties(), ZipCodeResolverTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.SOURCE.getPropertyName(), "Zip Code Resolver");
         assertHasProperty(zipCodeVertex.getProperties(), ZipCodeResolverTermMentionFilter.MULTI_VALUE_PROPERTY_KEY, LumifyProperties.TITLE.getPropertyName(), "20191 - Reston, VA");
         visibilityJson = new VisibilityJson();

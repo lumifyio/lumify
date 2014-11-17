@@ -125,12 +125,12 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         int videoFrameIndex = 0;
         int mentionStart = "".length();
         int mentionEnd = mentionStart + "Salam".length();
-        lumifyApi.getVertexApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Salam", CONCEPT_TEST_PERSON, "auth1");
+        lumifyApi.getVertexApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Salam", TestOntology.CONCEPT_PERSON, "auth1");
 
         videoFrameIndex = 2;
         mentionStart = "appalling brutality what we know is that\nthree ".length();
         mentionEnd = mentionStart + "British".length();
-        lumifyApi.getVertexApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Great Britain", CONCEPT_TEST_PERSON, "auth1");
+        lumifyApi.getVertexApi().resolveVideoTranscriptTerm(artifactVertexId, propertyKey, videoFrameIndex, mentionStart, mentionEnd, "Great Britain", TestOntology.CONCEPT_PERSON, "auth1");
 
         lumifyTestCluster.processGraphPropertyQueue();
 

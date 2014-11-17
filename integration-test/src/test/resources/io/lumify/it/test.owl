@@ -2,23 +2,48 @@
 
 
 <!DOCTYPE rdf:RDF [
-        <!ENTITY lumify "http://lumify.io#" >
-        <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
-        <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
-        <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
-        <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-        ]>
+    <!ENTITY lumify "http://lumify.io#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
 
 
 <rdf:RDF xmlns="http://lumify.io/test#"
-         xml:base="http://lumify.io/test"
-         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-         xmlns:lumify="http://lumify.io#"
-         xmlns:owl="http://www.w3.org/2002/07/owl#"
-         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     xml:base="http://lumify.io/test"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:lumify="http://lumify.io#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <owl:Ontology rdf:about="http://lumify.io/test">
         <owl:imports rdf:resource="http://lumify.io"/>
     </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/test#textIndexHints -->
+
+    <owl:AnnotationProperty rdf:about="http://lumify.io/test#textIndexHints"/>
+    
+
+
+    <!-- http://lumify.io/test#userVisible -->
+
+    <owl:AnnotationProperty rdf:about="http://lumify.io/test#userVisible"/>
+    
 
 
     <!-- 
@@ -29,6 +54,8 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
 
     <!-- http://lumify.io/test#artifactHasEntity -->
 
@@ -36,6 +63,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
+    
 
 
     <!-- http://lumify.io/test#rawContainsImageOfEntity -->
@@ -44,13 +72,16 @@
         <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
+    
+
 
     <!-- http://lumify.io/test#worksFor -->
 
     <owl:ObjectProperty rdf:about="http://lumify.io/test#worksFor">
-        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
         <rdfs:range rdf:resource="http://lumify.io/test#company"/>
+        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
     </owl:ObjectProperty>
+    
 
 
     <!-- 
@@ -61,6 +92,8 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
 
     <!-- http://lumify.io#subrip -->
 
@@ -68,53 +101,86 @@
         <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
+    
+
 
     <!-- http://lumify.io/csv#mappingJson -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/csv#mappingJson">
-        <userVisible>false</userVisible>
         <textIndexHints>NONE</textIndexHints>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
+    
 
-    <!-- http://lumify.io/#firstName -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/test#firstName">
-        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-
-    <!-- http://lumify.io/#lastName -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/test#lastName">
-        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-
-    <!-- http://lumify.io/#name -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/test#name">
-        <rdfs:domain rdf:resource="http://lumify.io/test#company"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-
-    <!-- http://lumify.io/dev#geolocation -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/test#geolocation">
-        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
-        <rdfs:range rdf:resource="&lumify;geolocation"/>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-        <rdfs:domain rdf:resource="http://lumify.io/test#location"/>
-    </owl:DatatypeProperty>
 
     <!-- http://lumify.io/test#birthDate -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/test#birthDate">
         <rdfs:label xml:lang="en">Birth Date</rdfs:label>
-        <rdfs:range rdf:resource="&xsd;dateTime"/>
         <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/test#city -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/test#city">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/test#firstName -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/test#firstName">
+        <rdfs:label xml:lang="en">First Name</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/test#geolocation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/test#geolocation">
+        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
+        <rdfs:range rdf:resource="&lumify;geolocation"/>
+        <rdfs:domain rdf:resource="http://lumify.io/test#location"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/test#lastName -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/test#lastName">
+        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/test#name -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/test#name">
+        <rdfs:domain rdf:resource="http://lumify.io/test#company"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/test#zipCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/test#zipCode">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -124,18 +190,13 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
 
     <!-- http://lumify.io/test#artifact -->
 
     <owl:Class rdf:about="http://lumify.io/test#artifact"/>
-
-    <!-- http://lumify.io/test#location -->
-
-    <owl:Class rdf:about="http://lumify.io/test#location"/>
-
-    <!-- http://lumify.io/test#zipCode -->
-
-    <owl:Class rdf:about="http://lumify.io/test#zipCode"/>
+    
 
 
     <!-- http://lumify.io/test#audio -->
@@ -143,6 +204,15 @@
     <owl:Class rdf:about="http://lumify.io/test#audio">
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
     </owl:Class>
+    
+
+
+    <!-- http://lumify.io/test#company -->
+
+    <owl:Class rdf:about="http://lumify.io/test#company">
+        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#name&apos;)</lumify:titleFormula>
+    </owl:Class>
+    
 
 
     <!-- http://lumify.io/test#document -->
@@ -151,6 +221,7 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
         <lumify:displayType>document</lumify:displayType>
     </owl:Class>
+    
 
 
     <!-- http://lumify.io/test#image -->
@@ -158,28 +229,39 @@
     <owl:Class rdf:about="http://lumify.io/test#image">
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
     </owl:Class>
+    
+
+
+    <!-- http://lumify.io/test#location -->
+
+    <owl:Class rdf:about="http://lumify.io/test#location"/>
+    
 
 
     <!-- http://lumify.io/test#person -->
 
     <owl:Class rdf:about="http://lumify.io/test#person">
-        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) + ' ' + prop(&apos;http://lumify.io/test#lastName&apos;)</lumify:titleFormula>
-        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) || &apos;&apos;</lumify:subtitleFormula>
         <lumify:timeFormula>prop(&apos;http://lumify.io/test#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
+        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) + &apos; &apos; + prop(&apos;http://lumify.io/test#lastName&apos;)</lumify:titleFormula>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) || &apos;&apos;</lumify:subtitleFormula>
     </owl:Class>
+    
 
-    <!-- http://lumify.io/test#company -->
-
-    <owl:Class rdf:about="http://lumify.io/test#company">
-        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#name&apos;)</lumify:titleFormula>
-    </owl:Class>
 
     <!-- http://lumify.io/test#video -->
 
     <owl:Class rdf:about="http://lumify.io/test#video">
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
     </owl:Class>
+    
+
+
+    <!-- http://lumify.io/test#zipCode -->
+
+    <owl:Class rdf:about="http://lumify.io/test#zipCode"/>
 </rdf:RDF>
 
 
-        <!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
