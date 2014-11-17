@@ -102,17 +102,21 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 ClientApiVertexUndoItem vertexUndoItem = (ClientApiVertexUndoItem) data;
                 String vertexId = vertexUndoItem.getVertexId();
                 checkNotNull(vertexId);
-                Vertex vertex = graph.getVertex(vertexId, authorizations);
+                Vertex vertex = graph.getVertex(vertexId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 checkNotNull(vertex);
-                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
+                if (vertex.isHidden(authorizations)) {
+                    LOGGER.debug("un-hiding vertex: %s (workspaceId: %s)", vertex.getId(), workspaceId);
+                    // TODO see undoVertex for all the other things we need to bring back
+                    graph.markVertexVisible(vertex, new Visibility(workspaceId), authorizations);
+                } else if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
                     String msg = "Cannot undo a public vertex";
                     LOGGER.warn(msg);
                     data.setErrorMessage(msg);
                     workspaceUndoResponse.addFailure(data);
-                    continue;
+                } else {
+                    undoVertex(vertex, workspaceId, authorizations, user);
+                    verticesDeleted.put(vertexId);
                 }
-                undoVertex(vertex, workspaceId, authorizations, user);
-                verticesDeleted.put(vertexId);
             } catch (Exception ex) {
                 LOGGER.error("Error undoing %s", data.toString(), ex);
                 data.setErrorMessage(ex.getMessage());
@@ -135,7 +139,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
 
                 ClientApiRelationshipUndoItem relationshipUndoItem = (ClientApiRelationshipUndoItem) data;
-                Edge edge = graph.getEdge(relationshipUndoItem.getEdgeId(), authorizations);
+                Edge edge = graph.getEdge(relationshipUndoItem.getEdgeId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 if (edge == null) {
                     continue;
                 }
@@ -146,14 +150,19 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
 
                 checkNotNull(edge);
-                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
+
+                if (edge.isHidden(authorizations)) {
+                    LOGGER.debug("un-hiding edge: %s (workspaceId: %s)", edge.getId(), workspaceId);
+                    // TODO see workspaceHelper.deleteEdge for all the other things we need to bring back
+                    graph.markEdgeVisible(edge, new Visibility(workspaceId), authorizations);
+                } else if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
                     String error_msg = "Cannot undo a public edge";
                     LOGGER.warn(error_msg);
                     data.setErrorMessage(error_msg);
                     workspaceUndoResponse.addFailure(data);
-                    continue;
+                } else {
+                    workspaceHelper.deleteEdge(workspaceId, edge, sourceVertex, destVertex, entityHasImageIri, false, user, authorizations);
                 }
-                workspaceHelper.deleteEdge(workspaceId, edge, sourceVertex, destVertex, entityHasImageIri, false, user, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);
                 data.setErrorMessage(ex.getMessage());
@@ -172,7 +181,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 ClientApiPropertyUndoItem propertyUndoItem = (ClientApiPropertyUndoItem) data;
-                Vertex vertex = graph.getVertex(propertyUndoItem.getVertexId(), authorizations);
+                Vertex vertex = graph.getVertex(propertyUndoItem.getVertexId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 if (vertex == null) {
                     continue;
                 }
@@ -189,14 +198,17 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     }
                     SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
 
-                    if (propertySandboxStatus == SandboxStatus.PUBLIC) {
+                    if (property.isHidden(authorizations)) {
+                        LOGGER.debug("un-hiding property: %s (workspaceId: %s)", property, workspaceId);
+                        vertex.markPropertyVisible(property, new Visibility(workspaceId), authorizations);
+                    } else if (propertySandboxStatus == SandboxStatus.PUBLIC) {
                         String error_msg = "Cannot undo a public property";
                         LOGGER.warn(error_msg);
                         data.setErrorMessage(error_msg);
                         workspaceUndoResponse.addFailure(data);
-                        continue;
+                    } else {
+                        workspaceHelper.deleteProperty(vertex, property, false, workspaceId, user, authorizations);
                     }
-                    workspaceHelper.deleteProperty(vertex, property, false, workspaceId, user, authorizations);
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);
