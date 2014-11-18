@@ -643,6 +643,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${plugin.maven.surefire.version}</version>
+                    <configuration>
+                        <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
+                    </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.plugins</groupId>
