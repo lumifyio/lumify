@@ -25,6 +25,7 @@ public class PublicItemChangeIntegrationTest extends TestBase {
         createUsers();
         createTestGraph();
         testDeleteProperty();
+        testDeleteEdge();
     }
 
     private void createUsers() throws ApiException {
@@ -52,16 +53,20 @@ public class PublicItemChangeIntegrationTest extends TestBase {
         lumifyApi.getWorkspaceApi().publishAll(diffItems);
 
         lumifyApi.logout();
-    }
 
-    private void testDeleteProperty() throws ApiException {
-        LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
+        lumifyApi = login(USERNAME_TEST_USER_2);
 
         // add vertices to workspace
         ClientApiWorkspaceUpdateData updateData = new ClientApiWorkspaceUpdateData();
         updateData.getEntityUpdates().add(new ClientApiWorkspaceUpdateData.EntityUpdate(v1.getId(), new GraphPosition(0, 0)));
         updateData.getEntityUpdates().add(new ClientApiWorkspaceUpdateData.EntityUpdate(v2.getId(), new GraphPosition(0, 0)));
         lumifyApi.getWorkspaceApi().update(updateData);
+
+        lumifyApi.logout();
+    }
+
+    private void testDeleteProperty() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
 
         // delete the property
         lumifyApi.getVertexApi().deleteProperty(v1.getId(), "key1", TestOntology.PROPERTY_NAME);
@@ -97,4 +102,36 @@ public class PublicItemChangeIntegrationTest extends TestBase {
 
         lumifyApi.logout();
     }
+
+    private void testDeleteEdge() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
+
+        // delete the edge
+        lumifyApi.getVertexApi().deleteEdge(e1.getId());
+
+        // verify the diff
+        List<ClientApiWorkspaceDiff.Item> diffItems = lumifyApi.getWorkspaceApi().getDiff().getDiffs();
+        assertEquals(1, diffItems.size());
+        assertTrue("wrong diff type: " + diffItems.get(0).getClass().getName(), diffItems.get(0) instanceof ClientApiWorkspaceDiff.EdgeItem);
+        ClientApiWorkspaceDiff.EdgeItem ei = (ClientApiWorkspaceDiff.EdgeItem) diffItems.get(0);
+        assertEquals(e1.getId(), ei.getEdgeId());
+        assertTrue("is deleted", ei.isDeleted());
+        assertEquals(TestOntology.EDGE_LABEL_WORKS_FOR, ei.getLabel());
+
+        // publish the delete
+        ClientApiWorkspacePublishResponse publishResponse = lumifyApi.getWorkspaceApi().publishAll(diffItems);
+        assertTrue("publish not success", publishResponse.isSuccess());
+        assertEquals(0, publishResponse.getFailures().size());
+
+        lumifyApi.logout();
+
+        // verify all users see the delete
+        lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(v1.getId());
+        assertEquals(0, edges.getRelationships().size());
+
+        lumifyApi.logout();
+    }
+
 }

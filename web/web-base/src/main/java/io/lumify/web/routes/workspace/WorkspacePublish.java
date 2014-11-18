@@ -288,7 +288,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
             checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName());
             if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
-                publishProperty(vertexElementMutation, property, workspaceId, user);
+                publishNewProperty(vertexElementMutation, property, workspaceId, user);
             }
         }
 
@@ -331,7 +331,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 element.removeProperty(key, name, authorizations);
                 graph.flush();
                 return;
-            } else if (publishProperty(elementMutation, property, workspaceId, user)) {
+            } else if (publishNewProperty(elementMutation, property, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 graph.flush();
                 return;
@@ -340,7 +340,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         throw new LumifyException(String.format("no property with key '%s' and name '%s' found on workspace '%s'", key, name, workspaceId));
     }
 
-    private boolean publishProperty(ExistingElementMutation elementMutation, Property property, String workspaceId, User user) {
+    private boolean publishNewProperty(ExistingElementMutation elementMutation, Property property, String workspaceId, User user) {
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getMetadataValue(property.getMetadata());
         if (visibilityJson == null) {
             LOGGER.debug("skipping property %s. no visibility json property", property.toString());
@@ -365,7 +365,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, ClientApiPublishItem.Action action, String workspaceId, User user, Authorizations authorizations) {
-        if (action == ClientApiPublishItem.Action.delete) {
+        if (action == ClientApiPublishItem.Action.delete || edge.isHidden(authorizations)) {
             graph.removeEdge(edge, authorizations);
             return;
         }
@@ -388,7 +388,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : edge.getProperties()) {
-            publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+            publishNewProperty(edgeExistingElementMutation, property, workspaceId, user);
         }
 
         auditRepository.auditEdgeElementMutation(AuditAction.PUBLISH, edgeExistingElementMutation, edge, sourceVertex, destVertex, "", user, lumifyVisibility.getVisibility());
@@ -416,7 +416,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         ExistingElementMutation elementMutation = entityVertex.prepareMutation();
         Iterable<Property> glyphIconProperties = entityVertex.getProperties(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
         for (Property glyphIconProperty : glyphIconProperties) {
-            if (publishProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
+            if (publishNewProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 return;
             }

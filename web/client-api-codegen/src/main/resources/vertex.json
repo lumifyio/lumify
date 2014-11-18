@@ -210,6 +210,26 @@
             ]
         },
         {
+            "path": "/vertex/edge",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes an edge",
+                    "type": "void",
+                    "nickname": "deleteEdge",
+                    "parameters": [
+                        {
+                            "name": "edgeId",
+                            "description": "The edge id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "path": "/vertex/term-mentions",
             "operations": [
                 {

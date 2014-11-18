@@ -4,10 +4,7 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
-import io.lumify.web.clientapi.model.ClientApiElement;
-import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
-import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
+import io.lumify.web.clientapi.model.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -221,5 +218,9 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
 
     public ClientApiElement setProperty(String graphVertexId, String propertyKey, String propertyName, String value, String visibilitySource, String justificationText) throws ApiException {
         return setProperty(graphVertexId, propertyKey, propertyName, value, visibilitySource, justificationText, null, null);
+    }
+
+    public ClientApiVertexEdges getEdges(String graphVertexId) throws ApiException {
+        return getEdges(graphVertexId, null, null, null);
     }
 }
