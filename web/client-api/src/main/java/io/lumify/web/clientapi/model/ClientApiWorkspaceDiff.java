@@ -37,10 +37,12 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
     public abstract static class Item {
         private final String type;
         private final SandboxStatus sandboxStatus;
+        private boolean deleted;
 
-        protected Item(String type, SandboxStatus sandboxStatus) {
+        protected Item(String type, SandboxStatus sandboxStatus, boolean deleted) {
             this.type = type;
             this.sandboxStatus = sandboxStatus;
+            this.deleted = deleted;
         }
 
         public String getType() {
@@ -55,6 +57,10 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         public String toString() {
             return ClientApiConverter.clientApiToString(this);
         }
+
+        public boolean isDeleted() {
+            return deleted;
+        }
     }
 
     public static class EdgeItem extends Item {
@@ -63,20 +69,18 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         private String outVertexId;
         private String inVertexId;
         private JsonNode visibilityJson;
-        private boolean deleted;
 
         public EdgeItem() {
-            super("EdgeDiffItem", SandboxStatus.PRIVATE);
+            super("EdgeDiffItem", SandboxStatus.PRIVATE, false);
         }
 
         public EdgeItem(String edgeId, String label, String outVertexId, String inVertexId, JsonNode visibilityJson, SandboxStatus sandboxStatus, boolean deleted) {
-            super("EdgeDiffItem", sandboxStatus);
+            super("EdgeDiffItem", sandboxStatus, deleted);
             this.edgeId = edgeId;
             this.label = label;
             this.outVertexId = outVertexId;
             this.inVertexId = inVertexId;
             this.visibilityJson = visibilityJson;
-            this.deleted = deleted;
         }
 
         public String getEdgeId() {
@@ -98,29 +102,23 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         public JsonNode getVisibilityJson() {
             return visibilityJson;
         }
-
-        public boolean isDeleted() {
-            return deleted;
-        }
     }
 
     public static class VertexItem extends Item {
-        private boolean deleted;
         private String vertexId;
         private JsonNode visibilityJson;
         private boolean visible;
         private String title;
 
         public VertexItem() {
-            super("VertexDiffItem", SandboxStatus.PRIVATE);
+            super("VertexDiffItem", SandboxStatus.PRIVATE, false);
         }
 
         public VertexItem(String vertexId, String title, JsonNode visibilityJson, SandboxStatus sandboxStatus, boolean deleted, boolean visible) {
-            super("VertexDiffItem", sandboxStatus);
+            super("VertexDiffItem", sandboxStatus, deleted);
             this.vertexId = vertexId;
             this.visibilityJson = visibilityJson;
             this.visible = visible;
-            this.deleted = deleted;
             this.title = title;
         }
 
@@ -139,14 +137,9 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         public String getTitle() {
             return title;
         }
-
-        public boolean isDeleted() {
-            return deleted;
-        }
     }
 
     public static class PropertyItem extends Item {
-        private boolean deleted;
         private String elementId;
         private String name;
         private String key;
@@ -158,17 +151,16 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         private JsonNode newData;
 
         public PropertyItem() {
-            super("PropertyDiffItem", SandboxStatus.PRIVATE);
+            super("PropertyDiffItem", SandboxStatus.PRIVATE, false);
         }
 
         public PropertyItem(String elementId, String name, String key, JsonNode oldData, JsonNode newData, SandboxStatus sandboxStatus, boolean deleted, String visibilityString) {
-            super("PropertyDiffItem", sandboxStatus);
+            super("PropertyDiffItem", sandboxStatus, deleted);
             this.elementId = elementId;
             this.name = name;
             this.key = key;
             this.oldData = oldData;
             this.newData = newData;
-            this.deleted = deleted;
             this.visibilityString = visibilityString;
         }
 
@@ -194,10 +186,6 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
 
         public String getVisibilityString() {
             return visibilityString;
-        }
-
-        public boolean isDeleted() {
-            return deleted;
         }
     }
 }

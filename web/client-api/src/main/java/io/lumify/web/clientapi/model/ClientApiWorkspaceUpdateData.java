@@ -38,6 +38,15 @@ public class ClientApiWorkspaceUpdateData implements ClientApiObject {
         private String vertexId;
         private GraphPosition graphPosition;
 
+        public EntityUpdate() {
+
+        }
+
+        public EntityUpdate(String vertexId, GraphPosition graphPosition) {
+            this.vertexId = vertexId;
+            this.graphPosition = graphPosition;
+        }
+
         public String getVertexId() {
             return vertexId;
         }

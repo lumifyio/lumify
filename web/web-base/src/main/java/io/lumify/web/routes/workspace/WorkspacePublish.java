@@ -99,7 +99,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 ClientApiVertexPublishItem vertexPublishItem = (ClientApiVertexPublishItem) data;
                 String vertexId = vertexPublishItem.getVertexId();
                 checkNotNull(vertexId);
-                Vertex vertex = graph.getVertex(vertexId, authorizations);
+                Vertex vertex = graph.getVertex(vertexId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 checkNotNull(vertex);
                 if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC && !vertex.isHidden(authorizations)) {
                     String msg;
@@ -132,7 +132,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 ClientApiRelationshipPublishItem relationshipPublishItem = (ClientApiRelationshipPublishItem) data;
-                Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), authorizations);
+                Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
                 Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
                 if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC && !edge.isHidden(authorizations)) {
@@ -175,7 +175,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 ClientApiPropertyPublishItem propertyPublishItem = (ClientApiPropertyPublishItem) data;
-                Element element = getPropertyElement(authorizations, propertyPublishItem);
+                Element element = getPropertyElement(propertyPublishItem, authorizations);
 
                 String propertyKey = propertyPublishItem.getKey();
                 String propertyName = propertyPublishItem.getName();
@@ -236,27 +236,27 @@ public class WorkspacePublish extends BaseRequestHandler {
         graph.flush();
     }
 
-    private Element getPropertyElement(Authorizations authorizations, ClientApiPropertyPublishItem data) {
+    private Element getPropertyElement(ClientApiPropertyPublishItem data, Authorizations authorizations) {
         Element element = null;
 
         String elementId = data.getEdgeId();
         if (elementId != null) {
-            element = graph.getEdge(elementId, authorizations);
+            element = graph.getEdge(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
         }
 
         if (element == null) {
             elementId = data.getVertexId();
             if (elementId != null) {
-                element = graph.getVertex(elementId, authorizations);
+                element = graph.getVertex(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
             }
         }
 
         if (element == null) {
             elementId = data.getElementId();
             checkNotNull(elementId, "elementId, vertexId, or edgeId is required to publish a property");
-            element = graph.getVertex(elementId, authorizations);
+            element = graph.getVertex(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
             if (element == null) {
-                element = graph.getEdge(elementId, authorizations);
+                element = graph.getEdge(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
             }
         }
 
@@ -327,7 +327,11 @@ public class WorkspacePublish extends BaseRequestHandler {
             if (!property.getKey().equals(key)) {
                 continue;
             }
-            if (publishProperty(elementMutation, property, workspaceId, user)) {
+            if (property.isHidden(authorizations)) {
+                element.removeProperty(key, name, authorizations);
+                graph.flush();
+                return;
+            } else if (publishProperty(elementMutation, property, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 graph.flush();
                 return;
@@ -343,7 +347,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             return false;
         }
         if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
-            LOGGER.debug("skipping property %s. doesn't have workspace in json.", property.toString());
+            LOGGER.debug("skipping property %s. doesn't have workspace in json or is not hidden from this workspace.", property.toString());
             return false;
         }
 
