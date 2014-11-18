@@ -1106,7 +1106,6 @@ define([
 
         this.onWorkspaceUpdated = function(event, data) {
             if (lumifyData.currentWorkspaceId === data.workspace.workspaceId) {
-            //if (this.previousWorkspace === data.workspace.workspaceId) {
                 this.isWorkspaceEditable = data.workspace.editable;
                 this.cytoscapeReady(function(cy) {
                     var self = this,
