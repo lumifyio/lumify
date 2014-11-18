@@ -577,11 +577,9 @@ define([
         this.onAddProperty = function(event, data) {
             if (data.property.name === 'http://lumify.io#visibilityJson') {
                 if (data.isEdge) {
-                    edgeService.setVisibility(
-                        this.attr.data.id,
-                        data.property.visibilitySource)
-                        .fail(this.requestFailure.bind(this))
-                        .done(this.closePropertyForm.bind(this));
+                    this.dataRequest('edge', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                        .then(this.closePropertyForm.bind(this))
+                        .catch(this.requestFailure.bind(this))
                 } else {
                     this.dataRequest('vertex', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
                         .then(this.closePropertyForm.bind(this))

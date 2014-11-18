@@ -6,7 +6,8 @@ define([
     'util/retina',
     'util/withFileDrop',
     'util/privileges',
-    'util/vertex/formatters'
+    'util/vertex/formatters',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
@@ -14,13 +15,14 @@ define([
     retina,
     withFileDrop,
     Privileges,
-    F) {
+    F,
+    withDataRequest) {
     'use strict';
 
     // Limit previews to 1MB since it's a dataUri
     var MAX_PREVIEW_FILE_SIZE = 1024 * 1024;
 
-    return defineComponent(ImageView, withFileDrop);
+    return defineComponent(ImageView, withFileDrop, withDataRequest);
 
     function ImageView() {
 
@@ -208,16 +210,16 @@ define([
             this.manualAnimation = false;
             this.firstProgressUpdate = true;
 
-            vertexService.uploadImage(this.attr.data.id, file)
+            this.dataRequest('vertex', 'uploadImage', this.attr.data.id, file)
                 .progress(function(complete) {
                     self.trigger('fileprogress', { complete: complete });
                 })
-                .fail(function(xhr, message, error) {
-                    self.trigger('fileerror', { status: xhr.status, response: error });
-                })
-                .done(function(vertex) {
+                .then(function(vertex) {
                     self.trigger('filecomplete', { vertex: vertex });
-                });
+                })
+                .catch(function(xhr) {
+                    self.trigger('fileerror', { status: xhr.status, response: xhr.error });
+                })
         };
 
         this.handleFileDrop = function(file) {

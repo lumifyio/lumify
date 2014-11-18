@@ -9,6 +9,13 @@ define([], function() {
             }
 
             Service[message.data.method].apply(undefined, message.data.parameters || [])
+                .progress(function(p) {
+                    dispatchMain('dataRequestProgress', {
+                        progress: p,
+                        requestId: message.data.requestId,
+                        originalRequest: _.pick(message.data, 'service', 'method', 'parameters')
+                    });
+                })
                 .then(function(result) {
                     dispatchMain('dataRequestCompleted', {
                         success: true,

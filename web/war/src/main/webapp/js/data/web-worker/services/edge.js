@@ -30,7 +30,12 @@ define([
                     throw new Error('Can only get one edge at a time');
                 }
                 return api.properties(toRequest[0]);
-            })
+            }),
+
+        setVisibility: function(edgeId, visibilitySource) {
+            // TODO
+        }
+
     };
 
     return api;

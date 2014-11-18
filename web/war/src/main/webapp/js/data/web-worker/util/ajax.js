@@ -8,6 +8,29 @@ define(['util/promise'], function() {
         return key + '=' + encodeURIComponent(value);
     }
 
+    function isFile(params) {
+        return params && (
+            params instanceof FormData ||
+            (params instanceof File) ||
+            _.isArray(params)
+        )
+    }
+
+    function toFileUpload(params) {
+        if (params instanceof FormData) {
+            return params;
+        }
+        var formData = new FormData();
+        if (!_.isArray(params)) {
+            params = [params];
+        }
+        params.forEach(function(file) {
+            formData.append(file.name, file);
+        });
+
+        return formData;
+    }
+
     function toQueryString(params) {
         var str = '', key;
         for (key in params) {
@@ -38,7 +61,8 @@ define(['util/promise'], function() {
 
         return new Promise(function(fulfill, reject) {
             var r = new XMLHttpRequest(),
-                params = toQueryString(parameters),
+                progressHandler,
+                params = isFile(parameters) ? toFileUpload(parameters) : toQueryString(parameters),
                 resolvedUrl = BASE_URL +
                     url +
                     ((/GET|DELETE/.test(method) && parameters) ?
@@ -48,6 +72,9 @@ define(['util/promise'], function() {
                 formData;
 
             r.onload = function() {
+                if (r.upload) {
+                    r.upload.removeEventListener('progress', progressHandler);
+                }
                 var text = r.status === 200 && r.responseText;
 
                 if (text) {
@@ -74,13 +101,30 @@ define(['util/promise'], function() {
                 }
             };
             r.onerror = function() {
+                if (r.upload) {
+                    r.upload.removeEventListener('progress', progressHandler);
+                }
                 reject(new Error('Network Error'));
             };
             r.open(method || 'get', resolvedUrl, true);
 
+            if (r.upload) {
+                r.upload.addEventListener('progress', (progressHandler = function(event) {
+                    console.log(event)
+                    if (event.lengthComputable) {
+                        var complete = (event.loaded / event.total || 0);
+                        if (complete < 1.0) {
+                            fulfill.updateProgress(complete);
+                        }
+                    }
+                }), false);
+            }
+
             if (method === 'POST' && parameters) {
                 formData = params;
-                r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                if (!(params instanceof FormData)) {
+                    r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                }
             }
 
             if (debugOptions) {

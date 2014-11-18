@@ -1,14 +1,16 @@
 define([
     'flight/lib/component',
     'util/formatters',
+    'util/withDataRequest',
     'data'
 ], function(
     defineComponent,
     F,
+    withDataRequest,
     appData) {
     'use strict';
 
-    return defineComponent(FindPath);
+    return defineComponent(FindPath, withDataRequest);
 
     function FindPath() {
 
@@ -102,7 +104,7 @@ define([
             var self = this,
                 $target = $(event.target).addClass('loading').attr('disabled', true);
 
-            longRunningProcessService.get(this.attr.process.id)
+            this.dataRequest('longRunningProcess', 'get', this.attr.process.id)
                 .done(function(process) {
                     var paths = process.results && process.results.paths || [],
                         allVertices = _.flatten(paths),

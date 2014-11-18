@@ -17,6 +17,13 @@ define(['util/promise', 'underscore', 'jquery'], function(Promise, _, $) {
                     clearTimeout(request.timeoutTimer);
                 }
             })
+            .on('dataRequestProgress', function(event, data) {
+                var request = requests[data.requestId];
+                if (request) {
+                    console.log(data.progress)
+                    request.promiseFulfill.updateProgress(data.progress);
+                }
+            })
             .on('dataRequestCompleted', function(event, data) {
                 var request = cleanRequest(data.requestId);
                 if (request) {
@@ -48,10 +55,10 @@ define(['util/promise', 'underscore', 'jquery'], function(Promise, _, $) {
             $node = $(node),
             nodeEl = $node[0],
             $nodeInDom = $.contains(document.documentElement, nodeEl) ? $node : $(document),
-            args = arguments.length > argsStartIndex ? _.rest(arguments, argsStartIndex) : [];
-            promise = Promise.require('util/requirejs/promise!util/service/dataPromise')
-                .then(function() {
-                    var promise = new Promise(function(fulfill, reject) {
+            args = arguments.length > argsStartIndex ? _.rest(arguments, argsStartIndex) : [],
+            promise = new Promise(function(fulfill, reject) {
+                Promise.require('util/requirejs/promise!util/service/dataPromise')
+                    .then(function() {
                         requests[thisRequestId] = {
                             promiseFulfill: fulfill,
                             promiseReject: reject,
@@ -64,17 +71,15 @@ define(['util/promise', 'underscore', 'jquery'], function(Promise, _, $) {
                                 })
                             }, NO_DATA_RESPONSE_TIMEOUT_SECONDS * 1000)
                         };
-                    });
 
-                    $nodeInDom.trigger('dataRequest', {
-                        requestId: thisRequestId,
-                        service: service,
-                        method: method,
-                        parameters: args
-                    });
-
-                    return promise;
-                })
+                        $nodeInDom.trigger('dataRequest', {
+                            requestId: thisRequestId,
+                            service: service,
+                            method: method,
+                            parameters: args
+                        });
+                    })
+            });
 
         promise.cancel = function() {
             var request = cleanRequest(thisRequestId);

@@ -36,6 +36,13 @@ define([
             return ajax('GET', '/vertex/search', params);
         },
 
+        'geo-search': function(query) {
+        },
+
+        findPath: function(options) {
+            return ajax('GET', '/vertex/find-path', options);
+        },
+
         multiple: function(options) {
             return ajax('POST', '/vertex/multiple', options);
         },
@@ -83,6 +90,37 @@ define([
                 });
             }
         ),
+
+        uploadImage: function(vertexId, file) {
+            return ajax('POST', '/vertex/upload-image?' +
+                'graphVertexId=' + encodeURIComponent(vertexId), file);
+        },
+
+        create: function(conceptType, visibilitySource) {
+            return ajax('POST', '/vertex/new', {
+                conceptType: conceptType,
+                visibilitySource: visibilitySource
+            });
+        },
+
+        importFiles: function(files, visibilitySource) {
+            var formData = new FormData();
+
+            _.forEach(files, function(f) {
+                formData.append('file', f);
+                if (_.isString(visibilitySource)) {
+                    formData.append('visibilitySource', visibilitySource);
+                }
+            });
+
+            if (_.isArray(visibilitySource)) {
+                _.forEach(visibilitySource, function(v) {
+                    formData.append('visibilitySource', v);
+                });
+            }
+
+            return ajax('POST', '/vertex/import', formData);
+        },
 
         setVisibility: function() {},
 

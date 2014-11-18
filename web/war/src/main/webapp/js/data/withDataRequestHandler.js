@@ -35,5 +35,9 @@ define([], function() {
             this.trigger(message.type, message);
         };
 
+        this.dataRequestProgress = function(message) {
+            this.trigger(message.type, message);
+        };
+
     }
 });
