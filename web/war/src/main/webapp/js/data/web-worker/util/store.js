@@ -148,6 +148,18 @@ define([
                 return willChange;
             },
 
+            updateObject: function(data, options) {
+                var onlyIfExists = options && options.onlyIfExists === true;
+
+                if (data.vertex && resemblesVertex(data.vertex)) {
+                    var cached = api.getObject(data.workspaceId, 'vertex', data.vertex.id)
+                    if (cached || !onlyIfExists) {
+                        cacheVertices(data.workspaceId, [data.vertex]);
+                    }
+                }
+                // TODO: edges
+            },
+
             checkAjaxForPossibleCaching: function(xhr, json, workspaceId, request) {
                 if (resemblesVertex(json)) {
                     cacheVertices(workspaceId, [json]);

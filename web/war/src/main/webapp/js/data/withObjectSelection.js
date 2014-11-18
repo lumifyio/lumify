@@ -42,8 +42,12 @@ define([
         });
 
         this.onSelectAll = function(event, data) {
-            // TODO: get all workspace vertices
-            this.trigger('selectObjects', { vertices: [] });
+            var self = this;
+
+            this.dataRequest('workspace', 'store')
+                .done(function(vertices) {
+                    self.trigger('selectObjects', { vertexIds: _.keys(vertices) });
+                })
         };
 
         this.onDeleteSelected = function(event, data) {

@@ -292,6 +292,7 @@ public abstract class WorkQueueRepository {
 
         JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId, null);
         dataJson.put("vertex", vertexJson);
+        dataJson.put("workspaceId", workspaceId);
 
         JSONObject propertyJson = new JSONObject();
         propertyJson.put("graphVertexId", graphVertex.getId());
@@ -313,6 +314,7 @@ public abstract class WorkQueueRepository {
 
         JSONObject vertexJson = JsonSerializer.toJson(edge, workspaceId, null);
         dataJson.put("edge", vertexJson);
+        dataJson.put("workspaceId", workspaceId);
 
         JSONObject propertyJson = new JSONObject();
         propertyJson.put("graphEdgeId", edge.getId());

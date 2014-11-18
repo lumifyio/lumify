@@ -33,7 +33,7 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
         },
 
         store: function(workspaceId) {
-            var workspace = store.getObject(workspaceId, 'workspace');
+            var workspace = store.getObject(workspaceId || publicData.currentWorkspaceId, 'workspace');
             return Promise.resolve(workspace && workspace.vertices || []);
         },
 

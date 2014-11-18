@@ -26,16 +26,18 @@ define(['require'], function(require) {
                 });
             },
             userWorkspaceChange: NOOP,
+            propertiesChange: function(data) {
+                require(['../util/store'], function(store) {
+                    store.updateObject(data, { onlyIfExists:true });
+                });
+            }
         //'edgeDeletion',
         //'entityImageUpdated',
         //'longRunningProcessChange',
         //'propertiesChange',
         //'sync',
         //'textUpdated',
-        //'userWorkspaceChange',
         //'verticesDeleted',
-        //'workspaceChange',
-        //'workspaceDelete',
     };
 
     return function(data) {

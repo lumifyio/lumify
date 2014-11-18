@@ -10,6 +10,10 @@ define([], function() {
                 this.trigger(document, 'verticesUpdated', {
                     vertices: message.vertices
                 });
+            } else if (message && message.edges) {
+                this.trigger(document, 'edgesUpdated', {
+                    edges: message.edges
+                });
             }
         }
 
