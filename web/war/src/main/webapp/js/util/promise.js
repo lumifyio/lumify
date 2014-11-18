@@ -53,7 +53,6 @@ define(['promise-polyfill'], function() {
     function addProgress() {
         if (typeof Promise.prototype.progress !== 'function') {
             Promise.prototype.progress = function(progress) {
-                console.log('added progress callback', progress)
                 this._progressCallbacks = this._progressCallbacks || [];
                 this._progressCallbacks.push(progress);
                 return this;
@@ -79,7 +78,6 @@ define(['promise-polyfill'], function() {
             return self;
 
             function updateProgress(percent) {
-                console.log('updating progress', percent, self._progressCallbacks)
                 if (self._progressCallbacks) {
                     self._progressCallbacks.forEach(function(c) {
                         c(percent || 0);

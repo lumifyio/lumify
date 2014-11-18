@@ -13,7 +13,7 @@ define([
     withDataRequest) {
     'use strict';
 
-    return defineComponent(FindPathPopover, withVertexPopover, withFormFieldErrors);
+    return defineComponent(FindPathPopover, withVertexPopover, withFormFieldErrors, withDataRequest);
 
     function FindPathPopover() {
 

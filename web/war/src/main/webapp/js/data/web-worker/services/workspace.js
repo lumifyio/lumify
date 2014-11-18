@@ -27,6 +27,11 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
             });
         },
 
+        store: function(workspaceId) {
+            var workspace = store.getObject(workspaceId, 'workspace');
+            return Promise.resolve(workspace && workspace.vertices || []);
+        },
+
         save: function(workspaceId, changes) {
             if (arguments.length === 1) {
                 changes = workspaceId;

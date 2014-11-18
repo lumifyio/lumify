@@ -1,13 +1,11 @@
 define([
     'flight/lib/component',
     'util/formatters',
-    'util/withDataRequest',
-    'data'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     F,
-    withDataRequest,
-    appData) {
+    withDataRequest) {
     'use strict';
 
     return defineComponent(FindPath, withDataRequest);
@@ -39,18 +37,30 @@ define([
         });
 
         this.updateButton = function($button, workspaceId) {
-            var onDifferentWorkspace = workspaceId !== this.attr.process.workspaceId,
-                disabled = onDifferentWorkspace || (this.attr.process.resultsCount || 0) === 0;
+            var self = this,
+                onDifferentWorkspace = workspaceId !== this.attr.process.workspaceId,
+                noResults = (self.attr.process.resultsCount || 0) === 0;
 
-            if (disabled) {
-                $button.attr('disabled', true);
-            } else {
-                $button.removeAttr('disabled');
-            }
+            this.dataRequest('workspace', 'store', workspaceId)
+                .done(function(workspaceVertices) {
+                    var sourceDestInWorkspace = (self.attr.process.sourceVertexId in workspaceVertices) &&
+                            (self.attr.process.destVertexId in workspaceVertices),
+                        disabled = onDifferentWorkspace ||
+                            noResults ||
+                            !sourceDestInWorkspace;
 
-            $button.attr('title', disabled ?
-                i18n('popovers.find_path.wrong_workspace') :
-                i18n('popovers.find_path.show_path'));
+                    if (disabled) {
+                        $button.attr('disabled', true);
+                    } else {
+                        $button.removeAttr('disabled');
+                    }
+
+                    $button.attr('title', onDifferentWorkspace ?
+                        i18n('popovers.find_path.wrong_workspace') :
+                        !sourceDestInWorkspace ?
+                        i18n('popovers.find_path.source_dest_missing') :
+                        i18n('popovers.find_path.show_path'));
+                });
         };
 
         this.onWorkspaceLoaded = function(event, data) {
@@ -66,7 +76,7 @@ define([
                         ), F.number.pretty(count))
                     );
 
-            this.updateButton($button, appData.workspaceId);
+            this.updateButton($button, lumifyData.currentWorkspaceId);
 
             this.$node.empty().append($button);
         }
@@ -104,9 +114,14 @@ define([
             var self = this,
                 $target = $(event.target).addClass('loading').attr('disabled', true);
 
-            this.dataRequest('longRunningProcess', 'get', this.attr.process.id)
-                .done(function(process) {
-                    var paths = process.results && process.results.paths || [],
+            Promise.all([
+                this.dataRequest('longRunningProcess', 'get', this.attr.process.id),
+                this.dataRequest('workspace', 'store', this.attr.process.workspaceId)
+            ])
+                .done(function(results) {
+                    var process = results.shift(),
+                        workspaceVertices = results.shift(),
+                        paths = process.results && process.results.paths || [],
                         allVertices = _.flatten(paths),
                         verticesById = _.chain(allVertices)
                             .indexBy('id')
@@ -115,7 +130,7 @@ define([
                             .map(_.property('id'))
                             .unique()
                             .reject(function(vertexId) {
-                                return appData.inWorkspace(vertexId);
+                                return vertexId in workspaceVertices;
                             })
                             .value(),
                         map = {};

@@ -20,7 +20,6 @@ define(['util/promise', 'underscore', 'jquery'], function(Promise, _, $) {
             .on('dataRequestProgress', function(event, data) {
                 var request = requests[data.requestId];
                 if (request) {
-                    console.log(data.progress)
                     request.promiseFulfill.updateProgress(data.progress);
                 }
             })

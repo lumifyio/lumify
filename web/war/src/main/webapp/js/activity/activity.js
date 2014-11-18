@@ -6,7 +6,8 @@ define([
     'd3',
     'configuration/plugins/activity/plugin',
     'util/formatters',
-    'util/withCollapsibleSections'
+    'util/withCollapsibleSections',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
@@ -14,12 +15,13 @@ define([
     d3,
     ActivityHandlers,
     F,
-    withCollapsibleSections) {
+    withCollapsibleSections,
+    withDataRequest) {
     'use strict';
 
     var AUTO_UPDATE_INTERVAL_SECONDS = 60;
 
-    return defineComponent(Activity, withCollapsibleSections);
+    return defineComponent(Activity, withCollapsibleSections, withDataRequest);
 
     function processIsIndeterminate(process) {
         var handler = ActivityHandlers.activityHandlersByType[process.type];
@@ -100,8 +102,8 @@ define([
 
             if (processId) {
                 $button.addClass('loading');
-                longRunningProcessService[name](processId)
-                    .always(function() {
+                this.dataRequest('longRunningProcess', name, processId)
+                    .finally(function() {
                         $button.removeClass('loading');
                     })
                     .done(function() {

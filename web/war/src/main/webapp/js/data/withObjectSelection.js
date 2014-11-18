@@ -5,6 +5,21 @@ define([
 
     return withObjectSelection;
 
+    function defaultNoObjectsOrData(data) {
+        var baseObj = {
+                vertices: [],
+                edges: [],
+                vertexIds: [],
+                edgeIds: []
+            },
+            returnable = _.extend({}, baseObj);
+
+        returnable.vertexIds = _.indexBy(returnable.vertices, 'id');
+        returnable.edgeIds = _.indexBy(returnable.edges, 'id');
+
+        return returnable;
+    }
+
     function withObjectSelection() {
 
         var selectedObjects,
@@ -12,6 +27,8 @@ define([
 
         this.after('initialize', function() {
             ClipboardManager.attachTo(this.$node);
+
+            this.setPublicApi('selectedObjects', defaultNoObjectsOrData());
 
             this.on('selectObjects', this.onSelectObjects);
             this.on('selectAll', this.onSelectAll);
@@ -107,6 +124,8 @@ define([
             } else {
                 this.trigger('clipboardClear');
             }
+
+            this.setPublicApi('selectedObjects', defaultNoObjectsOrData(data));
 
             if (window.DEBUG) {
                 DEBUG.selectedObjects = data;
