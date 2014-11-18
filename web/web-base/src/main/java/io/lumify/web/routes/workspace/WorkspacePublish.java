@@ -14,6 +14,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -101,7 +102,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 checkNotNull(vertexId);
                 Vertex vertex = graph.getVertex(vertexId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 checkNotNull(vertex);
-                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC && !vertex.isHidden(authorizations)) {
+                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC && !WorkspaceDiffHelper.isPublicDelete(vertex, authorizations)) {
                     String msg;
                     if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         msg = "Cannot delete public vertex " + vertexId;
@@ -135,7 +136,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
                 Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
-                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC && !edge.isHidden(authorizations)) {
+                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC && !WorkspaceDiffHelper.isPublicDelete(edge, authorizations)) {
                     String error_msg;
                     if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         error_msg = "Cannot delete a public edge";
@@ -198,7 +199,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     }
                     SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
 
-                    if (propertySandboxStatus == SandboxStatus.PUBLIC && !property.isHidden(authorizations)) {
+                    if (propertySandboxStatus == SandboxStatus.PUBLIC && !WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
                         String error_msg;
                         if (data.getAction() == ClientApiPublishItem.Action.delete) {
                             error_msg = "Cannot delete a public property";
@@ -265,7 +266,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishVertex(Vertex vertex, ClientApiPublishItem.Action action, Authorizations authorizations, String workspaceId, User user) throws IOException {
-        if (action == ClientApiPublishItem.Action.delete || vertex.isHidden(authorizations)) {
+        if (action == ClientApiPublishItem.Action.delete || WorkspaceDiffHelper.isPublicDelete(vertex, authorizations)) {
             graph.removeVertex(vertex, authorizations);
             return;
         }
@@ -327,7 +328,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             if (!property.getKey().equals(key)) {
                 continue;
             }
-            if (property.isHidden(authorizations)) {
+            if (WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
                 element.removeProperty(key, name, authorizations);
                 graph.flush();
                 return;
@@ -365,7 +366,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, ClientApiPublishItem.Action action, String workspaceId, User user, Authorizations authorizations) {
-        if (action == ClientApiPublishItem.Action.delete || edge.isHidden(authorizations)) {
+        if (action == ClientApiPublishItem.Action.delete || WorkspaceDiffHelper.isPublicDelete(edge, authorizations)) {
             graph.removeEdge(edge, authorizations);
             return;
         }

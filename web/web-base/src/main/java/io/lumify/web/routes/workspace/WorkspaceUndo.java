@@ -8,6 +8,7 @@ import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -87,7 +88,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 checkNotNull(vertexId);
                 Vertex vertex = graph.getVertex(vertexId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 checkNotNull(vertex);
-                if (vertex.isHidden(authorizations)) {
+                if (WorkspaceDiffHelper.isPublicDelete(vertex, authorizations)) {
                     LOGGER.debug("un-hiding vertex: %s (workspaceId: %s)", vertex.getId(), workspaceId);
                     // TODO see WorkspaceHelper.deleteVertex for all the other things we need to bring back
                     graph.markVertexVisible(vertex, new Visibility(workspaceId), authorizations);
@@ -134,7 +135,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
                 checkNotNull(edge);
 
-                if (edge.isHidden(authorizations)) {
+                if (WorkspaceDiffHelper.isPublicDelete(edge, authorizations)) {
                     LOGGER.debug("un-hiding edge: %s (workspaceId: %s)", edge.getId(), workspaceId);
                     // TODO see workspaceHelper.deleteEdge for all the other things we need to bring back
                     graph.markEdgeVisible(edge, new Visibility(workspaceId), authorizations);
@@ -181,7 +182,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     }
                     SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
 
-                    if (property.isHidden(authorizations)) {
+                    if (WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
                         LOGGER.debug("un-hiding property: %s (workspaceId: %s)", property, workspaceId);
                         vertex.markPropertyVisible(property, new Visibility(workspaceId), authorizations);
                     } else if (propertySandboxStatus == SandboxStatus.PUBLIC) {

@@ -58,14 +58,26 @@ public class WorkspaceDiffHelper {
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getWorkspaceId());
         boolean isPrivateChange = sandboxStatus != SandboxStatus.PUBLIC;
-        boolean isDeleted = edge.isHidden(hiddenAuthorizations);
-        if (isPrivateChange || isDeleted) {
-            result.add(createWorkspaceDiffEdgeItem(edge, sandboxStatus, isDeleted));
+        boolean isPublicDelete = WorkspaceDiffHelper.isPublicDelete(edge, hiddenAuthorizations);
+        if (isPrivateChange || isPublicDelete) {
+            result.add(createWorkspaceDiffEdgeItem(edge, sandboxStatus, isPublicDelete));
         }
 
         diffProperties(workspace, edge, result, hiddenAuthorizations);
 
         return result;
+    }
+
+    public static boolean isPublicDelete(Edge edge, Authorizations authorizations) {
+        return edge.isHidden(authorizations);
+    }
+
+    public static boolean isPublicDelete(Vertex vertex, Authorizations authorizations) {
+        return vertex.isHidden(authorizations);
+    }
+
+    public static boolean isPublicDelete(Property property, Authorizations authorizations) {
+        return property.isHidden(authorizations);
     }
 
     private ClientApiWorkspaceDiff.EdgeItem createWorkspaceDiffEdgeItem(Edge edge, SandboxStatus sandboxStatus, boolean deleted) {
@@ -92,9 +104,9 @@ public class WorkspaceDiffHelper {
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(entityVertex, workspace.getWorkspaceId());
         boolean isPrivateChange = sandboxStatus != SandboxStatus.PUBLIC;
-        boolean isDeleted = entityVertex.isHidden(authorizations);
-        if (isPrivateChange || isDeleted) {
-            result.add(createWorkspaceDiffVertexItem(entityVertex, sandboxStatus, workspaceEntity.isVisible(), isDeleted));
+        boolean isPublicDelete = WorkspaceDiffHelper.isPublicDelete(entityVertex, authorizations);
+        if (isPrivateChange || isPublicDelete) {
+            result.add(createWorkspaceDiffVertexItem(entityVertex, sandboxStatus, workspaceEntity.isVisible(), isPublicDelete));
         }
 
         diffProperties(workspace, entityVertex, result, authorizations);
@@ -120,13 +132,13 @@ public class WorkspaceDiffHelper {
         for (int i = 0; i < properties.size(); i++) {
             Property property = properties.get(i);
             boolean isPrivateChange = propertyStatuses[i] != SandboxStatus.PUBLIC;
-            boolean isDelete = property.isHidden(hiddenAuthorizations);
-            if (isPrivateChange || isDelete) {
+            boolean isPublicDelete = WorkspaceDiffHelper.isPublicDelete(property, hiddenAuthorizations);
+            if (isPrivateChange || isPublicDelete) {
                 Property existingProperty = null;
                 if (isPrivateChange) {
                     existingProperty = findExistingProperty(properties, propertyStatuses, property);
                 }
-                result.add(createWorkspaceDiffPropertyItem(element, property, existingProperty, propertyStatuses[i], isDelete));
+                result.add(createWorkspaceDiffPropertyItem(element, property, existingProperty, propertyStatuses[i], isPublicDelete));
             }
         }
     }
