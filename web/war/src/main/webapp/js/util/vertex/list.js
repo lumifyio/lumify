@@ -392,9 +392,11 @@ define([
         };
 
         // Switching workspaces should clear the icon state and vertices
-        this.onWorkspaceClear = function() {
-            this.$node.find('li.graph-displayed').removeClass('graph-displayed');
-            this.$node.find('li.map-displayed').removeClass('map-displayed');
+        this.onWorkspaceClear = function(event, data) {
+            if (event.type !== 'workspaceDeleted' || lumifyData.currentWorkspaceId === data.workspaceId) {
+                this.$node.find('li.graph-displayed').removeClass('graph-displayed');
+                this.$node.find('li.map-displayed').removeClass('map-displayed');
+            }
         };
 
         this.onVerticesUpdated = function(event, data) {

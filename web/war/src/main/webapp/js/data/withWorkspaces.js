@@ -95,6 +95,8 @@ define([], function() {
             workspace.data = {
                 vertices: message.vertices
             };
+            this.setPublicApi('currentWorkspaceId', workspace.workspaceId);
+            this.setPublicApi('currentWorkspaceEditable', workspace.editable);
             this.trigger('workspaceLoaded', workspace);
             this.fireApplicationReadyOnce();
         };

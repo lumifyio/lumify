@@ -248,8 +248,8 @@ define([
 
             // TODO: convert to d3
             this.dataRequest('workspace', 'all')
-                .done(function(workspaceResponse) {
-                    var workspaces = workspaceResponse.workspaces || [],
+                .done(function(workspacesResponse) {
+                    var workspaces = workspacesResponse || [],
                         users = _.chain(workspaces)
                             .map(function(workspace) {
                                 return _.pluck(workspace.users, 'userId');

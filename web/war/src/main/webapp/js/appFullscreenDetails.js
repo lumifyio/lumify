@@ -217,8 +217,8 @@ define([
             var self = this;
 
             this.dataRequest('workspace', 'all')
-                .done(function(data) {
-                    if (data.workspaces.length > 1) {
+                .done(function(workspaces) {
+                    if (workspaces.length > 1) {
                         var template = _.template(
                             '<li data-id="{workspaceId}" ' +
                             '<% if (disabled) { %>class="disabled"<% } %>>' +
@@ -229,7 +229,7 @@ define([
                             .find('.caret').show()
                             .end()
                             .find('.dropdown-menu')
-                            .html(_.chain(data.workspaces)
+                            .html(_.chain(workspaces)
                                     .sortBy(function(w) {
                                         return w.title.toLowerCase();
                                     })

@@ -38,7 +38,7 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.on(document, 'socketMessage', this.onSocketMessage);
+            this.on(document, 'userStatusChange', this.onUserStatusChange);
 
             this.editable = this.attr.data.editable;
 
@@ -87,18 +87,15 @@ define([
             }
         });
 
-        this.onSocketMessage = function(event, message) {
-            if (message && ~'userStatusChange'.indexOf(message.type)) {
-                var user = message.data;
-                this.$node.find('.share-list > .user-row').each(function() {
-                    var $this = $(this);
-                    if ($this.data('userId') === user.id) {
-                        $this.find('.user-status')
-                            .removeClass('active idle offline unknown')
-                            .addClass((user.status && user.status.toLowerCase()) || 'unknown');
-                    }
-                })
-            }
+        this.onUserStatusChange = function(event, user) {
+            this.$node.find('.share-list > .user-row').each(function() {
+                var $this = $(this);
+                if ($this.data('userId') === user.id) {
+                    $this.find('.user-status')
+                        .removeClass('active idle offline unknown')
+                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                }
+            })
         };
 
         var timeout;
@@ -145,7 +142,7 @@ define([
                 .done(function(users) {
                     self.currentUsers = users;
 
-                    _.sortBy(users, function(userPermission) {
+                    _.sortBy(workspaceUsers, function(userPermission) {
                         var user = users[userPermission.userId];
                         return user && user.displayName || 1;
                     }).forEach(function(userPermission) {
@@ -269,7 +266,7 @@ define([
 
             this.dataRequest('workspace', 'delete', workspaceId)
                 .then(function() {
-                    self.trigger('workspaceDeleted', { workspaceId: workspaceId });
+                    //self.trigger('workspaceDeleted', { workspaceId: workspaceId });
                 })
                 .catch(function() {
                     $target.text(previousText).removeAttr('disabled');

@@ -10,7 +10,12 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
         },
 
         all: function() {
-            return ajax('GET', '/workspace/all');
+            return ajax('GET', '/workspace/all')
+                .then(function(result) {
+                    return _.sortBy(result.workspaces, function(w) {
+                        return w.title.toLowerCase();
+                    });
+                })
         },
 
         get: function(workspaceId) {

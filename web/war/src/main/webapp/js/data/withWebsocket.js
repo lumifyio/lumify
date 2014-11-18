@@ -5,11 +5,14 @@ define(['util/websocket'], function(websocketUtils) {
 
     function withWebsocket() {
 
-        this.after('setupDataWorker', function() {
-            this.setPublicApi('socketSourceGuid', websocketUtils.generateSourceGuid());
-            this.worker.postMessage({
-                type: 'atmosphereConfiguration',
-                configuration: this.getAtmosphereConfiguration()
+        this.after('initialize', function() {
+            var self = this;
+            this.on('applicationReady', function() {
+                self.setPublicApi('socketSourceGuid', websocketUtils.generateSourceGuid());
+                self.worker.postMessage({
+                    type: 'atmosphereConfiguration',
+                    configuration: this.getAtmosphereConfiguration()
+                })
             })
         });
 
@@ -18,6 +21,10 @@ define(['util/websocket'], function(websocketUtils) {
                 type: 'websocketSend',
                 message: message
             });
+        };
+
+        this.rebroadcastEvent = function(message) {
+            this.trigger(message.eventName, message.data);
         };
 
         this.getAtmosphereConfiguration = function() {

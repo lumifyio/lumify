@@ -150,7 +150,9 @@ define([
         };
 
         this.onWorkspaceUpdated = function(event, data) {
-            this.updateWithNewWorkspaceData(data.workspace);
+            if (lumifyData.currentWorkspaceId === data.workspace.workspaceId) {
+                this.updateWithNewWorkspaceData(data.workspace);
+            }
         };
 
         this.onEdgesLoaded = function(event, data) {

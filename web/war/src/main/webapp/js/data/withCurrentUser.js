@@ -26,9 +26,9 @@ define([], function() {
             var self = this;
 
             this.dataRequest('workspace', 'all')
-                .then(function(result) {
-                    if (result.workspaces.length) {
-                        return Promise.resolve(result.workspaces[0]);
+                .then(function(workspaces) {
+                    if (workspaces.length) {
+                        return Promise.resolve(workspaces[0]);
                     }
 
                     return self.dataRequest('workspace', 'create')

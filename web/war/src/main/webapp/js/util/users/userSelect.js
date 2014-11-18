@@ -22,7 +22,7 @@ define([
         this.after('initialize', function() {
             this.on('clearUser', this.onClearUser);
             this.on('updateFilterUserIds', this.onUpdateFilterUserIds);
-            this.on(document, 'socketMessage', this.onSocketMessage);
+            this.on(document, 'userStatusChange', this.onUserStatusChange);
 
             this.$node.html(template({
                 placeholder: this.attr.placeholder || i18n('user.selection.field.placeholder'),
@@ -31,18 +31,15 @@ define([
             this.setupTypeahead();
         });
 
-        this.onSocketMessage = function(event, message) {
-            if (message && ~'userStatusChange'.indexOf(message.type)) {
-                var user = message.data;
-                this.$node.find('.user-row').each(function() {
-                    var $this = $(this);
-                    if ($this.data('user').id === user.id) {
-                        $this.find('.user-status')
-                            .removeClass('active idle offline unknown')
-                            .addClass((user.status && user.status.toLowerCase()) || 'unknown');
-                    }
-                })
-            }
+        this.onUserStatusChange = function(event, user) {
+            this.$node.find('.user-row').each(function() {
+                var $this = $(this);
+                if ($this.data('user').id === user.id) {
+                    $this.find('.user-status')
+                        .removeClass('active idle offline unknown')
+                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                }
+            })
         };
 
         this.onUpdateFilterUserIds = function(event, data) {

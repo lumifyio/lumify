@@ -61,33 +61,53 @@ define([
                     }
                 });
                 workspace.vertices = _.omit(workspace.vertices, changes.entityDeletes);
-                // TODO: userDeletes and Updates
+                if (changes.title) {
+                    workspace.title = changes.title
+                }
+
+                var updatedIds = _.pluck(changes.userUpdates, 'userId');
+                updatedIds.concat(changes.userDeletes).forEach(function(userId) {
+                    for (var i = 0; i < workspace.users.length; i++) {
+                        if (workspace.users[i].userId === userId) {
+                            workspace.users.splice(i, 1);
+                            return;
+                        }
+                    }
+                });
+                workspace.users = workspace.users.concat(changes.userUpdates);
 
                 api.workspaceWasChangedRemotely(workspace);
                 return workspace;
             },
 
-            workspaceWasChangedRemotely: function(remoteWorkspace) {
-                remoteWorkspace.vertices = _.indexBy(remoteWorkspace.vertices, 'vertexId');
-                var workspace = api.getObject(remoteWorkspace.workspaceId, 'workspace');
-                if (!workspace) {
-                    // TODO: was just shared with user?
-                    return;
+            removeWorkspace: function(workspaceId) {
+                if (workspaceId in workspaceCaches) {
+                    delete workspaceCaches[workspaceId];
                 }
-                if (!_.isEqual(remoteWorkspace.vertices, workspace.vertices)) {
+            },
+
+            workspaceWasChangedRemotely: function(remoteWorkspace) {
+                var user = _.findWhere(remoteWorkspace.users, { userId: publicData.currentUser.id });
+                remoteWorkspace.editable = /WRITE/i.test(user && user.access);
+                remoteWorkspace.isSharedToUser = remoteWorkspace.createdBy !== publicData.currentUser.id;
+                if (('vertices' in remoteWorkspace)) {
+                    remoteWorkspace.vertices = _.indexBy(remoteWorkspace.vertices, 'vertexId');
+                }
+                var workspace = api.getObject(remoteWorkspace.workspaceId, 'workspace');
+                if (!workspace || !_.isEqual(remoteWorkspace, workspace)) {
                     console.debug('WORKSPACE UPDATED', remoteWorkspace, workspace)
 
                     var vertexIds = _.keys(remoteWorkspace.vertices),
-                        vertexIdsPrevious = _.keys(workspace.vertices),
+                        vertexIdsPrevious = workspace ? _.keys(workspace.vertices) : [],
                         addedIds = _.difference(vertexIds, vertexIdsPrevious),
                         removedIds = _.difference(vertexIdsPrevious, vertexIds),
                         updatedIds = _.without.apply(_, [vertexIds].concat(addedIds)),
                         added = _.values(_.pick(remoteWorkspace.vertices, addedIds)),
                         updated = _.compact(_.map(updatedIds, function(vId) {
-                            return _.isEqual(
+                            return (workspace && _.isEqual(
                                 remoteWorkspace.vertices[vId].graphPosition,
                                 workspace.vertices[vId].graphPosition
-                            ) ? null : remoteWorkspace.vertices[vId];
+                            )) ? null : remoteWorkspace.vertices[vId];
                         }));
 
                     require(['../services/vertex'], function(vertex) {
@@ -110,11 +130,12 @@ define([
             workspaceShouldSave: function(workspace, changes) {
                 var willChange = false;
 
-                willChange = willChange || changes.entityDeletes.length;
+                willChange = willChange || (changes.title && changes.title !== workspace.title);
+
                 willChange = willChange || changes.userDeletes.length;
+                willChange = willChange || changes.userUpdates.length;
 
-                // TODO: user updates
-
+                willChange = willChange || changes.entityDeletes.length;
                 willChange = willChange || _.any(changes.entityUpdates, function(entityUpdate) {
                     var workspaceVertex = _.findWhere(workspace.vertices, { vertexId: entityUpdate.vertexId });
                     if (workspaceVertex) {
