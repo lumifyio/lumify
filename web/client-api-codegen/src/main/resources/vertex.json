@@ -230,6 +230,26 @@
             ]
         },
         {
+            "path": "/vertex",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes a vertex",
+                    "type": "void",
+                    "nickname": "deleteVertex",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "The vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "path": "/vertex/term-mentions",
             "operations": [
                 {

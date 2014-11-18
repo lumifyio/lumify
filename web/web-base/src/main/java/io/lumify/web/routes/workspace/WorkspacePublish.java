@@ -265,7 +265,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishVertex(Vertex vertex, ClientApiPublishItem.Action action, Authorizations authorizations, String workspaceId, User user) throws IOException {
-        if (action == ClientApiPublishItem.Action.delete) {
+        if (action == ClientApiPublishItem.Action.delete || vertex.isHidden(authorizations)) {
             graph.removeVertex(vertex, authorizations);
             return;
         }

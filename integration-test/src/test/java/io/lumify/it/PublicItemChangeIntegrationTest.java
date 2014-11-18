@@ -13,6 +13,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PublicItemChangeIntegrationTest extends TestBase {
@@ -26,6 +27,7 @@ public class PublicItemChangeIntegrationTest extends TestBase {
         createTestGraph();
         testDeleteProperty();
         testDeleteEdge();
+        testDeleteVertex();
     }
 
     private void createUsers() throws ApiException {
@@ -134,4 +136,33 @@ public class PublicItemChangeIntegrationTest extends TestBase {
         lumifyApi.logout();
     }
 
+    private void testDeleteVertex() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
+
+        // delete the vertex
+        lumifyApi.getVertexApi().deleteVertex(v1.getId());
+
+        // verify the diff
+        List<ClientApiWorkspaceDiff.Item> diffItems = lumifyApi.getWorkspaceApi().getDiff().getDiffs();
+        assertEquals(1, diffItems.size());
+        assertTrue("wrong diff type: " + diffItems.get(0).getClass().getName(), diffItems.get(0) instanceof ClientApiWorkspaceDiff.VertexItem);
+        ClientApiWorkspaceDiff.VertexItem vi = (ClientApiWorkspaceDiff.VertexItem) diffItems.get(0);
+        assertEquals(v1.getId(), vi.getVertexId());
+        assertTrue("is deleted", vi.isDeleted());
+
+        // publish the delete
+        ClientApiWorkspacePublishResponse publishResponse = lumifyApi.getWorkspaceApi().publishAll(diffItems);
+        assertTrue("publish not success", publishResponse.isSuccess());
+        assertEquals(0, publishResponse.getFailures().size());
+
+        lumifyApi.logout();
+
+        // verify all users see the delete
+        lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiElement v = lumifyApi.getVertexApi().getByVertexId(v1.getId());
+        assertNull("vertex should not have been found", v);
+
+        lumifyApi.logout();
+    }
 }
