@@ -8,7 +8,6 @@ define([
     'workspaces/workspaces',
     'workspaces/overlay',
     'admin/admin',
-    'chat/chat',
     'activity/activity',
     'graph/graph',
     'detail/detail',
@@ -30,7 +29,6 @@ define([
     Workspaces,
     WorkspaceOverlay,
     Admin,
-    Chat,
     Activity,
     Graph,
     Detail,
@@ -64,7 +62,6 @@ define([
             workspaceOverlaySelector: '.workspace-overlay',
             adminSelector: '.admin-pane',
             helpDialogSelector: '.help-dialog',
-            chatSelector: '.chat-pane',
             activitySelector: '.activity-pane',
             graphSelector: '.graph-pane',
             mapSelector: '.map-pane',
@@ -81,7 +78,6 @@ define([
                 Search,
                 Workspaces,
                 Admin,
-                Chat,
                 Graph,
                 Map,
                 Detail,
@@ -104,8 +100,6 @@ define([
 
             this.on(document, 'error', this.onError);
             this.on(document, 'menubarToggleDisplay', this.toggleDisplay);
-            this.on(document, 'chatMessage', this.onChatMessage);
-            this.on(document, 'selectUser', this.onChatMessage);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.on(document, 'paneResized', this.onInternalPaneResize);
             this.on(document, 'toggleGraphDimensions', this.onToggleGraphDimensions);
@@ -116,7 +110,6 @@ define([
             this.on(document, 'changeView', this.onChangeView);
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'toggleActivityPane', this.toggleActivityPane);
-            this.on(document, 'toggleChatPane', this.toggleChatPane);
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
@@ -150,13 +143,6 @@ define([
                 }
             });
 
-            this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: i18n('chat.help.scope'),
-                shortcuts: {
-                    'alt-c': { fire: 'toggleChatPane', desc: i18n('chat.help.toggle') }
-                }
-            });
-
             // Prevent the fragment identifier from changing after an anchor
             // with href="#" not stopPropagation'ed
             $(document).on('click', 'a', this.trapAnchorClicks.bind(this));
@@ -167,7 +153,6 @@ define([
                 searchPane = content.filter('.search-pane').data(DATA_MENUBAR_NAME, 'search'),
                 workspacesPane = content.filter('.workspaces-pane').data(DATA_MENUBAR_NAME, 'workspaces'),
                 adminPane = content.filter('.admin-pane').data(DATA_MENUBAR_NAME, 'admin'),
-                chatPane = content.filter('.chat-pane').data(DATA_MENUBAR_NAME, 'chat'),
                 activityPane = content.filter('.activity-pane').data(DATA_MENUBAR_NAME, 'activity'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
                 detailPane = content.filter('.detail-pane').data(DATA_MENUBAR_NAME, 'detail'),
@@ -192,7 +177,6 @@ define([
             Search.attachTo(searchPane.find('.content'));
             Workspaces.attachTo(workspacesPane.find('.content'));
             Admin.attachTo(adminPane.find('.content'));
-            Chat.attachTo(chatPane.find('.content'));
             Activity.attachTo(activityPane.find('.content'));
             Graph.attachTo(graphPane.filter('.graph-pane-2d'));
             Map.attachTo(mapPane);
@@ -317,10 +301,6 @@ define([
             });
         };
 
-        this.toggleChatPane = function() {
-            this.trigger(document, 'menubarToggleDisplay', { name: 'chat' });
-        };
-
         this.toggleActivityPane = function() {
             this.trigger(document, 'menubarToggleDisplay', { name: 'activity' });
         };
@@ -437,14 +417,6 @@ define([
                             });
                         });
                     });
-            }
-        };
-
-        this.onChatMessage = function(e, data) {
-            if (!this.select('chatSelector').hasClass('visible')) {
-                this.trigger(document, 'menubarToggleDisplay', {
-                    name: this.select('chatSelector').data(DATA_MENUBAR_NAME)
-                });
             }
         };
 
@@ -707,8 +679,7 @@ define([
                 this.select('workspacesSelector'),
                 this.select('adminSelector'),
                 this.select('detailPaneSelector'),
-                this.select('activitySelector'),
-                this.select('chatSelector')
+                this.select('activitySelector')
             ]);
 
             $('.search-results').hide();
