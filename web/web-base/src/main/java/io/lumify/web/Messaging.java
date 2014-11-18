@@ -111,23 +111,11 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             onDisconnect(event, response);
         } else if (event.isSuspended()) {
             onMessage(event, response, (String) event.getMessage());
-        } else if (event.isResuming()) {
-            onResume(event, response);
-        } else if (event.isResumedOnTimeout()) {
-            onTimeout(event, response);
         }
     }
 
     public void onOpen(AtmosphereResource resource) throws IOException {
         setStatus(resource, UserStatus.ACTIVE);
-    }
-
-    public void onResume(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
-        LOGGER.debug("onResume");
-    }
-
-    public void onTimeout(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
-        LOGGER.debug("onTimeout");
     }
 
     public void onDisconnect(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
@@ -162,10 +150,6 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
     }
 
-    public void onClose(AtmosphereResourceEvent event, AtmosphereResponse response) {
-        setUserStatusToOffline(event);
-    }
-
     public void onMessage(AtmosphereResourceEvent event, AtmosphereResponse response, String message) throws IOException {
         try {
             if (!StringUtils.isBlank(message)) {
@@ -174,7 +158,11 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         } catch (Exception ex) {
             LOGGER.error("Could not handle async message: " + message, ex);
         }
-        response.write(message);
+        if (message != null) {
+            response.write(message);
+        } else {
+            setUserStatusToOffline(event);
+        }
     }
 
     private void processRequestData(AtmosphereResource resource, String message) {

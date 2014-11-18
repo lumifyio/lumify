@@ -30,6 +30,12 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
 
         try {
             JSONObject json = new JSONObject("" + originalMessage);
+
+            String type = json.optString("type");
+            if (type != null && type.equals("setActiveWorkspace")) {
+                return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
+            }
+
             JSONObject permissionsJson = json.optJSONObject("permissions");
             if (permissionsJson == null) {
                 return new BroadcastAction(message);
