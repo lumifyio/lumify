@@ -7,6 +7,8 @@ define([], function() {
         var lastReloadedState;
 
         this.after('initialize', function() {
+            this.fireApplicationReadyOnce = _.once(this.trigger.bind(this, 'applicationReady'));
+
             this.on('loadCurrentWorkspace', this.onLoadCurrentWorkspace);
             this.on('switchWorkspace', this.onSwitchWorkspace);
             this.on('reloadWorkspace', this.onReloadWorkspace);
@@ -94,6 +96,7 @@ define([], function() {
                 vertices: message.vertices
             };
             this.trigger('workspaceLoaded', workspace);
+            this.fireApplicationReadyOnce();
         };
     }
 });

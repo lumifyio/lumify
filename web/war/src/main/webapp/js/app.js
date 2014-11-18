@@ -200,8 +200,6 @@ define([
                     if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
                         $(document.body).off(TRANSITION_END);
                         self.trigger('loadCurrentWorkspace');
-                        //data.loadActiveWorkspace();
-                        //self.trigger(document, 'applicationReady');
                         graphPane.focus();
                     }
                 });
@@ -210,8 +208,6 @@ define([
                 })
             } else {
                 this.trigger('loadCurrentWorkspace');
-                //data.loadActiveWorkspace();
-                //self.trigger(document, 'applicationReady');
             }
 
             _.delay(function() {
