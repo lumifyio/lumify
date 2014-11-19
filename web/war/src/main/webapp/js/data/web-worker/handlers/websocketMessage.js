@@ -34,10 +34,7 @@ define(['require'], function(require) {
         //'edgeDeletion',
         //'entityImageUpdated',
         //'longRunningProcessChange',
-        //'propertiesChange',
-        //'sync',
         //'textUpdated',
-        //'verticesDeleted',
     };
 
     return function(data) {
