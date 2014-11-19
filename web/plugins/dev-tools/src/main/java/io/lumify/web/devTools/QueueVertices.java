@@ -37,6 +37,7 @@ public class QueueVertices extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String propertyName = getOptionalParameter(request, "propertyName");
+        final String workspaceId = getWorkspaceIdOrDefault(request);
         if (propertyName != null && propertyName.trim().length() == 0) {
             propertyName = null;
         }
@@ -50,11 +51,11 @@ public class QueueVertices extends BaseRequestHandler {
                 Iterable<Vertex> vertices = graph.getVertices(authorizations);
                 for (Vertex vertex : vertices) {
                     if (finalPropertyName == null) {
-                        workQueueRepository.pushElement(vertex);
+                        workQueueRepository.pushElement(vertex, workspaceId);
                     } else {
                         Iterable<Property> properties = vertex.getProperties(finalPropertyName);
                         for (Property property : properties) {
-                            workQueueRepository.pushGraphPropertyQueue(vertex, property);
+                            workQueueRepository.pushGraphPropertyQueue(vertex, property, workspaceId);
                         }
                     }
                 }

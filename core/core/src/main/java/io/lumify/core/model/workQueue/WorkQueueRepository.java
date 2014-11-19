@@ -33,8 +33,8 @@ public abstract class WorkQueueRepository {
         this.graph = graph;
     }
 
-    public void pushGraphPropertyQueue(final Element element, final Property property) {
-        pushGraphPropertyQueue(element, property.getKey(), property.getName());
+    public void pushGraphPropertyQueue(final Element element, final Property property, String workspaceId) {
+        pushGraphPropertyQueue(element, property.getKey(), property.getName(), workspaceId, null);
     }
 
     public void pushGraphPropertyQueue(final Element element, final Property property, String workspaceId, String visibilitySource) {
@@ -63,9 +63,6 @@ public abstract class WorkQueueRepository {
         broadcastEntityImage(element, propertyKey, propertyName);
     }
 
-    public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName) {
-        pushGraphPropertyQueue(element, propertyKey, propertyName, null, null);
-    }
 
     public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName,
                                        String workspaceId, String visibilitySource) {
@@ -118,20 +115,24 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushElement(Element element) {
-        pushGraphPropertyQueue(element, null, null);
+    public void pushElement(Element element, String workspaceId) {
+        pushGraphPropertyQueue(element, null, null, workspaceId, null);
     }
 
-    public void pushEdgeDeletion(Edge edge) {
-        broadcastEdgeDeletion(edge);
+    public void pushEdgeDeletion(Edge edge, String workspaceId) {
+        broadcastEdgeDeletion(edge, workspaceId);
     }
 
-    protected void broadcastEdgeDeletion(Edge edge) {
+    protected void broadcastEdgeDeletion(Edge edge, String workspaceId) {
         JSONObject dataJson = new JSONObject();
         if (edge != null) {
             dataJson.put("edgeId", edge.getId());
             dataJson.put("outVertexId", edge.getVertexId(Direction.OUT));
             dataJson.put("inVertexId", edge.getVertexId(Direction.IN));
+
+        }
+        if (workspaceId != null) {
+            dataJson.put("workspaceId", workspaceId);
         }
 
         JSONObject json = new JSONObject();

@@ -152,7 +152,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.graph.flush();
         workQueueRepository.pushTextUpdated(artifactId);
 
-        workQueueRepository.pushElement(edge);
+        workQueueRepository.pushElement(edge, workspaceId);
 
         respondWithSuccessJson(response);
     }

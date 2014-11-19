@@ -95,7 +95,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, user, authorizations);
+        workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, user, workspaceId, authorizations);
         respondWithSuccessJson(response);
     }
 }

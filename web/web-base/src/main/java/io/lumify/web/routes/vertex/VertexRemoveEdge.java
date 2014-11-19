@@ -66,7 +66,7 @@ public class VertexRemoveEdge extends BaseRequestHandler {
             return;
         }
 
-        workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+        workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, workspaceId, authorizations);
         respondWithSuccessJson(response);
     }
 }

@@ -154,7 +154,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     workspaceUndoResponse.addFailure(data);
                     continue;
                 }
-                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, workspaceId, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);
                 data.setErrorMessage(ex.getMessage());
@@ -233,7 +233,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     LumifyProperties.DETECTED_OBJECT.removeProperty(outVertex, multiValueKey, authorizations);
                     graph.removeEdge(edge, authorizations);
                     auditRepository.auditRelationship(AuditAction.DELETE, outVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
-                    this.workQueueRepository.pushEdgeDeletion(edge);
+                    this.workQueueRepository.pushEdgeDeletion(edge, workspaceId);
                     this.workQueueRepository.pushGraphPropertyQueue(outVertex, multiValueKey,
                             LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getSource());
                 }
@@ -241,7 +241,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         }
 
         for (Vertex termMention : termMentionRepository.findResolvedTo(vertex.getId(), authorizations)) {
-            workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations);
+            workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, workspaceId, authorizations);
             JSONObject result = new JSONObject();
             result.put("success", true);
             unresolved.put(result);

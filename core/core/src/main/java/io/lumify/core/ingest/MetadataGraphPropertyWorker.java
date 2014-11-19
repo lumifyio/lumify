@@ -50,7 +50,7 @@ public class MetadataGraphPropertyWorker extends GraphPropertyWorker {
             propertyKey = ElementMutation.DEFAULT_KEY;
         }
         String propertyName = propertyJson.optString("name");
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), propertyKey, propertyName);
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), propertyKey, propertyName, data.getWorkspaceId(), null);
     }
 
     private void setProperty(JSONObject propertyJson, GraphPropertyWorkData data) {

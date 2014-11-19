@@ -150,8 +150,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         graph.flush();
 
-        workQueueRepository.pushElement(edge);
-        workQueueRepository.pushGraphPropertyQueue(artifactVertex, propertyKey, LumifyProperties.DETECTED_OBJECT.getPropertyName());
+        workQueueRepository.pushElement(edge, workspaceId);
+        workQueueRepository.pushGraphPropertyQueue(artifactVertex, propertyKey, LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, null);
 
         ClientApiElement result = ClientApiConverter.toClientApi(artifactVertex, workspaceId, authorizations);
         respondWithClientApiObject(response, result);

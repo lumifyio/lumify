@@ -36,6 +36,7 @@ public class QueueEdges extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final Authorizations authorizations = getUserRepository().getAuthorizations(getUserRepository().getSystemUser());
+        final String workspaceId = getWorkspaceIdOrDefault(request);
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -43,7 +44,7 @@ public class QueueEdges extends BaseRequestHandler {
                 LOGGER.info("requeue all edges");
                 Iterable<Edge> edges = graph.getEdges(authorizations);
                 for (Edge edge : edges) {
-                    workQueueRepository.pushElement(edge);
+                    workQueueRepository.pushElement(edge, workspaceId);
                 }
                 workQueueRepository.flush();
                 LOGGER.info("requeue all edges complete");

@@ -205,12 +205,12 @@ public class FileImport {
 
     private void pushOnQueue(Vertex vertex, Workspace workspace, String visibilitySource) {
         LOGGER.debug("pushing %s on to %s queue", vertex.getId(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
-        this.workQueueRepository.pushElement(vertex);
+        this.workQueueRepository.pushElement(vertex, workspace.getWorkspaceId());
         if (workspace != null) {
             this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY,
                     LumifyProperties.RAW.getPropertyName(), workspace.getWorkspaceId(), visibilitySource);
         } else {
-            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
+            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName(), workspace.getWorkspaceId(), null);
         }
     }
 

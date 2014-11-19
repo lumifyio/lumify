@@ -185,10 +185,10 @@ public abstract class GraphPropertyWorker {
         }
     }
 
-    protected void pushVideoTranscriptTextPropertiesOnWorkQueue(Element element, String propertyKey, VideoTranscript videoTranscript) {
+    protected void pushVideoTranscriptTextPropertiesOnWorkQueue(Element element, String propertyKey, VideoTranscript videoTranscript, String workspaceId) {
         for (VideoTranscript.TimedText entry : videoTranscript.getEntries()) {
             String textPropertyKey = getVideoTranscriptTimedTextPropertyKey(propertyKey, entry);
-            getWorkQueueRepository().pushGraphPropertyQueue(element, textPropertyKey, LumifyProperties.TEXT.getPropertyName());
+            getWorkQueueRepository().pushGraphPropertyQueue(element, textPropertyKey, LumifyProperties.TEXT.getPropertyName(), workspaceId, null);
         }
     }
 
