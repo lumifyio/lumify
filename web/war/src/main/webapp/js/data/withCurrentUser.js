@@ -19,8 +19,7 @@ define([], function() {
 
         this.around('dataRequestCompleted', function(dataRequestCompleted, request) {
             if (isUserMeRequest(request)) {
-                var self = this,
-                user = request.result;
+                var user = request.result;
 
                 this.setPublicApi('currentUser', user, { onlyIfNull:true });
 
