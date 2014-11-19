@@ -84,11 +84,13 @@ define([
         };
 
         this.onPromptAdd = function(event) {
-            this.trigger(document, 'addVertices', {
-                options: {
-                    addingVerticesRelatedTo: this.attr.relatedToVertexId
-                },
-                vertices: this.promptAddVertices
+            this.trigger('updateWorkspace', {
+                //layoutOptions: {
+                    //addingVerticesRelatedTo: this.attr.relatedToVertexId
+                //},
+                entityUpdates: this.promptAddVertices.map(function(vertex) {
+                    return { vertexId: vertex.id };
+                })
             });
             this.teardown();
         };
@@ -141,11 +143,13 @@ define([
                         self.promptAddVertices = vertices;
                         promptAdd.text(i18n('popovers.add_related.button.prompt_add', count)).show();
                     } else {
-                        self.trigger(document, 'addVertices', {
-                            options: {
-                                addingVerticesRelatedTo: self.attr.relatedToVertexId
-                            },
-                            vertices: vertices
+                        self.trigger('updateWorkspace', {
+                            //layoutOptions: {
+                                //addingVerticesRelatedTo: self.attr.relatedToVertexId
+                            //},
+                            entityUpdates: vertices.map(function(vertex) {
+                                return { vertexId: vertex.id };
+                            })
                         });
                         self.teardown();
                     }

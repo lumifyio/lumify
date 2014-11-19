@@ -95,18 +95,23 @@ define([
         };
 
         this.onAddVertices = function(event) {
-            var vertices = _.values(this.toAdd);
-
-            this.trigger('addVertices', {
-                vertices: vertices,
-                options: {
-                    layout: {
-                        type: 'path',
-                        map: this.toAddLayout
+            var vertexIds = [],
+                vertices = _.map(this.toAdd, function(vertex, vertexId) {
+                    vertexIds.push(vertexId);
+                    return {
+                        vertexId: vertexId
                     }
-                }
+                });
+
+            this.trigger('updateWorkspace', {
+                entityUpdates: vertices
+                // TODO: implement in graph
+                //layoutOptions: {
+                    //type: 'path',
+                    //map: this.toAddLayout
+                //}
             });
-            this.trigger('selectObjects', { vertices: vertices });
+            this.trigger('selectObjects', { vertexIds: vertexIds });
             this.loadDefaultContent();
         };
 

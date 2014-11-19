@@ -244,10 +244,6 @@ define([
             });
         };
 
-        this.onVerticesAdded = function(evt, data) {
-            this.addVertices(data.vertices, data.options);
-        };
-
         this.addVertices = function(vertices, opts) {
             var self = this,
                 options = $.extend({ fit: false, animate: false }, opts),
@@ -346,8 +342,11 @@ define([
                             cyNodeData.position = retina.pointsToPixels(layoutPositions[vertex.id]);
                             needsUpdating = true;
                         } else {
-
-                            cyNodeData.position = retina.pointsToPixels(nextAvailablePosition);
+                            var position = retina.pointsToPixels(nextAvailablePosition);
+                            cyNodeData.position = {
+                                x: Math.round(position.x),
+                                y: Math.round(position.y)
+                            };
 
                             nextAvailablePosition.x += xInc;
                             if ((nextAvailablePosition.x - startX) > maxWidth) {
@@ -373,7 +372,7 @@ define([
 
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
-                        v.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
+                        v.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v.vertexId)).position());
                         self.workspaceVertices[v.vertexId] = v;
                     });
 
@@ -1382,7 +1381,6 @@ define([
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
             this.on(document, 'verticesHoveringEnded', this.onVerticesHoveringEnded);
-            this.on(document, 'verticesAdded', this.onVerticesAdded);
             this.on(document, 'verticesDropped', this.onVerticesDropped);
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
