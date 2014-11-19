@@ -90,7 +90,7 @@ define([], function() {
         };
 
         this.workspaceLoaded = function(message) {
-            lastReloadedState.workspace = message;
+            lastReloadedState.workspace = message.workspace;
             var workspace = message.workspace;
             workspace.data = {
                 vertices: message.vertices

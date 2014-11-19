@@ -151,8 +151,8 @@ define([
         };
 
         this.onWorkspaceSaved = function(event, data) {
-            this.updateListItemWithData(data);
-            this.trigger(document, 'workspaceRemoteSave', data);
+            var li = this.findWorkspaceRow(data.workspaceId);
+            li.find('.badge').removeClass('loading').hide().next().show();
         };
 
         this.updateListItemWithData = function(data, timestamp) {
