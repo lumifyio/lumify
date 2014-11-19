@@ -31,11 +31,13 @@ define(['require'], function(require) {
                     store.updateObject(data, { onlyIfExists:true });
                 });
             }
-        //'edgeDeletion',
-        //'entityImageUpdated',
-        //'longRunningProcessChange',
-        //'textUpdated',
-    };
+
+            // TODO:
+            //'edgeDeletion',
+            //'entityImageUpdated',
+            //'longRunningProcessChange',
+            //'textUpdated',
+        };
 
     return function(data) {
         var body = data.responseBody,
