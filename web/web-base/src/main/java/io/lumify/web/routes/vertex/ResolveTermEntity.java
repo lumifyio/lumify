@@ -150,7 +150,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         vertexMutation.save(authorizations);
 
         this.graph.flush();
-        workQueueRepository.pushTextUpdated(artifactId);
+        workQueueRepository.pushTextUpdated(artifactId, workspaceId);
 
         workQueueRepository.pushElement(edge, workspaceId);
 

@@ -53,7 +53,7 @@ public class WorkspaceHelper {
         }
 
         termMentionRepository.delete(termMention, authorizations);
-        workQueueRepository.pushTextUpdated(sourceVertex.getId());
+        workQueueRepository.pushTextUpdated(sourceVertex.getId(), workspaceId);
 
         graph.flush();
 
@@ -83,7 +83,7 @@ public class WorkspaceHelper {
 
         for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
             termMentionRepository.delete(termMention, authorizations);
-            workQueueRepository.pushTextUpdated(sourceVertex.getId());
+            workQueueRepository.pushTextUpdated(sourceVertex.getId(), workspaceId);
         }
 
         this.workQueueRepository.pushEdgeDeletion(edge, workspaceId);

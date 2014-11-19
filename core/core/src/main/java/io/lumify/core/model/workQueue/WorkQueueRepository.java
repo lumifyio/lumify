@@ -157,14 +157,17 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushTextUpdated(String vertexId) {
-        broadcastTextUpdated(vertexId);
+    public void pushTextUpdated(String vertexId, String workspaceId) {
+        broadcastTextUpdated(vertexId, workspaceId);
     }
 
-    protected void broadcastTextUpdated(String vertexId) {
+    protected void broadcastTextUpdated(String vertexId, String workspaceId) {
         JSONObject dataJson = new JSONObject();
         if (vertexId != null) {
             dataJson.put("graphVertexId", vertexId);
+        }
+        if (workspaceId != null) {
+            dataJson.put("workspaceId", workspaceId);
         }
 
         JSONObject json = new JSONObject();

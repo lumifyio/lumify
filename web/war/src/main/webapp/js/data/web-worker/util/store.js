@@ -165,7 +165,7 @@ define([
                 var onlyIfExists = options && options.onlyIfExists === true;
 
                 if (!data.workspaceId) {
-                    throw new Error('Unable to update cache without a workspaceId');
+                    data.workspaceId = publicData.currentWorkspaceId;
                 }
 
                 if (data.vertex && resemblesVertex(data.vertex)) {
@@ -221,6 +221,10 @@ define([
     return api;
 
     function cacheForWorkspace(workspaceId, options) {
+        if (!workspaceId) {
+            workspaceId = publicData.currentWorkspaceId;
+        }
+
         if (workspaceId in workspaceCaches) {
             return workspaceCaches[workspaceId];
         }

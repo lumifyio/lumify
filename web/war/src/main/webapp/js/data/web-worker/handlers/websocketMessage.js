@@ -53,12 +53,24 @@ define(['require'], function(require) {
                 require(['../util/store'], function(store) {
                     store.removeObject(data.workspaceId, 'edge', data.edgeId);
                 });
+            },
+            textUpdated: function(data) {
+                if (data.graphVertexId &&
+                    (!data.workspaceId ||
+                     data.workspaceId === publicData.currentWorkspaceId)) {
+
+                    dispatchMain('rebroadcastEvent', {
+                        eventName: 'textUpdated',
+                        data: {
+                            vertexId: data.graphVertexId
+                        }
+                    })
+                }
             }
 
             // TODO:
             //'entityImageUpdated',
             //'longRunningProcessChange',
-            //'textUpdated',
         };
 
     return function(data) {
