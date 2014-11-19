@@ -162,14 +162,15 @@ define([
             },
 
             updateObject: function(data, options) {
-                var onlyIfExists = options && options.onlyIfExists === true;
+                var onlyIfExists = options && options.onlyIfExists === true,
+                    cached;
 
                 if (!data.workspaceId) {
                     data.workspaceId = publicData.currentWorkspaceId;
                 }
 
                 if (data.vertex && resemblesVertex(data.vertex)) {
-                    var cached = api.getObject(data.workspaceId, 'vertex', data.vertex.id)
+                    cached = api.getObject(data.workspaceId, 'vertex', data.vertex.id)
                     if (cached || !onlyIfExists) {
                         cacheVertices(data.workspaceId, [data.vertex]);
                     }
@@ -183,7 +184,7 @@ define([
                     } else {
                         if (data.edge.sourceVertexId && data.edge.destVertexId) {
                             // Load vertices from cache
-                            var cached = _.compact(api.getObjects(data.workspaceId, 'vertex', [
+                            cached = _.compact(api.getObjects(data.workspaceId, 'vertex', [
                                 data.edge.sourceVertexId,
                                 data.edge.destVertexId
                             ]));
