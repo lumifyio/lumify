@@ -5,6 +5,7 @@ define([
     './withBrokenWorkerConsole',
     './withDataRequestHandler',
     './withCurrentUser',
+    './withCachedConceptIcons',
     './withWebsocket',
     './withLegacyWebsocket',
     './withKeyboardRegistration',
