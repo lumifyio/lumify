@@ -22,6 +22,10 @@ define(['util/websocket'], function(websocketUtils) {
                     configuration: this.getAtmosphereConfiguration()
                 })
             });
+
+            if (window.DEBUG) {
+                DEBUG.pushSocket = this.pushSocket.bind(this);
+            }
         });
 
         this.pushSocket = function(message) {

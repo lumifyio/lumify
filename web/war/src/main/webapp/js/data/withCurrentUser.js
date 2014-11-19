@@ -5,6 +5,18 @@ define([], function() {
 
     function withCurrentUser() {
 
+        this.after('initialize', function() {
+            this.on('userStatusChange', function(event, user) {
+                if (user &&
+                    user.status &&
+                    user.status === 'OFFLINE' &&
+                    user.id &&
+                    user.id === lumifyData.currentUser.id) {
+                    $(document).trigger('logout', {  message: i18n('lumify.session.expired') });
+                }
+            });
+        });
+
         this.around('dataRequestCompleted', function(dataRequestCompleted, request) {
             if (isUserMeRequest(request)) {
                 var self = this,

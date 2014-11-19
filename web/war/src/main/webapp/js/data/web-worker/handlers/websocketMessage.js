@@ -19,12 +19,20 @@ define(['require'], function(require) {
                     })
                 });
             },
-            userStatusChange: function(data) {
-                dispatchMain('rebroadcastEvent', {
-                    eventName: 'userStatusChange',
-                    data: data
-                });
-            },
+            userStatusChange: (function() {
+                // TODO: put into store
+                var previousById = {};
+                return function(data) {
+                    var previous = data && previousById[data.id];
+                    if (!previous || !_.isEqual(data, previous)) {
+                        previousById[data.id] = data;
+                        dispatchMain('rebroadcastEvent', {
+                            eventName: 'userStatusChange',
+                            data: data
+                        });
+                    }
+                }
+            })(),
             userWorkspaceChange: NOOP,
             propertiesChange: function(data) {
                 require(['../util/store'], function(store) {
