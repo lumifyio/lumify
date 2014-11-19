@@ -43,12 +43,12 @@ public class WebApp extends App {
         this.devMode = "true".equals(config.get(Configuration.DEV_MODE));
 
         if (!devMode) {
-            String pluginsJsRoute = "/plugins.js";
-            this.get(pluginsJsRoute, pluginsJsResourceHandler);
+            String pluginsJsRoute = "plugins.js";
+            this.get("/" + pluginsJsRoute, pluginsJsResourceHandler);
             pluginsJsResources.add(pluginsJsRoute);
 
-            String pluginsCssRoute = "/plugins.css";
-            this.get(pluginsCssRoute, pluginsCssResourceHandler);
+            String pluginsCssRoute = "plugins.css";
+            this.get("/" + pluginsCssRoute, pluginsCssResourceHandler);
             pluginsCssResources.add(pluginsCssRoute);
         }
     }
@@ -72,9 +72,9 @@ public class WebApp extends App {
     }
 
     public void registerJavaScript(String scriptResourceName) {
-        String resourcePath = "/js" + scriptResourceName;
+        String resourcePath = "js" + scriptResourceName;
         if (devMode) {
-            get(resourcePath, new StaticResourceHandler(this.getClass(), scriptResourceName, "application/javascript"));
+            get("/" + resourcePath, new StaticResourceHandler(this.getClass(), scriptResourceName, "application/javascript"));
             pluginsJsResources.add(resourcePath);
         } else {
             pluginsJsResourceHandler.appendResource(scriptResourceName);
@@ -82,9 +82,9 @@ public class WebApp extends App {
     }
 
     public void registerCss(String cssResourceName) {
-        String resourcePath = "/css" + cssResourceName;
+        String resourcePath = "css" + cssResourceName;
         if (devMode) {
-            get(resourcePath, new StaticResourceHandler(this.getClass(), cssResourceName, "text/css"));
+            get("/" + resourcePath, new StaticResourceHandler(this.getClass(), cssResourceName, "text/css"));
             pluginsCssResources.add(resourcePath);
         } else {
             pluginsCssResourceHandler.appendResource(cssResourceName);
