@@ -74,10 +74,15 @@ define(['require'], function(require) {
                         process: process
                     }
                 });
-            }
+            },
+            entityImageUpdated: function(data) {
+                if (data && data.graphVertexId) {
+                    require(['../util/store'], function(store) {
+                        store.updateObject(data, { onlyIfExists:true });
+                    });
 
-            // TODO:
-            //'entityImageUpdated',
+                }
+            }
         };
 
     return function(data) {

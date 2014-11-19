@@ -220,7 +220,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
                 Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
                 outVertex.removeProperty(entityHasImage.getName(), authorizations);
-                this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage);
+                this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage, workspaceId);
             }
         }
 

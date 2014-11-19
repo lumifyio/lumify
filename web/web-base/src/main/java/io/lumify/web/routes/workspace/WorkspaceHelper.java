@@ -77,7 +77,7 @@ public class WorkspaceHelper {
             Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
             if (entityHasImage != null) {
                 sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
-                this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+                this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage, workspaceId);
             }
         }
 
