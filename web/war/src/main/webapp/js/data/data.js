@@ -32,8 +32,17 @@ define([
 
             this.setupDataWorker();
 
-            // Late require since messages relies on data component
-            require(['util/messages'], this.setupMessages.bind(this));
+            new Promise(function(fulfill, reject) {
+                    if (self.lumifyData.readyForDataRequests) {
+                        fulfill();
+                    } else {
+                        self.on('readyForDataRequests', fulfill);
+                    }
+                })
+                .then(function() {
+                    return Promise.require('util/messages');
+                })
+                .done(this.setupMessages.bind(this));
         });
 
         this.setupMessages = function(i18n) {
