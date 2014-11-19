@@ -183,10 +183,10 @@ define([
                     } else {
                         if (data.edge.sourceVertexId && data.edge.destVertexId) {
                             // Load vertices from cache
-                            var cached = api.getObjects(data.workspaceId, 'vertex', [
+                            var cached = _.compact(api.getObjects(data.workspaceId, 'vertex', [
                                 data.edge.sourceVertexId,
                                 data.edge.destVertexId
-                            ]);
+                            ]));
                             if (cached && cached.length === 2) {
                                 toCache = _.extend({}, _.omit(data.edge, 'sourceVertexId', 'destVertexId'), {
                                     source: cached[0],
@@ -319,8 +319,8 @@ define([
             val.type === 'edge' &&
             _.has(val, 'id') &&
             _.has(val, 'label') &&
-            _.has(val, 'source') &&
-            _.has(val, 'target')
+            !_.isEmpty(val.source) &&
+            !_.isEmpty(val.target)
         );
     }
 
