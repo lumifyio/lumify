@@ -40,6 +40,19 @@ define([
                 return cache;
             },
 
+            removeObject: function(workspaceId, kind, objectId) {
+                if (!(kind in KIND_TO_CACHE)) {
+                    throw new Error('kind parameter not valid', kind);
+                }
+
+                var workspaceCache = cacheForWorkspace(workspaceId, { create: false }),
+                    cache = workspaceCache && workspaceCache[KIND_TO_CACHE[kind]];
+
+                if (cache && objectId) {
+                    cache.removeItem(objectId);
+                }
+            },
+
             setWorkspace: function(workspace) {
                 workspace.vertices = _.indexBy(workspace.vertices, 'vertexId');
                 var workspaceCache = cacheForWorkspace(workspace.workspaceId);
@@ -151,13 +164,42 @@ define([
             updateObject: function(data, options) {
                 var onlyIfExists = options && options.onlyIfExists === true;
 
+                if (!data.workspaceId) {
+                    throw new Error('Unable to update cache without a workspaceId');
+                }
+
                 if (data.vertex && resemblesVertex(data.vertex)) {
                     var cached = api.getObject(data.workspaceId, 'vertex', data.vertex.id)
                     if (cached || !onlyIfExists) {
                         cacheVertices(data.workspaceId, [data.vertex]);
                     }
                 }
-                // TODO: edges
+
+                if (data.edge) {
+                    var toCache;
+
+                    if (resemblesEdge(data.edge)) {
+                        toCache = data.edge;
+                    } else {
+                        if (data.edge.sourceVertexId && data.edge.destVertexId) {
+                            // Load vertices from cache
+                            var cached = api.getObjects(data.workspaceId, 'vertex', [
+                                data.edge.sourceVertexId,
+                                data.edge.destVertexId
+                            ]);
+                            if (cached && cached.length === 2) {
+                                toCache = _.extend({}, _.omit(data.edge, 'sourceVertexId', 'destVertexId'), {
+                                    source: cached[0],
+                                    target: cached[1]
+                                });
+                            }
+                        }
+                    }
+
+                    if (toCache) {
+                        cacheEdges(data.workspaceId, [toCache]);
+                    }
+                }
             },
 
             checkAjaxForPossibleCaching: function(xhr, json, workspaceId, request) {
@@ -238,9 +280,14 @@ define([
 
     function cacheEdges(workspaceId, edges) {
         var edgeCache = cacheForWorkspace(workspaceId).edges,
+            workspace = api.getObject(workspaceId, 'workspace'),
             updated = _.compact(edges.map(function(e) {
-                var previous = edgeCache.getItem(e.id);
-                if (previous && _.isEqual(v, previous)) {
+                var previous = edgeCache.getItem(e.id),
+                    bothVerticesInWorkspace = workspace &&
+                        e.source.id in workspace.vertices &&
+                        e.target.id in workspace.vertices;
+
+                if ((previous && _.isEqual(v, previous)) || !bothVerticesInWorkspace) {
                     return;
                 }
 
@@ -254,10 +301,8 @@ define([
                     }
                 });
 
-                if (previous) {
-                    console.debug('Edge updated previous:', previous, 'new:', e)
-                    return e;
-                }
+                console.debug('Edge updated previous:', previous, 'new:', e)
+                return e;
             }));
 
         if (updated.length && workspaceId === publicData.currentWorkspaceId) {

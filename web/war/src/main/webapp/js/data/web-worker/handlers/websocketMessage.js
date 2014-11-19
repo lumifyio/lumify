@@ -38,10 +38,24 @@ define(['require'], function(require) {
                 require(['../util/store'], function(store) {
                     store.updateObject(data, { onlyIfExists:true });
                 });
+            },
+            edgeDeletion: function(data) {
+                if (!data.workspaceId || data.workspaceId === publicData.currentWorkspaceId) {
+                    dispatchMain('rebroadcastEvent', {
+                        eventName: 'edgesDeleted',
+                        data: {
+                            edgeId: data.edgeId,
+                            sourceVertexId: data.inVertexId,
+                            destVertexId: data.outVertexId
+                        }
+                    });
+                }
+                require(['../util/store'], function(store) {
+                    store.removeObject(data.workspaceId, 'edge', data.edgeId);
+                });
             }
 
             // TODO:
-            //'edgeDeletion',
             //'entityImageUpdated',
             //'longRunningProcessChange',
             //'textUpdated',

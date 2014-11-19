@@ -151,7 +151,6 @@ define([], function() {
                 }[connectionType] ||   'controlDragPopover';
 
                 require(['graph/popovers/' + componentName], function(Popover) {
-                    console.log(connectionType, componentName)
                     Popover.teardownAll();
                     Popover.attachTo(self.$node, {
                         cy: cy,

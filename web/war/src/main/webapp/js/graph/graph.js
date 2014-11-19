@@ -61,6 +61,31 @@ define([
             toCyId = function(v) {
                 var vId = _.isString(v) ? v : v.id;
                 return F.className.to(vId);
+            },
+            cyEdgeFromEdge = function(e, sourceNode, destNode) {
+                var source = e.from || (e.source && e.source.id) || e.sourceVertexId,
+                    target = e.to || (e.target && e.target.id) || e.destVertexId;
+
+                return {
+                    group: 'edges',
+                    data: {
+                        id: toCyId(e.id),
+                        source: sourceNode.id(),
+                        target: destNode.id(),
+                        edge: {
+                            id: e.id,
+                            diffType: e.diffType,
+                            source: { id: source },
+                            target: { id: target },
+                            properties: {
+                                'http://lumify.io#conceptType': 'relationship',
+                                relationshipType: e.relationshipType || e.label,
+                                source: source,
+                                target: target
+                            }
+                        }
+                    }
+                }
             };
 
         this.toCyId = toCyId;
@@ -545,9 +570,29 @@ define([
 
         this.onContextMenuDeleteEdge = function() {
             var menu = this.select('edgeContextMenuSelector'),
-                edge = menu.data('edge').vertex;
+                edge = menu.data('edge').edge;
 
             this.trigger('deleteEdges', { edges: [edge] });
+        };
+
+        this.onEdgesUpdated = function(event, data) {
+            this.cytoscapeReady(function(cy) {
+                var newEdges = _.compact(data.edges.map(function(edge) {
+                        var cyEdge = cy.getElementById(toCyId(edge.id));
+                        if (cyEdge.length === 0) {
+                            var sourceNode = cy.getElementById(toCyId(edge.source.id)),
+                                destNode = cy.getElementById(toCyId(edge.target.id));
+
+                            if (sourceNode.length && destNode.length) {
+                                return cyEdgeFromEdge(edge, sourceNode, destNode);
+                            }
+                        }
+                    }));
+
+                if (newEdges.length) {
+                    cy.add(newEdges);
+                }
+            });
         };
 
         this.onEdgesDeleted = function(event, data) {
@@ -835,7 +880,7 @@ define([
                 if (Privileges.canEDIT) {
                     menu = this.select ('edgeContextMenuSelector');
                     var edgeData = event.cyTarget.data();
-                    if (!(/^public$/i).test(edgeData.vertex.diffType)) {
+                    if (!(/^public$/i).test(edgeData.edge.diffType)) {
                         menu.data('edge', edgeData);
                         if (event.cy.nodes().filter(':selected').length > 1) {
                             return false;
@@ -1162,24 +1207,7 @@ define([
                             destNode = cy.getElementById(toCyId(relationship.to));
 
                         if (sourceNode.length && destNode.length) {
-                            relationshipEdges.push ({
-                                group: 'edges',
-                                data: {
-                                    id: toCyId(relationship.id),
-                                    source: sourceNode.id(),
-                                    target: destNode.id(),
-                                    vertex: {
-                                        id: relationship.id,
-                                        diffType: relationship.diffType,
-                                        properties: {
-                                            'http://lumify.io#conceptType': 'relationship',
-                                            source: relationship.from,
-                                            target: relationship.to,
-                                            relationshipType: relationship.relationshipType
-                                        }
-                                    }
-                                }
-                            });
+                            relationshipEdges.push(cyEdgeFromEdge(relationship, sourceNode, destNode));
                         }
                     });
                     // Hide edges when zooming if more than threshold
@@ -1368,6 +1396,7 @@ define([
             this.on(document, 'focusPaths', this.onFocusPaths);
             this.on(document, 'defocusPaths', this.onDefocusPaths);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
+            this.on(document, 'edgesUpdated', this.onEdgesUpdated);
 
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
             this.on('unregisterForPositionChanges', this.onUnregisterForPositionChanges);

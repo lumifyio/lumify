@@ -17,6 +17,14 @@ define([
             return ajax('POST', '/edge/create', options);
         },
 
+        'delete': function(edgeId, sourceId, targetId) {
+            return ajax('DELETE', '/vertex/edge', {
+                edgeId: edgeId,
+                sourceId: sourceId,
+                targetId: targetId
+            });
+        },
+
         properties: function(edgeId) {
             return ajax('GET', '/edge/properties', {
                 graphEdgeId: edgeId

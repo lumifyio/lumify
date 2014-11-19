@@ -34,6 +34,12 @@ define([
             this.on('selectAll', this.onSelectAll);
 
             this.on('deleteSelected', this.onDeleteSelected);
+            this.on('deleteEdges', this.onDeleteEdges);
+            this.on('edgesDeleted', function(event, data) {
+                if (selectedObjects && _.findWhere(selectedObjects.edges, { id: data.edgeId })) {
+                    this.trigger('selectObjects');
+                }
+            })
 
             this.on('searchTitle', this.onSearchTitle);
             this.on('searchRelated', this.onSearchRelated);
@@ -51,19 +57,35 @@ define([
         };
 
         this.onDeleteSelected = function(event, data) {
-            if (data && data.vertexId) {
-                this.trigger('updateWorkspace', {
-                    entityDeletes: [data.vertexId]
-                });
-            } else if (selectedObjects) {
-                if (selectedObjects.vertices) {
-                    this.trigger('updateWorkspace', {
-                        entityDeletes: _.pluck(selectedObjects.vertices, 'id')
+            var self = this;
+
+            require(['util/privileges'], function(Privileges) {
+                if (data && data.vertexId) {
+                    self.trigger('updateWorkspace', {
+                        entityDeletes: [data.vertexId]
                     });
-                } else if (selectedObjects.edges && Privileges.canEDIT) {
-                    this.trigger('deleteEdges', { edges: selectedObjects.edges });
+                } else if (selectedObjects) {
+                    if (selectedObjects.vertices.length) {
+                        self.trigger('updateWorkspace', {
+                            entityDeletes: _.pluck(selectedObjects.vertices, 'id')
+                        });
+                    } else if (selectedObjects.edges && Privileges.canEDIT) {
+                        self.trigger('deleteEdges', { edges: selectedObjects.edges });
+                    }
                 }
-            }
+            });
+        };
+
+        this.onDeleteEdges = function(event, data) {
+            var edge = data && data.edges && data.edges.length === 1 && data.edges[0];
+
+            if (edge) {
+                this.dataRequest('edge', 'delete',
+                    edge.id,
+                    edge.source.id,
+                    edge.target.id
+                );
+            } else console.error('Only can delete one edge at a time');
         };
 
         this.onSelectObjects = function(event, data) {
