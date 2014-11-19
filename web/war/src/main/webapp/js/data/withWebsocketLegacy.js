@@ -11,6 +11,9 @@ define([], function() {
                 atmospherePromise = new Promise(function(fulfill, reject) {
                     require(['atmosphere'], function(atmosphere) {
                         var socket = atmosphere.subscribe(_.extend(config, {
+
+                            // Remember to also Change
+                            // web-worker/handlers/atmosphereConfiguration
                             onOpen: function() {
                                 console.log('OPENED');
                                 fulfill(socket);

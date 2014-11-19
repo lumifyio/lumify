@@ -11,11 +11,18 @@ define([], function() {
                         atmosphere.util.__socketOpened = true;
                     }
                 },
-                onError: function() {
-                    // TODO: show overlay
+                onError: function(request) {
+                    dispatchMain('websocketStateOnError', {
+                        reason: request.reasonPhrase,
+                        error: request.error
+                    });
                 },
-                onClose: function() {
+                onClose: function(request) {
                     atmosphere.util.__socketOpened = false;
+                    dispatchMain('websocketStateOnClose', {
+                        reason: request.reasonPhrase,
+                        error: request.error
+                    });
                 },
                 onMessage: function(response) {
                     processMainMessage({

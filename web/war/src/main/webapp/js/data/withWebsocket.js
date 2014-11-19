@@ -5,6 +5,14 @@ define(['util/websocket'], function(websocketUtils) {
 
     function withWebsocket() {
 
+        var overlayPromise = new Promise(function(fulfill, reject) {
+            this.after('initialize', function() {
+                _.defer(function() {
+                    Promise.require('util/offlineOverlay').done(fulfill);
+                })
+            })
+        }.bind(this));
+
         this.after('initialize', function() {
             var self = this;
             this.on('applicationReady', function() {
@@ -13,7 +21,7 @@ define(['util/websocket'], function(websocketUtils) {
                     type: 'atmosphereConfiguration',
                     configuration: this.getAtmosphereConfiguration()
                 })
-            })
+            });
         });
 
         this.pushSocket = function(message) {
@@ -44,5 +52,20 @@ define(['util/websocket'], function(websocketUtils) {
             };
         };
 
+        this.websocketStateOnError = function(error) {
+            overlayPromise.done(function(Overlay) {
+                // Might be closing because of browser refresh, delay
+                // so it only happens if server went down
+                _.delay(function() {
+                    Overlay.attachTo(document);
+                }, 1000);
+            });
+        };
+
+        this.websocketStateOnClose = function(message) {
+            if (message && message.error) {
+                console.error('Websocket closed', message.reasonPhrase, message.error);
+            }
+        };
     }
 });

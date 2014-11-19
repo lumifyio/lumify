@@ -7,7 +7,7 @@ define([
     './withCurrentUser',
     './withCachedConceptIcons',
     './withWebsocket',
-    './withLegacyWebsocket',
+    './withWebsocketLegacy',
     './withKeyboardRegistration',
     './withObjectSelection',
     './withObjectsUpdated',
