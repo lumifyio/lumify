@@ -66,11 +66,18 @@ define(['require'], function(require) {
                         }
                     })
                 }
+            },
+            longRunningProcessChange: function(process) {
+                dispatchMain('rebroadcastEvent', {
+                    eventName: 'longRunningProcessChanged',
+                    data: {
+                        process: process
+                    }
+                });
             }
 
             // TODO:
             //'entityImageUpdated',
-            //'longRunningProcessChange',
         };
 
     return function(data) {

@@ -68,7 +68,7 @@ define([
             this.updateEventWatchers();
 
             this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
-            this.on(document, 'socketMessage', this.onSocketMessage);
+            this.on(document, 'longRunningProcessChanged', this.onLongRunningProcessChanged);
             this.on(document, 'showActivityDisplay', this.onShowActivityDisplay);
             this.on(document, 'activityHandlersUpdated', this.onActivityHandlersUpdated);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
@@ -116,13 +116,11 @@ define([
             }
         };
 
-        this.onSocketMessage = function(event, message) {
-            if (message && message.type === 'longRunningProcessChange') {
-                var task = message.data;
+        this.onLongRunningProcessChanged = function(event, data) {
+            var task = data.process;
 
-                this.addOrUpdateTask(task);
-                this.update();
-            }
+            this.addOrUpdateTask(task);
+            this.update();
         };
 
         this.onVerticesUpdated = function(event, data) {
