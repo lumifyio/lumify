@@ -39,7 +39,7 @@ public class WorkspaceHelper {
         this.graph = graph;
     }
 
-    public void unresolveTerm(Vertex resolvedVertex, Vertex termMention, LumifyVisibility visibility, User user, String workspaceId, Authorizations authorizations) {
+    public void unresolveTerm(Vertex resolvedVertex, Vertex termMention, LumifyVisibility visibility, User user, Authorizations authorizations) {
         Vertex sourceVertex = termMentionRepository.findSourceVertex(termMention, authorizations);
         if (sourceVertex == null) {
             return;
@@ -48,12 +48,12 @@ public class WorkspaceHelper {
 
         if (edges.size() == 1) {
             graph.removeEdge(edges.get(0), authorizations);
-            workQueueRepository.pushEdgeDeletion(edges.get(0), workspaceId);
+            workQueueRepository.pushEdgeDeletion(edges.get(0));
             auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, resolvedVertex, edges.get(0), "", "", user, visibility.getVisibility());
         }
 
         termMentionRepository.delete(termMention, authorizations);
-        workQueueRepository.pushTextUpdated(sourceVertex.getId(), workspaceId);
+        workQueueRepository.pushTextUpdated(sourceVertex.getId());
 
         graph.flush();
 
@@ -67,26 +67,24 @@ public class WorkspaceHelper {
 
         graph.flush();
 
-        workQueueRepository.pushGraphPropertyQueue(vertex, property, workspaceId);
+        workQueueRepository.pushGraphPropertyQueue(vertex, property);
     }
 
-    public void deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String imageRelationshipLabel, User user, String workspaceId, Authorizations authorizations) {
+    public void deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String imageRelationshipLabel, User user, Authorizations authorizations) {
         graph.removeEdge(edge, authorizations);
 
         if (edge.getLabel().equals(imageRelationshipLabel)) {
             Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
-            if (entityHasImage != null) {
-                sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
-                this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage, workspaceId);
-            }
+            sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
+            this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
         }
 
         for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
             termMentionRepository.delete(termMention, authorizations);
-            workQueueRepository.pushTextUpdated(sourceVertex.getId(), workspaceId);
+            workQueueRepository.pushTextUpdated(sourceVertex.getId());
         }
 
-        this.workQueueRepository.pushEdgeDeletion(edge, workspaceId);
+        this.workQueueRepository.pushEdgeDeletion(edge);
 
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, new LumifyVisibility().getVisibility());

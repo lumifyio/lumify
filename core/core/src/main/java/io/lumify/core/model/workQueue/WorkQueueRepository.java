@@ -33,19 +33,19 @@ public abstract class WorkQueueRepository {
         this.graph = graph;
     }
 
-    public void pushGraphPropertyQueue(final Element element, final Property property, String workspaceId) {
-        pushGraphPropertyQueue(element, property.getKey(), property.getName(), workspaceId, null);
+    public void pushGraphPropertyQueue(final Element element, final Property property) {
+        pushGraphPropertyQueue(element, property.getKey(), property.getName());
     }
 
     public void pushGraphPropertyQueue(final Element element, final Property property, String workspaceId, String visibilitySource) {
         pushGraphPropertyQueue(element, property.getKey(), property.getName(), workspaceId, visibilitySource);
     }
 
-    public void pushElementImageQueue(final Element element, final Property property, String workspaceId) {
-        pushElementImageQueue(element, property.getKey(), property.getName(), workspaceId);
+    public void pushElementImageQueue(final Element element, final Property property) {
+        pushElementImageQueue(element, property.getKey(), property.getName());
     }
 
-    public void pushElementImageQueue(final Element element, String propertyKey, final String propertyName, String workspaceId) {
+    public void pushElementImageQueue(final Element element, String propertyKey, final String propertyName) {
         getGraph().flush();
         checkNotNull(element);
         JSONObject data = new JSONObject();
@@ -60,9 +60,12 @@ public abstract class WorkQueueRepository {
         data.put("propertyName", propertyName);
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
 
-        broadcastEntityImage(element, propertyKey, propertyName, workspaceId);
+        broadcastEntityImage(element, propertyKey, propertyName);
     }
 
+    public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName) {
+        pushGraphPropertyQueue(element, propertyKey, propertyName, null, null);
+    }
 
     public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName,
                                        String workspaceId, String visibilitySource) {
@@ -115,24 +118,21 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushElement(Element element, String workspaceId) {
-        pushGraphPropertyQueue(element, null, null, workspaceId, null);
+    public void pushElement(Element element) {
+        pushGraphPropertyQueue(element, null, null);
     }
 
-    public void pushEdgeDeletion(Edge edge, String workspaceId) {
-        broadcastEdgeDeletion(edge, workspaceId);
+    public void pushEdgeDeletion(Edge edge) {
+        broadcastEdgeDeletion(edge);
     }
 
-    protected void broadcastEdgeDeletion(Edge edge, String workspaceId) {
+    protected void broadcastEdgeDeletion(Edge edge) {
         JSONObject dataJson = new JSONObject();
         if (edge != null) {
             dataJson.put("edgeId", edge.getId());
             dataJson.put("outVertexId", edge.getVertexId(Direction.OUT));
             dataJson.put("inVertexId", edge.getVertexId(Direction.IN));
-
         }
-
-        dataJson.putOpt("workspaceId", workspaceId);
 
         JSONObject json = new JSONObject();
         json.put("type", "edgeDeletion");
@@ -156,17 +156,14 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushTextUpdated(String vertexId, String workspaceId) {
-        broadcastTextUpdated(vertexId, workspaceId);
+    public void pushTextUpdated(String vertexId) {
+        broadcastTextUpdated(vertexId);
     }
 
-    protected void broadcastTextUpdated(String vertexId, String workspaceId) {
+    protected void broadcastTextUpdated(String vertexId) {
         JSONObject dataJson = new JSONObject();
         if (vertexId != null) {
             dataJson.put("graphVertexId", vertexId);
-        }
-        if (workspaceId != null) {
-            dataJson.put("workspaceId", workspaceId);
         }
 
         JSONObject json = new JSONObject();
@@ -266,9 +263,9 @@ public abstract class WorkQueueRepository {
         }
     }
 
-    protected void broadcastEntityImage(Element element, String propertyKey, String propertyName, String workspaceId) {
+    protected void broadcastEntityImage(Element element, String propertyKey, String propertyName) {
         try {
-            JSONObject json = getBroadcastEntityImageJson((Vertex) element, workspaceId);
+            JSONObject json = getBroadcastEntityImageJson((Vertex) element);
             broadcastJson(json);
         } catch (Exception ex) {
             throw new LumifyException("Could not broadcast property change", ex);
@@ -277,13 +274,12 @@ public abstract class WorkQueueRepository {
 
     protected abstract void broadcastJson(JSONObject json);
 
-    protected JSONObject getBroadcastEntityImageJson(Vertex graphVertex, String workspaceId) {
+    protected JSONObject getBroadcastEntityImageJson(Vertex graphVertex) {
         JSONObject dataJson = new JSONObject();
 
         JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null, null);
         dataJson.put("vertex", vertexJson);
         dataJson.put("graphVertexId", graphVertex.getId());
-        dataJson.putOpt("workspaceId", workspaceId);
 
         JSONObject json = new JSONObject();
         json.put("type", "entityImageUpdated");
@@ -296,7 +292,6 @@ public abstract class WorkQueueRepository {
 
         JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId, null);
         dataJson.put("vertex", vertexJson);
-        dataJson.putOpt("workspaceId", workspaceId);
 
         JSONObject propertyJson = new JSONObject();
         propertyJson.put("graphVertexId", graphVertex.getId());
@@ -318,7 +313,6 @@ public abstract class WorkQueueRepository {
 
         JSONObject vertexJson = JsonSerializer.toJson(edge, workspaceId, null);
         dataJson.put("edge", vertexJson);
-        dataJson.putOpt("workspaceId", workspaceId);
 
         JSONObject propertyJson = new JSONObject();
         propertyJson.put("graphEdgeId", edge.getId());

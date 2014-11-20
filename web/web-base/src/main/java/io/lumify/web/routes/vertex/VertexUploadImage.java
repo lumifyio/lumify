@@ -144,7 +144,6 @@ public class VertexUploadImage extends BaseRequestHandler {
 
         graph.flush();
         workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(), workspaceId, visibilityJson.getSource());
-        workQueueRepository.pushElementImageQueue(entityVertex, LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName(), artifactVertex.getId(), workspaceId);
 
         respondWithClientApiObject(response, ClientApiConverter.toClientApi(entityVertex, workspaceId, authorizations));
     }

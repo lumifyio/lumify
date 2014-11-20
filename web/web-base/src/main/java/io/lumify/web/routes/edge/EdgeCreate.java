@@ -78,7 +78,7 @@ public class EdgeCreate extends BaseRequestHandler {
             LOGGER.info("Statement created:\n" + JsonSerializer.toJson(edge, workspaceId, authorizations).toString(2));
         }
 
-        workQueueRepository.pushElement(edge, workspaceId);
+        workQueueRepository.pushElement(edge);
 
         respondWithClientApiObject(response, ClientApiConverter.toClientApi(edge, workspaceId, authorizations));
     }

@@ -42,7 +42,7 @@ public class SphinxGraphPropertyWorker extends GraphPropertyWorker {
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
 
         getGraph().flush();
-        pushVideoTranscriptTextPropertiesOnWorkQueue(data.getElement(), MULTI_VALUE_KEY, transcript, data.getWorkspaceId());
+        pushVideoTranscriptTextPropertiesOnWorkQueue(data.getElement(), MULTI_VALUE_KEY, transcript);
     }
 
     @Override

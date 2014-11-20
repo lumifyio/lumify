@@ -154,7 +154,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     workspaceUndoResponse.addFailure(data);
                     continue;
                 }
-                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, workspaceId, authorizations);
+                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);
                 data.setErrorMessage(ex.getMessage());
@@ -220,7 +220,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
                 Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
                 outVertex.removeProperty(entityHasImage.getName(), authorizations);
-                this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage, workspaceId);
+                this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage);
             }
         }
 
@@ -233,7 +233,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     LumifyProperties.DETECTED_OBJECT.removeProperty(outVertex, multiValueKey, authorizations);
                     graph.removeEdge(edge, authorizations);
                     auditRepository.auditRelationship(AuditAction.DELETE, outVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
-                    this.workQueueRepository.pushEdgeDeletion(edge, workspaceId);
+                    this.workQueueRepository.pushEdgeDeletion(edge);
                     this.workQueueRepository.pushGraphPropertyQueue(outVertex, multiValueKey,
                             LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getSource());
                 }
@@ -241,7 +241,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         }
 
         for (Vertex termMention : termMentionRepository.findResolvedTo(vertex.getId(), authorizations)) {
-            workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, workspaceId, authorizations);
+            workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations);
             JSONObject result = new JSONObject();
             result.put("success", true);
             unresolved.put(result);

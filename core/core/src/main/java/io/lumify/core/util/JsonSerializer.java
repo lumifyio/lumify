@@ -74,7 +74,6 @@ public class JsonSerializer {
         try {
             JSONObject json = toJsonElement(edge, workspaceId);
             json.put("label", edge.getLabel());
-            json.put("type", "edge");
             json.put("sourceVertexId", edge.getVertexId(Direction.OUT));
             json.put("destVertexId", edge.getVertexId(Direction.IN));
             return json;

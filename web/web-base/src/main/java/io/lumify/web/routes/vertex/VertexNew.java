@@ -84,7 +84,7 @@ public class VertexNew extends BaseRequestHandler {
 
         LOGGER.debug("Created new empty vertex with id: %s", vertex.getId());
 
-        workQueueRepository.pushElement(vertex, workspaceId);
+        workQueueRepository.pushElement(vertex);
         workQueueRepository.pushGraphPropertyQueue(vertex, null, LumifyProperties.CONCEPT_TYPE.getPropertyName(), workspaceId, visibilitySource);
         workQueueRepository.pushUserCurrentWorkspaceChange(user, workspaceId);
 
