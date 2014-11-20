@@ -111,10 +111,13 @@ public class AnalystsNotebookExporter {
             chartItems.add(ChartItem.createFromEdge(version, edge, ontologyRepository));
         }
         if (classificationBanner != null) {
-            int margin = 5;
-            int maxXY[] = getMaxXY(workspaceEntities);
-            chartItems.add(getLabelChartItem(classificationBanner, maxXY[0] / 2, margin, "class_header"));
-            chartItems.add(getLabelChartItem(classificationBanner, maxXY[0] / 2, maxXY[1] + margin, "class_footer"));
+            int margin = 50;
+            int[] minXYmaxXY = getMinXYmaxXY(workspaceEntities);
+            int middleX = minXYmaxXY[0] + ((minXYmaxXY[2] - minXYmaxXY[0]) / 2); // center of items
+            int headerY = minXYmaxXY[1] - margin; // possible negative value seems ok
+            int footerY = minXYmaxXY[3] + margin;
+            chartItems.add(getLabelChartItem(classificationBanner, middleX, headerY, "class_header"));
+            chartItems.add(getLabelChartItem(classificationBanner, middleX, footerY, "class_footer"));
         }
         chart.setChartItemCollection(chartItems);
 
@@ -184,15 +187,17 @@ public class AnalystsNotebookExporter {
         return map;
     }
 
-    private int[] getMaxXY(Collection<WorkspaceEntity> workspaceEntities) {
-        int[] maxXY = {0, 0};
+    private int[] getMinXYmaxXY(Collection<WorkspaceEntity> workspaceEntities) {
+        int[] minXYmaxXY = {Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 0};
         for(WorkspaceEntity workspaceEntity : workspaceEntities) {
             int x = workspaceEntity.getGraphPositionX();
             int y = workspaceEntity.getGraphPositionX();
-            maxXY[0] = x > maxXY[0] ? x : maxXY[0];
-            maxXY[1] = y > maxXY[1] ? y : maxXY[1];
+            /* min x */ minXYmaxXY[0] = x < minXYmaxXY[0] ? x : minXYmaxXY[0];
+            /* min y */ minXYmaxXY[1] = y < minXYmaxXY[1] ? y : minXYmaxXY[1];
+            /* max x */ minXYmaxXY[2] = x > minXYmaxXY[2] ? x : minXYmaxXY[2];
+            /* max y */ minXYmaxXY[3] = y > minXYmaxXY[3] ? y : minXYmaxXY[3];
         }
-        return maxXY;
+        return minXYmaxXY;
     }
 
     private List<LinkType> getLinkTypes() {
