@@ -12,7 +12,7 @@ define([
                 vertexIds: [],
                 edgeIds: []
             },
-            returnable = _.extend({}, baseObj);
+            returnable = _.extend({}, baseObj, data || {});
 
         returnable.vertexIds = _.indexBy(returnable.vertices, 'id');
         returnable.edgeIds = _.indexBy(returnable.edges, 'id');
@@ -134,6 +134,7 @@ define([
 
                     previousSelectedObjects = selectedObjects;
 
+                    self.setPublicApi('selectedObjects', defaultNoObjectsOrData(selectedObjects));
                     self.trigger('objectsSelected', _.clone(selectedObjects));
                 })
         };
@@ -150,8 +151,6 @@ define([
             } else {
                 this.trigger('clipboardClear');
             }
-
-            this.setPublicApi('selectedObjects', defaultNoObjectsOrData(data));
 
             if (window.DEBUG) {
                 DEBUG.selectedObjects = data;

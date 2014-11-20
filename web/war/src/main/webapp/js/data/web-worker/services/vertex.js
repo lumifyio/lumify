@@ -36,7 +36,12 @@ define([
             return ajax('GET', '/vertex/search', params);
         },
 
-        'geo-search': function(query) {
+        'geo-search': function(lat, lon, radius) {
+            return ajax('GET', '/vertex/geo-search', {
+                lat: lat,
+                lon: lon,
+                radius: radius
+            });
         },
 
         findPath: function(options) {
