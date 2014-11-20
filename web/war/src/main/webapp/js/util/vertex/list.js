@@ -104,7 +104,7 @@ define([
 
             this.setupDraggables();
 
-            // TODO: this.onObjectsSelected(null, { edges: [], vertices: appData.selectedVertices});
+            this.onObjectsSelected(null, { edges: [], vertices: lumifyData.selectedObjects.vertices });
 
             this.on('selectAll', this.onSelectAll);
             this.on('down', this.move);
