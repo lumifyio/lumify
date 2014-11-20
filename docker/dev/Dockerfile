@@ -119,6 +119,20 @@ RUN \
 ENV PATH $PATH:/opt/accumulo/bin
 EXPOSE 9997 9999 50091 50095
 
+# Install ElasticSearch
+VOLUME ["/opt/elasticsearch-1.4.0/logs"]
+
+RUN \
+  wget -O /opt/elasticsearch-1.4.0.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.0.tar.gz \
+  && tar -xzf /opt/elasticsearch-1.4.0.tar.gz -C /opt \
+  && rm /opt/elasticsearch-1.4.0.tar.gz \
+  && ln -s /opt/elasticsearch-1.4.0 /opt/elasticsearch \
+  && /opt/elasticsearch/bin/plugin -install mobz/elasticsearch-head \
+  && /opt/elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
+
+ENV PATH $PATH:/opt/elasticsearch/bin
+EXPOSE 9200 9300
+
 # add scripts
 ADD start.sh /opt/start.sh
 ADD stop.sh /opt/stop.sh

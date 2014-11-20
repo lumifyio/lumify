@@ -8,6 +8,7 @@ mkdir -p ${FS_DIR}/var/lib/hadoop-hdfs
 mkdir -p ${FS_DIR}/var/local/hadoop
 mkdir -p ${FS_DIR}/opt/hadoop-2.5.1/logs
 mkdir -p ${FS_DIR}/opt/accumulo-1.6.1/logs
+mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/logs
 
 sudo docker run \
   -v ${FS_DIR}/../../:/opt/lumify \
@@ -17,7 +18,10 @@ sudo docker run \
   -v ${FS_DIR}/var/local/hadoop:/var/local/hadoop \
   -v ${FS_DIR}/opt/hadoop/logs:/opt/hadoop-2.5.1/logs \
   -v ${FS_DIR}/opt/accumulo-1.6.1/logs:/opt/accumulo-1.6.1/logs \
+  -v ${FS_DIR}/opt/elasticsearch-1.4.0/logs:/opt/elasticsearch-1.4.0/logs \
   -p 2181:2181 \
+  -p 9200:9200 \
+  -p 9300:9300 \
   -p 9997:9997 \
   -p 9999:9999 \
   -p 50010:50010 \

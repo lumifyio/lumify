@@ -18,6 +18,8 @@ if /opt/accumulo/bin/accumulo info 2>&1 | grep --quiet "Accumulo not initialized
 fi
 /opt/accumulo/bin/start-all.sh
 
+/opt/elasticsearch/bin/elasticsearch > /dev/null &
+
 if [[ $1 == "-d" ]]; then
   echo "Sleeping..."
   while true; do sleep 1000; done
