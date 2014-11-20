@@ -6,6 +6,8 @@ import io.lumify.core.config.PostConfigurationValidator;
 public class AnalystsNotebookExportConfiguration {
     public static final String CONFIGURATION_PREFIX = "analystsNotebookExport";
 
+    private boolean enableCustomImageCollection;
+    private boolean enableIconPicture;
     private int thumbnailWidth;
     private int thumbnailHeight;
     private boolean includeProperties;
@@ -14,6 +16,16 @@ public class AnalystsNotebookExportConfiguration {
     private boolean includeImageUrl;
     private boolean includeVisibility;
     private String visibilityLabel;
+
+    @Configurable(name = "enableCustomImageCollection", defaultValue = "true")
+    public void setEnableCustomImageCollection(String enableCustomImageCollection) {
+        this.enableCustomImageCollection = Boolean.valueOf(enableCustomImageCollection);
+    }
+
+    @Configurable(name = "enableIconPicture", defaultValue = "true")
+    public void setEnableIconPicture(String enableIconPicture) {
+        this.enableIconPicture = Boolean.valueOf(enableIconPicture);
+    }
 
     @Configurable(name = "thumbnailWidth", defaultValue = "200")
     public void setThumbnailWidth(int thumbnailWidth) {
@@ -60,6 +72,13 @@ public class AnalystsNotebookExportConfiguration {
         return !includeVisibility || visibilityLabel != null;
     }
 
+    public boolean enableCustomImageCollection() {
+        return enableCustomImageCollection;
+    }
+
+    public boolean enableIconPicture() {
+        return enableIconPicture;
+    }
 
     public int getThumbnailWidth() {
         return thumbnailWidth;

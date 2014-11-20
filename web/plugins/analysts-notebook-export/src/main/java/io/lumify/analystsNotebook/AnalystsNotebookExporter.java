@@ -13,7 +13,9 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.formula.FormulaEvaluator;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -91,7 +93,7 @@ public class AnalystsNotebookExporter {
         chart.setAttributeClassCollection(createAttributeClassCollection(vertices));
         chart.setLinkTypeCollection(getLinkTypes());
         chart.setEntityTypeCollection(EntityType.createForVertices(vertices, ontologyRepository, version));
-        if (version.supports(AnalystsNotebookFeature.CUSTOM_IMAGE_COLLECTION)) {
+        if (version.supports(AnalystsNotebookFeature.CUSTOM_IMAGE_COLLECTION) && analystsNotebookExportConfiguration.enableCustomImageCollection()) {
             chart.setCustomImageCollection(CustomImage.createForVertices(vertices, ontologyRepository));
         }
 
@@ -109,9 +111,10 @@ public class AnalystsNotebookExporter {
             chartItems.add(ChartItem.createFromEdge(version, edge, ontologyRepository));
         }
         if (classificationBanner != null) {
-            // TODO: select x,y
-            chartItems.add(getLabelChartItem(classificationBanner, 4889, 7, "class_header"));
-            chartItems.add(getLabelChartItem(classificationBanner, 4889, 6667, "class_footer"));
+            int margin = 5;
+            int maxXY[] = getMaxXY(workspaceEntities);
+            chartItems.add(getLabelChartItem(classificationBanner, maxXY[0] / 2, margin, "class_header"));
+            chartItems.add(getLabelChartItem(classificationBanner, maxXY[0] / 2, maxXY[1] + margin, "class_footer"));
         }
         chart.setChartItemCollection(chartItems);
 
@@ -179,6 +182,17 @@ public class AnalystsNotebookExporter {
             }
         }
         return map;
+    }
+
+    private int[] getMaxXY(Collection<WorkspaceEntity> workspaceEntities) {
+        int[] maxXY = {0, 0};
+        for(WorkspaceEntity workspaceEntity : workspaceEntities) {
+            int x = workspaceEntity.getGraphPositionX();
+            int y = workspaceEntity.getGraphPositionX();
+            maxXY[0] = x > maxXY[0] ? x : maxXY[0];
+            maxXY[1] = y > maxXY[1] ? y : maxXY[1];
+        }
+        return maxXY;
     }
 
     private List<LinkType> getLinkTypes() {
