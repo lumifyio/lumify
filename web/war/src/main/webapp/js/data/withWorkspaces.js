@@ -23,7 +23,7 @@ define([], function() {
 
         this.onReloadWorkspace = function() {
             if (lastReloadedState) {
-                this.workspaceLoaded(lastReloadedState.workspace);
+                this.workspaceLoaded(lastReloadedState);
                 this.edgesLoaded(lastReloadedState.edges);
             }
         };
@@ -90,7 +90,7 @@ define([], function() {
         };
 
         this.workspaceLoaded = function(message) {
-            lastReloadedState.workspace = message.workspace;
+            lastReloadedState = message;
             var workspace = message.workspace;
             workspace.data = {
                 vertices: message.vertices
