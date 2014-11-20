@@ -91,9 +91,6 @@ RUN \
   cp /opt/hadoop/etc/hadoop/*.xml /opt/hadoop/input \
   && sed s/HOSTNAME/localhost/ /opt/hadoop/etc/hadoop/core-site.xml.template > /opt/hadoop/etc/hadoop/core-site.xml
 
-RUN \
-  /opt/hadoop/bin/hdfs namenode -format
-
 EXPOSE 8032 8088 50030 50060 50070 50075 50090 50105
 
 # Install Accumulo

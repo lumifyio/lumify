@@ -4,6 +4,10 @@ sed s/HOSTNAME/$HOSTNAME/ /opt/hadoop/etc/hadoop/core-site.xml.template > /opt/h
 
 service sshd start
 /opt/zookeeper/bin/zkServer.sh start
+
+if [ ! -d "/tmp/hadoop-root" ]; then
+  /opt/hadoop/bin/hdfs namenode -format
+fi
 /opt/hadoop/sbin/start-dfs.sh
 /opt/hadoop/sbin/start-yarn.sh
 
