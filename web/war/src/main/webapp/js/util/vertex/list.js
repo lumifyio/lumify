@@ -37,11 +37,11 @@ define([
         });
 
         this.stateForVertex = function(vertex) {
-            var inWorkspace = false; // TODO: appData.inWorkspace(vertex);
+            var inWorkspace = vertex.id in this.workspaceVertices;
             return {
                 inGraph: inWorkspace,
                 inMap: inWorkspace && _.some(vertex.properties, function(p) {
-                    var ontologyProperty = ontologyPromise.propertiesByTitle[p.name];
+                    var ontologyProperty = ontologyPromise.properties.byTitle[p.name];
                     return ontologyProperty && ontologyProperty.dataType === 'geoLocation';
                 })
             };
@@ -85,36 +85,50 @@ define([
             this.classNameIndex = 0;
             this.classNameLookup = {};
 
-            this.$node
-                .addClass('vertex-list')
-                .html(template({
-                    vertices: this.attr.vertices,
-                    infiniteScrolling: this.attr.infiniteScrolling && this.attr.total !== this.attr.vertices.length,
-                    classNamesForVertex: this.classNameMapForVertices(this.attr.vertices),
-                    F: F
-                }));
+            this.dataRequest('workspace', 'store')
+                .done(function(workspaceVertices) {
+                    self.workspaceVertices = workspaceVertices;
+                    self.$node
+                        .addClass('vertex-list')
+                        .html(template({
+                            vertices: self.attr.vertices,
+                            infiniteScrolling: self.attr.infiniteScrolling &&
+                                self.attr.total !== self.attr.vertices.length,
+                            classNamesForVertex: self.classNameMapForVertices(self.attr.vertices),
+                            F: F
+                        }));
 
-            this.attachEvents();
+                    self.attachEvents();
 
-            this.loadVisibleResultPreviews = _.debounce(this.loadVisibleResultPreviews.bind(this), 1000);
-            this.loadVisibleResultPreviews();
+                    self.loadVisibleResultPreviews = _.debounce(self.loadVisibleResultPreviews.bind(self), 1000);
+                    self.loadVisibleResultPreviews();
 
-            this.triggerInfiniteScrollRequest = _.debounce(this.triggerInfiniteScrollRequest.bind(this), 1000);
-            this.triggerInfiniteScrollRequest();
+                    self.triggerInfiniteScrollRequest = _.debounce(self.triggerInfiniteScrollRequest.bind(self), 1000);
+                    self.triggerInfiniteScrollRequest();
 
-            this.setupDraggables();
+                    self.setupDraggables();
 
-            this.onObjectsSelected(null, { edges: [], vertices: lumifyData.selectedObjects.vertices });
+                    self.onObjectsSelected(null, { edges: [], vertices: lumifyData.selectedObjects.vertices });
 
-            this.on('selectAll', this.onSelectAll);
-            this.on('down', this.move);
-            this.on('up', this.move);
-            this.on('contextmenu', this.onContextMenu);
+                    self.on('selectAll', self.onSelectAll);
+                    self.on('down', self.move);
+                    self.on('up', self.move);
+                    self.on('contextmenu', self.onContextMenu);
+                    self.on(document, 'workspaceUpdated', self.onWorkspaceUpdated);
 
-            _.defer(function() {
-                this.$node.scrollTop(0);
-            }.bind(this))
+                    _.defer(function() {
+                        self.$node.scrollTop(0);
+                    })
+            });
         });
+
+        this.onWorkspaceUpdated = function() {
+            var self = this;
+            this.dataRequest('workspace', 'store')
+                .done(function(workspaceVertices) {
+                    self.workspaceVertices = workspaceVertices;
+                });
+        };
 
         this.onContextMenu = function(event) {
             var $target = $(event.target).closest('.vertex-item'),
@@ -137,18 +151,18 @@ define([
                 moveTo = previousSelected[e.type === 'up' ? 'prev' : 'next']('.vertex-item');
 
             if (moveTo.length) {
-
-                var selected = [];
+                var selected = [],
+                    vertexId = moveTo.data('vertexId');
 
                 if (data.shiftKey) {
-                    selected = selected.concat(appData.selectedVertices);
-                    selected.push(appData.vertex(moveTo.data('vertexId')));
+                    selected = selected.concat(_.keys(lumifyData.selectedObjects.vertexIds));
+                    selected.push(vertexId);
                 } else {
-                    selected.push(appData.vertex(moveTo.data('vertexId')));
+                    selected.push(vertexId);
                 }
 
                 this.trigger(document, 'defocusVertices');
-                this.trigger('selectObjects', { vertices: selected });
+                this.trigger('selectObjects', { vertexIds: selected });
             }
         };
 
@@ -447,7 +461,9 @@ define([
                     })
                     .value().join(',');
 
-            $(ids, this.node).addClass('active');
+            if (ids.length) {
+                $(ids, this.node).addClass('active');
+            }
         };
     }
 });

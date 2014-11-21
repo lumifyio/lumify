@@ -9,8 +9,8 @@ define([
         var baseObj = {
                 vertices: [],
                 edges: [],
-                vertexIds: [],
-                edgeIds: []
+                vertexIds: {},
+                edgeIds: {}
             },
             returnable = _.extend({}, baseObj, data || {});
 
