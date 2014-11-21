@@ -37,6 +37,27 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
             return Promise.resolve(workspace && workspace.vertices || []);
         },
 
+        histogramValues: function(workspaceId, property) {
+            if (arguments.length === 1) {
+                property = arguments[0];
+                workspaceId = null;
+            }
+
+            var workspace = store.getObject(workspaceId || publicData.currentWorkspaceId, 'workspace');
+                vertexIds = _.keys(workspace.vertices),
+                vertices = store.getObjects(workspace.workspaceId, 'vertex', vertexIds);
+                values = _.chain(vertices)
+                    .map(function(v) {
+                        var properties = _.where(v.properties, { name: property.title });
+                        return _.pluck(properties, 'value');
+                    })
+                    .flatten(true)
+                    .compact()
+                    .value()
+
+            return Promise.resolve(values);
+        },
+
         save: function(workspaceId, changes) {
             if (arguments.length === 1) {
                 changes = workspaceId;

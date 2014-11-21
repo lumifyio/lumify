@@ -86,8 +86,7 @@ define(['util/promise'], function() {
                             }
                             fulfill(json);
                         } catch(e) {
-                            console.error(e);
-                            reject(new Error(e && e.message));
+                            reject(e && e.message);
                         }
                     } else {
                         fulfill(text)
@@ -99,15 +98,12 @@ define(['util/promise'], function() {
                 }
             };
             r.onerror = function() {
-                console.log('error')
                 if (r.upload) {
                     r.upload.removeEventListener('progress', progressHandler);
                 }
                 reject(new Error('Network Error'));
             };
-            console.log('opening')
             r.open(method || 'get', resolvedUrl, true);
-            console.log('opened')
 
             if (r.upload) {
                 r.upload.addEventListener('progress', (progressHandler = function(event) {

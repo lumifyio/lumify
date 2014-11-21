@@ -32,11 +32,12 @@ define([
                 d;
 
             if (this.attr.predicates) {
-                d = this.hasGeocoder().done(function(enabled) {
+                d = this.hasGeocoder();
+                d.done(function(enabled) {
                     self.attr.hasGeocoder = enabled;
                 });
             } else {
-                d = $.Deferred().resolve();
+                d = Promise.resolve();
             }
 
             d.done(function() {

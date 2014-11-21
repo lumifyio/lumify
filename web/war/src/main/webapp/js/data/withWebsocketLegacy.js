@@ -15,7 +15,6 @@ define([], function() {
                             // Remember to also Change
                             // web-worker/handlers/atmosphereConfiguration
                             onOpen: function() {
-                                console.log('OPENED');
                                 fulfill(socket);
                             },
                             onError: function(request) {
@@ -47,15 +46,17 @@ define([], function() {
             });
 
             this.websocketFromWorker = function(message) {
-                Promise.all([
-                    atmospherePromise,
-                    'util/websocket'
-                ]).then(function(r) {
-                    var socket = r[0],
-                        websocketUtils = r[1];
+                if (message && message.message) {
+                    Promise.all([
+                        atmospherePromise,
+                        Promise.require('util/websocket')
+                    ]).then(function(r) {
+                        var socket = r[0],
+                            websocketUtils = r[1];
 
-                    websocketUtils.pushDataToSocket(socket, lumifyData.socketSourceGuid, message);
-                });
+                        websocketUtils.pushDataToSocket(socket, lumifyData.socketSourceGuid, message.message);
+                    });
+                }
             }
         }
 
