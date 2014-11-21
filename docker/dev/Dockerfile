@@ -35,7 +35,7 @@ ENV _JAVA_OPTIONS -Djava.net.preferIPv4Stack=true
 
 # Install Maven
 RUN \
-  wget -O /opt/apache-maven-3.2.3-bin.tar.gz http://apache.mirrors.pair.com/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz \
+  wget -O /opt/apache-maven-3.2.3-bin.tar.gz http://www.us.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz \
   && tar -xzf /opt/apache-maven-3.2.3-bin.tar.gz -C /opt \
   && rm /opt/apache-maven-3.2.3-bin.tar.gz \
   && ln -s /opt/apache-maven-3.2.3 /opt/maven
@@ -45,7 +45,7 @@ ENV MVN_HOME /opt/maven
 
 # Install ZooKeeper
 RUN \
-  wget -O /opt/zookeeper-3.4.6.tar.gz http://apache.mirrors.pair.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz \
+  wget -O /opt/zookeeper-3.4.6.tar.gz http://www.us.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz \
   && tar -xzf /opt/zookeeper-3.4.6.tar.gz -C /opt \
   && rm /opt/zookeeper-3.4.6.tar.gz \
   && ln -s /opt/zookeeper-3.4.6 /opt/zookeeper \
@@ -57,26 +57,28 @@ ENV PATH $PATH:/opt/zookeeper/bin
 EXPOSE 2181 2888 3888
 
 # Install Hadoop
-VOLUME ["/var/lib/hadoop-hdfs", "/var/local/hadoop", "/opt/hadoop-2.5.1/logs"]
+VOLUME ["/var/lib/hadoop-hdfs", "/var/local/hadoop"]
 
 RUN \
-  wget -O /opt/hadoop-2.5.1.tar.gz http://apache.mirrors.pair.com/hadoop/common/hadoop-2.5.1/hadoop-2.5.1.tar.gz \
-  && tar -xzf /opt/hadoop-2.5.1.tar.gz -C /opt/ \
-  && rm /opt/hadoop-2.5.1.tar.gz \
-  && ln -s /opt/hadoop-2.5.1 /opt/hadoop \
+  wget -O /opt/hadoop-2.5.2.tar.gz http://www.us.apache.org/dist/hadoop/common/hadoop-2.5.2/hadoop-2.5.2.tar.gz \
+  && tar -xzf /opt/hadoop-2.5.2.tar.gz -C /opt/ \
+  && rm /opt/hadoop-2.5.2.tar.gz \
+  && ln -s /opt/hadoop-2.5.2 /opt/hadoop \
   && sed -i '/^export JAVA_HOME/ s:.*:export JAVA_HOME=/opt/jdk\nexport HADOOP_PREFIX=/opt/hadoop\nexport HADOOP_HOME=/opt/hadoop\n:' /opt/hadoop/etc/hadoop/hadoop-env.sh \
   && sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop/:' /opt/hadoop/etc/hadoop/hadoop-env.sh \
   && sed -i '/^hadoop.log.dir=.*/ s:.*:hadoop.log.dir=/var/log/hadoop:' /opt/hadoop/etc/hadoop/log4j.properties \
   && mkdir /opt/hadoop/input \
   && mkdir /var/log/hadoop \
+  && rm -rf /opt/hadoop-2.5.2/logs \
+  && ln -s /var/log/hadoop /opt/hadoop-2.5.2/logs \
   && rm /opt/hadoop/lib/native/* \
   && wget -q -O - http://dl.bintray.com/sequenceiq/sequenceiq-bin/hadoop-native-64-2.5.0.tar | tar -xzf - -C /opt/hadoop/lib/native/ \
   && chmod +x /opt/hadoop/etc/hadoop/*-env.sh
 
-ADD hadoop/core-site.xml.template /opt/hadoop-2.5.1/etc/hadoop/core-site.xml.template
-ADD hadoop/hdfs-site.xml /opt/hadoop-2.5.1/etc/hadoop/hdfs-site.xml
-ADD hadoop/mapred-site.xml /opt/hadoop-2.5.1/etc/hadoop/mapred-site.xml
-ADD hadoop/yarn-site.xml /opt/hadoop-2.5.1/etc/hadoop/yarn-site.xml
+ADD hadoop/core-site.xml.template /opt/hadoop-2.5.2/etc/hadoop/core-site.xml.template
+ADD hadoop/hdfs-site.xml /opt/hadoop-2.5.2/etc/hadoop/hdfs-site.xml
+ADD hadoop/mapred-site.xml /opt/hadoop-2.5.2/etc/hadoop/mapred-site.xml
+ADD hadoop/yarn-site.xml /opt/hadoop-2.5.2/etc/hadoop/yarn-site.xml
 
 ENV HADOOP_PREFIX /opt/hadoop
 ENV HADOOP_COMMON_HOME /opt/hadoop
@@ -94,13 +96,14 @@ RUN \
 EXPOSE 8032 8088 50030 50060 50070 50075 50090 50105
 
 # Install Accumulo
-VOLUME ["/opt/accumulo-1.6.1/logs"]
-
 RUN \
-  wget -O /opt/accumulo-1.6.1-bin.tar.gz http://apache.mirrors.pair.com/accumulo/1.6.1/accumulo-1.6.1-bin.tar.gz \
+  wget -O /opt/accumulo-1.6.1-bin.tar.gz http://www.us.apache.org/dist/accumulo/1.6.1/accumulo-1.6.1-bin.tar.gz \
   && tar -xzf /opt/accumulo-1.6.1-bin.tar.gz -C /opt \
   && rm /opt/accumulo-1.6.1-bin.tar.gz \
   && ln -s /opt/accumulo-1.6.1 /opt/accumulo \
+  && rm -rf /opt/accumulo-1.6.1/logs \
+  && mkdir -p /var/log/accumulo \
+  && ln -s /var/log/accumulo /opt/accumulo-1.6.1/logs \
   && cp /opt/accumulo/conf/examples/1GB/standalone/* /opt/accumulo/conf \
   && sed -i -e "s|HADOOP_PREFIX=/path/to/hadoop|HADOOP_PREFIX=/opt/hadoop|" \
             -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/opt/jdk|" \
@@ -117,13 +120,16 @@ ENV PATH $PATH:/opt/accumulo/bin
 EXPOSE 9997 9999 50091 50095
 
 # Install ElasticSearch
-VOLUME ["/opt/elasticsearch-1.4.0/logs"]
+VOLUME ["/opt/elasticsearch-1.4.0/data/"]
 
 RUN \
   wget -O /opt/elasticsearch-1.4.0.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.0.tar.gz \
   && tar -xzf /opt/elasticsearch-1.4.0.tar.gz -C /opt \
   && rm /opt/elasticsearch-1.4.0.tar.gz \
   && ln -s /opt/elasticsearch-1.4.0 /opt/elasticsearch \
+  && rm -rf /opt/elasticsearch-1.4.0/logs \
+  && mkdir -p /var/log/elasticsearch \
+  && ln -s /var/log/elasticsearch /opt/elasticsearch-1.4.0/logs \
   && /opt/elasticsearch/bin/plugin -install mobz/elasticsearch-head \
   && /opt/elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
 

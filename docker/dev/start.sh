@@ -2,6 +2,10 @@
 
 sed s/HOSTNAME/$HOSTNAME/ /opt/hadoop/etc/hadoop/core-site.xml.template > /opt/hadoop/etc/hadoop/core-site.xml
 
+mkdir -p /var/log/hadoop
+mkdir -p /var/log/accumulo
+mkdir -p /var/log/elasticsearch
+
 service sshd start
 /opt/zookeeper/bin/zkServer.sh start
 
@@ -24,11 +28,4 @@ fi
 
 /opt/elasticsearch/bin/elasticsearch > /dev/null &
 
-if [[ $1 == "-d" ]]; then
-  echo "Sleeping..."
-  while true; do sleep 1000; done
-fi
-
-if [[ $1 == "-bash" ]]; then
-  /bin/bash
-fi
+/bin/bash
