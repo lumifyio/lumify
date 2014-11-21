@@ -122,11 +122,21 @@ define([
             });
         });
 
-        this.onWorkspaceUpdated = function() {
+        this.onWorkspaceUpdated = function(event, data) {
             var self = this;
             this.dataRequest('workspace', 'store')
                 .done(function(workspaceVertices) {
                     self.workspaceVertices = workspaceVertices;
+                    var ids = _.pluck(data.entityUpdates, 'vertexId').concat(data.entityDeletes)
+                    if (ids.length) {
+                        self.dataRequest('vertex', 'store', { vertexIds: ids })
+                            .done(function(vertices) {
+                                // TODO: only toggleWorkspaceIcons?
+                                self.onVerticesUpdated(null, {
+                                    vertices: vertices
+                                });
+                            })
+                    }
                 });
         };
 
@@ -188,9 +198,7 @@ define([
 
             this.$node.on('mouseenter mouseleave', '.vertex-item', this.onHoverItem.bind(this));
 
-            this.on(document, 'verticesAdded', this.onVerticesUpdated);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
-            this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.on(document, 'switchWorkspace', this.onWorkspaceClear);
             this.on(document, 'workspaceDeleted', this.onWorkspaceClear);
@@ -442,13 +450,6 @@ define([
             });
 
             this.loadVisibleResultPreviews();
-        };
-
-        this.onVerticesDeleted = function(event, data) {
-            var self = this;
-            (data.vertices || []).forEach(function(vertex) {
-                self.toggleItemIcons(vertex.id, { inGraph: false, inMap: false });
-            });
         };
 
         this.onObjectsSelected = function(event, data) {
