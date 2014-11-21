@@ -1,21 +1,13 @@
 package io.lumify.analystsNotebook;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.analystsNotebook.aggregateClassification.AggregateClassificationClient;
 import io.lumify.analystsNotebook.model.*;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.formula.FormulaEvaluator;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
-import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -35,11 +27,7 @@ import static org.securegraph.util.IterableUtils.toList;
 @Singleton
 public class AnalystsNotebookExporter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AnalystsNotebookExporter.class);
-    private static final String XML_DECLARATION = "<?xml version='1.0' encoding='UTF-8'?>";
-    private static final String XML_COMMENT_START = "<!-- ";
-    private static final String XML_COMMENT_END = " -->";
-    private static final String XML_COMMENT_INDENT = "     ";
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+
     private Graph graph;
     private WorkspaceRepository workspaceRepository;
     private OntologyRepository ontologyRepository;
@@ -64,30 +52,14 @@ public class AnalystsNotebookExporter {
         aggregateClassificationClient = new AggregateClassificationClient(configuration);
     }
 
-    public static String toXml(Chart chart, List<String> comments) {
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append(XML_DECLARATION).append(LINE_SEPARATOR);
-            sb = appendComments(sb, comments);
-            sb.append(getXmlMapper().writeValueAsString(chart));
-            return sb.toString();
-        } catch (JsonProcessingException e) {
-            throw new LumifyException("exception while generating XML", e);
-        }
-    }
-
     public Chart toChart(AnalystsNotebookVersion version, Workspace workspace, User user, Authorizations authorizations, Locale locale, String timeZone, String baseUrl) {
         LOGGER.debug("creating Chart from workspace %s for Analyst's Notebook version %s", workspace.getWorkspaceId(), version.toString());
 
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
-
         Iterable<String> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
         Iterable<Vertex> vertices = graph.getVertices(vertexIds, authorizations);
         Map<Vertex, WorkspaceEntity> vertexWorkspaceEntityMap = createVertexWorkspaceEntityMap(vertices, workspaceEntities);
-
         List<Edge> edges = toList(graph.getEdges(graph.findRelatedEdges(vertexIds, authorizations), authorizations));
-
-        String classificationBanner = aggregateClassificationClient.getClassificationBanner(vertices);
 
         Chart chart = new Chart();
         chart.setAttributeClassCollection(createAttributeClassCollection(vertices));
@@ -95,6 +67,15 @@ public class AnalystsNotebookExporter {
         chart.setEntityTypeCollection(EntityType.createForVertices(vertices, ontologyRepository, version));
         if (version.supports(AnalystsNotebookFeature.CUSTOM_IMAGE_COLLECTION) && analystsNotebookExportConfiguration.enableCustomImageCollection()) {
             chart.setCustomImageCollection(CustomImage.createForVertices(vertices, ontologyRepository));
+        }
+
+        String classificationBanner = "hello, world"; //aggregateClassificationClient.getClassificationBanner(vertices);
+
+        if (version.supports(AnalystsNotebookFeature.SUMMARY) && classificationBanner != null) {
+            chart.setSummary(getSummary(classificationBanner));
+        }
+        if (version.supports(AnalystsNotebookFeature.PRINT_SETTINGS) && classificationBanner != null) {
+            chart.setPrintSettings(getPrintSettings());
         }
 
         List<ChartItem> chartItems = new ArrayList<ChartItem>();
@@ -110,25 +91,18 @@ public class AnalystsNotebookExporter {
         for (Edge edge : edges) {
             chartItems.add(ChartItem.createFromEdge(version, edge, ontologyRepository));
         }
+
         if (classificationBanner != null) {
             int margin = 50;
             int[] minXYmaxXY = getMinXYmaxXY(workspaceEntities);
             int middleX = minXYmaxXY[0] + ((minXYmaxXY[2] - minXYmaxXY[0]) / 2); // center of items
             int headerY = minXYmaxXY[1] - margin; // possible negative value seems ok
             int footerY = minXYmaxXY[3] + margin;
-            chartItems.add(getLabelChartItem(classificationBanner, middleX, headerY, "class_header"));
-            chartItems.add(getLabelChartItem(classificationBanner, middleX, footerY, "class_footer"));
+            chartItems.add(ChartItem.createLabel(version, middleX, headerY, classificationBanner, classificationBanner, "class_header"));
+            chartItems.add(ChartItem.createLabel(version, middleX, footerY, classificationBanner, classificationBanner, "class_footer"));
         }
+
         chart.setChartItemCollection(chartItems);
-
-        if (version.supports(AnalystsNotebookFeature.SUMMARY) && classificationBanner != null) {
-            chart.setSummary(getSummary(classificationBanner));
-        }
-
-        if (version.supports(AnalystsNotebookFeature.PRINT_SETTINGS) && classificationBanner != null) {
-            chart.setPrintSettings(getPrintSettings());
-        }
-
         return chart;
     }
 
@@ -155,22 +129,7 @@ public class AnalystsNotebookExporter {
         return attributeClasses;
     }
 
-    private ChartItem getLabelChartItem(String chartItemLabelAndDescription, int x, int y, String labelId) {
-        ChartItem chartItem = new ChartItem();
-        chartItem.setLabel(chartItemLabelAndDescription);
-        chartItem.setDescription(chartItemLabelAndDescription);
-        chartItem.setDateSet(false);
-        chartItem.setxPosition(x);
-        Label label = new Label();
-        label.setLabelId(labelId);
-        End end = new End();
-        end.setY(y);
-        end.setLabel(label);
-        chartItem.setEnd(end);
-        return chartItem;
-    }
-
-    private Map<Vertex, WorkspaceEntity> createVertexWorkspaceEntityMap(Iterable<Vertex> vertices, List<WorkspaceEntity> workspaceEntities) {
+    private static Map<Vertex, WorkspaceEntity> createVertexWorkspaceEntityMap(Iterable<Vertex> vertices, List<WorkspaceEntity> workspaceEntities) {
         Map<Vertex, WorkspaceEntity> map = new HashMap<Vertex, WorkspaceEntity>();
         for (Vertex vertex : vertices) {
             WorkspaceEntity correspondingWorkspaceEntity = null;
@@ -187,11 +146,11 @@ public class AnalystsNotebookExporter {
         return map;
     }
 
-    private int[] getMinXYmaxXY(Collection<WorkspaceEntity> workspaceEntities) {
+    private static int[] getMinXYmaxXY(Collection<WorkspaceEntity> workspaceEntities) {
         int[] minXYmaxXY = {Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 0};
-        for(WorkspaceEntity workspaceEntity : workspaceEntities) {
+        for (WorkspaceEntity workspaceEntity : workspaceEntities) {
             int x = workspaceEntity.getGraphPositionX();
-            int y = workspaceEntity.getGraphPositionX();
+            int y = workspaceEntity.getGraphPositionY();
             /* min x */ minXYmaxXY[0] = x < minXYmaxXY[0] ? x : minXYmaxXY[0];
             /* min y */ minXYmaxXY[1] = y < minXYmaxXY[1] ? y : minXYmaxXY[1];
             /* max x */ minXYmaxXY[2] = x > minXYmaxXY[2] ? x : minXYmaxXY[2];
@@ -200,7 +159,7 @@ public class AnalystsNotebookExporter {
         return minXYmaxXY;
     }
 
-    private List<LinkType> getLinkTypes() {
+    private static List<LinkType> getLinkTypes() {
         List<LinkType> linkTypes = new ArrayList<LinkType>();
         LinkType linkType = new LinkType();
         linkType.setColour("65280");
@@ -209,7 +168,7 @@ public class AnalystsNotebookExporter {
         return linkTypes;
     }
 
-    private PrintSettings getPrintSettings() {
+    private static PrintSettings getPrintSettings() {
         PrintSettings printSettings = new PrintSettings();
         List<Header> headers = new ArrayList<Header>();
         Header header = new Header();
@@ -228,7 +187,7 @@ public class AnalystsNotebookExporter {
         return printSettings;
     }
 
-    private Summary getSummary(String classificationBanner) {
+    private static Summary getSummary(String classificationBanner) {
         Summary summary = new Summary();
         List<CustomProperty> customProperties = new ArrayList<CustomProperty>();
         CustomProperty customProperty = new CustomProperty();
@@ -238,29 +197,6 @@ public class AnalystsNotebookExporter {
         customProperties.add(customProperty);
         summary.setCustomPropertyCollection(customProperties);
         return summary;
-    }
-
-    private static XmlMapper getXmlMapper() {
-        XmlMapper mapper = new XmlMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);
-        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper;
-    }
-
-    private static StringBuilder appendComments(StringBuilder sb, List<String> comments) {
-        if (comments != null && comments.size() > 0) {
-            if (comments.size() == 1) {
-                return sb.append(XML_COMMENT_START).append(comments.get(0)).append(XML_COMMENT_END).append(LINE_SEPARATOR);
-            } else {
-                for (int i = 0; i < comments.size(); i++) {
-                    sb.append(i == 0 ? XML_COMMENT_START : XML_COMMENT_INDENT).append(comments.get(i)).append(LINE_SEPARATOR);
-                }
-                sb.append(XML_COMMENT_END).append(LINE_SEPARATOR);
-            }
-        }
-        return sb;
     }
 
     // TODO: this is copied from io.lumify.web.routes.workspace.WorkspaceVertices

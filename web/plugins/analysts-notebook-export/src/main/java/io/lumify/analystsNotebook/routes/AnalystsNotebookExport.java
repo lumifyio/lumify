@@ -65,7 +65,7 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
         comments.add(String.format("%s/#w=%s", baseUrl, workspaceId));
         comments.add(String.format("Exported %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
 
-        String xml = AnalystsNotebookExporter.toXml(chart, comments);
+        String xml = chart.toXml(comments);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         response.setContentType(CONTENT_TYPE);
         setMaxAge(response, EXPIRES_1_HOUR);
