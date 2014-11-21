@@ -187,11 +187,12 @@ define([
                     });
                     self.trigger('loadEdges');
                 })
-                .catch(function(req, reason, statusText) {
+                .catch(function(error) {
                     $target.text(i18n('popovers.connection.button.connect'))
                         .add(inputs)
                         .removeAttr('disabled');
-                    self.markFieldErrors(statusText);
+                    self.markFieldErrors(error);
+                    self.positionDialog();
                 })
                 .finally(function() {
                     self.attr.teardownOnTap = true;

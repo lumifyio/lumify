@@ -25,10 +25,12 @@ define([], function() {
                     });
                 })
                 .catch(function(error) {
-                    console.error(error);
+                    if (error && error instanceof Error) {
+                        error = error.message;
+                    }
                     dispatchMain('dataRequestCompleted', {
                         success: false,
-                        error: error.message,
+                        error: error,
                         requestId: message.data.requestId,
                         originalRequest: _.pick(message.data, 'service', 'method', 'parameters')
                     })

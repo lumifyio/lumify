@@ -92,8 +92,18 @@ define(['util/promise'], function() {
                         fulfill(text)
                     }
                 } else {
+                    if (r.statusText && /^\s*{/.test(r.statusText)) {
+                        try {
+                            var errorJson = JSON.parse(r.statusText);
+                            reject(errorJson);
+                            return;
+                        } catch(e) {
+                            // continue
+                        }
+                    }
                     reject({
-                        status: r.status
+                        status: r.status,
+                        statusText: r.statusText
                     });
                 }
             };
@@ -103,7 +113,7 @@ define(['util/promise'], function() {
                 }
                 reject(new Error('Network Error'));
             };
-            r.open(method || 'get', resolvedUrl, true);
+            r.open(method, resolvedUrl, true);
 
             if (r.upload) {
                 r.upload.addEventListener('progress', (progressHandler = function(event) {

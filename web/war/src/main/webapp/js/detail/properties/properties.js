@@ -597,19 +597,8 @@ define([
             this.$node.find('.underneath').teardownComponent(PropertyForm);
         };
 
-        this.requestFailure = function(request, message, error) {
+        this.requestFailure = function(error) {
             var target = this.$node.find('.underneath');
-            if (_.isElement(request)) {
-                target = request;
-                request = arguments[1];
-                message = arguments[2];
-                error = arguments[3];
-            }
-
-            try {
-                error = JSON.parse(error);
-            } catch(e) { }
-
             this.trigger(target, 'propertyerror', { error: error });
         };
 
