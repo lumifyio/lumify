@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-reindex-mr</artifactId>
-    <name>Lumify: Tools: Re-index MapReduce</name>
+    <artifactId>lumify-assign-image-mr</artifactId>
+    <name>Lumify: Tools: Assign Image MapReduce</name>
 
     <dependencies>
         <dependency>
@@ -38,7 +38,7 @@
             <artifactId>lumify-model-bigtable</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <!-- Required for MR job -->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
@@ -89,7 +89,7 @@
                     <descriptor>src/main/assembly/descriptor.xml</descriptor>
                     <archive>
                         <manifest>
-                            <mainClass>io.lumify.reindexmr.ReindexMR</mainClass>
+                            <mainClass>io.lumify.assignimagemr.AssignImageMR</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

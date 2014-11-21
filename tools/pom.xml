@@ -23,5 +23,6 @@
         <module>reindex-mr</module>
         <module>format</module>
         <module>rdf-import</module>
+        <module>assign-image-mr</module>
     </modules>
 </project>
