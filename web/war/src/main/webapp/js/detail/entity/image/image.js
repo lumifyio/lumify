@@ -281,8 +281,6 @@ define([
             }
 
             this.updateImageBackground(this.srcForGlyphIconUrl(F.vertex.imageDetail(data.vertex)));
-
-            this.trigger(document, 'updateVertices', { vertices: [data.vertex] });
         };
 
         this.onUpdateProgress = function(event, data) {

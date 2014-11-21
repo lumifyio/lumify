@@ -841,13 +841,13 @@ define([
                         }
                         var updates = $.map(cy.nodes(), function(vertex) {
                             return {
-                                id: fromCyId(vertex.id()),
-                                workspace: {
-                                    graphPosition: retina.pixelsToPoints(vertex.position())
-                                }
+                                vertexId: fromCyId(vertex.id()),
+                                graphPosition: retina.pixelsToPoints(vertex.position())
                             };
                         });
-                        self.trigger(document, 'updateVertices', { vertices: updates });
+                        self.trigger('updateWorkspace', {
+                            entityUpdates: updates
+                        });
                         self.fit(cy);
                     }
                 }, LAYOUT_OPTIONS[layout] || {});
