@@ -39,20 +39,21 @@ define([
         },
         getConfiguration = memoize(function() {
             var data = {};
-            try {
-                var language = localStorage.getItem('language');
-                if (language) {
-                    data.localeLanguage = language;
-                }
-                var country = localStorage.getItem('country');
-                if (country) {
-                    data.localeCountry = country;
-                }
-                var variant = localStorage.getItem('variant');
-                if (variant) {
-                    data.localeVariant = variant;
-                }
-            } catch(e) { }
+            // TODO: move to main thread
+            //try {
+                //var language = localStorage.getItem('language');
+                //if (language) {
+                    //data.localeLanguage = language;
+                //}
+                //var country = localStorage.getItem('country');
+                //if (country) {
+                    //data.localeCountry = country;
+                //}
+                //var variant = localStorage.getItem('variant');
+                //if (variant) {
+                    //data.localeVariant = variant;
+                //}
+            //} catch(e) { console.log(e);}
             return ajax('GET', '/configuration', data);
         }),
         api = {

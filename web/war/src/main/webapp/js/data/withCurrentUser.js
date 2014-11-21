@@ -36,25 +36,28 @@ define([], function() {
         this.findOrCreateWorkspace = function(userId, dataRequestCompleted, request) {
             var self = this;
 
-            this.dataRequest('workspace', 'all')
-                .then(function(workspaces) {
-                    if (workspaces.length) {
-                        return Promise.resolve(workspaces[0]);
-                    }
+            this.dataRequestPromise
+                .done(function(dataRequest) {
+                    dataRequest('workspace', 'all')
+                        .then(function(workspaces) {
+                            if (workspaces.length) {
+                                return Promise.resolve(workspaces[0]);
+                            }
 
-                    return self.dataRequest('workspace', 'create')
+                            return dataRequest('workspace', 'create')
+                        })
+                        .done(function(workspace) {
+                            self.pushSocket({
+                                type: 'setActiveWorkspace',
+                                data: {
+                                    workspaceId: workspace.workspaceId,
+                                    userId: userId
+                                }
+                            });
+                            self.setPublicApi('currentWorkspaceId', workspace.workspaceId);
+                            dataRequestCompleted.call(this, request);
+                        });
                 })
-                .done(function(workspace) {
-                    self.pushSocket({
-                        type: 'setActiveWorkspace',
-                        data: {
-                            workspaceId: workspace.workspaceId,
-                            userId: userId
-                        }
-                    });
-                    self.setPublicApi('currentWorkspaceId', workspace.workspaceId);
-                    dataRequestCompleted.call(this, request);
-                });
         };
 
     }

@@ -63,12 +63,8 @@ define(['util/promise'], function() {
             var r = new XMLHttpRequest(),
                 progressHandler,
                 params = isFile(parameters) ? toFileUpload(parameters) : toQueryString(parameters),
-                resolvedUrl = BASE_URL +
-                    url +
-                    ((/GET|DELETE/.test(method) && parameters) ?
-                        '?' + params :
-                        ''
-                    ),
+                resolvedUrl = BASE_URL + url + ((/GET|DELETE/.test(method) && parameters) ?
+                    ('?' + params) : ''),
                 formData;
 
             r.onload = function() {
@@ -97,20 +93,24 @@ define(['util/promise'], function() {
                         fulfill(text)
                     }
                 } else {
-                    reject(r);
+                    reject({
+                        status: r.status
+                    });
                 }
             };
             r.onerror = function() {
+                console.log('error')
                 if (r.upload) {
                     r.upload.removeEventListener('progress', progressHandler);
                 }
                 reject(new Error('Network Error'));
             };
+            console.log('opening')
             r.open(method || 'get', resolvedUrl, true);
+            console.log('opened')
 
             if (r.upload) {
                 r.upload.addEventListener('progress', (progressHandler = function(event) {
-                    console.log(event)
                     if (event.lengthComputable) {
                         var complete = (event.loaded / event.total || 0);
                         if (complete < 1.0) {

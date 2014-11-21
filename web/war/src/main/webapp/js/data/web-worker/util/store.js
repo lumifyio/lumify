@@ -279,8 +279,6 @@ define([
             console.log('updated', updated)
             dispatchMain('storeObjectsUpdated', { vertices: updated });
         }
-
-        console.log(vertexCache)
     }
 
     function cacheEdges(workspaceId, edges) {
@@ -314,8 +312,6 @@ define([
             console.log('updated', updated)
             dispatchMain('storeObjectsUpdated', { edges: updated });
         }
-
-        console.log(edgeCache);
     }
 
     function resemblesEdge(val) {

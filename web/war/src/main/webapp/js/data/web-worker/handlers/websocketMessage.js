@@ -93,7 +93,7 @@ define(['require'], function(require) {
             return;
         }
 
-        console.info(json.type, json.data);
+        console.debug('Socket: ', json.type, json.data);
 
         if (json.type in socketHandlers) {
             socketHandlers[json.type](json.data || json);

@@ -30,10 +30,12 @@ define([], function() {
 
         this.onLoadEdges = function(event, data) {
             var self = this;
-            this.dataRequest('workspace', 'edges', data && data.workspaceId)
-                .done(function(edges) {
-                    self.edgesLoaded({ edges:edges });
-                })
+            this.dataRequestPromise.done(function(dataRequest) {
+                dataRequest('workspace', 'edges', data && data.workspaceId)
+                    .done(function(edges) {
+                        self.edgesLoaded({ edges:edges });
+                    })
+            });
         };
 
         this.onSwitchWorkspace = function(event, data) {
@@ -54,19 +56,21 @@ define([], function() {
                     self.trigger('workspaceSaving', lastReloadedState.workspace);
                 }, 250)
 
-            this.dataRequest('workspace', 'save', data)
-                .then(function(data) {
-                    clearTimeout(buffer);
-                    if (data.saved) {
-                        self.trigger('workspaceSaved', lastReloadedState.workspace);
-                    }
-                })
-                .finally(function() {
-                    if (triggered) {
-                        self.trigger('workspaceSaved', lastReloadedState.workspace);
-                    }
-                })
-                .done();
+            this.dataRequestPromise.done(function(dataRequest) {
+                dataRequest('workspace', 'save', data)
+                    .then(function(data) {
+                        clearTimeout(buffer);
+                        if (data.saved) {
+                            self.trigger('workspaceSaved', lastReloadedState.workspace);
+                        }
+                    })
+                    .finally(function() {
+                        if (triggered) {
+                            self.trigger('workspaceSaved', lastReloadedState.workspace);
+                        }
+                    })
+                    .done();
+            });
         };
 
         // Worker Handlers

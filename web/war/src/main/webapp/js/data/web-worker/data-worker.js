@@ -31,7 +31,9 @@ function setupConsole() {
         return function() {
             dispatchMain('brokenWorkerConsole', {
                 logType: type,
-                messages: Array.prototype.slice.call(arguments, 0)
+                messages: Array.prototype.slice.call(arguments, 0).map(function(arg) {
+                    return JSON.stringify(arg);
+                })
             });
         }
     }
@@ -72,6 +74,9 @@ function setupWebsocket() {
 }
 
 function setupRequireJs() {
+    if (typeof FormData === 'undefined') {
+        importScripts('./util/formDataPolyfill.js');
+    }
     importScripts(BASE_URL + '/jsc/require.config.js');
     require.baseUrl = BASE_URL + '/jsc/';
     importScripts(BASE_URL + '/libs/requirejs/require.js');
@@ -96,7 +101,15 @@ function dispatchMain(type, message) {
     }
     message = message || {};
     message.type = type;
-    postMessage(message);
+    try {
+        postMessage(message);
+    } catch(e) {
+        postMessage({
+            type:'brokenWorkerConsole',
+            logType: 'error',
+            messages: ['error posting', e.message, JSON.stringify(message).substring(0, 100)]
+        });
+    }
 }
 
 function ajaxPrefilter(xmlHttpRequest, method, url, parameters) {

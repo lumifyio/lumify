@@ -50,10 +50,12 @@ define([
         this.onSelectAll = function(event, data) {
             var self = this;
 
-            this.dataRequest('workspace', 'store')
-                .done(function(vertices) {
-                    self.trigger('selectObjects', { vertexIds: _.keys(vertices) });
-                })
+            this.dataRequestPromise.done(function(dataRequest) {
+                dataRequest('workspace', 'store')
+                    .done(function(vertices) {
+                        self.trigger('selectObjects', { vertexIds: _.keys(vertices) });
+                    })
+            })
         };
 
         this.onDeleteSelected = function(event, data) {
@@ -80,11 +82,13 @@ define([
             var edge = data && data.edges && data.edges.length === 1 && data.edges[0];
 
             if (edge) {
-                this.dataRequest('edge', 'delete',
-                    edge.id,
-                    edge.source.id,
-                    edge.target.id
-                );
+                this.dataRequestPromise.done(function(dataRequest) {
+                    dataRequest('edge', 'delete',
+                        edge.id,
+                        edge.source.id,
+                        edge.target.id
+                    );
+                });
             } else console.error('Only can delete one edge at a time');
         };
 
@@ -92,51 +96,53 @@ define([
             var self = this,
                 promises = [];
 
-            if (data && data.vertexIds) {
-                if (!_.isArray(data.vertexIds)) {
-                    data.vertexIds = [data.vertexIds];
-                }
-                promises.push(
-                    this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
-                );
-            } else if (data && data.vertices) {
-                promises.push(Promise.resolve(data.vertices));
-            }
-
-            if (data && data.edgeIds && data.edgeIds.length) {
-                // Only supports one
-                if (_.isArray(data.edgeIds)) {
-                    data.edgeIds = data.edgeIds[0];
-                }
-                promises.push(
-                    this.dataRequest('edge', 'store', { edgeId: data.edgeIds })
-                );
-            } else if (data && data.edges) {
-                promises.push(Promise.resolve(data.edges));
-            }
-
-            Promise.all(promises)
-                .done(function(result) {
-                    var vertices = result[0] || [],
-                        edge = result[1],
-                        edges = edge ? [edge] : [];
-
-                    selectedObjects = {
-                        vertices: vertices,
-                        edges: vertices.length ? [] : edges
-                    };
-
-                    if (previousSelectedObjects &&
-                        selectedObjects &&
-                        _.isEqual(previousSelectedObjects, selectedObjects)) {
-                        return;
+            this.dataRequestPromise.done(function(dataRequest) {
+                if (data && data.vertexIds) {
+                    if (!_.isArray(data.vertexIds)) {
+                        data.vertexIds = [data.vertexIds];
                     }
+                    promises.push(
+                        dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
+                    );
+                } else if (data && data.vertices) {
+                    promises.push(Promise.resolve(data.vertices));
+                }
 
-                    previousSelectedObjects = selectedObjects;
+                if (data && data.edgeIds && data.edgeIds.length) {
+                    // Only supports one
+                    if (_.isArray(data.edgeIds)) {
+                        data.edgeIds = data.edgeIds[0];
+                    }
+                    promises.push(
+                        dataRequest('edge', 'store', { edgeId: data.edgeIds })
+                    );
+                } else if (data && data.edges) {
+                    promises.push(Promise.resolve(data.edges));
+                }
 
-                    self.setPublicApi('selectedObjects', defaultNoObjectsOrData(selectedObjects));
-                    self.trigger('objectsSelected', _.clone(selectedObjects));
-                })
+                Promise.all(promises)
+                    .done(function(result) {
+                        var vertices = result[0] || [],
+                            edge = result[1],
+                            edges = edge ? [edge] : [];
+
+                        selectedObjects = {
+                            vertices: vertices,
+                            edges: vertices.length ? [] : edges
+                        };
+
+                        if (previousSelectedObjects &&
+                            selectedObjects &&
+                            _.isEqual(previousSelectedObjects, selectedObjects)) {
+                            return;
+                        }
+
+                        previousSelectedObjects = selectedObjects;
+
+                        self.setPublicApi('selectedObjects', defaultNoObjectsOrData(selectedObjects));
+                        self.trigger('objectsSelected', _.clone(selectedObjects));
+                    });
+            });
         };
 
         this.onObjectsSelected = function(event, data) {
@@ -168,7 +174,9 @@ define([
             if (vertexId) {
                 Promise.all([
                     Promise.require('util/vertex/formatters'),
-                    this.dataRequest('vertex', 'store', { vertexIds: vertexId })
+                    this.dataRequestPromise.then(function(dataRequest) {
+                        return dataRequest('vertex', 'store', { vertexIds: vertexId });
+                    })
                 ]).done(function(results) {
                     var F = results.shift(),
                         vertex = results.shift(),
@@ -207,7 +215,9 @@ define([
             Promise.all([
                 Promise.require('util/popovers/addRelated/addRelated'),
                 Promise.require('util/vertex/formatters'),
-                this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
+                this.dataRequestPromise.then(function(dataRequest) {
+                    return dataRequest('vertex', 'store', { vertexIds: data.vertexId })
+                })
             ]).done(function(results) {
                 var RP = results.shift(),
                     F = results.shift(),

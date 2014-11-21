@@ -18,6 +18,18 @@ define([], function() {
                                 console.log('OPENED');
                                 fulfill(socket);
                             },
+                            onError: function(request) {
+                                self.websocketStateOnError({
+                                    reason: request.reasonPhrase,
+                                    error: request.error
+                                });
+                            },
+                            onClose: function(request) {
+                                self.websocketStateOnClose({
+                                    reason: request.reasonPhrase,
+                                    error: request.error
+                                });
+                            },
                             onMessage: function(response) {
                                 self.worker.postMessage({
                                     type: 'websocketMessage',

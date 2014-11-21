@@ -58,7 +58,7 @@ define([], function() {
                                 started = true;
                                 // TODO: for non-cached vertices we need
                                 // some ui feedback that it's loading
-                                verticesFromDraggable(draggable)
+                                verticesFromDraggable(draggable, self.dataRequestPromise)
                                     .done(function(v) {
                                         vertices = v;
                                         handler(event, draggableUI);
@@ -96,7 +96,7 @@ define([], function() {
                     // Early exit if should leave to a different droppable
                     if (!enabled) return;
 
-                    verticesFromDraggable(ui.draggable)
+                    verticesFromDraggable(ui.draggable, self.dataRequestPromise)
                         .done(function(vertices) {
                             var graphVisible = $('.graph-pane-2d').is('.visible');
 
@@ -110,7 +110,7 @@ define([], function() {
                 }.bind(this)
             });
 
-            function verticesFromDraggable(draggable) {
+            function verticesFromDraggable(draggable, dataRequestPromise) {
                 var alsoDragging = draggable.data('ui-draggable').alsoDragging,
                     anchors = draggable;
 
@@ -146,7 +146,9 @@ define([], function() {
                     return vertexId;
                 }).toArray());
 
-                return self.dataRequest('vertex', 'store', { vertexIds: vertexIds });
+                return dataRequestPromise.then(function(dataRequest) {
+                    return dataRequest('vertex', 'store', { vertexIds: vertexIds });
+                });
             }
         });
     }

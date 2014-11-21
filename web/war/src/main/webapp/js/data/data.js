@@ -12,8 +12,8 @@ define([
     './withObjectSelection',
     './withObjectsUpdated',
     './withWorkspaces',
-    './withWorkspaceVertexDrop',
-    'util/withDataRequest'
+    './withWorkspaceFiltering',
+    './withWorkspaceVertexDrop'
 ], function(
     defineComponent
     // mixins auto added in order (change index of slice)
@@ -32,21 +32,32 @@ define([
 
             this.setupDataWorker();
 
-            new Promise(function(fulfill, reject) {
+            this.dataRequestPromise = new Promise(function(fulfill, reject) {
                     if (self.lumifyData.readyForDataRequests) {
                         fulfill();
                     } else {
-                        self.on('readyForDataRequests', fulfill);
+                        var timer = _.delay(reject, 10000);
+                        self.on('readyForDataRequests', function readyForDataRequests() {
+                            if (timer) {
+                                clearTimeout(timer);
+                            }
+                            fulfill();
+                            self.off('readyForDataRequests', readyForDataRequests);
+                        });
                     }
-                })
-                .then(function() {
+                }).then(function() {
+                    return Promise.require('util/withDataRequest');
+                }).then(function(withDataRequest) {
+                    return withDataRequest.dataRequest;
+                });
+
+            this.messagesPromise = this.dataRequestPromise.then(function() {
                     return Promise.require('util/messages');
-                })
-                .done(this.setupMessages.bind(this));
+                }).then(this.setupMessages.bind(this));
         });
 
         this.setupMessages = function(i18n) {
-            window.i18n = i18n;
+            return (window.i18n = i18n);
         };
 
         this.setupDataWorker = function() {
