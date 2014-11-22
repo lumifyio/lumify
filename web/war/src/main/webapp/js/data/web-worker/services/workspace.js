@@ -43,9 +43,9 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
                 workspaceId = null;
             }
 
-            var workspace = store.getObject(workspaceId || publicData.currentWorkspaceId, 'workspace');
+            var workspace = store.getObject(workspaceId || publicData.currentWorkspaceId, 'workspace'),
                 vertexIds = _.keys(workspace.vertices),
-                vertices = store.getObjects(workspace.workspaceId, 'vertex', vertexIds);
+                vertices = store.getObjects(workspace.workspaceId, 'vertex', vertexIds),
                 values = _.chain(vertices)
                     .map(function(v) {
                         var properties = _.where(v.properties, { name: property.title });
@@ -53,7 +53,7 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
                     })
                     .flatten(true)
                     .compact()
-                    .value()
+                    .value();
 
             return Promise.resolve(values);
         },

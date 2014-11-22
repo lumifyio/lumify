@@ -258,7 +258,6 @@ define([
                             .uniq()
                             .value(),
                         updateHtml = function() {
-                            self.$node.html(workspacesTemplate({}));
                             $.when.apply($, _.chain(workspaces)
                                 .reject(function(workspace) {
                                     return _.isUndefined(workspace.createdBy);
@@ -368,6 +367,8 @@ define([
             this.on('keyup', {
                 addNewInputSelector: this.onInputKeyUp
             });
+
+            this.$node.html(workspacesTemplate({}));
         });
     }
 
