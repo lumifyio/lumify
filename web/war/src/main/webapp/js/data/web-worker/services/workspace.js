@@ -1,5 +1,9 @@
 
-define(['../util/ajax', '../util/store'], function(ajax, store) {
+define([
+    '../util/ajax',
+    '../util/store',
+    '../util/abort'
+], function(ajax, store, abortPrevious) {
     'use strict';
 
     return {
@@ -58,7 +62,7 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
             return Promise.resolve(values);
         },
 
-        save: function(workspaceId, changes) {
+        save: abortPrevious(function(workspaceId, changes) {
             if (arguments.length === 1) {
                 changes = workspaceId;
                 workspaceId = publicData.currentWorkspaceId;
@@ -96,7 +100,7 @@ define(['../util/ajax', '../util/store'], function(ajax, store) {
             }).then(function() {
                 return { saved: true, workspace: store.updateWorkspace(workspaceId, allChanges) };
             })
-        },
+        }),
 
         vertices: function(workspaceId) {
             return ajax('GET', '/workspace/vertices', {

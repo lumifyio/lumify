@@ -31,8 +31,7 @@ define(['promise-polyfill'], function() {
     addFinally();
     addTimeout();
     addRequire();
-
-    createDeferred();
+    fixThen();
 
     return Promise;
 
@@ -114,23 +113,15 @@ define(['promise-polyfill'], function() {
         } else console.warn('Native implementation of require');
     }
 
-    function createDeferred() {
-        if (typeof Deferred !== 'undefined') {
-            console.warn('Existing implementation of Deferred');
-        }
-
-        Deferred = function() {
-            var fulfill,
-                reject,
-                p = new Promise(function(f, r) {
-                    fulfill = f;
-                    reject = r;
-                });
-
-            return {
-                cancel: reject.bind(null, 'cancelled'),
-                promise: p
+    function fixThen() {
+        var oldThen = Promise.prototype.then;
+        Promise.prototype.then = function() {
+            var p = oldThen.apply(this, Array.prototype.slice.call(arguments, 0));
+            if (this.abort) {
+                p.abort = this.abort;
             }
+            return p;
         }
     }
+
 });

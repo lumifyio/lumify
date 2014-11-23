@@ -59,95 +59,103 @@ define(['util/promise'], function() {
             method = matches[1];
         }
 
-        return new Promise(function(fulfill, reject) {
-            var r = new XMLHttpRequest(),
-                progressHandler,
-                params = isFile(parameters) ? toFileUpload(parameters) : toQueryString(parameters),
-                resolvedUrl = BASE_URL + url + ((/GET|DELETE/.test(method) && parameters) ?
-                    ('?' + params) : ''),
-                formData;
+        var r = new XMLHttpRequest(),
+            promise = new Promise(function(fulfill, reject) {
+                var progressHandler,
+                    params = isFile(parameters) ? toFileUpload(parameters) : toQueryString(parameters),
+                    resolvedUrl = BASE_URL + url + ((/GET|DELETE/.test(method) && parameters) ?
+                        ('?' + params) : ''),
+                    formData;
 
-            r.onload = function() {
-                if (r.upload) {
-                    r.upload.removeEventListener('progress', progressHandler);
-                }
-                var text = r.status === 200 && r.responseText;
+                r.onload = function() {
+                    if (r.upload) {
+                        r.upload.removeEventListener('progress', progressHandler);
+                    }
+                    var text = r.status === 200 && r.responseText;
 
-                if (text) {
-                    if (isJson) {
-                        try {
-                            var json = JSON.parse(text);
-                            if (typeof ajaxPostfilter !== 'undefined') {
-                                ajaxPostfilter(r, json, {
-                                    method: method,
-                                    url: url,
-                                    parameters: parameters
-                                });
+                    if (text) {
+                        if (isJson) {
+                            try {
+                                var json = JSON.parse(text);
+                                if (typeof ajaxPostfilter !== 'undefined') {
+                                    ajaxPostfilter(r, json, {
+                                        method: method,
+                                        url: url,
+                                        parameters: parameters
+                                    });
+                                }
+                                fulfill(json);
+                            } catch(e) {
+                                reject(e && e.message);
                             }
-                            fulfill(json);
-                        } catch(e) {
-                            reject(e && e.message);
+                        } else {
+                            fulfill(text)
                         }
                     } else {
-                        fulfill(text)
-                    }
-                } else {
-                    if (r.statusText && /^\s*{/.test(r.statusText)) {
-                        try {
-                            var errorJson = JSON.parse(r.statusText);
-                            reject(errorJson);
-                            return;
-                        } catch(e) {
-                            // continue
+                        if (r.statusText && /^\s*{/.test(r.statusText)) {
+                            try {
+                                var errorJson = JSON.parse(r.statusText);
+                                reject(errorJson);
+                                return;
+                            } catch(e) {
+                                // continue
+                            }
                         }
+                        reject({
+                            status: r.status,
+                            statusText: r.statusText
+                        });
                     }
-                    reject({
-                        status: r.status,
-                        statusText: r.statusText
-                    });
-                }
-            };
-            r.onerror = function() {
+                };
+                r.onerror = function() {
+                    if (r.upload) {
+                        r.upload.removeEventListener('progress', progressHandler);
+                    }
+                    reject(new Error('Network Error'));
+                };
+                r.open(method, resolvedUrl, true);
+
                 if (r.upload) {
-                    r.upload.removeEventListener('progress', progressHandler);
-                }
-                reject(new Error('Network Error'));
-            };
-            r.open(method, resolvedUrl, true);
-
-            if (r.upload) {
-                r.upload.addEventListener('progress', (progressHandler = function(event) {
-                    if (event.lengthComputable) {
-                        var complete = (event.loaded / event.total || 0);
-                        if (complete < 1.0) {
-                            fulfill.updateProgress(complete);
+                    r.upload.addEventListener('progress', (progressHandler = function(event) {
+                        if (event.lengthComputable) {
+                            var complete = (event.loaded / event.total || 0);
+                            if (complete < 1.0) {
+                                fulfill.updateProgress(complete);
+                            }
                         }
+                    }), false);
+                }
+
+                if (method === 'POST' && parameters) {
+                    formData = params;
+                    if (!(params instanceof FormData)) {
+                        r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                     }
-                }), false);
-            }
-
-            if (method === 'POST' && parameters) {
-                formData = params;
-                if (!(params instanceof FormData)) {
-                    r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 }
-            }
 
-            if (debugOptions) {
-                console.warn('Request Debugging is set for ' + url)
-                if (debugOptions.error) {
-                    r.setRequestHeader('Lumify-Request-Error', debugOptions.error);
+                if (debugOptions) {
+                    console.warn('Request Debugging is set for ' + url)
+                    if (debugOptions.error) {
+                        r.setRequestHeader('Lumify-Request-Error', debugOptions.error);
+                    }
+                    if (debugOptions.delay) {
+                        r.setRequestHeader('Lumify-Request-Delay-Millis', debugOptions.delay);
+                    }
                 }
-                if (debugOptions.delay) {
-                    r.setRequestHeader('Lumify-Request-Delay-Millis', debugOptions.delay);
+
+                if (typeof ajaxPrefilter !== 'undefined') {
+                    ajaxPrefilter.call(null, r, method, url, parameters);
                 }
-            }
 
-            if (typeof ajaxPrefilter !== 'undefined') {
-                ajaxPrefilter.call(null, r, method, url, parameters);
-            }
+                r.send(formData);
+            });
 
-            r.send(formData);
-        });
+        promise.abort = function() {
+            if (r) {
+                r.abort();
+            }
+        }
+
+        return promise;
     }
 })
