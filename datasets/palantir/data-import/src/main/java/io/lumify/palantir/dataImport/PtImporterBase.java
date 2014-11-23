@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PtImporterBase<T> {
+public abstract class PtImporterBase<T> implements Runnable {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtImporterBase.class);
     private final Class<T> ptClass;
     private final DataImporter dataImporter;
