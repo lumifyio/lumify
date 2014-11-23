@@ -247,8 +247,8 @@ define([
             var self = this;
 
             // TODO: convert to d3
-            this.dataRequest('workspace', 'all')
-                .done(function(workspacesResponse) {
+            return this.dataRequest('workspace', 'all')
+                .then(function(workspacesResponse) {
                     var workspaces = workspacesResponse || [],
                         users = _.chain(workspaces)
                             .map(function(workspace) {
@@ -288,7 +288,7 @@ define([
                         };
 
                     if (users.length) {
-                        self.dataRequest('user', 'info', users)
+                        return self.dataRequest('user', 'info', users)
                             .done(function(result) {
                                 self.usersById = $.extend(self.usersById, result.users);
                                 updateHtml();
@@ -334,10 +334,14 @@ define([
         };
 
         this.onToggleMenu = function(event, data) {
+            var self = this;
+
             if (data.name === 'workspaces') {
                 if (this.$node.closest('.visible').length) {
-                    this.loadWorkspaceList();
-                    this.switchActive(lumifyData.currentWorkspaceId);
+                    this.loadWorkspaceList()
+                        .then(function() {
+                            self.switchActive(lumifyData.currentWorkspaceId);
+                        })
                 } else {
                     this.collapseEditForm();
                 }
