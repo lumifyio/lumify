@@ -36,7 +36,7 @@ define([
             this.on('fileprogress', this.onUpdateProgress);
             this.on('filecomplete', this.onUploadComplete);
             this.on('fileerror', this.onUploadError);
-            this.on(document, 'iconUpdated', this.onUpdateIcon);
+            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.updateImageBackgroundSize = _.throttle(this.updateImageBackgroundSize.bind(this), 100);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
@@ -125,7 +125,7 @@ define([
             if (url === F.vertex.imageDetail(this.attr.data)) {
                 return url;
             }
-            return url ? url.replace(/\/thumbnail/, '/raw') : '';
+            return url || '';
         };
 
         this.updateImageBackground = function(src) {
@@ -179,11 +179,16 @@ define([
             }.bind(this), 1000);
         };
 
-        this.onUpdateIcon = function(e, data) {
-            var src = this.srcForGlyphIconUrl(data.src);
+        this.onVerticesUpdated = function(e, data) {
+            var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
+            if (vertex) {
+                var src = F.vertex.imageDetail(vertex),
+                    oldSrc = F.vertex.imageDetail(this.attr.data);
 
-            if (src !== this.srcForGlyphIconUrl(F.vertex.imageDetail(this.attr.data))) {
-                this.updateImageBackground(src);
+                this.attr.data = vertex;
+                if (src !== oldSrc) {
+                    this.updateImageBackground(src);
+                }
             }
         };
 

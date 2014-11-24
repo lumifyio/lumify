@@ -52,6 +52,12 @@ define([
             return ajax('POST', '/vertex/multiple', options);
         },
 
+        properties: function(vertexId) {
+            return ajax('GET', '/vertex/properties', {
+                graphVertexId: vertexId
+            });
+        },
+
         edges: function(vertexId, options) {
             var parameters = {
                 graphVertexId: vertexId

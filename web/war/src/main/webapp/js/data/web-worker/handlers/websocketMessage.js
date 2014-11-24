@@ -34,9 +34,24 @@ define(['require'], function(require) {
                 }
             })(),
             userWorkspaceChange: NOOP,
-            propertiesChange: function(data) {
+            propertyChange: function(data) {
+                var type =
+                        'graphVertexId' in data ? 'vertex' :
+                        'graphEdgeId' in data ? 'edge' :
+                        null,
+                    objectId = type && (data.graphVertexId || data.graphEdgeId);
+
+                if (!type) {
+                    throw new Error('Property change sent unknown type', data);
+                }
+
                 require(['../util/store'], function(store) {
-                    store.updateObject(data, { onlyIfExists:true });
+                    var storeObject = store.getObject(publicData.currentWorkspaceId, type, objectId);
+                    if (storeObject) {
+                        require(['../services/' + type], function(service) {
+                            service.properties(objectId).done();
+                        });
+                    }
                 });
             },
             edgeDeletion: function(data) {
@@ -77,10 +92,7 @@ define(['require'], function(require) {
             },
             entityImageUpdated: function(data) {
                 if (data && data.graphVertexId) {
-                    require(['../util/store'], function(store) {
-                        store.updateObject(data, { onlyIfExists:true });
-                    });
-
+                    socketHandlers.propertyChange(data);
                 }
             }
         };
