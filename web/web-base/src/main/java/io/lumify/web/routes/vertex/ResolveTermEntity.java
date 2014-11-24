@@ -126,7 +126,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
             this.graph.flush();
 
-            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, user);
+            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, user);
         }
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?

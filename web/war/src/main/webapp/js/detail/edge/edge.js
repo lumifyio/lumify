@@ -1,6 +1,5 @@
 define([
     'flight/lib/component',
-    'data',
     '../withTypeContent',
     '../withHighlighting',
     '../toolbar/toolbar',
@@ -11,7 +10,6 @@ define([
     'd3'
 ], function(
     defineComponent,
-    appData,
     withTypeContent,
     withHighlighting,
     Toolbar,
@@ -133,7 +131,7 @@ define([
         this.onVertexToVertexRelationshipClicked = function(evt) {
             var $target = $(evt.target),
                 id = $target.data('vertexId');
-            this.trigger(document, 'selectObjects', { vertices: [appData.vertex(id)] });
+            this.trigger(document, 'selectObjects', { vertexIds: [id] });
         };
 
         this.onPaneClicked = function(evt) {
@@ -141,7 +139,7 @@ define([
 
             if ($target.is('.entity, .artifact, span.relationship')) {
                 var id = $target.data('vertexId');
-                this.trigger(document, 'selectObjects', { vertices: [appData.vertex(id)] });
+                this.trigger(document, 'selectObjects', { vertexIds: [id] });
                 evt.stopPropagation();
             }
         };

@@ -1148,6 +1148,21 @@ define([
             );
         };
 
+        // Delete entities before saving (faster feeling interface)
+        this.onUpdateWorkspace = function(event, data) {
+            if (data && data.entityDeletes && data.entityDeletes.length) {
+                this.cytoscapeReady(function(cy) {
+                    cy.$(
+                        data.entityDeletes.map(function(vertexId) {
+                        return '#' + toCyId(vertexId);
+                    }).join(',')).remove();
+
+                    this.setWorkspaceDirty();
+                    this.updateVertexSelections(cy);
+                });
+            }
+        }
+
         this.onWorkspaceUpdated = function(event, data) {
             if (lumifyData.currentWorkspaceId === data.workspace.workspaceId) {
                 this.isWorkspaceEditable = data.workspace.editable;
@@ -1379,6 +1394,7 @@ define([
 
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
+            this.on(document, 'updateWorkspace', this.onUpdateWorkspace);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
             this.on(document, 'verticesHoveringEnded', this.onVerticesHoveringEnded);
             this.on(document, 'verticesDropped', this.onVerticesDropped);

@@ -246,7 +246,7 @@ public abstract class WorkspaceRepository {
         private final Boolean visible;
         private final GraphPosition graphPosition;
 
-        public Update(String vertexId, boolean visible, GraphPosition graphPosition) {
+        public Update(String vertexId, Boolean visible, GraphPosition graphPosition) {
             this.vertexId = vertexId;
             this.visible = visible;
             this.graphPosition = graphPosition;

@@ -71,7 +71,7 @@ define([
                     this.enter().append('option');
                 })
                 .attr('selected', function(workspace) {
-                    return appData.workspaceId === workspace.workspaceId ?
+                    return lumifyData.currentWorkspaceId === workspace.workspaceId ?
                         'selected' : null;
                 })
                 .attr('disabled', function(workspace) {
@@ -105,7 +105,7 @@ define([
             var self = this,
                 workspaceId = this.popover.find('select').val();
 
-            if (appData.workspaceId !== workspaceId) {
+            if (lumifyData.currentWorkspaceId !== workspaceId) {
                 this.on(document, 'workspaceLoaded', function loaded(event, workspace) {
                     self.addToCurrentWorkspace();
                 });

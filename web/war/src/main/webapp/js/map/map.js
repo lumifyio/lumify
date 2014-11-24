@@ -57,6 +57,8 @@ define([
         })
 
         this.after('initialize', function() {
+            var self = this;
+
             this.initialized = false;
             this.setupAsyncQueue('map');
             this.$node.html(template({})).find('.shortcut').each(function() {
@@ -87,13 +89,15 @@ define([
 
             this.attachToZoomPanControls();
 
-            // TODO: Fix
-            /*
-            var verticesInWorkspace = appData.verticesInWorkspace();
-            if (verticesInWorkspace.length) {
-                this.updateOrAddVertices(verticesInWorkspace, { adding: true, preventShake: true });
-            }
-            */
+            this.dataRequest('workspace', 'store')
+                .then(function(workspaceVertices) {
+                    return self.dataRequest('vertex', 'store', { vertexIds: _.keys(workspaceVertices) });
+                })
+                .done(function(vertices) {
+                    if (vertices.length) {
+                        self.updateOrAddVertices(vertices, { adding: true, preventShake: true });
+                    }
+                });
         });
 
         this.attachToZoomPanControls = function() {
