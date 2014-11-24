@@ -27,7 +27,7 @@ import java.util.Locale;
 
 public class AnalystsNotebookExport extends BaseRequestHandler {
     private static final String VERSION_PARAMETER_NAME = "version";
-    private static final AnalystsNotebookVersion DEFAULT_VERSION = AnalystsNotebookVersion.VERSION_7_OR_8;
+    private static final AnalystsNotebookVersion DEFAULT_VERSION = AnalystsNotebookVersion.VERSION_8_9;
     private static final String FILE_EXT = "anx";
     private static final String CONTENT_TYPE = "application/xml";
     private WorkspaceRepository workspaceRepository;
@@ -57,14 +57,15 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
 
         Locale locale = getLocale(request);
         String timeZone = getTimeZone(request);
-        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations, locale, timeZone);
+        String baseUrl = getBaseUrl(request);
+        Chart chart = analystsNotebookExporter.toChart(version, workspace, user, authorizations, locale, timeZone, baseUrl);
 
         List<String> comments = new ArrayList<String>();
         comments.add(String.format("Lumify Workspace: %s", workspace.getDisplayTitle()));
-        comments.add(String.format("%s/#w=%s", getBaseUrl(request), workspaceId));
+        comments.add(String.format("%s/#w=%s", baseUrl, workspaceId));
         comments.add(String.format("Exported %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
 
-        String xml = AnalystsNotebookExporter.toXml(chart, comments);
+        String xml = chart.toXml(comments);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         response.setContentType(CONTENT_TYPE);
         setMaxAge(response, EXPIRES_1_HOUR);

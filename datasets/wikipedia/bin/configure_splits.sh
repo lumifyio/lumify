@@ -24,4 +24,3 @@ function _configure_splits {
 _configure_splits lumify_securegraph_d DVWIKIPEDIA_
 _configure_splits lumify_securegraph_e EWIKIPEDIA_LINK_
 _configure_splits lumify_securegraph_v VWIKIPEDIA_
-_configure_splits lumify_termMention   WIKIPEDIA_

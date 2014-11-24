@@ -356,6 +356,7 @@ See [Lumify Dependencies by Feature](dependencies.md) for additional optional de
         sudo cp web/war/target/lumify-web-war-0.4.0-SNAPSHOT.war /opt/jetty/webapps/ROOT.war
         sudo cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-0.4.0-SNAPSHOT.jar /opt/lumify/lib
         sudo cp web/plugins/dev-tools/target/lumify-web-dev-tools-0.4.0-SNAPSHOT.jar /opt/lumify/lib
+        sudo cp core/plugins/model-bigtable/target/lumify-model-bigtable-0.4.0-SNAPSHOT-jar-with-dependencies.jar /opt/lumify/lib
 
         sudo /opt/jetty/bin/jetty.sh restart
 

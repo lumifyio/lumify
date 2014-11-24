@@ -29,9 +29,9 @@ public class WebApp extends App {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WebApp.class);
     private final Injector injector;
     private final boolean devMode;
-    private final AppendableStaticResourceHandler pluginsJsResourceHandler = new AppendableStaticResourceHandler("application/javascript");
+    private final AppendableStaticResourceHandler pluginsJsResourceHandler = new No404AppendableStaticResourceHandler("application/javascript");
     private final List<String> pluginsJsResources = new ArrayList<String>();
-    private final AppendableStaticResourceHandler pluginsCssResourceHandler = new AppendableStaticResourceHandler("text/css");
+    private final AppendableStaticResourceHandler pluginsCssResourceHandler = new No404AppendableStaticResourceHandler("text/css");
     private final List<String> pluginsCssResources = new ArrayList<String>();
     private LumifyResourceBundleManager lumifyResourceBundleManager = new LumifyResourceBundleManager();
 

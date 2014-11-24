@@ -14,7 +14,10 @@
      xml:base="http://lumify.io/dev"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:lumify="http://lumify.io#"
-     xmlns:analystsNotebook="http://lumify.io/analystsNotebook#"
+     xmlns:analystsNotebook6="http://lumify.io/analystsNotebook/v6#"
+     xmlns:analystsNotebook7="http://lumify.io/analystsNotebook/v7#"
+     xmlns:analystsNotebook851="http://lumify.io/analystsNotebook/v8.5.1#"
+     xmlns:analystsNotebook89="http://lumify.io/analystsNotebook/v8.9#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -445,7 +448,6 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#birthDate">
         <rdfs:label xml:lang="en">Birth Date</rdfs:label>
-        <lumify:propertyGroup xml:lang="en">Geographical Characteristics</lumify:propertyGroup>
         <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
@@ -562,7 +564,6 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#nationality">
         <rdfs:label xml:lang="en">Nationality</rdfs:label>
-        <lumify:propertyGroup xml:lang="en">Geographical Characteristics</lumify:propertyGroup>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -694,7 +695,6 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_020_home@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
-        <analystsNotebook:iconFile>address</analystsNotebook:iconFile>
     </owl:Class>
     
 
@@ -767,6 +767,10 @@
         <lumify:displayType xml:lang="en">document</lumify:displayType>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
         <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io#author&apos;) || &apos;&apos;</lumify:subtitleFormula>
+        <analystsNotebook6:iconFile>Document</analystsNotebook6:iconFile>
+        <analystsNotebook7:iconFile>Document</analystsNotebook7:iconFile>
+        <analystsNotebook851:iconFile>Document</analystsNotebook851:iconFile>
+        <analystsNotebook89:iconFile>Document</analystsNotebook89:iconFile>
     </owl:Class>
     
 
@@ -809,7 +813,10 @@
         <rdfs:label xml:lang="en">Location</rdfs:label>
         <lumify:glyphIconFileName xml:lang="en">pin@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(160, 7, 206)</lumify:color>
-        <analystsNotebook:iconFile>location</analystsNotebook:iconFile>
+        <analystsNotebook6:iconFile>Place</analystsNotebook6:iconFile>
+        <analystsNotebook7:iconFile>Place</analystsNotebook7:iconFile>
+        <analystsNotebook851:iconFile>Place</analystsNotebook851:iconFile>
+        <analystsNotebook89:iconFile>Place</analystsNotebook89:iconFile>
     </owl:Class>
     
 
@@ -833,7 +840,10 @@
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
-        <analystsNotebook:iconFile>person</analystsNotebook:iconFile>
+        <analystsNotebook6:iconFile>Person</analystsNotebook6:iconFile>
+        <analystsNotebook7:iconFile>Person</analystsNotebook7:iconFile>
+        <analystsNotebook851:iconFile>Person</analystsNotebook851:iconFile>
+        <analystsNotebook89:iconFile>Person</analystsNotebook89:iconFile>
     </owl:Class>
     
 

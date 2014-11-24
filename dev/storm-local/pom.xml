@@ -53,8 +53,8 @@
             <scope>${cluster.dependency.scope}</scope>
         </dependency>
         <dependency>
-            <groupId>storm</groupId>
-            <artifactId>storm</artifactId>
+            <groupId>org.apache.storm</groupId>
+            <artifactId>storm-core</artifactId>
             <scope>${cluster.dependency.scope}</scope>
             <exclusions>
                 <exclusion>

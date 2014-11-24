@@ -4,14 +4,19 @@ import com.google.inject.Inject;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.dataImport.model.PtGraphObject;
-import io.lumify.palantir.dataImport.model.awstateProto.AwstateProto;
-import io.lumify.palantir.dataImport.model.awstateProto.AwstateProtoObject;
+import io.lumify.palantir.dataImport.model.protobuf.AWState;
 import io.lumify.web.clientapi.model.GraphPosition;
+import org.securegraph.util.ConvertingIterable;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class PtGraphObjectImporter extends PtImporterBase<PtGraphObject> {
+public class PtGraphObjectImporter extends PtGroupingImporterBase<PtGraphObject, Long> {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtGraphObjectImporter.class);
     private WorkspaceRepository workspaceRepository;
 
     public PtGraphObjectImporter(DataImporter dataImporter) {
@@ -25,20 +30,46 @@ public class PtGraphObjectImporter extends PtImporterBase<PtGraphObject> {
     }
 
     @Override
-    protected void processRow(PtGraphObject row) throws Exception {
-        Workspace workspace = getDataImporter().getWorkspacesByGraphId().get(row.getGraphId());
-        checkNotNull(workspace, "Could not find workspace with graph id: " + row.getGraphId());
+    protected void processGroup(final Long graphId, List<PtGraphObject> rows) throws Exception {
+        Workspace workspace = getDataImporter().getWorkspacesByGraphId().get(graphId);
+        checkNotNull(workspace, "Could not find workspace with graph id: " + graphId);
 
-        AwstateProto awstateProto = getDataImporter().getAwstateProtosByGraphId().get(row.getGraphId());
-        checkNotNull(awstateProto, "Could not find awstateProto with graph id: " + row.getGraphId());
+        final AWState.Wrapper1 awstate = getDataImporter().getAwstateProtosByGraphId().get(graphId);
+        checkNotNull(awstate, "Could not find awstate with graph id: " + graphId);
 
-        AwstateProtoObject awstateProtoObject = awstateProto.findObject(row.getObjectId());
-        checkNotNull(awstateProtoObject, "Could not find awstateProtoObject: " + row.getObjectId());
-        GraphPosition graphPosition = new GraphPosition(awstateProtoObject.getX() / 3, awstateProtoObject.getY() / 3);
+        Iterable<WorkspaceRepository.Update> updates = new ConvertingIterable<PtGraphObject, WorkspaceRepository.Update>(rows) {
+            @Override
+            protected WorkspaceRepository.Update convert(PtGraphObject row) {
+                GraphPosition graphPosition = null;
+                try {
+                    AWState.VertexInner awstateVertex = findObject(awstate, row.getObjectId());
+                    checkNotNull(awstateVertex, "Could not find awstateVertex: " + row.getObjectId());
+                    graphPosition = new GraphPosition(awstateVertex.getX() / 2, awstateVertex.getY() / 2);
+                } catch (Throwable ex) {
+                    LOGGER.error("Could not parse graph position from awstate proto: graphId: " + graphId + ", objectId: " + row.getObjectId(), ex);
+                }
+
+                return new WorkspaceRepository.Update(getObjectVertexId(row), true, graphPosition);
+            }
+        };
 
         User user = getDataImporter().getSystemUser();
 
-        workspaceRepository.updateEntityOnWorkspace(workspace, getObjectVertexId(row), true, graphPosition, user);
+        workspaceRepository.updateEntitiesOnWorkspace(workspace, updates, user);
+    }
+
+    @Override
+    protected Long getGroupKey(PtGraphObject row) {
+        return row.getGraphId();
+    }
+
+    private AWState.VertexInner findObject(AWState.Wrapper1 awstate, long objectId) {
+        for (AWState.Vertex v : awstate.getWrapper2().getWrapper3().getVertexList()) {
+            if (v.getVertexInner().getObjectId() == objectId) {
+                return v.getVertexInner();
+            }
+        }
+        return null;
     }
 
     private String getObjectVertexId(PtGraphObject row) {
@@ -47,7 +78,7 @@ public class PtGraphObjectImporter extends PtImporterBase<PtGraphObject> {
 
     @Override
     protected String getSql() {
-        return "SELECT * FROM {namespace}.PT_GRAPH_OBJECT";
+        return "SELECT * FROM {namespace}.PT_GRAPH_OBJECT ORDER BY GRAPH_ID";
     }
 
     @Inject

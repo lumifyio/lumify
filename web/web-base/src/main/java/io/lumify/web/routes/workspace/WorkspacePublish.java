@@ -384,7 +384,11 @@ public class WorkspacePublish extends BaseRequestHandler {
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : edge.getProperties()) {
-            publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+            OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
+            checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName());
+            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
+                publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+            }
         }
 
         auditRepository.auditEdgeElementMutation(AuditAction.PUBLISH, edgeExistingElementMutation, edge, sourceVertex, destVertex, "", user, lumifyVisibility.getVisibility());

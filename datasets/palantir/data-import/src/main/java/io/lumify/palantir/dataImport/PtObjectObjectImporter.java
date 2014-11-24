@@ -3,13 +3,8 @@ package io.lumify.palantir.dataImport;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.palantir.dataImport.model.PtLinkType;
 import io.lumify.palantir.dataImport.model.PtObjectObject;
-import org.securegraph.Vertex;
 
-import java.util.concurrent.ExecutionException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-public class PtObjectObjectImporter extends PtImporterBase<PtObjectObject> {
+public class PtObjectObjectImporter extends PtRowImporterBase<PtObjectObject> {
     protected PtObjectObjectImporter(final DataImporter dataImporter) {
         super(dataImporter, PtObjectObject.class);
     }
@@ -21,23 +16,18 @@ public class PtObjectObjectImporter extends PtImporterBase<PtObjectObject> {
     }
 
     @Override
-    protected void processRow(PtObjectObject row) throws ExecutionException {
+    protected void processRow(PtObjectObject row) throws Exception {
+        String sourceVertexId = getObjectVertexId(row.getParentObjectId());
+        String destVertexId = getObjectVertexId(row.getChildObjectId());
+
         PtLinkType ptLinkType = getDataImporter().getLinkTypes().get(row.getType());
         if (ptLinkType == null) {
             throw new LumifyException("Could not find link type: " + row.getType());
         }
         String linkTypeUri = getLinkTypeUri(ptLinkType.getUri());
 
-        String sourceObjectId = getObjectVertexId(row.getParentObjectId());
-        Vertex sourceVertex = getVertexCache().get(sourceObjectId);
-        checkNotNull(sourceVertex, "Could not find source vertex: " + sourceObjectId);
-
-        String destObjectId = getObjectVertexId(row.getChildObjectId());
-        Vertex destVertex = getVertexCache().get(destObjectId);
-        checkNotNull(destVertex, "Could not find dest vertex: " + destObjectId);
-
         String edgeId = getEdgeId(row);
-        getDataImporter().getGraph().addEdge(edgeId, sourceVertex, destVertex, linkTypeUri, getDataImporter().getVisibility(), getDataImporter().getAuthorizations());
+        getDataImporter().getGraph().addEdge(edgeId, sourceVertexId, destVertexId, linkTypeUri, getDataImporter().getVisibility(), getDataImporter().getAuthorizations());
     }
 
     protected String getEdgeId(PtObjectObject ptObjectObject) {

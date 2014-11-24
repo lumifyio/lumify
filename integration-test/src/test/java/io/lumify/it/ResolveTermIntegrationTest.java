@@ -60,7 +60,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         lumifyTestCluster.processGraphPropertyQueue();
 
         joeFernerVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "auth1");
-        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test", null, null);
+        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test");
 
         lumifyTestCluster.processGraphPropertyQueue();
 

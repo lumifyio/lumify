@@ -2,7 +2,7 @@ package io.lumify.palantir.dataImport;
 
 import io.lumify.palantir.dataImport.model.PtPropertyType;
 
-public class PtPropertyTypeImporter extends PtImporterBase<PtPropertyType> {
+public class PtPropertyTypeImporter extends PtRowImporterBase<PtPropertyType> {
     protected PtPropertyTypeImporter(DataImporter dataImporter) {
         super(dataImporter, PtPropertyType.class);
     }

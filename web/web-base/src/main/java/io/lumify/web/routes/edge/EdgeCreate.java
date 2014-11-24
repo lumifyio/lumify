@@ -48,7 +48,7 @@ public class EdgeCreate extends BaseRequestHandler {
         final String sourceGraphVertexId = getRequiredParameter(request, "sourceGraphVertexId");
         final String destGraphVertexId = getRequiredParameter(request, "destGraphVertexId");
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
-        final String visibilitySource = getOptionalParameter(request, "visibilitySource");
+        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 

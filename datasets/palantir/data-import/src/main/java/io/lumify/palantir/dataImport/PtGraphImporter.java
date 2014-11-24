@@ -6,14 +6,11 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.palantir.dataImport.model.PtGraph;
-import io.lumify.palantir.dataImport.model.awstateProto.AwstateProto;
-import org.apache.commons.io.IOUtils;
+import io.lumify.palantir.dataImport.model.protobuf.AWState;
+import io.lumify.palantir.dataImport.util.TryInflaterInputStream;
 
-import java.io.ByteArrayInputStream;
-import java.util.zip.InflaterInputStream;
-
-public class PtGraphImporter extends PtImporterBase<PtGraph> {
-    private static final String PALANTIR_WORKSPACE_ID_PREFIX = "WORKSPACE_PALANTIR_";
+public class PtGraphImporter extends PtRowImporterBase<PtGraph> {
+    private static final String PALANTIR_WORKSPACE_ID_PREFIX = "PALANTIR_";
     private WorkspaceRepository workspaceRepository;
 
     public PtGraphImporter(DataImporter dataImporter) {
@@ -36,13 +33,9 @@ public class PtGraphImporter extends PtImporterBase<PtGraph> {
 
     @Override
     protected void processRow(PtGraph row) throws Exception {
-        byte[] awstateProto = row.getAwstateProto();
-        try {
-            awstateProto = IOUtils.toByteArray(new InflaterInputStream(new ByteArrayInputStream(awstateProto)));
-        } catch (Exception ex) {
-            // ignore. Probably not compresses
-        }
-        getDataImporter().getAwstateProtosByGraphId().put(row.getId(), new AwstateProto(awstateProto));
+        byte[] awstateProto = TryInflaterInputStream.inflate(row.getAwstateProto());
+        AWState.Wrapper1 awstate = AWState.Wrapper1.parseFrom(awstateProto);
+        getDataImporter().getAwstateProtosByGraphId().put(row.getId(), awstate);
 
         if (getDataImporter().getWorkspacesByGraphId().containsKey(row.getId())) {
             return;

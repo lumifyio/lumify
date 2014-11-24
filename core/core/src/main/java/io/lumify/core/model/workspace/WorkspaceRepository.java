@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.securegraph.Graph;
 import org.securegraph.util.ConvertingIterable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -72,20 +73,17 @@ public abstract class WorkspaceRepository {
     public Workspace copyTo(Workspace workspace, User destinationUser, User user) {
         Workspace newWorkspace = add("Copy of " + workspace.getDisplayTitle(), destinationUser);
         List<WorkspaceEntity> entities = findEntities(workspace, user);
-        for (WorkspaceEntity entity : entities) {
-            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.isVisible(), new GraphPosition(entity.getGraphPositionX(), entity.getGraphPositionY()), destinationUser);
-        }
+        Iterable<Update> updates = new ConvertingIterable<WorkspaceEntity, Update>(entities) {
+            @Override
+            protected Update convert(WorkspaceEntity entity) {
+                return new Update(entity.getEntityVertexId(), entity.isVisible(), new GraphPosition(entity.getGraphPositionX(), entity.getGraphPositionY()));
+            }
+        };
+        updateEntitiesOnWorkspace(newWorkspace, updates, destinationUser);
         return newWorkspace;
     }
 
     public abstract void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user);
-
-    public abstract void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, GraphPosition graphPosition, User user);
-
-    public void updateEntityOnWorkspace(String workspaceId, String vertexId, Boolean visible, GraphPosition graphPosition, User user) {
-        Workspace workspace = findById(workspaceId, user);
-        updateEntityOnWorkspace(workspace, vertexId, visible, graphPosition, user);
-    }
 
     public abstract void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
@@ -224,6 +222,47 @@ public abstract class WorkspaceRepository {
 
     protected Graph getGraph() {
         return graph;
+    }
+
+    public abstract void updateEntitiesOnWorkspace(Workspace workspace, Iterable<Update> updates, User user);
+
+    public void updateEntityOnWorkspace(Workspace workspace, Update update, User user) {
+        List<Update> updates = new ArrayList<Update>();
+        updates.add(update);
+        updateEntitiesOnWorkspace(workspace, updates, user);
+    }
+
+    public void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, GraphPosition graphPosition, User user) {
+        updateEntityOnWorkspace(workspace, new Update(vertexId, visible, graphPosition), user);
+    }
+
+    public void updateEntityOnWorkspace(String workspaceId, String vertexId, Boolean visible, GraphPosition graphPosition, User user) {
+        Workspace workspace = findById(workspaceId, user);
+        updateEntityOnWorkspace(workspace, vertexId, visible, graphPosition, user);
+    }
+
+    public static class Update {
+        private final String vertexId;
+        private final Boolean visible;
+        private final GraphPosition graphPosition;
+
+        public Update(String vertexId, boolean visible, GraphPosition graphPosition) {
+            this.vertexId = vertexId;
+            this.visible = visible;
+            this.graphPosition = graphPosition;
+        }
+
+        public String getVertexId() {
+            return vertexId;
+        }
+
+        public Boolean getVisible() {
+            return visible;
+        }
+
+        public GraphPosition getGraphPosition() {
+            return graphPosition;
+        }
     }
 }
 

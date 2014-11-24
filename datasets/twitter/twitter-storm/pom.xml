@@ -62,8 +62,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>storm</groupId>
-            <artifactId>storm</artifactId>
+            <groupId>org.apache.storm</groupId>
+            <artifactId>storm-core</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>commons-io</groupId>

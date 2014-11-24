@@ -148,7 +148,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private Iterable<Property> getOntologyFiles() {
-        List<Property> ontologyFiles = toList(((SecureGraphConcept) getRootConcept()).getVertex().getProperties(ONTOLOGY_FILE_PROPERTY_NAME));
+        SecureGraphConcept rootConcept = (SecureGraphConcept) getRootConcept();
+        checkNotNull(rootConcept, "Could not get root concept");
+        Vertex rootConceptVertex = rootConcept.getVertex();
+        checkNotNull(rootConceptVertex, "Could not get root concept vertex");
+
+        List<Property> ontologyFiles = toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME));
         Collections.sort(ontologyFiles, new Comparator<Property>() {
             @Override
             public int compare(Property ontologyFile1, Property ontologyFile2) {

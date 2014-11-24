@@ -1,7 +1,7 @@
 
 1. You need to configure the following:
 
-      ontology.iri.hasMedia=http://lumify.io/palantir#hasMedia
+      ontology.iri.hasMedia=http://lumify.io/palantir-import#hasMedia
 
 2. Setup Oracle JDBC jar in your classpath.
 
@@ -24,7 +24,11 @@
 
       io.lumify.palantir.ontologyToOwl.OntologyToOwl \
         /palantir/ontology/ \
-        http://lumify.io/palantir# \
+        http://lumify.io/palantir \
         /palantir/owl/palantir.owl
-        
-6. Run the data import. The parameters will be the same as step 4 minus the ontologyexport argument.
+
+6. Import ```/palantir/owl/palantir.owl```
+
+7. Modify ```ontology/palantir-import.owl``` as needed and import that owl file.
+
+8. Run the data import. The parameters will be the same as step 4 minus the ontologyexport argument.

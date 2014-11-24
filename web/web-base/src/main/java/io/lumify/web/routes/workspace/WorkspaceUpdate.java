@@ -1,5 +1,7 @@
 package io.lumify.web.routes.workspace;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
@@ -17,6 +19,7 @@ import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -102,11 +105,15 @@ public class WorkspaceUpdate extends BaseRequestHandler {
     }
 
     private void updateEntities(Workspace workspace, List<ClientApiWorkspaceUpdateData.EntityUpdate> entityUpdates, User authUser) {
-        for (ClientApiWorkspaceUpdateData.EntityUpdate update : entityUpdates) {
-            LOGGER.debug("workspace update (%s): %s", workspace.getWorkspaceId(), update.toString());
-            String entityId = update.getVertexId();
-            GraphPosition graphPosition = update.getGraphPosition();
-            workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPosition, authUser);
-        }
+        Iterable<WorkspaceRepository.Update> updates = Iterables.transform(entityUpdates, new Function<ClientApiWorkspaceUpdateData.EntityUpdate, WorkspaceRepository.Update>() {
+            @Nullable
+            @Override
+            public WorkspaceRepository.Update apply(ClientApiWorkspaceUpdateData.EntityUpdate u) {
+                String vertexId = u.getVertexId();
+                GraphPosition graphPosition = u.getGraphPosition();
+                return new WorkspaceRepository.Update(vertexId, true, graphPosition);
+            }
+        });
+        workspaceRepository.updateEntitiesOnWorkspace(workspace, updates, authUser);
     }
 }

@@ -6,7 +6,7 @@ import io.lumify.palantir.dataImport.model.PtObject;
 import io.lumify.palantir.dataImport.model.PtObjectType;
 import org.securegraph.VertexBuilder;
 
-public class PtObjectImporter extends PtImporterBase<PtObject> {
+public class PtObjectImporter extends PtRowImporterBase<PtObject> {
 
     protected PtObjectImporter(DataImporter dataImporter) {
         super(dataImporter, PtObject.class);

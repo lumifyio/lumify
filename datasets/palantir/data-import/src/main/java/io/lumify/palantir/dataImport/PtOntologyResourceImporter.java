@@ -5,7 +5,7 @@ import com.google.common.base.Splitter;
 import io.lumify.palantir.dataImport.model.PtOntologyResource;
 import org.apache.commons.codec.binary.Base64;
 
-public class PtOntologyResourceImporter extends PtImporterBase<PtOntologyResource> {
+public class PtOntologyResourceImporter extends PtRowImporterBase<PtOntologyResource> {
 
     protected PtOntologyResourceImporter(DataImporter dataImporter) {
         super(dataImporter, PtOntologyResource.class);

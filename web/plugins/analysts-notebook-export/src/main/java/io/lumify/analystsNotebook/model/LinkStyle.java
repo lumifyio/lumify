@@ -4,6 +4,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class LinkStyle {
     public static final String ARROW_STYLE_ARROW_NONE = "ArrowNone";
+    public static final String ARROW_STYLE_ARROW_ON_BOTH = "ArrowOnBoth";
+    public static final String ARROW_STYLE_ARROW_ON_HEAD = "ArrowOnHead";
+    public static final String ARROW_STYLE_ARROW_ON_TAIL = "ArrowOnTail";
     public static final String TYPE_LINK = "Link";
 
     // present only in version 6

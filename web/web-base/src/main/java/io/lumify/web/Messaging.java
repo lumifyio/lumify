@@ -2,7 +2,11 @@ package io.lumify.web;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import org.apache.curator.framework.CuratorFramework;
+import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.user.UserSessionCounterRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -46,6 +50,9 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     private static Broadcaster broadcaster;
     private WorkspaceRepository workspaceRepository;
     private WorkQueueRepository workQueueRepository;
+    private CuratorFramework curatorFramework;
+    private Configuration configuration;
+    private UserSessionCounterRepository userSessionCounterRepository;
     private boolean subscribedToBroadcast = false;
 
     @Override
@@ -77,6 +84,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             Injector injector = (Injector) resource.getAtmosphereConfig().getServletContext().getAttribute(Injector.class.getName());
             injector.injectMembers(this);
         }
+
         if (!subscribedToBroadcast) {
             this.workQueueRepository.subscribeToBroadcastMessages(new WorkQueueRepository.BroadcastConsumer() {
                 @Override
@@ -89,6 +97,10 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             subscribedToBroadcast = true;
         }
         broadcaster = resource.getBroadcaster();
+
+        if (userSessionCounterRepository == null) {
+            userSessionCounterRepository = new UserSessionCounterRepository(curatorFramework, configuration);
+        }
     }
 
     @Override
@@ -111,41 +123,38 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             onDisconnect(event, response);
         } else if (event.isSuspended()) {
             onMessage(event, response, (String) event.getMessage());
+        } else if (event.isResuming()) {
+            onResume(event, response);
+        } else if (event.isResumedOnTimeout()) {
+            onTimeout(event, response);
         }
     }
 
     public void onOpen(AtmosphereResource resource) throws IOException {
         setStatus(resource, UserStatus.ACTIVE);
+        incrementUserSessionCount(resource);
+    }
+
+    public void onResume(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
+        LOGGER.debug("onResume");
+    }
+
+    public void onTimeout(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
+        LOGGER.debug("onTimeout");
     }
 
     public void onDisconnect(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
-        setUserStatusToOffline(event);
+        onDisconnectOrClose(event);
     }
 
-    private void setUserStatusToOffline(AtmosphereResourceEvent event) {
-        AtmosphereResource thisResource = event.getResource();
-        Collection<AtmosphereResource> atmosphereResources = thisResource.getBroadcaster().getAtmosphereResources();
-        HttpSession thisSession = thisResource.session();
+    public void onClose(AtmosphereResourceEvent event, AtmosphereResponse response) {
+        onDisconnectOrClose(event);
+    }
 
-        int thisUsersConnections = 0;
-
-        if (thisSession != null) {
-            String thisUser = (String) thisSession.getAttribute(CurrentUser.STRING_ATTRIBUTE_NAME);
-            for (AtmosphereResource r : atmosphereResources) {
-                HttpSession session = r.session();
-                if (session != null) {
-                    String username = (String) session.getAttribute(CurrentUser.STRING_ATTRIBUTE_NAME);
-                    if (username.equals(thisUser)) {
-                        thisUsersConnections++;
-                        if (thisUsersConnections > 1) {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (thisUsersConnections <= 1) {
+    private void onDisconnectOrClose(AtmosphereResourceEvent event) {
+        boolean lastSession = decrementUserSessionCount(event.getResource());
+        if (lastSession) {
+            LOGGER.info("last session for user %s", getCurrentUserId(event.getResource()));
             setStatus(event.getResource(), UserStatus.OFFLINE);
         }
     }
@@ -179,10 +188,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
 
         if ("setActiveWorkspace".equals(type)) {
-            String authUserId = CurrentUser.get(resource.session());
-            if (authUserId == null) {
-                throw new RuntimeException("Could not find user in session");
-            }
+            String authUserId = getCurrentUserId(resource);
             String workspaceId = dataJson.getString("workspaceId");
             String userId = dataJson.getString("userId");
             if (userId.equals(authUserId)) {
@@ -223,6 +229,24 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
     }
 
+    private void incrementUserSessionCount(AtmosphereResource resource) {
+        String userId = getCurrentUserId(resource);
+        userSessionCounterRepository.incrementAndGet(userId);
+    }
+
+    private boolean decrementUserSessionCount(AtmosphereResource resource) {
+        String userId = getCurrentUserId(resource);
+        return userSessionCounterRepository.decrementAndGet(userId) < 1;
+    }
+
+    private String getCurrentUserId(AtmosphereResource resource) {
+        String userId = CurrentUser.get(resource.getRequest());
+        if (userId != null && userId.trim().length() > 0) {
+            return userId;
+        }
+        throw new LumifyException("failed to get a current userId via an AtmosphereResource");
+    }
+
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -236,5 +260,15 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     @Inject
     public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
         this.workQueueRepository = workQueueRepository;
+    }
+
+    @Inject
+    public void setCuratorFramework(CuratorFramework curatorFramework) {
+        this.curatorFramework = curatorFramework;
+    }
+
+    @Inject
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 }

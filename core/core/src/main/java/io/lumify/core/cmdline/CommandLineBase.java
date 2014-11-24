@@ -2,7 +2,7 @@ package io.lumify.core.cmdline;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
-import com.netflix.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFramework;
 import io.lumify.core.FrameworkUtils;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;

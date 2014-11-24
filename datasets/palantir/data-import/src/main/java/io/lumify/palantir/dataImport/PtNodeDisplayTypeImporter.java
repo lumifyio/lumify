@@ -2,7 +2,7 @@ package io.lumify.palantir.dataImport;
 
 import io.lumify.palantir.dataImport.model.PtNodeDisplayType;
 
-public class PtNodeDisplayTypeImporter extends PtImporterBase<PtNodeDisplayType> {
+public class PtNodeDisplayTypeImporter extends PtRowImporterBase<PtNodeDisplayType> {
 
     protected PtNodeDisplayTypeImporter(DataImporter dataImporter) {
         super(dataImporter, PtNodeDisplayType.class);

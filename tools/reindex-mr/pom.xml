@@ -33,7 +33,12 @@
             <artifactId>lumify-model-rabbitmq</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-bigtable</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <!-- Required for MR job -->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

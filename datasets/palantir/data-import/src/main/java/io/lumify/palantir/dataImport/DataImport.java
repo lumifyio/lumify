@@ -1,6 +1,7 @@
 package io.lumify.palantir.dataImport;
 
 import io.lumify.core.cmdline.CommandLineBase;
+import io.lumify.core.exception.LumifyException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -112,7 +113,14 @@ public class DataImport extends CommandLineBase {
         Visibility visibility = new Visibility("");
         Authorizations authorizations = getAuthorizations();
 
-        String hasMediaConceptTypeIri = getConfiguration().get("ontology.iri.hasMedia");
+        String hasMediaConceptTypeIri = getConfiguration().get("ontology.iri.hasMedia", null);
+        if (hasMediaConceptTypeIri == null || hasMediaConceptTypeIri.length() == 0) {
+            throw new LumifyException("'ontology.iri.hasMedia' is required.");
+        }
+
+        if (!owlPrefix.endsWith("#")) {
+            owlPrefix = owlPrefix + "#";
+        }
 
         DataImporterInitParameters p = new DataImporterInitParameters()
                 .setConnectionString(connectionString)

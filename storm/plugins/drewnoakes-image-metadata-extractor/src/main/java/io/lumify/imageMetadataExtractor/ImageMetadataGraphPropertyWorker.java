@@ -58,7 +58,7 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             try {
                 imageMetadata = ImageMetadataReader.readMetadata(imageFile);
             } catch (Exception e) {
-                LOGGER.debug("Could not read metadata from imageFile.", e);
+                LOGGER.error("Could not read metadata from imageFile: %s", imageFile, e);
             }
 
             if (imageMetadata != null) {

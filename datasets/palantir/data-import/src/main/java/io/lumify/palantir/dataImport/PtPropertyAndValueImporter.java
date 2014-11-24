@@ -11,7 +11,7 @@ import org.securegraph.type.GeoPoint;
 
 import java.awt.geom.Point2D;
 
-public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValue> {
+public class PtPropertyAndValueImporter extends PtRowImporterBase<PtPropertyAndValue> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtPropertyAndValueImporter.class);
 
     protected PtPropertyAndValueImporter(DataImporter dataImporter) {
@@ -41,6 +41,9 @@ public class PtPropertyAndValueImporter extends PtImporterBase<PtPropertyAndValu
 
     private Object toValueGeo(PtPropertyAndValue row, Object propertyValue) {
         JGeometryWrapper geometryGis = JGeometryWrapper.load(row.getGeometryGis());
+        if (geometryGis == null) {
+            return propertyValue;
+        }
         if (geometryGis.getType() == JGeometryWrapper.Type.POINT) {
             if (propertyValue == null) {
                 propertyValue = "";
