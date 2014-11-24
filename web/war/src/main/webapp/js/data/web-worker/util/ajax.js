@@ -61,6 +61,7 @@ define(['util/promise'], function() {
 
         var r = new XMLHttpRequest(),
             promise = new Promise(function(fulfill, reject) {
+                if (promise && promise._aborted) return;
                 var progressHandler,
                     params = isFile(parameters) ? toFileUpload(parameters) : toQueryString(parameters),
                     resolvedUrl = BASE_URL + url + ((/GET|DELETE/.test(method) && parameters) ?
@@ -68,6 +69,7 @@ define(['util/promise'], function() {
                     formData;
 
                 r.onload = function() {
+                    if (promise && promise._aborted) return;
                     if (r.upload) {
                         r.upload.removeEventListener('progress', progressHandler);
                     }
@@ -108,6 +110,7 @@ define(['util/promise'], function() {
                     }
                 };
                 r.onerror = function() {
+                    if (promise && promise._aborted) return;
                     if (r.upload) {
                         r.upload.removeEventListener('progress', progressHandler);
                     }
@@ -151,6 +154,7 @@ define(['util/promise'], function() {
             });
 
         promise.abort = function() {
+            this._aborted = true;
             if (r) {
                 r.abort();
             }

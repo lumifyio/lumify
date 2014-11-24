@@ -162,6 +162,8 @@ public class Router extends HttpServlet {
             HttpServletResponse httpResponse = (HttpServletResponse) resp;
             httpResponse.addHeader("Accept-Ranges", "bytes");
             app.handle((HttpServletRequest) req, httpResponse);
+        } catch (ConnectionClosedException cce) {
+            LOGGER.debug("Connection closed by client", cce);
         } catch (Exception e) {
             throw new ServletException(e);
         }

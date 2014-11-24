@@ -64,11 +64,12 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         workspace = workspaceRepository.findById(workspaceId, authUser);
         ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, true);
-        workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
 
         deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
         respondWithSuccessJson(response);
+
+        workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {
