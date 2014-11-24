@@ -884,7 +884,9 @@ define([
                             dataType = 'visibility';
                         } else if (property.hideVisibility !== true) {
                             F.vertex.properties.visibility(
-                                visibilitySpan, { value: property[VISIBILITY_NAME] }, vertexId);
+                                visibilitySpan,
+                                { value: property.metadata && property.metadata[VISIBILITY_NAME] },
+                                vertexId);
                         }
 
                         $infoButton.toggle(Boolean(
