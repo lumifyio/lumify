@@ -311,6 +311,9 @@ define([
         };
 
         this.onShareWorkspaceWithUser = function(event, data) {
+            if (this.currentUsers) {
+                this.currentUsers[data.user.id] = data.user;
+            }
 
             var self = this,
                 form = this.select('shareFormSelector'),

@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -188,8 +189,8 @@ public abstract class WorkQueueRepository {
         broadcastUserWorkspaceChange(user, workspaceId);
     }
 
-    public void pushWorkspaceChange(ClientApiWorkspace workspace) {
-        broadcastWorkspace(workspace);
+    public void pushWorkspaceChange(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers) {
+        broadcastWorkspace(workspace, previousUsers);
     }
 
     protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
@@ -201,10 +202,10 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    protected void broadcastWorkspace(ClientApiWorkspace workspace) {
+    protected void broadcastWorkspace(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers) {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceChange");
-        json.put("permissions", getPermissionsWithUsers(workspace));
+        json.put("permissions", getPermissionsWithUsers(workspace, previousUsers));
         json.put("data", new JSONObject(ClientApiConverter.clientApiToString(workspace)));
         broadcastJson(json);
     }
@@ -212,7 +213,7 @@ public abstract class WorkQueueRepository {
     public void pushWorkspaceDelete(ClientApiWorkspace workspace) {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceDelete");
-        json.put("permissions", getPermissionsWithUsers(workspace));
+        json.put("permissions", getPermissionsWithUsers(workspace, null));
         json.put("workspaceId", workspace.getWorkspaceId());
         broadcastJson(json);
     }
@@ -229,9 +230,14 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    private JSONObject getPermissionsWithUsers(ClientApiWorkspace workspace) {
+    private JSONObject getPermissionsWithUsers(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers) {
         JSONObject permissions = new JSONObject();
         JSONArray users = new JSONArray();
+        if (previousUsers != null) {
+            for (ClientApiWorkspace.User user : previousUsers) {
+                users.put(user.getUserId());
+            }
+        }
         for (ClientApiWorkspace.User user : workspace.getUsers()) {
             users.put(user.getUserId());
         }
