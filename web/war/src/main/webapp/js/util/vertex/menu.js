@@ -67,8 +67,8 @@ define([
                     event: 'deleteSelected',
                     selection: 2,
                     shouldDisable: function(selection, vertexId, target) {
-                        return !lumifyData.currentWorkspaceEditable || true;
-                        // TODO:  !appData.inWorkspace(vertexId);
+                        return !lumifyData.currentWorkspaceEditable || false;
+                        // TODO:  !inWorkspace(vertexId);
                     }
                 }
 
@@ -134,17 +134,13 @@ define([
                 items: items,
                 vertex: vertex,
                 shouldDisable: function(item) {
-                    // TODO: fix
-                    return false;
-                    /*
-                    var currentSelection = appData.selectedVertexIds,
+                    var currentSelection = lumifyData.selectedObjects.vertexIds,
                         shouldDisable = _.isFunction(item.shouldDisable) ? item.shouldDisable(
                             currentSelection,
                             self.attr.vertexId,
                             self.attr.element) : false;
 
                     return shouldDisable;
-                    */
                 },
                 processLabel: function(item) {
                     return _.template(item.label)({

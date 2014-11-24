@@ -375,14 +375,16 @@ define([
                         self.trigger('selectObjects', { vertexIds: property.value.resolvedVertexId });
                     });
                     self.on('unresolve.actionbar', function() {
-                        _.defer(
-                            self.showForm.bind(self),
-                            $.extend({}, property.value, {
-                                title: F.vertex.title(appData.cachedVertices[property.value.resolvedVertexId]),
-                                propertyKey: property.key
-                            }),
-                            $target
-                        );
+                        self.dataRequest('vertex', 'store', { vertexIds: property.value.resolvedVertexId })
+                            .done(function(vertex) {
+                                self.showForm(
+                                    $.extend({}, property.value, {
+                                        title: F.vertex.title(vertex),
+                                        propertyKey: property.key
+                                    }),
+                                    $target
+                                );
+                            });
                     });
 
                 } else if (Privileges.canEDIT) {
@@ -408,7 +410,7 @@ define([
 
         this.onCoordsChanged = function(event, data) {
             var self = this,
-                vertex = appData.vertex(this.attr.data.id),
+                vertex = this.attr.data,
                 detectedObject = F.vertex.propForNameAndKey(vertex, 'http://lumify.io#detectedObject', data.id),
                 width = parseFloat(data.x2) - parseFloat(data.x1),
                 height = parseFloat(data.y2) - parseFloat(data.y1),

@@ -196,8 +196,10 @@ define([
             if (data && data.vertices) {
                 var intersection = _.intersection(this.displayingVertexIds, _.pluck(data.vertices, 'id'));
                 if (intersection.length) {
-                    appData.refresh(this.displayingVertexIds)
-                        .done(self.drawHistograms.bind(this));
+                    this.dataRequest('vertex', 'store', { vertexIds: this.displayingVertexIds })
+                        .done(function(vertices) {
+                            self.drawHistograms(vertices);
+                        });
                 }
             }
         };
@@ -710,7 +712,7 @@ define([
         this.histogramClick = function(event, object) {
             var vertexIds = $(event.target).closest('g').data('vertexIds');
 
-            this.trigger(document, 'selectObjects', { vertices: appData.vertices(vertexIds) });
+            this.trigger(document, 'selectObjects', { vertexIds: vertexIds });
             this.trigger(document, 'defocusVertices', { vertexIds: vertexIds });
         };
 

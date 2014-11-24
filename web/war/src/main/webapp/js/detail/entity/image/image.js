@@ -2,7 +2,6 @@
 define([
     'flight/lib/component',
     'tpl!./image',
-    'data',
     'util/retina',
     'util/withFileDrop',
     'util/privileges',
@@ -11,7 +10,6 @@ define([
 ], function(
     defineComponent,
     template,
-    appData,
     retina,
     withFileDrop,
     Privileges,
