@@ -645,6 +645,10 @@
                     <version>${plugin.maven.surefire.version}</version>
                     <configuration>
                         <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
+                        <excludes>
+                            <exclude>**/*$*</exclude>
+                            <exclude>**/*IntegrationTest.java</exclude>
+                        </excludes>
                     </configuration>
                     <dependencies>
                         <dependency>

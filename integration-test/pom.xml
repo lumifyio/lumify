@@ -129,19 +129,26 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${plugin.maven.surefire.version}</version>
-                    <configuration>
-                        <reuseForks>false</reuseForks>
-                        <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+
+    <profiles>
+        <profile>
+            <id>ITest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${plugin.maven.surefire.version}</version>
+                        <configuration>
+                            <reuseForks>false</reuseForks>
+                            <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
+                            <excludes>
+                                <exclude>**/*$*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
