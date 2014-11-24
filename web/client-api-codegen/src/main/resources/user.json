@@ -59,6 +59,26 @@
           ]
         }
       ]
+    },
+    {
+      "path": "/user",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Gets a user by user name (Admin only)",
+          "type": "ClientApiUser",
+          "nickname": "getByUserName",
+          "parameters": [
+            {
+              "name": "user-name",
+              "description": "Query",
+              "required": true,
+              "type": "string",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
     }
   ],
   "models": {

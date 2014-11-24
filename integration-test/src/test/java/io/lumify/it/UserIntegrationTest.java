@@ -25,6 +25,7 @@ public class UserIntegrationTest extends TestBase {
         createUsers();
         verifyGetAll();
         verifyGetByIds();
+        verifyGetByUserName();
     }
 
     public void createUsers() throws ApiException {
@@ -80,6 +81,16 @@ public class UserIntegrationTest extends TestBase {
         }
         assertTrue("Could not find " + USERNAME_TEST_USER_1, foundUser1);
         assertTrue("Could not find " + USERNAME_TEST_USER_2, foundUser2);
+
+        lumifyApi.logout();
+    }
+
+    private void verifyGetByUserName() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiUser user = lumifyApi.getUserApi().getByUserName(USERNAME_TEST_USER_1);
+        assertEquals(user1Id, user.getId());
+        assertEquals(1, user.getWorkspaces().size());
 
         lumifyApi.logout();
     }

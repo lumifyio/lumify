@@ -22,6 +22,7 @@ public class ClientApiUser implements ClientApiObject {
     private JsonNode uiPreferences;
     private List<String> authorizations = new ArrayList<String>();
     private List<Object> longRunningProcesses = new ArrayList<Object>();
+    private List<ClientApiWorkspace> workspaces = new ArrayList<ClientApiWorkspace>();
 
     public String getId() {
         return id;
@@ -117,6 +118,10 @@ public class ClientApiUser implements ClientApiObject {
 
     public List<Object> getLongRunningProcesses() {
         return longRunningProcesses;
+    }
+
+    public List<ClientApiWorkspace> getWorkspaces() {
+        return workspaces;
     }
 
     @Override
