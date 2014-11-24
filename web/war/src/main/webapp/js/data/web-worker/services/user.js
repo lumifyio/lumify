@@ -25,35 +25,28 @@ define(['../util/ajax'], function(ajax) {
             });
         },
 
-        search: function(query, optionalWorkspaceId) {
-            var data = {};
-            if (query) {
-                data.q = query;
-            }
-            if (optionalWorkspaceId) {
-                data.workspaceId = optionalWorkspaceId;
-            }
-            return ajax('GET', '/user/all', data)
-                .then(function(response) {
-                    return response.users;
-                })
-        },
+        search: function(options) {
+            var data = {},
+                returnSingular = false;
 
-        info: function(userIds) {
-            var returnSingular = false;
-            if (!_.isArray(userIds)) {
-                returnSingular = true;
-                userIds = [userIds];
+            if (options.query) {
+                data.q = options.query;
             }
-
-            return ajax(userIds.length > 1 ? 'POST' : 'GET', '/user/info', {
-                userIds: userIds
-            }).then(function(result) {
-                if (returnSingular) {
-                    return result.users[userIds[0]];
+            if (options.userIds) {
+                if (!_.isArray(options.userIds)) {
+                    returnSingular = true;
+                    data.userIds = [options.userIds];
+                } else {
+                    data.userIds = options.userIds;
                 }
-                return result.users;
-            });
+            }
+            return ajax(
+                (data.userIds && data.userIds.length > 2) ? 'POST' : 'GET',
+                '/user/all', data)
+                .then(function(response) {
+                    var users = response.users;
+                    return returnSingular ? users[0] : users;
+                })
         },
 
         logout: function(options) {

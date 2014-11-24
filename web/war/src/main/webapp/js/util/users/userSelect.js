@@ -61,7 +61,7 @@ define([
             this.select('inputSelector').typeahead({
                 source: function(query, callback) {
                     if ($.trim(query).length) {
-                        self.dataRequest('user', 'search', query)
+                        self.dataRequest('user', 'search', { query: query })
                             .done(function(users) {
                                 var otherUsers = users.filter(function(user) {
                                         return self.attr.filterUserIds.indexOf(user.id) === -1;

@@ -47,7 +47,7 @@ define([
                 userAsync: function(el, userId) {
                     return Promise.require('util/withDataRequest')
                         .then(function(withDataRequest) {
-                            return withDataRequest.dataRequest('user', 'info', userId)
+                            return withDataRequest.dataRequest('user', 'search', { userIds: userId })
                         })
                         .then(function(user) {
                             el.textContent = user && user.displayName || i18n('user.unknown.displayName');

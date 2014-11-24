@@ -138,12 +138,13 @@ define([
                 userIds = _.pluck(workspaceUsers, 'userId'),
                 html = $();
 
-            this.dataRequest('user', 'info', userIds)
+            this.dataRequest('user', 'search', { userIds: userIds })
                 .done(function(users) {
-                    self.currentUsers = users;
+                    var usersById = _.indexBy(users, 'id');
+                    self.currentUsers = usersById;
 
                     _.sortBy(workspaceUsers, function(userPermission) {
-                        var user = users[userPermission.userId];
+                        var user = usersById[userPermission.userId];
                         return user && user.displayName || 1;
                     }).forEach(function(userPermission) {
                         if (userPermission.userId != lumifyData.currentUser.id) {

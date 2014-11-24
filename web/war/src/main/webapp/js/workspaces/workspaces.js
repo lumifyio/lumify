@@ -288,9 +288,9 @@ define([
                         };
 
                     if (users.length) {
-                        return self.dataRequest('user', 'info', users)
+                        return self.dataRequest('user', 'search', { userIds: users })
                             .done(function(result) {
-                                self.usersById = $.extend(self.usersById, result.users);
+                                self.usersById = $.extend(self.usersById, _.indexBy(users, 'id'));
                                 updateHtml();
                             })
                     } else {
@@ -308,7 +308,7 @@ define([
                 people = usersNotCurrent.length;
 
             if (row.sharedToUser) {
-                this.dataRequest('user', 'info', row.createdBy)
+                this.dataRequest('user', 'search', { userIds: row.createdBy })
                     .done(function(createdBy) {
                         var name = createdBy && createdBy.displayName ||
                                 i18n('workspaces.shared_with_me.subtitle.unknown_user');
