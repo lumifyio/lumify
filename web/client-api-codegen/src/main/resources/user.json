@@ -39,6 +39,24 @@
               "paramType": "query"
             }
           ]
+        },
+        {
+          "method": "POST",
+          "summary": "Gets many users by id",
+          "type": "ClientApiUsers",
+          "nickname": "getManyByIds",
+          "consumes": [
+            "multipart/form-data"
+          ],
+          "parameters": [
+            {
+              "name": "userIds[]",
+              "description": "User ids to get",
+              "required": true,
+              "type": "List[string]",
+              "paramType": "form"
+            }
+          ]
         }
       ]
     }

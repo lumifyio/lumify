@@ -95,6 +95,12 @@ public abstract class BaseRequestHandler implements Handler {
         return getParameter(request, parameterName, false);
     }
 
+    protected String[] getOptionalParameterArray(HttpServletRequest request, String parameterName) {
+        Preconditions.checkNotNull(request, "The provided request was invalid");
+
+        return request.getParameterValues(parameterName);
+    }
+
     protected String[] getRequiredParameterArray(HttpServletRequest request, String parameterName) {
         Preconditions.checkNotNull(request, "The provided request was invalid");
 

@@ -122,8 +122,7 @@ public class Router extends HttpServlet {
             app.get("/user/me", authenticator, csrfProtector, MeGet.class);
             app.post("/user/ui-preferences", authenticator, csrfProtector, UserSetUiPreferences.class);
             app.get("/user/all", authenticator, csrfProtector, UserList.class);
-            app.get("/user/info", authenticator, csrfProtector, UserInfo.class);
-            app.post("/user/info", authenticator, csrfProtector, UserInfo.class);
+            app.post("/user/all", authenticator, csrfProtector, UserList.class);
             app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
 
             app.get("/long-running-process", authenticator, csrfProtector, LongRunningProcessById.class);

@@ -114,5 +114,52 @@ public class UserApi {
       }
     }
   }
+  public ClientApiUsers getManyByIds (List<String> userIds) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(userIds == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/user/all".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    String[] contentTypes = {
+      "multipart/form-data"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      hasFields = true;
+      for(String userId:userIds) { mp.field("userIds[]", userId, MediaType.MULTIPART_FORM_DATA_TYPE); }
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      throw new java.lang.RuntimeException("invalid content type");}
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiUsers) ApiInvoker.deserialize(response, "", ClientApiUsers.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
   }
 

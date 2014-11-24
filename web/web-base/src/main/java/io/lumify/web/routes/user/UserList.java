@@ -10,16 +10,18 @@ import io.lumify.core.user.User;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiUsers;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.securegraph.util.ConvertingIterable;
 import org.securegraph.util.FilterIterable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.sun.tools.javac.util.Assert.checkNull;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class UserList extends BaseRequestHandler {
     @Inject
@@ -34,12 +36,28 @@ public class UserList extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String query = getOptionalParameter(request, "q");
         String workspaceId = getOptionalParameter(request, "workspaceId");
-
+        String[] userIds = getOptionalParameterArray(request, "userIds[]");
         User user = getUser(request);
-        Iterable<User> users = getUserRepository().find(query);
 
-        if (workspaceId != null) {
-            users = getUsersWithWorkspaceAccess(workspaceId, users, user);
+        List<User> users;
+        if (userIds != null) {
+            checkNull(query, "Cannot use userIds[] and q at the same time");
+            checkNull(query, "Cannot use userIds[] and workspaceId at the same time");
+            users = new ArrayList<User>();
+            for (String userId : userIds) {
+                User u = getUserRepository().findById(userId);
+                if (u == null) {
+                    respondWithNotFound(response, "User " + userId + " not found");
+                    return;
+                }
+                users.add(u);
+            }
+        } else {
+            users = toList(getUserRepository().find(query));
+
+            if (workspaceId != null) {
+                users = toList(getUsersWithWorkspaceAccess(workspaceId, users, user));
+            }
         }
 
         Iterable<String> workspaceIds = getCurrentWorkspaceIds(users);
