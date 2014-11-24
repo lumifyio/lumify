@@ -149,7 +149,8 @@ define([
 
             // Justification
             var justification = [];
-            if (property._justificationMetadata || property._sourceMetadata) {
+            if (property.metadata &&
+                (property.metadata._justificationMetadata || property.metadata._sourceMetadata)) {
                 justification.push(true);
             }
 
@@ -177,8 +178,8 @@ define([
                         require(['util/vertex/justification/viewer'], function(JustificationViewer) {
                             $(node).teardownAllComponents();
                             JustificationViewer.attachTo(node, {
-                                justificationMetadata: property._justificationMetadata,
-                                sourceMetadata: property._sourceMetadata
+                                justificationMetadata: property.metadata._justificationMetadata,
+                                sourceMetadata: property.metadata._sourceMetadata
                             });
                             positionDialog();
                         });

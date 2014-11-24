@@ -6,6 +6,7 @@ define([
     './withDataRequestHandler',
     './withCurrentUser',
     './withCachedConceptIcons',
+    './withDocumentCopyText',
     './withWebsocket',
     './withWebsocketLegacy',
     './withKeyboardRegistration',
