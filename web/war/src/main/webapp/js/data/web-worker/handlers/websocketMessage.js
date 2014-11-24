@@ -9,8 +9,12 @@ define(['require'], function(require) {
                 })
             },
             workspaceDelete: function(data) {
-                require(['../util/store'], function(store) {
+                require([
+                    '../util/store',
+                    './workspaceSwitch'
+                ], function(store, workspaceSwitch) {
                     store.removeWorkspace(data.workspaceId);
+                    workspaceSwitch(data);
                     dispatchMain('rebroadcastEvent', {
                         eventName: 'workspaceDeleted',
                         data: {
@@ -108,7 +112,7 @@ define(['require'], function(require) {
         console.debug('%cSocket: %s %O', 'color:#999;font-style:italics', json.type, json.data)
 
         if (json.type in socketHandlers) {
-            socketHandlers[json.type](json.data || json);
+            socketHandlers[json.type]('data' in json ? json.data : json, json);
         } else {
             console.warn('Unhandled socket message type:' + json.type, 'message:', json);
         }

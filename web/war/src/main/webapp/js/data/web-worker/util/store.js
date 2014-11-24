@@ -236,8 +236,7 @@ define([
 
         workspaceCaches[workspaceId] = {
             vertices: new Cache(),
-            edges: new Cache(),
-            onGraphVertexIds: {}
+            edges: new Cache()
         };
 
         return workspaceCaches[workspaceId];

@@ -119,8 +119,7 @@ define([
 
         this.onWorkspaceDeleted = function(event, data) {
             this.collapseEditForm();
-
-            this.loadWorkspaceList(this.workspaceId === data.workspaceId);
+            this.findWorkspaceRow(data.workspaceId).remove();
         };
 
         this.onSwitchWorkspace = function(event, data) {
