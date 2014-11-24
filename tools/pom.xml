@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.0.20141124</version>
     </parent>
 
     <artifactId>lumify-tools-group</artifactId>
