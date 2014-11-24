@@ -16,8 +16,12 @@ import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class BingTranslator implements Translator {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BingTranslator.class);
+    public static final String CONFIG_CLIENT_ID = "translator.bing.clientId";
+    public static final String CONFIG_CLIENT_SECRET = "translator.bing.clientSecret";
     private Configuration configuration;
     private Date tokenExpiresDate;
     private String accessToken;
@@ -48,8 +52,10 @@ public class BingTranslator implements Translator {
         }
 
         try {
-            String clientId = this.configuration.get("translator.bing.clientId");
-            String clientSecret = this.configuration.get("translator.bing.clientSecret");
+            String clientId = this.configuration.get(CONFIG_CLIENT_ID, null);
+            checkNotNull(clientId, "Configuration " + CONFIG_CLIENT_ID + " is required");
+            String clientSecret = this.configuration.get(CONFIG_CLIENT_SECRET, null);
+            checkNotNull(clientSecret, "Configuration " + CONFIG_CLIENT_SECRET + " is required");
             String scope = "http://api.microsofttranslator.com";
             String grantType = "client_credentials";
 

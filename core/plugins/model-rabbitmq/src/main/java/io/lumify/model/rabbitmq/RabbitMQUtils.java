@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class RabbitMQUtils {
     private static final String RABBITMQ_ADDR_PREFIX = "rabbitmq.addr";
     private static final int DEFAULT_PORT = 5672;
@@ -36,7 +38,8 @@ public class RabbitMQUtils {
         List<Address> addresses = new ArrayList<Address>();
         for (String key : configuration.getKeys(RABBITMQ_ADDR_PREFIX)) {
             if (key.endsWith(".host")) {
-                String host = configuration.get(key);
+                String host = configuration.get(key, null);
+                checkNotNull(host, "Configuration " + key + " is required");
                 int port = configuration.getInt(key.replace(".host", ".port"), DEFAULT_PORT);
                 addresses.add(new Address(host, port));
             }

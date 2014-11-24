@@ -40,7 +40,7 @@ public class WebApp extends App {
         this.injector = injector;
 
         Configuration config = injector.getInstance(Configuration.class);
-        this.devMode = "true".equals(config.get(Configuration.DEV_MODE));
+        this.devMode = "true".equals(config.get(Configuration.DEV_MODE, "false"));
 
         if (!devMode) {
             String pluginsJsRoute = "plugins.js";
