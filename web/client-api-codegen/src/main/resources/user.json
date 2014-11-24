@@ -1,22 +1,48 @@
 {
-    "apiVersion": "0.4.0",
-    "swaggerVersion": "1.2",
-    "basePath": "http://localhost:8889",
-    "resourcePath": "/user",
-    "apis": [
+  "apiVersion": "0.4.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://localhost:8889",
+  "resourcePath": "/user",
+  "apis": [
+    {
+      "path": "/user/me",
+      "operations": [
         {
-            "path": "/user/me",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Gets the current user info",
-                    "type": "ClientApiUser",
-                    "nickname": "getMe"
-                }
-            ]
+          "method": "GET",
+          "summary": "Gets the current user info",
+          "type": "ClientApiUser",
+          "nickname": "getMe"
         }
-    ],
-    "models": {
-
+      ]
+    },
+    {
+      "path": "/user/all",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Gets all the users",
+          "type": "ClientApiUsers",
+          "nickname": "getAll",
+          "parameters": [
+            {
+              "name": "q",
+              "description": "Query",
+              "required": false,
+              "type": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "workspaceId",
+              "description": "The workspaceId to check for users",
+              "required": false,
+              "type": "string",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
     }
+  ],
+  "models": {
+  }
 }

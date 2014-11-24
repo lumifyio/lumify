@@ -1,6 +1,5 @@
 package io.lumify.web.routes.user;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
@@ -8,7 +7,9 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.WorkspaceUser;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiUsers;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.util.ConvertingIterable;
@@ -44,11 +45,8 @@ public class UserList extends BaseRequestHandler {
         Iterable<String> workspaceIds = getCurrentWorkspaceIds(users);
         Map<String, String> workspaceNames = getWorkspaceNames(workspaceIds, user);
 
-        JSONObject resultJson = new JSONObject();
-        JSONArray usersJson = UserRepository.toJson(users, workspaceNames);
-        resultJson.put("users", usersJson);
-
-        respondWithJson(response, resultJson);
+        ClientApiUsers clientApiUsers = getUserRepository().toClientApi(users, workspaceNames);
+        respondWithClientApiObject(response, clientApiUsers);
     }
 
     private Map<String, String> getWorkspaceNames(Iterable<String> workspaceIds, User user) {
