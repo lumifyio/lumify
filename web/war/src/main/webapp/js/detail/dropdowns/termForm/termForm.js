@@ -117,7 +117,7 @@ define([
                 }
 
                 this.deferredConcepts.done(function() {
-                    self.trigger(self.select('conceptContainerSelector').show(), 'selectConcept', {
+                    self.trigger(self.select('conceptContainerSelector').show(), 'selectConceptId', {
                         conceptId: conceptType
                     })
                     self.updateConceptLabel(conceptType)
@@ -146,7 +146,7 @@ define([
                 });
             } else if (this.attr.restrictConcept) {
                 this.deferredConcepts.done(function() {
-                    self.trigger(self.select('conceptContainerSelector'), 'selectConcept', {
+                    self.trigger(self.select('conceptContainerSelector'), 'selectConceptId', {
                         conceptId: self.attr.restrictConcept
                     })
                 });
@@ -488,7 +488,7 @@ define([
                         )
                     ) || '';
 
-                    self.trigger(self.select('conceptContainerSelector'), 'selectConcept', {
+                    self.trigger(self.select('conceptContainerSelector'), 'selectConceptId', {
                         conceptId: self.selectedConceptId
                     })
 
