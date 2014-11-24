@@ -127,7 +127,12 @@ define([
             return ajax('POST', '/vertex/import', formData);
         },
 
-        setVisibility: function() {},
+        setVisibility: function(vertexId, visibilitySource) {
+            return ajax('POST', '/vertex/visibility', {
+                graphVertexId: vertexId,
+                visibilitySource: visibilitySource
+            });
+        },
 
         setProperty: function(vertexId, property, optionalWorkspaceId) {
             return ajax('POST', '/vertex/property', _.tap({

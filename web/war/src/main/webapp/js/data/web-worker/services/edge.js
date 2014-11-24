@@ -41,8 +41,11 @@ define([
             }),
 
         setVisibility: function(edgeId, visibilitySource) {
-            // TODO
-        }
+            return ajax('POST', '/edge/visibility', {
+                graphEdgeId: edgeId,
+                visibilitySource: visibilitySource
+            });
+        },
 
     };
 

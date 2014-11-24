@@ -290,7 +290,7 @@ define([
                         e.source.id in workspace.vertices &&
                         e.target.id in workspace.vertices;
 
-                if ((previous && _.isEqual(v, previous)) || !bothVerticesInWorkspace) {
+                if ((previous && _.isEqual(e, previous)) || !bothVerticesInWorkspace) {
                     return;
                 }
 
