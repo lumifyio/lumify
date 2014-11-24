@@ -78,15 +78,7 @@ define(['require', 'underscore'], function(require, _) {
 
     function partitionVertices(ontology, vertices, query, conceptFilter, propertyFilters) {
         var propertiesByTitle = ontology.properties.byTitle,
-            conceptsById = ontology.concepts.byId,
-            hasGeoFilter = _.any(propertyFilters, function(filter) {
-                var ontologyProperty = propertiesByTitle[filter.propertyId];
-                return ontologyProperty && ontologyProperty.dataType === 'geoLocation';
-            });
-
-        if (hasGeoFilter) {
-            debugger;
-        }
+            conceptsById = ontology.concepts.byId;
 
         return _.partition(vertices, function(v) {
             var queryMatch = query && query !== '*' ?

@@ -170,7 +170,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         if (message != null) {
             response.write(message);
         } else {
-            setUserStatusToOffline(event);
+            onDisconnectOrClose(event);
         }
     }
 
