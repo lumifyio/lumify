@@ -60,17 +60,21 @@ define([
 
             this.select('inputSelector').typeahead({
                 source: function(query, callback) {
-                    self.dataRequest('user', 'search', query)
-                        .done(function(users) {
-                            var otherUsers = users.filter(function(user) {
-                                    return self.attr.filterUserIds.indexOf(user.id) === -1;
-                                }),
-                                ids = _.pluck(otherUsers, 'id');
+                    if ($.trim(query).length) {
+                        self.dataRequest('user', 'search', query)
+                            .done(function(users) {
+                                var otherUsers = users.filter(function(user) {
+                                        return self.attr.filterUserIds.indexOf(user.id) === -1;
+                                    }),
+                                    ids = _.pluck(otherUsers, 'id');
 
-                            userMap = _.indexBy(otherUsers, 'id');
+                                userMap = _.indexBy(otherUsers, 'id');
 
-                            callback(ids);
-                        });
+                                callback(ids);
+                            });
+                    } else {
+                        callback([]);
+                    }
                 },
                 matcher: function() {
                     return true;
