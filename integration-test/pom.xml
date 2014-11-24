@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lumify</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.0.20141124</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -128,4 +128,27 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>ITest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${plugin.maven.surefire.version}</version>
+                        <configuration>
+                            <reuseForks>false</reuseForks>
+                            <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
+                            <excludes>
+                                <exclude>**/*$*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

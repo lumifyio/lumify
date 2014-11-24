@@ -1,11 +1,10 @@
 
 define([
     'flight/lib/component',
-    'service/ontology',
     './3djs/3djs',
     'util/vertex/formatters',
     'tpl!util/alert'
-], function(defineComponent, OntologyService, $3djs, F, alertTemplate) {
+], function(defineComponent, $3djs, F, alertTemplate) {
     'use strict';
 
     var MAX_TITLE_LENGTH = 15,
@@ -33,7 +32,6 @@ define([
     }
 
     function Graph3D() {
-        this.ontologyService = new OntologyService();
         this.defaultAttrs({ });
 
         this.after('teardown', function() {
@@ -58,7 +56,7 @@ define([
                 this.on(document, 'verticesDeleted', this.onVerticesDeleted);
                 this.on(document, 'verticesUpdated', this.onVerticesUpdated);
                 this.on(document, 'existingVerticesAdded', this.onExistingVerticesAdded);
-                this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
+                this.on(document, 'edgesLoaded', this.onEdgesLoaded);
 
                 this.on('showPanel', this.onShowPanel);
                 this.on('hidePanel', this.onHidePanel);
@@ -95,7 +93,7 @@ define([
                 var node = new $3djs.Graph.Node(vertex.id);
 
                 node.data.vertex = vertex;
-                node.data.icon = vertex.imageSrc;
+                node.data.icon = F.vertex.image(vertex);
 
                 if (node.data.icon) {
                     deferredImages.push(
@@ -142,6 +140,7 @@ define([
                 this.addVertices(workspace.data.vertices);
             }
         };
+
         this.onVerticesAdded = function(event, data) {
             if (!this.isWorkspaceEditable) return;
 
@@ -149,6 +148,7 @@ define([
                 this.addVertices(data.vertices);
             }
         };
+
         this.onVerticesDeleted = function(event, data) {
             var self = this;
 
@@ -162,12 +162,12 @@ define([
         };
         this.onExistingVerticesAdded = function() {
         };
-        this.onRelationshipsLoaded = function(event, data) {
+        this.onEdgesLoaded = function(event, data) {
             var graph = this.graph;
 
-            if (data.relationships) {
-                this.relationships = data.relationships;
-                this.addEdges(data.relationships);
+            if (data.edges) {
+                this.relationships = data.edges;
+                this.addEdges(data.edges);
                 this.graph.needsUpdate = true;
             }
         };

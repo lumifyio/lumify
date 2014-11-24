@@ -8,6 +8,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.User;
+import io.lumify.core.util.AutoDependencyTreeRunner;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.dataImport.model.PtLinkType;
@@ -27,9 +28,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -48,34 +47,49 @@ public class DataImporter {
     private final Map<Long, User> users = new HashMap<Long, User>();
     private final Map<Long, Workspace> workspaces = new HashMap<Long, Workspace>();
     private final Map<Long, AWState.Wrapper1> awstateProtosByGraphId = new HashMap<Long, AWState.Wrapper1>();
+    private final AutoDependencyTreeRunner tree;
     private User systemUser;
     private UserRepository userRepository;
     private String owlPrefix;
-    private final List<PtImporterBase> importers = new ArrayList<PtImporterBase>();
     private final String hasMediaConceptTypeIri;
 
     public DataImporter(DataImporterInitParameters p) {
         InjectHelper.inject(this);
 
-        importers.add(new PtObjectTypeImporter(this));
-        importers.add(new PtPropertyTypeImporter(this));
-        importers.add(new PtLinkTypeImporter(this));
-        importers.add(new PtNodeDisplayTypeImporter(this));
-        importers.add(new PtImageInfoImporter(this));
-        importers.add(new PtOntologyResourceImporter(this));
-        importers.add(new PtLinkRelationImporter(this));
-        if (!p.isOntologyExport()) {
-            importers.add(new PtUserImporter(this));
-            importers.add(new PtGraphImporter(this));
-            importers.add(new PtObjectImporter(this));
-            importers.add(new PtGraphObjectImporter(this));
-            importers.add(new PtPropertyAndValueImporter(this));
-            importers.add(new PtObjectObjectImporter(this));
-            importers.add(new PtMediaAndValueImporter(this));
-        }
+        PtObjectTypeImporter ptObjectTypeImporter = InjectHelper.inject(new PtObjectTypeImporter(this));
+        PtPropertyTypeImporter ptPropertyTypeImporter = InjectHelper.inject(new PtPropertyTypeImporter(this));
+        PtLinkTypeImporter ptLinkTypeImporter = InjectHelper.inject(new PtLinkTypeImporter(this));
+        PtNodeDisplayTypeImporter ptNodeDisplayTypeImporter = InjectHelper.inject(new PtNodeDisplayTypeImporter(this));
+        PtImageInfoImporter ptImageInfoImporter = InjectHelper.inject(new PtImageInfoImporter(this));
+        PtOntologyResourceImporter ptOntologyResourceImporter = InjectHelper.inject(new PtOntologyResourceImporter(this));
+        PtLinkRelationImporter ptLinkRelationImporter = InjectHelper.inject(new PtLinkRelationImporter(this));
 
-        for (PtImporterBase importer : importers) {
-            InjectHelper.inject(importer);
+        PtUserImporter ptUserImporter = InjectHelper.inject(new PtUserImporter(this));
+        PtGraphImporter ptGraphImporter = InjectHelper.inject(new PtGraphImporter(this));
+        PtObjectImporter ptObjectImporter = InjectHelper.inject(new PtObjectImporter(this));
+        PtGraphObjectImporter ptGraphObjectImporter = InjectHelper.inject(new PtGraphObjectImporter(this));
+        PtPropertyAndValueImporter ptPropertyAndValueImporter = InjectHelper.inject(new PtPropertyAndValueImporter(this));
+        PtObjectObjectImporter ptObjectObjectImporter = InjectHelper.inject(new PtObjectObjectImporter(this));
+        PtMediaAndValueImporter ptMediaAndValueImporter = InjectHelper.inject(new PtMediaAndValueImporter(this));
+
+        tree = new AutoDependencyTreeRunner();
+
+        tree.add(ptObjectTypeImporter);
+        tree.add(ptPropertyTypeImporter);
+        tree.add(ptLinkTypeImporter);
+        tree.add(ptNodeDisplayTypeImporter);
+        tree.add(ptImageInfoImporter);
+        tree.add(ptOntologyResourceImporter);
+        tree.add(ptLinkRelationImporter);
+
+        if (!p.isOntologyExport()) {
+            tree.add(ptUserImporter);
+            tree.add(ptUserImporter, ptGraphImporter);
+            tree.add(ptObjectTypeImporter, ptObjectImporter);
+            tree.add(ptGraphImporter, ptGraphObjectImporter);
+            tree.add(ptPropertyTypeImporter, ptPropertyAndValueImporter);
+            tree.add(ptLinkTypeImporter, ptObjectObjectImporter);
+            tree.add(ptMediaAndValueImporter);
         }
 
         File f = null;
@@ -102,9 +116,7 @@ public class DataImporter {
         long startTime = System.currentTimeMillis();
         sqlRunner.connect();
         try {
-            for (PtImporterBase importer : importers) {
-                importer.run();
-            }
+            tree.run();
         } finally {
             sqlRunner.close();
         }

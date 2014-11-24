@@ -66,12 +66,13 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         updateUsers(workspace, updateData.getUserUpdates(), authUser);
 
         workspace = workspaceRepository.findById(workspaceId, authUser);
-        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, false);
-        workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
+        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, true);
 
         deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
         respondWithSuccessJson(response);
+
+        workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {

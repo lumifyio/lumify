@@ -123,6 +123,7 @@ public class Router extends HttpServlet {
             app.post("/user/ui-preferences", authenticator, csrfProtector, UserSetUiPreferences.class);
             app.get("/user/all", authenticator, csrfProtector, UserList.class);
             app.get("/user/info", authenticator, csrfProtector, UserInfo.class);
+            app.post("/user/info", authenticator, csrfProtector, UserInfo.class);
             app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
 
             app.get("/long-running-process", authenticator, csrfProtector, LongRunningProcessById.class);
@@ -161,6 +162,8 @@ public class Router extends HttpServlet {
             HttpServletResponse httpResponse = (HttpServletResponse) resp;
             httpResponse.addHeader("Accept-Ranges", "bytes");
             app.handle((HttpServletRequest) req, httpResponse);
+        } catch (ConnectionClosedException cce) {
+            LOGGER.debug("Connection closed by client", cce);
         } catch (Exception e) {
             throw new ServletException(e);
         }

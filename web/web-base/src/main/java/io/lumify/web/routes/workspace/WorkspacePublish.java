@@ -65,7 +65,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }
@@ -384,7 +384,11 @@ public class WorkspacePublish extends BaseRequestHandler {
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : edge.getProperties()) {
-            publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+            OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
+            checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName());
+            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
+                publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+            }
         }
 
         auditRepository.auditEdgeElementMutation(AuditAction.PUBLISH, edgeExistingElementMutation, edge, sourceVertex, destVertex, "", user, lumifyVisibility.getVisibility());

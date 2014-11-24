@@ -1,33 +1,23 @@
 
 define([
     'flight/lib/component',
-    'service/ontology',
-    'service/vertex',
-    'service/edge',
-    'service/config',
+    '../dropdowns/propertyForm/propForm',
     'util/vertex/formatters',
     'util/privileges',
-    '../dropdowns/propertyForm/propForm',
+    'util/withDataRequest',
     'hbs!../audit/audit-list',
-    'data',
-    'sf',
     'd3'
 ], function(
     defineComponent,
-    OntologyService,
-    VertexService,
-    EdgeService,
-    ConfigService,
+    PropertyForm,
     F,
     Privileges,
-    PropertyForm,
+    withDataRequest,
     auditsListTemplate,
-    appData,
-    sf,
     d3) {
     'use strict';
 
-    var component = defineComponent(Properties),
+    var component = defineComponent(Properties, withDataRequest),
         VISIBILITY_NAME = 'http://lumify.io#visibilityJson',
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
@@ -39,11 +29,7 @@ define([
         // Property td types
         GROUP = 0, NAME = 1, VALUE = 2,
 
-        alreadyWarnedAboutMissingOntology = {},
-        ontologyService = new OntologyService(),
-        vertexService = new VertexService(),
-        edgeService = new EdgeService(),
-        configService = new ConfigService();
+        alreadyWarnedAboutMissingOntology = {};
 
     return component;
 
@@ -350,15 +336,19 @@ define([
                 .attr('class', 'table')
                 .on('click', onTableClick.bind(this));
 
-            $.when(
-                ontologyService.relationships(),
-                ontologyService.properties(),
-                configService.getProperties()
-            ).done(function(ontologyRelationships, ontologyProperties, config) {
-                    self.config = config;
-                    self.ontologyProperties = ontologyProperties;
-                    self.ontologyRelationships = ontologyRelationships;
-                    self.update(properties);
+            Promise.all([
+                this.dataRequest('ontology', 'relationships'),
+                this.dataRequest('ontology', 'properties'),
+                this.dataRequest('config', 'properties')
+            ]).done(function(results) {
+                var ontologyRelationships = results[0],
+                    ontologyProperties = results[1],
+                    config = results[2];
+
+                self.config = config;
+                self.ontologyProperties = ontologyProperties;
+                self.ontologyRelationships = ontologyRelationships;
+                self.update(properties);
             });
 
             this.on('click', {
@@ -389,12 +379,6 @@ define([
                 .on('toggleAuditDisplay.properties', this.onToggleAuditing.bind(this));
         });
 
-        this.before('teardown', function() {
-            if (this.auditRequest && this.auditRequest.abort) {
-                this.auditRequest.abort();
-            }
-        });
-
         this.onAuditShowAll = function(event) {
             var row = $(event.target).closest('tr');
 
@@ -410,15 +394,9 @@ define([
             if (info) {
                 event.preventDefault();
 
-                var vertexId = info.graphVertexId,
-                    vertex = appData.vertex(vertexId);
-                if (!vertex) {
-                    appData.refresh(vertexId).done(function(v) {
-                        self.trigger('selectObjects', { vertices: [v] });
-                    });
-                } else {
-                    this.trigger('selectObjects', { vertices: [vertex] });
-                }
+                var vertexId = info.graphVertexId;
+
+                this.trigger('selectObjects', { vertexIds: [vertexId] });
             }
         };
 
@@ -448,70 +426,74 @@ define([
                     .find('.hidden').removeClass('hidden').end()
                     .find('.show-more').remove();
 
-                $.when(
-                        ontologyService.ontology(),
-                        this.auditRequest = (F.vertex.isEdge(self.attr.data) ?
-                                             edgeService : vertexService
-                                            ).getAudits(this.attr.data.id)
-                    ).done(function(ontology, auditResponse) {
-                        var audits = _.sortBy(auditResponse[0].auditHistory, function(a) {
-                                return new Date(a.dateTime).getTime() * -1;
-                            }),
-                            auditGroups = _.groupBy(audits, function(a) {
-                                if (a.entityAudit) {
-                                   if (a.entityAudit.analyzedBy) {
-                                       a.data.displayType = a.entityAudit.analyzedBy;
-                                   }
-                                }
+                Promise.all([
+                    this.dataRequest('ontology', 'ontology'),
+                    this.dataRequest(
+                        F.vertex.isEdge(this.attr.data) ? 'edge' : 'vertex',
+                        'audit',
+                        this.attr.data.id
+                    )
+                ]).done(function(results) {
+                    var ontology = results[0],
+                        auditHistory = results[1],
+                        audits = _.sortBy(auditHistory, function(a) {
+                            return new Date(a.dateTime).getTime() * -1;
+                        }),
+                        auditGroups = _.groupBy(audits, function(a) {
+                            if (a.entityAudit) {
+                               if (a.entityAudit.analyzedBy) {
+                                   a.data.displayType = a.entityAudit.analyzedBy;
+                               }
+                            }
 
-                                if (a.propertyAudit) {
-                                    a.propertyAudit.isVisibility =
-                                        a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
-                                    a.propertyAudit.visibilityValue = a.propertyAudit.propertyMetadata &&
-                                        a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
-                                    a.propertyAudit.formattedValue = F.vertex.displayProp({
-                                        name: a.propertyAudit.propertyName,
-                                        value: a.propertyAudit.newValue || a.propertyAudit.previousValue
-                                    });
-                                    a.propertyAudit.isDeleted = a.propertyAudit.newValue === '';
+                            if (a.propertyAudit) {
+                                a.propertyAudit.isVisibility =
+                                    a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
+                                a.propertyAudit.visibilityValue = a.propertyAudit.propertyMetadata &&
+                                    a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
+                                a.propertyAudit.formattedValue = F.vertex.displayProp({
+                                    name: a.propertyAudit.propertyName,
+                                    value: a.propertyAudit.newValue || a.propertyAudit.previousValue
+                                });
+                                a.propertyAudit.isDeleted = a.propertyAudit.newValue === '';
 
-                                    return 'property';
-                                }
+                                return 'property';
+                            }
 
-                                if (a.relationshipAudit) {
-                                    a.relationshipAudit.sourceIsCurrent =
-                                        a.relationshipAudit.sourceId === self.attr.data.id;
-                                    a.relationshipAudit.sourceHref = F.vertexUrl.fragmentUrl(
-                                        [a.relationshipAudit.sourceId], appData.workspaceId);
-                                    a.relationshipAudit.sourceInfo =
-                                        self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
+                            if (a.relationshipAudit) {
+                                a.relationshipAudit.sourceIsCurrent =
+                                    a.relationshipAudit.sourceId === self.attr.data.id;
+                                a.relationshipAudit.sourceHref = F.vertexUrl.fragmentUrl(
+                                    [a.relationshipAudit.sourceId], lumifyData.currentWorkspaceId);
+                                a.relationshipAudit.sourceInfo =
+                                    self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
 
-                                    a.relationshipAudit.destInfo =
-                                        self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
-                                    a.relationshipAudit.destHref = F.vertexUrl.fragmentUrl(
-                                        [a.relationshipAudit.destId], appData.workspaceId);
-                                }
+                                a.relationshipAudit.destInfo =
+                                    self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
+                                a.relationshipAudit.destHref = F.vertexUrl.fragmentUrl(
+                                    [a.relationshipAudit.destId], lumifyData.currentWorkspaceId);
+                            }
 
-                                return 'other';
-                            });
+                            return 'other';
+                        });
 
-                        self.select('entityAuditsSelector')
-                            .empty()
-                            .append('<table></table>')
-                            .find('table')
-                            .append(auditsListTemplate({
-                                audits: auditGroups.other || [],
-                                MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
-                            }));
+                    self.select('entityAuditsSelector')
+                        .empty()
+                        .append('<table></table>')
+                        .find('table')
+                        .append(auditsListTemplate({
+                            audits: auditGroups.other || [],
+                            MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
+                        }));
 
-                        if (auditGroups.property) {
-                            self.updatePropertyAudits(auditGroups.property);
-                        }
-                        auditsEl.show();
+                    if (auditGroups.property) {
+                        self.updatePropertyAudits(auditGroups.property);
+                    }
+                    auditsEl.show();
 
-                        self.trigger('updateDraggables');
-                        self.updateVisibility();
-                    });
+                    self.trigger('updateDraggables');
+                    self.updateVisibility();
+                });
             } else {
                 auditsEl.hide();
                 this.$node.find('.audit-row').remove();
@@ -584,39 +566,29 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            vertexService.deleteProperty(this.attr.data.id, data.property)
-                .done(this.closePropertyForm.bind(this))
-                .fail(this.requestFailure.bind(this, event.target))
+            this.dataRequest(
+                    F.vertex.isEdge(this.attr.data) ? 'edge' : 'vertex',
+                    'deleteProperty',
+                    this.attr.data.id, data.property
+                ).then(this.closePropertyForm.bind(this))
+                 .catch(this.requestFailure.bind(this, event.target))
         };
 
         this.onAddProperty = function(event, data) {
             if (data.property.name === 'http://lumify.io#visibilityJson') {
                 if (data.isEdge) {
-                    edgeService.setVisibility(
-                        this.attr.data.id,
-                        data.property.visibilitySource)
-                        .fail(this.requestFailure.bind(this))
-                        .done(this.closePropertyForm.bind(this));
+                    this.dataRequest('edge', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                        .then(this.closePropertyForm.bind(this))
+                        .catch(this.requestFailure.bind(this))
                 } else {
-                    vertexService.setVisibility(
-                        this.attr.data.id,
-                        data.property.visibilitySource)
-                        .fail(this.requestFailure.bind(this))
-                        .done(this.closePropertyForm.bind(this));
+                    this.dataRequest('vertex', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                        .then(this.closePropertyForm.bind(this))
+                        .catch(this.requestFailure.bind(this));
                 }
             } else {
-
-                vertexService.setProperty(
-                        this.attr.data.id,
-                        data.property.key,
-                        data.property.name,
-                        data.property.value,
-                        data.property.visibilitySource,
-                        data.property.justificationText,
-                        data.property.sourceInfo,
-                        data.property.metadata)
-                    .fail(this.requestFailure.bind(this))
-                    .done(this.closePropertyForm.bind(this));
+                this.dataRequest('vertex', 'setProperty', this.attr.data.id, data.property)
+                    .then(this.closePropertyForm.bind(this))
+                    .catch(this.requestFailure.bind(this));
             }
 
         };
@@ -625,19 +597,8 @@ define([
             this.$node.find('.underneath').teardownComponent(PropertyForm);
         };
 
-        this.requestFailure = function(request, message, error) {
+        this.requestFailure = function(error) {
             var target = this.$node.find('.underneath');
-            if (_.isElement(request)) {
-                target = request;
-                request = arguments[1];
-                message = arguments[2];
-                error = arguments[3];
-            }
-
-            try {
-                error = JSON.parse(error);
-            } catch(e) { }
-
             this.trigger(target, 'propertyerror', { error: error });
         };
 

@@ -1,6 +1,6 @@
 
 define([
-    'promise!./service/messagesPromise'
+    'util/requirejs/promise!./service/messagesPromise'
 ], function(messages) {
 
     return function(key/**, args **/) {

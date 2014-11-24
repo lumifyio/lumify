@@ -2,11 +2,12 @@ define([
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./detail',
-    'util/vertex/formatters'
-], function(defineComponent, registry, template, F) {
+    'util/vertex/formatters',
+    'util/withDataRequest'
+], function(defineComponent, registry, template, F, withDataRequest) {
     'use strict';
 
-    return defineComponent(Detail);
+    return defineComponent(Detail, withDataRequest);
 
     function Detail() {
 
@@ -22,7 +23,6 @@ define([
             this.on('finishedLoadingTypeContent', this.onFinishedTypeContent);
 
             this.on(document, 'objectsSelected', this.onObjectsSelected);
-            this.on('selectObjects', this.onSelectObjects);
             this.preventDropEventsFromPropagating();
 
             this.before('teardown', this.teardownComponents);
@@ -33,12 +33,6 @@ define([
                 this.onObjectsSelected(null, { vertices: [this.attr.loadGraphVertexData] });
             }
         });
-
-        this.onSelectObjects = function(event, data) {
-            if (!data.focus) {
-                this.onObjectsSelected(null, data);
-            }
-        };
 
         this.onFinishedTypeContent = function() {
             this.$node.removeClass('loading');
@@ -87,10 +81,11 @@ define([
                 moduleData = vertices;
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
-                    type = vertex.concept && vertex.concept.displayType ||
-                        (F.vertex.isEdge(vertex) ? 'relationship' : 'entity');
+                    concept = F.vertex.concept(vertex),
+                    type = concept && concept.displayType ||
+                        (F.vertex.isEdge(vertex) ? 'edge' : 'entity');
 
-                if (type === 'relationship') {
+                if (type === 'edge') {
                     moduleName = type;
                 } else {
                     moduleName = (((type != 'document' &&
@@ -101,7 +96,7 @@ define([
                 }
                 moduleData = vertex;
             } else {
-                moduleName = 'relationship';
+                moduleName = 'edge';
                 moduleData = edges[0];
             }
 

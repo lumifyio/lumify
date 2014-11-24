@@ -90,7 +90,6 @@ public class X509AuthenticationHandlerTest {
         when(userRepository.findOrAddUser(eq(TEST_USERNAME), eq("valid"), isNull(String.class), anyString(), any(String[].class))).thenReturn(user);
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);
-        verify(httpSession).setAttribute(CurrentUser.STRING_ATTRIBUTE_NAME, user.getUsername());
         verify(chain).next(request, response);
     }
 

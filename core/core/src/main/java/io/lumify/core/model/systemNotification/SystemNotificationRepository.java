@@ -15,6 +15,7 @@ import java.util.List;
 public abstract class SystemNotificationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SystemNotificationRepository.class);
     private static final String LOCK_NAME = SystemNotificationRepository.class.getName();
+    private boolean shutdown;
 
     public abstract List<SystemNotification> getActiveNotifications(User user);
 
@@ -73,7 +74,7 @@ public abstract class SystemNotificationRepository {
     }
 
     private void runPeriodically(UserRepository userRepository, WorkQueueRepository workQueueRepository) {
-        while (true) {
+        while (!shutdown) {
             LOGGER.debug("running periodically");
             Date now = new Date();
             Date nowPlusOneMinute = DateUtils.addMinutes(now, 1);
@@ -90,5 +91,9 @@ public abstract class SystemNotificationRepository {
                 // do nothing
             }
         }
+    }
+
+    public void shutdown() {
+        shutdown = true;
     }
 }

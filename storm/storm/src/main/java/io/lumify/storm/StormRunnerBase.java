@@ -108,7 +108,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
         Config conf = new Config();
         conf.put("topology.kryo.factory", DefaultKryoFactory.class.getName());
         for (String key : getConfiguration().getKeys()) {
-            conf.put(key, getConfiguration().get(key));
+            conf.put(key, getConfiguration().get(key, null));
         }
         conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS, 10000);
         conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 100);

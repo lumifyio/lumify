@@ -2,17 +2,15 @@ define([
     'flight/lib/component',
     'hbs!./template',
     'hbs!./concept',
-    'service/ontology'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     conceptTemplate,
-    OntologyService) {
+    withDataRequest) {
     'use strict';
 
-    var ontologyService = new OntologyService();
-
-    return defineComponent(ConceptSelector);
+    return defineComponent(ConceptSelector, withDataRequest);
 
     function ConceptSelector() {
 
@@ -72,135 +70,133 @@ define([
         this.setupTypeahead = function() {
             var self = this;
 
-            ontologyService.concepts()
+            this.dataRequest('ontology', 'concepts')
                 .then(this.transformConcepts.bind(this))
                 .done(function(concepts) {
+                    concepts.splice(0, 0, self.attr.defaultText);
 
-                concepts.splice(0, 0, self.attr.defaultText);
+                    self.select('fieldSelector')
+                        .attr('placeholder', self.attr.defaultText)
+                        .typeahead({
+                            minLength: 0,
+                            items: Number.MAX_VALUE,
+                            source: concepts,
+                            matcher: function(concept) {
+                                if ($.trim(this.query) === '') {
+                                    return true;
+                                }
+                                if (concept === self.attr.defaultText) {
+                                    return false;
+                                }
 
-                self.select('fieldSelector')
-                    .attr('placeholder', self.attr.defaultText)
-                    .typeahead({
-                        minLength: 0,
-                        items: Number.MAX_VALUE,
-                        source: concepts,
-                        matcher: function(concept) {
-                            if ($.trim(this.query) === '') {
-                                return true;
+                                return Object.getPrototypeOf(this).matcher.call(this, concept.flattenedDisplayName);
+                            },
+                            sorter: _.identity,
+                            updater: function(conceptId) {
+                                var $element = this.$element,
+                                    concept = self.conceptsById[conceptId];
+
+                                self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
+                                _.defer(function() {
+                                    $element.blur();
+                                });
+                                return concept && concept.displayName || '';
+                            },
+                            highlighter: function(concept) {
+                                return conceptTemplate(concept === self.attr.defaultText ?
+                                {
+                                    concept: {
+                                        displayName: concept,
+                                        rawConcept: { }
+                                    },
+                                    path: null,
+                                    marginLeft: 0
+                                } : {
+                                    concept: concept,
+                                    path: concept.flattenedDisplayName.replace(/\/?[^\/]+$/, ''),
+                                    marginLeft: concept.depth
+                                });
                             }
-                            if (concept === self.attr.defaultText) {
-                                return false;
-                            }
-
-                            return Object.getPrototypeOf(this).matcher.call(this, concept.flattenedDisplayName);
-                        },
-                        sorter: _.identity,
-                        updater: function(conceptId) {
-                            var $element = this.$element,
-                                concept = self.conceptsById[conceptId];
-
-                            self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
-                            _.defer(function() {
-                                $element.blur();
-                            });
-                            return concept && concept.displayName || '';
-                        },
-                        highlighter: function(concept) {
-                            return conceptTemplate(concept === self.attr.defaultText ?
-                            {
-                                concept: {
-                                    displayName: concept,
-                                    rawConcept: { }
-                                },
-                                path: null,
-                                marginLeft: 0
-                            } : {
-                                concept: concept,
-                                path: concept.flattenedDisplayName.replace(/\/?[^\/]+$/, ''),
-                                marginLeft: concept.depth
-                            });
-                        }
-                    })
-                    .data('typeahead').lookup = allowEmptyLookup;
-            });
+                        })
+                        .data('typeahead').lookup = allowEmptyLookup;
+                });
         }
 
         this.transformConcepts = function(concepts) {
             var self = this,
-                deferred = $.Deferred(),
                 limitRelatedSearch;
 
             if (this.attr.limitRelatedToConceptId) {
-                limitRelatedSearch = ontologyService.relationships();
+                limitRelatedSearch = this.dataRequest('ontology', 'relationships');
             } else {
-                limitRelatedSearch = $.Deferred().resolve();
+                limitRelatedSearch = Promise.resolve();
             }
 
-            limitRelatedSearch.done(function(r) {
-                self.allConcepts = _.chain(
-                        concepts[self.attr.showAdminConcepts ? 'forAdmin' : 'byTitle']
-                    )
-                    .filter(function(c) {
-                        if (c.userVisible === false) {
-                            return false;
-                        }
+            return new Promise(function(fulfill, reject) {
+                limitRelatedSearch.done(function(r) {
+                    self.allConcepts = _.chain(
+                            concepts[self.attr.showAdminConcepts ? 'forAdmin' : 'byTitle']
+                        )
+                        .filter(function(c) {
+                            if (c.userVisible === false) {
+                                return false;
+                            }
 
-                        if (self.attr.restrictConcept) {
+                            if (self.attr.restrictConcept) {
 
-                            // Walk up tree to see if any match
-                            var parentConceptId = c.id,
-                                shouldRestrictConcept = true;
-                            do {
-                                if (self.attr.restrictConcept === parentConceptId) {
-                                    shouldRestrictConcept = false;
-                                    break;
+                                // Walk up tree to see if any match
+                                var parentConceptId = c.id,
+                                    shouldRestrictConcept = true;
+                                do {
+                                    if (self.attr.restrictConcept === parentConceptId) {
+                                        shouldRestrictConcept = false;
+                                        break;
+                                    }
+                                } while (
+                                    parentConceptId &&
+                                    (parentConceptId = concepts.byId[parentConceptId].parentConcept)
+                                );
+
+                                if (shouldRestrictConcept) {
+                                    return false;
                                 }
-                            } while (
-                                parentConceptId &&
-                                (parentConceptId = concepts.byId[parentConceptId].parentConcept)
-                            );
+                            }
 
-                            if (shouldRestrictConcept) {
+                            if (self.attr.onlySearchable && c.searchable === false) {
                                 return false;
                             }
-                        }
 
-                        if (self.attr.onlySearchable && c.searchable === false) {
-                            return false;
-                        }
-
-                        if (self.attr.limitRelatedToConceptId &&
-                           r && r.groupedBySourceConcept &&
-                           r.groupedBySourceConcept[self.attr.limitRelatedToConceptId]) {
-                            if (r.groupedBySourceConcept[self.attr.limitRelatedToConceptId].indexOf(c.id) === -1) {
-                                return false;
+                            if (self.attr.limitRelatedToConceptId &&
+                               r && r.groupedBySourceConcept &&
+                               r.groupedBySourceConcept[self.attr.limitRelatedToConceptId]) {
+                                if (r.groupedBySourceConcept[self.attr.limitRelatedToConceptId].indexOf(c.id) === -1) {
+                                    return false;
+                                }
                             }
-                        }
 
-                        return true;
-                    })
-                    .map(function(c) {
-                        return {
-                            id: c.id,
-                            toString: function() {
-                                return this.id;
-                            },
-                            displayName: c.displayName,
-                            flattenedDisplayName: c.flattenedDisplayName,
-                            depth: c.flattenedDisplayName
-                                     .replace(/[^\/]/g, '').length,
-                            selected: self.attr.selected === c.id,
-                            rawConcept: c
-                        }
-                    })
-                    .value();
+                            return true;
+                        })
+                        .map(function(c) {
+                            return {
+                                id: c.id,
+                                toString: function() {
+                                    return this.id;
+                                },
+                                displayName: c.displayName,
+                                flattenedDisplayName: c.flattenedDisplayName,
+                                depth: c.flattenedDisplayName
+                                         .replace(/[^\/]/g, '').length,
+                                selected: self.attr.selected === c.id,
+                                rawConcept: c
+                            }
+                        })
+                        .value();
 
-                self.conceptsById = _.indexBy(self.allConcepts, 'id');
+                    self.conceptsById = _.indexBy(self.allConcepts, 'id');
 
-                deferred.resolve(self.allConcepts);
+                    fulfill(self.allConcepts);
+                });
             });
-
-            return deferred;
         }
     }
 

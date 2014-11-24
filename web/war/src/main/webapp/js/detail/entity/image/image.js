@@ -6,7 +6,8 @@ define([
     'util/retina',
     'util/withFileDrop',
     'util/privileges',
-    'service/vertex'
+    'util/vertex/formatters',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
@@ -14,17 +15,16 @@ define([
     retina,
     withFileDrop,
     Privileges,
-    VertexService) {
+    F,
+    withDataRequest) {
     'use strict';
 
     // Limit previews to 1MB since it's a dataUri
     var MAX_PREVIEW_FILE_SIZE = 1024 * 1024;
 
-    return defineComponent(ImageView, withFileDrop);
+    return defineComponent(ImageView, withFileDrop, withDataRequest);
 
     function ImageView() {
-
-        var vertexService = new VertexService();
 
         this.defaultAttrs({
             canvasSelector: 'canvas',
@@ -124,7 +124,7 @@ define([
         }
 
         this.srcForGlyphIconUrl = function(url) {
-            if (url === this.attr.data.imageDetailSrc) {
+            if (url === F.vertex.imageDetail(this.attr.data)) {
                 return url;
             }
             return url ? url.replace(/\/thumbnail/, '/raw') : '';
@@ -132,8 +132,8 @@ define([
 
         this.updateImageBackground = function(src) {
             var self = this,
-                imageUrl = this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc),
-                customImage = !!(src || !this.attr.data.imageSrcIsFromConcept);
+                imageUrl = this.srcForGlyphIconUrl(src || F.vertex.imageDetail(this.attr.data)),
+                customImage = !!(src || !F.vertex.imageIsFromConcept(this.attr.data));
 
             if (imageUrl && customImage) {
                 self.$node.closest('.entity-background').addClass('loading');
@@ -184,7 +184,7 @@ define([
         this.onUpdateIcon = function(e, data) {
             var src = this.srcForGlyphIconUrl(data.src);
 
-            if (src !== this.srcForGlyphIconUrl(this.attr.data.imageDetailSrc)) {
+            if (src !== this.srcForGlyphIconUrl(F.vertex.imageDetail(this.attr.data))) {
                 this.updateImageBackground(src);
             }
         };
@@ -210,16 +210,16 @@ define([
             this.manualAnimation = false;
             this.firstProgressUpdate = true;
 
-            vertexService.uploadImage(this.attr.data.id, file)
+            this.dataRequest('vertex', 'uploadImage', this.attr.data.id, file)
                 .progress(function(complete) {
                     self.trigger('fileprogress', { complete: complete });
                 })
-                .fail(function(xhr, message, error) {
-                    self.trigger('fileerror', { status: xhr.status, response: error });
-                })
-                .done(function(vertex) {
+                .then(function(vertex) {
                     self.trigger('filecomplete', { vertex: vertex });
-                });
+                })
+                .catch(function(xhr) {
+                    self.trigger('fileerror', { status: xhr.status, response: xhr.error });
+                })
         };
 
         this.handleFileDrop = function(file) {
@@ -280,9 +280,7 @@ define([
                 this.cleanup(true);
             }
 
-            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageDetailSrc));
-
-            this.trigger(document, 'updateVertices', { vertices: [data.vertex] });
+            this.updateImageBackground(this.srcForGlyphIconUrl(F.vertex.imageDetail(data.vertex)));
         };
 
         this.onUpdateProgress = function(event, data) {

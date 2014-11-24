@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify-datasets-group</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.0.20141124</version>
     </parent>
 
     <artifactId>lumify-gdelt</artifactId>
@@ -15,7 +15,7 @@
 
     <properties>
         <!-- Dependency Versions -->
-        <lumify.version>0.4.0-SNAPSHOT</lumify.version>
+        <lumify.version>0.4.0.20141124</lumify.version>
     </properties>
 
     <modules>

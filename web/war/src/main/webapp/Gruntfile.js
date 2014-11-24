@@ -39,6 +39,11 @@ module.exports = function(grunt) {
             command: 'npm install -q && make',
             stdout: false,
             cwd: 'libs/PathFinding.js'
+        },
+        rewritePromiseSourceMapUrl: {
+            command: 'sed -i".bak" \'/# sourceMappingURL=/d\' promise-*.js',
+            stdout: false,
+            cwd: 'libs/promise-polyfill/polyfills/output'
         }
     },
 

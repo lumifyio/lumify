@@ -152,7 +152,10 @@ public class LumifyBootstrap extends AbstractModule {
 
     private Provider<? extends Graph> getGraphProvider(Configuration configuration, String configurationPrefix) {
         // TODO change to use org.securegraph.GraphFactory
-        String graphClassName = configuration.get(configurationPrefix);
+        String graphClassName = configuration.get(configurationPrefix, null);
+        if (graphClassName == null) {
+            throw new LumifyException("Could not find graph configuration: " + configurationPrefix);
+        }
         final Map<String, String> configurationSubset = configuration.getSubset(configurationPrefix);
 
         final Class<?> graphClass;
@@ -202,7 +205,10 @@ public class LumifyBootstrap extends AbstractModule {
         private RetryPolicy retryPolicy;
 
         public CuratorFrameworkProvider(Configuration configuration) {
-            zookeeperConnectionString = configuration.get(Configuration.ZK_SERVERS);
+            zookeeperConnectionString = configuration.get(Configuration.ZK_SERVERS, null);
+            if (zookeeperConnectionString == null) {
+                throw new LumifyException("Could not find configuration item: " + Configuration.ZK_SERVERS);
+            }
             retryPolicy = new ExponentialBackoffRetry(1000, 3);
         }
 

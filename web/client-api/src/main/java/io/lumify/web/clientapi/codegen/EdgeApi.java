@@ -132,5 +132,66 @@ public class EdgeApi {
       }
     }
   }
+  public void setProperty (String edgeId, String propertyKey, String propertyName, String value, String visibilitySource, String justificationString, String sourceInfo, String metadata) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(edgeId == null || propertyKey == null || propertyName == null || value == null || visibilitySource == null || justificationString == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/edge/property".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    if(!"null".equals(String.valueOf(edgeId)))
+      queryParams.put("edgeId", String.valueOf(edgeId));
+    if(!"null".equals(String.valueOf(propertyKey)))
+      queryParams.put("propertyKey", String.valueOf(propertyKey));
+    if(!"null".equals(String.valueOf(propertyName)))
+      queryParams.put("propertyName", String.valueOf(propertyName));
+    if(!"null".equals(String.valueOf(value)))
+      queryParams.put("value", String.valueOf(value));
+    if(!"null".equals(String.valueOf(visibilitySource)))
+      queryParams.put("visibilitySource", String.valueOf(visibilitySource));
+    if(!"null".equals(String.valueOf(justificationString)))
+      queryParams.put("justificationString", String.valueOf(justificationString));
+    if(!"null".equals(String.valueOf(sourceInfo)))
+      queryParams.put("sourceInfo", String.valueOf(sourceInfo));
+    if(!"null".equals(String.valueOf(metadata)))
+      queryParams.put("metadata", String.valueOf(metadata));
+    String[] contentTypes = {
+      "application/json"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return ;
+      }
+      else {
+        return ;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return ;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
   }
 

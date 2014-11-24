@@ -225,7 +225,7 @@ public class UploadFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
         String geoPoint = ObjectMapperFactory.getInstance().writeValueAsString(new GeoPoint(38.8951, -77.0367));
-        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", TestOntology.GEO_LOCATION.getPropertyName(), geoPoint, "", "justification", null, null);
+        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", TestOntology.GEO_LOCATION.getPropertyName(), geoPoint, "", "justification");
 
         ClientApiVertexSearchResponse geoSearchResults = lumifyApi.getVertexApi().vertexGeoSearch(38.8951, -77.0367, 1000.0);
         assertEquals(1, geoSearchResults.getVertices().size());
@@ -239,7 +239,7 @@ public class UploadFileIntegrationTest extends TestBase {
         ClientApiWorkspace newWorkspace = lumifyApi.getWorkspaceApi().create();
         lumifyApi.setWorkspaceId(newWorkspace.getWorkspaceId());
 
-        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", LumifyProperties.TITLE.getPropertyName(), "New Title", "", "new title", null, null);
+        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", LumifyProperties.TITLE.getPropertyName(), "New Title", "", "new title");
 
         ClientApiElement artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         boolean foundNewTitle = false;

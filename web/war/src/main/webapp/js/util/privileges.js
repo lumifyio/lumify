@@ -14,7 +14,6 @@ define([
 
         this.after('initialize', function() {
             this.workspaceEditable = true;
-            this.on('currentUserChanged', this.update);
             this.on('workspaceLoaded', this.onWorkspaceLoaded);
             this.update();
         });
@@ -25,7 +24,7 @@ define([
         };
 
         this.update = function() {
-            var user = window.currentUser,
+            var user = lumifyData.currentUser,
                 editable = this.workspaceEditable,
                 cls = [];
 

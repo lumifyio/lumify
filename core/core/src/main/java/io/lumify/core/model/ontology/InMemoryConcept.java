@@ -22,7 +22,7 @@ public class InMemoryConcept extends Concept {
     private List<String> addRelatedConceptWhiteList;
     private byte[] glyphIcon;
     private byte[] mapGlyphIcon;
-    private boolean userVisible;
+    private boolean userVisible = true;
     private Boolean searchable;
     private Map<String, String> metadata = new HashMap<String, String>();
 

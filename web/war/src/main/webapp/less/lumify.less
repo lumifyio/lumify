@@ -92,7 +92,6 @@ html.fullscreenDetails {
 }
 
 .fullscreenApp {
-  .chat-pane,
   .activity-pane,
   .search-pane,
   .workspaces-pane,
@@ -173,17 +172,6 @@ html.fullscreenDetails {
   .left-pane;
 
   @import "admin/admin";
-}
-
-.fullscreenApp .chat-pane {
-  @padding: 10px;
-  .above-graph(2);
-  .left-pane(@padding);
-
-  bottom: @padding;
-  height: 200px;
-
-  @import "chat/chat";
 }
 
 .fullscreenApp .activity-pane {

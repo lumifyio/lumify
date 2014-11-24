@@ -446,6 +446,10 @@ public abstract class BaseRequestHandler implements Handler {
                 default:
                     throw new RuntimeException("Unsupported response type encountered");
             }
+
+            if (response.getWriter().checkError()) {
+                throw new ConnectionClosedException();
+            }
         } catch (IOException e) {
             throw new RuntimeException("Error occurred while writing response", e);
         }

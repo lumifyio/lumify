@@ -26,7 +26,7 @@ define([
         });
 
         this.onClearSearch = function() {
-            if (this.currentRequest) {
+            if (this.currentRequest && this.currentRequest.cancel) {
                 this.currentRequest.cancel();
                 this.currentRequest = null;
             }
@@ -50,10 +50,7 @@ define([
                 this.currentFilters.conceptFilter,
                 { offset: 0 }
             )
-                .fail(function() {
-                    self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
-                })
-                .done(function(result) {
+                .then(function(result) {
                     var unknownTotal = false;
                     if (!('totalHits' in result)) {
                         unknownTotal = true;
@@ -72,19 +69,27 @@ define([
                             ),
                             F.number.prettyApproximate(result.totalHits))
                     });
-                });
+                }, function() {
+                    self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
+                })
+                .done()
         };
 
-        this.triggerRequest = function() {
-            if (this.currentRequest) {
+        this.triggerRequest = function(query, propertyFilters, conceptFilter, paging) {
+            if (this.currentRequest && this.currentRequest.cancel) {
                 this.currentRequest.cancel();
                 this.currentRequest = null;
             }
 
             return (
-                this.currentRequest = this.serviceRequest.apply(
+                this.currentRequest = this.dataRequest.apply(
                     this,
-                    ['vertex', 'search'].concat(_.toArray(arguments))
+                    ['vertex', 'search'].concat([{
+                        query: query,
+                        propertyFilters: propertyFilters,
+                        conceptFilter: conceptFilter,
+                        paging: paging
+                    }])
                 )
             );
         };

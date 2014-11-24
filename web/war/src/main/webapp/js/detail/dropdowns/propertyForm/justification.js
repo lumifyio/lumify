@@ -3,18 +3,20 @@ define([
     'flight/lib/component',
     'tpl!./justification',
     'tpl!./justificationRef',
-    'data',
-    'util/withTeardown'
+    'util/withTeardown',
+    'util/withDataRequest',
+    'util/vertex/formatters'
 ], function(
     defineComponent,
     template,
     templateRef,
-    appData,
-    withTeardown
+    withTeardown,
+    withDataRequest,
+    F
 ) {
     'use strict';
 
-    return defineComponent(Justification, withTeardown);
+    return defineComponent(Justification, withTeardown, withDataRequest);
 
     function Justification() {
 
@@ -74,7 +76,7 @@ define([
         };
 
         this.setReferenceWithValue = function(val) {
-            var clipboard = appData.copiedDocumentText(),
+            var clipboard = lumifyData.copiedDocumentText,
                 normalizeWhiteSpace = function(str) {
                     return str.replace(/\s/g, ' ');
                 };
@@ -182,7 +184,10 @@ define([
                 return deferredTitle.resolve(value.vertexTitle);
             }
 
-            return appData.getVertexTitle(value.vertexId);
+            return this.dataRequest('vertex', 'store', { vertexIds: value.vertexId })
+                .then(function(vertex) {
+                    return F.vertex.title(vertex);
+                });
         };
     }
 });

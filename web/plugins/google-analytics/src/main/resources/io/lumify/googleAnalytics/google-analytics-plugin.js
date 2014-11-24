@@ -1,11 +1,9 @@
 require([
     'jquery',
-    'underscore',
-    'service/config'
-], function($, _, ConfigService) {
+    'underscore'
+], function($, _) {
     'use strict';
 
-    var configService = new ConfigService();
     configService.getProperties().done(function(config) {
         var key = config['google-analytics.key'],
             domain = config['google-analytics.domain'];

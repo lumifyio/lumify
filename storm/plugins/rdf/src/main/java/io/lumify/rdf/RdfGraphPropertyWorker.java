@@ -31,11 +31,11 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        hasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        hasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
         checkNotNull(hasEntityIri, "configuration " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY + " is required");
 
         // rdfConceptTypeIri is not required because the concept type could have been set by some other means.
-        rdfConceptTypeIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_PREFIX + "rdf");
+        rdfConceptTypeIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_PREFIX + "rdf", null);
     }
 
     @Override

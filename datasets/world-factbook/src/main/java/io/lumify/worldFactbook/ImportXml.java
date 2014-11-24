@@ -90,7 +90,7 @@ public class ImportXml extends CommandLineBase {
             return 1;
         }
 
-        entityHasImageIri = getConfiguration().get("ontology.iri.entityHasImage");
+        entityHasImageIri = getConfiguration().get("ontology.iri.entityHasImage", null);
         if (entityHasImageIri == null) {
             System.err.println("ontology.iri.entityHasImage is required.");
             return 1;

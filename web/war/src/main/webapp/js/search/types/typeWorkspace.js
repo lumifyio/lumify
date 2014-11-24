@@ -18,7 +18,7 @@ define([
 
         this.after('initialize', function() {
             this.on('queryupdated', this.onQueryUpdated);
-            this.on('workspaceFiltered', this.onWorkspaceFiltered);
+            this.on(document, 'workspaceFiltered', this.onWorkspaceFiltered);
             this.on(document, 'clearWorkspaceFilter', this.onClearWorkspaceFilter);
         });
 

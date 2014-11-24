@@ -210,6 +210,8 @@ public abstract class WorkspaceRepository {
 
                     workspaceClientApi.addVertex(v);
                 }
+            } else {
+                workspaceClientApi.removeVertices();
             }
 
             return workspaceClientApi;

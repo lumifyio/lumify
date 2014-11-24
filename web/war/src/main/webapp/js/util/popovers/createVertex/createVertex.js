@@ -1,27 +1,25 @@
 
 define([
     'flight/lib/component',
-    '../withPopover',
-    'service/vertex',
-    'util/formatters',
     'configuration/plugins/visibility/visibilityEditor',
+    '../withPopover',
+    'util/formatters',
     'util/withFormFieldErrors',
-    'util/ontology/conceptSelect'
+    'util/ontology/conceptSelect',
+    'util/withDataRequest'
 ], function(
     defineComponent,
-    withPopover,
-    VertexService,
-    F,
     VisibilityEditor,
+    withPopover,
+    F,
     withFormFieldErrors,
-    ConceptSelect) {
+    ConceptSelect,
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(CreateVertex, withPopover, withFormFieldErrors);
+    return defineComponent(CreateVertex, withPopover, withFormFieldErrors, withDataRequest);
 
     function CreateVertex() {
-
-        var vertexService = new VertexService();
 
         this.defaultAttrs({
             createSelector: '.btn-primary',
@@ -30,8 +28,8 @@ define([
         });
 
         this.after('teardown', function() {
-            if (this.request) {
-                this.request.abort();
+            if (this.request && this.request.cancel) {
+                this.request.cancel();
             }
         });
 
@@ -99,25 +97,27 @@ define([
                 conceptType = this.concept.id,
                 visibilityValue = this.visibilitySource.value;
 
-            this.request = vertexService.createVertex(conceptType, visibilityValue)
-                .fail(function(xhr, m, error) {
-                    self.markFieldErrors(error, self.popover);
+            this.request = this.dataRequest('vertex', 'create', conceptType, visibilityValue);
+
+            this.request
+                .then(function(result) {
+                    // TODO: fileDropPosition: self.attr.anchorTo.page
+                    self.trigger('updateWorkspace', {
+                        entityUpdates: [{
+                            vertexId: result.id
+                        }]
+                    })
+                    self.teardown();
+                })
+                .catch(function(error) {
+                    // TODO: error
+                    self.markFieldErrors(error || 'Unknown Error', self.popover);
                     button.text(i18n('popovers.create_vertex.button.create'))
                         .removeClass('loading')
                         .removeAttr('disabled')
 
                     _.defer(self.positionDialog.bind(self));
                 })
-                .done(function(result) {
-                    self.trigger('addVertices', {
-                        vertices: [ result ],
-                        options: {
-                            fileDropPosition: self.attr.anchorTo.page
-                        }
-                    });
-
-                    self.teardown();
-                });
         }
     }
 });

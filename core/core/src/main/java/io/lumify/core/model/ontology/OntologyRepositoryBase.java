@@ -46,9 +46,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         for (String key : config.getKeys(Configuration.ONTOLOGY_REPOSITORY_OWL)) {
             if (key.endsWith(".iri")) {
-                String iri = config.getOrNull(key);
-                String dir = config.getOrNull(key.replace(".iri", ".dir"));
-                String file = config.getOrNull(key.replace(".iri", ".file"));
+                String iri = config.get(key, null);
+                String dir = config.get(key.replace(".iri", ".dir"), null);
+                String file = config.get(key.replace(".iri", ".file"), null);
 
                 if (iri != null) {
                     if (dir != null) {

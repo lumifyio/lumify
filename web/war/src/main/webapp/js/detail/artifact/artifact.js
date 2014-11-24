@@ -15,10 +15,7 @@ define([
     'hbs!./transcriptEntries',
     'tpl!util/alert',
     'util/vertex/formatters',
-    'service/ontology',
-    'service/vertex',
-    'service/config',
-    'data',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineComponent,
@@ -35,19 +32,13 @@ define([
     transcriptEntriesTemplate,
     alertTemplate,
     F,
-    OntologyService,
-    VertexService,
-    ConfigService,
-    appData,
+    withDataRequest,
     d3) {
     'use strict';
 
-    return defineComponent(Artifact, withTypeContent, withHighlighting);
+    return defineComponent(Artifact, withTypeContent, withHighlighting, withDataRequest);
 
     function Artifact() {
-
-        this.ontologyService = new OntologyService();
-        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             previewSelector: '.preview',
@@ -119,18 +110,20 @@ define([
             var self = this,
                 vertex = self.attr.data;
 
-            $.when(
-                this.handleCancelling(appData.refresh(vertex)),
-                new ConfigService().getProperties()
-            ).done(this.handleVertexLoaded.bind(this));
+            this.dataRequest('config', 'properties')
+                .done(function(config) {
+                    self.handleVertexLoaded(self.attr.data, config);
+                })
         };
 
         this.handleVertexLoaded = function(vertex, config) {
             var self = this,
-                displayType = this.attr.data.concept.displayType,
+                concept = F.vertex.concept(vertex),
+                displayType = concept.displayType,
                 properties = vertex && vertex.properties;
 
             this.attr.data = vertex;
+            this.trigger('finishedLoadingTypeContent');
 
             if (properties && displayType) {
                 var durationProperty = _.findWhere(properties, {
@@ -144,6 +137,7 @@ define([
 
             this.$node.html(template({
                 vertex: vertex,
+                concept: concept,
                 F: F
             }));
 
@@ -197,7 +191,7 @@ define([
             this.select('titleSelector')
                 .text(F.vertex.title(this.attr.data))
                 .next('.subtitle')
-                .text(this.attr.data.concept.displayName);
+                .text(F.vertex.concept(this.attr.data).displayName);
         };
 
         this.updateDetectedObjects = function() {
@@ -221,11 +215,13 @@ define([
                 }
             });
 
-            $.when(
-                appData.refresh(needsLoading),
-                this.ontologyService.concepts()
-            ).done(function(vertices, concepts) {
-                var verticesById = _.indexBy(vertices, 'id'),
+            Promise.all([
+                this.dataRequest('vertex', 'store', { vertexIds: needsLoading }),
+                this.dataRequest('ontology', 'concepts')
+            ]).done(function(results) {
+                var vertices = results[0],
+                    concepts = results[1],
+                    verticesById = _.indexBy(vertices, 'id'),
                     detectedObjectKey = _.property('key');
 
                 d3.select(container.get(0))
@@ -376,14 +372,7 @@ define([
                     });
 
                     self.on('open.actionbar', function() {
-
-                        self.trigger('selectObjects', {
-                            vertices: [
-                                {
-                                    id: property.value.resolvedVertexId
-                                }
-                            ]
-                        });
+                        self.trigger('selectObjects', { vertexIds: property.value.resolvedVertexId });
                     });
                     self.on('unresolve.actionbar', function() {
                         _.defer(
@@ -478,9 +467,9 @@ define([
         this.videoSetup = function(vertex) {
             this.select('detectedObjectLabelsSelector').hide();
             VideoScrubber.attachTo(this.select('previewSelector'), {
-                rawUrl: vertex.imageRawSrc,
-                posterFrameUrl: vertex.imageSrc,
-                videoPreviewImageUrl: vertex.imageFramesSrc,
+                rawUrl: F.vertex.raw(vertex),
+                posterFrameUrl: F.vertex.image(vertex),
+                videoPreviewImageUrl: F.vertex.imageFrames(vertex),
                 duration: this.duration,
                 allowPlayback: true
             });
@@ -489,7 +478,7 @@ define([
         this.imageSetup = function(vertex) {
             var self = this,
                 data = {
-                    src: vertex.imageDetailSrc,
+                    src: F.vertex.imageDetail(vertex),
                     id: vertex.id
                 };
             Image.attachTo(this.select('imagePreviewSelector'), { data: data });

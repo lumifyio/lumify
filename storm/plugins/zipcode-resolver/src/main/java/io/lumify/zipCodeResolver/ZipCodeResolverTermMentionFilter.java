@@ -79,7 +79,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             throw new LumifyException("Could not find config: " + CONFIG_GEO_LOCATION_IRI);
         }
 
-        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
         if (this.artifactHasEntityIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
         }
