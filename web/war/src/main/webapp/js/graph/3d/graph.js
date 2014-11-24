@@ -178,8 +178,8 @@ define([
 
             edges.length = 0;
             relationships.forEach(function(r) {
-                var source = graph.node(r.from),
-                    target = graph.node(r.to);
+                var source = graph.node(r.sourceVertexId),
+                    target = graph.node(r.destVertexId);
 
                 if (source && target) {
                     edges.push({

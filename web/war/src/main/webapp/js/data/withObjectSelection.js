@@ -140,7 +140,12 @@ define([
                         previousSelectedObjects = selectedObjects;
 
                         self.setPublicApi('selectedObjects', defaultNoObjectsOrData(selectedObjects));
-                        self.trigger('objectsSelected', _.clone(selectedObjects));
+
+                        var postData = _.clone(selectedObjects);
+                        if (data && 'focus' in data) {
+                            postData.focus = data.focus;
+                        }
+                        self.trigger('objectsSelected', postData);
                     });
             });
         };

@@ -63,8 +63,8 @@ define([
                 return F.className.to(vId);
             },
             cyEdgeFromEdge = function(e, sourceNode, destNode) {
-                var source = e.from || (e.source && e.source.id) || e.sourceVertexId,
-                    target = e.to || (e.target && e.target.id) || e.destVertexId;
+                var source = e.sourceVertexId || (e.source && e.source.id),
+                    target = e.destVertexId || (e.target && e.target.id);
 
                 return {
                     group: 'edges',
@@ -1201,12 +1201,12 @@ define([
             this.cytoscapeReady(function(cy) {
                 if (relationshipData.edges) {
                     var relationshipEdges = [];
-                    relationshipData.edges.forEach(function(relationship) {
-                        var sourceNode = cy.getElementById(toCyId(relationship.from)),
-                            destNode = cy.getElementById(toCyId(relationship.to));
+                    relationshipData.edges.forEach(function(edge) {
+                        var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
+                            destNode = cy.getElementById(toCyId(edge.destVertexId));
 
                         if (sourceNode.length && destNode.length) {
-                            relationshipEdges.push(cyEdgeFromEdge(relationship, sourceNode, destNode));
+                            relationshipEdges.push(cyEdgeFromEdge(edge, sourceNode, destNode));
                         }
                     });
                     // Hide edges when zooming if more than threshold
