@@ -7,6 +7,12 @@ define([
 
     var DEFAULTS = {
 
+            // Local cache rules for vertices / edges (per workspace)
+            'cache.vertex.lru.expiration.seconds': (10 /*minutes*/) * 60,
+            'cache.vertex.max_size': 500,
+            'cache.edge.lru.expiration.seconds': (10 /*minutes*/) * 60,
+            'cache.edge.max_size': 250,
+
             // Load related vertices thresholds
             'vertex.loadRelatedMaxBeforePrompt': 50,
             'vertex.loadRelatedMaxForceSearch': 250,
