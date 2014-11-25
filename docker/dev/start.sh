@@ -28,4 +28,7 @@ fi
 
 /opt/elasticsearch/bin/elasticsearch > /dev/null &
 
+/opt/rabbitmq/sbin/rabbitmq-server > /dev/null &
+/opt/rabbitmq/sbin/rabbitmq-plugins enable rabbitmq_management
+
 /bin/bash

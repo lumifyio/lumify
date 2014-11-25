@@ -134,6 +134,22 @@ RUN \
 ENV PATH $PATH:/opt/elasticsearch/bin
 EXPOSE 9200 9300
 
+# Install RabbitMQ
+RUN yum install -y erlang
+
+RUN \
+  wget -O /opt/rabbitmq-server-generic-unix-3.4.1.tar.gz http://www.rabbitmq.com/releases/rabbitmq-server/v3.4.1/rabbitmq-server-generic-unix-3.4.1.tar.gz \
+  && tar -xzf /opt/rabbitmq-server-generic-unix-3.4.1.tar.gz -C /opt \
+  && rm /opt/rabbitmq-server-generic-unix-3.4.1.tar.gz \
+  && ln -s /opt/rabbitmq_server-3.4.1 /opt/rabbitmq
+
+ADD rabbitmq/etc/rabbitmq/rabbitmq.config /opt/rabbitmq_server-3.4.1/etc/rabbitmq/rabbitmq.config
+
+ENV PATH $PATH:/opt/rabbitmq/sbin
+
+VOLUME ["/opt/rabbitmq_server-3.4.1/var"]
+EXPOSE 5672 5673 15672
+
 # add scripts
 ADD start.sh /opt/start.sh
 ADD stop.sh /opt/stop.sh

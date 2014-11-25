@@ -9,6 +9,7 @@ mkdir -p ${FS_DIR}/tmp/zookeeper
 mkdir -p ${FS_DIR}/var/lib/hadoop-hdfs
 mkdir -p ${FS_DIR}/var/local/hadoop
 mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/data
+mkdir -p ${FS_DIR}/opt/rabbitmq_server-3.4.1/var
 
 sudo docker run \
   -v ${FS_DIR}/../../:/opt/lumify \
@@ -17,6 +18,7 @@ sudo docker run \
   -v ${FS_DIR}/var/lib/hadoop-hdfs:/var/lib/hadoop-hdfs \
   -v ${FS_DIR}/var/local/hadoop:/var/local/hadoop \
   -v ${FS_DIR}/opt/elasticsearch-1.4.0/data:/opt/elasticsearch-1.4.0/data \
+  -v ${FS_DIR}/opt/rabbitmq_server-3.4.1/var:/opt/rabbitmq_server-3.4.1/var \
   -p 2181:2181 \
   -p 9200:9200 \
   -p 9300:9300 \
@@ -29,6 +31,9 @@ sudo docker run \
   -p 50075:50075 \
   -p 50090:50090 \
   -p 50095:50095 \
+  -p 5672:5672 \
+  -p 5673:5673 \
+  -p 15672:15672 \
   -i \
   -t \
   lumifyio/dev \
