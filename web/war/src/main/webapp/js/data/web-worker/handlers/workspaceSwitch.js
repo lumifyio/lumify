@@ -8,7 +8,7 @@ define(['../services/workspace'], function(Workspace) {
             })
             .catch(function(xhr) {
                 return Workspace.all().then(function(workspaces) {
-                    var workspace = _.findWhere(workspaces, { isSharedToUser: false });
+                    var workspace = _.findWhere(workspaces, { sharedToUser: false });
                     if (workspace) {
                         return Workspace.get(workspace.workspaceId);
                     }

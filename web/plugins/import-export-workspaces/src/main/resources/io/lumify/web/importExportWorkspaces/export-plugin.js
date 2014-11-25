@@ -38,17 +38,17 @@ require([
             });
 
             this.dataRequest('workspace', 'all')
-                .then(function(result) {
+                .then(function(workspaces) {
                     self.select('selectSelector')
                         .append(
-                            result.workspaces.map(function(workspace) {
+                            workspaces.map(function(workspace) {
                                 return $('<option>')
                                     .val(workspace.workspaceId)
                                     .text(workspace.title);
                             })
                         ).change();
 
-                    if (result.workspaces.length) {
+                    if (workspaces.length) {
                         self.$node.find('a').removeAttr('disabled');
                     }
                 })

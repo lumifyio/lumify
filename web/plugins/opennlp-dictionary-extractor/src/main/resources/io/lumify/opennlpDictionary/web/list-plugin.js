@@ -58,9 +58,9 @@ require([
             button.closest('li').addClass('show-hover-items');
 
             this.handleSubmitButton(button,
-                this.adminService.dictionaryDelete(rowKey)
-                    .fail(this.showError.bind(this, 'Error deleting entry'))
-                    .done(this.loadEntries.bind(this))
+                this.dataRequest('admin', 'dictionaryDelete', rowKey)
+                    .then(this.loadEntries.bind(this))
+                    .catch(this.showError.bind(this, 'Error deleting entry'))
             );
         };
 

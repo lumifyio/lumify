@@ -17,6 +17,25 @@ define([
             return ajax('GET', '/admin/dictionary');
         },
 
+        dictionaryDelete: function(rowKey) {
+            return ajax('POST', '/admin/dictionary/delete', {
+                entryRowKey: rowKey
+            });
+        },
+
+        dictionaryAdd: function(concept, tokens, resolvedName) {
+            var data = {
+                concept: concept,
+                tokens: tokens
+            };
+
+            if (resolvedName) {
+                data.resolvedName = resolvedName;
+            }
+
+            return ajax('POST', '/admin/dictionary', data);
+        },
+
         plugins: function() {
             return ajax('GET', '/admin/plugins');
         },
@@ -53,6 +72,35 @@ define([
                 'user-name': userName,
                 workspaceId: workspaceId
             });
+        },
+
+        workspaceImport: function(workspaceFile) {
+            var formData = new FormData();
+            formData.append('workspace', workspaceFile);
+            return ajax('POST->HTML', '/admin/workspace/import', formData);
+        },
+
+        queueVertices: function(propertyName) {
+            var data = {};
+            if (propertyName) {
+                data.propertyName = propertyName;
+            }
+            return ajax('POST->HTML', '/admin/queueVertices', data);
+        },
+
+        queueEdges: function(propertyName) {
+            return ajax('POST->HTML', '/admin/queueEdges');
+        },
+
+        ontologyUpload: function(file, iri) {
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('documentIRI', iri);
+            return ajax('POST->HTML', '/admin/upload-ontology', formData);
+        },
+
+        ontologyEdit: function(options) {
+            return ajax('POST->HTML', '/admin/saveOntologyConcept', options);
         }
 
     };
