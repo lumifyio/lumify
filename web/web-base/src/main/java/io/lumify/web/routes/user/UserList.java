@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.sun.tools.javac.util.Assert.checkNull;
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.securegraph.util.IterableUtils.toList;
 
 public class UserList extends BaseRequestHandler {
@@ -41,8 +41,8 @@ public class UserList extends BaseRequestHandler {
 
         List<User> users;
         if (userIds != null) {
-            checkNull(query, "Cannot use userIds[] and q at the same time");
-            checkNull(query, "Cannot use userIds[] and workspaceId at the same time");
+            checkArgument (query == null, "Cannot use userIds[] and q at the same time");
+            checkArgument (workspaceId == null, "Cannot use userIds[] and workspaceId at the same time");
             users = new ArrayList<User>();
             for (String userId : userIds) {
                 User u = getUserRepository().findById(userId);
