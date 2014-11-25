@@ -17,6 +17,23 @@ define([
 
         api = {
 
+            logStatistics: function() {
+                _.each(workspaceCaches, function(cache, workspaceId) {
+                    var v = cache.vertices.getStats(),
+                        e = cache.edges.getStats();
+                    console.log(
+                        'V(size:%s hits:%s miss:%s) E(size:%s hits:%s miss:%s)',
+                        cache.vertices.size(),
+                        v.hits,
+                        v.misses,
+                        cache.edges.size(),
+                        e.hits,
+                        e.misses,
+                        workspaceId
+                    );
+                })
+            },
+
             getObject: function(workspaceId, kind, objectId) {
                 var result = api.getObjects(workspaceId, kind, objectId ? [objectId] : null);
                 if (objectId) {
