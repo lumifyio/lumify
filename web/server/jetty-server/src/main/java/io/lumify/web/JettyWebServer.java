@@ -5,9 +5,12 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.eclipse.jetty.http.HttpVersion;
-import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -43,27 +46,17 @@ public class JettyWebServer extends WebServer {
 
     @Override
     protected int run(CommandLine cmd) throws Exception {
-        HttpConfiguration http_config = new HttpConfiguration();
-        http_config.setSecureScheme("https");
-        http_config.setSecurePort(super.getHttpsPort());
-
-        ServerConnector httpConnector = new ServerConnector(server,
-                new HttpConnectionFactory(http_config));
+        SelectChannelConnector httpConnector = new SelectChannelConnector();
         httpConnector.setPort(super.getHttpPort());
+        httpConnector.setConfidentialPort(super.getHttpsPort());
 
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStorePath(super.getKeyStorePath());
         sslContextFactory.setKeyStorePassword(super.getKeyStorePassword());
-        sslContextFactory.setTrustStorePath(super.getTrustStorePath());
+        sslContextFactory.setTrustStore(super.getTrustStorePath());
         sslContextFactory.setTrustStorePassword(super.getTrustStorePassword());
         sslContextFactory.setNeedClientAuth(super.getRequireClientCert());
-
-        HttpConfiguration https_config = new HttpConfiguration(http_config);
-        https_config.addCustomizer(new SecureRequestCustomizer());
-
-        ServerConnector httpsConnector = new ServerConnector(server,
-                new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),
-                new HttpConnectionFactory(https_config));
+        SslSelectChannelConnector httpsConnector = new SslSelectChannelConnector(sslContextFactory);
         httpsConnector.setPort(super.getHttpsPort());
 
         WebAppContext webAppContext = new WebAppContext();
