@@ -52,7 +52,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency Versions -->
-        <accumulo.version>1.5.2</accumulo.version>
+        <accumulo.version>1.6.1</accumulo.version>
         <altamira.bigtable.version>0.4.0</altamira.bigtable.version>
         <miniweb.version>0.5.1</miniweb.version>
         <ant.version>1.4.1</ant.version>
@@ -64,14 +64,14 @@
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>
         <curator.version>2.7.0</curator.version>
-        <elasticsearch.version>1.1.0</elasticsearch.version>
+        <elasticsearch.version>1.4.0</elasticsearch.version>
         <evo.inflector.version>1.0.1</evo.inflector.version>
         <guice.version>3.0</guice.version>
-        <hadoop.version>2.0.0-mr1-cdh4.4.0</hadoop.version>
+        <hadoop.version>2.5.0-mr1-cdh5.2.0</hadoop.version>
         <httpcomponents.httpclient.version>4.3.1</httpcomponents.httpclient.version>
         <inflector.version>0.7.0</inflector.version>
         <jackson.version>2.4.3</jackson.version>
-        <jetty.version>8.1.14.v20131031</jetty.version>
+        <jetty.version>9.2.5.v20141112</jetty.version>
         <jetty.javaee.version>3.0.0.v201112011016</jetty.javaee.version>
         <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
         <json.version>20130918</json.version>
@@ -80,7 +80,7 @@
         <log4j.version>1.2.17</log4j.version>
         <lucene.version>4.7.0</lucene.version>
         <metrics.version>3.0.1</metrics.version>
-        <securegraph.version>0.8.1</securegraph.version>
+        <securegraph.version>0.8.2-SNAPSHOT</securegraph.version>
         <zip4j.version>1.3.1</zip4j.version>
         <zookeeper.version>3.4.6</zookeeper.version>
         <jersey.version>1.18.1</jersey.version>
@@ -505,12 +505,6 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-webapp</artifactId>
-                <version>${jetty.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-websocket</artifactId>
                 <version>${jetty.version}</version>
                 <scope>compile</scope>
             </dependency>
