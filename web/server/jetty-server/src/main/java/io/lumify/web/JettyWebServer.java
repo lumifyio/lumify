@@ -43,6 +43,8 @@ public class JettyWebServer extends WebServer {
 
     @Override
     protected int run(CommandLine cmd) throws Exception {
+        server = new org.eclipse.jetty.server.Server();
+
         HttpConfiguration http_config = new HttpConfiguration();
         http_config.setSecureScheme("https");
         http_config.setSecurePort(super.getHttpsPort());
@@ -75,7 +77,6 @@ public class JettyWebServer extends WebServer {
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[]{webAppContext});
 
-        server = new org.eclipse.jetty.server.Server();
         server.setConnectors(new Connector[]{httpConnector, httpsConnector});
         server.setHandler(contexts);
 
