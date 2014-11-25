@@ -22,6 +22,7 @@ import org.atmosphere.cpr.*;
 import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor;
 import org.atmosphere.interceptor.BroadcastOnPostAtmosphereInterceptor;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
+import org.atmosphere.interceptor.JavaScriptProtocol;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpSession;
@@ -36,7 +37,8 @@ import java.util.List;
                 AtmosphereResourceLifecycleInterceptor.class,
                 BroadcastOnPostAtmosphereInterceptor.class,
                 TrackMessageSizeInterceptor.class,
-                HeartbeatInterceptor.class
+                HeartbeatInterceptor.class,
+                JavaScriptProtocol.class
         })
 public class Messaging implements AtmosphereHandler { //extends AbstractReflectorAtmosphereHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Messaging.class);
@@ -165,7 +167,11 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         } catch (Exception ex) {
             LOGGER.error("Could not handle async message: " + message, ex);
         }
-        response.write(message);
+        if (message != null) {
+            response.write(message);
+        } else {
+            onDisconnectOrClose(event);
+        }
     }
 
     private void processRequestData(AtmosphereResource resource, String message) {
@@ -181,7 +187,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             return;
         }
 
-        if ("changedWorkspace".equals(type)) {
+        if ("setActiveWorkspace".equals(type)) {
             String authUserId = getCurrentUserId(resource);
             String workspaceId = dataJson.getString("workspaceId");
             String userId = dataJson.getString("userId");

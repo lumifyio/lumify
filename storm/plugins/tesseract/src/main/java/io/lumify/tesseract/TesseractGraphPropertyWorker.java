@@ -37,7 +37,7 @@ public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
         super.prepare(workerPrepareData);
         tesseract = Tesseract.getInstance();
 
-        String dataPath = getConfiguration().get(CONFIG_DATA_PATH);
+        String dataPath = getConfiguration().get(CONFIG_DATA_PATH, null);
         if (dataPath != null) {
             tesseract.setDatapath(dataPath);
         }

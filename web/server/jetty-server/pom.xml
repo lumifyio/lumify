@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify-web-server-group</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.0.20141124</version>
     </parent>
 
     <artifactId>lumify-jetty-server</artifactId>
@@ -33,11 +33,6 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>

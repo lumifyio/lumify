@@ -1,9 +1,7 @@
 require([
     'configuration/plugins/logout/plugin',
-    'service/user',
     'util/messages'
-], function(logoutHandlers, UserService, messages) {
-    var userService = new UserService();
+], function(logoutHandlers, messages) {
     logoutHandlers.registerLogoutHandler(function() {
         userService.logout()
             .always(function () {

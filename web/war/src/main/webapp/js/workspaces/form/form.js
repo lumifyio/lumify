@@ -5,24 +5,19 @@ define([
     'tpl!./shareRow',
     'tpl!./permissions',
     'util/users/userSelect',
-    'service/user',
-    'service/workspace'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     shareRowTemplate,
     permissionsTemplate,
     UserSelect,
-    UserService,
-    WorkspaceService) {
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(Form);
+    return defineComponent(Form, withDataRequest);
 
     function Form() {
-
-        this.userService = new UserService();
-        this.workspaceService = new WorkspaceService();
 
         this.defaultAttrs({
             titleSelector: '.workspace-title',
@@ -43,7 +38,7 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.on(document, 'socketMessage', this.onSocketMessage);
+            this.on(document, 'userStatusChange', this.onUserStatusChange);
 
             this.editable = this.attr.data.editable;
 
@@ -51,7 +46,7 @@ define([
                 workspace: this.attr.data,
                 editable: this.editable
             }));
-            this.userService.getCurrentUsers().done(this.loadUserPermissionsList.bind(this));
+            this.loadUserPermissionsList();
 
             if (this.editable) {
 
@@ -92,18 +87,15 @@ define([
             }
         });
 
-        this.onSocketMessage = function(event, message) {
-            if (message && ~'userStatusChange'.indexOf(message.type)) {
-                var user = message.data;
-                this.$node.find('.share-list > .user-row').each(function() {
-                    var $this = $(this);
-                    if ($this.data('userId') === user.id) {
-                        $this.find('.user-status')
-                            .removeClass('active idle offline unknown')
-                            .addClass((user.status && user.status.toLowerCase()) || 'unknown');
-                    }
-                })
-            }
+        this.onUserStatusChange = function(event, user) {
+            this.$node.find('.share-list > .user-row').each(function() {
+                var $this = $(this);
+                if ($this.data('userId') === user.id) {
+                    $this.find('.user-status')
+                        .removeClass('active idle offline unknown')
+                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                }
+            })
         };
 
         var timeout;
@@ -114,16 +106,17 @@ define([
                 d = $.Deferred(),
                 save = function() {
                     self.trigger(document, 'workspaceSaving', self.attr.data);
-                    return self.workspaceService.save(self.attr.data.workspaceId, changes)
-                        .fail(function() {
+
+                    self.dataRequest('workspace', 'save', self.attr.data.workspaceId, changes)
+                        .then(function(workspace) {
+                            self.trigger(document, 'workspaceSaved', self.attr.data);
+                            d.resolve({ workspace: self.attr.data });
+                        })
+                        .catch(function() {
                             self.attr.data = revert;
                             self.trigger(document, 'workspaceSaved', revert);
                             d.reject();
                         })
-                        .done(function(workspace) {
-                            self.trigger(document, 'workspaceSaved', self.attr.data);
-                            d.resolve({ workspace: self.attr.data });
-                        });
                 }
 
             if (immediate) {
@@ -138,33 +131,40 @@ define([
             return d;
         };
 
-        this.loadUserPermissionsList = function(response) {
+        this.loadUserPermissionsList = function() {
             var self = this,
                 workspace = this.attr.data,
+                workspaceUsers = workspace.users || (workspace.users = []),
+                userIds = _.pluck(workspaceUsers, 'userId'),
                 html = $();
 
-            this.currentUsers = response.users;
+            this.dataRequest('user', 'search', { userIds: userIds })
+                .done(function(users) {
+                    var usersById = _.indexBy(users, 'id');
+                    self.currentUsers = usersById;
 
-            _.sortBy(workspace.users || (workspace.users = []), function(userPermission) {
-                var user = _.findWhere(self.currentUsers, { id: userPermission.userId });
-                return user && user.displayName || 0;
-            }).forEach(function(userPermission) {
-                if (userPermission.userId != window.currentUser.id) {
-                    var data = self.shareRowDataForPermission(userPermission);
-                    if (data) {
-                        html = html.add(shareRowTemplate(data));
+                    _.sortBy(workspaceUsers, function(userPermission) {
+                        var user = usersById[userPermission.userId];
+                        return user && user.displayName || 1;
+                    }).forEach(function(userPermission) {
+                        if (userPermission.userId != lumifyData.currentUser.id) {
+                            var data = self.shareRowDataForPermission(userPermission);
+                            if (data) {
+                                html = html.add(shareRowTemplate(data));
+                            }
+                        }
+                    });
+                    self.select('shareHeader').after(html).find('.loading').remove();
+                    if (self.editable) {
+                        self.select('shareFormSelector').show();
+                        self.updatePopovers();
                     }
-                }
-            });
-            this.select('shareHeader').after(html).find('.loading').remove();
-            if (this.editable) {
-                this.select('shareFormSelector').show();
-                this.updatePopovers();
-            }
+
+                })
         };
 
         this.shareRowDataForPermission = function(userPermission, _user) {
-            var user = _user || _.findWhere(this.currentUsers, { id: userPermission.userId });
+            var user = _user || this.currentUsers[userPermission.userId];
             if (user) {
                 return {
                     user: {
@@ -265,13 +265,13 @@ define([
 
             $target.text(i18n('workspaces.form.button.deleting')).attr('disabled', true);
 
-            this.workspaceService['delete'](workspaceId)
-                .always(function() {
+            this.dataRequest('workspace', 'delete', workspaceId)
+                .then(function() {
+                    //self.trigger('workspaceDeleted', { workspaceId: workspaceId });
+                })
+                .catch(function() {
                     $target.text(previousText).removeAttr('disabled');
                 })
-                .done(function() {
-                    self.trigger('workspaceDeleted', { workspaceId: workspaceId });
-                });
         };
 
         this.onRevokeAccess = function(event) {
@@ -311,6 +311,9 @@ define([
         };
 
         this.onShareWorkspaceWithUser = function(event, data) {
+            if (this.currentUsers) {
+                this.currentUsers[data.user.id] = data.user;
+            }
 
             var self = this,
                 form = this.select('shareFormSelector'),

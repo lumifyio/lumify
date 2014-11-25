@@ -2,24 +2,22 @@
 define([
     'flight/lib/component',
     '../withPopover',
-    'service/vertex',
-    'util/formatters',
     'configuration/plugins/visibility/visibilityEditor',
-    'util/withFormFieldErrors'
+    'util/formatters',
+    'util/withFormFieldErrors',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     withPopover,
-    VertexService,
-    F,
     VisibilityEditor,
-    withFormFieldErrors) {
+    F,
+    withFormFieldErrors,
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(FileImport, withPopover, withFormFieldErrors);
+    return defineComponent(FileImport, withPopover, withFormFieldErrors, withDataRequest);
 
     function FileImport() {
-
-        var vertexService = new VertexService();
 
         this.defaultAttrs({
             importSelector: '.btn-primary',
@@ -29,8 +27,8 @@ define([
         });
 
         this.after('teardown', function() {
-            if (this.request) {
-                this.request.abort();
+            if (this.request && this.request.cancel) {
+                this.request.cancel();
             }
         });
 
@@ -162,14 +160,28 @@ define([
 
             this.attr.teardownOnTap = false;
 
-            this.request = vertexService.importFiles(this.attr.files, visibilityValue)
+            this.request = this.dataRequest('vertex', 'importFiles', this.attr.files, visibilityValue);
+
+            this.request
                 .progress(function(complete) {
                     var percent = Math.round(complete * 100);
                     button.text(percent + '% ' + i18n('popovers.file_import.importing'));
                 })
-                .fail(function(xhr, m, error) {
+                .then(function(result) {
+                    // TODO: somehow tie in fileDropPosition: self.attr.anchorTo.page
+                    self.trigger('updateWorkspace', {
+                        entityUpdates: result.vertexIds.map(function(vId) {
+                            return {
+                                vertexId: vId
+                            }
+                        })
+                    });
+                    self.teardown();
+                })
+                .catch(function(error) {
                     self.attr.teardownOnTap = true;
-                    self.markFieldErrors(error, self.popover);
+                    // TODO: fix error
+                    self.markFieldErrors(error || 'Unknown Error', self.popover);
                     cancelButton.hide();
                     button.text(i18n('popovers.file_import.button.import'))
                         .removeClass('loading')
@@ -177,20 +189,6 @@ define([
 
                     _.defer(self.positionDialog.bind(self));
                 })
-                .done(function(result) {
-
-                    vertexService.getMultiple(result.vertexIds)
-                        .done(function(result) {
-                            self.trigger('addVertices', {
-                                vertices: result.vertices,
-                                options: {
-                                    fileDropPosition: self.attr.anchorTo.page
-                                }
-                            });
-
-                            self.teardown();
-                        });
-                });
         }
     }
 });

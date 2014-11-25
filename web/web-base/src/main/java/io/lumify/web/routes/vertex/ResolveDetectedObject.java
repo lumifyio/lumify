@@ -61,7 +61,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
+        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY, null);
         if (this.artifactContainsImageOfEntityIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
         }
@@ -122,7 +122,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
             graph.flush();
 
-            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, null, user);
+            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), null, null, user);
         } else {
             resolvedVertex = graph.getVertex(graphVertexId, authorizations);
             resolvedVertexMutation = resolvedVertex.prepareMutation();

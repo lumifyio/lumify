@@ -1,20 +1,18 @@
 
 define([
     'flight/lib/component',
-    'service/user',
     'tpl!login',
-    'configuration/plugins/authentication/authentication'
+    'configuration/plugins/authentication/authentication',
+    'util/withDataRequest'
 ], function(
     defineComponent,
-    UserService,
     template,
-    AuthenticationPlugin
+    AuthenticationPlugin,
+    withDataRequest
 ) {
     'use strict';
 
-    var userService = new UserService();
-
-    return defineComponent(Login);
+    return defineComponent(Login, withDataRequest);
 
     function Login() {
 
@@ -37,14 +35,16 @@ define([
         this.onLoginSuccess = function() {
             var self = this;
 
-            if ((/^#?v=/).test(location.hash)) {
+            if ((/^#?[a-z]+=/i).test(location.hash)) {
                 window.location.reload();
             } else {
-                userService.isLoginRequired()
-                    .done(function(user) {
-                        window.currentUser = user;
-                        $(document).trigger('currentUserChanged', { user: user });
+                this.dataRequest('user', 'me')
+                    .then(function() {
                         require(['app'], function(App) {
+
+                            self.select('authenticationSelector')
+                                .find('button.loading').removeClass('loading');
+
                             App.attachTo('#app', {
                                 animateFromLogin: true,
                                 addVertexIds: self.attr.toOpen &&
@@ -59,7 +59,7 @@ define([
                                 self.teardown();
                             });
                         });
-                    })
+                    });
             }
         };
 

@@ -39,13 +39,9 @@ public class FormulaEvaluator {
     public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository, Locale locale, String timeZone) {
         this.configuration = configuration;
         this.ontologyRepository = ontologyRepository;
-        this.context = Context.enter();
         this.locale = locale == null ? Locale.getDefault() : locale;
         this.timeZone = timeZone;
         this.skipCloseWarning = false;
-
-        setupContext();
-        loadJavaScript();
     }
 
     @Override
@@ -58,7 +54,9 @@ public class FormulaEvaluator {
     }
 
     public void close() {
-        context.exit();
+        if (context != null) {
+            context.exit();
+        }
         this.skipCloseWarning = true;
     }
 
@@ -75,15 +73,27 @@ public class FormulaEvaluator {
     }
 
     private String evaluateFormula(String type, Vertex vertex, String workspaceId, Authorizations authorizations) {
-        String json = toJson(vertex, workspaceId, authorizations);
+        if (context == null) {
+            initializeEnvironment();
+        }
 
-        Function f = (Function) scope.get("evaluate" + type + "FormulaJson", scope);
-        Object result = f.call(context, scope, scope, new Object[]{json});
+        String json = toJson(vertex, workspaceId, authorizations);
+        Function function = (Function) scope.get("evaluate" + type + "FormulaJson", scope);
+        Object result = function.call(context, scope, scope, new Object[]{json});
 
         return (String) Context.jsToJava(result, String.class);
     }
 
-    private void setupContext() {
+    protected void initializeEnvironment() {
+        setupContext();
+        loadJavaScript();
+    }
+
+    protected void setupContext() {
+        if (this.context != null) {
+            Context.exit();
+        }
+        this.context = Context.enter();
         context.setLanguageVersion(Context.VERSION_1_6);
 
         final RequireJsSupport browserSupport = new RequireJsSupport();
@@ -108,15 +118,16 @@ public class FormulaEvaluator {
     private void loadJavaScript() {
         evaluateFile("libs/underscore.js");
         evaluateFile("libs/r.js");
+        evaluateFile("libs/windowTimers.js");
         evaluateFile("loader.js");
     }
 
-    private String getOntologyJson() throws Exception {
+    protected String getOntologyJson() throws Exception {
         ClientApiOntology result = ontologyRepository.getClientApiObject();
         return ObjectMapperFactory.getInstance().writeValueAsString(result);
     }
 
-    private String getConfigurationJson() throws Exception {
+    protected String getConfigurationJson() throws Exception {
         return configuration.toJSON(this.locale).toString();
     }
 
@@ -132,7 +143,7 @@ public class FormulaEvaluator {
         return null;
     }
 
-    private String toJson(Vertex vertex, String workspaceId, Authorizations authorizations) {
+    protected String toJson(Vertex vertex, String workspaceId, Authorizations authorizations) {
         ClientApiVertex v = ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations);
         return v.toString();
     }

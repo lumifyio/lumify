@@ -75,13 +75,16 @@ public class VertexUploadImage extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.conceptIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
+        this.conceptIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE, null);
+        if (conceptIri == null) {
+            throw new LumifyException("Configuration " + Configuration.ONTOLOGY_IRI_ENTITY_IMAGE + " is required");
+        }
         Concept concept = ontologyRepository.getConceptByIRI(conceptIri);
         if (concept == null) {
             LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIri, Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
         }
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }
@@ -139,11 +142,12 @@ public class VertexUploadImage extends BaseRequestHandler {
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, artifactVertex.getId(), false, null, user);
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), false, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, artifactVertex.getId(), null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, user);
 
         graph.flush();
         workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(), workspaceId, visibilityJson.getSource());
+        workQueueRepository.pushElementImageQueue(entityVertex, null, LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
 
         respondWithClientApiObject(response, ClientApiConverter.toClientApi(entityVertex, workspaceId, authorizations));
     }

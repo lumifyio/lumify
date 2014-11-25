@@ -93,7 +93,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
         // Store the injector in the context for a servlet to access later
         context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());
-        if (!config.get(Configuration.MODEL_PROVIDER).equals(Configuration.UNKNOWN_STRING)) {
+        if (config.get(Configuration.MODEL_PROVIDER, null) != null) {
             FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
         }
 

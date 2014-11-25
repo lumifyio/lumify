@@ -38,7 +38,7 @@ public class VertexRemoveEdge extends BaseRequestHandler {
         this.graph = graph;
         this.workspaceHelper = workspaceHelper;
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }

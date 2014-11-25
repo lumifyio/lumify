@@ -34,7 +34,7 @@ public class UploadCsvIntegrationTest extends TestBase {
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "sample.csv", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         artifactVertexId = artifact.getVertexIds().get(0);
 
-        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", CsvOntology.MAPPING_JSON.getPropertyName(), MAPPING_JSON, "", "", null, null);
+        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", CsvOntology.MAPPING_JSON.getPropertyName(), MAPPING_JSON, "", "");
 
         lumifyTestCluster.processGraphPropertyQueue();
 

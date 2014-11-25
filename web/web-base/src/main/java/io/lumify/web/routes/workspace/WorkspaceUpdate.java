@@ -13,10 +13,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.ClientApiWorkspace;
-import io.lumify.web.clientapi.model.ClientApiWorkspaceUpdateData;
-import io.lumify.web.clientapi.model.GraphPosition;
-import io.lumify.web.clientapi.model.WorkspaceAccess;
+import io.lumify.web.clientapi.model.*;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 
 import javax.annotation.Nullable;
@@ -66,12 +63,15 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         updateUsers(workspace, updateData.getUserUpdates(), authUser);
 
         workspace = workspaceRepository.findById(workspaceId, authUser);
-        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, false);
-        workQueueRepository.pushWorkspaceChange(clientApiWorkspaceAfterUpdateButBeforeDelete);
-
+        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, true);
+        List<ClientApiWorkspace.User> previousUsers = clientApiWorkspaceAfterUpdateButBeforeDelete.getUsers();
         deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
+        ClientApiWorkspace clientApiWorkspace = workspaceRepository.toClientApi(workspace, authUser, true);
+
         respondWithSuccessJson(response);
+
+        workQueueRepository.pushWorkspaceChange(clientApiWorkspace, previousUsers);
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {

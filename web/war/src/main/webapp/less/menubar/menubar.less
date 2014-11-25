@@ -98,19 +98,6 @@ background: @menubar-background;
     background-image: url(../img/glyphicons/white/glyphicons_027_search@2x.png);
   }
 
-  .chat { 
-
-    &.synchronizing a:before {
-      .spinning-image('glyphicons_081_refresh@2x', 10px, 1px, -22px);
-      .spin(4s, forward);
-      .animation-play-state(running);
-    }
-
-    a {
-      background-image: url(../img/glyphicons/white/glyphicons_245_chat@2x.png);
-      background-size: auto 19px;
-    }
-  }
   .metrics a { background-image: url(../img/glyphicons/white/glyphicons_041_charts@2x.png); }
   .prefs a { background-image: url(../img/glyphicons/white/glyphicons_280_settings@2x.png); }
 
@@ -208,7 +195,7 @@ background: @menubar-background;
     }
 }
 @media (max-height:16em) {    
-    .menu-bottom .chat, .menu-bottom .divider {
+    .menu-bottom .divider {
         display: none;        
     }
 }

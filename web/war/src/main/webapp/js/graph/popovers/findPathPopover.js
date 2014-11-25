@@ -4,22 +4,18 @@ define([
     './withVertexPopover',
     'util/formatters',
     'util/withFormFieldErrors',
-    'service/vertex',
-    'data'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     withVertexPopover,
     F,
     withFormFieldErrors,
-    VertexService,
-    appData) {
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(FindPathPopover, withVertexPopover, withFormFieldErrors);
+    return defineComponent(FindPathPopover, withVertexPopover, withFormFieldErrors, withDataRequest);
 
     function FindPathPopover() {
-
-        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             buttonSelector: 'button',
@@ -50,15 +46,15 @@ define([
                             depth: 5,
                             hops: $target.addClass('loading').data('hops')
                         },
-                        buttons = self.popover.find('button').attr('disabled', true);
+                        buttons = this.popover.find('button').attr('disabled', true);
 
-                    self.clearFieldErrors(this.popover);
-                    this.vertexService.findPath(parameters)
-                        .done(function() {
+                    this.clearFieldErrors(this.popover);
+                    this.dataRequest('vertex', 'findPath', parameters)
+                        .then(function() {
                             self.teardown();
                             self.trigger('showActivityDisplay');
                         })
-                        .fail(function() {
+                        .catch(function() {
                             buttons.removeAttr('disabled');
                             $target.removeClass('loading');
                             self.markFieldErrors(i18n('popovers.find_path.error'), self.popover);

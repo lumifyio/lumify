@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lumify-tools-group</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.0.20141124</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,12 +22,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-fs-hdfs</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
-            <artifactId>lumify-model-bigtable-queue</artifactId>
+            <artifactId>lumify-model-bigtable</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -95,6 +95,12 @@ public abstract class BaseRequestHandler implements Handler {
         return getParameter(request, parameterName, false);
     }
 
+    protected String[] getOptionalParameterArray(HttpServletRequest request, String parameterName) {
+        Preconditions.checkNotNull(request, "The provided request was invalid");
+
+        return request.getParameterValues(parameterName);
+    }
+
     protected String[] getRequiredParameterArray(HttpServletRequest request, String parameterName) {
         Preconditions.checkNotNull(request, "The provided request was invalid");
 
@@ -445,6 +451,10 @@ public abstract class BaseRequestHandler implements Handler {
                     break;
                 default:
                     throw new RuntimeException("Unsupported response type encountered");
+            }
+
+            if (response.getWriter().checkError()) {
+                throw new ConnectionClosedException();
             }
         } catch (IOException e) {
             throw new RuntimeException("Error occurred while writing response", e);

@@ -47,16 +47,16 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Graph graph;
     private Authorizations authorizations;
     private Cache<String, List<Concept>> allConceptsWithPropertiesCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
     private Cache<String, List<OntologyProperty>> allPropertiesCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
     private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
     private Cache<String, ClientApiOntology> clientApiCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
 
     @Inject
@@ -269,27 +269,23 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return allConceptsWithPropertiesCache.get("", new TimingCallable<List<Concept>>("getConceptsWithProperties") {
                 @Override
                 public List<Concept> callWithTime() throws Exception {
-                    return toList(getConcepts());
+                    return toList(new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
+                            .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
+                            .limit(QUERY_LIMIT)
+                            .vertices()) {
+                        @Override
+                        protected Concept convert(Vertex vertex) {
+                            List<OntologyProperty> conceptProperties = getPropertiesByVertexNoRecursion(vertex);
+                            Vertex parentConceptVertex = getParentConceptVertex(vertex);
+                            String parentConceptIRI = ONTOLOGY_TITLE.getPropertyValue(parentConceptVertex);
+                            return new SecureGraphConcept(vertex, parentConceptIRI, conceptProperties);
+                        }
+                    });
                 }
             });
         } catch (ExecutionException e) {
             throw new LumifyException("could not get concepts with properties", e);
         }
-    }
-
-    private Iterable<Concept> getConcepts() {
-        return new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
-                .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
-                .limit(QUERY_LIMIT)
-                .vertices()) {
-            @Override
-            protected Concept convert(Vertex vertex) {
-                List<OntologyProperty> conceptProperties = getPropertiesByVertexNoRecursion(vertex);
-                Vertex parentConceptVertex = getParentConceptVertex(vertex);
-                String parentConceptIRI = ONTOLOGY_TITLE.getPropertyValue(parentConceptVertex);
-                return new SecureGraphConcept(vertex, parentConceptIRI, conceptProperties);
-            }
-        };
     }
 
     private Concept getRootConcept() {

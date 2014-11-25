@@ -1,11 +1,13 @@
 define([
     'flight/lib/component',
     'hbs!./histogramTpl',
-    'd3'
+    'd3',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
-    d3) {
+    d3,
+    withDataRequest) {
     'use strict';
 
     var HEIGHT = 100,
@@ -16,7 +18,7 @@ define([
         MAX_ZOOM_OUT = 100,
         DAY = 24 * 60 * 60 * 1000;
 
-    return defineComponent(Histogram);
+    return defineComponent(Histogram, withDataRequest);
 
     function inDomain(d, xScale) {
         var domain = xScale.domain();
@@ -33,27 +35,24 @@ define([
             this.onGraphPaddingUpdated = _.debounce(this.onGraphPaddingUpdated.bind(this), 500);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
-            this.on('histogramValuesRequested', this.onHistogramValuesRequested);
-            this.trigger('requestHistogramValues', { property: this.attr.property });
+            this.dataRequest('workspace', 'histogramValues', this.attr.property)
+                .done(this.renderChart.bind(this));
 
             this.redraw = _.throttle(this.redraw.bind(this), 16);
         });
 
-        this.onHistogramValuesRequested = function(event, data) {
-            event.stopPropagation();
-            this.renderChart(data.values);
-        };
-
         this.onGraphPaddingUpdated = function(event, data) {
-            var padding = data.padding,
-                width = this.width = this.$node.scrollParent().width() - margin.left - margin.right,
-                height = width / (16 / 9);
+            if (this.xScale) {
+                var padding = data.padding,
+                    width = this.width = this.$node.scrollParent().width() - margin.left - margin.right,
+                    height = width / (16 / 9);
 
-            this.$node.find('svg').attr('width', width + margin.left + margin.right);
+                this.$node.find('svg').attr('width', width + margin.left + margin.right);
 
-            this.xScale.range([0, width]);
-            this.focus.style('display', 'none');
-            this.redraw();
+                this.xScale.range([0, width]);
+                this.focus.style('display', 'none');
+                this.redraw();
+            }
         };
 
         this.redraw = function(rebin) {

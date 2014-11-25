@@ -12,10 +12,10 @@ import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.*;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.version.VersionService;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
@@ -444,12 +444,12 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     private Visibility orVisibility(Visibility visibility) {
-        if (!configuration.get(Configuration.AUDIT_VISIBILITY_LABEL).equals(Configuration.UNKNOWN_STRING) && !visibility.toString().equals("")) {
-            String auditVisibility = configuration.get(Configuration.AUDIT_VISIBILITY_LABEL);
-            if (visibility.toString().equals(auditVisibility)) {
-                return new Visibility(auditVisibility);
+        String auditVisibilityLabel = configuration.get(Configuration.AUDIT_VISIBILITY_LABEL, null);
+        if (auditVisibilityLabel != null && !visibility.toString().equals("")) {
+            if (visibility.toString().equals(auditVisibilityLabel)) {
+                return new Visibility(auditVisibilityLabel);
             }
-            return new Visibility("(" + auditVisibility + "|" + visibility.toString() + ")");
+            return new Visibility("(" + auditVisibilityLabel + "|" + visibility.toString() + ")");
         }
         return visibility;
     }

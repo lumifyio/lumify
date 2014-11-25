@@ -2,32 +2,32 @@ require([
     'configuration/plugins/exportWorkspace/plugin',
     'util/messages',
     'util/formatters',
-    'service/config'
-], function(p, i18n, F, ConfigService) {
-    var componentPath = 'io.lumify.analystsNotebook.AnalystsNotebook',
-        configService = new ConfigService();
+    'util/withDataRequest'
+], function(p, i18n, F, withDataRequest) {
+    var componentPath = 'io.lumify.analystsNotebook.AnalystsNotebook';
 
-    configService.getProperties().done(function(config) {
-        var versions = {};
+    withDataRequest.dataRequest('config', 'properties')
+        .done(function(config) {
+            var versions = {};
 
-        Object.getOwnPropertyNames(config).forEach(function(key) {
-            var labelMatch = key.match(/analystsNotebookExport\.menuOption\.(\w+)\.label/);
-            if (labelMatch && labelMatch.length == 2) {
-                var label = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.label'],
-                    value = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.value'];
-                if (label && value) {
-                    versions[label] = value;
+            Object.getOwnPropertyNames(config).forEach(function(key) {
+                var labelMatch = key.match(/analystsNotebookExport\.menuOption\.(\w+)\.label/);
+                if (labelMatch && labelMatch.length == 2) {
+                    var label = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.label'],
+                        value = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.value'];
+                    if (label && value) {
+                        versions[label] = value;
+                    }
                 }
-            }
-        });
+            });
 
-        Object.getOwnPropertyNames(versions).forEach(function(label) {
-            p.registerWorkspaceExporter({
-                menuItem: i18n('analystsnotebook.menuitem.title', label),
-                componentPath: componentPath
+            Object.getOwnPropertyNames(versions).forEach(function(label) {
+                p.registerWorkspaceExporter({
+                    menuItem: i18n('analystsnotebook.menuitem.title', label),
+                    componentPath: componentPath
+                });
             });
         });
-    });
 
     define(componentPath, ['flight/lib/component'], function(defineComponent) {
 

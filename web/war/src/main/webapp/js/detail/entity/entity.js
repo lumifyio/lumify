@@ -1,7 +1,6 @@
 
 define([
     'flight/lib/component',
-    'data',
     './image/image',
     '../properties/properties',
     '../withTypeContent',
@@ -12,14 +11,10 @@ define([
     'tpl!util/alert',
     'util/vertex/list',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'detail/dropdowns/propertyForm/propForm',
-    'service/ontology',
-    'service/vertex',
-    'service/config',
-    'sf',
     'd3'
 ], function(defineComponent,
-    appData,
     Image,
     Properties,
     withTypeContent,
@@ -30,20 +25,14 @@ define([
     alertTemplate,
     VertexList,
     F,
+    withDataRequest,
     PropertyForm,
-    OntologyService,
-    VertexService,
-    ConfigService,
-    sf,
     d3) {
     'use strict';
 
-    var MAX_RELATIONS_TO_DISPLAY,
-        ontologyService = new OntologyService(),
-        vertexService = new VertexService(),
-        configService = new ConfigService();
+    var MAX_RELATIONS_TO_DISPLAY; // Loaded with configuration parameters
 
-    return defineComponent(Entity, withTypeContent, withHighlighting);
+    return defineComponent(Entity, withTypeContent, withHighlighting, withDataRequest);
 
     function defaultSort(x,y) {
         return x === y ? 0 : x < y ? -1 : 1;
@@ -103,23 +92,12 @@ define([
 
             $badge.addClass('loading');
 
-            this.handleCancelling(
-                vertexService.getVertexRelationships(
-                    this.attr.data.id,
-                    paging,
-                    $section.data('label')
-                )
-            )
-                .always(function() {
-                    $badge.removeClass('loading');
-                    $section.addClass('expanded');
-                })
-                .fail(function() {
-                    $content.html(alertTemplate({
-                        error: i18n('detail.entity.relationships.error')
-                    }));
-                })
-                .done(function(result) {
+            this.dataRequest('vertex', 'edges', this.attr.data.id, {
+                offset: paging.offset,
+                size: paging.size,
+                label: $section.data('label')
+            })
+                .then(function(result) {
                     var relationships = result.relationships;
 
                     if (!relationships.length) {
@@ -163,7 +141,16 @@ define([
                             .append('<button class="next">')
                             .appendTo($content)
                     }
-                });
+                })
+                .catch(function() {
+                    $content.html(alertTemplate({
+                        error: i18n('detail.entity.relationships.error')
+                    }));
+                })
+                .finally(function() {
+                    $badge.removeClass('loading');
+                    $section.addClass('expanded');
+                })
         };
 
         this.onPageRelationships = function(event) {
@@ -194,7 +181,7 @@ define([
             if (matching) {
                 this.select('titleSelector').text(F.vertex.title(matching))
                     .next('.subtitle')
-                    .text(matching.concept.displayName);
+                    .text(F.vertex.concept(matching).displayName);
 
                 this.attr.data = matching;
                 this.updateRelationships();
@@ -202,63 +189,61 @@ define([
         };
 
         this.loadEntity = function() {
-            var self = this,
-                vertexRefresh = this.handleCancelling(appData.refresh(this.attr.data));
+            var vertex = this.attr.data;
 
-            this.vertexRefresh = vertexRefresh;
+            this.trigger('finishedLoadingTypeContent');
 
-            vertexRefresh
-                .done(function(vertex) {
-                    self.vertex = vertex;
-                    self.attr.data = vertex;
-                    self.$node.html(template({
-                        vertex: vertex,
-                        F: F
-                    }));
+            this.vertex = vertex;
+            this.attr.data = vertex;
+            this.$node.html(template({
+                vertex: vertex,
+                F: F
+            }));
 
-                    Toolbar.attachTo(self.select('toolbarSelector'), {
-                        toolbar: [
-                            {
-                                title: i18n('detail.toolbar.open'),
-                                submenu: [
-                                    Toolbar.ITEMS.FULLSCREEN,
-                                    self.sourceUrlToolbarItem()
-                                ]
-                            },
-                            {
-                                title: i18n('detail.toolbar.add'),
-                                cls: 'requires-EDIT',
-                                submenu: [
-                                    Toolbar.ITEMS.ADD_PROPERTY,
-                                    Toolbar.ITEMS.ADD_IMAGE
-                                ]
-                            },
-                            Toolbar.ITEMS.AUDIT
+            Toolbar.attachTo(this.select('toolbarSelector'), {
+                toolbar: [
+                    {
+                        title: i18n('detail.toolbar.open'),
+                        submenu: [
+                            Toolbar.ITEMS.FULLSCREEN,
+                            this.sourceUrlToolbarItem()
                         ]
-                    });
+                    },
+                    {
+                        title: i18n('detail.toolbar.add'),
+                        cls: 'requires-EDIT',
+                        submenu: [
+                            Toolbar.ITEMS.ADD_PROPERTY,
+                            Toolbar.ITEMS.ADD_IMAGE
+                        ]
+                    },
+                    Toolbar.ITEMS.AUDIT
+                ]
+            });
 
-                    Image.attachTo(self.select('glyphIconSelector'), {
-                        data: vertex,
-                        service: vertexService
-                    });
+            Image.attachTo(this.select('glyphIconSelector'), {
+                data: vertex
+            });
 
-                   Properties.attachTo(self.select('propertiesSelector'), {
-                       data: vertex
-                   });
+            Properties.attachTo(this.select('propertiesSelector'), {
+                data: vertex
+            });
 
-                   self.updateRelationships();
-                   self.updateEntityAndArtifactDraggables();
-                   self.updateText();
-                });
+            this.updateRelationships();
+            this.updateEntityAndArtifactDraggables();
+            this.updateText();
         };
 
         this.updateRelationships = function() {
             var self = this;
 
-            $.when(
-                this.handleCancelling(configService.getProperties()),
-                this.handleCancelling(ontologyService.relationships())
-            ).done(function(config, relationships) {
+            Promise.all([
+                this.dataRequest('config', 'properties'),
+                this.dataRequest('ontology', 'relationships')
+            ]).done(function(results) {
+                var config = results[0],
+                    relationships = results[1];
+
                 MAX_RELATIONS_TO_DISPLAY = parseInt(config['vertex.relationships.maxPerSection'], 10);
 
                 var hasEntityLabel = config['ontology.iri.artifactHasEntity'],
@@ -322,13 +307,7 @@ define([
 
             if ($target.is('.entity, .artifact')) {
                 var id = $target.data('vertexId');
-                this.trigger('selectObjects', { vertices: [appData.vertex(id)] });
-                evt.stopPropagation();
-            } else if ($target.is('.relationship')) {
-                var info = $target.data('info');
-                if (info) {
-                    this.trigger('selectObjects', { vertices: [info] });
-                }
+                this.trigger('selectObjects', { vertexIds: [id] });
                 evt.stopPropagation();
             }
         };

@@ -1,0 +1,36 @@
+{
+ "type":"vertex",
+ "id":"TEST_VERTEX",
+ "properties":[
+    {
+       "sandboxStatus":"PRIVATE",
+       "name":"http://lumify.io#conceptType",
+       "value":"http://lumify.io/dev#titleFormulaEntity"
+    },
+    {
+       "sandboxStatus":"PRIVATE",
+       "name":"http://lumify.io/dev#titleFormulaEntityPropA",
+       "value":"Prop A Value"
+    },
+    {
+        "sandboxStatus":"PRIVATE",
+        "name":"http://lumify.io/dev#titleFormulaEntityPropB",
+        "value":"Prop B Value"
+    },
+    {
+        "sandboxStatus":"PRIVATE",
+        "name":"http://lumify.io/dev#titleFormulaEntityPropC",
+        "value":"Prop C Value"
+    },
+    {
+       "sandboxStatus":"PRIVATE",
+       "name":"http://lumify.io/dev#titleFormulaEntityPropD",
+       "value":"1416506400000"
+    }
+ ],
+ "sandboxStatus":"PRIVATE",
+ "visibilitySource":"",
+ "edgeLabels":[
+    "http://lumify.io/dev#rawHasEntity"
+ ]
+}

@@ -17,10 +17,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,12 +52,10 @@ public class SetEdgeProperty extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        final String edgeId = getRequiredParameter(request, "edgeId");
         final String propertyName = getRequiredParameter(request, "propertyName");
         String propertyKey = getOptionalParameter(request, "propertyKey");
         final String valueStr = getRequiredParameter(request, "value");
-        final String sourceId = getRequiredParameter(request, "source");
-        final String destId = getRequiredParameter(request, "dest");
-        final String edgeId = getRequiredParameter(request, "edgeId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationString");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
@@ -122,6 +117,8 @@ public class SetEdgeProperty extends BaseRequestHandler {
                 authorizations);
         setPropertyResult.elementMutation.save(authorizations);
 
+        String sourceId = edge.getVertexId(Direction.OUT);
+        String destId = edge.getVertexId(Direction.IN);
 
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, propertyName, oldValue, null, edge, "", "",

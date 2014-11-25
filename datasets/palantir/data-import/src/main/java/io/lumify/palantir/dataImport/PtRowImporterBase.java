@@ -5,6 +5,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 
 public abstract class PtRowImporterBase<T> extends PtImporterBase<T> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtRowImporterBase.class);
+    protected int count;
 
     protected PtRowImporterBase(DataImporter dataImporter, Class<T> ptClass) {
         super(dataImporter, ptClass);
@@ -16,14 +17,13 @@ public abstract class PtRowImporterBase<T> extends PtImporterBase<T> {
 
     @Override
     protected long run(Iterable<T> rows) {
-        int count = 0;
+        count = 0;
 
         for (T row : rows) {
             if (count % 1000 == 0) {
                 LOGGER.debug("Importing %s: %d", getPtClass().getSimpleName(), count);
                 getDataImporter().getGraph().flush();
             }
-
             try {
                 processRow(row);
             } catch (Throwable ex) {

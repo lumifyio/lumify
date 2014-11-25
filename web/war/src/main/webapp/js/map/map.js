@@ -1,33 +1,27 @@
 
 define([
     'flight/lib/component',
-    'data',
     'tpl!./template',
     'tpl!./instructions/regionCenter',
     'tpl!./instructions/regionRadius',
     'tpl!./instructions/regionLoading',
-    'service/vertex',
-    'service/ontology',
-    'service/config',
     'util/retina',
     'util/controls',
     'util/vertex/formatters',
     'util/withAsyncQueue',
-    'util/withContextMenu'
+    'util/withContextMenu',
+    'util/withDataRequest'
 ], function(defineComponent,
-    appData,
     template,
     centerTemplate,
     radiusTemplate,
     loadingTemplate,
-    VertexService,
-    OntologyService,
-    ConfigService,
     retina,
     Controls,
     F,
     withAsyncQueue,
-    withContextMenu) {
+    withContextMenu,
+    withDataRequest) {
     'use strict';
 
     var MODE_NORMAL = 0,
@@ -35,15 +29,12 @@ define([
         MODE_REGION_SELECTION_MODE_RADIUS = 2,
         MODE_REGION_SELECTION_MODE_LOADING = 3;
 
-    return defineComponent(MapViewOpenLayers, withContextMenu, withAsyncQueue);
+    return defineComponent(MapViewOpenLayers, withContextMenu, withAsyncQueue, withDataRequest);
 
     function MapViewOpenLayers() {
 
         var ol, latlon, point;
 
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
-        this.configService = new ConfigService();
         this.mode = MODE_NORMAL;
 
         this.defaultAttrs({
@@ -66,6 +57,8 @@ define([
         })
 
         this.after('initialize', function() {
+            var self = this;
+
             this.initialized = false;
             this.setupAsyncQueue('map');
             this.$node.html(template({})).find('.shortcut').each(function() {
@@ -96,10 +89,15 @@ define([
 
             this.attachToZoomPanControls();
 
-            var verticesInWorkspace = appData.verticesInWorkspace();
-            if (verticesInWorkspace.length) {
-                this.updateOrAddVertices(verticesInWorkspace, { adding: true, preventShake: true });
-            }
+            this.dataRequest('workspace', 'store')
+                .then(function(workspaceVertices) {
+                    return self.dataRequest('vertex', 'store', { vertexIds: _.keys(workspaceVertices) });
+                })
+                .done(function(vertices) {
+                    if (vertices.length) {
+                        self.updateOrAddVertices(vertices, { adding: true, preventShake: true });
+                    }
+                });
         });
 
         this.attachToZoomPanControls = function() {
@@ -278,7 +276,7 @@ define([
                         })
                         .value(),
                 conceptType = F.vertex.prop(vertex, 'conceptType'),
-                selected = ~appData.selectedVertexIds.indexOf(vertex.id),
+                selected = vertex.id in lumifyData.selectedObjects.vertexIds,
                 iconUrl =  'map/marker/image?' + $.param({
                     type: conceptType,
                     scale: retina.devicePixelRatio > 1 ? '2' : '1'
@@ -335,48 +333,51 @@ define([
                 validAddition = false;
 
             this.mapReady(function(map) {
-                vertices.forEach(function(vertex) {
-                    var inWorkspace = appData.inWorkspace(vertex),
-                        markers = [];
+                self.dataRequest('workspace', 'store')
+                    .done(function(workspaceVertices) {
+                        vertices.forEach(function(vertex) {
+                            var inWorkspace = vertex.id in workspaceVertices,
+                                markers = [];
 
-                    if (!adding && !inWorkspace) {
+                            if (!adding && !inWorkspace) {
 
-                        // Only update marker if it exists
-                        map.featuresLayer.features.forEach(function(f) {
-                            if (f.cluster) {
-                                markers.push(_.find(f.cluster, function(f) {
-                                    return f.data.vertex.id === vertex.id;
-                                }))
-                            } else if (f.data.vertex.id === vertex.id) {
-                                markers.push(f);
+                                // Only update marker if it exists
+                                map.featuresLayer.features.forEach(function(f) {
+                                    if (f.cluster) {
+                                        markers.push(_.find(f.cluster, function(f) {
+                                            return f.data.vertex.id === vertex.id;
+                                        }))
+                                    } else if (f.data.vertex.id === vertex.id) {
+                                        markers.push(f);
+                                    }
+                                });
+
+                                if (markers.length) {
+                                    markers = self.findOrCreateMarkers(map, vertex);
+                                }
+                            } else {
+                                markers = self.findOrCreateMarkers(map, vertex);
+                            }
+
+                            if (markers && markers.length) {
+                                markers.forEach(function(m) {
+                                    validAddition = true;
+                                    m.data.inWorkspace = inWorkspace;
+                                });
                             }
                         });
 
-                        if (markers.length) {
-                            markers = self.findOrCreateMarkers(map, vertex);
+                        self.clusterStrategy.cluster();
+                        map.featuresLayer.redraw();
+
+                        if (adding && vertices.length && validAddition) {
+                            self.fit(map);
                         }
-                    } else {
-                        markers = self.findOrCreateMarkers(map, vertex);
-                    }
 
-                    if (markers && markers.length) {
-                        markers.forEach(function(m) {
-                            validAddition = true;
-                            m.data.inWorkspace = inWorkspace;
-                        });
-                    }
-                });
-
-                this.clusterStrategy.cluster();
-                map.featuresLayer.redraw();
-
-                if (adding && vertices.length && validAddition) {
-                    this.fit(map);
-                }
-
-                if (adding && !validAddition && !preventShake) {
-                    this.invalidMap();
-                }
+                        if (adding && !validAddition && !preventShake) {
+                            self.invalidMap();
+                        }
+                    })
             });
 
         };
@@ -588,13 +589,18 @@ define([
                     self.$node.find('.instructions').remove();
                     self.$node.append(loadingTemplate({}));
 
-                    self.vertexService.geoSearch(
+                    self.dataRequest('vertex', 'geo-search',
                         lonlat.lat,
                         lonlat.lon,
-                        radius).done(
+                        radius
+                    ).done(
                         function(data) {
                             self.endRegionSelection();
-                            self.trigger(document, 'addVertices', data);
+                            self.trigger('updateWorkspace', {
+                                entityUpdates: data.vertices.map(function(vertex) {
+                                    return { vertexId: vertex.id };
+                                })
+                            });
                         }
                     );
 
@@ -612,7 +618,7 @@ define([
             require(['openlayers'], openlayersDeferred.resolve);
             require(['map/clusterStrategy'], clusterStrategyDeferred.resolve);
 
-            this.configService.getProperties().done(function(configProperties) {
+            this.dataRequest('config', 'properties').done(function(configProperties) {
               if (configProperties['map.provider'] == 'google') {
                 require(['goog!maps,3,other_params:sensor=false'], function() {
                   google.maps.visualRefresh = true;
@@ -759,7 +765,7 @@ define([
             // Prevent map shake on initialize while catching up with vertexAdd
             // events
 
-            this.ontologyService.properties()
+            this.dataRequest('ontology', 'properties')
                 .done(function(p) {
                     self.ontologyProperties = p;
                     self.preventShake = true;

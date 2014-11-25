@@ -1,13 +1,15 @@
 require([
     'configuration/admin/plugin',
-    'hbs!io/lumify/web/devTools/templates/requeue'
+    'hbs!io/lumify/web/devTools/templates/requeue',
+    'util/withDataRequest'
 ], function(
     defineLumifyAdminPlugin,
-    template
-    ) {
+    template,
+    withDataRequest) {
     'use strict';
 
     return defineLumifyAdminPlugin(Requeue, {
+        mixins: [withDataRequest],
         section: 'Vertex',
         name: 'Requeue',
         subtitle: 'Requeue vertices and edges'
@@ -35,9 +37,7 @@ require([
         this.onParameterRequeue = function(event) {
             this.handleSubmitButton(event.target,
                 this.showResult(
-                    this.adminService.queueVertices(
-                        this.select('parameterSelector').val()
-                    )
+                    this.dataRequest('admin', 'queueVertices', this.select('parameterSelector').val())
                 )
             );
         };
@@ -45,7 +45,7 @@ require([
         this.onVertexRequeue = function(event) {
             this.handleSubmitButton(event.target,
                 this.showResult(
-                    this.adminService.queueVertices()
+                    this.dataRequest('admin', 'queueVertices')
                 )
             );
         };
@@ -53,7 +53,7 @@ require([
         this.onEdgeRequeue = function(event) {
             this.handleSubmitButton(event.target,
                 this.showResult(
-                    this.adminService.queueEdges()
+                    this.dataRequest('admin', 'queueEdges')
                 )
             );
         };
@@ -62,9 +62,9 @@ require([
             var self = this;
 
             return promise
-                .done(this.showSuccess.bind(this))
-                .fail(this.showError.bind(this))
-                .always(function() {
+                .then(this.showSuccess.bind(this))
+                .catch(this.showError.bind(this))
+                .finally(function() {
                     _.delay(function() {
                         self.$node.find('.alert').remove();
                     }, 3000)

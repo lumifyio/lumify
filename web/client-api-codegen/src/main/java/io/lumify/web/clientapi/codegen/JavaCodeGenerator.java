@@ -65,6 +65,9 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
                 fileContents = fileContents.replaceAll("mp.field\\(\"vertexIds\\[\\]\", vertexIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String vertexId:vertexIds) { mp.field(\"vertexIds[]\", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
                 fileContents = fileContents.replaceAll("formParams\\.put\\(\"vertexIds\\[\\]\", vertexIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
 
+                fileContents = fileContents.replaceAll("mp.field\\(\"userIds\\[\\]\", userIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String userId:userIds) { mp.field(\"userIds[]\", userId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
+                fileContents = fileContents.replaceAll("formParams\\.put\\(\"userIds\\[\\]\", userIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
+
                 fileContents = fileContents.replaceAll("mp.field\\(\"ids\\[\\]\", ids, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String id:ids) { mp.field(\"ids[]\", id, MediaType.MULTIPART_FORM_DATA_TYPE); }");
                 fileContents = fileContents.replaceAll("formParams\\.put\\(\"ids\\[\\]\", ids\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
 

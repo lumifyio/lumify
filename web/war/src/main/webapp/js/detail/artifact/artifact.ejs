@@ -1,22 +1,22 @@
 
 <div class="entity-background">
-  <div class="entity-glyphIcon" style="background-image: url(<%= vertex.concept.glyphIconHref %>)"></div>
+  <div class="entity-glyphIcon" style="background-image: url(<%= concept.glyphIconHref %>)"></div>
   <h1 class="generic-draggable artifact-title" 
     data-vertex-id='<%= vertex.id %>'><%= F.vertex.title(vertex) %></h1>
-  <div class="subtitle"><%= vertex.concept.displayName %></div>
+  <div class="subtitle"><%= concept.displayName %></div>
 
   <div class="comp-toolbar"></div>
 </div>
 
 <div class="nav-with-background" style="margin-top: 7.5em">
-  <% if(vertex.concept.displayType == 'video') { %>
+  <% if(concept.displayType == 'video') { %>
     <div class="preview"/>
     <div class="currentTranscript"></div>
   <% } %>
-  <% if(vertex.concept.displayType == 'image') { %>
+  <% if(concept.displayType == 'image') { %>
     <div class="image-preview opens-dropdown"></div>
   <% } %>
-  <% if(vertex.concept.displayType == 'audio') { %>
+  <% if(concept.displayType == 'audio') { %>
     <div class="audio-preview"></div>
     <div class="currentTranscript"></div>
   <% } %>
