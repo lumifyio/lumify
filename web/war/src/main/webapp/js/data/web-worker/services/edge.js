@@ -18,7 +18,7 @@ define([
         },
 
         'delete': function(edgeId, sourceId, targetId) {
-            return ajax('DELETE', '/vertex/edge', {
+            return ajax('DELETE', '/edge', {
                 edgeId: edgeId,
                 sourceId: sourceId,
                 targetId: targetId
