@@ -57,8 +57,6 @@ ENV PATH $PATH:/opt/zookeeper/bin
 EXPOSE 2181 2888 3888
 
 # Install Hadoop
-VOLUME ["/var/lib/hadoop-hdfs", "/var/local/hadoop"]
-
 RUN \
   wget -O /opt/hadoop-2.3.0.tar.gz https://archive.apache.org/dist/hadoop/core/hadoop-2.3.0/hadoop-2.3.0.tar.gz \
   && tar -xzf /opt/hadoop-2.3.0.tar.gz -C /opt/ \
@@ -91,6 +89,7 @@ RUN \
   cp /opt/hadoop/etc/hadoop/*.xml /opt/hadoop/input \
   && sed s/HOSTNAME/localhost/ /opt/hadoop/etc/hadoop/core-site.xml.template > /opt/hadoop/etc/hadoop/core-site.xml
 
+VOLUME ["/var/lib/hadoop-hdfs", "/var/local/hadoop"]
 EXPOSE 8032 8088 50030 50060 50070 50075 50090 50105
 
 # Install Accumulo
@@ -118,8 +117,6 @@ ENV PATH $PATH:/opt/accumulo/bin
 EXPOSE 9997 9999 50091 50095
 
 # Install ElasticSearch
-VOLUME ["/opt/elasticsearch-1.4.0/data/"]
-
 RUN \
   wget -O /opt/elasticsearch-1.4.0.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.0.tar.gz \
   && tar -xzf /opt/elasticsearch-1.4.0.tar.gz -C /opt \
@@ -132,6 +129,8 @@ RUN \
   && /opt/elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
 
 ENV PATH $PATH:/opt/elasticsearch/bin
+
+VOLUME ["/opt/elasticsearch-1.4.0/data/"]
 EXPOSE 9200 9300
 
 # Install RabbitMQ
