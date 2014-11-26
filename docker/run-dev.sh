@@ -36,5 +36,6 @@ sudo docker run \
   -p 15672:15672 \
   -i \
   -t \
+  -h lumify-dev \
   lumifyio/dev \
   $1

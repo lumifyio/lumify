@@ -1,6 +1,11 @@
 #!/bin/bash
 
 sed s/HOSTNAME/$HOSTNAME/ /opt/hadoop/etc/hadoop/core-site.xml.template > /opt/hadoop/etc/hadoop/core-site.xml
+echo $HOSTNAME > /opt/accumulo/conf/masters
+echo $HOSTNAME > /opt/accumulo/conf/slaves
+echo $HOSTNAME > /opt/accumulo/conf/tracers
+echo $HOSTNAME > /opt/accumulo/conf/gc
+echo $HOSTNAME > /opt/accumulo/conf/monitor
 
 mkdir -p /var/log/hadoop
 mkdir -p /var/log/accumulo
