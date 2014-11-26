@@ -16,7 +16,7 @@
 
     <modules>
         <module>jetty-server</module>
-        <module>storm-local</module>
+        <module>graph-property-worker-local</module>
         <module>tomcat-server</module>
         <module>import-local</module>
     </modules>

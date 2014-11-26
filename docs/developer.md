@@ -10,7 +10,7 @@ In order to work with Lumify as a developer, it's recommended that:
 
 * You know Java, since the entire backend is written in Java.
 * You know JavaScript, as the UI is very JavaScript heavy.
-* You're familiar with common big data tools, including the Hadoop stack, Accumulo, and Storm.
+* You're familiar with common big data tools, including the Hadoop stack, Accumulo.
 
 If that sounds like you, then continue reading to get started.
 

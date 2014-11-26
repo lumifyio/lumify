@@ -2,7 +2,7 @@ package io.lumify.core.ingest.graphProperty;
 
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
-import io.lumify.core.config.ConfigurationHelper;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
@@ -12,7 +12,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.core.util.TeeInputStream;
 import org.apache.commons.io.IOUtils;
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.json.JSONObject;
 import org.securegraph.*;
@@ -21,7 +20,10 @@ import org.securegraph.util.IterableUtils;
 
 import java.io.*;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import static org.securegraph.util.IterableUtils.toList;
 
@@ -32,27 +34,21 @@ public class GraphPropertyRunner {
     private List<GraphPropertyThreadedWrapper> workerWrappers;
     private User user;
     private UserRepository userRepository;
+    private Configuration configuration;
 
-    public void prepare(Map stormConf) {
-        prepareUser(stormConf);
-        prepareWorkers(stormConf);
-    }
-
-    private void prepareUser(Map stormConf) {
-        this.user = (User) stormConf.get("user");
-        if (this.user == null) {
-            this.user = this.userRepository.getSystemUser();
-        }
+    public void prepare(User user) {
+        this.user = user;
         this.authorizations = this.userRepository.getAuthorizations(this.user);
+        prepareWorkers();
     }
 
-    private void prepareWorkers(Map stormConf) {
-        FileSystem hdfsFileSystem = getFileSystem(stormConf);
+    private void prepareWorkers() {
+        FileSystem hdfsFileSystem = getFileSystem();
 
-        List<TermMentionFilter> termMentionFilters = loadTermMentionFilters(stormConf, hdfsFileSystem);
+        List<TermMentionFilter> termMentionFilters = loadTermMentionFilters(hdfsFileSystem);
 
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(
-                stormConf,
+                configuration.toMap(),
                 termMentionFilters,
                 hdfsFileSystem,
                 this.user,
@@ -77,11 +73,11 @@ public class GraphPropertyRunner {
         }
     }
 
-    private FileSystem getFileSystem(Map stormConf) {
+    private FileSystem getFileSystem() {
         FileSystem hdfsFileSystem;
-        Configuration conf = ConfigurationHelper.createHadoopConfigurationFromMap(stormConf);
+        org.apache.hadoop.conf.Configuration conf = configuration.toHadoopConfiguration();
         try {
-            String hdfsRootDir = (String) stormConf.get(io.lumify.core.config.Configuration.HADOOP_URL);
+            String hdfsRootDir = configuration.get(Configuration.HADOOP_URL, null);
             hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), conf, "hadoop");
         } catch (Exception e) {
             throw new LumifyException("Could not open hdfs filesystem", e);
@@ -89,9 +85,9 @@ public class GraphPropertyRunner {
         return hdfsFileSystem;
     }
 
-    private List<TermMentionFilter> loadTermMentionFilters(Map stormConf, FileSystem hdfsFileSystem) {
+    private List<TermMentionFilter> loadTermMentionFilters(FileSystem hdfsFileSystem) {
         TermMentionFilterPrepareData termMentionFilterPrepareData = new TermMentionFilterPrepareData(
-                stormConf,
+                configuration.toMap(),
                 hdfsFileSystem,
                 this.user,
                 this.authorizations,
@@ -288,5 +284,10 @@ public class GraphPropertyRunner {
     @Inject
     public void setGraph(Graph graph) {
         this.graph = graph;
+    }
+
+    @Inject
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 }

@@ -164,51 +164,6 @@ See [Lumify Dependencies by Feature](dependencies.md) for additional optional de
         elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
         elasticsearch/bin/plugin install mobz/elasticsearch-head
 
-
-### Storm
-
-*as root:*
-
-        cd ~
-        curl http://download.zeromq.org/zeromq-2.1.7.tar.gz -O
-        tar -xzf zeromq-2.1.7.tar.gz
-        cd zeromq-2.1.7
-        ./configure
-        make
-        make install
-
-        cd ~
-        git clone https://github.com/nathanmarz/jzmq.git
-        cd jzmq
-        ./autogen.sh
-        ./configure
-        make
-        make install
-
-        cd ~
-        curl http://www.us.apache.org/dist/commons/io/binaries/commons-io-2.4-bin.zip -O
-
-        cd ~
-        curl https://dl.dropboxusercontent.com/s/tqdpoif32gufapo/storm-0.9.0.1.tar.gz -O
-        cd /opt
-        tar xzf ~/storm-0.9.0.1.tar.gz
-        ln -s storm-0.9.0.1 storm
-
-        cd storm/lib
-        rm -f rm commons-io-1.4.jar
-        unzip -j ~/commons-io-2.4-bin.zip commons-io-2.4/commons-io-2.4.jar
-
-        vi /opt/storm/conf/storm.yaml
-        # add the following at the end of the file:
-          storm.zookeeper.servers: [192.168.33.10]
-          nimbus.host: 192.168.33.10
-          supervisor.slots.ports: [6700, 6701, 6702, 6703]
-          ui.port: 8081
-
-        ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
-        sed -i -e "s/192.168.33.10/${ip_address}/" /opt/storm/conf/storm.yaml
-
-
 ### RabbitMQ
 
 *as root:*
@@ -301,11 +256,6 @@ See [Lumify Dependencies by Feature](dependencies.md) for additional optional de
 
         service rabbitmq-server start
 
-        /opt/storm/bin/storm nimbus &
-        /opt/storm/bin/storm ui &
-        /opt/storm/bin/storm supervisor &
-
-
 ### create a lumify user
 
 *as root*
@@ -383,23 +333,23 @@ See [Lumify Dependencies by Feature](dependencies.md) for additional optional de
         hadoop fs -put config/opennlp /lumify/config
 
 
-### build and deploy the Lumify Storm topology
+### build and deploy Lumify YARN Application
 
 *as the lumify user:*
 
         cd ~/lumify
-        mvn package -pl storm/storm -am
+        mvn package -pl graph-property-worker -am
 
         # exclude plugins that require optional dependencies that these instructions have not installed
         # see https://github.com/lumifyio/lumify/blob/master/docs/dependencies.md
         #
         excluded_plugins=$(cat docs/dependencies.md | awk -F '|' '$2 ~ /text|media/ && $4 !~ /n\/a/ {print $4}' | sed -e 's/^ *//' -e 's/ *$//' -e 's| *<br */> *| |')
         find_opts=$(echo $(echo $excluded_plugins) | sed -E 's/^| / ! -name /g')
-        plugins=$(echo $(find storm/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ${find_opts} ) | sed -e 's/ /,/g')
+        plugins=$(echo $(find graph-property-worker/plugins -mindepth 1 -maxdepth 1 -type d ! -name target ${find_opts} ) | sed -e 's/ /,/g')
 
         mvn package -pl ${plugins} -am
 
-        jars=$(for t in $(find storm/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done)
+        jars=$(for t in $(find graph-property-worker/plugins -mindepth 2 -maxdepth 2 -type d -name target); do find ${t} -name '*.jar' ! -name '*-sources.jar' | sort | tail -1; done)
         hadoop fs -put ${jars} /lumify/libcache
 
-        /opt/storm/bin/storm jar storm/storm/target/lumify-storm-0.4.0-SNAPSHOT-jar-with-dependencies.jar io.lumify.storm.StormRunner
+        /opt/hadoop/bin/hadoop jar graph-property-worker/graph-property-worker/target/lumify-graph-property-worker-0.4.0-SNAPSHOT-jar-with-dependencies.jar

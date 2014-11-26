@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-storm</artifactId>
+            <artifactId>lumify-graph-property-worker-base</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

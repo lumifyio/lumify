@@ -38,4 +38,4 @@
 
 1. Run `io.lumify.wikipedia.mapreduce.ImportMR enwiki-20140102-pages-articles-lines-10.xml`
 
-1. Run the public storm topology.
+1. Run Graph Property Workers.

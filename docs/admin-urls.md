@@ -9,4 +9,3 @@
 | Accumulo | http://192.168.33.10:50095 |
 | ElasticSearch | http://192.168.33.10:9200/_plugin/head/ | [head plugin](http://mobz.github.io/elasticsearch-head/) |
 | RabbitMQ | http://192.168.33.10:15672 | login with guest/guest |
-| Storm | http://192.168.33.10:8081 |
