@@ -88,6 +88,9 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
         FileOutputStream fos = null;
         InputStream in = null;
         try {
+            if (!fs.exists(new Path(classifierFilePath))) {
+                throw new LumifyException("HDFS file " + classifierFilePath + " does not exist");
+            }
             in = fs.open(new Path(classifierFilePath));
             fos = new FileOutputStream(tempFile);
             IOUtils.copy(in, fos);
