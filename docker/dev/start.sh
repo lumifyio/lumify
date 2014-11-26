@@ -14,6 +14,7 @@ if [ ! -d "/tmp/hadoop-root" ]; then
 fi
 /opt/hadoop/sbin/start-dfs.sh
 /opt/hadoop/sbin/start-yarn.sh
+/opt/hadoop/bin/hdfs dfsadmin -safemode wait
 
 if [ $(/opt/hadoop/bin/hadoop fs -ls /user | grep accumulo | wc -l) == "0" ]; then
   echo "Creating accumulo user in hdfs"
