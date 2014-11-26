@@ -126,7 +126,7 @@ RUN \
   && mkdir -p /var/log/elasticsearch \
   && ln -s /var/log/elasticsearch /opt/elasticsearch-1.4.0/logs \
   && /opt/elasticsearch/bin/plugin -install mobz/elasticsearch-head \
-  && /opt/elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
+  && /opt/elasticsearch/bin/plugin -install org.securegraph/securegraph-elasticsearch-plugin/0.8.0
 
 ENV PATH $PATH:/opt/elasticsearch/bin
 
