@@ -6,6 +6,8 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.NoOpWorkQueueRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -35,6 +37,7 @@ public class GraphPropertyRunner {
     private User user;
     private UserRepository userRepository;
     private Configuration configuration;
+    private WorkQueueRepository workQueueRepository;
 
     public void prepare(User user) {
         this.user = user;
@@ -289,5 +292,34 @@ public class GraphPropertyRunner {
     @Inject
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    @Inject
+    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
+        this.workQueueRepository = workQueueRepository;
+    }
+
+    public void run() throws Exception {
+        GraphPropertyWorkerSpout graphPropertyWorkerSpout = prepareGraphPropertyWorkerSpout();
+        while (true) {
+            GraphPropertyWorkerTuple tuple = graphPropertyWorkerSpout.nextTuple();
+            if (tuple == null) {
+                Thread.sleep(100);
+                continue;
+            }
+            try {
+                process(tuple.getJson());
+                graphPropertyWorkerSpout.ack(tuple.getMessageId());
+            } catch (Throwable ex) {
+                LOGGER.error("Could not process tuple: %s", tuple, ex);
+                graphPropertyWorkerSpout.fail(tuple.getMessageId());
+            }
+        }
+    }
+
+    protected GraphPropertyWorkerSpout prepareGraphPropertyWorkerSpout() {
+        GraphPropertyWorkerSpout spout = workQueueRepository.createGraphPropertyWorkerSpout();
+        spout.open();
+        return spout;
     }
 }
