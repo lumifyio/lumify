@@ -90,7 +90,7 @@ RUN \
   && sed s/HOSTNAME/localhost/ /opt/hadoop/etc/hadoop/core-site.xml.template > /opt/hadoop/etc/hadoop/core-site.xml
 
 VOLUME ["/var/lib/hadoop-hdfs", "/var/local/hadoop"]
-EXPOSE 8032 8088 9000 50010 50020 50030 50060 50070 50075 50090
+EXPOSE 8020 8032 8088 9000 50010 50020 50030 50060 50070 50075 50090
 
 # Install Accumulo
 RUN \

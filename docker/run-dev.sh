@@ -22,6 +22,7 @@ sudo docker run \
   -p 2181:2181 `# ZooKeeper` \
   -p 5672:5672 `# RabbitMQ` \
   -p 5673:5673 `# RabbitMQ` \
+  -p 8020:8020 `# Hadoop: HDFS` \
   -p 8032:8032 `# Hadoop: Resource Manager` \
   -p 8088:8088 `# Hadoop: Resource Manager: Web UI` \
   -p 9000:9000 `# Hadoop: Name Node: Metadata Service` \
