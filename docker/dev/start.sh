@@ -60,10 +60,20 @@ function start_rabbitmq {
   /opt/rabbitmq/sbin/rabbitmq-plugins enable rabbitmq_management
 }
 
+function ensure_lumify_config {
+  start_msg "Lumify Config"
+  hadoop fs -mkdir -p /lumify/config/opencv
+  hadoop fs -mkdir -p /lumify/config/opennlp
+  hadoop fs -put /opt/lumify/config/opencv/haarcascade_frontalface_alt.xml /lumify/config/opencv/
+  hadoop fs -put /opt/lumify/config/opennlp/* /lumify/config/opennlp/
+  hadoop fs -chmod -R a+w /lumify/
+}
+
 start_sshd
 start_zookeeper
 start_hadoop
 start_accumulo
 start_elasticsearch
 start_rabbitmq
+ensure_lumify_config
 /bin/bash
