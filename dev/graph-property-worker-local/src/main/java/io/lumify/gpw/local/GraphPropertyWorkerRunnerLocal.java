@@ -22,6 +22,10 @@ public class GraphPropertyWorkerRunnerLocal extends CommandLineBase {
 
         while (true) {
             GraphPropertyWorkerTuple tuple = graphPropertyWorkerSpout.nextTuple();
+            if (tuple == null) {
+                Thread.sleep(100);
+                continue;
+            }
             try {
                 graphPropertyRunner.process(tuple.getJson());
                 graphPropertyWorkerSpout.ack(tuple.getMessageId());
