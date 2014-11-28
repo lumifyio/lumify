@@ -5,6 +5,9 @@ import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.gpw.MediaPropertyConfiguration;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -51,6 +54,8 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
         weaveRunner.startAndWait();
 
         TwillController controller = weaveRunner.prepare(new GraphPropertyWorkerRunnable(getUser()))
+                .withDependencies(LumifyLogger.class) // core
+                .withDependencies(MediaPropertyConfiguration.class) // graph-property-worker-base
                 .addLogHandler(new PrinterLogHandler(new PrintWriter(System.out, true)))
                 .start();
 
@@ -59,6 +64,7 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
     }
 
     private static class GraphPropertyWorkerRunnable extends AbstractTwillRunnable {
+        private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorkerRunnable.class);
         private final User user;
 
         public GraphPropertyWorkerRunnable(User user) {
@@ -67,11 +73,14 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
 
         @Override
         public void run() {
+            LOGGER.info("BEGIN Run");
             try {
                 GraphPropertyRunner graphPropertyRunner = prepareGraphPropertyRunner();
                 graphPropertyRunner.run();
             } catch (Exception ex) {
                 throw new LumifyException("GraphPropertyRunner failed", ex);
+            } finally {
+                LOGGER.info("END Run");
             }
         }
 
