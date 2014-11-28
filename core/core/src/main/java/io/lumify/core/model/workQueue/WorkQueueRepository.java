@@ -246,6 +246,22 @@ public abstract class WorkQueueRepository {
         return permissions;
     }
 
+    public void pushSessionExpiration(String userId, String sessionId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "sessionExpiration");
+
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        JSONArray sessionIds = new JSONArray();
+        sessionIds.put(sessionId);
+        permissions.put("sessionIds", sessionIds);
+        json.put("permissions", permissions);
+        json.putOpt("sessionId", sessionId);
+        broadcastJson(json);
+    }
+
     public void pushSystemNotification(SystemNotification notification) {
         JSONObject json = new JSONObject();
         json.put("type", "systemNotification");

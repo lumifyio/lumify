@@ -915,7 +915,7 @@ define([
                     menu.find('.layout-multi').hide();
                 }
 
-                if (WorkspaceExporters.exporters.length) {
+                if (menu.is('.graph-context-menu') && WorkspaceExporters.exporters.length) {
                     var $exporters = menu.find('.exporters');
 
                     if ($exporters.length === 0) {
@@ -923,7 +923,7 @@ define([
                           i18n('graph.contextmenu.export_workspace') +
                           '</a>' +
                           '<ul class="dropdown-menu exporters"></ul></li>'
-                         ).appendTo(menu).find('ul');
+                         ).appendTo(menu).before('<li class="divider"></li>').find('ul');
                     }
 
                     $exporters.empty();

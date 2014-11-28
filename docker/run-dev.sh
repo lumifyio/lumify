@@ -2,6 +2,7 @@
 
 FS_DIR=$(pwd)/fs
 
+mkdir -p ${FS_DIR}/opt/lumify
 mkdir -p ${FS_DIR}/var/log/hadoop
 mkdir -p ${FS_DIR}/var/log/accumulo
 mkdir -p ${FS_DIR}/var/log/elasticsearch
@@ -12,7 +13,8 @@ mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/data
 mkdir -p ${FS_DIR}/opt/rabbitmq_server-3.4.1/var
 
 sudo docker run \
-  -v ${FS_DIR}/../../:/opt/lumify \
+  -v ${FS_DIR}/../../:/opt/lumify-source \
+  -v ${FS_DIR}/opt/lumify:/opt/lumify \
   -v ${FS_DIR}/var/log:/var/log \
   -v ${FS_DIR}/tmp:/tmp \
   -v ${FS_DIR}/var/lib/hadoop-hdfs:/var/lib/hadoop-hdfs \

@@ -55,6 +55,14 @@ define([
             this.messagesPromise = this.dataRequestPromise.then(function() {
                     return Promise.require('util/messages');
                 }).then(this.setupMessages.bind(this));
+
+            if (typeof DEBUG !== 'undefined') {
+                DEBUG.logCacheStats = function() {
+                    self.worker.postMessage({
+                        type: 'postCacheStats'
+                    });
+                }
+            }
         });
 
         this.setupMessages = function(i18n) {
