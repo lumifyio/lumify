@@ -158,6 +158,6 @@ RUN \
   chmod +x /opt/start.sh
 
 # Set working environment
-VOLUME ["/tmp", "/var/log", "/home/root/lumify"]
+VOLUME ["/tmp", "/var/log", "/opt/lumify", "/opt/lumify-source"]
 WORKDIR /home/root/lumify
 CMD ["/opt/start.sh", "-d"]
