@@ -1,4 +1,4 @@
-package io.lumify.web.routes.vertex;
+package io.lumify.web.routes.edge;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -21,14 +21,14 @@ import org.securegraph.Vertex;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class VertexRemoveEdge extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexRemoveEdge.class);
+public class EdgeDelete extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EdgeDelete.class);
     private final Graph graph;
     private final WorkspaceHelper workspaceHelper;
     private final String entityHasImageIri;
 
     @Inject
-    public VertexRemoveEdge(
+    public EdgeDelete(
             final Graph graph,
             final WorkspaceHelper workspaceHelper,
             final UserRepository userRepository,

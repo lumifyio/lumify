@@ -7,9 +7,9 @@ define([
 
     var api = {
 
-        audit: function(vertexId) {
+        audit: function(edgeId) {
             return ajax('GET', '/edge/audit', {
-                graphVertexId: vertexId
+                edgeId: edgeId
             });
         },
 
@@ -18,7 +18,7 @@ define([
         },
 
         'delete': function(edgeId, sourceId, targetId) {
-            return ajax('DELETE', '/vertex/edge', {
+            return ajax('DELETE', '/edge', {
                 edgeId: edgeId,
                 sourceId: sourceId,
                 targetId: targetId
