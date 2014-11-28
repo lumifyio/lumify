@@ -112,6 +112,7 @@ define([
             this.on(document, 'toggleActivityPane', this.toggleActivityPane);
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
+            this.on(document, 'sessionExpiration', this.onSessionExpiration);
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
             this.on(document, 'hideMenu', this.onHideMenu);
 
@@ -389,9 +390,18 @@ define([
             });
         };
 
+        this.onSessionExpiration = function(event, data) {
+            if (this.ignoreSessionExpiration) {
+                return;
+            }
+
+            this.trigger('logout', { message: i18n('lumify.session.expired') });
+        };
+
         this.logout = function(event, data) {
             var self = this;
 
+            this.ignoreSessionExpiration = true;
             this.trigger('willLogout');
 
             if (LogoutExtensions.executeHandlers()) {
@@ -400,6 +410,7 @@ define([
                         window.location.reload();
                     })
                     .catch(function() {
+                        self.ignoreSessionExpiration = false;
                         require(['login'], function(Login) {
                             $(document.body)
                                 .removeClass('animatelogin animateloginstart')
@@ -413,6 +424,8 @@ define([
                             });
                         });
                     });
+            } else {
+                this.ignoreSessionExpiration = false;
             }
         };
 

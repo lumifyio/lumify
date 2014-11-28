@@ -95,15 +95,18 @@ require([
             this.handleSubmitButton(
                 button,
 
-                this.dataRequest('vertex', 'setProperty', {
-                    vertexId: this.$node.find('.vertexId').val(),
-                    propertyKey: li.find('input[name=key]').val(),
-                    propertyName: property.name || li.find('input[name=name]').val(),
-                    value: li.find('input[name=value]').val(),
-                    visibilitySource: li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
-                    justificationText: 'admin graph vertex editor',
-                    metadata: JSON.parse(li.find('textarea[name=metadata]').val()),
-                }, this.$node.find('.workspaceId').val())
+                this.dataRequest('vertex', 'setProperty',
+                    this.$node.find('.vertexId').val(),
+                    {
+                        key: li.find('input[name=key]').val(),
+                        name: property.name || li.find('input[name=name]').val(),
+                        value: li.find('input[name=value]').val(),
+                        visibilitySource: li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
+                        justificationText: 'admin graph vertex editor',
+                        metadata: JSON.parse(li.find('textarea[name=metadata]').val())
+                    },
+                    this.$node.find('.workspaceId').val()
+                )
                     .then(function() {
                         if (li.closest('.collapsible').next('.collapsible').length) {
                             li.removeClass('editing');
@@ -296,7 +299,12 @@ require([
                                     return _.chain(d)
                                         .clone()
                                         .tap(function(property) {
-                                            property.metadata = _.omit(property, notMetadata);
+                                            var vis = property.metadata &&
+                                                property.metadata['http://lumify.io#visibilityJson'];
+
+                                            property.metadata = _.omit(property.metadata, notMetadata);
+
+                                            property['http://lumify.io#visibilityJson'] = vis || { source:'' };
                                         })
                                         .pairs()
                                         .reject(function(pair) {

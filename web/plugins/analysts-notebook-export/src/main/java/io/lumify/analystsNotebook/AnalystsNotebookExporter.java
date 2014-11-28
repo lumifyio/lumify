@@ -69,7 +69,7 @@ public class AnalystsNotebookExporter {
             chart.setCustomImageCollection(CustomImage.createForVertices(vertices, ontologyRepository));
         }
 
-        String classificationBanner = "hello, world"; //aggregateClassificationClient.getClassificationBanner(vertices);
+        String classificationBanner = aggregateClassificationClient.getClassificationBanner(vertices);
 
         if (version.supports(AnalystsNotebookFeature.SUMMARY) && classificationBanner != null) {
             chart.setSummary(getSummary(classificationBanner));

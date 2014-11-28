@@ -49,6 +49,14 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
                 }
             }
 
+            JSONArray sessionIds = permissionsJson.optJSONArray("sessionIds");
+            if (sessionIds != null) {
+                String currentSessionId = r.getRequest().getSession().getId();
+                if (!isSessionIdInList(sessionIds, currentSessionId)) {
+                    return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
+                }
+            }
+
             JSONArray workspaces = permissionsJson.optJSONArray("workspaces");
             if (workspaces != null) {
                 String currentUserId = CurrentUser.get(r.getRequest().getSession());
@@ -88,6 +96,16 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
         for (int i = 0; i < users.length(); i++) {
             String userItemId = users.getString(i);
             if (userItemId.equals(userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isSessionIdInList(JSONArray sessionIds, String id) {
+        for (int i = 0; i < sessionIds.length(); i++) {
+            String sessionId = sessionIds.getString(i);
+            if (sessionId.equals(id)) {
                 return true;
             }
         }
