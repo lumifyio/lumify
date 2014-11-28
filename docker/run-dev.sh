@@ -24,6 +24,7 @@ sudo docker run \
   -p 5673:5673 `# RabbitMQ` \
   -p 8020:8020 `# Hadoop: HDFS` \
   -p 8032:8032 `# Hadoop: Resource Manager` \
+  -p 8042:8042 `# Hadoop: Node Manager: Web UI` \
   -p 8088:8088 `# Hadoop: Resource Manager: Web UI` \
   -p 9000:9000 `# Hadoop: Name Node: Metadata Service` \
   -p 9200:9200 `# Elasticsearch` \
@@ -34,7 +35,7 @@ sudo docker run \
   -p 50010:50010 `# Hadoop: Data Node: Data transfer` \
   -p 50020:50020 `# Hadoop: Data Node: Metadata operations` \
   -p 50030:50030 `# Hadoop: Job Tracker` \
-  -p 50060:50060 `# Hadoop: Node Manager: Web UI` \
+  -p 50060:50060 `# Hadoop: Task Tracker: Web UI` \
   -p 50070:50070 `# Hadoop: Name Node: Web UI` \
   -p 50075:50075 `# Hadoop: Data Node: Web UI` \
   -p 50090:50090 `# Hadoop: Secondary Name Node` \
