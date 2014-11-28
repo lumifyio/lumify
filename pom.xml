@@ -67,7 +67,8 @@
         <elasticsearch.version>1.4.0</elasticsearch.version>
         <evo.inflector.version>1.0.1</evo.inflector.version>
         <guice.version>3.0</guice.version>
-        <hadoop.version>2.5.0-mr1-cdh5.2.0</hadoop.version>
+        <hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+        <hadoop-test.version>2.5.0-mr1-cdh5.2.0</hadoop-test.version>
         <httpcomponents.httpclient.version>4.3.1</httpcomponents.httpclient.version>
         <inflector.version>0.7.0</inflector.version>
         <jackson.version>2.4.3</jackson.version>
@@ -407,6 +408,11 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-hdfs</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.elasticsearch</groupId>
                 <artifactId>elasticsearch</artifactId>
                 <version>${elasticsearch.version}</version>
@@ -578,7 +584,7 @@
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-test</artifactId>
-                <version>${hadoop.version}</version>
+                <version>${hadoop-test.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
