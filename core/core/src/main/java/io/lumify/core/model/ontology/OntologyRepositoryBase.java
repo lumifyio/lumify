@@ -73,6 +73,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         importResourceOwl("base.owl", "http://lumify.io", authorizations);
         importResourceOwl("user.owl", "http://lumify.io/user", authorizations);
         importResourceOwl("workspace.owl", "http://lumify.io/workspace", authorizations);
+        importResourceOwl("comment.owl", "http://lumify.io/comment", authorizations);
     }
 
     private void importResourceOwl(String fileName, String iri, Authorizations authorizations) {

@@ -119,17 +119,21 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
 
-        OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
-        if (property == null) {
-            throw new RuntimeException("Could not find property: " + propertyName);
-        }
-
         Object value;
-        try {
-            value = property.convertString(valueStr);
-        } catch (Exception ex) {
-            LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
-            throw new LumifyException(ex.getMessage(), ex);
+        if (propertyName == "http://lumify.io#comment") {
+            value = valueStr;
+        } else {
+            OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
+            if (property == null) {
+                throw new RuntimeException("Could not find property: " + propertyName);
+            }
+
+            try {
+                value = property.convertString(valueStr);
+            } catch (Exception ex) {
+                LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
+                throw new LumifyException(ex.getMessage(), ex);
+            }
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);

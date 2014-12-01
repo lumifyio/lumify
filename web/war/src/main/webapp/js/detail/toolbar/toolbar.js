@@ -34,6 +34,11 @@ define([
                 fileSelector: true
             }
         },
+        ADD_COMMENT: {
+            title: i18n('detail.toolbar.add.comment'),
+            subtitle: i18n('detail.toolbar.add.comment.subtitle'), // 'Add New Comment to Entity',
+            event: 'addNewComment'
+        },
         AUDIT: {
             title: i18n('detail.toolbar.audit'),
             cls: 'audits',
