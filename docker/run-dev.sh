@@ -3,6 +3,8 @@
 FS_DIR=$(pwd)/fs
 
 mkdir -p ${FS_DIR}/opt/lumify
+mkdir -p ${FS_DIR}/opt/lumify/logs
+mkdir -p ${FS_DIR}/opt/lumify/config
 mkdir -p ${FS_DIR}/var/log/hadoop
 mkdir -p ${FS_DIR}/var/log/accumulo
 mkdir -p ${FS_DIR}/var/log/elasticsearch
