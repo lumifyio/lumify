@@ -50,6 +50,7 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
         TwillController controller = weaveRunner.prepare(new GraphPropertyWorkerRunnable())
                 .withDependencies(LumifyLogger.class) // core
                 .withDependencies(MediaPropertyConfiguration.class) // graph-property-worker-base
+                .addJVMOptions("-Djava.net.preferIPv4Stack=true")
                 .addLogHandler(new PrinterLogHandler(new PrintWriter(System.out, true)))
                 .start();
 

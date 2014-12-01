@@ -68,6 +68,7 @@
         <evo.inflector.version>1.0.1</evo.inflector.version>
         <guice.version>3.0</guice.version>
         <hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+        <twill.version>0.4.0-incubating</twill.version>
         <hadoop-test.version>2.5.0-mr1-cdh5.2.0</hadoop-test.version>
         <httpcomponents.httpclient.version>4.3.1</httpcomponents.httpclient.version>
         <inflector.version>0.7.0</inflector.version>
@@ -412,6 +413,31 @@
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-hdfs</artifactId>
                 <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-yarn-common</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-yarn-client</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.twill</groupId>
+                <artifactId>twill-yarn</artifactId>
+                <version>${twill.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-yarn-common</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-yarn-client</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.elasticsearch</groupId>
