@@ -569,7 +569,12 @@ define([
                     .flatten()
                     .tap(function(list) {
                         if (pair[0] !== NO_GROUP) {
-                            list.splice(0, 0, [pair[0], pair[1].length]);
+                            list.splice(0, 0, [pair[0], {
+                                propertyCount: pair[1].length,
+                                valueCount: _.reduce(pair[1], function(sum, p) {
+                                    return sum + p[1].length;
+                                }, 0)
+                            }]);
                         }
                     })
                     .value();
@@ -694,7 +699,28 @@ define([
                 this.select('h1.collapsible-header strong').text(_.property('name'))
                 this.select('h1.collapsible-header .badge')
                     .text(function(d) {
-                        return F.number.pretty(d.count);
+                        return i18n('properties.groups.count',
+                            F.number.pretty(d.count.propertyCount),
+                            F.number.pretty(d.count.valueCount)
+                        );
+                    })
+                    .attr('title', function(d) {
+                        var propertyLabel = 'properties.groups.count.hover.property',
+                            valueLabel = 'properties.groups.count.hover.value';
+
+                        if (d.count.propertyCount > 1) {
+                            propertyLabel += '.plural';
+                        }
+                        if (d.count.valueCount > 1) {
+                            valueLabel += '.plural';
+                        }
+
+                        return [
+                            F.number.pretty(d.count.propertyCount),
+                            i18n(propertyLabel),
+                            F.number.pretty(d.count.valueCount),
+                            i18n(valueLabel)
+                        ].join(' ')
                     });
 
                 this.select('.property-name strong')
