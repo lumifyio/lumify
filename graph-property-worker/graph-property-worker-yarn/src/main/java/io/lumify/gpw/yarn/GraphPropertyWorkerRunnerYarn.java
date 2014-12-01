@@ -1,18 +1,12 @@
 package io.lumify.gpw.yarn;
 
-import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.cmdline.CommandLineBase;
-import io.lumify.core.exception.LumifyException;
-import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
-import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.gpw.MediaPropertyConfiguration;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
-import org.apache.twill.api.AbstractTwillRunnable;
 import org.apache.twill.api.TwillController;
 import org.apache.twill.api.TwillRunnerService;
 import org.apache.twill.api.logging.PrinterLogHandler;
@@ -53,7 +47,7 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
         TwillRunnerService weaveRunner = new YarnTwillRunnerService(new YarnConfiguration(), zkConnect);
         weaveRunner.startAndWait();
 
-        TwillController controller = weaveRunner.prepare(new GraphPropertyWorkerRunnable(getUser()))
+        TwillController controller = weaveRunner.prepare(new GraphPropertyWorkerRunnable())
                 .withDependencies(LumifyLogger.class) // core
                 .withDependencies(MediaPropertyConfiguration.class) // graph-property-worker-base
                 .addLogHandler(new PrinterLogHandler(new PrintWriter(System.out, true)))
@@ -61,33 +55,5 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
 
         Services.getCompletionFuture(controller).get();
         return 0;
-    }
-
-    private static class GraphPropertyWorkerRunnable extends AbstractTwillRunnable {
-        private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorkerRunnable.class);
-        private final User user;
-
-        public GraphPropertyWorkerRunnable(User user) {
-            this.user = user;
-        }
-
-        @Override
-        public void run() {
-            LOGGER.info("BEGIN Run");
-            try {
-                GraphPropertyRunner graphPropertyRunner = prepareGraphPropertyRunner();
-                graphPropertyRunner.run();
-            } catch (Exception ex) {
-                throw new LumifyException("GraphPropertyRunner failed", ex);
-            } finally {
-                LOGGER.info("END Run");
-            }
-        }
-
-        private GraphPropertyRunner prepareGraphPropertyRunner() {
-            GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
-            graphPropertyRunner.prepare(this.user);
-            return graphPropertyRunner;
-        }
     }
 }
