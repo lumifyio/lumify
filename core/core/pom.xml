@@ -116,7 +116,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>client-api</artifactId>
+            <artifactId>lumify-client-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>palantir-ontology-to-owl</artifactId>
+    <artifactId>lumify-palantir-ontology-to-owl</artifactId>
     <name>Lumify: Datasets: Palantir: Ontology to OWL</name>
 
     <dependencies>
