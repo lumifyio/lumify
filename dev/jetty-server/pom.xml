@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>lumify-dev-jetty-server</artifactId>
+    <packaging>jar</packaging>
     <name>Lumify: Dev: Jetty Server</name>
     <description>This project is only here to create a good classpath with the plugins for your IDE</description>
 

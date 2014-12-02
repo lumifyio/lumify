@@ -109,7 +109,7 @@ public class Twitter implements Handler {
             String randomPassword = UserRepository.createRandomPassword();
             user = userRepository.addUser(username, displayName, null, randomPassword, new String[0]);
         }
-        userRepository.recordLogin(user, httpRequest.getRemoteAddr());
+        userRepository.recordLogin(user, AuthenticationHandler.getRemoteAddr(httpRequest));
 
         CurrentUser.set(httpRequest, user.getUserId(), user.getUsername());
 
