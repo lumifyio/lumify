@@ -3,16 +3,18 @@ define([
     'hbs!./template',
     '../dropdowns/commentForm/commentForm',
     'util/withCollapsibleSections',
-    'util/vertex/formatters'
+    'util/vertex/formatters',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     CommentForm,
     withCollapsibleSections,
-    F) {
+    F,
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(Comments, withCollapsibleSections);
+    return defineComponent(Comments, withCollapsibleSections, withDataRequest);
 
     function Comments() {
 
@@ -59,9 +61,14 @@ define([
             selection.select('.comment-text').text(function(p) {
                 return p.value;
             });
-            selection.select('.user').each(function(p) {
-                $(this).text('Loading...');
-                F.vertex.metadata.userAsync(this, p.metadata['http://lumify.io#modifiedBy']);
+            var users = this.dataRequest('user', 'getUserNames', _.map(comments, function(p) {
+                return p.metadata['http://lumify.io#modifiedBy'];
+            }));
+            selection.select('.user').each(function(p, i) {
+                var $this = $(this).text('Loading...');
+                users.done(function(users) {
+                    $this.text(users[i]);
+                })
             });
             selection.select('.date')
                 .text(function(p) {

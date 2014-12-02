@@ -2,7 +2,7 @@
 define(['../util/ajax'], function(ajax) {
     'use strict';
 
-    return {
+    var api = {
         me: function(options) {
             return ajax('GET', '/user/me')
                 .then(function(user) {
@@ -25,6 +25,33 @@ define(['../util/ajax'], function(ajax) {
             });
         },
 
+        getUserNames: (function() {
+            var cachedNames = {};
+            return function getUserNames(userIds) {
+                var notCached = _.reject(userIds, function(userId) {
+                    return userId in cachedNames;
+                });
+
+                if (notCached.length) {
+                    return api.search({ userIds: notCached })
+                        .then(function(users) {
+                            var usersById = _.indexBy(users, 'id');
+                            return userIds.map(function(userId) {
+                                return cachedNames[userId] || (
+                                    cachedNames[userId] = usersById[userId].displayName
+                                );
+                            });
+                        });
+                } else {
+                    return Promise.resolve(
+                        userIds.map(function(userId) {
+                            return cachedNames[userId];
+                        })
+                    );
+                }
+            };
+        })(),
+
         search: function(options) {
             var data = {},
                 returnSingular = false;
@@ -37,7 +64,7 @@ define(['../util/ajax'], function(ajax) {
                     returnSingular = true;
                     data.userIds = [options.userIds];
                 } else {
-                    data.userIds = options.userIds;
+                    data.userIds = _.unique(options.userIds);
                 }
             }
             return ajax(
@@ -54,4 +81,6 @@ define(['../util/ajax'], function(ajax) {
         }
 
     };
+
+    return api;
 });
