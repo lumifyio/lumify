@@ -63,9 +63,13 @@ define([
                 $(this).text('Loading...');
                 F.vertex.metadata.userAsync(this, p.metadata['http://lumify.io#modifiedBy']);
             });
-            selection.select('.date').text(function(p) {
-                return F.date.dateTimeString(p.metadata['http://lumify.io#modifiedDate']);
-            });
+            selection.select('.date')
+                .text(function(p) {
+                    return F.date.relativeToNow(F.date.utc(p.metadata['http://lumify.io#modifiedDate']));
+                })
+                .attr('title', function(p) {
+                    return F.date.dateTimeString(p.metadata['http://lumify.io#modifiedDate']);
+                });
 
             // TODO: visibility
 
