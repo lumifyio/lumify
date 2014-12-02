@@ -8,19 +8,18 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.properties.types.DoubleLumifyProperty;
 import io.lumify.core.model.properties.types.IntegerLumifyProperty;
+import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.MediaPropertyConfiguration;
-import io.lumify.storm.util.FFprobeExecutor;
 import io.lumify.storm.util.FFprobeRotationUtil;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
+import org.securegraph.Visibility;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
 
@@ -38,6 +37,7 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoFrameExtractGraphPropertyWorker.class);
+    public static final String VISIBILITY = "videoFrame";
     private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
     private Double defaultFPSToExtract = 1.0;
     private ProcessRunner processRunner;
@@ -46,12 +46,14 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
         getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+        getAuthorizationRepository().addAuthorizationToGraph(VISIBILITY);
     }
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         IntegerLumifyProperty videoRotationProperty = new IntegerLumifyProperty(config.clockwiseRotationIri);
         Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement(), 0);
+        Visibility newVisibility = new LumifyVisibility(LumifyVisibility.and(data.getVisibility(), VideoFrameExtractGraphPropertyWorker.VISIBILITY)).getVisibility();
 
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
@@ -79,7 +81,8 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     Map<String, Object> metadata = data.createPropertyMetadata();
                     metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), "image/png");
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
-                    MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVisibility());
+
+                    MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, newVisibility);
                     propertyKeys.add(key);
                     mutation.save(getAuthorizations());
                 } finally {

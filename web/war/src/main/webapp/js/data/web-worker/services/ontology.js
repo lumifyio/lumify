@@ -199,21 +199,21 @@ define([
                         var concepts = results[0],
                             ontology = results[1],
                             list = _.sortBy(ontology.relationships, 'displayName'),
-                            groupedBySource = {};
+                            groupedByRelated = {};
 
                         return {
                             list: list,
                             byId: _.indexBy(ontology.relationships, 'id'),
                             byTitle: _.indexBy(ontology.relationships, 'title'),
-                            groupedBySourceDestConcepts: conceptGrouping(concepts, list, groupedBySource),
-                            groupedBySourceConcept: groupedBySource
+                            groupedBySourceDestConcepts: conceptGrouping(concepts, list, groupedByRelated),
+                            groupedByRelatedConcept: groupedByRelated
                         };
                     });
 
                 // Calculates cache with all possible mappings from source->dest
                 // including all possible combinations of source->children and
                 // dest->children
-                function conceptGrouping(concepts, relationships, groupedBySource) {
+                function conceptGrouping(concepts, relationships, groupedByRelated) {
                     var groups = {},
                         addToAllSourceDestChildrenGroups = function(r, source, dest) {
                             var key = genSourceDestKey(source, dest);
@@ -221,13 +221,19 @@ define([
                             if (!groups[key]) {
                                 groups[key] = [];
                             }
-                            if (!groupedBySource[source]) {
-                                groupedBySource[source] = [];
+                            if (!groupedByRelated[source]) {
+                                groupedByRelated[source] = [];
+                            }
+                            if (!groupedByRelated[dest]) {
+                                groupedByRelated[dest] = [];
                             }
 
                             groups[key].push(r);
-                            if (groupedBySource[source].indexOf(dest) === -1) {
-                                groupedBySource[source].push(dest);
+                            if (groupedByRelated[source].indexOf(dest) === -1) {
+                                groupedByRelated[source].push(dest);
+                            }
+                            if (groupedByRelated[dest].indexOf(source) === -1) {
+                                groupedByRelated[dest].push(source);
                             }
 
                             var destConcept = concepts.byId[dest]
