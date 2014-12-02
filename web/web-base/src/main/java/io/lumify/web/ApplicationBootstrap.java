@@ -18,6 +18,7 @@ import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereInterceptor;
 import org.atmosphere.cpr.AtmosphereServlet;
+import org.atmosphere.cpr.SessionSupport;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
 import org.securegraph.Graph;
 
@@ -114,6 +115,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
     private void addAtmosphereServlet(ServletContext context, Configuration config) {
         ServletRegistration.Dynamic servlet = context.addServlet(ATMOSPHERE_SERVLET_NAME, AtmosphereServlet.class);
+        context.addListener(SessionSupport.class);
         servlet.addMapping("/messaging/*");
         servlet.setAsyncSupported(true);
         servlet.setLoadOnStartup(0);

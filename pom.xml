@@ -64,7 +64,7 @@
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>
         <curator.version>2.7.0</curator.version>
-        <elasticsearch.version>1.4.0</elasticsearch.version>
+        <elasticsearch.version>1.4.1</elasticsearch.version>
         <evo.inflector.version>1.0.1</evo.inflector.version>
         <guice.version>3.0</guice.version>
         <hadoop.version>2.5.0-cdh5.2.0</hadoop.version>

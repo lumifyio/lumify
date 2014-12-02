@@ -120,19 +120,19 @@ EXPOSE 9997 9999 50091 50095
 
 # Install ElasticSearch
 RUN \
-  wget -O /opt/elasticsearch-1.4.0.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.0.tar.gz \
-  && tar -xzf /opt/elasticsearch-1.4.0.tar.gz -C /opt \
-  && rm /opt/elasticsearch-1.4.0.tar.gz \
-  && ln -s /opt/elasticsearch-1.4.0 /opt/elasticsearch \
-  && rm -rf /opt/elasticsearch-1.4.0/logs \
+  wget -O /opt/elasticsearch-1.4.1.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.1.tar.gz \
+  && tar -xzf /opt/elasticsearch-1.4.1.tar.gz -C /opt \
+  && rm /opt/elasticsearch-1.4.1.tar.gz \
+  && ln -s /opt/elasticsearch-1.4.1 /opt/elasticsearch \
+  && rm -rf /opt/elasticsearch-1.4.1/logs \
   && mkdir -p /var/log/elasticsearch \
-  && ln -s /var/log/elasticsearch /opt/elasticsearch-1.4.0/logs \
+  && ln -s /var/log/elasticsearch /opt/elasticsearch-1.4.1/logs \
   && /opt/elasticsearch/bin/plugin -install mobz/elasticsearch-head \
   && /opt/elasticsearch/bin/plugin -install org.securegraph/securegraph-elasticsearch-plugin/0.8.0
 
 ENV PATH $PATH:/opt/elasticsearch/bin
 
-VOLUME ["/opt/elasticsearch-1.4.0/data/"]
+VOLUME ["/opt/elasticsearch-1.4.1/data/"]
 EXPOSE 9200 9300
 
 # Install RabbitMQ
