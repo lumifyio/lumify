@@ -5,7 +5,7 @@
 
     <groupId>io.lumify</groupId>
     <artifactId>lumify-build-tools</artifactId>
-    <version>0.4.0.20141124</version>
+    <version>0.4.1-SNAPSHOT</version>
 
     <name>Lumify Root: Build Tools</name>
     <description>Common build tools and configurations for Lumify projects.</description>
