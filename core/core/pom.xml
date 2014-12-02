@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify-core-group</artifactId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
     <artifactId>lumify-core</artifactId>
     <packaging>jar</packaging>

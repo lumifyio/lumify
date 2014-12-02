@@ -23,6 +23,11 @@ define(['require'], function(require) {
                     })
                 });
             },
+            sessionExpiration: function(data) {
+                dispatchMain('rebroadcastEvent', {
+                    eventName: 'sessionExpiration'
+                });
+            },
             userStatusChange: (function() {
                 // TODO: put into store
                 var previousById = {};

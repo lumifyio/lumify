@@ -7,15 +7,13 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify-datasets-group</artifactId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>lumify-wikipedia</artifactId>
     <name>Lumify: Datasets: Wikipedia</name>
 
     <properties>
-        <!-- Dependency Versions -->
-        <lumify.version>0.4.0.20141124</lumify.version>
         <sweble.version>2.0.0</sweble.version>
         <jdom.version>2.0.2</jdom.version>
     </properties>
@@ -24,23 +22,4 @@
         <module>core</module>
         <module>mr</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>lumify-releases</id>
-            <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
-                 To test clear your local m2 repo of the lumify root pom, then maven compile. -->
-            <url>http://bits.lumify.io/m2/releases/</url>
-        </repository>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>interval:60</updatePolicy>
-            </snapshots>
-            <id>lumify-snapshots</id>
-            <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
-                 To test clear your local m2 repo of the lumify root pom, then maven compile. -->
-            <url>http://bits.lumify.io/m2/snapshots/</url>
-        </repository>
-    </repositories>
 </project>

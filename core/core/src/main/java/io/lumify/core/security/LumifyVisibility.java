@@ -14,12 +14,25 @@ public class LumifyVisibility {
         if (visibility == null || visibility.length() == 0) {
             this.visibility = new Visibility("");
         } else {
-            this.visibility = new Visibility("(" + visibility + ")|" + SUPER_USER_VISIBILITY_STRING);
+            this.visibility = addSuperUser(visibility);
+        }
+    }
+
+    public LumifyVisibility(Visibility visibility) {
+        if (visibility == null || visibility.getVisibilityString().length() == 0
+                || visibility.getVisibilityString().contains(SUPER_USER_VISIBILITY_STRING)) {
+            this.visibility = visibility;
+        } else {
+            this.visibility = addSuperUser(visibility.getVisibilityString());
         }
     }
 
     public Visibility getVisibility() {
         return visibility;
+    }
+
+    private Visibility addSuperUser(String visibility) {
+        return new Visibility("(" + visibility + ")|" + SUPER_USER_VISIBILITY_STRING);
     }
 
     @Override

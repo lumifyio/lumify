@@ -95,7 +95,7 @@ define([
             this.dataRequest('vertex', 'edges', this.attr.data.id, {
                 offset: paging.offset,
                 size: paging.size,
-                label: $section.data('label')
+                edgeLabel: $section.data('label')
             })
                 .then(function(result) {
                     var relationships = result.relationships;
