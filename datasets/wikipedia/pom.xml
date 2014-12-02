@@ -16,7 +16,7 @@
     <properties>
         <!-- Dependency Versions -->
         <lumify.version>0.4.0.20141124</lumify.version>
-        <sweble.version>2.0.0-alpha-3-SNAPSHOT</sweble.version>
+        <sweble.version>2.0.0</sweble.version>
         <jdom.version>2.0.2</jdom.version>
     </properties>
 
@@ -41,16 +41,6 @@
             <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
                  To test clear your local m2 repo of the lumify root pom, then maven compile. -->
             <url>http://bits.lumify.io/m2/snapshots/</url>
-        </repository>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-            <id>informatik.uni-erlangen-snapshots</id>
-            <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
-                 To test clear your local m2 repo of the lumify root pom, then maven compile. -->
-            <url>http://mojo.informatik.uni-erlangen.de/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 </project>
