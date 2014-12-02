@@ -1,5 +1,6 @@
 package io.lumify.gpw.yarn;
 
+import com.google.common.util.concurrent.Service;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
@@ -16,12 +17,16 @@ import org.apache.twill.common.Services;
 import org.apache.twill.yarn.YarnTwillRunnerService;
 
 import java.io.PrintWriter;
+import java.util.List;
+
+import static org.securegraph.util.IterableUtils.toList;
 
 public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
     private static final String CMD_OPT_ZOOKEEPER = "zk";
     private static final String CMD_OPT_INSTANCES = "instances";
     private static final String CMD_OPT_VIRTUAL_CORES = "virtual-cores";
     private static final String CMD_OPT_MEMORY = "memory";
+    private static final String CMD_OPT_ALTER = "alter";
     private static final int DEFAULT_VIRTUAL_CORES = 1;
     private static final String DEFAULT_MEMORY = "512m";
 
@@ -70,6 +75,13 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
                         .create()
         );
 
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_ALTER)
+                        .withDescription("If alter is specified this will change an existing application")
+                        .create()
+        );
+
         return options;
     }
 
@@ -82,20 +94,46 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
         TwillRunnerService weaveRunner = new YarnTwillRunnerService(new YarnConfiguration(), zkConnect);
         weaveRunner.startAndWait();
 
-        ResourceSpecification resourceSpecification = ResourceSpecification.Builder.with()
-                .setVirtualCores(virtualCores)
-                .setMemory(memory.getSize(), memory.getUnits())
-                .setInstances(instances)
-                .build();
-        TwillController controller = weaveRunner.prepare(new GraphPropertyWorkerRunnable(), resourceSpecification)
-                .withDependencies(LumifyLogger.class) // core
-                .withDependencies(MediaPropertyConfiguration.class) // graph-property-worker-base
-                .addJVMOptions("-Djava.net.preferIPv4Stack=true")
-                .addLogHandler(new PrinterLogHandler(new PrintWriter(System.out, true)))
-                .start();
+        if (cmd.hasOption(CMD_OPT_ALTER)) {
+            List<TwillController> controllers = getControllers(weaveRunner);
+            LOGGER.info("Found %d controllers", controllers.size());
+            for (TwillController controller : controllers) {
+                LOGGER.info("Changing instances to %d on controller with run id: %s", instances, controller.getRunId());
+                Integer result = controller
+                        .changeInstances(GraphPropertyWorkerApplication.RUNNABLE_NAME, instances)
+                        .get();
+                LOGGER.info("results: %s", result.toString());
+            }
+        } else {
+            TwillController controller = weaveRunner.prepare(new GraphPropertyWorkerApplication(virtualCores, memory, instances))
+                    .withDependencies(LumifyLogger.class) // core
+                    .withDependencies(MediaPropertyConfiguration.class) // graph-property-worker-base
+                    .addJVMOptions("-Djava.net.preferIPv4Stack=true")
+                    .addLogHandler(new PrinterLogHandler(new PrintWriter(System.out, true)))
+                    .start();
 
-        Services.getCompletionFuture(controller).get();
+            Service.State result = Services.getCompletionFuture(controller).get();
+            LOGGER.info("results: %s", result.toString());
+        }
         return 0;
+    }
+
+    private List<TwillController> getControllers(TwillRunnerService weaveRunner) throws InterruptedException {
+        int timeout = 0;
+        List<TwillController> controllers = null;
+        while (timeout < 10) {
+            controllers = toList(weaveRunner.lookup(GraphPropertyWorkerApplication.NAME));
+            if (controllers.size() > 0) {
+                break;
+            }
+            LOGGER.debug("waiting for controller list...");
+            Thread.sleep(1000);
+            timeout++;
+        }
+        if (controllers.size() == 0) {
+            throw new LumifyException("Could not find applications with name: " + GraphPropertyWorkerApplication.NAME);
+        }
+        return controllers;
     }
 
     private Size parseSize(String value) {
@@ -113,21 +151,4 @@ public class GraphPropertyWorkerRunnerYarn extends CommandLineBase {
         return new Size(size, units);
     }
 
-    private static class Size {
-        private final int size;
-        private final ResourceSpecification.SizeUnit units;
-
-        private Size(int size, ResourceSpecification.SizeUnit units) {
-            this.size = size;
-            this.units = units;
-        }
-
-        public int getSize() {
-            return size;
-        }
-
-        public ResourceSpecification.SizeUnit getUnits() {
-            return units;
-        }
-    }
 }
