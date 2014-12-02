@@ -90,149 +90,6 @@ define([
                         parseInt(self.config['properties.multivalue.defaultVisibleCount'], 10)
                     )
                 );
-
-                /*
-                row = this.tableRoot.selectAll('tr.property-row')
-                    .data(displayProperties)
-                    .call(function() {
-                        this.enter()
-                            .insert('tr', '.buttons-row')
-                            .call(function() {
-                                this.append('td')
-                                    .attr('class', 'property-name')
-                                    .attr('width', '40%')
-                                    .append('strong')
-
-                                this.append('td')
-                                    .attr('class', 'property-value')
-                                    .attr('colspan', 2)
-                                    .call(function() {
-                                        this.append('span').attr('class', 'value');
-                                        this.append('button')
-                                            .attr('class', 'info')
-                                        this.append('span').attr('class', 'visibility');
-                                        this.append('a').attr('class', 'show-more');
-                                    })
-                            });
-
-                        var propertyCountByName = {},
-                            propertyPreventHideByName = {},
-                            maxProperties = parseInt(self.config['properties.multivalue.defaultVisibleCount'], 10);
-
-                        this.each(function(property) {
-                            var classes = ['property-row'],
-                                count = propertyCountByName[property.name] || 0,
-                                $this = $(this);
-
-                            propertyCountByName[property.name] = ++count;
-
-                            if (count > maxProperties) {
-                                if ($this.hasClass('unhide')) {
-                                    propertyPreventHideByName[property.name] = true;
-                                    classes.push('unhide');
-                                } else if (count === maxProperties + 1) {
-                                    $this.prev('.property-row').addClass('last-not-hidden');
-                                }
-
-                                if (propertyPreventHideByName[property.name] !== true) {
-                                    classes.push('hidden');
-                                }
-                            }
-
-                            $this.attr('class', classes.join(' '));
-                        });
-                        this.select('.show-more')
-                            .text(function(property) {
-                                return i18n(
-                                    'properties.button.show_more',
-                                    F.number.pretty(propertyCountByName[property.name] - maxProperties)
-                                );
-                            })
-                            .on('click', function() {
-                                $(this)
-                                    .closest('tr').removeClass('last-not-hidden')
-                                    .nextUntil(':not(.hidden)').addClass('unhide');
-                            })
-                        this.select('button.info')
-                            .on('click', function(property) {
-                                d3.event.stopPropagation();
-                                d3.event.preventDefault();
-                                self.showPropertyInfo(this, property);
-                            });
-                    });
-
-            row.each(function(d) {
-                $(this).removePrefixedClasses('property-row-')
-                    .addClass('property-row-' + F.className.to(d.name + d.key));
-            });
-
-            row.select('td.property-name strong')
-                .text(function(d, index) {
-                    if (index > 0 && displayProperties[index - 1].name === d.name) {
-                        return '';
-                    }
-
-                    if (isVisibility(d)) {
-                        return i18n('visibility.label');
-                    }
-
-                    var ontologyProperty = self.ontologyProperties.byTitle[d.name];
-                    if (ontologyProperty) {
-                        return ontologyProperty.displayName;
-                    }
-
-                    if (d.displayName) {
-                        return d.displayName;
-                    }
-
-                    console.warn('No ontology definition for ', d.name);
-                    return d.name;
-                });
-
-            row.select('td.property-value')
-                .each(function(property) {
-                    var valueSpan = d3.select(this).select('.value').node(),
-                        visibilitySpan = d3.select(this).select('.visibility').node(),
-                        visibility = isVisibility(property),
-                        ontologyProperty = self.ontologyProperties.byTitle[property.name],
-                        dataType = ontologyProperty && ontologyProperty.dataType,
-                        displayType = ontologyProperty && ontologyProperty.displayType;
-
-                    valueSpan.textContent = '';
-                    visibilitySpan.textContent = '';
-
-                    if (visibility) {
-                        dataType = 'visibility';
-                    } else if (property.hideVisibility !== true) {
-                        F.vertex.properties.visibility(
-                            visibilitySpan, { value: property[VISIBILITY_NAME] }, self.attr.data.id);
-                    }
-
-                    $(this).find('button').toggle(Boolean(
-                        !property.hideInfo &&
-                        (Privileges.canEDIT || F.vertex.hasMetadata(property))
-                    ));
-
-                    if (displayType && F.vertex.properties[displayType]) {
-                        F.vertex.properties[displayType](valueSpan, property, self.attr.data.id);
-                        return;
-                    } else if (dataType && F.vertex.properties[dataType]) {
-                        F.vertex.properties[dataType](valueSpan, property, self.attr.data.id);
-                        return;
-                    }
-
-                    if (isJustification(property)) {
-                        require(['util/vertex/justification/viewer'], function(JustificationViewer) {
-                            $(valueSpan).teardownAllComponents();
-                            JustificationViewer.attachTo(valueSpan, property.justificationData);
-                        });
-                        return;
-                    }
-
-                    valueSpan.textContent = F.vertex.displayProp(property);
-                });
-            row.exit().remove()
-            */
         };
 
         this.transformPropertiesForUpdate = function(properties) {
@@ -712,7 +569,12 @@ define([
                     .flatten()
                     .tap(function(list) {
                         if (pair[0] !== NO_GROUP) {
-                            list.splice(0, 0, [pair[0], pair[1].length]);
+                            list.splice(0, 0, [pair[0], {
+                                propertyCount: pair[1].length,
+                                valueCount: _.reduce(pair[1], function(sum, p) {
+                                    return sum + p[1].length;
+                                }, 0)
+                            }]);
                         }
                     })
                     .value();
@@ -837,7 +699,28 @@ define([
                 this.select('h1.collapsible-header strong').text(_.property('name'))
                 this.select('h1.collapsible-header .badge')
                     .text(function(d) {
-                        return F.number.pretty(d.count);
+                        return i18n('properties.groups.count',
+                            F.number.pretty(d.count.propertyCount),
+                            F.number.pretty(d.count.valueCount)
+                        );
+                    })
+                    .attr('title', function(d) {
+                        var propertyLabel = 'properties.groups.count.hover.property',
+                            valueLabel = 'properties.groups.count.hover.value';
+
+                        if (d.count.propertyCount > 1) {
+                            propertyLabel += '.plural';
+                        }
+                        if (d.count.valueCount > 1) {
+                            valueLabel += '.plural';
+                        }
+
+                        return [
+                            F.number.pretty(d.count.propertyCount),
+                            i18n(propertyLabel),
+                            F.number.pretty(d.count.valueCount),
+                            i18n(valueLabel)
+                        ].join(' ')
                     });
 
                 this.select('.property-name strong')

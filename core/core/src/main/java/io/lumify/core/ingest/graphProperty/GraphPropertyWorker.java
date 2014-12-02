@@ -8,6 +8,7 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
+import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
@@ -30,6 +31,7 @@ public abstract class GraphPropertyWorker {
     private WorkQueueRepository workQueueRepository;
     private OntologyRepository ontologyRepository;
     private AuditRepository auditRepository;
+    private AuthorizationRepository authorizationRepository;
     private GraphPropertyWorkerPrepareData workerPrepareData;
     private Configuration configuration;
     private WorkspaceRepository workspaceRepository;
@@ -144,6 +146,15 @@ public abstract class GraphPropertyWorker {
     @Inject
     public final void setVisibilityTranslator(VisibilityTranslator visibilityTranslator) {
         this.visibilityTranslator = visibilityTranslator;
+    }
+
+    @Inject
+    public final void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
+        this.authorizationRepository = authorizationRepository;
+    }
+
+    protected AuthorizationRepository getAuthorizationRepository() {
+        return authorizationRepository;
     }
 
     /**
