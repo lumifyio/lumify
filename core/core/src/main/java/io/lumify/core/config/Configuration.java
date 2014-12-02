@@ -20,6 +20,7 @@ public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+    public static final String BASE_URL = "base.url";
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_SOURCE_DIRECTORY = "hdfsLibcache.sourceDirectory";
     public static final String HDFS_LIB_CACHE_TEMP_DIRECTORY = "hdfsLibcache.tempDirectory";

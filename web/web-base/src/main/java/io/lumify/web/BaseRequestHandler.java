@@ -10,6 +10,8 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.App;
 import io.lumify.miniweb.Handler;
 import io.lumify.miniweb.HandlerChain;
@@ -43,8 +45,6 @@ public abstract class BaseRequestHandler implements Handler {
     public static final String LOCALE_COUNTRY_PARAMETER = "localeCountry";
     public static final String LOCALE_VARIANT_PARAMETER = "localeVariant";
     protected static final int EXPIRES_1_HOUR = 60 * 60;
-    protected static final int EXPIRES_1_DAY = 24 * 60 * 60;
-    private static final String RFC1123_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
     private final Configuration configuration;
@@ -58,6 +58,26 @@ public abstract class BaseRequestHandler implements Handler {
 
     @Override
     public abstract void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception;
+
+    protected String getBaseUrl(HttpServletRequest request) {
+        String configuredBaseUrl = configuration.get(Configuration.BASE_URL, null);
+        if (configuredBaseUrl != null && configuredBaseUrl.trim().length() > 0) {
+            return configuredBaseUrl;
+        }
+
+        String scheme = request.getScheme();
+        String serverName = request.getServerName();
+        int port = request.getServerPort();
+        String contextPath = request.getContextPath();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(scheme).append("://").append(serverName);
+        if (!(scheme.equals("http") && port == 80 || scheme.equals("https") && port == 443)) {
+            sb.append(":").append(port);
+        }
+        sb.append(contextPath);
+        return sb.toString();
+    }
 
     protected Locale getLocale(HttpServletRequest request) {
         String language = getOptionalParameter(request, LOCALE_LANGUAGE_PARAMETER);

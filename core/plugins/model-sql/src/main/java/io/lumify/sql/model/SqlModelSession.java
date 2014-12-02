@@ -85,7 +85,7 @@ public class SqlModelSession extends ModelSession {
 
     @Override
     public void close() {
-        throw new RuntimeException("Not Implemented");
+        // NOP was throw new RuntimeException("Not Implemented");
     }
 
     @Override
