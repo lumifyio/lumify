@@ -167,9 +167,18 @@ define([
                             }
 
                             if (self.attr.limitRelatedToConceptId &&
-                               r && r.groupedBySourceConcept &&
-                               r.groupedBySourceConcept[self.attr.limitRelatedToConceptId]) {
-                                if (r.groupedBySourceConcept[self.attr.limitRelatedToConceptId].indexOf(c.id) === -1) {
+                               r && r.groupedByRelatedConcept &&
+                               r.groupedByRelatedConcept[self.attr.limitRelatedToConceptId]) {
+                                if (r.groupedByRelatedConcept[self.attr.limitRelatedToConceptId].indexOf(c.id) === -1) {
+                                    return false;
+                                }
+                            }
+
+                            if (self.attr.limitRelatedToConceptId) {
+                                var relatedToConcept = concepts.byId[self.attr.limitRelatedToConceptId];
+                                if (relatedToConcept &&
+                                    relatedToConcept.addRelatedConceptWhiteList &&
+                                    relatedToConcept.addRelatedConceptWhiteList.indexOf(c.id) === -1) {
                                     return false;
                                 }
                             }
