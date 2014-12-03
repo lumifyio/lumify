@@ -87,6 +87,7 @@ define([
                 return p.value;
             });
             selection.select('.visibility').each(function(p) {
+                this.textContent = '';
                 F.vertex.properties.visibility(
                     this,
                     { value: p.metadata && p.metadata[VISIBILITY_NAME] },
