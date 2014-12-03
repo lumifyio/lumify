@@ -14,6 +14,8 @@ define([
     withDataRequest) {
     'use strict';
 
+    var VISIBILITY_NAME = 'http://lumify.io#visibilityJson';
+
     return defineComponent(Comments, withCollapsibleSections, withDataRequest);
 
     function Comments() {
@@ -48,7 +50,8 @@ define([
         };
 
         this.update = function() {
-            var comments = _.chain(this.attr.data.properties)
+            var self = this,
+                comments = _.chain(this.attr.data.properties)
                     .where({ name: 'http://lumify.io/comment#entry' })
                     .sortBy(function(p) {
                         return p.metadata['http://lumify.io#modifiedDate'];
@@ -67,6 +70,7 @@ define([
                 .append('li').attr('class', 'comment')
                 .call(function() {
                     this.append('div').attr('class', 'comment-text')
+                    this.append('span').attr('class', 'visibility')
                     this.append('span').attr('class', 'user')
                     this.append('span').attr('class', 'date')
                 })
@@ -74,6 +78,13 @@ define([
             selection.select('.comment-text').text(function(p) {
                 return p.value;
             });
+            selection.select('.visibility').each(function(p) {
+                F.vertex.properties.visibility(
+                    this,
+                    { value: p.metadata && p.metadata[VISIBILITY_NAME] },
+                    self.attr.data.id
+                );
+            })
             var users = this.dataRequest('user', 'getUserNames', _.map(comments, function(p) {
                 return p.metadata['http://lumify.io#modifiedBy'];
             }));

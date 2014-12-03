@@ -32,6 +32,7 @@ define([
             this.on('click', {
                 primarySelector: this.onSave
             });
+            this.on('visibilitychange', this.onVisibilityChange);
 
             this.$node.html(commentTemplate({
                 graphVertexId: this.attr.data.id,
@@ -50,11 +51,16 @@ define([
                 });
             });
 
-            this.update();
+            this.checkValid();
         });
 
         this.onChange = function(event) {
-            this.update();
+            this.checkValid();
+        };
+
+        this.onVisibilityChange = function(event, data) {
+            this.visibilitySource = data;
+            this.checkValid();
         };
 
         this.onSave = function(event) {
@@ -65,7 +71,7 @@ define([
             this.dataRequest(this.attr.type, 'setProperty', this.attr.data.id, {
                 name: 'http://lumify.io/comment#entry',
                 value: this.getValue(),
-                visibilitySource: '' // TODO:
+                visibilitySource: this.visibilitySource && this.visibilitySource.value || ''
             })
                 .catch(function() {
                     self.select('primarySelector').removeClass('loading').removeAttr('disabled');
@@ -79,10 +85,10 @@ define([
             return $.trim(this.select('inputSelector').val());
         };
 
-        this.update = function() {
+        this.checkValid = function() {
             var val = this.getValue();
 
-            if (val.length) {
+            if (val.length && this.visibilitySource && this.visibilitySource.valid) {
                 this.select('primarySelector').removeAttr('disabled');
             } else {
                 this.select('primarySelector').attr('disabled', true);
