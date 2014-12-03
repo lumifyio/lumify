@@ -57,6 +57,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty TIME_FORMULA = new StringLumifyProperty("http://lumify.io#timeFormula");
     public static final StringLumifyProperty TITLE = new StringLumifyProperty("http://lumify.io#title");
     public static final StringLumifyProperty TITLE_FORMULA = new StringLumifyProperty("http://lumify.io#titleFormula");
+    public static final StringLumifyProperty COMMENT = new StringLumifyProperty("http://lumify.io/comment#entry");
 
     public static final DetectedObjectProperty DETECTED_OBJECT = new DetectedObjectProperty("http://lumify.io#detectedObject");
 

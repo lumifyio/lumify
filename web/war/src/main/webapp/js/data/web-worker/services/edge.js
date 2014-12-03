@@ -31,6 +31,34 @@ define([
             });
         },
 
+        setProperty: function(edgeId, property, optionalWorkspaceId) {
+            var url = '/edge/' + (
+                property.name === 'http://lumify.io/comment#entry' ?
+                'comment' : 'property'
+            );
+
+            return ajax('POST', url, _.tap({
+                 edgeId: edgeId,
+                 propertyName: property.name,
+                 value: property.value,
+                 visibilitySource: property.visibilitySource,
+                 justificationText: property.justificationText
+            }, function(params) {
+                if (property.sourceInfo) {
+                    params.sourceInfo = JSON.stringify(property.sourceInfo);
+                }
+                if (property.key) {
+                    params.propertyKey = property.key;
+                }
+                if (property.metadata) {
+                    params.metadata = JSON.stringify(property.metadata)
+                }
+                if (optionalWorkspaceId) {
+                    params.workspaceId = optionalWorkspaceId;
+                }
+            }));
+        },
+
         store: storeHelper.createStoreAccessorOrDownloader(
             'edge', 'edgeId', null,
             function(toRequest) {

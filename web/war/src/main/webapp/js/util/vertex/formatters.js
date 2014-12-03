@@ -47,10 +47,11 @@ define([
                 userAsync: function(el, userId) {
                     return Promise.require('util/withDataRequest')
                         .then(function(withDataRequest) {
-                            return withDataRequest.dataRequest('user', 'search', { userIds: userId })
+                            console.trace()
+                            return withDataRequest.dataRequest('user', 'getUserNames', [userId])
                         })
-                        .then(function(user) {
-                            el.textContent = user && user.displayName || i18n('user.unknown.displayName');
+                        .then(function(users) {
+                            el.textContent = users && users[0] || i18n('user.unknown.displayName');
                         })
                 }
             },
