@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
@@ -37,7 +38,7 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoFrameExtractGraphPropertyWorker.class);
-    public static final String VISIBILITY = "videoFrame";
+
     private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
     private Double defaultFPSToExtract = 1.0;
     private ProcessRunner processRunner;
@@ -46,14 +47,14 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
         getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
-        getAuthorizationRepository().addAuthorizationToGraph(VISIBILITY);
+        getAuthorizationRepository().addAuthorizationToGraph(VideoFrameInfo.VISIBILITY);
     }
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         IntegerLumifyProperty videoRotationProperty = new IntegerLumifyProperty(config.clockwiseRotationIri);
         Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement(), 0);
-        Visibility newVisibility = new LumifyVisibility(LumifyVisibility.and(data.getVisibility(), VideoFrameExtractGraphPropertyWorker.VISIBILITY)).getVisibility();
+        Visibility newVisibility = new LumifyVisibility(LumifyVisibility.and(getVisibilityTranslator().toVisibilityNoSuperUser(data.getVisibilityJson()), VideoFrameInfo.VISIBILITY)).getVisibility();
 
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();

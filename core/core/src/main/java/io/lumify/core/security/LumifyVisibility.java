@@ -46,4 +46,5 @@ public class LumifyVisibility {
         }
         return new Visibility("(" + visibility.getVisibilityString() + ")&(" + additionalVisibility + ")");
     }
+
 }
