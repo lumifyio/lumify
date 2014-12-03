@@ -14,31 +14,29 @@ define([
         currentDataRequestId = 0,
         requests = {};
 
-    $(function() {
-        $(document)
-            .on('dataRequestStarted', function(event, data) {
-                var request = requests[data.requestId];
-                if (request) {
-                    clearTimeout(request.timeoutTimer);
+    $(document)
+        .on('dataRequestStarted', function(event, data) {
+            var request = requests[data.requestId];
+            if (request) {
+                clearTimeout(request.timeoutTimer);
+            }
+        })
+        .on('dataRequestProgress', function(event, data) {
+            var request = requests[data.requestId];
+            if (request) {
+                request.promiseFulfill.updateProgress(data.progress);
+            }
+        })
+        .on('dataRequestCompleted', function(event, data) {
+            var request = cleanRequest(data.requestId);
+            if (request) {
+                if (data.success) {
+                    request.promiseFulfill(data.result);
+                } else {
+                    request.promiseReject(data.error);
                 }
-            })
-            .on('dataRequestProgress', function(event, data) {
-                var request = requests[data.requestId];
-                if (request) {
-                    request.promiseFulfill.updateProgress(data.progress);
-                }
-            })
-            .on('dataRequestCompleted', function(event, data) {
-                var request = cleanRequest(data.requestId);
-                if (request) {
-                    if (data.success) {
-                        request.promiseFulfill(data.result);
-                    } else {
-                        request.promiseReject(data.error);
-                    }
-                }
-            });
-    });
+            }
+        });
 
     function cleanRequest(requestId) {
         var request = requests[requestId];
