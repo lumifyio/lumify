@@ -2,10 +2,12 @@ package io.lumify.web.routes.edge;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -84,6 +86,12 @@ public class SetEdgeProperty extends BaseRequestHandler {
             respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
             chain.next(request, response);
             return;
+        }
+
+        if (propertyName.equals(LumifyProperties.COMMENT) && request.getPathInfo().equals("/edge/property")) {
+            throw new LumifyException("Use /edge/comment to save comment properties");
+        } else if (request.getPathInfo().equals("/edge/comment") && !propertyName.equals(LumifyProperties.COMMENT)) {
+            throw new LumifyException("Use /edge/property to save non-comment properties");
         }
 
         OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);

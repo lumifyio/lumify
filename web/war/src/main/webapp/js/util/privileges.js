@@ -3,7 +3,7 @@ define([
 ], function(defineComponent) {
     'use strict';
 
-    var PRIVILEGES = 'EDIT PUBLISH ADMIN'.split(' '),
+    var PRIVILEGES = 'EDIT COMMENT PUBLISH ADMIN'.split(' '),
         Component = defineComponent(Privileges);
 
     return Component;

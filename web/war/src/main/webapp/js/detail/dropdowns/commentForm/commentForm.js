@@ -66,18 +66,19 @@ define([
         this.onSave = function(event) {
             var self = this;
 
-            this.select('primarySelector').addClass('loading').attr('disabled', true);
+            this.buttonLoading();
 
             this.dataRequest(this.attr.type, 'setProperty', this.attr.data.id, {
                 name: 'http://lumify.io/comment#entry',
                 value: this.getValue(),
                 visibilitySource: this.visibilitySource && this.visibilitySource.value || ''
             })
-                .catch(function() {
-                    self.select('primarySelector').removeClass('loading').removeAttr('disabled');
-                })
-                .done(function() {
+                .then(function() {
                     self.teardown();
+                })
+                .catch(function(error) {
+                    self.markFieldErrors(error && error.statusText);
+                    self.clearLoading();
                 })
         };
 

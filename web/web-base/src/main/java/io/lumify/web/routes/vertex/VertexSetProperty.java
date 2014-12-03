@@ -7,6 +7,7 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -78,6 +79,12 @@ public class VertexSetProperty extends BaseRequestHandler {
             respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
             chain.next(request, response);
             return;
+        }
+
+        if (propertyName.equals(LumifyProperties.COMMENT) && request.getPathInfo().equals("/vertex/property")) {
+            throw new LumifyException("Use /vertex/comment to save comment properties");
+        } else if (request.getPathInfo().equals("/vertex/comment") && !propertyName.equals(LumifyProperties.COMMENT)) {
+            throw new LumifyException("Use /vertex/property to save non-comment properties");
         }
 
         respondWithClientApiObject(response, handle(

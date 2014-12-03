@@ -32,7 +32,12 @@ define([
         },
 
         setProperty: function(edgeId, property, optionalWorkspaceId) {
-            return ajax('POST', '/edge/property', _.tap({
+            var url = '/edge/' + (
+                property.name === 'http://lumify.io/comment#entry' ?
+                'comment' : 'property'
+            );
+
+            return ajax('POST', url, _.tap({
                  edgeId: edgeId,
                  propertyName: property.name,
                  value: property.value,
