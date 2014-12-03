@@ -62,7 +62,7 @@ define([
                 comments = _.chain(this.attr.data.properties)
                     .where({ name: 'http://lumify.io/comment#entry' })
                     .sortBy(function(p) {
-                        return p.metadata['http://lumify.io#modifiedDate'];
+                        return p.metadata['http://lumify.io#createDate'];
                     })
                     .value()
                 selection = d3.select(this.$node.find('.comment-content ul').get(0))
@@ -105,13 +105,29 @@ define([
             });
             selection.select('.date')
                 .text(function(p) {
-                    return F.date.relativeToNow(F.date.utc(p.metadata['http://lumify.io#modifiedDate']));
+                    var created = p.metadata['http://lumify.io#createDate'],
+                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                        edited = created !== modified,
+                        relativeString = F.date.relativeToNow(F.date.utc(created));
+
+                    if (edited) {
+                        return i18n('detail.comments.date.edited', relativeString);
+                    }
+                    return relativeString;
                 })
                 .attr('title', function(p) {
-                    return F.date.dateTimeString(p.metadata['http://lumify.io#modifiedDate']);
+                    var created = p.metadata['http://lumify.io#createDate'],
+                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                        edited = created !== modified;
+                    if (edited) {
+                        return i18n(
+                            'detail.comments.date.hover.edited',
+                            F.date.dateTimeString(created),
+                            F.date.dateTimeString(modified)
+                        );
+                    }
+                    return F.date.dateTimeString(created);
                 });
-
-            // TODO: visibility
 
             selection.exit().remove();
 
