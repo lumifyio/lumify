@@ -105,6 +105,8 @@ define([
             // TODO: visibility
 
             selection.exit().remove();
+
+            this.$node.find('.collapsible-header').toggle(comments.length > 0);
         };
 
         this.onEditComment = function(evt, data) {
