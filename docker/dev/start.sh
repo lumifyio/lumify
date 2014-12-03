@@ -64,8 +64,8 @@ function ensure_lumify_config {
   start_msg "Lumify Config"
   hadoop fs -mkdir -p /lumify/config/opencv
   hadoop fs -mkdir -p /lumify/config/opennlp
-  hadoop fs -put /opt/lumify/config/opencv/haarcascade_frontalface_alt.xml /lumify/config/opencv/
-  hadoop fs -put /opt/lumify/config/opennlp/* /lumify/config/opennlp/
+  hadoop fs -put /opt/lumify-source/config/opencv/haarcascade_frontalface_alt.xml /lumify/config/opencv/
+  hadoop fs -put /opt/lumify-source/config/opennlp/* /lumify/config/opennlp/
   hadoop fs -chmod -R a+w /lumify/
 }
 
