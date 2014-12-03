@@ -141,7 +141,12 @@ define([
         },
 
         setProperty: function(vertexId, property, optionalWorkspaceId) {
-            return ajax('POST', '/vertex/property', _.tap({
+            var url = '/vertex/' + (
+                property.name === 'http://lumify.io/comment#entry' ?
+                'comment' : 'property'
+            );
+
+            return ajax('POST', url, _.tap({
                  graphVertexId: vertexId,
                  propertyName: property.name,
                  value: property.value,

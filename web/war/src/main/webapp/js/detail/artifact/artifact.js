@@ -8,8 +8,9 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     '../toolbar/toolbar',
-    'detail/dropdowns/termForm/termForm',
-    'detail/properties/properties',
+    '../dropdowns/termForm/termForm',
+    '../properties/properties',
+    '../comments/comments',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'hbs!./transcriptEntries',
@@ -27,6 +28,7 @@ define([
     Toolbar,
     TermForm,
     Properties,
+    Comments,
     template,
     transcriptEntryTemplate,
     transcriptEntriesTemplate,
@@ -52,6 +54,7 @@ define([
             artifactSelector: '.artifact-image',
             toolbarSelector: '.comp-toolbar',
             propertiesSelector: '.properties',
+            commentsSelector: '.comments',
             titleSelector: '.artifact-title',
             timestampAnchorSelector: '.av-times a'
         });
@@ -143,6 +146,10 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
+            Comments.attachTo(this.select('commentsSelector'), {
+                vertex: vertex
+            });
+
             Toolbar.attachTo(this.select('toolbarSelector'), {
                 toolbar: [
                     {
@@ -165,9 +172,9 @@ define([
                     },
                     {
                         title: i18n('detail.toolbar.add'),
-                        cls: 'requires-EDIT',
                         submenu: [
-                            Toolbar.ITEMS.ADD_PROPERTY
+                            Toolbar.ITEMS.ADD_PROPERTY,
+                            Toolbar.ITEMS.ADD_COMMENT
                         ]
                     },
                     Toolbar.ITEMS.AUDIT

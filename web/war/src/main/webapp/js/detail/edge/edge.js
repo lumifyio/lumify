@@ -3,6 +3,7 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     '../toolbar/toolbar',
+    '../comments/comments',
     'tpl!./edge',
     'detail/properties/properties',
     'util/vertex/formatters',
@@ -13,6 +14,7 @@ define([
     withTypeContent,
     withHighlighting,
     Toolbar,
+    Comments,
     template,
     Properties,
     F,
@@ -29,6 +31,7 @@ define([
         this.defaultAttrs({
             vertexToVertexRelationshipSelector: '.vertex-to-vertex-relationship',
             propertiesSelector: '.properties',
+            commentsSelector: '.comments',
             toolbarSelector: '.comp-toolbar'
         });
 
@@ -118,9 +121,19 @@ define([
                     data: edge
                 });
 
+                Comments.attachTo(self.select('commentsSelector'), {
+                    edge: edge
+                });
+
                 Toolbar.attachTo(self.select('toolbarSelector'), {
                     toolbar: [
-                        Toolbar.ITEMS.AUDIT
+                        {
+                            title: i18n('detail.toolbar.add'),
+                            submenu: [
+                                Toolbar.ITEMS.ADD_COMMENT
+                            ]
+                        },
+                        Toolbar.ITEMS.AUDIT,
                     ]
                 });
 

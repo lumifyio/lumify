@@ -7,6 +7,7 @@ import java.util.*;
 
 public enum Privilege {
     READ(0x01),
+    COMMENT(0x16),
     EDIT(0x02),
     PUBLISH(0x04),
     ADMIN(0x08);
@@ -40,7 +41,7 @@ public enum Privilege {
         return hints;
     }
 
-    public static final Set<Privilege> ALL = EnumSet.of(READ, EDIT, PUBLISH, ADMIN);
+    public static final Set<Privilege> ALL = EnumSet.of(READ, COMMENT, EDIT, PUBLISH, ADMIN);
 
     public static final Set<Privilege> NONE = new HashSet<Privilege>();
 
