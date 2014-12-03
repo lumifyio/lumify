@@ -1,6 +1,7 @@
 package io.lumify.core.security;
 
 import io.lumify.web.clientapi.model.VisibilityJson;
+import org.securegraph.Visibility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,11 @@ public class DirectVisibilityTranslator extends VisibilityTranslator {
 
     @Override
     public LumifyVisibility toVisibility(VisibilityJson visibilityJson) {
+        return new LumifyVisibility(toVisibilityNoSuperUser(visibilityJson));
+    }
+
+    @Override
+    public Visibility toVisibilityNoSuperUser(VisibilityJson visibilityJson) {
         StringBuilder visibilityString = new StringBuilder();
 
         List<String> required = new ArrayList<String>();
@@ -38,7 +44,6 @@ public class DirectVisibilityTranslator extends VisibilityTranslator {
                     .append(v)
                     .append(")");
         }
-
-        return new LumifyVisibility(visibilityString.toString());
+        return new Visibility(visibilityString.toString());
     }
 }
