@@ -54,6 +54,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     private Cache<String, Boolean> usersWithReadAccessCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
+    private Cache<String, Boolean> usersWithCommentAccessCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(15, TimeUnit.SECONDS)
+            .build();
     private Cache<String, Boolean> usersWithWriteAccessCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
@@ -284,7 +287,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void updateEntitiesOnWorkspace(final Workspace workspace, final Iterable<Update> updates, final User user) {
-        if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
+        if (!hasCommentPermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
 
@@ -371,9 +374,35 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 getGraph().flush();
 
                 usersWithWriteAccessCache.invalidateAll();
+                usersWithCommentAccessCache.invalidateAll();
                 usersWithReadAccessCache.invalidateAll();
             }
         });
+    }
+
+    @Override
+    public boolean hasCommentPermissions(String workspaceId, User user) {
+        if (user instanceof SystemUser) {
+            return true;
+        }
+
+        String cacheKey = workspaceId + user.getUserId();
+        Boolean hasCommentAccess = usersWithCommentAccessCache.getIfPresent(cacheKey);
+        if (hasCommentAccess != null && hasCommentAccess) {
+            return true;
+        }
+
+        List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspaceId, user);
+        for (WorkspaceUser userWithAccess : usersWithAccess) {
+            if (userWithAccess.getUserId().equals(user.getUserId()) && (
+                userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE ||
+                userWithAccess.getWorkspaceAccess() == WorkspaceAccess.COMMENT
+            )) {
+                usersWithCommentAccessCache.put(cacheKey, true);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -413,7 +442,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspaceId, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId())
-                    && (userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE || userWithAccess.getWorkspaceAccess() == WorkspaceAccess.READ)) {
+                    && (userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE || userWithAccess.getWorkspaceAccess() == WorkspaceAccess.READ || userWithAccess.getWorkspaceAccess() == WorkspaceAccess.COMMENT)) {
                 return true;
             }
         }
@@ -460,6 +489,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 getGraph().flush();
 
                 usersWithReadAccessCache.invalidateAll();
+                usersWithCommentAccessCache.invalidateAll();
                 usersWithWriteAccessCache.invalidateAll();
             }
         });

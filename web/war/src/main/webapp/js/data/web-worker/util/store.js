@@ -121,6 +121,7 @@ define([
             workspaceWasChangedRemotely: function(remoteWorkspace) {
                 var user = _.findWhere(remoteWorkspace.users, { userId: publicData.currentUser.id });
                 remoteWorkspace.editable = /WRITE/i.test(user && user.access);
+                remoteWorkspace.commentable = /(COMMENT|WRITE)/i.test(user && user.access);
                 remoteWorkspace.isSharedToUser = remoteWorkspace.createdBy !== publicData.currentUser.id;
                 if (('vertices' in remoteWorkspace)) {
                     remoteWorkspace.vertices = _.indexBy(remoteWorkspace.vertices, 'vertexId');

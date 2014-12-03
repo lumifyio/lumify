@@ -208,13 +208,7 @@ define([
         };
 
         this.onWorkspaceUpdated = function(event, data) {
-            var currentUser = lumifyData.currentUser,
-                workspace = data.workspace,
-                userAccess = _.findWhere(workspace.users, { userId: currentUser.id });
-            workspace.editable = (/write/i).test(userAccess && userAccess.access);
-            workspace.sharedToUser = workspace.createdBy !== currentUser.id;
-
-            this.updateListItemWithData(workspace);
+            this.updateListItemWithData(data.workspace);
         };
 
         this.onWorkspaceNotAvailable = function(event, data) {

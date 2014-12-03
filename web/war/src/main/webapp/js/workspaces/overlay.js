@@ -123,17 +123,24 @@ define([
             }
         }
 
-        this.setContent = function(title, editable, subtitle) {
+        this.setContent = function(title, editable, commentable, subtitle) {
             this.select('nameSelector').text(title);
             this.select('subtitleSelector').html(
                 editable === false ?
-                    i18n('workspaces.overlay.read_only') :
-                    subtitle
+                commentable === false ?
+                i18n('workspaces.overlay.read_only') :
+                i18n('workspaces.overlay.read_only_comment') :
+                subtitle
             );
         };
 
         this.updateWithNewWorkspaceData = function(workspace) {
-            this.setContent(workspace.title, workspace.editable, i18n('workspaces.overlay.no_changes'));
+            this.setContent(
+                workspace.title,
+                workspace.editable,
+                workspace.commentable,
+                i18n('workspaces.overlay.no_changes')
+            );
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(workspace);
         };

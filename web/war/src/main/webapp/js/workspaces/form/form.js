@@ -171,6 +171,7 @@ define([
                         access: userPermission.access,
                         permissionLabel: {
                             read: i18n('workspaces.form.sharing.access.view'),
+                            comment: i18n('workspaces.form.sharing.access.comment'),
                             write: i18n('workspaces.form.sharing.access.edit')
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,

@@ -20,12 +20,14 @@ define([
 
         this.onWorkspaceLoaded = function(event, workspace) {
             this.workspaceEditable = workspace.editable;
+            this.workspaceCommentable = workspace.commentable;
             this.update();
         };
 
         this.update = function() {
             var user = lumifyData.currentUser,
                 editable = this.workspaceEditable,
+                commentable = this.workspaceCommentable,
                 cls = [];
 
             if (user) {
@@ -38,6 +40,8 @@ define([
 
                 if (p === 'ADMIN') {
                     Component[missingKey] = !user || !user.privilegesHelper[p];
+                } else if (p === 'COMMENT') {
+                    Component[missingKey] = !user || !user.privilegesHelper[p] || !commentable;
                 } else {
                     Component[missingKey] = !user || !user.privilegesHelper[p] || !editable;
                 }

@@ -100,6 +100,8 @@ public abstract class WorkspaceRepository {
         return null;
     }
 
+    public abstract boolean hasCommentPermissions(String workspaceId, User user);
+
     public abstract boolean hasWritePermissions(String workspaceId, User user);
 
     public abstract boolean hasReadPermissions(String workspaceId, User user);
@@ -183,6 +185,7 @@ public abstract class WorkspaceRepository {
                 workspaceClientApi.setSharedToUser(!creatorUserId.equals(user.getUserId()));
             }
             workspaceClientApi.setEditable(hasWritePermissions(workspace.getWorkspaceId(), user));
+            workspaceClientApi.setCommentable(hasCommentPermissions(workspace.getWorkspaceId(), user));
 
             for (WorkspaceUser u : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
                 String userId = u.getUserId();

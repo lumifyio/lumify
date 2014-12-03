@@ -101,6 +101,7 @@ define([], function() {
             };
             this.setPublicApi('currentWorkspaceId', workspace.workspaceId);
             this.setPublicApi('currentWorkspaceEditable', workspace.editable);
+            this.setPublicApi('currentWorkspaceCommentable', workspace.commentable);
             this.trigger('workspaceLoaded', workspace);
             this.trigger('selectObjects');
             this.fireApplicationReadyOnce();

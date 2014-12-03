@@ -11,6 +11,7 @@ public class ClientApiWorkspace implements ClientApiObject {
     private String createdBy;
     private boolean isSharedToUser;
     private boolean isEditable;
+    private boolean isCommentable;
     private List<User> users = new ArrayList<User>();
     private List<Vertex> vertices = new ArrayList<Vertex>();
     private boolean active;
@@ -53,6 +54,14 @@ public class ClientApiWorkspace implements ClientApiObject {
 
     public void setEditable(boolean isEditable) {
         this.isEditable = isEditable;
+    }
+
+    public boolean isCommentable() {
+        return isCommentable;
+    }
+
+    public void setCommentable(boolean isCommentable) {
+        this.isCommentable = isCommentable;
     }
 
     public List<User> getUsers() {
