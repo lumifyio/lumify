@@ -1,7 +1,6 @@
 define([
     'flight/lib/component',
     '../withDropdown',
-    'detail/properties/properties',
     'tpl!./termForm',
     'tpl!./entity',
     'tpl!util/alert',
@@ -12,7 +11,6 @@ define([
 ], function(
     defineComponent,
     withDropdown,
-    Properties,
     dropdownTemplate,
     entityTemplate,
     alertTemplate,

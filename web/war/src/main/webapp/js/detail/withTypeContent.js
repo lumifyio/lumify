@@ -50,6 +50,7 @@ define([
             this.auditDisplayed = false;
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
             this.on('addNewProperty', this.onAddNewProperty);
+            this.on('addNewComment', this.onAddNewComment);
             this.on('openFullscreen', this.onOpenFullscreen);
             this.on('toggleAudit', this.onAuditToggle);
             this.on('openSourceUrl', this.onOpenSourceUrl);
@@ -73,6 +74,10 @@ define([
 
         this.onAddNewProperty = function(event) {
             this.trigger(this.select('propertiesSelector'), 'editProperty');
+        };
+
+        this.onAddNewComment = function(event) {
+            this.trigger(this.select('commentsSelector'), 'editComment');
         };
 
         this.onOpenFullscreen = function(event) {

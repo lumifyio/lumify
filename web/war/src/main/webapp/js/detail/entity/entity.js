@@ -3,6 +3,7 @@ define([
     'flight/lib/component',
     './image/image',
     '../properties/properties',
+    '../comments/comments',
     '../withTypeContent',
     '../withHighlighting',
     '../toolbar/toolbar',
@@ -17,6 +18,7 @@ define([
 ], function(defineComponent,
     Image,
     Properties,
+    Comments,
     withTypeContent,
     withHighlighting,
     Toolbar,
@@ -43,6 +45,7 @@ define([
         this.defaultAttrs({
             glyphIconSelector: '.entity-glyphIcon',
             propertiesSelector: '.properties',
+            commentsSelector: '.comments',
             titleSelector: '.entity-title',
             toolbarSelector: '.comp-toolbar',
             relationshipsHeaderSelector: '.relationships section.collapsible h1',
@@ -214,7 +217,8 @@ define([
                         cls: 'requires-EDIT',
                         submenu: [
                             Toolbar.ITEMS.ADD_PROPERTY,
-                            Toolbar.ITEMS.ADD_IMAGE
+                            Toolbar.ITEMS.ADD_IMAGE,
+                            Toolbar.ITEMS.ADD_COMMENT
                         ]
                     },
                     Toolbar.ITEMS.AUDIT
@@ -227,6 +231,10 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), {
                 data: vertex
+            });
+
+            Comments.attachTo(this.select('commentsSelector'), {
+                vertex: vertex
             });
 
             this.updateRelationships();

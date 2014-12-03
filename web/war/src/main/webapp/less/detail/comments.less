@@ -1,0 +1,40 @@
+
+.comments {
+  overflow: auto;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      margin: 1em;
+
+      .comment {
+        text-align: left;    
+      }
+
+      .visibility {
+        display: block;
+      }
+
+      .comment-text {
+        text-align: left;
+      }
+
+      .date, .user {
+        font-size: 75%;
+        font-style: italic;
+        color: #555;
+        font-variant: small-caps;
+        text-transform: uppercase;
+      }
+      .user {
+        margin-right: 1ex;
+        &:after {
+          content: ','
+        }
+      }
+    }
+  }
+}
