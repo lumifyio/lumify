@@ -129,7 +129,6 @@ define([
                     toolbar: [
                         {
                             title: i18n('detail.toolbar.add'),
-                            cls: 'requires-EDIT', // TODO: add COMMENT priv
                             submenu: [
                                 Toolbar.ITEMS.ADD_COMMENT
                             ]

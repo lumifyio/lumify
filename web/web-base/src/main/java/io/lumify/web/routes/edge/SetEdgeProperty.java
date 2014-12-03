@@ -88,9 +88,9 @@ public class SetEdgeProperty extends BaseRequestHandler {
             return;
         }
 
-        if (propertyName.equals(LumifyProperties.COMMENT) && request.getPathInfo().equals("/edge/property")) {
+        if (propertyName.equals(LumifyProperties.COMMENT.getPropertyName()) && request.getPathInfo().equals("/edge/property")) {
             throw new LumifyException("Use /edge/comment to save comment properties");
-        } else if (request.getPathInfo().equals("/edge/comment") && !propertyName.equals(LumifyProperties.COMMENT)) {
+        } else if (request.getPathInfo().equals("/edge/comment") && !propertyName.equals(LumifyProperties.COMMENT.getPropertyName())) {
             throw new LumifyException("Use /edge/property to save non-comment properties");
         }
 

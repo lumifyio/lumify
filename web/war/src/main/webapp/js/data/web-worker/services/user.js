@@ -40,7 +40,7 @@ define(['../util/ajax'], function(ajax) {
                             var usersById = _.indexBy(users, 'id');
                             return userIds.map(function(userId) {
                                 return cachedNames[userId] || (
-                                    cachedNames[userId] = usersById[userId].displayName
+                                    cachedNames[userId] = (usersById[userId] || publicData.currentUser).displayName
                                 );
                             });
                         });

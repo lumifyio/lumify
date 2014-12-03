@@ -214,7 +214,6 @@ define([
                     },
                     {
                         title: i18n('detail.toolbar.add'),
-                        cls: 'requires-EDIT',
                         submenu: [
                             Toolbar.ITEMS.ADD_PROPERTY,
                             Toolbar.ITEMS.ADD_IMAGE,

@@ -24,11 +24,13 @@ define([
         ADD_PROPERTY: {
             title: i18n('detail.toolbar.add.property'),
             subtitle: i18n('detail.toolbar.add.property.subtitle'), // 'Add New Property to Entity',
+            cls: 'requires-EDIT',
             event: 'addNewProperty'
         },
         ADD_IMAGE: {
             title: i18n('detail.toolbar.add.image'),
             subtitle: i18n('detail.toolbar.add.image.subtitle'), // 'Upload an Image for Entity',
+            cls: 'requires-EDIT',
             event: 'addImage',
             options: {
                 fileSelector: true
@@ -37,6 +39,7 @@ define([
         ADD_COMMENT: {
             title: i18n('detail.toolbar.add.comment'),
             subtitle: i18n('detail.toolbar.add.comment.subtitle'), // 'Add New Comment to Entity',
+            cls: 'requires-COMMENT',
             event: 'addNewComment'
         },
         AUDIT: {

@@ -81,9 +81,9 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
-        if (propertyName.equals(LumifyProperties.COMMENT) && request.getPathInfo().equals("/vertex/property")) {
+        if (propertyName.equals(LumifyProperties.COMMENT.getPropertyName()) && request.getPathInfo().equals("/vertex/property")) {
             throw new LumifyException("Use /vertex/comment to save comment properties");
-        } else if (request.getPathInfo().equals("/vertex/comment") && !propertyName.equals(LumifyProperties.COMMENT)) {
+        } else if (request.getPathInfo().equals("/vertex/comment") && !propertyName.equals(LumifyProperties.COMMENT.getPropertyName())) {
             throw new LumifyException("Use /vertex/property to save non-comment properties");
         }
 
