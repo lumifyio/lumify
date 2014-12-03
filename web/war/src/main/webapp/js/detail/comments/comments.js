@@ -28,10 +28,18 @@ define([
                 this.on(document, 'edgesUpdated', this.onEdgesUpdated);
             }
 
+            this.on('commentOnSelection', this.onCommentOnSelection);
+
             this.attr.data = this.attr.vertex || this.attr.edge;
             this.$node.html(template({}));
             this.update();
         });
+
+        this.onCommentOnSelection = function(event, data) {
+            this.trigger('editComment', {
+                sourceInfo: data
+            });
+        };
 
         this.onVerticesUpdated = function(event, data) {
             var vertex = data && data.vertices && _.findWhere(data.vertices, { id: this.attr.data.id });
@@ -112,6 +120,7 @@ define([
         this.onEditComment = function(evt, data) {
             var root = $('<div class="underneath">'),
                 comment = data && data.comment,
+                sourceInfo = data && data.sourceInfo,
                 commentRow = comment && $(evt.target).closest('tr');
 
             this.$node.find('button.info').popover('hide');
@@ -142,6 +151,7 @@ define([
             CommentForm.attachTo(root, {
                 data: this.attr.data,
                 type: this.attr.vertex ? 'vertex' : 'edge',
+                sourceInfo: sourceInfo,
                 comment: comment
             });
         };

@@ -68,10 +68,12 @@ define([
 
             this.buttonLoading();
 
+            debugger;
             this.dataRequest(this.attr.type, 'setProperty', this.attr.data.id, {
                 name: 'http://lumify.io/comment#entry',
                 value: this.getValue(),
-                visibilitySource: this.visibilitySource && this.visibilitySource.value || ''
+                visibilitySource: this.visibilitySource && this.visibilitySource.value || '',
+                sourceInfo: this.attr.sourceInfo
             })
                 .then(function() {
                     self.teardown();

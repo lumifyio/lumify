@@ -137,37 +137,9 @@ define([
 
             if (!selection.isCollapsed && selection.rangeCount === 1) {
 
-                var $anchor = $(selection.anchorNode),
-                    $focus = $(selection.focusNode),
-                    isTranscript = $anchor.closest('.av-times').length,
-                    offsetsFunction = isTranscript ?
-                        'offsetsForTranscript' :
-                        'offsetsForText',
-                    offsets = this[offsetsFunction]([
-                        {el: $anchor, offset: selection.anchorOffset},
-                        {el: $focus, offset: selection.focusOffset}
-                    ], '.text', _.identity),
-                    range = selection.getRangeAt(0),
-                    output = {},
-                    contextRange = rangeUtils.expandRangeByWords(range, 4, output),
-                    context = contextRange.toString(),
-                    contextHighlight =
-                        '...' +
-                        output.before +
-                        '<span class="selection">' + selection.toString() + '</span>' +
-                        output.after +
-                        '...';
-
-                if (offsets) {
-                    this.trigger('copydocumenttext', {
-                        startOffset: offsets[0],
-                        endOffset: offsets[1],
-                        snippet: contextHighlight,
-                        vertexId: this.attr.data.id,
-                        textPropertyKey: $anchor.closest('.text-section').data('key'),
-                        text: selection.toString(),
-                        vertexTitle: F.vertex.title(this.attr.data)
-                    });
+                var data = this.transformSelection(selection);
+                if (data.startOffset && data.endOffset) {
+                    this.trigger('copydocumenttext', data);
                 }
             }
         };
@@ -184,6 +156,39 @@ define([
             } else {
                 this.openText(propertyKey);
             }
+        };
+
+        this.transformSelection = function(selection) {
+            var $anchor = $(selection.anchorNode),
+                $focus = $(selection.focusNode),
+                isTranscript = $anchor.closest('.av-times').length,
+                offsetsFunction = isTranscript ?
+                    'offsetsForTranscript' :
+                    'offsetsForText',
+                offsets = this[offsetsFunction]([
+                    {el: $anchor, offset: selection.anchorOffset},
+                    {el: $focus, offset: selection.focusOffset}
+                ], '.text', _.identity),
+                range = selection.getRangeAt(0),
+                output = {},
+                contextRange = rangeUtils.expandRangeByWords(range, 4, output),
+                context = contextRange.toString(),
+                contextHighlight =
+                    '...' +
+                    output.before +
+                    '<span class="selection">' + selection.toString() + '</span>' +
+                    output.after +
+                    '...';
+
+            return {
+                startOffset: offsets && offsets[0],
+                endOffset: offsets && offsets[1],
+                snippet: contextHighlight,
+                vertexId: this.attr.data.id,
+                textPropertyKey: $anchor.closest('.text-section').data('key'),
+                text: selection.toString(),
+                vertexTitle: F.vertex.title(this.attr.data)
+            };
         };
 
         this.trackMouse = function(event) {
@@ -424,28 +429,38 @@ define([
                     ActionBar.attachTo(self.node, {
                         alignTo: 'textselection',
                         actions: {
-                            Resolve: 'resolve.actionbar'
+                            Resolve: 'resolve.actionbar',
+                            Comment: 'comment.actionbar'
                         }
                     });
 
-                    self.off('.actionbar').on('resolve.actionbar', function(event) {
-                        event.stopPropagation();
+                    self.off('.actionbar')
+                        .on('comment.actionbar', function(event) {
+                            event.stopPropagation();
 
-                        var isEndTextNode = endContainer.nodeType === 1;
-                        if (isEndTextNode) {
-                            self.dropdownEntity(true, endContainer, selection, text);
-                        } else {
+                            var data = self.transformSelection(sel);
+                            if (data.startOffset && data.endOffset) {
+                                self.trigger(self.select('commentsSelector'), 'commentOnSelection', data);
+                            }
+                        })
+                        .on('resolve.actionbar', function(event) {
+                            event.stopPropagation();
 
-                            // Move to first space in end so as to not break up word when splitting
-                            var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
-                            do {
-                                character = endContainer.textContent.substring(++i, i + 1);
-                            } while (whitespaceCheck.test(character));
+                            var isEndTextNode = endContainer.nodeType === 1;
+                            if (isEndTextNode) {
+                                self.dropdownEntity(true, endContainer, selection, text);
+                            } else {
 
-                            endContainer.splitText(i);
-                            self.dropdownEntity(true, endContainer, selection, text);
-                        }
-                    });
+                                // Move to first space in end so as to not break up word when splitting
+                                var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
+                                do {
+                                    character = endContainer.textContent.substring(++i, i + 1);
+                                } while (whitespaceCheck.test(character));
+
+                                endContainer.splitText(i);
+                                self.dropdownEntity(true, endContainer, selection, text);
+                            }
+                        });
                 });
             }
         }, 250);
