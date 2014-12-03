@@ -29,7 +29,9 @@ define(['../util/ajax'], function(ajax) {
             var cachedNames = {};
             return function getUserNames(userIds) {
                 var notCached = _.reject(userIds, function(userId) {
-                    return userId in cachedNames;
+                    return userId in cachedNames || (
+                        publicData.currentUser.id === userId
+                    );
                 });
 
                 if (notCached.length) {
@@ -45,7 +47,7 @@ define(['../util/ajax'], function(ajax) {
                 } else {
                     return Promise.resolve(
                         userIds.map(function(userId) {
-                            return cachedNames[userId];
+                            return cachedNames[userId] || publicData.currentUser.displayName;
                         })
                     );
                 }
