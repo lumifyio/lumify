@@ -3,11 +3,13 @@ define([
     'flight/lib/component',
     'tpl!./overlay',
     'util/formatters',
+    'util/privileges',
     'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     F,
+    Privilege,
     withDataRequest) {
     'use strict';
 
@@ -126,8 +128,8 @@ define([
         this.setContent = function(title, editable, commentable, subtitle) {
             this.select('nameSelector').text(title);
             this.select('subtitleSelector').html(
-                editable === false ?
-                commentable === false ?
+                editable === false || Privilege.missingEDIT ?
+                commentable === false || Privilege.missingCOMMENT ?
                 i18n('workspaces.overlay.read_only') :
                 i18n('workspaces.overlay.read_only_comment') :
                 subtitle
