@@ -20,8 +20,13 @@ define([
 
         this.after('initialize', function() {
             this.on('editComment', this.onEditComment);
-            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+            if (this.attr.vertex) {
+                this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+            } else if (this.attr.edge) {
+                this.on(document, 'edgesUpdated', this.onEdgesUpdated);
+            }
 
+            this.attr.data = this.attr.vertex || this.attr.edge;
             this.$node.html(template({}));
             this.update();
         });
@@ -30,6 +35,14 @@ define([
             var vertex = data && data.vertices && _.findWhere(data.vertices, { id: this.attr.data.id });
             if (vertex) {
                 this.attr.data = vertex;
+                this.update();
+            }
+        };
+
+        this.onEdgesUpdated = function(event, data) {
+            var edge = data && data.edges && _.findWhere(data.edges, { id: this.attr.data.id });
+            if (edge) {
+                this.attr.data = edge;
                 this.update();
             }
         };
@@ -115,6 +128,7 @@ define([
             CommentForm.teardownAll();
             CommentForm.attachTo(root, {
                 data: this.attr.data,
+                type: this.attr.vertex ? 'vertex' : 'edge',
                 comment: comment
             });
         };

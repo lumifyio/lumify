@@ -234,7 +234,7 @@ define([
             });
 
             Comments.attachTo(this.select('commentsSelector'), {
-                data: vertex
+                vertex: vertex
             });
 
             this.updateRelationships();

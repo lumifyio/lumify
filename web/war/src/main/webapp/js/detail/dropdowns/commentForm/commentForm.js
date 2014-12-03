@@ -62,10 +62,10 @@ define([
 
             this.select('primarySelector').addClass('loading').attr('disabled', true);
 
-            this.dataRequest('vertex', 'setProperty', this.attr.data.id, {
+            this.dataRequest(this.attr.type, 'setProperty', this.attr.data.id, {
                 name: 'http://lumify.io/comment#entry',
                 value: this.getValue(),
-                visibilitySource: ''
+                visibilitySource: '' // TODO:
             })
                 .catch(function() {
                     self.select('primarySelector').removeClass('loading').removeAttr('disabled');
