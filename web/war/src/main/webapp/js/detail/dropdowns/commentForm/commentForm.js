@@ -74,7 +74,7 @@ define([
 
             this.dataRequest(this.attr.type, 'setProperty', this.attr.data.id, {
                 name: 'http://lumify.io/comment#entry',
-                key: this.attr.comment.key,
+                key: this.attr.comment && this.attr.comment.key,
                 value: this.getValue(),
                 visibilitySource: this.visibilitySource && this.visibilitySource.value || '',
                 sourceInfo: this.attr.sourceInfo
