@@ -337,14 +337,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 if (graphPosition != null) {
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(m, graphPosition.getX(), VISIBILITY.getVisibility());
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(m, graphPosition.getY(), VISIBILITY.getVisibility());
-                } else {
-                    WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.removeProperty(existingEdge, authorizations);
-                    WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.removeProperty(existingEdge, authorizations);
                 }
                 if (graphLayoutJson != null) {
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.setProperty(m, graphLayoutJson, VISIBILITY.getVisibility());
-                } else {
-                    WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.removeProperty(existingEdge, authorizations);
                 }
                 if (visible != null) {
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(m, visible, VISIBILITY.getVisibility());
