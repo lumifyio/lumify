@@ -222,7 +222,8 @@ define([
         };
 
         this.onDelete = function(e) {
-            var button = this.select('deleteButtonSelector').addClass('loading').attr('disabled', true);
+            e.stopPropagation();
+            var button = this.popover.find('.btn-danger').addClass('loading').attr('disabled', true);
             this.trigger('deleteProperty', {
                 property: _.pick(this.attr.property, 'name', 'key')
             });

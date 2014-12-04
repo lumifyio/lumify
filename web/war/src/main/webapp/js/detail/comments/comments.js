@@ -32,8 +32,10 @@ define([
 
             this.on('commentOnSelection', this.onCommentOnSelection);
             this.on('editProperty', this.onEditProperty);
+            this.on('deleteProperty', this.onDeleteProperty);
 
             this.attr.data = this.attr.vertex || this.attr.edge;
+            this.attr.type = this.attr.vertex ? 'vertex' : 'edge';
             this.$node.html(template({}));
             this.update();
         });
@@ -145,6 +147,15 @@ define([
             this.onEditComment(event, { comment: data.property });
         };
 
+        this.onDeleteProperty = function(event, data) {
+            var self = this;
+            this.dataRequest(this.attr.type, 'deleteProperty',
+                this.attr.data.id, data.property
+            ).then(function() {
+                $(event.target).popover('hide');
+            });
+        };
+
         this.onEditComment = function(event, data) {
             var root = $('<div class="underneath">'),
                 comment = data && data.comment,
@@ -188,7 +199,7 @@ define([
             CommentForm.teardownAll();
             CommentForm.attachTo(root, {
                 data: this.attr.data,
-                type: this.attr.vertex ? 'vertex' : 'edge',
+                type: this.attr.type,
                 sourceInfo: sourceInfo,
                 comment: comment
             });
