@@ -192,7 +192,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
                 boolean visible = sqlWorkspaceVertex.isVisible();
 
-                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY);
+                // TODO implement graphLayoutJson in sql
+                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY, null);
             }
         });
         return workspaceEntities;

@@ -110,7 +110,8 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             public WorkspaceRepository.Update apply(ClientApiWorkspaceUpdateData.EntityUpdate u) {
                 String vertexId = u.getVertexId();
                 GraphPosition graphPosition = u.getGraphPosition();
-                return new WorkspaceRepository.Update(vertexId, true, graphPosition);
+                String graphLayoutJson = u.getGraphLayoutJson();
+                return new WorkspaceRepository.Update(vertexId, true, graphPosition, graphLayoutJson);
             }
         });
         workspaceRepository.updateEntitiesOnWorkspace(workspace, updates, authUser);

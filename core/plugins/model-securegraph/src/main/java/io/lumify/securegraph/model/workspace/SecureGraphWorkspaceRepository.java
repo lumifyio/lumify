@@ -245,9 +245,10 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
                 Integer graphPositionX = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.getPropertyValue(edge);
                 Integer graphPositionY = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.getPropertyValue(edge);
+                String graphLayoutJson = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.getPropertyValue(edge);
                 boolean visible = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.getPropertyValue(edge, false);
 
-                return new WorkspaceEntity(entityVertexId, visible, graphPositionX, graphPositionY);
+                return new WorkspaceEntity(entityVertexId, visible, graphPositionX, graphPositionY, graphLayoutJson);
             }
         });
     }
@@ -281,6 +282,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         List<Edge> edges = toList(workspaceVertex.getEdges(otherVertex, Direction.BOTH, authorizations));
         for (Edge edge : edges) {
             WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edge, false, VISIBILITY.getVisibility(), authorizations);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.removeProperty(edge, authorizations);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.removeProperty(edge, authorizations);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.removeProperty(edge, authorizations);
         }
         getGraph().flush();
     }
@@ -318,14 +322,14 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 for (Update update : updates) {
                     Vertex otherVertex = verticesMap.get(update.getVertexId());
                     checkNotNull(otherVertex, "Could not find vertex with id: " + update.getVertexId());
-                    createEdge(workspaceVertex, otherVertex, update.getGraphPosition(), update.getVisible(), authorizations);
+                    createEdge(workspaceVertex, otherVertex, update.getGraphPosition(), update.getGraphLayoutJson(), update.getVisible(), authorizations);
                 }
                 getGraph().flush();
             }
         });
     }
 
-    private void createEdge(Vertex workspaceVertex, Vertex otherVertex, GraphPosition graphPosition, Boolean visible, Authorizations authorizations) {
+    private void createEdge(Vertex workspaceVertex, Vertex otherVertex, GraphPosition graphPosition, String graphLayoutJson, Boolean visible, Authorizations authorizations) {
         List<Edge> existingEdges = toList(workspaceVertex.getEdges(otherVertex, Direction.BOTH, authorizations));
         if (existingEdges.size() > 0) {
             for (Edge existingEdge : existingEdges) {
@@ -333,6 +337,14 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 if (graphPosition != null) {
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(m, graphPosition.getX(), VISIBILITY.getVisibility());
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(m, graphPosition.getY(), VISIBILITY.getVisibility());
+                } else {
+                    WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.removeProperty(existingEdge, authorizations);
+                    WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.removeProperty(existingEdge, authorizations);
+                }
+                if (graphLayoutJson != null) {
+                    WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.setProperty(m, graphLayoutJson, VISIBILITY.getVisibility());
+                } else {
+                    WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.removeProperty(existingEdge, authorizations);
                 }
                 if (visible != null) {
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(m, visible, VISIBILITY.getVisibility());
@@ -344,6 +356,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             if (graphPosition != null) {
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPosition.getX(), VISIBILITY.getVisibility());
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(edgeBuilder, graphPosition.getY(), VISIBILITY.getVisibility());
+            }
+            if (graphLayoutJson != null) {
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.setProperty(edgeBuilder, graphLayoutJson, VISIBILITY.getVisibility());
             }
             if (visible != null) {
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edgeBuilder, visible, VISIBILITY.getVisibility());

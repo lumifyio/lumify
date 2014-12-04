@@ -209,6 +209,16 @@ public abstract class WorkspaceRepository {
                     if (graphPositionX != null && graphPositionY != null) {
                         GraphPosition graphPosition = new GraphPosition(graphPositionX, graphPositionY);
                         v.setGraphPosition(graphPosition);
+                        v.setGraphLayoutJson(null);
+                    } else {
+                        v.setGraphPosition(null);
+
+                        String graphLayoutJson = workspaceEntity.getGraphLayoutJson();
+                        if (graphLayoutJson != null) {
+                            v.setGraphLayoutJson(graphLayoutJson);
+                        } else {
+                            v.setGraphLayoutJson(null);
+                        }
                     }
 
                     workspaceClientApi.addVertex(v);
@@ -248,11 +258,20 @@ public abstract class WorkspaceRepository {
         private final String vertexId;
         private final Boolean visible;
         private final GraphPosition graphPosition;
+        private final String graphLayoutJson;
 
         public Update(String vertexId, Boolean visible, GraphPosition graphPosition) {
             this.vertexId = vertexId;
             this.visible = visible;
             this.graphPosition = graphPosition;
+            graphLayoutJson = null;
+        }
+
+        public Update(String vertexId, Boolean visible, GraphPosition graphPosition, String graphLayoutJson) {
+            this.vertexId = vertexId;
+            this.visible = visible;
+            this.graphPosition = graphPosition;
+            this.graphLayoutJson = graphLayoutJson;
         }
 
         public String getVertexId() {
@@ -265,6 +284,10 @@ public abstract class WorkspaceRepository {
 
         public GraphPosition getGraphPosition() {
             return graphPosition;
+        }
+
+        public String getGraphLayoutJson() {
+            return graphLayoutJson;
         }
     }
 }
