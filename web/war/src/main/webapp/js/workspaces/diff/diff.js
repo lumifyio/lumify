@@ -354,25 +354,12 @@ define([
                     console.error('Unknown diff type', diff);
                 }).toArray();
 
-            workspaceService[type](diffsToSend)
-                .always(function() {
+            this.dataRequest('workspace', type, diffsToSend)
+                .finally(function() {
                     bothButtons.hide().removeAttr('disabled').removeClass('loading');
                     self.trigger(document, 'updateDiff');
                 })
-                .fail(function(xhr, status, errorText) {
-                    var error = $('<div>')
-                        .addClass('alert alert-error')
-                        .html(
-                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            i18n('workspaces.diff.error', type, errorText)
-                        )
-                        .appendTo(header);
-
-                    button.show();
-
-                    _.delay(error.remove.bind(error), 5000)
-                })
-                .done(function(response) {
+                .then(function(response) {
                     var failures = response.failures,
                         success = response.success;
 
@@ -387,6 +374,19 @@ define([
                             )
                             .appendTo(header);
                     }
+                })
+                .catch(function(error) {
+                    var error = $('<div>')
+                        .addClass('alert alert-error')
+                        .html(
+                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                            i18n('workspaces.diff.error', type, error)
+                        )
+                        .appendTo(header);
+
+                    button.show();
+
+                    _.delay(error.remove.bind(error), 5000)
                 });
         };
 

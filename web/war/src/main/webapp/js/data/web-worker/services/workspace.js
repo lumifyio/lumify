@@ -115,6 +115,18 @@ define([
             });
         },
 
+        publish: function(changes) {
+            return ajax('POST', '/workspace/publish', {
+                publishData: JSON.stringify(changes)
+            });
+        },
+
+        undo: function(changes) {
+            return ajax('POST', '/workspace/undo', {
+                undoData: JSON.stringify(changes)
+            });
+        },
+
         edges: function(workspaceId, additionalVertices) {
             return ajax('GET', '/workspace/edges', {
                 workspaceId: workspaceId || publicData.currentWorkspaceId
