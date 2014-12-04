@@ -4,19 +4,21 @@ define([
     '../dropdowns/commentForm/commentForm',
     'util/withCollapsibleSections',
     'util/vertex/formatters',
-    'util/withDataRequest'
+    'util/withDataRequest',
+    'util/popovers/propertyInfo/withPropertyInfo'
 ], function(
     defineComponent,
     template,
     CommentForm,
     withCollapsibleSections,
     F,
-    withDataRequest) {
+    withDataRequest,
+    withPropertyInfo) {
     'use strict';
 
     var VISIBILITY_NAME = 'http://lumify.io#visibilityJson';
 
-    return defineComponent(Comments, withCollapsibleSections, withDataRequest);
+    return defineComponent(Comments, withCollapsibleSections, withDataRequest, withPropertyInfo);
 
     function Comments() {
 
@@ -29,6 +31,7 @@ define([
             }
 
             this.on('commentOnSelection', this.onCommentOnSelection);
+            this.on('editProperty', this.onEditProperty);
 
             this.attr.data = this.attr.vertex || this.attr.edge;
             this.$node.html(template({}));
@@ -81,6 +84,7 @@ define([
                     this.append('span').attr('class', 'visibility')
                     this.append('span').attr('class', 'user')
                     this.append('span').attr('class', 'date')
+                    this.append('button').attr('class', 'info')
                 })
 
             selection.select('.comment-text').text(function(p) {
@@ -128,25 +132,31 @@ define([
                     }
                     return F.date.dateTimeString(created);
                 });
+            selection.select('.info').on('click', function(property) {
+                console.log(this)
+                self.showPropertyInfo(this, self.attr.data.id, property);
+            });
 
             selection.exit().remove();
 
             this.$node.find('.collapsible-header').toggle(comments.length > 0);
         };
 
-        this.onEditComment = function(evt, data) {
+        this.onEditProperty = function(event, data) {
+            this.onEditComment(event, { comment: data.property });
+        };
+
+        this.onEditComment = function(event, data) {
             var root = $('<div class="underneath">'),
                 comment = data && data.comment,
                 sourceInfo = data && data.sourceInfo,
-                commentRow = comment && $(evt.target).closest('tr');
+                commentRow = comment && $(event.target).closest('li');
 
             this.$node.find('button.info').popover('hide');
 
             if (commentRow && commentRow.length) {
                 root.appendTo(
-                    $('<tr><td colspan=3></td></tr>')
-                        .insertAfter(commentRow)
-                        .find('td')
+                    $('<li></li>').css({ margin:0 }).insertAfter(commentRow)
                 );
             } else {
                 root.appendTo(this.$node.find('.comment-content'));
@@ -157,10 +167,22 @@ define([
             root.on(TRANSITION_END, function handler(e) {
                 var $this = $(this);
                 if (e && e.originalEvent && e.originalEvent.propertyName === 'height') {
-                    var sp = $this.scrollParent()
-                    sp.animate({
-                        scrollTop: $this.position().top
-                    });
+                    var sp = $this.scrollParent(),
+                        height = sp.height(),
+                        scrollTop = sp.scrollTop(),
+                        top = $this.position().top,
+                        formHeight = $this.outerHeight(true) + 50,
+                        bottom = top + formHeight,
+                        scrollUp = top < scrollTop,
+                        scrollDown = bottom > (scrollTop + height);
+
+                    if (scrollUp || scrollDown) {
+                        sp.animate({
+                            scrollTop: scrollUp ?
+                                $this.position().top :
+                                top - (height - formHeight)
+                        });
+                    }
                     root.off(TRANSITION_END, handler);
                 }
             })

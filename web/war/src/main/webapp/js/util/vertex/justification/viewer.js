@@ -29,6 +29,7 @@ define([
                 this.dataRequest('vertex', 'store', { vertexIds: this.attr.sourceMetadata.vertexId })
                     .done(function(vertex) {
                         self.select('sourceInfoTitleSelector').text(F.vertex.title(vertex));
+                        self.trigger('positionDialog');
                     });
             }
         });
