@@ -133,7 +133,6 @@ define([
                     return F.date.dateTimeString(created);
                 });
             selection.select('.info').on('click', function(property) {
-                console.log(this)
                 self.showPropertyInfo(this, self.attr.data.id, property);
             });
 
