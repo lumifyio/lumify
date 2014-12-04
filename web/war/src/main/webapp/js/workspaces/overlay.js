@@ -214,12 +214,6 @@ define([
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
 
-            if (event && event.type === 'verticesUpdated') {
-                if (!data || !data.options || data.options.originalEvent !== 'propertiesChange') {
-                    return;
-                }
-            }
-
             if (!badge.length) {
                 badge = $('<span class="badge"></span>')
                     .insertAfter(node)
