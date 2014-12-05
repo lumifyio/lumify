@@ -375,12 +375,12 @@ define([
                             .appendTo(header);
                     }
                 })
-                .catch(function(error) {
+                .catch(function(errorText) {
                     var error = $('<div>')
                         .addClass('alert alert-error')
                         .html(
                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            i18n('workspaces.diff.error', type, error)
+                            i18n('workspaces.diff.error', type, errorText)
                         )
                         .appendTo(header);
 
