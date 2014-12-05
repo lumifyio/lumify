@@ -44,7 +44,7 @@ function setupWebsocket() {
 
     if (supportedInWorker) {
         self.window = self;
-        importScripts('/libs/atmosphere/atmosphere.js')
+        importScripts(BASE_URL + '/libs/atmosphere/atmosphere.js')
         atmosphere.util.getAbsoluteURL = function() {
             return location.origin + '/messaging';
         }
