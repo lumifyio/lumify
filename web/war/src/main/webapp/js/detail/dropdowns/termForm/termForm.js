@@ -113,6 +113,7 @@ define([
                 if (conceptType === '' && self.attr.restrictConcept) {
                     conceptType = self.attr.restrictConcept;
                 }
+                this.selectedConceptId = conceptType;
 
                 this.deferredConcepts.done(function() {
                     self.trigger(self.select('conceptContainerSelector').show(), 'selectConceptId', {

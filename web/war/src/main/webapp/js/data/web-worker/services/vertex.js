@@ -170,6 +170,10 @@ define([
 
         resolveTerm: function(params) {
             return ajax('POST', '/vertex/resolve-term', params);
+        },
+
+        unresolveTerm: function(params) {
+            return ajax('POST', '/vertex/unresolve-term', params);
         }
     };
 
