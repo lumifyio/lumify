@@ -1,4 +1,4 @@
-define(['util/promise'], function() {
+define(['util/promise', 'jquery'], function() {
     return new Promise(function(fulfill, reject) {
         if (typeof lumifyData !== 'undefined' && lumifyData.readyForDataRequests) {
             fulfill();
