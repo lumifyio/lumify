@@ -49,7 +49,9 @@ function setupWebsocket() {
         self.window = self;
         importScripts(BASE_URL + '/libs/atmosphere/atmosphere.js')
         atmosphere.util.getAbsoluteURL = function() {
-            return location.origin + '/messaging';
+            return location.origin +
+                location.pathname.replace(/\/jsc.*$/, '') +
+                '/messaging';
         }
         self.pushSocketMessage = function(message) {
             Promise.all([
