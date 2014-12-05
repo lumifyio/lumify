@@ -189,8 +189,8 @@ public abstract class WorkQueueRepository {
         broadcastUserWorkspaceChange(user, workspaceId);
     }
 
-    public void pushWorkspaceChange(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers) {
-        broadcastWorkspace(workspace, previousUsers);
+    public void pushWorkspaceChange(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers, String changedByUserId) {
+        broadcastWorkspace(workspace, previousUsers, changedByUserId);
     }
 
     protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
@@ -202,9 +202,10 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    protected void broadcastWorkspace(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers) {
+    protected void broadcastWorkspace(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers, String changedByUserId) {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceChange");
+        json.put("modifiedBy", changedByUserId);
         json.put("permissions", getPermissionsWithUsers(workspace, previousUsers));
         json.put("data", new JSONObject(ClientApiConverter.clientApiToString(workspace)));
         broadcastJson(json);

@@ -71,7 +71,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         respondWithSuccessJson(response);
 
-        workQueueRepository.pushWorkspaceChange(clientApiWorkspace, previousUsers);
+        workQueueRepository.pushWorkspaceChange(clientApiWorkspace, previousUsers, authUser.getUserId());
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {
