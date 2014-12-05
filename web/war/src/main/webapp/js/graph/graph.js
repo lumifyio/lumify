@@ -1196,7 +1196,17 @@ define([
                     data.entityUpdates.forEach(function(entityUpdate) {
                         var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId));
                         if (cyNode.length && !cyNode.grabbed()) {
-                            cyNode.position(retina.pointsToPixels(entityUpdate.graphPosition));
+                            cyNode
+                                .stop(true)
+                                .animate(
+                                    {
+                                        position: retina.pointsToPixels(entityUpdate.graphPosition)
+                                    },
+                                    {
+                                        duration: 500,
+                                        easing: 'easeOutBack'
+                                    }
+                                );
                         }
                         self.workspaceVertices[entityUpdate.vertexId] = entityUpdate;
                     });
