@@ -20,6 +20,67 @@ define([
 
     return defineComponent(Comments, withCollapsibleSections, withDataRequest, withPropertyInfo);
 
+    function toCommentTree(properties) {
+        var comments = _.chain(properties)
+                .where({ name: 'http://lumify.io/comment#entry' })
+                .sortBy(function(p) {
+                    return p.metadata['http://lumify.io#createDate'];
+                })
+                .value(),
+            maxDepth = 1,
+            total = comments.length,
+            userIds = _.unique(_.map(comments, function(c) {
+                return c.metadata['http://lumify.io#modifiedBy'];
+            })),
+            commentsByKey = _.indexBy(_.map(comments, function(c) {
+                return [c, []];
+            }), function(a) {
+                return a[0].key;
+            }),
+            rootComments = _.filter(comments, function(p) {
+                return !p.metadata['http://lumify.io/comment#path'];
+            }),
+            roots = [];
+
+        comments.forEach(function(comment) {
+            var path = comment.metadata['http://lumify.io/comment#path'];
+            if (path) {
+                var components = path.split('/');
+                maxDepth = Math.max(components.length + 1);
+                components.forEach(function(key, i, components) {
+                    var value = commentsByKey[key];
+                    if (!value) {
+                        total++;
+                        value = commentsByKey[key] = [{
+                            key: key,
+                            value: 'REDACTED',
+                            redacted: true,
+                            metadata: {
+                                'http://lumify.io#createDate': '',
+                                'http://lumify.io#modifiedDate': ''
+                            }
+                        }, []];
+                        if (i === 0) {
+                            roots.push(value);
+                        }
+                    }
+                    if (i === (components.length - 1)) {
+                        value[1].push(commentsByKey[comment.key]);
+                    }
+                });
+            } else {
+                roots.push(commentsByKey[comment.key])
+            }
+        });
+
+        return {
+            roots: roots,
+            userIds: userIds,
+            maxDepth: maxDepth,
+            total: total
+        };
+    }
+
     function Comments() {
 
         this.after('initialize', function() {
@@ -62,57 +123,51 @@ define([
             }
         };
 
-        this.update = function() {
-            var self = this,
-                comments = _.chain(this.attr.data.properties)
-                    .where({ name: 'http://lumify.io/comment#entry' })
-                    .sortBy(function(p) {
-                        return p.metadata['http://lumify.io#createDate'];
-                    })
-                    .value()
-                selection = d3.select(this.$node.find('.comment-content ul').get(0))
-                    .selectAll('.comment')
-                    .data(comments)
-                    .order();
+        this.renderCommentLevel = function(maxDepth, level, selection) {
+            var self = this;
 
-            this.$node.find('.collapsible .badge').text(
-                F.number.pretty(comments.length)
-            );
+            if (level >= maxDepth) {
+                return;
+            }
 
             selection.enter()
-                .append('li').attr('class', 'comment')
+                .append('li').attr('class', 'comment comment-' + level)
                 .call(function() {
                     this.append('div').attr('class', 'comment-text')
                     this.append('span').attr('class', 'visibility')
                     this.append('span').attr('class', 'user')
                     this.append('span').attr('class', 'date')
                     this.append('button').attr('class', 'info')
+                    this.append('ul');
                 })
 
             selection.select('.comment-text').text(function(p) {
-                return p.value;
+                return p[0].value;
             });
             selection.select('.visibility').each(function(p) {
+                if (p[0].redacted) {
+                    return;
+                }
                 this.textContent = '';
                 F.vertex.properties.visibility(
                     this,
-                    { value: p.metadata && p.metadata[VISIBILITY_NAME] },
+                    { value: p[0].metadata && p[0].metadata[VISIBILITY_NAME] },
                     self.attr.data.id
                 );
             })
-            var users = this.dataRequest('user', 'getUserNames', _.map(comments, function(p) {
-                return p.metadata['http://lumify.io#modifiedBy'];
-            }));
             selection.select('.user').each(function(p, i) {
                 var $this = $(this).text('Loading...');
-                users.done(function(users) {
-                    $this.text(users[i]);
-                })
+                //users.done(function(users) {
+                    //$this.text(users[i]);
+                //})
             });
             selection.select('.date')
                 .text(function(p) {
-                    var created = p.metadata['http://lumify.io#createDate'],
-                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                    if (p[0].redacted) {
+                        return '';
+                    }
+                    var created = p[0].metadata['http://lumify.io#createDate'],
+                        modified = p[0].metadata['http://lumify.io#modifiedDate'],
                         edited = created !== modified,
                         relativeString = F.date.relativeToNow(F.date.utc(created));
 
@@ -122,8 +177,11 @@ define([
                     return relativeString;
                 })
                 .attr('title', function(p) {
-                    var created = p.metadata['http://lumify.io#createDate'],
-                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                    if (p[0].redacted) {
+                        return '';
+                    }
+                    var created = p[0].metadata['http://lumify.io#createDate'],
+                        modified = p[0].metadata['http://lumify.io#modifiedDate'],
                         edited = created !== modified;
                     if (edited) {
                         return i18n(
@@ -135,12 +193,43 @@ define([
                     return F.date.dateTimeString(created);
                 });
             selection.select('.info').on('click', function(property) {
-                self.showPropertyInfo(this, self.attr.data.id, property);
+                if (property[0].redacted) {
+                    return;
+                }
+                self.showPropertyInfo(this, self.attr.data.id, property[0]);
             });
-
             selection.exit().remove();
 
-            this.$node.find('.collapsible-header').toggle(comments.length > 0);
+            var nextLevel = level + 1,
+                subselection = selection
+                    .select(function() {
+                        return $(this).children('ul')[0];
+                    })
+                    .selectAll('.comment-' + nextLevel)
+                    .data(function(p) {
+                        return p[1] || [];
+                    });
+
+            this.renderCommentLevel(maxDepth, nextLevel, subselection);
+        };
+
+        this.update = function() {
+            var self = this,
+                commentsTreeResponse = toCommentTree(this.attr.data.properties),
+                commentsTree = commentsTreeResponse.roots,
+                selection = d3.select(this.$node.find('.comment-content ul').get(0))
+                    .selectAll('.comment-0')
+                    .data(commentsTree)
+                    .order();
+
+            console.log('update', commentsTree);
+            this.commentingUsers = this.dataRequest('user', 'getUserNames', commentsTreeResponse.userIds);
+            this.renderCommentLevel(commentsTreeResponse.maxDepth, 0, selection);
+
+            this.$node.find('.collapsible .badge').text(
+                F.number.pretty(commentsTreeResponse.total)
+            );
+            this.$node.find('.collapsible-header').toggle(commentsTreeResponse.total > 0);
         };
 
         this.onEditProperty = function(event, data) {
