@@ -30,7 +30,6 @@
     <!-- http://lumify.io/comment#entry-->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/comment#entry">
-        <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>FULL_TEXT</lumify:textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
         <rdfs:range rdf:resource="&xsd;string"/>

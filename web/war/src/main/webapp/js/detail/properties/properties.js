@@ -20,6 +20,7 @@ define([
     'use strict';
 
     var component = defineComponent(Properties, withDataRequest, withPropertyInfo),
+        HIDE_PROPERTIES = ['http://lumify.io/comment#entry'],
         VISIBILITY_NAME = 'http://lumify.io#visibilityJson',
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
@@ -99,6 +100,10 @@ define([
 
                         if (isVisibility(property)) {
                             return true;
+                        }
+
+                        if (~HIDE_PROPERTIES.indexOf(property.name)) {
+                            return false;
                         }
 
                         var ontologyProperty = self.ontologyProperties.byTitle[property.name];
