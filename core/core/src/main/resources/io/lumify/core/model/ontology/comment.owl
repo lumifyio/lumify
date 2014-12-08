@@ -31,7 +31,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/comment#entry">
         <lumify:userVisible>false</lumify:userVisible>
-        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
+        <lumify:textIndexHints>FULL_TEXT</lumify:textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
