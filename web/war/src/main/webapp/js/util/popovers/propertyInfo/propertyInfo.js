@@ -71,8 +71,15 @@ define([
                 positionDialog = this.positionDialog.bind(this),
                 displayNames = this.metadataPropertiesDisplayMap,
                 displayTypes = this.metadataPropertiesTypeMap,
-                canEdit = F.vertex.sandboxStatus(property) ||
-                    property.name === 'http://lumify.io#visibilityJson',
+                isComment = property.name === 'http://lumify.io/comment#entry',
+                isCommentCreator = isComment &&
+                    property.metadata['http://lumify.io#modifiedBy'] === lumifyData.currentUser.id,
+                canEdit = isComment ?
+                    isCommentCreator :
+                    (
+                        F.vertex.sandboxStatus(property) ||
+                        property.name === 'http://lumify.io#visibilityJson'
+                    ),
                 canDelete = canEdit && property.name !== 'http://lumify.io#visibilityJson',
                 metadata = _.chain(this.metadataProperties || [])
                     .map(function(name) {
@@ -100,10 +107,15 @@ define([
                     });
 
             this.contentRoot.select('.btn-danger')
-                .style('display', canDelete ? 'inline' : 'none');
+                .style('display', canDelete ? 'inline' : 'none')
+                .classed('requires-EDIT', !isComment)
+                .classed('requires-COMMENT', isComment)
             this.contentRoot.select('.editadd')
+                .style('display', isComment && !isCommentCreator ? 'none' : 'inline')
                 .classed('btn-edit', canEdit)
                 .classed('btn-add', !canEdit)
+                .classed('requires-EDIT', !isComment)
+                .classed('requires-COMMENT', isComment)
                 .classed('nodelete', !canDelete)
                 .text(canEdit ?
                   i18n('popovers.property_info.button.edit') :
@@ -222,7 +234,8 @@ define([
         };
 
         this.onDelete = function(e) {
-            var button = this.select('deleteButtonSelector').addClass('loading').attr('disabled', true);
+            e.stopPropagation();
+            var button = this.popover.find('.btn-danger').addClass('loading').attr('disabled', true);
             this.trigger('deleteProperty', {
                 property: _.pick(this.attr.property, 'name', 'key')
             });

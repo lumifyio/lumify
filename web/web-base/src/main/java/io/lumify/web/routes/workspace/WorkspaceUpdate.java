@@ -71,7 +71,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         respondWithSuccessJson(response);
 
-        workQueueRepository.pushWorkspaceChange(clientApiWorkspace, previousUsers);
+        workQueueRepository.pushWorkspaceChange(clientApiWorkspace, previousUsers, authUser.getUserId());
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {
@@ -110,7 +110,8 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             public WorkspaceRepository.Update apply(ClientApiWorkspaceUpdateData.EntityUpdate u) {
                 String vertexId = u.getVertexId();
                 GraphPosition graphPosition = u.getGraphPosition();
-                return new WorkspaceRepository.Update(vertexId, true, graphPosition);
+                String graphLayoutJson = u.getGraphLayoutJson();
+                return new WorkspaceRepository.Update(vertexId, true, graphPosition, graphLayoutJson);
             }
         });
         workspaceRepository.updateEntitiesOnWorkspace(workspace, updates, authUser);

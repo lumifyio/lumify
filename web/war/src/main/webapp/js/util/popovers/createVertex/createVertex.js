@@ -101,10 +101,12 @@ define([
 
             this.request
                 .then(function(result) {
-                    // TODO: fileDropPosition: self.attr.anchorTo.page
                     self.trigger('updateWorkspace', {
                         entityUpdates: [{
-                            vertexId: result.id
+                            vertexId: result.id,
+                            graphLayoutJson: {
+                                pagePosition: self.attr.anchorTo.page
+                            }
                         }]
                     })
                     self.teardown();

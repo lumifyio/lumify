@@ -3,11 +3,13 @@ define([
     'flight/lib/component',
     'tpl!./overlay',
     'util/formatters',
+    'util/privileges',
     'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     F,
+    Privilege,
     withDataRequest) {
     'use strict';
 
@@ -123,17 +125,24 @@ define([
             }
         }
 
-        this.setContent = function(title, editable, subtitle) {
+        this.setContent = function(title, editable, commentable, subtitle) {
             this.select('nameSelector').text(title);
             this.select('subtitleSelector').html(
-                editable === false ?
-                    i18n('workspaces.overlay.read_only') :
-                    subtitle
+                editable === false || Privilege.missingEDIT ?
+                commentable === false || Privilege.missingCOMMENT ?
+                i18n('workspaces.overlay.read_only') :
+                i18n('workspaces.overlay.read_only_comment') :
+                subtitle
             );
         };
 
         this.updateWithNewWorkspaceData = function(workspace) {
-            this.setContent(workspace.title, workspace.editable, i18n('workspaces.overlay.no_changes'));
+            this.setContent(
+                workspace.title,
+                workspace.editable,
+                workspace.commentable,
+                i18n('workspaces.overlay.no_changes')
+            );
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(workspace);
         };
@@ -204,12 +213,6 @@ define([
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
-
-            if (event && event.type === 'verticesUpdated') {
-                if (!data || !data.options || data.options.originalEvent !== 'propertiesChange') {
-                    return;
-                }
-            }
 
             if (!badge.length) {
                 badge = $('<span class="badge"></span>')

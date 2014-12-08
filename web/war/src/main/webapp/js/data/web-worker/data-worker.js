@@ -25,6 +25,9 @@ function setupConsole() {
             debug: log('debug'),
             error: log('error'),
             warn: log('warn'),
+            group: _.identity,
+            groupCollapsed: _.identity,
+            groupEnd: _.identity
         };
     }
     function log(type) {
@@ -44,9 +47,11 @@ function setupWebsocket() {
 
     if (supportedInWorker) {
         self.window = self;
-        importScripts('/libs/atmosphere/atmosphere.js')
+        importScripts(BASE_URL + '/libs/atmosphere/atmosphere.js')
         atmosphere.util.getAbsoluteURL = function() {
-            return location.origin + '/messaging';
+            return location.origin +
+                location.pathname.replace(/\/jsc.*$/, '') +
+                '/messaging';
         }
         self.pushSocketMessage = function(message) {
             Promise.all([

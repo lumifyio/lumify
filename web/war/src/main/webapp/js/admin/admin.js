@@ -109,7 +109,7 @@ define([
                             }
                         }).each(function(component) {
                             if (!_.isString(component)) {
-                                d3.select(this).append('a').attr('href', '#');
+                                d3.select(this).append('a');
                             }
                         });
 

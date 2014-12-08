@@ -271,25 +271,15 @@ define([
                     }),
                     xInc = GRID_LAYOUT_X_INCREMENT,
                     yInc = GRID_LAYOUT_Y_INCREMENT,
-                    nextAvailablePosition = _.pick(availableSpaceBox, 'x', 'y');
+                    defaultAvailablePosition = _.pick(availableSpaceBox, 'x', 'y'),
+                    nextAvailablePosition = null;
 
                 if (options.animate) container.removeClass('animateinstart').addClass('animatein');
 
-                if (options.fileDropPosition) {
-                    var projectedPosition = cy.renderer().projectIntoViewport(
-                        options.fileDropPosition.x,
-                        options.fileDropPosition.y
-                    );
-                    nextAvailablePosition = retina.pixelsToPoints({
-                        x: projectedPosition[0],
-                        y: projectedPosition[1]
-                    });
-                } else {
-                    nextAvailablePosition.y += yInc;
-                }
+                defaultAvailablePosition.y += yInc;
 
                 var maxWidth = Math.max(availableSpaceBox.w, xInc * 10),
-                    startX = nextAvailablePosition.x,
+                    startX = null,
                     vertexIds = _.pluck(vertices, 'id'),
                     existingNodes = currentNodes.filter(function(i, n) {
                         var nId = n.id();
@@ -314,34 +304,65 @@ define([
                     vertices.forEach(function(vertex) {
 
                         var cyNodeData = {
-                            group: 'nodes',
-                            classes: self.classesForVertex(vertex),
-                            data: {
-                                id: toCyId(vertex),
+                                group: 'nodes',
+                                classes: self.classesForVertex(vertex),
+                                data: {
+                                    id: toCyId(vertex),
+                                },
+                                grabbable: self.isWorkspaceEditable,
+                                selected: false // TODO: check selected?
                             },
-                            grabbable: self.isWorkspaceEditable,
-                            selected: false // TODO: check selected?
-                        };
+                            workspaceVertex = self.workspaceVertices[vertex.id];
+
                         self.updateCyNodeData(cyNodeData.data, vertex);
 
                         var needsAdding = false,
-                            needsUpdating = false;
-
-                        if (self.workspaceVertices[vertex.id].graphPosition) {
-                            cyNodeData.position = retina.pointsToPixels(
-                                self.workspaceVertices[vertex.id].graphPosition
+                            needsUpdating = false,
+                            hasPosition = workspaceVertex && (
+                                workspaceVertex.graphPosition || workspaceVertex.graphLayoutJson
                             );
-                        } else if (self.workspaceVertices[vertex.id].dropPosition) {
-                            var offset = self.$node.offset();
-                            cyNodeData.renderedPosition = retina.pointsToPixels({
-                                x: self.workspaceVertices[vertex.id].dropPosition.x - offset.left,
-                                y: self.workspaceVertices[vertex.id].dropPosition.y - offset.top
-                            });
-                            needsAdding = true;
-                        } else if (layoutPositions[vertex.id]) {
-                            cyNodeData.position = retina.pointsToPixels(layoutPositions[vertex.id]);
-                            needsUpdating = true;
+
+                        if (!hasPosition) {
+                            console.debug('Vertex added without position info', vertex);
+                            return;
+                        }
+
+                        if (workspaceVertex.graphPosition) {
+                            cyNodeData.position = retina.pointsToPixels(
+                                workspaceVertex.graphPosition
+                            );
                         } else {
+                            if (!nextAvailablePosition) {
+                                var layout = workspaceVertex.graphLayoutJson;
+                                if (layout && layout.pagePosition) {
+                                    var projectedPosition = cy.renderer().projectIntoViewport(
+                                        workspaceVertex.graphLayoutJson.pagePosition.x,
+                                        workspaceVertex.graphLayoutJson.pagePosition.y
+                                    );
+                                    nextAvailablePosition = retina.pixelsToPoints({
+                                        x: projectedPosition[0],
+                                        y: projectedPosition[1]
+                                    });
+                                } else if (layout && layout.relatedToVertexId) {
+                                    var relatedToCyNode = cy.getElementById(toCyId(layout.relatedToVertexId));
+                                    if (relatedToCyNode.length) {
+                                        var relatedToPosition = retina.pixelsToPoints(relatedToCyNode.position());
+                                        nextAvailablePosition = {
+                                            x: Math.max(relatedToPosition.x, defaultAvailablePosition.x),
+                                            y: Math.max(relatedToPosition.y, defaultAvailablePosition.y)
+                                        };
+                                    }
+                                }
+
+                                if (!nextAvailablePosition) {
+                                    nextAvailablePosition = defaultAvailablePosition;
+                                }
+                            }
+
+                            if (startX === null) {
+                                startX = nextAvailablePosition.x;
+                            }
+
                             var position = retina.pointsToPixels(nextAvailablePosition);
                             cyNodeData.position = {
                                 x: Math.round(position.x),
@@ -1175,10 +1196,21 @@ define([
                     data.entityUpdates.forEach(function(entityUpdate) {
                         var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId));
                         if (cyNode.length && !cyNode.grabbed()) {
-                            cyNode.position(retina.pointsToPixels(entityUpdate.graphPosition));
+                            cyNode
+                                .stop(true)
+                                .animate(
+                                    {
+                                        position: retina.pointsToPixels(entityUpdate.graphPosition)
+                                    },
+                                    {
+                                        duration: 500,
+                                        easing: 'easeOutBack'
+                                    }
+                                );
                         }
                         self.workspaceVertices[entityUpdate.vertexId] = entityUpdate;
                     });
+                    self.workspaceVertices = _.omit(self.workspaceVertices, data.entityDeletes);
 
                     this.getNodesByVertexIds(cy, data.entityDeletes).remove();
                     if (data.newVertices) {

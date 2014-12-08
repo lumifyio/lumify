@@ -92,7 +92,7 @@ define([
             return ajax('POST->HTML', '/admin/queueEdges');
         },
 
-        ontologyUpload: function(file, iri) {
+        ontologyUpload: function(iri, file) {
             var formData = new FormData();
             formData.append('file', file);
             formData.append('documentIRI', iri);

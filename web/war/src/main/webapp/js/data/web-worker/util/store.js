@@ -73,7 +73,10 @@ define([
             },
 
             setWorkspace: function(workspace) {
-                workspace.vertices = _.indexBy(workspace.vertices, 'vertexId');
+                if (_.isArray(workspace.vertices)) {
+                    workspace.vertices = _.indexBy(workspace.vertices, 'vertexId');
+                }
+                parseJsonLayoutForVertices(workspace.vertices);
                 var workspaceCache = cacheForWorkspace(workspace.workspaceId);
                 workspaceCache.workspace = workspace;
                 return workspace;
@@ -84,12 +87,19 @@ define([
                 changes.entityUpdates.forEach(function(entityUpdate) {
                     var workspaceVertex = _.findWhere(workspace.vertices, { vertexId: entityUpdate.vertexId });
                     if (workspaceVertex) {
-                        workspaceVertex.graphPosition = entityUpdate.graphPosition;
+                        if ('graphPosition' in entityUpdate) {
+                            workspaceVertex.graphPosition = entityUpdate.graphPosition;
+                        } else {
+                            delete workspaceVertex.graphPosition;
+                        }
+                        if ('graphLayoutJson' in entityUpdate) {
+                            workspaceVertex.graphLayoutJson = entityUpdate.graphLayoutJson;
+                        } else {
+                            delete workspaceVertex.graphLayoutJson;
+                        }
                     } else {
-                        workspace.vertices[entityUpdate.vertexId] = {
-                            vertexId: entityUpdate.vertexId,
-                            graphPosition: entityUpdate.graphPosition
-                        };
+                        workspace.vertices[entityUpdate.vertexId] =
+                            _.pick(entityUpdate, 'vertexId', 'graphPosition', 'graphLayoutJson');
                     }
                 });
                 workspace.vertices = _.omit(workspace.vertices, changes.entityDeletes);
@@ -121,13 +131,18 @@ define([
             workspaceWasChangedRemotely: function(remoteWorkspace) {
                 var user = _.findWhere(remoteWorkspace.users, { userId: publicData.currentUser.id });
                 remoteWorkspace.editable = /WRITE/i.test(user && user.access);
+                remoteWorkspace.commentable = /(COMMENT|WRITE)/i.test(user && user.access);
                 remoteWorkspace.isSharedToUser = remoteWorkspace.createdBy !== publicData.currentUser.id;
                 if (('vertices' in remoteWorkspace)) {
                     remoteWorkspace.vertices = _.indexBy(remoteWorkspace.vertices, 'vertexId');
+                    parseJsonLayoutForVertices(remoteWorkspace.vertices);
                 }
                 var workspace = api.getObject(remoteWorkspace.workspaceId, 'workspace');
                 if (!workspace || !_.isEqual(remoteWorkspace, workspace)) {
-                    console.debug('WORKSPACE UPDATED', remoteWorkspace, workspace)
+                    console.groupCollapsed('Workspace Update')
+                    console.debug('old', workspace)
+                    console.debug('new', remoteWorkspace)
+                    console.groupEnd('Workspace Update')
 
                     var vertexIds = _.keys(remoteWorkspace.vertices),
                         vertexIdsPrevious = workspace ? _.keys(workspace.vertices) : [],
@@ -137,8 +152,8 @@ define([
                         added = _.values(_.pick(remoteWorkspace.vertices, addedIds)),
                         updated = _.compact(_.map(updatedIds, function(vId) {
                             return (workspace && _.isEqual(
-                                remoteWorkspace.vertices[vId].graphPosition,
-                                workspace.vertices[vId].graphPosition
+                                remoteWorkspace.vertices[vId],
+                                workspace.vertices[vId]
                             )) ? null : remoteWorkspace.vertices[vId];
                         }));
 
@@ -171,7 +186,7 @@ define([
                 willChange = willChange || _.any(changes.entityUpdates, function(entityUpdate) {
                     var workspaceVertex = _.findWhere(workspace.vertices, { vertexId: entityUpdate.vertexId });
                     if (workspaceVertex) {
-                        return !_.isEqual(workspaceVertex.graphPosition, entityUpdate.graphPosition);
+                        return !_.isEqual(workspaceVertex, entityUpdate);
                     } else {
                         return true;
                     }
@@ -267,6 +282,16 @@ define([
     function cachePriorityForUrl(url) {
         if (url === '/vertex/search') {
             return Cache.Priority.LOW;
+        }
+    }
+
+    function parseJsonLayoutForVertices(workspaceVertices) {
+        if (workspaceVertices) {
+            _.each(workspaceVertices, function(wv) {
+                if (('graphLayoutJson' in wv) && _.isString(wv.graphLayoutJson)) {
+                    wv.graphLayoutJson = JSON.parse(wv.graphLayoutJson);
+                }
+            })
         }
     }
 
