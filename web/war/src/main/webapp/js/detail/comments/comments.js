@@ -138,7 +138,8 @@ define([
                     this.append('span').attr('class', 'user')
                     this.append('span').attr('class', 'date')
                     this.append('button').attr('class', 'info')
-                    this.append('ul');
+                    this.append('button').attr('class', 'replies btn-link btn')
+                    this.append('ul').attr('class', 'collapsed');
                 })
 
             selection.select('.comment-text').text(function(p) {
@@ -158,7 +159,7 @@ define([
             selection.select('.user').each(function(p, i) {
                 var $this = $(this)
                     .data('userId', p[0].metadata['http://lumify.io#modifiedBy'])
-                    .text('Loading...');
+                    .text(p[0].redacted ? 'Unknown' : 'Loading...');
             });
             selection.select('.date')
                 .text(function(p) {
@@ -190,6 +191,18 @@ define([
                         );
                     }
                     return F.date.dateTimeString(created);
+                });
+            selection.select('.replies')
+                .attr('style', function(p) {
+                    if (p[1].length === 0) {
+                        return 'display:none';
+                    }
+                })
+                .text(function(p) {
+                    return F.string.plural(p[1].length, 'reply', 'replies');
+                })
+                .on('click', function(property) {
+                    $(this).next('ul').toggleClass('collapsed')
                 });
             selection.select('.info').on('click', function(property) {
                 if (property[0].redacted) {
