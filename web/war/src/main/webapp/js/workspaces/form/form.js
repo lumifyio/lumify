@@ -171,6 +171,7 @@ define([
                         access: userPermission.access,
                         permissionLabel: {
                             read: i18n('workspaces.form.sharing.access.view'),
+                            comment: i18n('workspaces.form.sharing.access.comment'),
                             write: i18n('workspaces.form.sharing.access.edit')
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,
@@ -189,13 +190,16 @@ define([
         };
 
         this.makePopover = function(el) {
+            var self = this;
+
             el.popover({
                 html: true,
                 placement: 'bottom',
                 container: this.$node,
                 content: function() {
-                    var row = $(this).closest('.user-row');
-                    return $(permissionsTemplate($(this).data())).data('userRow', row);
+                    var row = $(this).closest('.user-row'),
+                        data = $(this).data();
+                    return $(permissionsTemplate(data)).data('userRow', row);
                 }
             });
         };

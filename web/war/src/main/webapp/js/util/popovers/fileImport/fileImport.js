@@ -168,11 +168,13 @@ define([
                     button.text(percent + '% ' + i18n('popovers.file_import.importing'));
                 })
                 .then(function(result) {
-                    // TODO: somehow tie in fileDropPosition: self.attr.anchorTo.page
                     self.trigger('updateWorkspace', {
                         entityUpdates: result.vertexIds.map(function(vId) {
                             return {
-                                vertexId: vId
+                                vertexId: vId,
+                                graphLayoutJson: {
+                                    pagePosition: self.attr.anchorTo.page
+                                }
                             }
                         })
                     });

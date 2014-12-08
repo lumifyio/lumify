@@ -4,19 +4,21 @@ define([
     '../dropdowns/commentForm/commentForm',
     'util/withCollapsibleSections',
     'util/vertex/formatters',
-    'util/withDataRequest'
+    'util/withDataRequest',
+    'util/popovers/propertyInfo/withPropertyInfo'
 ], function(
     defineComponent,
     template,
     CommentForm,
     withCollapsibleSections,
     F,
-    withDataRequest) {
+    withDataRequest,
+    withPropertyInfo) {
     'use strict';
 
     var VISIBILITY_NAME = 'http://lumify.io#visibilityJson';
 
-    return defineComponent(Comments, withCollapsibleSections, withDataRequest);
+    return defineComponent(Comments, withCollapsibleSections, withDataRequest, withPropertyInfo);
 
     function Comments() {
 
@@ -29,8 +31,11 @@ define([
             }
 
             this.on('commentOnSelection', this.onCommentOnSelection);
+            this.on('editProperty', this.onEditProperty);
+            this.on('deleteProperty', this.onDeleteProperty);
 
             this.attr.data = this.attr.vertex || this.attr.edge;
+            this.attr.type = this.attr.vertex ? 'vertex' : 'edge';
             this.$node.html(template({}));
             this.update();
         });
@@ -62,7 +67,7 @@ define([
                 comments = _.chain(this.attr.data.properties)
                     .where({ name: 'http://lumify.io/comment#entry' })
                     .sortBy(function(p) {
-                        return p.metadata['http://lumify.io#modifiedDate'];
+                        return p.metadata['http://lumify.io#createDate'];
                     })
                     .value()
                 selection = d3.select(this.$node.find('.comment-content ul').get(0))
@@ -81,6 +86,7 @@ define([
                     this.append('span').attr('class', 'visibility')
                     this.append('span').attr('class', 'user')
                     this.append('span').attr('class', 'date')
+                    this.append('button').attr('class', 'info')
                 })
 
             selection.select('.comment-text').text(function(p) {
@@ -105,32 +111,62 @@ define([
             });
             selection.select('.date')
                 .text(function(p) {
-                    return F.date.relativeToNow(F.date.utc(p.metadata['http://lumify.io#modifiedDate']));
+                    var created = p.metadata['http://lumify.io#createDate'],
+                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                        edited = created !== modified,
+                        relativeString = F.date.relativeToNow(F.date.utc(created));
+
+                    if (edited) {
+                        return i18n('detail.comments.date.edited', relativeString);
+                    }
+                    return relativeString;
                 })
                 .attr('title', function(p) {
-                    return F.date.dateTimeString(p.metadata['http://lumify.io#modifiedDate']);
+                    var created = p.metadata['http://lumify.io#createDate'],
+                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                        edited = created !== modified;
+                    if (edited) {
+                        return i18n(
+                            'detail.comments.date.hover.edited',
+                            F.date.dateTimeString(created),
+                            F.date.dateTimeString(modified)
+                        );
+                    }
+                    return F.date.dateTimeString(created);
                 });
-
-            // TODO: visibility
+            selection.select('.info').on('click', function(property) {
+                self.showPropertyInfo(this, self.attr.data.id, property);
+            });
 
             selection.exit().remove();
 
             this.$node.find('.collapsible-header').toggle(comments.length > 0);
         };
 
-        this.onEditComment = function(evt, data) {
+        this.onEditProperty = function(event, data) {
+            this.onEditComment(event, { comment: data.property });
+        };
+
+        this.onDeleteProperty = function(event, data) {
+            var self = this;
+            this.dataRequest(this.attr.type, 'deleteProperty',
+                this.attr.data.id, data.property
+            ).then(function() {
+                $(event.target).popover('hide');
+            });
+        };
+
+        this.onEditComment = function(event, data) {
             var root = $('<div class="underneath">'),
                 comment = data && data.comment,
                 sourceInfo = data && data.sourceInfo,
-                commentRow = comment && $(evt.target).closest('tr');
+                commentRow = comment && $(event.target).closest('li');
 
             this.$node.find('button.info').popover('hide');
 
             if (commentRow && commentRow.length) {
                 root.appendTo(
-                    $('<tr><td colspan=3></td></tr>')
-                        .insertAfter(commentRow)
-                        .find('td')
+                    $('<li></li>').css({ margin:0 }).insertAfter(commentRow)
                 );
             } else {
                 root.appendTo(this.$node.find('.comment-content'));
@@ -141,17 +177,29 @@ define([
             root.on(TRANSITION_END, function handler(e) {
                 var $this = $(this);
                 if (e && e.originalEvent && e.originalEvent.propertyName === 'height') {
-                    var sp = $this.scrollParent()
-                    sp.animate({
-                        scrollTop: $this.position().top
-                    });
+                    var sp = $this.scrollParent(),
+                        height = sp.height(),
+                        scrollTop = sp.scrollTop(),
+                        top = $this.position().top,
+                        formHeight = $this.outerHeight(true) + 50,
+                        bottom = top + formHeight,
+                        scrollUp = top < scrollTop,
+                        scrollDown = bottom > (scrollTop + height);
+
+                    if (scrollUp || scrollDown) {
+                        sp.animate({
+                            scrollTop: scrollUp ?
+                                $this.position().top :
+                                top - (height - formHeight)
+                        });
+                    }
                     root.off(TRANSITION_END, handler);
                 }
             })
             CommentForm.teardownAll();
             CommentForm.attachTo(root, {
                 data: this.attr.data,
-                type: this.attr.vertex ? 'vertex' : 'edge',
+                type: this.attr.type,
                 sourceInfo: sourceInfo,
                 comment: comment
             });

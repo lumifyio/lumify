@@ -36,6 +36,7 @@ define([
 
             this.$node.html(commentTemplate({
                 graphVertexId: this.attr.data.id,
+                commentText: this.attr.comment && this.attr.comment.value || '',
                 buttonText: i18n('detail.comment.form.button')
             }));
 
@@ -47,7 +48,10 @@ define([
                 'configuration/plugins/visibility/visibilityEditor'
             ], function(Visibility) {
                 Visibility.attachTo(self.$node.find('.visibility'), {
-                    value: ''
+                    value: self.attr.comment &&
+                        self.attr.comment.metadata &&
+                        self.attr.comment.metadata['http://lumify.io#visibilityJson'] &&
+                        self.attr.comment.metadata['http://lumify.io#visibilityJson'].source
                 });
             });
 
@@ -68,9 +72,9 @@ define([
 
             this.buttonLoading();
 
-            debugger;
             this.dataRequest(this.attr.type, 'setProperty', this.attr.data.id, {
                 name: 'http://lumify.io/comment#entry',
+                key: this.attr.comment && this.attr.comment.key,
                 value: this.getValue(),
                 visibilitySource: this.visibilitySource && this.visibilitySource.value || '',
                 sourceInfo: this.attr.sourceInfo
@@ -79,7 +83,7 @@ define([
                     self.teardown();
                 })
                 .catch(function(error) {
-                    self.markFieldErrors(error && error.statusText);
+                    self.markFieldErrors(error && error.statusText || error);
                     self.clearLoading();
                 })
         };

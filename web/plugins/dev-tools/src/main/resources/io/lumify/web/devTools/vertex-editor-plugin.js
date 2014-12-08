@@ -57,6 +57,8 @@ require([
                 workspaceId: lumifyData.currentWorkspaceId,
                 vertexId: ''
             }));
+
+            this.onObjectsSelected(null, lumifyData.selectedObjects);
         });
 
         this.onEdit = function(event) {
@@ -71,11 +73,11 @@ require([
 
             this.handleSubmitButton(
                 button,
-                this.dataRequest('vertex', 'deleteProperty', {
-                    vertexId: this.$node.find('.vertexId').val(),
-                    property: li.data('property'),
-                    workspaceId: this.$node.find('.workspaceId').val()
-                })
+                this.dataRequest('vertex', 'deleteProperty',
+                    this.$node.find('.vertexId').val(),
+                    li.data('property'),
+                    this.$node.find('.workspaceId').val()
+                )
                     .then(function() {
                         li.removeClass('show-hover-items');
                         self.onLoad();

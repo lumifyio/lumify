@@ -59,6 +59,14 @@ define([
             }));
         },
 
+        deleteProperty: function(edgeId, property) {
+            return ajax('DELETE', '/edge/property', {
+                edgeId: edgeId,
+                propertyName: property.name,
+                propertyKey: property.key
+            })
+        },
+
         store: storeHelper.createStoreAccessorOrDownloader(
             'edge', 'edgeId', null,
             function(toRequest) {

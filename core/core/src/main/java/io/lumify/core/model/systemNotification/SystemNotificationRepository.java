@@ -50,6 +50,7 @@ public abstract class SystemNotificationRepository {
         return notification.getStartDate().before(now) && (endDate == null || endDate.after(now));
     }
 
+    // TODO: use LeaderSelector, http://curator.apache.org/curator-recipes/leader-election.html
     protected void startBackgroundThread(final LockRepository lockRepository, final UserRepository userRepository, final WorkQueueRepository workQueueRepository) {
         Runnable acquireLock = new Runnable() {
             @Override

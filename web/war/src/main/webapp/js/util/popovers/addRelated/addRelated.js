@@ -84,12 +84,16 @@ define([
         };
 
         this.onPromptAdd = function(event) {
+            var self = this;
+
             this.trigger('updateWorkspace', {
-                //layoutOptions: {
-                    //addingVerticesRelatedTo: this.attr.relatedToVertexId
-                //},
                 entityUpdates: this.promptAddVertices.map(function(vertex) {
-                    return { vertexId: vertex.id };
+                    return {
+                        vertexId: vertex.id,
+                        graphLayoutJson: {
+                            relatedToVertexId: self.attr.relatedToVertexId
+                        }
+                    };
                 })
             });
             this.teardown();
@@ -144,11 +148,13 @@ define([
                         promptAdd.text(i18n('popovers.add_related.button.prompt_add', count)).show();
                     } else {
                         self.trigger('updateWorkspace', {
-                            //layoutOptions: {
-                                //addingVerticesRelatedTo: self.attr.relatedToVertexId
-                            //},
                             entityUpdates: vertices.map(function(vertex) {
-                                return { vertexId: vertex.id };
+                                return {
+                                    vertexId: vertex.id,
+                                    graphLayoutJson: {
+                                        relatedToVertexId: self.attr.relatedToVertexId
+                                    }
+                                };
                             })
                         });
                         self.teardown();

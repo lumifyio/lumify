@@ -25,6 +25,9 @@ function setupConsole() {
             debug: log('debug'),
             error: log('error'),
             warn: log('warn'),
+            group: _.identity,
+            groupCollapsed: _.identity,
+            groupEnd: _.identity
         };
     }
     function log(type) {
