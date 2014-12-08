@@ -156,10 +156,9 @@ define([
                 );
             })
             selection.select('.user').each(function(p, i) {
-                var $this = $(this).text('Loading...');
-                //users.done(function(users) {
-                    //$this.text(users[i]);
-                //})
+                var $this = $(this)
+                    .data('userId', p[0].metadata['http://lumify.io#modifiedBy'])
+                    .text('Loading...');
             });
             selection.select('.date')
                 .text(function(p) {
@@ -223,8 +222,14 @@ define([
                     .order();
 
             console.log('update', commentsTree);
-            this.commentingUsers = this.dataRequest('user', 'getUserNames', commentsTreeResponse.userIds);
             this.renderCommentLevel(commentsTreeResponse.maxDepth, 0, selection);
+            this.dataRequest('user', 'getUserNames', commentsTreeResponse.userIds)
+                .done(function(users) {
+                    var usersById = _.object(commentsTreeResponse.userIds, users);
+                    self.$node.find('.user').each(function() {
+                        $(this).text(usersById[$(this).data('userId')]);
+                    })
+                })
 
             this.$node.find('.collapsible .badge').text(
                 F.number.pretty(commentsTreeResponse.total)
