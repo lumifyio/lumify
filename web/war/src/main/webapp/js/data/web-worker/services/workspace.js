@@ -83,10 +83,17 @@ define([
             }, changes || {});
 
             allChanges.entityUpdates.forEach(function(entityUpdate) {
-                var p = entityUpdate.graphPosition;
+                var p = entityUpdate.graphPosition,
+                    layout = entityUpdate.graphLayoutJson;
+
                 if (p) {
                     p.x = Math.round(p.x);
                     p.y = Math.round(p.y);
+                }
+                if (layout) {
+                    entityUpdate.graphLayoutJson = JSON.stringify(layout);
+                } else if (!p) {
+                    console.error('Entity updates require either graphPosition or graphLayoutJson', entityUpdate);
                 }
             })
 
@@ -105,6 +112,18 @@ define([
         vertices: function(workspaceId) {
             return ajax('GET', '/workspace/vertices', {
                 workspaceId: workspaceId || publicData.currentWorkspaceId
+            });
+        },
+
+        publish: function(changes) {
+            return ajax('POST', '/workspace/publish', {
+                publishData: JSON.stringify(changes)
+            });
+        },
+
+        undo: function(changes) {
+            return ajax('POST', '/workspace/undo', {
+                undoData: JSON.stringify(changes)
             });
         },
 

@@ -47,7 +47,6 @@ define([
                 userAsync: function(el, userId) {
                     return Promise.require('util/withDataRequest')
                         .then(function(withDataRequest) {
-                            console.trace()
                             return withDataRequest.dataRequest('user', 'getUserNames', [userId])
                         })
                         .then(function(users) {

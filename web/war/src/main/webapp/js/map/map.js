@@ -598,7 +598,16 @@ define([
                             self.endRegionSelection();
                             self.trigger('updateWorkspace', {
                                 entityUpdates: data.vertices.map(function(vertex) {
-                                    return { vertexId: vertex.id };
+                                    return {
+                                        vertexId: vertex.id,
+                                        graphLayoutJson: {
+                                            fromMapRegion: {
+                                                lat: lonlat.lat,
+                                                lon: lonlat.lon,
+                                                radius: radius
+                                            }
+                                        }
+                                    };
                                 })
                             });
                         }

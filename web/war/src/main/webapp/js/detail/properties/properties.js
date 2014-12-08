@@ -5,6 +5,7 @@ define([
     'util/vertex/formatters',
     'util/privileges',
     'util/withDataRequest',
+    'util/popovers/propertyInfo/withPropertyInfo',
     'hbs!../audit/audit-list',
     'd3'
 ], function(
@@ -13,11 +14,12 @@ define([
     F,
     Privileges,
     withDataRequest,
+    withPropertyInfo,
     auditsListTemplate,
     d3) {
     'use strict';
 
-    var component = defineComponent(Properties, withDataRequest),
+    var component = defineComponent(Properties, withDataRequest, withPropertyInfo),
         VISIBILITY_NAME = 'http://lumify.io#visibilityJson',
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
@@ -54,24 +56,6 @@ define([
             auditEntitySelector: '.resolved',
             propertiesInfoSelector: 'button.info'
         });
-
-        this.showPropertyInfo = function(button, property) {
-            var vertexId = this.attr.data.id,
-                $target = $(button),
-                shouldOpen = $target.lookupAllComponents().length === 0;
-
-            require(['util/popovers/propertyInfo/propertyInfo'], function(PropertyInfo) {
-                if (shouldOpen) {
-                    PropertyInfo.teardownAll();
-                    PropertyInfo.attachTo($target, {
-                        property: property,
-                        vertexId: vertexId
-                    });
-                } else {
-                    $target.teardownComponent(PropertyInfo);
-                }
-            });
-        };
 
         this.update = function(properties) {
             var self = this,
@@ -531,7 +515,7 @@ define([
             this.reload();
         } else if ($target.is('.info')) {
             var datum = d3.select($target.closest('.property-value').get(0)).datum();
-            this.showPropertyInfo($target, datum.property);
+            this.showPropertyInfo($target, this.attr.data.id, datum.property);
         } else {
             processed = false;
         }
