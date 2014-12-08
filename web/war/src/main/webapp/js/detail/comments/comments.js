@@ -62,6 +62,8 @@ define([
                         }, []];
                         if (i === 0) {
                             roots.push(value);
+                        } else {
+                            commentsByKey[components[i - 1]][1].push(value);
                         }
                     }
                     if (i === (components.length - 1)) {
@@ -133,12 +135,15 @@ define([
             selection.enter()
                 .append('li').attr('class', 'comment comment-' + level)
                 .call(function() {
-                    this.append('div').attr('class', 'comment-text')
-                    this.append('span').attr('class', 'visibility')
-                    this.append('span').attr('class', 'user')
-                    this.append('span').attr('class', 'date')
-                    this.append('button').attr('class', 'info')
-                    this.append('button').attr('class', 'replies btn-link btn')
+                    this.append('div').attr('class', 'wrap')
+                        .call(function() {
+                            this.append('div').attr('class', 'comment-text')
+                            this.append('span').attr('class', 'visibility')
+                            this.append('span').attr('class', 'user')
+                            this.append('span').attr('class', 'date')
+                            this.append('button').attr('class', 'info')
+                            this.append('button').attr('class', 'replies btn-link btn')
+                        })
                     this.append('ul').attr('class', 'collapsed');
                 })
 
@@ -202,7 +207,7 @@ define([
                     return F.string.plural(p[1].length, 'reply', 'replies');
                 })
                 .on('click', function(property) {
-                    $(this).next('ul').toggleClass('collapsed')
+                    $(this).closest('li').children('ul').toggleClass('collapsed')
                 });
             selection.select('.info').on('click', function(property) {
                 if (property[0].redacted) {
@@ -251,7 +256,7 @@ define([
         };
 
         this.onEditProperty = function(event, data) {
-            this.onEditComment(event, { comment: data.property });
+            this.onEditComment(event, { path: data.path, comment: data.property });
         };
 
         this.onDeleteProperty = function(event, data) {
@@ -266,15 +271,19 @@ define([
         this.onEditComment = function(event, data) {
             var root = $('<div class="underneath">'),
                 comment = data && data.comment,
+                path = data && data.path,
                 sourceInfo = data && data.sourceInfo,
-                commentRow = comment && $(event.target).closest('li');
+                commentRow = (comment || path) && $(event.target).closest('li').children('ul');
 
             this.$node.find('button.info').popover('hide');
 
             if (commentRow && commentRow.length) {
                 root.appendTo(
-                    $('<li></li>').css({ margin:0 }).insertAfter(commentRow)
+                    $('<li></li>').css({ margin:0 }).insertBefore(commentRow)
                 );
+                if (path) {
+                    commentRow.removeClass('collapsed')
+                }
             } else {
                 root.appendTo(this.$node.find('.comment-content'));
             }
@@ -307,6 +316,7 @@ define([
             CommentForm.attachTo(root, {
                 data: this.attr.data,
                 type: this.attr.type,
+                path: path,
                 sourceInfo: sourceInfo,
                 comment: comment
             });

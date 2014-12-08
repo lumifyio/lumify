@@ -21,6 +21,7 @@ define([
             deleteButtonSelector: '.btn-danger',
             editButtonSelector: '.btn-edit',
             addButtonSelector: '.btn-add',
+            replyButtonSelector: '.reply',
             justificationValueSelector: 'a'
         });
 
@@ -54,6 +55,7 @@ define([
                             deleteButtonSelector: self.onDelete,
                             editButtonSelector: self.onEdit,
                             addButtonSelector: self.onAdd,
+                            replyButtonSelector: self.onReply,
                             justificationValueSelector: self.teardown
                         });
 
@@ -121,6 +123,14 @@ define([
                   i18n('popovers.property_info.button.edit') :
                   i18n('popovers.property_info.button.add')
                 );
+            this.contentRoot.select('.reply').each(function() {
+                var $this = $(this);
+                if (isComment) {
+                    $this.show();
+                } else {
+                    $this.hide();
+                }
+            })
             this.contentRoot.selectAll('tr')
                 .call(function() {
                     var self = this;
@@ -217,6 +227,16 @@ define([
                 this.attr.property = property;
                 this.update(property);
             }
+        };
+
+        this.onReply = function() {
+            var metadata = this.attr.property.metadata['http://lumify.io/comment#path'],
+                path = (metadata ? (metadata + '/') : '') + this.attr.property.key;
+
+            this.trigger('editProperty', {
+                path: path
+            });
+            this.teardown();
         };
 
         this.onAdd = function() {
