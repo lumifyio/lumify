@@ -133,7 +133,17 @@ define([
                                 Toolbar.ITEMS.ADD_COMMENT
                             ]
                         },
-                        Toolbar.ITEMS.AUDIT,
+                        {
+                            icon: 'img/glyphicons/white/glyphicons_157_show_lines@2x.png',
+                            right: true,
+                            submenu: [
+                                Toolbar.ITEMS.AUDIT,
+                                _.extend(Toolbar.ITEMS.DELETE_ITEM, {
+                                    title: i18n('detail.toolbar.delete.edge'),
+                                    subtitle: i18n('detail.toolbar.delete.edge.subtitle')
+                                })
+                            ]
+                        }
                     ]
                 });
 

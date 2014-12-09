@@ -83,11 +83,7 @@ define([
 
             if (edge) {
                 this.dataRequestPromise.done(function(dataRequest) {
-                    dataRequest('edge', 'delete',
-                        edge.id,
-                        edge.source.id,
-                        edge.target.id
-                    );
+                    dataRequest('edge', 'delete', edge.id);
                 });
             } else console.error('Only can delete one edge at a time');
         };

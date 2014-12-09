@@ -65,6 +65,24 @@ define(['require'], function(require) {
                     }
                 });
             },
+            verticesDeleted: function(data) {
+                require(['../util/store'], function(store) {
+                    var storeObjects = _.compact(store.getObjects(publicData.currentWorkspaceId, 'vertex', data.vertexIds));
+                    if (storeObjects.length) {
+                        require(['../services/vertex'], function(service) {
+                            service.multiple(_.pluck(storeObjects, 'id'))
+                                .catch(function() {
+                                    dispatchMain('rebroadcastEvent', {
+                                        eventName: 'verticesDeleted',
+                                        data: {
+                                            vertexIds: data.vertexIds
+                                        }
+                                    });
+                                });
+                        });
+                    }
+                });
+            },
             edgeDeletion: function(data) {
                 if (!data.workspaceId || data.workspaceId === publicData.currentWorkspaceId) {
                     dispatchMain('rebroadcastEvent', {

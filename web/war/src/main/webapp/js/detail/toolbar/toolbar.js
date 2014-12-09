@@ -44,9 +44,14 @@ define([
         },
         AUDIT: {
             title: i18n('detail.toolbar.audit'),
+            subtitle: i18n('detail.toolbar.audit.subtitle'),
             cls: 'audits',
-            right: true,
             event: 'toggleAudit'
+        },
+        DELETE_ITEM: {
+            title: i18n('detail.toolbar.delete'),
+            cls: 'requires-EDIT',
+            event: 'deleteItem'
         }
     };
 

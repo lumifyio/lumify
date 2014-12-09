@@ -1,8 +1,9 @@
 
 define([
     'util/vertex/formatters',
-    'util/withDataRequest'
-], function(F, withDataRequest) {
+    'util/withDataRequest',
+    'require'
+], function(F, withDataRequest, require) {
     'use strict';
 
     return withTypeContent;
@@ -14,7 +15,8 @@ define([
         this._promisesToCancel = [];
 
         this.defaultAttrs({
-            auditSelector: '.audits'
+            auditSelector: '.audits',
+            deleteFormSelector: '.delete-form'
         });
 
         this.after('teardown', function() {
@@ -51,6 +53,7 @@ define([
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
             this.on('addNewProperty', this.onAddNewProperty);
             this.on('addNewComment', this.onAddNewComment);
+            this.on('deleteItem', this.onDeleteItem);
             this.on('openFullscreen', this.onOpenFullscreen);
             this.on('toggleAudit', this.onAuditToggle);
             this.on('openSourceUrl', this.onOpenSourceUrl);
@@ -78,6 +81,24 @@ define([
 
         this.onAddNewComment = function(event) {
             this.trigger(this.select('commentsSelector'), 'editComment');
+        };
+
+        this.onDeleteItem = function(event) {
+            var self = this,
+                $container = this.select('deleteFormSelector');
+
+            if ($container.length === 0) {
+                $container = $('<div class="delete-form"></div>').insertBefore(
+                    this.select('propertiesSelector')
+                );
+            }
+
+            require(['./dropdowns/deleteForm/deleteForm'], function(DeleteForm) {
+                var node = $('<div class="underneath"></div>').appendTo($container);
+                DeleteForm.attachTo(node, {
+                    data: self.attr.data
+                });
+            });
         };
 
         this.onOpenFullscreen = function(event) {

@@ -161,13 +161,14 @@ define([
                             };
 
                         diffs.forEach(function(diff) {
+
                             switch (diff.type) {
                                 case 'VertexDiffItem':
                                     diff.id = outputItem.id = vertexId;
                                     if (outputItem.vertex) {
                                         outputItem.title = F.vertex.title(outputItem.vertex);
                                     }
-                                    outputItem.action = actionTypes.CREATE;
+                                    outputItem.action = diff.deleted ? actionTypes.DELETE : actionTypes.CREATE;
                                     self.diffsForVertexId[vertexId] = diff;
                                     self.diffsById[vertexId] = diff;
                                     break;

@@ -6,9 +6,12 @@
     {{#if event}} data-event="{{ event }}"{{/if}}
     {{#if eventData}} data-event-data="{{ json eventData }}"{{/if}}
       >
-    <a>
-      <strong>{{ title }}</strong>
-    </a>
+      {{#if icon}}
+      <a title="{{ title }}" class="icon"><strong style="background-image:url({{icon}})">.</strong></a>
+      {{/if}}
+      {{#unless icon}}
+      <a><strong>{{ title }}</strong></a>
+      {{/unless}}
     {{#if submenu~}}
       <ul>
         {{#each submenu~}}
