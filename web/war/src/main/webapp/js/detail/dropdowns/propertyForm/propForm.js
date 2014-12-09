@@ -238,10 +238,6 @@ define([
             }
 
             if (data.fromPreviousValuePrompt !== true) {
-                previousValues = _.reject(previousValues, function(prevVal) {
-                    return prevVal.sandboxStatus === 'PUBLIC';
-                });
-
                 if (previousValues && previousValues.length) {
                     this.previousValues = previousValues;
                     this.select('previousValuesSelector')
@@ -270,12 +266,12 @@ define([
 
             this.select('deleteButtonSelector')
                 .text(
-                    sandboxStatus === 'PRIVATE' ?  i18n('property.form.button.delete') :
-                    sandboxStatus === 'PUBLIC_CHANGED' ?  i18n('property.form.button.undo') : ''
+                    sandboxStatus === 'PUBLIC_CHANGED' ?
+                    i18n('property.form.button.undo') :
+                    i18n('property.form.button.delete')
                 )
                 .toggle(
                     (!!isExistingProperty) &&
-                    sandboxStatus !== 'PUBLIC' &&
                     propertyName !== 'http://lumify.io#visibilityJson'
                 );
 
