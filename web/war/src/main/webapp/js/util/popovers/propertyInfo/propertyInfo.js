@@ -76,12 +76,7 @@ define([
                 isComment = property.name === 'http://lumify.io/comment#entry',
                 isCommentCreator = isComment &&
                     property.metadata['http://lumify.io#modifiedBy'] === lumifyData.currentUser.id,
-                canEdit = isComment ?
-                    isCommentCreator :
-                    (
-                        F.vertex.sandboxStatus(property) ||
-                        property.name === 'http://lumify.io#visibilityJson'
-                    ),
+                canEdit = !isComment || isCommentCreator,
                 canDelete = canEdit && property.name !== 'http://lumify.io#visibilityJson',
                 metadata = _.chain(this.metadataProperties || [])
                     .map(function(name) {

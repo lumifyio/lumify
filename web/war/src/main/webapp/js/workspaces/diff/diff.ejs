@@ -23,7 +23,7 @@
   <div class="diff-content">
     <table class="table">
         <% diffs.forEach(function(diff) { %>
-          <tr class="vertex-row <%= diff.className %>" data-diff-id="<%= diff.id %>" data-vertex-id="<%= diff.vertexId %>">
+          <tr class="vertex-row <%= diff.className %> <%= diff.deleted ? 'deleted' : '' %>" data-diff-id="<%= diff.id %>" data-vertex-id="<%= diff.vertexId %>">
               <th class="vertex-label" colspan="2">
                 <div class="img" <% if (diff.vertex) { %> style="background-image:url(<%= F.vertex.image(diff.vertex) %>)"<% } %>></div>
                 <h1 data-vertex-id="<%= diff.vertexId %>"><%= diff.title %>
@@ -46,7 +46,7 @@
           <% diff.properties.forEach(function(property) { %>
           <tr class="<%= property.className %>" data-diff-id="<%= property.id %>">
             <td class="property-label"><%= formatLabel(property.name) %></td>
-            <td class="property-value"><%
+            <td class="property-value<%= property.deleted ? ' deleted' : '' %>"><%
               if (property.old && property.new) { %>
               <%= formatValue(property.name, property.new) %>
               <div class="visibility" data-visibility="<%= JSON.stringify(property.new['http://lumify.io#visibilityJson']) %>"></div>
