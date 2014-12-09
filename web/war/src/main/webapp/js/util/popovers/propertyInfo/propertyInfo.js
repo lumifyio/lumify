@@ -95,6 +95,12 @@ define([
                         }
                     })
                     .compact()
+                    .filter(function(m) {
+                        if (m[0] === 'http://lumify.io#confidence' && isComment) {
+                            return false;
+                        }
+                        return true;
+                    })
                     .value()
                 row = this.contentRoot.select('table')
                     .selectAll('tr')
