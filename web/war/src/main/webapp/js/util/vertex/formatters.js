@@ -118,7 +118,7 @@ define([
                 },
 
                 textarea: function(el, property) {
-                    $(el).html((property.value||'').replace(/\r?\n/g, '<br />'));
+                    $(el).html(_.escape(property.value || '').replace(/\r?\n+/g, '<br><br>'));
                 },
 
                 heading: function(el, property) {
