@@ -234,7 +234,8 @@ define([
                     return F.string.plural(p[1].length, 'reply', 'replies');
                 })
                 .on('click', function(property) {
-                    $(this).closest('li').children('ul').toggleClass('collapsed')
+                    $(this).toggleClass('open')
+                        .closest('li').children('ul').toggleClass('collapsed')
                 });
             selection.select('.info')
                 .attr('style', function(p) {
