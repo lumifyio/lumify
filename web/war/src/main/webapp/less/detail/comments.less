@@ -5,7 +5,6 @@
     .clearfix;
 
     ul ul {
-      //margin-left: 0.5em;
       &.collapsed {
         display:none;
       }
@@ -15,6 +14,11 @@
     ul ul li .wrap { margin-left: 2em; }
     ul ul ul li .wrap { margin-left: 4em; }
     ul ul ul ul li .wrap { margin-left: 5em; }
+    ul ul ul ul ul li .wrap { margin-left: 6em; }
+    ul ul ul ul ul ul li .wrap { margin-left: 7em; }
+    ul ul ul ul ul ul ul li .wrap { margin-left: 8em; }
+    ul ul ul ul ul ul ul ul li .wrap { margin-left: 8.5em; }
+    ul ul ul ul ul ul ul ul ul li .wrap { margin-left: 9em; }
   }
 
   .replies {
@@ -22,6 +26,10 @@
     padding: 0;
     font-style: italic;
     font-size: 85%;
+  }
+
+  .underneath {
+    float: none;
   }
 
   ul {
@@ -42,6 +50,23 @@
 
       .comment-text {
         text-align: left;
+        p {
+          margin: 1em 0;
+          &:first-child {
+            margin: 0 0 1em 0;
+          }
+          &:last-child {
+            margin: 0
+          }
+        }
+        &.redacted {
+          font-style: italic;
+          .opacity(50);
+          p {
+            font-size: 90%;
+            margin-bottom: 0;
+          }
+        }
       }
 
       .date, .user {
@@ -55,6 +80,12 @@
         margin-right: 1ex;
         &:after {
           content: ','
+        }
+      }
+
+      .form {
+        textarea {
+          height: 7em;
         }
       }
     }

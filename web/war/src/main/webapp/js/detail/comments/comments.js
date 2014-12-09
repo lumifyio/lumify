@@ -46,14 +46,13 @@ define([
             var path = comment.metadata['http://lumify.io/comment#path'];
             if (path) {
                 var components = path.split('/');
-                maxDepth = Math.max(components.length + 1);
+                maxDepth = Math.max(maxDepth, components.length + 1);
                 components.forEach(function(key, i, components) {
                     var value = commentsByKey[key];
                     if (!value) {
                         total++;
                         value = commentsByKey[key] = [{
                             key: key,
-                            value: 'REDACTED',
                             redacted: true,
                             metadata: {
                                 'http://lumify.io#createDate': '',
@@ -147,14 +146,29 @@ define([
                     this.append('ul').attr('class', 'collapsed');
                 })
 
-            selection.select('.comment-text').text(function(p) {
-                return p[0].value;
-            });
+            selection.select('.comment-text')
+                .classed('redacted', function(p) {
+                    return p[0].redacted || false;
+                })
+                .each(function() {
+                    var p = d3.select(this).datum();
+                    if (p[0].redacted) {
+                        $(this).html(
+                            i18n('detail.comments.missing') +
+                            '<p>' +
+                            i18n('detail.comments.missing.explanation') +
+                            '</p>'
+                        );
+                    } else {
+                        $(this).html(_.escape('\n' + p[0].value).replace(/\r?\n+/g, '<p>'));
+                    }
+                });
             selection.select('.visibility').each(function(p) {
+                this.textContent = '';
                 if (p[0].redacted) {
+                    $(this).hide();
                     return;
                 }
-                this.textContent = '';
                 F.vertex.properties.visibility(
                     this,
                     { value: p[0].metadata && p[0].metadata[VISIBILITY_NAME] },
@@ -162,11 +176,24 @@ define([
                 );
             })
             selection.select('.user').each(function(p, i) {
-                var $this = $(this)
-                    .data('userId', p[0].metadata['http://lumify.io#modifiedBy'])
-                    .text(p[0].redacted ? 'Unknown' : 'Loading...');
+                var $this = $(this);
+                if (p[0].redacted) {
+                    $this.hide();
+                } else {
+                    var currentUserId = $this.data('userId'),
+                        newUserId = p[0].metadata['http://lumify.io#modifiedBy'],
+                        currentText = $this.text(),
+                        loading = i18n('detail.comments.user.loading');
+                    if ((!currentUserId || currentUserId === newUserId) &&
+                        (!currentText || currentText === loading)) {
+                        $this.data('userId', newUserId).text(loading);
+                    }
+                }
             });
             selection.select('.date')
+                .attr('style', function(p) {
+                    return p[0].redacted ? 'display:none' : undefined;
+                })
                 .text(function(p) {
                     if (p[0].redacted) {
                         return '';
@@ -209,12 +236,16 @@ define([
                 .on('click', function(property) {
                     $(this).closest('li').children('ul').toggleClass('collapsed')
                 });
-            selection.select('.info').on('click', function(property) {
-                if (property[0].redacted) {
-                    return;
-                }
-                self.showPropertyInfo(this, self.attr.data.id, property[0]);
-            });
+            selection.select('.info')
+                .attr('style', function(p) {
+                    return p[0].redacted ? 'display:none' : undefined;
+                })
+                .on('click', function(property) {
+                    if (property[0].redacted) {
+                        return;
+                    }
+                    self.showPropertyInfo(this, self.attr.data.id, property[0]);
+                });
             selection.exit().remove();
 
             var nextLevel = level + 1,
@@ -239,7 +270,6 @@ define([
                     .data(commentsTree)
                     .order();
 
-            console.log('update', commentsTree);
             this.renderCommentLevel(commentsTreeResponse.maxDepth, 0, selection);
             this.dataRequest('user', 'getUserNames', commentsTreeResponse.userIds)
                 .done(function(users) {
@@ -278,9 +308,7 @@ define([
             this.$node.find('button.info').popover('hide');
 
             if (commentRow && commentRow.length) {
-                root.appendTo(
-                    $('<li></li>').css({ margin:0 }).insertBefore(commentRow)
-                );
+                root.insertBefore(commentRow)
                 if (path) {
                     commentRow.removeClass('collapsed')
                 }
