@@ -11,12 +11,14 @@ public class WorkspaceEntity {
     private final boolean visible;
     private final Integer graphPositionX;
     private final Integer graphPositionY;
+    private final String graphLayoutJson;
 
-    public WorkspaceEntity(String entityVertexId, boolean visible, Integer graphPositionX, Integer graphPositionY) {
+    public WorkspaceEntity(String entityVertexId, boolean visible, Integer graphPositionX, Integer graphPositionY, String graphLayoutJson) {
         this.entityVertexId = entityVertexId;
         this.visible = visible;
         this.graphPositionX = graphPositionX;
         this.graphPositionY = graphPositionY;
+        this.graphLayoutJson = graphLayoutJson;
     }
 
     public String getEntityVertexId() {
@@ -29,6 +31,10 @@ public class WorkspaceEntity {
 
     public Integer getGraphPositionY() {
         return graphPositionY;
+    }
+
+    public String getGraphLayoutJson() {
+        return graphLayoutJson;
     }
 
     public boolean isVisible() {

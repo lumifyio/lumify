@@ -3,24 +3,17 @@ define([
     'flight/lib/component',
     '../withPopover',
     'util/vertex/formatters',
-    'service/vertex',
-    'service/workspace',
+    'util/withDataRequest',
     'd3',
-    'data'
 ], function(
     defineComponent,
     withPopover,
     F,
-    VertexService,
-    WorkspaceService,
-    d3,
-    appData) {
+    withDataRequest,
+    d3) {
     'use strict';
 
-    var vertexService = new VertexService(),
-        workspaceService = new WorkspaceService();
-
-    return defineComponent(AddToWorkspace, withPopover);
+    return defineComponent(AddToWorkspace, withPopover, withDataRequest);
 
     function AddToWorkspace() {
 
@@ -46,33 +39,36 @@ define([
                     cancelButtonSelector: this.onCancel
                 });
 
-                $.when(
+                Promise.all([
                     this.loadVertices(),
-                    this.loadWorkspaces())
-                    .fail(this.fail.bind(this))
-                    .done(this.done.bind(this));
+                    this.loadWorkspaces()
+                ]).then(this.done.bind(this))
+                  .catch(this.fail.bind(this));
             });
         });
 
         this.loadWorkspaces = function() {
-            return workspaceService.list();
+            return this.dataRequest('workspace', 'all');
         };
 
         this.loadVertices = function() {
-            return vertexService.getMultiple(this.attr.addVertexIds.vertexIds)
+            return this.dataRequest('vertex', 'store', { vertexIds: this.attr.addVertexIds.vertexIds });
         };
 
-        this.fail = function(vertexResponse, workspaceResponse) {
+        this.fail = function() {
             this.popover.find('.btn-primary')
                 .text(i18n('popovers.add_to_workspace.error'))
         };
 
-        this.done = function(vertexResponse, workspaceResponse) {
-            var select = this.popover.find('select').empty();
+        this.done = function(results) {
+            var vertices = results.shift(),
+                workspaces = results.shift(),
+                select = this.popover.find('select').empty();
+
             d3.select(select.get(0))
                 .selectAll('option')
                 .data(
-                    _.sortBy(workspaceResponse[0].workspaces, function(workspace) {
+                    _.sortBy(workspaces, function(workspace) {
                         return workspace.title.toLowerCase();
                     })
                 )
@@ -80,7 +76,7 @@ define([
                     this.enter().append('option');
                 })
                 .attr('selected', function(workspace) {
-                    return appData.workspaceId === workspace.workspaceId ?
+                    return lumifyData.currentWorkspaceId === workspace.workspaceId ?
                         'selected' : null;
                 })
                 .attr('disabled', function(workspace) {
@@ -96,7 +92,7 @@ define([
                     return workspace.title;
                 });
 
-            this.verticesToAdd = vertexResponse[0].vertices;
+            this.verticesToAdd = vertices;
             this.popover.find('.btn-primary').removeAttr('disabled')
         };
 
@@ -114,7 +110,7 @@ define([
             var self = this,
                 workspaceId = this.popover.find('select').val();
 
-            if (appData.workspaceId !== workspaceId) {
+            if (lumifyData.currentWorkspaceId !== workspaceId) {
                 this.on(document, 'workspaceLoaded', function loaded(event, workspace) {
                     self.addToCurrentWorkspace();
                 });

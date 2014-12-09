@@ -9,7 +9,6 @@ import io.lumify.core.model.systemNotification.SystemNotificationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.clientapi.model.ClientApiWorkspace;
@@ -18,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -199,8 +199,8 @@ public abstract class WorkQueueRepository {
         broadcastUserWorkspaceChange(user, workspaceId);
     }
 
-    public void pushWorkspaceChange(ClientApiWorkspace workspace) {
-        broadcastWorkspace(workspace);
+    public void pushWorkspaceChange(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers, String changedByUserId) {
+        broadcastWorkspace(workspace, previousUsers, changedByUserId);
     }
 
     protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
@@ -212,10 +212,11 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    protected void broadcastWorkspace(ClientApiWorkspace workspace) {
+    protected void broadcastWorkspace(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers, String changedByUserId) {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceChange");
-        json.put("permissions", getPermissionsWithUsers(workspace));
+        json.put("modifiedBy", changedByUserId);
+        json.put("permissions", getPermissionsWithUsers(workspace, previousUsers));
         json.put("data", new JSONObject(ClientApiConverter.clientApiToString(workspace)));
         broadcastJson(json);
     }
@@ -223,7 +224,7 @@ public abstract class WorkQueueRepository {
     public void pushWorkspaceDelete(ClientApiWorkspace workspace) {
         JSONObject json = new JSONObject();
         json.put("type", "workspaceDelete");
-        json.put("permissions", getPermissionsWithUsers(workspace));
+        json.put("permissions", getPermissionsWithUsers(workspace, null));
         json.put("workspaceId", workspace.getWorkspaceId());
         broadcastJson(json);
     }
@@ -240,14 +241,35 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    private JSONObject getPermissionsWithUsers(ClientApiWorkspace workspace) {
+    private JSONObject getPermissionsWithUsers(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers) {
         JSONObject permissions = new JSONObject();
         JSONArray users = new JSONArray();
+        if (previousUsers != null) {
+            for (ClientApiWorkspace.User user : previousUsers) {
+                users.put(user.getUserId());
+            }
+        }
         for (ClientApiWorkspace.User user : workspace.getUsers()) {
             users.put(user.getUserId());
         }
         permissions.put("users", users);
         return permissions;
+    }
+
+    public void pushSessionExpiration(String userId, String sessionId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "sessionExpiration");
+
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        JSONArray sessionIds = new JSONArray();
+        sessionIds.put(sessionId);
+        permissions.put("sessionIds", sessionIds);
+        json.put("permissions", permissions);
+        json.putOpt("sessionId", sessionId);
+        broadcastJson(json);
     }
 
     public void pushSystemNotification(SystemNotification notification) {
@@ -285,57 +307,42 @@ public abstract class WorkQueueRepository {
     protected abstract void broadcastJson(JSONObject json);
 
     protected JSONObject getBroadcastEntityImageJson(Vertex graphVertex) {
-        JSONObject dataJson = new JSONObject();
-
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null, null);
-        dataJson.put("vertex", vertexJson);
-        dataJson.put("graphVertexId", graphVertex.getId());
-
+        // TODO: only broadcast to workspace users if sandboxStatus is PRIVATE
         JSONObject json = new JSONObject();
         json.put("type", "entityImageUpdated");
+
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("graphVertexId", graphVertex.getId());
+
         json.put("data", dataJson);
         return json;
     }
 
     protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName, String workspaceId) {
-        JSONObject dataJson = new JSONObject();
-
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId, null);
-        dataJson.put("vertex", vertexJson);
-
-        JSONObject propertyJson = new JSONObject();
-        propertyJson.put("graphVertexId", graphVertex.getId());
-        propertyJson.put("propertyKey", propertyKey);
-        propertyJson.put("propertyName", propertyName);
-        JSONArray propertiesJson = new JSONArray();
-        propertiesJson.put(propertyJson);
-
-        dataJson.put("properties", propertiesJson);
-
+        // TODO: only broadcast to workspace users if sandboxStatus is PRIVATE
         JSONObject json = new JSONObject();
-        json.put("type", "propertiesChange");
+        json.put("type", "propertyChange");
+
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("graphVertexId", graphVertex.getId());
+        dataJson.putOpt("workspaceId", workspaceId);
+
         json.put("data", dataJson);
+
         return json;
     }
 
     protected JSONObject getBroadcastPropertyChangeJson(Edge edge, String propertyKey, String propertyName, String workspaceId) {
-        JSONObject dataJson = new JSONObject();
-
-        JSONObject vertexJson = JsonSerializer.toJson(edge, workspaceId, null);
-        dataJson.put("edge", vertexJson);
-
-        JSONObject propertyJson = new JSONObject();
-        propertyJson.put("graphEdgeId", edge.getId());
-        propertyJson.put("propertyKey", propertyKey);
-        propertyJson.put("propertyName", propertyName);
-        JSONArray propertiesJson = new JSONArray();
-        propertiesJson.put(propertyJson);
-
-        dataJson.put("properties", propertiesJson);
-
+        // TODO: only broadcast to workspace users if sandboxStatus is PRIVATE
         JSONObject json = new JSONObject();
-        json.put("type", "propertiesChange");
+        json.put("type", "propertyChange");
+
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("graphEdgeId", edge.getId());
+        dataJson.putOpt("workspaceId", workspaceId);
+
         json.put("data", dataJson);
+
         return json;
     }
 

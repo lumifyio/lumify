@@ -1,7 +1,7 @@
 package io.lumify.web.clientapi.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +22,7 @@ public class ClientApiUser implements ClientApiObject {
     private JsonNode uiPreferences;
     private List<String> authorizations = new ArrayList<String>();
     private List<Object> longRunningProcesses = new ArrayList<Object>();
+    private List<ClientApiWorkspace> workspaces = new ArrayList<ClientApiWorkspace>();
 
     public String getId() {
         return id;
@@ -117,5 +118,14 @@ public class ClientApiUser implements ClientApiObject {
 
     public List<Object> getLongRunningProcesses() {
         return longRunningProcesses;
+    }
+
+    public List<ClientApiWorkspace> getWorkspaces() {
+        return workspaces;
+    }
+
+    @Override
+    public String toString() {
+        return ClientApiConverter.clientApiToString(this);
     }
 }

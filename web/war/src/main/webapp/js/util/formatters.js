@@ -36,7 +36,7 @@ define([
             }
         };
 
-    timezoneJS.timezone.zoneFileBasePath = '/tz';
+    timezoneJS.timezone.zoneFileBasePath = 'tz';
     timezoneJS.timezone.defaultZoneFile = ['northamerica'];
     timezoneJS.timezone.init({ async: false });
 

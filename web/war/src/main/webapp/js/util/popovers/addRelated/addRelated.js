@@ -2,25 +2,20 @@
 define([
     'flight/lib/component',
     'util/ontology/conceptSelect',
-    'service/config',
-    'service/vertex',
     'util/withFormFieldErrors',
-    'data',
+    'util/withDataRequest',
+    'util/vertex/formatters',
     '../withPopover'
 ], function(
     defineComponent,
     ConceptSelector,
-    ConfigService,
-    VertexService,
     withFormFieldErrors,
-    appData,
+    withDataRequest,
+    F,
     withPopover) {
     'use strict';
 
-    var configService = new ConfigService(),
-        vertexService = new VertexService();
-
-    return defineComponent(AddRelatedPopover, withPopover, withFormFieldErrors);
+    return defineComponent(AddRelatedPopover, withPopover, withFormFieldErrors, withDataRequest);
 
     function AddRelatedPopover() {
 
@@ -32,9 +27,11 @@ define([
         });
 
         this.before('initialize', function(node, config) {
-            if (!config.title) {
-                console.warn('title attribute required');
-                config.title = i18n('popovers.load_related.title_unknown');
+            if (config.vertex) {
+                config.title = F.vertex.title(config.vertex);
+            } else {
+                console.warn('vertex attribute required');
+                config.title = i18n('popovers.add_related.title_unknown');
             }
             config.template = 'addRelated/template';
         });
@@ -51,14 +48,10 @@ define([
                     promptAddButtonSelector: this.onPromptAdd
                 })
 
-                appData.refresh(this.attr.relatedToVertexId)
-                    .done(function(vertex) {
-                        var conceptId = vertex.concept.id;
-                        ConceptSelector.attachTo(self.popover.find('.concept'), {
-                            defaultText: i18n('popovers.add_related.concept.default_text'),
-                            limitRelatedToConceptId: conceptId
-                        });
-                    })
+                ConceptSelector.attachTo(self.popover.find('.concept'), {
+                    defaultText: i18n('popovers.add_related.concept.default_text'),
+                    limitRelatedToConceptId: F.vertex.prop(this.attr.vertex, 'conceptType')
+                });
 
                 this.positionDialog();
             });
@@ -72,8 +65,8 @@ define([
                 cancelButton = this.popover.find('.cancel').show(),
                 addButton = this.popover.find('.add');
 
-            if (this.relatedRequest && this.relatedRequest.abort) {
-                this.relatedRequest.abort();
+            if (this.relatedRequest && this.relatedRequest.cancel) {
+                this.relatedRequest.cancel();
             }
             this.clearFieldErrors(this.popover);
             searchButton.hide();
@@ -91,11 +84,17 @@ define([
         };
 
         this.onPromptAdd = function(event) {
-            this.trigger(document, 'addVertices', {
-                options: {
-                    addingVerticesRelatedTo: this.attr.relatedToVertexId
-                },
-                vertices: this.promptAddVertices
+            var self = this;
+
+            this.trigger('updateWorkspace', {
+                entityUpdates: this.promptAddVertices.map(function(vertex) {
+                    return {
+                        vertexId: vertex.id,
+                        graphLayoutJson: {
+                            relatedToVertexId: self.attr.relatedToVertexId
+                        }
+                    };
+                })
             });
             this.teardown();
         };
@@ -113,51 +112,58 @@ define([
                 cancelButton = this.popover.find('.cancel').show(),
                 button = $(event.target).addClass('loading').attr('disabled', true);
 
-            $.when(
-                configService.getProperties(),
+            Promise.all([
+                this.dataRequest('config', 'properties'),
                 (
-                    this.relatedRequest = vertexService.getRelatedVertices({
-                        graphVertexId: this.attr.relatedToVertexId,
+                    this.relatedRequest = this.dataRequest('vertex', 'related', this.attr.relatedToVertexId, {
                         limitParentConceptId: this.conceptId
                     })
                 )
-            ).always(function() {
-                button.removeClass('loading').removeAttr('disabled');
-                searchButton.hide();
-                promptAdd.hide();
-                cancelButton.hide();
-                self.clearFieldErrors(this.popover);
-            }).fail(function() {
-                self.markFieldErrors(i18n('popovers.add_related.error'));
-            }).done(function(config, relatedResponse) {
-                var related = relatedResponse[0],
-                    count = related.count,
-                    vertices = related.vertices,
-                    forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
-                    promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
+            ])
+                .finally(function() {
+                    button.removeClass('loading').removeAttr('disabled');
+                    searchButton.hide();
+                    promptAdd.hide();
+                    cancelButton.hide();
+                    self.clearFieldErrors(this.popover);
+                })
+                .then(function(results) {
+                    var config = results.shift(),
+                        related = results.shift(),
+                        count = related.count,
+                        vertices = related.vertices,
+                        forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
+                        promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
 
-                if (count === 0) {
-                    self.markFieldErrors(i18n('popovers.add_related.no_vertices'), self.popover);
-                } else if (forceSearch) {
-                    self.markFieldErrors(i18n('popovers.add_related.too_many'), self.popover);
-                    button.hide();
-                    searchButton.show();
-                } else if (promptBeforeAdding) {
-                    button.hide();
-                    searchButton.show();
-                    self.promptAddVertices = vertices;
-                    promptAdd.text(i18n('popovers.add_related.button.prompt_add', count)).show();
-                } else {
-                    self.trigger(document, 'addVertices', {
-                        options: {
-                            addingVerticesRelatedTo: self.attr.relatedToVertexId
-                        },
-                        vertices: vertices
-                    });
-                    self.teardown();
-                }
-            })
+                    if (count === 0) {
+                        self.markFieldErrors(i18n('popovers.add_related.no_vertices'), self.popover);
+                    } else if (forceSearch) {
+                        self.markFieldErrors(i18n('popovers.add_related.too_many'), self.popover);
+                        button.hide();
+                        searchButton.show();
+                    } else if (promptBeforeAdding) {
+                        button.hide();
+                        searchButton.show();
+                        self.promptAddVertices = vertices;
+                        promptAdd.text(i18n('popovers.add_related.button.prompt_add', count)).show();
+                    } else {
+                        self.trigger('updateWorkspace', {
+                            entityUpdates: vertices.map(function(vertex) {
+                                return {
+                                    vertexId: vertex.id,
+                                    graphLayoutJson: {
+                                        relatedToVertexId: self.attr.relatedToVertexId
+                                    }
+                                };
+                            })
+                        });
+                        self.teardown();
+                    }
 
+                })
+                .catch(function() {
+                    self.markFieldErrors(i18n('popovers.add_related.error'));
+                })
         };
     }
 });

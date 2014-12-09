@@ -13,12 +13,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceSandboxingIntegrationTest extends TestBase {
     private String susanFengVertexId;
+    private String artifactVertexId;
 
     @Test
     public void testWorkspaceSandboxing() throws ApiException, IOException {
@@ -26,6 +26,7 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
         addPropertyWithPublicChangeSandboxStatus();
         addPropertyWithPrivateSandboxStatus();
         assertAllPropertiesArePublic();
+        addEdge();
     }
 
     private void setupTest() throws ApiException, IOException {
@@ -37,12 +38,13 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("", "test.txt", new ByteArrayInputStream("Susan Feng knows Joe Ferner.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         assertNotNull(artifact.getVertexIds().get(0));
+        artifactVertexId = artifact.getVertexIds().get(0);
 
         lumifyTestCluster.processGraphPropertyQueue();
 
         ClientApiElement susanFengVertex = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "");
         susanFengVertexId = susanFengVertex.getId();
-        lumifyApi.getVertexApi().setProperty(susanFengVertexId, TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Susan Feng", "", "test", null, null);
+        lumifyApi.getVertexApi().setProperty(susanFengVertexId, TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Susan Feng", "", "test");
 
         lumifyTestCluster.processGraphPropertyQueue();
         lumifyApi.getVertexApi().setProperty(susanFengVertexId, "key1", TestOntology.PROPERTY_NAME, "Joe", "A", "test", null, null);
@@ -153,6 +155,31 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
         assertHasProperty(key3Properties, "key3", TestOntology.PROPERTY_NAME, "Susan");
         ClientApiProperty key3Property = key3Properties.get(0);
         checkVisibility(key3Property, visibilityJsonNoSource);
+        lumifyApi.logout();
+    }
+
+    private void addEdge() throws ApiException {
+        LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
+
+        ClientApiEdgeWithVertexData edge = lumifyApi.getEdgeApi().create(artifactVertexId, susanFengVertexId, "http://lumify.io/test#artifactHasEntity", "");
+        lumifyApi.getEdgeApi().setProperty(edge.getId(), "key1", "http://lumify.io/test#firstName", "edge property value", "", "");
+
+        assertPublishAll(lumifyApi, 2);
+
+        lumifyApi.logout();
+
+        lumifyApi = login(USERNAME_TEST_USER_2);
+
+        edge = lumifyApi.getEdgeApi().getByEdgeId(edge.getId());
+        boolean foundFirstNameEdgeProperty = false;
+        for (ClientApiProperty edgeProperty : edge.getProperties()) {
+            if (edgeProperty.getKey().equals("key1") && edgeProperty.getName().equals("http://lumify.io/test#firstName")) {
+                assertEquals("edge property value", edgeProperty.getValue().toString());
+                foundFirstNameEdgeProperty = true;
+            }
+        }
+        assertTrue(foundFirstNameEdgeProperty);
+
         lumifyApi.logout();
     }
 

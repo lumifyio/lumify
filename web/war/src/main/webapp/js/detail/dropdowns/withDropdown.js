@@ -7,7 +7,7 @@ define(['util/withFormFieldErrors'], function(withFormFieldErrors) {
         withFormFieldErrors.call(this);
 
         this.defaultAttrs({
-            canceButtonSelector: '.btn.cancel'
+            cancelButtonSelector: '.btn.cancel'
         });
 
         this.open = function() {
@@ -65,7 +65,7 @@ define(['util/withFormFieldErrors'], function(withFormFieldErrors) {
         this.after('initialize', function() {
             this.$node.closest('.text').addClass('dropdown');
             this.on('click', {
-                canceButtonSelector: this.teardown
+                cancelButtonSelector: this.teardown
             });
             if (!this.attr.manualOpen) {
                 _.defer(this.open.bind(this));

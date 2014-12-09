@@ -41,12 +41,11 @@ public class PtMediaAndValueImporter extends PtRowImporterBase<PtMediaAndValue> 
             LumifyProperties.TITLE.setProperty(vertexBuilder, title, getDataImporter().getVisibility());
             Vertex mediaVertex = vertexBuilder.save(getDataImporter().getAuthorizations());
 
-            Vertex sourceVertex = getVertexCache().get(getObjectVertexId(row.getLinkObjectId()));
-            checkNotNull(sourceVertex, "Could not find source vertex for media object: " + row.getLinkObjectId());
+            String sourceVertexId = getObjectVertexId(row.getLinkObjectId());
 
             String edgeId = getEdgeId(row);
             String edgeLabel = getEdgeLabel(row);
-            getDataImporter().getGraph().addEdge(edgeId, sourceVertex, mediaVertex, edgeLabel, getDataImporter().getVisibility(), getDataImporter().getAuthorizations());
+            getDataImporter().getGraph().addEdge(edgeId, sourceVertexId, mediaVertex.getId(), edgeLabel, getDataImporter().getVisibility(), getDataImporter().getAuthorizations());
         } finally {
             in.close();
         }

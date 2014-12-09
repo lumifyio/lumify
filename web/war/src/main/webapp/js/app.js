@@ -2,15 +2,12 @@
 define([
     'flight/lib/component',
     'tpl!app',
-    'data',
     'menubar/menubar',
     'dashboard/dashboard',
     'search/search',
     'workspaces/workspaces',
     'workspaces/overlay',
     'admin/admin',
-    'sync/sync',
-    'chat/chat',
     'activity/activity',
     'graph/graph',
     'detail/detail',
@@ -22,21 +19,16 @@ define([
     'util/vertex/menu',
     'util/contextMenu',
     'util/privileges',
-    'util/withAsyncQueue',
-    'service/user',
-    'service/vertex'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     appTemplate,
-    data,
     Menubar,
     Dashboard,
     Search,
     Workspaces,
     WorkspaceOverlay,
     Admin,
-    Sync,
-    Chat,
     Activity,
     Graph,
     Detail,
@@ -48,19 +40,15 @@ define([
     VertexMenu,
     ContextMenu,
     Privileges,
-    withAsyncQueue,
-    UserService,
-    VertexService) {
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(App, withFileDrop, withAsyncQueue);
+    return defineComponent(App, withFileDrop, withDataRequest);
 
     function App() {
         var Graph3D,
             MAX_RESIZE_TRIGGER_INTERVAL = 250,
-            DATA_MENUBAR_NAME = 'menubar-name',
-            userService = new UserService(),
-            vertexService = new VertexService();
+            DATA_MENUBAR_NAME = 'menubar-name';
 
         this.onError = function(evt, err) {
             alert('Error: ' + err.message); // TODO better error handling
@@ -74,7 +62,6 @@ define([
             workspaceOverlaySelector: '.workspace-overlay',
             adminSelector: '.admin-pane',
             helpDialogSelector: '.help-dialog',
-            chatSelector: '.chat-pane',
             activitySelector: '.activity-pane',
             graphSelector: '.graph-pane',
             mapSelector: '.map-pane',
@@ -86,13 +73,11 @@ define([
             _.invoke([
                 WorkspaceOverlay,
                 MouseOverlay,
-                Sync,
                 Menubar,
                 Dashboard,
                 Search,
                 Workspaces,
                 Admin,
-                Chat,
                 Graph,
                 Map,
                 Detail,
@@ -103,17 +88,11 @@ define([
                 Graph3D.teardownAll();
             }
 
-            data.teardown();
-
             this.$node.empty();
         });
 
         this.after('initialize', function() {
             var self = this;
-
-            window.lumifyApp = this;
-
-            this.setupAsyncQueue('currentUser');
 
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
 
@@ -121,10 +100,7 @@ define([
 
             this.on(document, 'error', this.onError);
             this.on(document, 'menubarToggleDisplay', this.toggleDisplay);
-            this.on(document, 'chatMessage', this.onChatMessage);
-            this.on(document, 'selectUser', this.onChatMessage);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
-            this.on(document, 'syncStarted', this.onSyncStarted);
             this.on(document, 'paneResized', this.onInternalPaneResize);
             this.on(document, 'toggleGraphDimensions', this.onToggleGraphDimensions);
             this.on(document, 'resizestart', this.onResizeStart);
@@ -132,17 +108,11 @@ define([
             this.on(document, 'windowResize', this.onWindowResize);
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
-            this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
-
-            if (window.currentUser) {
-                this.currentUserMarkReady(window.currentUser);
-            }
-
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'toggleActivityPane', this.toggleActivityPane);
-            this.on(document, 'toggleChatPane', this.toggleChatPane);
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
+            this.on(document, 'sessionExpiration', this.onSessionExpiration);
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
             this.on(document, 'hideMenu', this.onHideMenu);
 
@@ -174,13 +144,6 @@ define([
                 }
             });
 
-            this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: i18n('chat.help.scope'),
-                shortcuts: {
-                    'alt-c': { fire: 'toggleChatPane', desc: i18n('chat.help.toggle') }
-                }
-            });
-
             // Prevent the fragment identifier from changing after an anchor
             // with href="#" not stopPropagation'ed
             $(document).on('click', 'a', this.trapAnchorClicks.bind(this));
@@ -191,7 +154,6 @@ define([
                 searchPane = content.filter('.search-pane').data(DATA_MENUBAR_NAME, 'search'),
                 workspacesPane = content.filter('.workspaces-pane').data(DATA_MENUBAR_NAME, 'workspaces'),
                 adminPane = content.filter('.admin-pane').data(DATA_MENUBAR_NAME, 'admin'),
-                chatPane = content.filter('.chat-pane').data(DATA_MENUBAR_NAME, 'chat'),
                 activityPane = content.filter('.activity-pane').data(DATA_MENUBAR_NAME, 'activity'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
                 detailPane = content.filter('.detail-pane').data(DATA_MENUBAR_NAME, 'detail'),
@@ -211,13 +173,11 @@ define([
             ContextMenu.attachTo(document);
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
             MouseOverlay.attachTo(document);
-            Sync.attachTo(window);
             Menubar.attachTo(menubarPane.find('.content'));
             Dashboard.attachTo(dashboardPane);
             Search.attachTo(searchPane.find('.content'));
             Workspaces.attachTo(workspacesPane.find('.content'));
             Admin.attachTo(adminPane.find('.content'));
-            Chat.attachTo(chatPane.find('.content'));
             Activity.attachTo(activityPane.find('.content'));
             Graph.attachTo(graphPane.filter('.graph-pane-2d'));
             Map.attachTo(mapPane);
@@ -234,13 +194,13 @@ define([
             this.setupWindowResizeTrigger();
 
             this.triggerPaneResized();
-            if (self.attr.animateFromLogin) {
+
+            if (this.attr.animateFromLogin) {
                 $(document.body).on(TRANSITION_END, function(e) {
                     var oe = e.originalEvent;
                     if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
                         $(document.body).off(TRANSITION_END);
-                        data.loadActiveWorkspace();
-                        self.trigger(document, 'applicationReady');
+                        self.trigger('loadCurrentWorkspace');
                         graphPane.focus();
                     }
                 });
@@ -248,8 +208,7 @@ define([
                     $(document.body).addClass('animateloginstart');
                 })
             } else {
-                data.loadActiveWorkspace();
-                self.trigger(document, 'applicationReady');
+                this.trigger('loadCurrentWorkspace');
             }
 
             _.delay(function() {
@@ -262,13 +221,6 @@ define([
                 }
             }, 500);
         });
-
-        this.onCurrentUserChanged = function(event, user) {
-            if (user) {
-                this.currentUserUnload();
-                this.currentUserMarkReady(user);
-            }
-        };
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
@@ -344,10 +296,6 @@ define([
                     });
                 }
             });
-        };
-
-        this.toggleChatPane = function() {
-            this.trigger(document, 'menubarToggleDisplay', { name: 'chat' });
         };
 
         this.toggleActivityPane = function() {
@@ -442,14 +390,27 @@ define([
             });
         };
 
+        this.onSessionExpiration = function(event, data) {
+            if (this.ignoreSessionExpiration) {
+                return;
+            }
+
+            this.trigger('logout', { message: i18n('lumify.session.expired') });
+        };
+
         this.logout = function(event, data) {
             var self = this;
 
+            this.ignoreSessionExpiration = true;
             this.trigger('willLogout');
 
             if (LogoutExtensions.executeHandlers()) {
-                userService.logout()
-                    .fail(function() {
+                this.dataRequest('user', 'logout')
+                    .then(function() {
+                        window.location.reload();
+                    })
+                    .catch(function() {
+                        self.ignoreSessionExpiration = false;
                         require(['login'], function(Login) {
                             $(document.body)
                                 .removeClass('animatelogin animateloginstart')
@@ -462,18 +423,9 @@ define([
                                 self.teardown();
                             });
                         });
-                    })
-                    .done(function() {
-                        window.location.reload();
                     });
-            }
-        };
-
-        this.onChatMessage = function(e, data) {
-            if (!this.select('chatSelector').hasClass('visible')) {
-                this.trigger(document, 'menubarToggleDisplay', {
-                    name: this.select('chatSelector').data(DATA_MENUBAR_NAME)
-                });
+            } else {
+                this.ignoreSessionExpiration = false;
             }
         };
 
@@ -679,32 +631,31 @@ define([
         };
 
         this.onResizeCreateLoad = function(event, ui) {
-            this.currentUserReady(function(user) {
-                var $pane = $(event.target),
-                    sizePaneName = $pane.data('sizePreference'),
-                    widthPaneName = !sizePaneName && $pane.data('widthPreference'),
-                    nameToPref = function(name) {
-                        return name && ('pane-' + name);
-                    },
-                    prefName = nameToPref(sizePaneName || widthPaneName),
-                    userPrefs = user.uiPreferences,
-                    value = userPrefs && prefName in userPrefs && userPrefs[prefName];
+            var user = lumifyData.currentUser,
+                $pane = $(event.target),
+                sizePaneName = $pane.data('sizePreference'),
+                widthPaneName = !sizePaneName && $pane.data('widthPreference'),
+                nameToPref = function(name) {
+                    return name && ('pane-' + name);
+                },
+                prefName = nameToPref(sizePaneName || widthPaneName),
+                userPrefs = user.uiPreferences,
+                value = userPrefs && prefName in userPrefs && userPrefs[prefName];
 
-                if (sizePaneName && value) {
-                    var size = value.split(',');
-                    if (size.length === 2) {
-                        $pane.width(parseInt(size[0], 10));
-                        $pane.height(parseInt(size[1], 10));
-                    }
-                } else if (widthPaneName && value) {
-                    $pane.width(parseInt(value, 10));
-                } else if (!prefName && !$pane.is('.facebox')) {
-                    console.warn(
-                        'No data-width-preference or data-size-preference ' +
-                        'attribute for resizable pane', $pane[0]
-                    );
+            if (sizePaneName && value) {
+                var size = value.split(',');
+                if (size.length === 2) {
+                    $pane.width(parseInt(size[0], 10));
+                    $pane.height(parseInt(size[1], 10));
                 }
-            });
+            } else if (widthPaneName && value) {
+                $pane.width(parseInt(value, 10));
+            } else if (!prefName && !$pane.is('.facebox')) {
+                console.warn(
+                    'No data-width-preference or data-size-preference ' +
+                    'attribute for resizable pane', $pane[0]
+                );
+            }
         };
 
         this.onResizeStartHandleMaxWidths = function(event, ui) {
@@ -716,25 +667,19 @@ define([
 
         this.onResizeStopSave = function(event, ui) {
             var sizePaneName = ui.helper.data('sizePreference'),
-                widthPaneName = ui.helper.data('widthPreference');
+                widthPaneName = ui.helper.data('widthPreference'),
+                key = 'pane-',
+                value;
 
             if (sizePaneName) {
-                userService.setPreference('pane-' + sizePaneName, ui.element.width() + ',' + ui.element.height());
+                key += sizePaneName;
+                value = ui.element.width() + ',' + ui.element.height();
             } else if (widthPaneName) {
-                userService.setPreference('pane-' + widthPaneName, ui.element.width());
+                key += widthPaneName;
+                value = ui.element.width();
             }
-        };
 
-        this.onSyncStarted = function() {
-            this.collapseAllPanes();
-
-            var graph = this.select('graphSelector');
-            if (!graph.is('.visible')) {
-                self.trigger(document, 'menubarToggleDisplay', {
-                    name: graph.data(DATA_MENUBAR_NAME),
-                    syncToRemote: false
-                });
-            }
+            this.dataRequest('user', 'preference', key, value)
         };
 
         this.collapseAllPanes = function() {
@@ -743,8 +688,7 @@ define([
                 this.select('workspacesSelector'),
                 this.select('adminSelector'),
                 this.select('detailPaneSelector'),
-                this.select('activitySelector'),
-                this.select('chatSelector')
+                this.select('activitySelector')
             ]);
 
             $('.search-results').hide();

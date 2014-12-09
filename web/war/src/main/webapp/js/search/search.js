@@ -61,19 +61,27 @@ define([
             var self = this,
                 d = $.Deferred();
 
-            if (this.$node.closest('.visible').length === 0) {
-                this.trigger(document, 'menubarToggleDisplay', { name: 'search' });
-            }
-
-            if (this.searchType === searchType) {
-                d.resolve();
-            } else {
-                this.on('searchtypeloaded', function loadedHandler() {
-                    self.off('searchtypeloaded', loadedHandler);
+            new Promise(function(fulfill, reject) {
+                if (self.$node.closest('.visible').length === 0) {
+                    self.searchType = null;
+                    self.on(document, 'searchPaneVisible', function handler(data) {
+                        self.off(document, 'searchPaneVisible', handler);
+                        fulfill();
+                    })
+                    self.trigger(document, 'menubarToggleDisplay', { name: 'search' });
+                } else fulfill();
+            }).done(function() {
+                if (self.searchType === searchType) {
                     d.resolve();
-                });
-            }
-            this.switchSearchType(searchType);
+                } else {
+                    self.on('searchtypeloaded', function loadedHandler() {
+                        self.off('searchtypeloaded', loadedHandler);
+                        d.resolve();
+                    });
+                }
+                self.switchSearchType(searchType);
+            });
+
             return d;
         };
 
@@ -102,7 +110,11 @@ define([
         };
 
         this.onSearchPaneVisible = function(event, data) {
-            this.select('querySelector').focus();
+            var self = this;
+
+            _.delay(function() {
+                self.select('querySelector').focus();
+            }, 250);
         };
 
         this.onSearchResultsBegan = function() {

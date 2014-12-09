@@ -2,10 +2,12 @@ package io.lumify.web.routes.edge;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -17,10 +19,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,12 +54,10 @@ public class SetEdgeProperty extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        final String edgeId = getRequiredParameter(request, "edgeId");
         final String propertyName = getRequiredParameter(request, "propertyName");
         String propertyKey = getOptionalParameter(request, "propertyKey");
         final String valueStr = getRequiredParameter(request, "value");
-        final String sourceId = getRequiredParameter(request, "source");
-        final String destId = getRequiredParameter(request, "dest");
-        final String edgeId = getRequiredParameter(request, "edgeId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationString");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
@@ -89,6 +86,12 @@ public class SetEdgeProperty extends BaseRequestHandler {
             respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
             chain.next(request, response);
             return;
+        }
+
+        if (propertyName.equals(LumifyProperties.COMMENT.getPropertyName()) && request.getPathInfo().equals("/edge/property")) {
+            throw new LumifyException("Use /edge/comment to save comment properties");
+        } else if (request.getPathInfo().equals("/edge/comment") && !propertyName.equals(LumifyProperties.COMMENT.getPropertyName())) {
+            throw new LumifyException("Use /edge/property to save non-comment properties");
         }
 
         OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
@@ -122,6 +125,8 @@ public class SetEdgeProperty extends BaseRequestHandler {
                 authorizations);
         setPropertyResult.elementMutation.save(authorizations);
 
+        String sourceId = edge.getVertexId(Direction.OUT);
+        String destId = edge.getVertexId(Direction.IN);
 
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, propertyName, oldValue, null, edge, "", "",

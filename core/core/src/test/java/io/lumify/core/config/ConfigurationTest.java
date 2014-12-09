@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
@@ -63,19 +62,10 @@ public class ConfigurationTest {
 
     @Test
     public void testGet() {
-        String hit = configuration.get("foo");
+        String hit = configuration.get("foo", null);
         assertEquals("A", hit);
 
-        String miss = configuration.get("no.such.key");
-        assertEquals(Configuration.UNKNOWN_STRING, miss);
-    }
-
-    @Test
-    public void testGetOrNull() {
-        String hit = configuration.getOrNull("bar");
-        assertEquals("B", hit);
-
-        String miss = configuration.getOrNull("no.such.key");
-        assertNull(miss);
+        String miss = configuration.get("no.such.key", null);
+        assertEquals(null, miss);
     }
 }

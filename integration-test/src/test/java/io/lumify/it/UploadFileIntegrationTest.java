@@ -239,7 +239,7 @@ public class UploadFileIntegrationTest extends TestBase {
         ClientApiWorkspace newWorkspace = lumifyApi.getWorkspaceApi().create();
         lumifyApi.setWorkspaceId(newWorkspace.getWorkspaceId());
 
-        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", LumifyProperties.TITLE.getPropertyName(), "New Title", "", "new title", null, null);
+        lumifyApi.getVertexApi().setProperty(artifactVertexId, "", LumifyProperties.TITLE.getPropertyName(), "New Title", "", "new title");
 
         ClientApiElement artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         boolean foundNewTitle = false;

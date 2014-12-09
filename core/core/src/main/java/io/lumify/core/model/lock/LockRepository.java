@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 
 public class LockRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LockRepository.class);
-    public static final String DEFAULT_PATH_PREFIX = "/lumify/locks/";
+    public static final String DEFAULT_PATH_PREFIX = "/lumify/locks";
     private final CuratorFramework curatorFramework;
     private final String pathPrefix;
     private final Map<String, Object> localLocks = new HashMap<String, Object>();
@@ -32,7 +32,7 @@ public class LockRepository {
     }
 
     private String getPath(String lockName) {
-        return this.pathPrefix + lockName;
+        return this.pathPrefix + "/" + lockName;
     }
 
     public void lock(String lockName, final Runnable runnable) {

@@ -3,7 +3,7 @@ define([
     './urlFormatters',
     './formula',
     'util/messages',
-    'promise!../service/ontologyPromise'
+    'util/requirejs/promise!../service/ontologyPromise'
 ], function(
     F,
     formula,
@@ -11,7 +11,7 @@ define([
     ontology) {
     'use strict';
 
-    var propertiesByTitle = ontology.propertiesByTitle,
+    var propertiesByTitle = ontology.properties.byTitle,
         V = {
 
             isPublished: function(vertex) {
@@ -45,17 +45,13 @@ define([
                 },
 
                 userAsync: function(el, userId) {
-                    var d = $.Deferred();
-                    require(['service/user'], function(UserService) {
-                        new UserService().userInfo(userId)
-                            .fail(d.reject)
-                            .done(function(result) {
-                                var user = result.users[userId];
-                                el.textContent = user && user.displayName || i18n('user.unknown.displayName');
-                                d.resolve();
-                            });
-                    })
-                    return d.promise();
+                    return Promise.require('util/withDataRequest')
+                        .then(function(withDataRequest) {
+                            return withDataRequest.dataRequest('user', 'getUserNames', [userId])
+                        })
+                        .then(function(users) {
+                            el.textContent = users && users[0] || i18n('user.unknown.displayName');
+                        })
                 }
             },
 
@@ -122,7 +118,7 @@ define([
                 },
 
                 textarea: function(el, property) {
-                    $(el).html((property.value||'').replace(/\r?\n/g, '<br />'));
+                    $(el).html(_.escape(property.value || '').replace(/\r?\n+/g, '<br><br>'));
                 },
 
                 heading: function(el, property) {
@@ -199,6 +195,16 @@ define([
                 );
             },
 
+            concept: function(vertex) {
+                var conceptType = vertex && V.prop(vertex, 'conceptType');
+
+                if (!conceptType || conceptType === 'Unknown') {
+                    conceptType = 'http://www.w3.org/2002/07/owl#Thing';
+                }
+
+                return ontology.concepts.byId[conceptType];
+            },
+
             isKindOfConcept: function(vertex, conceptTypeFilter) {
                 var conceptType = V.prop(vertex, 'conceptType');
 
@@ -207,142 +213,71 @@ define([
                         return true;
                     }
 
-                    conceptType = ontology.conceptsById[conceptType].parentConcept;
+                    conceptType = ontology.concepts.byId[conceptType].parentConcept;
                 } while (conceptType)
 
                 return false;
             },
 
-            partitionVertices: function(vertices, query, conceptFilter, propertyFilters) {
-                var deferred = $.Deferred(),
-                    hasGeoFilter = _.any(propertyFilters, function(filter) {
-                        var ontologyProperty = ontology.propertiesByTitle[filter.propertyId];
-                        return ontologyProperty && ontologyProperty.dataType === 'geoLocation';
-                    });
-
-                if (hasGeoFilter) {
-                    require(['openlayers'], function(OpenLayers) {
-                        deferred.resolve(OpenLayers);
-                    });
-                } else {
-                    deferred.resolve();
+            image: function(vertex, optionalWorkspaceId, width) {
+                var entityImageUrl = V.prop(vertex, 'entityImageUrl');
+                if (entityImageUrl) {
+                    return entityImageUrl;
                 }
 
-                return deferred.then(function(OpenLayers) {
-                    return _.partition(vertices, function(v) {
-                        var queryMatch = query && query !== '*' ?
-                                _.chain(v.properties)
-                                    .map(function(p) {
-                                        var ontologyProperty = ontology.propertiesByTitle[p.name];
-                                        if (p.value &&
-                                            ontologyProperty &&
-                                            ontologyProperty.possibleValues &&
-                                            ontologyProperty.possibleValues[p.value]) {
+                var entityImageVertexId = V.prop(vertex, 'entityImageVertexId'),
+                    concept = V.concept(vertex),
+                    isImage = /image/i.test(concept.displayType),
+                    isVideo = /video/i.test(concept.displayType);
 
-                                            return $.extend({}, p, {
-                                                value: ontologyProperty.possibleValues[p.value]
-                                            });
-                                        }
-                                        return p;
-                                    })
-                                    .pluck('value')
-                                    .compact()
-                                    .value()
-                                    .join(' ')
-                                    .toLowerCase()
-                                    .indexOf(query) >= 0 : true,
-                            filterConceptMatch = conceptFilter ?
-                                V.isKindOfConcept(v, conceptFilter) : true,
-                            filterPropertyMatch = propertyFilters && propertyFilters.length ?
-                                V.matchesPropertyFilters(v, propertyFilters, OpenLayers) : true;
-
-                        return queryMatch && filterConceptMatch && filterPropertyMatch;
+                if (entityImageVertexId || isImage) {
+                    return 'vertex/thumbnail?' + $.param({
+                        workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
+                        graphVertexId: entityImageVertexId || vertex.id,
+                        width: width || 150
                     });
-                }).promise();
+                }
+
+                if (isVideo) {
+                    var posterFrame =  _.any(vertex.properties, function(p) {
+                        return p.name === 'http://lumify.io#rawPosterFrame';
+                    });
+                    if (posterFrame) {
+                        return 'vertex/poster-frame?' + $.param({
+                            workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
+                            graphVertexId: vertex.id
+                        });
+                    }
+                }
+
+                return concept.glyphIconHref;
             },
 
-            matchesPropertyFilters: function(vertex, filters, OpenLayers) {
-                return _.every(filters, function(filter) {
-                    var predicate = filter.predicate,
-                        property = ontology.propertiesByTitle[filter.propertyId],
-                        vertexProperty = V.prop(vertex, filter.propertyId),
-                        values = filter.values,
-                        predicateCompare = function(values, actual) {
-                            switch (predicate) {
-                                case '<': return actual <= values[0];
-                                case '>': return actual >= values[0];
-                                case 'range': return actual >= values[0] && actual <= values[1];
-                                case 'equal':
-                                    return _.isEqual(values[0], actual);
-                                case 'contains': return actual.indexOf(values[0]) >= 0;
+            imageIsFromConcept: function(vertex, optionalWorkspaceId) {
+                return V.image(vertex, optionalWorkspaceId) === V.concept(vertex).glyphIconHref;
+            },
 
-                                default: console.warn('Unknown predicate:', predicate);
-                            }
+            imageDetail: function(vertex, optionalWorkspaceId) {
+                return V.image(vertex, optionalWorkspaceId, 800);
+            },
 
-                            return false;
-                        },
-                        compareFunction,
-                        transformFunction = _.identity;
-
-                    if (_.isUndefined(vertexProperty)) {
-                        return false;
-                    }
-
-                    switch (property.dataType) {
-                        case 'date':
-                            if (property.displayType !== 'dateOnly') {
-                                vertexProperty = F.date.utc(vertexProperty).getTime();
-                                transformFunction = F.date.local;
-                            } else {
-                                transformFunction = function(v, i) {
-                                    if (_.isUndefined(i)) {
-                                        return new Date(v);
-                                    }
-                                    return F.date.utc(v);
-                                }
-                            }
-                            compareFunction = predicateCompare;
-                            break;
-
-                        case 'geoLocation':
-                            transformFunction = function(v) {
-                                return v.latitude ? v : parseFloat(v);
-                            };
-                            compareFunction = function(values, actual) {
-                                var from = new OpenLayers.Geometry.Point(values[1], values[0]),
-                                    to = new OpenLayers.Geometry.Point(actual.longitude, actual.latitude),
-                                    line = new OpenLayers.Geometry.LineString([from, to]),
-                                    km = line.getGeodesicLength(new OpenLayers.Projection('EPSG:4326')) / 1000;
-
-                                return km <= values[2];
-                            };
-                            break;
-
-                        case 'double':
-                        case 'integer':
-                        case 'heading':
-                        case 'currency':
-                            compareFunction = predicateCompare;
-                            break;
-
-                        case 'boolean':
-                            compareFunction = predicateCompare;
-                            transformFunction = function(v) {
-                                return v === 'true' || v === true;
-                            };
-                            predicate = 'equal';
-                            break;
-
-                        default:
-                            transformFunction = function(v) {
-                                return v.toLowerCase();
-                            };
-                            predicate = 'contains';
-                            compareFunction = predicateCompare;
-                    }
-
-                    return compareFunction(values.map(transformFunction), transformFunction(vertexProperty));
+            raw: function(vertex, optionalWorkspaceId) {
+                return 'vertex/raw?' + $.param({
+                    workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
+                    graphVertexId: vertex.id
                 });
+            },
+
+            imageFrames: function(vertex, optionalWorkspaceId) {
+                var videoPreview =  _.any(vertex.properties, function(p) {
+                    return p.name === 'http://lumify.io#videoPreviewImage';
+                });
+                if (videoPreview) {
+                    return 'vertex/video-preview?' + $.param({
+                        workspaceId: optionalWorkspaceId || lumifyData.currentWorkspaceId,
+                        graphVertexId: vertex.id
+                    });
+                }
             },
 
             propName: function(name) {
@@ -487,7 +422,10 @@ define([
             },
 
             isEdge: function(vertex) {
-                return V.prop(vertex, 'conceptType') === 'relationship' ||
+                var propsIsObjectNotArray = _.isObject(vertex && vertex.properties) &&
+                    vertex.properties['http://lumify.io#conceptType'] === 'relationship';
+                return propsIsObjectNotArray ||
+                    V.prop(vertex, 'conceptType') === 'relationship' ||
                     (_.has(vertex, 'sourceVertexId') && _.has(vertex, 'destVertexId'));
             }
         }
@@ -495,7 +433,7 @@ define([
     return $.extend({}, F, { vertex: V });
 
     function treeLookupForConceptProperty(conceptId, propertyName) {
-        var ontologyConcept = conceptId && ontology.conceptsById[conceptId],
+        var ontologyConcept = conceptId && ontology.concepts.byId[conceptId],
             formulaString = ontologyConcept && ontologyConcept[propertyName];
 
         if (formulaString) {

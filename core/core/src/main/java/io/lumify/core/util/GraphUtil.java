@@ -157,8 +157,12 @@ public class GraphUtil {
         ExistingElementMutation<T> elementMutation = element.prepareMutation();
 
         visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
+        Date now = new Date();
+        if (LumifyProperties.CREATE_DATE.getMetadataValue(propertyMetadata, null) == null) {
+            LumifyProperties.CREATE_DATE.setMetadata(propertyMetadata, now);
+        }
         LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
-        LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, new Date());
+        LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, now);
         LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId());
         LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, SET_PROPERTY_CONFIDENCE);
 

@@ -1,15 +1,18 @@
 require([
     'configuration/admin/plugin',
     'util/formatters',
-    'd3'
+    'd3',
+    'util/withDataRequest'
 ], function(
     defineLumifyAdminPlugin,
     F,
-    d3
+    d3,
+    withDataRequest
     ) {
     'use strict';
 
     return defineLumifyAdminPlugin(PluginList, {
+        mixins: [withDataRequest],
         section: 'Plugin',
         name: 'List',
         subtitle: 'Loaded plugins'
@@ -25,12 +28,13 @@ require([
                   '<li class="nav-header">Plugins<span class="badge loading"></span></li>' +
                 '</ul>'
             );
-            this.adminService.plugins()
-                .always(function() {
+
+            this.dataRequest('admin', 'plugins')
+                .then(this.renderPlugins.bind(this))
+                .catch(this.showError.bind(this))
+                .finally(function() {
                     self.$node.find('.badge').remove();
-                })
-                .done(this.renderPlugins.bind(this))
-                .fail(this.showError.bind(this));
+                });
         });
 
         this.renderPlugins = function(plugins) {
@@ -90,10 +94,13 @@ require([
 
                             this.select('a')
                                 .attr('href', function(d) {
+                                    var baseUrl = '';
                                     if ((/^io\.lumify\./).test(d.className)) {
-                                        return 'https://github.com/lumifyio/lumify/search?q=' + d.className + '.java';
+                                        baseUrl = 'https://github.com/lumifyio/lumify/search?q=';
+                                    } else {
+                                        baseUrl = 'https://github.com/search?q=';
                                     }
-                                    return 'https://github.com/search?q=' + d.className + '.java&type=Code';
+                                    return baseUrl + d.className + '+language%3Ajava&type=Code';
                                 })
                                 .text(function(d) {
                                     return d.className;

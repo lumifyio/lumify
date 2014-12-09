@@ -3,34 +3,30 @@ define([
     'flight/lib/component',
     '../withDropdown',
     'tpl!./propForm',
-    'service/ontology',
     'fields/selection/selection',
-    'data',
     'tpl!util/alert',
     'util/withTeardown',
-    'util/vertex/formatters'
+    'util/vertex/formatters',
+    'util/withDataRequest'
 ], function(
     require,
     defineComponent,
     withDropdown,
     template,
-    OntologyService,
     FieldSelection,
-    appData,
     alertTemplate,
     withTeardown,
-    F
+    F,
+    withDataRequest
 ) {
     'use strict';
 
         // Animates the property value to the justification reference on paste if false
     var SKIP_SELECTION_ANIMATION = true;
 
-    return defineComponent(PropertyForm, withDropdown, withTeardown);
+    return defineComponent(PropertyForm, withDropdown, withTeardown, withDataRequest);
 
     function PropertyForm() {
-
-        var ontologyService = new OntologyService();
 
         this.defaultAttrs({
             propertyListSelector: '.property-list',
@@ -98,24 +94,24 @@ define([
                         })
                         .value()
                 });
+            } else if (F.vertex.isEdge(this.attr.data)) {
+                throw new Error('Property form not supported for edges');
             } else {
-                (F.vertex.isEdge(vertex) ?
-                    ontologyService.propertiesByRelationshipLabel(vertex.label) :
-                    ontologyService.propertiesByConceptId(F.vertex.prop(vertex, 'conceptType'))
-                ).done(function(properties) {
-                    var propertiesList = [];
+                this.dataRequest('ontology', 'propertiesByConceptId', F.vertex.prop(vertex, 'conceptType'))
+                    .done(function(properties) {
+                        var propertiesList = [];
 
-                    properties.list.forEach(function(property) {
-                        if (property.userVisible) {
-                            propertiesList.push(_.pick(property, 'displayName', 'title', 'userVisible'));
-                        }
-                    });
+                        properties.list.forEach(function(property) {
+                            if (property.userVisible) {
+                                propertiesList.push(_.pick(property, 'displayName', 'title', 'userVisible'));
+                            }
+                        });
 
-                    FieldSelection.attachTo(self.select('propertyListSelector'), {
-                        properties: propertiesList,
-                        placeholder: i18n('property.form.field.selection.placeholder')
+                        FieldSelection.attachTo(self.select('propertyListSelector'), {
+                            properties: propertiesList,
+                            placeholder: i18n('property.form.field.selection.placeholder')
+                        });
                     });
-                });
             }
         });
 
@@ -291,7 +287,7 @@ define([
                 button.attr('disabled', true);
             }
 
-            ontologyService.properties().done(function(properties) {
+            this.dataRequest('ontology', 'properties').done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
                 if (propertyName === 'http://lumify.io#visibilityJson') {
                     require([

@@ -11,6 +11,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.web.clientapi.model.ClientApiUser;
+import io.lumify.web.clientapi.model.ClientApiUsers;
 import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.accumulo.core.security.Authorizations;
@@ -163,16 +164,12 @@ public abstract class UserRepository {
         return username.trim().toLowerCase();
     }
 
-    public static JSONArray toJson(Iterable<User> users) throws JSONException {
-        return toJson(users, null);
-    }
-
-    public static JSONArray toJson(Iterable<User> users, Map<String, String> workspaceNames) {
-        JSONArray usersJson = new JSONArray();
+    public ClientApiUsers toClientApi(Iterable<User> users, Map<String, String> workspaceNames) {
+        ClientApiUsers clientApiUsers = new ClientApiUsers();
         for (User user : users) {
-            usersJson.put(UserRepository.toJson(user, workspaceNames));
+            clientApiUsers.getUsers().add(toClientApi(user, workspaceNames));
         }
-        return usersJson;
+        return clientApiUsers;
     }
 
     public static JSONObject toJson(User user) {

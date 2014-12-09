@@ -2,21 +2,20 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'data',
     'tpl!./list',
     'tpl!./item',
     'tpl!util/alert',
-    'promise!util/service/ontologyPromise',
+    'util/requirejs/promise!util/service/ontologyPromise',
     'util/deferredImage',
     'util/video/scrubber',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'util/popovers/withElementScrollingPositionUpdates',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
 ], function(
     defineComponent,
     registry,
-    appData,
     template,
     vertexTemplate,
     alertTemplate,
@@ -24,10 +23,11 @@ define([
     deferredImage,
     VideoScrubber,
     F,
+    withDataRequest,
     withPositionUpdates) {
     'use strict';
 
-    return defineComponent(List, withPositionUpdates);
+    return defineComponent(List, withPositionUpdates, withDataRequest);
 
     function List() {
 
@@ -37,11 +37,11 @@ define([
         });
 
         this.stateForVertex = function(vertex) {
-            var inWorkspace = appData.inWorkspace(vertex);
+            var inWorkspace = vertex.id in this.workspaceVertices;
             return {
                 inGraph: inWorkspace,
                 inMap: inWorkspace && _.some(vertex.properties, function(p) {
-                    var ontologyProperty = ontologyPromise.propertiesByTitle[p.name];
+                    var ontologyProperty = ontologyPromise.properties.byTitle[p.name];
                     return ontologyProperty && ontologyProperty.dataType === 'geoLocation';
                 })
             };
@@ -65,7 +65,7 @@ define([
                 if (vertexState.inGraph) classes.push('graph-displayed');
                 if (vertexState.inMap) classes.push('map-displayed');
 
-                if (!v.imageSrcIsFromConcept) {
+                if (!F.vertex.imageIsFromConcept(v)) {
                     classes.push('non_concept_preview');
                 }
 
@@ -85,36 +85,60 @@ define([
             this.classNameIndex = 0;
             this.classNameLookup = {};
 
-            this.$node
-                .addClass('vertex-list')
-                .html(template({
-                    vertices: this.attr.vertices,
-                    infiniteScrolling: this.attr.infiniteScrolling && this.attr.total !== this.attr.vertices.length,
-                    classNamesForVertex: this.classNameMapForVertices(this.attr.vertices),
-                    F: F
-                }));
+            this.dataRequest('workspace', 'store')
+                .done(function(workspaceVertices) {
+                    self.workspaceVertices = workspaceVertices;
+                    self.$node
+                        .addClass('vertex-list')
+                        .html(template({
+                            vertices: self.attr.vertices,
+                            infiniteScrolling: self.attr.infiniteScrolling &&
+                                self.attr.total !== self.attr.vertices.length,
+                            classNamesForVertex: self.classNameMapForVertices(self.attr.vertices),
+                            F: F
+                        }));
 
-            this.attachEvents();
+                    self.attachEvents();
 
-            this.loadVisibleResultPreviews = _.debounce(this.loadVisibleResultPreviews.bind(this), 1000);
-            this.loadVisibleResultPreviews();
+                    self.loadVisibleResultPreviews = _.debounce(self.loadVisibleResultPreviews.bind(self), 1000);
+                    self.loadVisibleResultPreviews();
 
-            this.triggerInfiniteScrollRequest = _.debounce(this.triggerInfiniteScrollRequest.bind(this), 1000);
-            this.triggerInfiniteScrollRequest();
+                    self.triggerInfiniteScrollRequest = _.debounce(self.triggerInfiniteScrollRequest.bind(self), 1000);
+                    self.triggerInfiniteScrollRequest();
 
-            this.setupDraggables();
+                    self.setupDraggables();
 
-            this.onObjectsSelected(null, { edges: [], vertices: appData.selectedVertices});
+                    self.onObjectsSelected(null, { edges: [], vertices: lumifyData.selectedObjects.vertices });
 
-            this.on('selectAll', this.onSelectAll);
-            this.on('down', this.move);
-            this.on('up', this.move);
-            this.on('contextmenu', this.onContextMenu);
+                    self.on('selectAll', self.onSelectAll);
+                    self.on('down', self.move);
+                    self.on('up', self.move);
+                    self.on('contextmenu', self.onContextMenu);
+                    self.on(document, 'workspaceUpdated', self.onWorkspaceUpdated);
 
-            _.defer(function() {
-                this.$node.scrollTop(0);
-            }.bind(this))
+                    _.defer(function() {
+                        self.$node.scrollTop(0);
+                    })
+            });
         });
+
+        this.onWorkspaceUpdated = function(event, data) {
+            var self = this;
+            this.dataRequest('workspace', 'store')
+                .done(function(workspaceVertices) {
+                    self.workspaceVertices = workspaceVertices;
+                    var ids = _.pluck(data.entityUpdates, 'vertexId').concat(data.entityDeletes)
+                    if (ids.length) {
+                        self.dataRequest('vertex', 'store', { vertexIds: ids })
+                            .done(function(vertices) {
+                                // TODO: only toggleWorkspaceIcons?
+                                self.onVerticesUpdated(null, {
+                                    vertices: vertices
+                                });
+                            })
+                    }
+                });
+        };
 
         this.onContextMenu = function(event) {
             var $target = $(event.target).closest('.vertex-item'),
@@ -137,18 +161,18 @@ define([
                 moveTo = previousSelected[e.type === 'up' ? 'prev' : 'next']('.vertex-item');
 
             if (moveTo.length) {
-
-                var selected = [];
+                var selected = [],
+                    vertexId = moveTo.data('vertexId');
 
                 if (data.shiftKey) {
-                    selected = selected.concat(appData.selectedVertices);
-                    selected.push(appData.vertex(moveTo.data('vertexId')));
+                    selected = selected.concat(_.keys(lumifyData.selectedObjects.vertexIds));
+                    selected.push(vertexId);
                 } else {
-                    selected.push(appData.vertex(moveTo.data('vertexId')));
+                    selected.push(vertexId);
                 }
 
                 this.trigger(document, 'defocusVertices');
-                this.trigger('selectObjects', { vertices: selected });
+                this.trigger('selectObjects', { vertexIds: selected });
             }
         };
 
@@ -174,9 +198,7 @@ define([
 
             this.$node.on('mouseenter mouseleave', '.vertex-item', this.onHoverItem.bind(this));
 
-            this.on(document, 'verticesAdded', this.onVerticesUpdated);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
-            this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.on(document, 'switchWorkspace', this.onWorkspaceClear);
             this.on(document, 'workspaceDeleted', this.onWorkspaceClear);
@@ -285,49 +307,62 @@ define([
                 lisVisible = lisVisible.withinScrollable(this.scrollNode);
             }
 
-            lisVisible.each(function() {
-                var li = $(this),
-                    vertex = appData.vertex(li.data('vertexId'));
+            var vertexIds = lisVisible.map(function() {
+                return $(this).data('vertexId');
+            }).toArray();
 
-                if (vertex && !li.data('previewLoaded')) {
+            this.dataRequest('vertex', 'store', { vertexIds: vertexIds })
+                .done(function(vertices) {
+                    lisVisible.each(function(i) {
+                        var li = $(this),
+                            vertex = vertices[i];
 
-                    var preview = li.data('previewLoaded', true)
-                                    .find('.preview');
+                        if (vertex && !li.data('previewLoaded')) {
 
-                    if (vertex.imageFramesSrc) {
-                        VideoScrubber.attachTo(preview, {
-                            posterFrameUrl: vertex.imageSrc,
-                            videoPreviewImageUrl: vertex.imageFramesSrc
-                        });
-                    } else {
-                        var conceptImage = vertex.concept.glyphIconHref,
-                            clsName = 'non_concept_preview';
+                            var preview = li.data('previewLoaded', true)
+                                            .find('.preview'),
+                                image = F.vertex.image(vertex),
+                                videoPreview = F.vertex.imageFrames(vertex);
 
-                        if ((preview.css('background-image') || '').indexOf(vertex.imageSrc) >= 0) {
-                            return;
-                        }
+                            if (videoPreview) {
+                                VideoScrubber.attachTo(preview, {
+                                    posterFrameUrl: image,
+                                    videoPreviewImageUrl: videoPreview
+                                });
+                            } else {
+                                var conceptImage = F.vertex.concept(vertex).glyphIconHref,
+                                clsName = 'non_concept_preview';
 
-                        li.removeClass(clsName).addClass('loading');
-
-                        deferredImage(conceptImage)
-                            .always(function() {
-                                preview.css('background-image', 'url(' + conceptImage + ')')
-                            })
-                            .done(function() {
-                                if (conceptImage === vertex.imageSrc) {
-                                    li.toggleClass(clsName, !vertex.imageSrcIsFromConcept).removeClass('loading');
-                                } else {
-                                    _.delay(function() {
-                                        deferredImage(vertex.imageSrc).always(function() {
-                                            preview.css('background-image', 'url(' + vertex.imageSrc + ')');
-                                            li.toggleClass(clsName, !vertex.imageSrcIsFromConcept)
-                                                .removeClass('loading');
-                                        })
-                                    }, 500);
+                                if ((preview.css('background-image') || '').indexOf(image) >= 0) {
+                                    return;
                                 }
-                            });
-                    }
-                }
+
+                                li.removeClass(clsName).addClass('loading');
+
+                                deferredImage(conceptImage)
+                                .always(function() {
+                                    preview.css('background-image', 'url(' + conceptImage + ')')
+                                })
+                                .done(function() {
+                                    if (conceptImage === image) {
+                                        li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
+                                        .removeClass('loading');
+                                    } else {
+                                        _.delay(function() {
+                                            deferredImage(image).always(function() {
+                                                preview.css(
+                                                    'background-image',
+                                                    'url(' + image + ')'
+                                                );
+                                                li.toggleClass(clsName, !F.vertex.imageIsFromConcept(vertex))
+                                                .removeClass('loading');
+                                            })
+                                        }, 500);
+                                    }
+                                });
+                            }
+                        }
+                    })
             });
         };
 
@@ -354,22 +389,15 @@ define([
         };
 
         this.selectItems = function(items) {
-            var vertices = appData.vertices(items.map(function() {
+            var vertexIds = items.map(function() {
                     return $(this).data('vertexId');
-                }).toArray());
+                }).toArray();
 
-            if (vertices.length > 1) {
-                vertices.forEach(function(vertex) {
-                    vertex.workspace = {
-                        selected: true
-                    };
-                });
-            }
-            if (vertices.length === 0) {
+            if (vertexIds.length === 0) {
                 return;
             }
             this.trigger(document, 'defocusVertices');
-            this.trigger('selectObjects', { vertices: vertices });
+            this.trigger('selectObjects', { vertexIds: vertexIds });
         };
 
         this.onWorkspaceLoaded = function(evt, workspace) {
@@ -386,9 +414,11 @@ define([
         };
 
         // Switching workspaces should clear the icon state and vertices
-        this.onWorkspaceClear = function() {
-            this.$node.find('li.graph-displayed').removeClass('graph-displayed');
-            this.$node.find('li.map-displayed').removeClass('map-displayed');
+        this.onWorkspaceClear = function(event, data) {
+            if (event.type !== 'workspaceDeleted' || lumifyData.currentWorkspaceId === data.workspaceId) {
+                this.$node.find('li.graph-displayed').removeClass('graph-displayed');
+                this.$node.find('li.map-displayed').removeClass('map-displayed');
+            }
         };
 
         this.onVerticesUpdated = function(event, data) {
@@ -403,9 +433,9 @@ define([
                         F: F
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = vertex.imageSrc;
+                    src = F.vertex.image(vertex);
 
-                li.toggleClass('non_concept_preview', !vertex.imageSrcIsFromConcept)
+                li.toggleClass('non_concept_preview', !F.vertex.imageIsFromConcept(vertex))
                     .toggleClass('has-subtitle', !!F.vertex.subtitle(vertex))
                     .toggleClass('has-timeSubtitle', !!F.vertex.time(vertex));
 
@@ -422,13 +452,6 @@ define([
             this.loadVisibleResultPreviews();
         };
 
-        this.onVerticesDeleted = function(event, data) {
-            var self = this;
-            (data.vertices || []).forEach(function(vertex) {
-                self.toggleItemIcons(vertex.id, { inGraph: false, inMap: false });
-            });
-        };
-
         this.onObjectsSelected = function(event, data) {
             this.$node.find('.active').removeClass('active');
 
@@ -439,7 +462,9 @@ define([
                     })
                     .value().join(',');
 
-            $(ids, this.node).addClass('active');
+            if (ids.length) {
+                $(ids, this.node).addClass('active');
+            }
         };
     }
 });

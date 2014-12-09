@@ -7,12 +7,11 @@ define([
     'util/privileges',
     'util/range',
     'colorjs',
-    'service/vertex',
-    'service/ontology',
+    'util/withDataRequest',
     'util/vertex/formatters',
     'util/popovers/withElementScrollingPositionUpdates',
     'util/range',
-    'util/jquery.withinScrollable'
+    'util/jquery.withinScrollable',
 ], function(
     TermForm,
     StatementForm,
@@ -21,8 +20,7 @@ define([
     Privileges,
     rangeUtils,
     colorjs,
-    VertexService,
-    OntologyService,
+    withDataRequest,
     F,
     withPositionUpdates,
     range) {
@@ -46,9 +44,7 @@ define([
     function WithHighlighting() {
 
         withPositionUpdates.call(this);
-
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
+        withDataRequest.call(this);
 
         this.defaultAttrs({
             resolvableSelector: '.text .entity',
@@ -141,37 +137,9 @@ define([
 
             if (!selection.isCollapsed && selection.rangeCount === 1) {
 
-                var $anchor = $(selection.anchorNode),
-                    $focus = $(selection.focusNode),
-                    isTranscript = $anchor.closest('.av-times').length,
-                    offsetsFunction = isTranscript ?
-                        'offsetsForTranscript' :
-                        'offsetsForText',
-                    offsets = this[offsetsFunction]([
-                        {el: $anchor, offset: selection.anchorOffset},
-                        {el: $focus, offset: selection.focusOffset}
-                    ], '.text', _.identity),
-                    range = selection.getRangeAt(0),
-                    output = {},
-                    contextRange = rangeUtils.expandRangeByWords(range, 4, output),
-                    context = contextRange.toString(),
-                    contextHighlight =
-                        '...' +
-                        output.before +
-                        '<span class="selection">' + selection.toString() + '</span>' +
-                        output.after +
-                        '...';
-
-                if (offsets) {
-                    this.trigger('copydocumenttext', {
-                        startOffset: offsets[0],
-                        endOffset: offsets[1],
-                        snippet: contextHighlight,
-                        vertexId: this.attr.data.id,
-                        textPropertyKey: $anchor.closest('.text-section').data('key'),
-                        text: selection.toString(),
-                        vertexTitle: F.vertex.title(this.attr.data)
-                    });
+                var data = this.transformSelection(selection);
+                if (data.startOffset && data.endOffset) {
+                    this.trigger('copydocumenttext', data);
                 }
             }
         };
@@ -188,6 +156,39 @@ define([
             } else {
                 this.openText(propertyKey);
             }
+        };
+
+        this.transformSelection = function(selection) {
+            var $anchor = $(selection.anchorNode),
+                $focus = $(selection.focusNode),
+                isTranscript = $anchor.closest('.av-times').length,
+                offsetsFunction = isTranscript ?
+                    'offsetsForTranscript' :
+                    'offsetsForText',
+                offsets = this[offsetsFunction]([
+                    {el: $anchor, offset: selection.anchorOffset},
+                    {el: $focus, offset: selection.focusOffset}
+                ], '.text', _.identity),
+                range = selection.getRangeAt(0),
+                output = {},
+                contextRange = rangeUtils.expandRangeByWords(range, 4, output),
+                context = contextRange.toString(),
+                contextHighlight =
+                    '...' +
+                    output.before +
+                    '<span class="selection">' + selection.toString() + '</span>' +
+                    output.after +
+                    '...';
+
+            return {
+                startOffset: offsets && offsets[0],
+                endOffset: offsets && offsets[1],
+                snippet: contextHighlight,
+                vertexId: this.attr.data.id,
+                textPropertyKey: $anchor.closest('.text-section').data('key'),
+                text: selection.toString(),
+                vertexTitle: F.vertex.title(this.attr.data)
+            };
         };
 
         this.trackMouse = function(event) {
@@ -257,8 +258,7 @@ define([
             this.highlightNode().addClass('highlight-' + style.selector);
 
             if (!style.styleApplied) {
-
-                this.ontologyService.concepts().done(function(concepts) {
+                this.dataRequest('ontology', 'concepts').done(function(concepts) {
                     var styleFile = 'tpl!detail/highlight-styles/' + style.selector + '.css',
                         detectedObjectStyleFile = 'tpl!detail/highlight-styles/detectedObject.css';
 
@@ -429,28 +429,38 @@ define([
                     ActionBar.attachTo(self.node, {
                         alignTo: 'textselection',
                         actions: {
-                            Resolve: 'resolve.actionbar'
+                            Resolve: 'resolve.actionbar',
+                            Comment: 'comment.actionbar'
                         }
                     });
 
-                    self.off('.actionbar').on('resolve.actionbar', function(event) {
-                        event.stopPropagation();
+                    self.off('.actionbar')
+                        .on('comment.actionbar', function(event) {
+                            event.stopPropagation();
 
-                        var isEndTextNode = endContainer.nodeType === 1;
-                        if (isEndTextNode) {
-                            self.dropdownEntity(true, endContainer, selection, text);
-                        } else {
+                            var data = self.transformSelection(sel);
+                            if (data.startOffset && data.endOffset) {
+                                self.trigger(self.select('commentsSelector'), 'commentOnSelection', data);
+                            }
+                        })
+                        .on('resolve.actionbar', function(event) {
+                            event.stopPropagation();
 
-                            // Move to first space in end so as to not break up word when splitting
-                            var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
-                            do {
-                                character = endContainer.textContent.substring(++i, i + 1);
-                            } while (whitespaceCheck.test(character));
+                            var isEndTextNode = endContainer.nodeType === 1;
+                            if (isEndTextNode) {
+                                self.dropdownEntity(true, endContainer, selection, text);
+                            } else {
 
-                            endContainer.splitText(i);
-                            self.dropdownEntity(true, endContainer, selection, text);
-                        }
-                    });
+                                // Move to first space in end so as to not break up word when splitting
+                                var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
+                                do {
+                                    character = endContainer.textContent.substring(++i, i + 1);
+                                } while (whitespaceCheck.test(character));
+
+                                endContainer.splitText(i);
+                                self.dropdownEntity(true, endContainer, selection, text);
+                            }
+                        });
                 });
             }
         }, 250);
@@ -516,14 +526,7 @@ define([
                     self.off('.actionbar')
                         .on('open.actionbar', function(event) {
                             event.stopPropagation();
-
-                            self.trigger('selectObjects', {
-                                vertices: [
-                                    {
-                                        id: $target.data('info').resolvedToVertexId
-                                    }
-                                ]
-                            });
+                            self.trigger('selectObjects', { vertexIds: $target.data('info').resolvedToVertexId });
                     });
                     self.on('unresolve.actionbar', function(event) {
                         event.stopPropagation();
@@ -552,7 +555,7 @@ define([
             var self = this,
                 words = this.select('draggablesSelector');
 
-            this.ontologyService.concepts()
+            this.dataRequest('ontology', 'concepts')
                 .done(function(concepts) {
 
                     // Filter list to those in visible scroll area
@@ -696,21 +699,21 @@ define([
                 this.openTextRequest.abort();
             }
 
-            return this.handleCancelling(
-                this.openTextRequest = this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
-            ).done(function(artifactText) {
-                var html = self.processArtifactText(artifactText);
-                if (expand) {
-                    $section.find('.text').html(html);
-                    $section.addClass('expanded');
-                    $badge.removeClass('loading');
+            // TODO: support cancelling
+            return this.dataRequest('vertex', 'highlighted-text', this.attr.data.id, propertyKey)
+                .then(function(artifactText) {
+                    var html = self.processArtifactText(artifactText);
+                    if (expand) {
+                        $section.find('.text').html(html);
+                        $section.addClass('expanded');
+                        $badge.removeClass('loading');
 
-                    self.updateEntityAndArtifactDraggables();
-                    if (!options || options.scrollToSection !== false) {
-                        self.scrollToRevealSection($section);
+                        self.updateEntityAndArtifactDraggables();
+                        if (!options || options.scrollToSection !== false) {
+                            self.scrollToRevealSection($section);
+                        }
                     }
-                }
-            });
+                });
         };
 
         this.offsetsForText = function(input, parentSelector, offsetTransform) {

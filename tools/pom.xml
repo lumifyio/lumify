@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>lumify-tools-group</artifactId>
@@ -23,5 +23,6 @@
         <module>reindex-mr</module>
         <module>format</module>
         <module>rdf-import</module>
+        <module>assign-image-mr</module>
     </modules>
 </project>

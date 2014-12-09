@@ -3,17 +3,20 @@ require([
     'hbs!io/lumify/web/devTools/templates/ontology-edit',
     'util/formatters',
     'util/ontology/conceptSelect',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
     template,
     F,
     ConceptSelector,
+    withDataRequest,
     d3
     ) {
     'use strict';
 
     return defineLumifyAdminPlugin(OntologyEdit, {
+        mixins: [withDataRequest],
         section: 'Ontology',
         name: 'Edit',
         subtitle: 'Modify the current ontology'
@@ -75,7 +78,7 @@ require([
 
             this.handleSubmitButton(
                 this.select('buttonSelector'),
-                this.adminService.ontologyEdit({
+                this.dataRequest('admin', 'ontologyEdit', {
                     concept: this.currentConcept,
                     displayName: this.$node.find('.displayName').val(),
                     color: hexToRgb(this.$node.find('.color').val()),
@@ -83,12 +86,13 @@ require([
                     subtitleFormula: this.$node.find('.subtitleFormula').val(),
                     timeFormula: this.$node.find('.timeFormula').val()
                 })
-                    .fail(function() {
-                        self.showError();
-                    })
-                    .done(function() {
+                    .then(function() {
                         self.showSuccess('Saved, refresh to see changes');
                     })
+                    .catch(function() {
+                        self.showError();
+                    })
+
             )
         };
 

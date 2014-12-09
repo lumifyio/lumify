@@ -29,25 +29,25 @@ public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWork
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        String imageIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_IMAGE);
+        String imageIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_IMAGE, null);
         if (imageIri != null) {
             imageConcept = getOntologyRepository().getConceptByIRI(imageIri);
             checkNotNull(imageConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_IMAGE + ")" + imageIri);
         }
 
-        String audioIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_AUDIO);
+        String audioIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_AUDIO, null);
         if (audioIri != null) {
             audioConcept = getOntologyRepository().getConceptByIRI(audioIri);
             checkNotNull(audioConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_AUDIO + ")" + audioIri);
         }
 
-        String videoIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_VIDEO);
+        String videoIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_VIDEO, null);
         if (videoIri != null) {
             videoConcept = getOntologyRepository().getConceptByIRI(videoIri);
             checkNotNull(videoConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_VIDEO + ")" + videoIri);
         }
 
-        String documentIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_DOCUMENT);
+        String documentIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_DOCUMENT, null);
         if (documentIri != null) {
             documentConcept = getOntologyRepository().getConceptByIRI(documentIri);
             checkNotNull(documentConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_DOCUMENT + ")" + documentIri);

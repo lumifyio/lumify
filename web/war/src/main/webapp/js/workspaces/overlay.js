@@ -3,10 +3,14 @@ define([
     'flight/lib/component',
     'tpl!./overlay',
     'util/formatters',
-    'service/workspace',
-    'service/ontology',
-    'data'
-], function(defineComponent, template, F, WorkspaceService, OntologyService, appData) {
+    'util/privileges',
+    'util/withDataRequest'
+], function(
+    defineComponent,
+    template,
+    F,
+    Privilege,
+    withDataRequest) {
     'use strict';
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30,
@@ -14,7 +18,7 @@ define([
         UPDATE_WORKSPACE_DIFF_SECONDS = 3,
         SHOW_UNPUBLUSHED_CHANGES_SECONDS = 3;
 
-    return defineComponent(WorkspaceOverlay);
+    return defineComponent(WorkspaceOverlay, withDataRequest);
 
     function isWorkspaceDiffPost(settings) {
         var route = ~['workspace/undo', 'workspace/publish'].indexOf(settings.url),
@@ -24,9 +28,6 @@ define([
     }
 
     function WorkspaceOverlay() {
-
-        var workspaceService = new WorkspaceService(),
-            ontologyService = new OntologyService();
 
         this.defaultAttrs({
             userSelector: '.user',
@@ -41,25 +42,15 @@ define([
                 MENUBAR_WIDTH = $('.menubar-pane').width();
             })
 
-            this.userDeferred = $.Deferred();
-            if (window.currentUser) {
-                this.userDeferred.resolve();
-            }
-
-            this.workspaceDeferred = $.Deferred();
             this.updateDiffBadge = _.throttle(this.updateDiffBadge.bind(this), UPDATE_WORKSPACE_DIFF_SECONDS * 1000)
 
-            $.when(this.userDeferred, this.workspaceDeferred).done(function() {
-                self.$node.show();
-
-                self.updateUserTooltip({user: window.currentUser});
-
-                requestAnimationFrame(function() {
-                    self.$node.addClass('visible');
-                });
-            })
-
             this.$node.hide().html(template({}));
+
+            this.updateUserTooltip({user: lumifyData.currentUser});
+
+            requestAnimationFrame(function() {
+                self.$node.addClass('visible');
+            });
 
             this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
             this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
@@ -67,8 +58,7 @@ define([
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
-            this.on(document, 'currentUserChanged', this.onCurrentUserChanged);
-            this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
+            this.on(document, 'edgesLoaded', this.onEdgesLoaded);
 
             this.on(document, 'verticesUpdated', this.updateDiffBadge);
             this.on(document, 'verticesAdded', this.updateDiffBadge);
@@ -99,11 +89,6 @@ define([
                 badge.popover('hide');
             }
         };
-
-        this.onCurrentUserChanged = function(event, data) {
-            this.userDeferred.resolve();
-            this.updateUserTooltip(data);
-        }
 
         this.onGraphPaddingUpdated = function(event, data) {
             this.$node.css('left', data.padding.l + MENUBAR_WIDTH);
@@ -140,13 +125,26 @@ define([
             }
         }
 
-        this.setContent = function(title, editable, subtitle) {
+        this.setContent = function(title, editable, commentable, subtitle) {
             this.select('nameSelector').text(title);
             this.select('subtitleSelector').html(
-                editable === false ?
-                    i18n('workspaces.overlay.read_only') :
-                    subtitle
+                editable === false || Privilege.missingEDIT ?
+                commentable === false || Privilege.missingCOMMENT ?
+                i18n('workspaces.overlay.read_only') :
+                i18n('workspaces.overlay.read_only_comment') :
+                subtitle
             );
+        };
+
+        this.updateWithNewWorkspaceData = function(workspace) {
+            this.setContent(
+                workspace.title,
+                workspace.editable,
+                workspace.commentable,
+                i18n('workspaces.overlay.no_changes')
+            );
+            clearTimeout(this.updateTimer);
+            this.updateWorkspaceTooltip(workspace);
         };
 
         this.onSwitchWorkspace = function() {
@@ -155,18 +153,18 @@ define([
         };
 
         this.onWorkspaceLoaded = function(event, data) {
-            this.workspaceDeferred.resolve();
-            this.setContent(data.title, data.editable, i18n('workspaces.overlay.no_changes'));
-            clearTimeout(this.updateTimer);
-            this.updateWorkspaceTooltip(data);
+            this.$node.show();
+            this.updateWithNewWorkspaceData(data);
             this.updateDiffBadge();
         };
 
         this.onWorkspaceUpdated = function(event, data) {
-            this.onWorkspaceLoaded(event, data.workspace);
+            if (lumifyData.currentWorkspaceId === data.workspace.workspaceId) {
+                this.updateWithNewWorkspaceData(data.workspace);
+            }
         };
 
-        this.onRelationshipsLoaded = function(event, data) {
+        this.onEdgesLoaded = function(event, data) {
             this.updateWorkspaceTooltip(data);
         };
 
@@ -216,126 +214,116 @@ define([
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
 
-            if (event && event.type === 'verticesUpdated') {
-                if (!data || !data.options || data.options.originalEvent !== 'propertiesChange') {
-                    return;
-                }
-            }
-
             if (!badge.length) {
                 badge = $('<span class="badge"></span>')
                     .insertAfter(node)
                     .on('mouseenter mouseleave', this.onDiffBadgeMouse.bind(this))
             }
 
-            $.when(
-                workspaceService.diff(appData.workspaceId),
-                ontologyService.properties())
-                .fail(function() {
-                    badge.removePrefixedClasses('badge-').addClass('badge-important')
-                        .popover('destroy')
-                        .attr('title', i18n('workspaces.overlay.error'))
-                        .text('!');
-                })
-                .done(function(response, ontologyProperties) {
-                    var diffs = response[0].diffs,
-                        diffsWithoutVisibleProperty = _.map(diffs, function(d) {
-                            return _.omit(d, 'visible');
-                        });
+            Promise.all([
+                this.dataRequest('workspace', 'diff'),
+                this.dataRequest('ontology', 'properties')
+            ]).done(function(results) {
+                var ontologyProperties = results[1],
+                    diffs = results[0].diffs,
+                    diffsWithoutVisibleProperty = _.map(diffs, function(d) {
+                        return _.omit(d, 'visible');
+                    });
 
-                    // Check if same
-                    if (self.previousDiff && _.isEqual(diffsWithoutVisibleProperty, self.previousDiff)) {
-                        return;
-                    }
-                    self.previousDiff = diffsWithoutVisibleProperty;
+                // Check if same
+                if (self.previousDiff && _.isEqual(diffsWithoutVisibleProperty, self.previousDiff)) {
+                    return;
+                }
+                self.previousDiff = diffsWithoutVisibleProperty;
 
-                    var vertexDiffsById = _.indexBy(diffs, function(diff) {
-                            return diff.vertexId;
-                        }),
-                        countOfTitleChanges = 0,
-                        filteredDiffs = _.filter(diffs, function(diff) {
-                            if (diff.type !== 'PropertyDiffItem') return true;
+                var vertexDiffsById = _.indexBy(diffs, function(diff) {
+                        return diff.vertexId;
+                    }),
+                    countOfTitleChanges = 0,
+                    filteredDiffs = _.filter(diffs, function(diff) {
+                        if (diff.type !== 'PropertyDiffItem') return true;
 
-                            var ontologyProperty = ontologyProperties.byTitle[diff.name];
-                            if (!ontologyProperty || !ontologyProperty.userVisible) return false;
-                            if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
-                                countOfTitleChanges++;
-                            }
-                            return true;
-                        }),
-                        count = filteredDiffs.length - countOfTitleChanges,
-                        formattedCount = F.number.pretty(count);
+                        var ontologyProperty = ontologyProperties.byTitle[diff.name];
+                        if (!ontologyProperty || !ontologyProperty.userVisible) return false;
+                        if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
+                            countOfTitleChanges++;
+                        }
+                        return true;
+                    }),
+                    count = filteredDiffs.length - countOfTitleChanges,
+                    formattedCount = F.number.pretty(count);
 
-                    self.currentDiffIds = _.uniq(filteredDiffs.map(function(diff) {
-                        return diff.vertexId || diff.elementId || diff.edgeId;
-                    }));
+                self.currentDiffIds = _.uniq(filteredDiffs.map(function(diff) {
+                    return diff.vertexId || diff.elementId || diff.edgeId;
+                }));
 
-                    require(['workspaces/diff/diff'], function(Diff) {
-                        var popover = badge.data('popover'),
-                            tip = popover && popover.tip();
+                require(['workspaces/diff/diff'], function(Diff) {
+                    var popover = badge.data('popover'),
+                        tip = popover && popover.tip();
 
-                        if (tip && tip.is(':visible')) {
-                            self.trigger(popover.tip().find('.popover-content'),
-                                 'diffsChanged',
-                                 { diffs: filteredDiffs });
-                            popover.show();
-                        } else {
-                            badge
-                                .popover('destroy')
-                                .popover({
-                                    placement: 'top',
-                                    content: i18n('workspaces.diff.loading'),
-                                    title: i18n('workspaces.diff.header.unpublished_changes')
-                                });
+                    if (tip && tip.is(':visible')) {
+                        self.trigger(popover.tip().find('.popover-content'),
+                             'diffsChanged',
+                             { diffs: filteredDiffs });
+                        popover.show();
+                    } else {
+                        badge
+                            .popover('destroy')
+                            .popover({
+                                placement: 'top',
+                                content: i18n('workspaces.diff.loading'),
+                                title: i18n('workspaces.diff.header.unpublished_changes')
+                            });
 
-                            popover = badge.data('popover');
-                            tip = popover.tip();
+                        popover = badge.data('popover');
+                        tip = popover.tip();
 
-                            var left = 10;
-                            tip.css({
-                                    width: '400px',
-                                    height: '250px'
-                                })
-                                .data('sizePreference', 'diff')
-                                .find('.arrow').css({
-                                    left: parseInt(badge.position().left - (left / 2) + 1, 10) + 'px',
-                                    marginLeft: 0
-                                })
-
-                            // We fill in our own content
-                            popover.setContent = function() {}
-                            badge.on('shown', function() {
-                                var css = {
-                                    top: (parseInt(tip.css('top')) - 10) + 'px'
-                                };
-                                tip.resizable({
-                                    handles: 'n, e, ne',
-                                    maxWidth: self.popoverCss.maxWidth,
-                                    maxHeight: self.popoverCss.maxHeight
-                                }).css({top: top});
-
-                                self.updatePopoverSize(tip);
+                        var left = 10;
+                        tip.css({
+                                width: '400px',
+                                height: '250px'
+                            })
+                            .data('sizePreference', 'diff')
+                            .find('.arrow').css({
+                                left: parseInt(badge.position().left - (left / 2) + 1, 10) + 'px',
+                                marginLeft: 0
                             })
 
-                            Diff.teardownAll();
+                        // We fill in our own content
+                        popover.setContent = function() {}
+                        badge.on('shown', function() {
+                            var css = {
+                                top: (parseInt(tip.css('top')) - 10) + 'px'
+                            };
+                            tip.resizable({
+                                handles: 'n, e, ne',
+                                maxWidth: self.popoverCss.maxWidth,
+                                maxHeight: self.popoverCss.maxHeight
+                            }).css({top: top});
+
+                            self.updatePopoverSize(tip);
+
                             Diff.attachTo(tip.find('.popover-content'), {
                                 diffs: filteredDiffs
                             });
-                        }
-                    });
+                        })
 
-                    badge.removePrefixedClasses('badge-').addClass('badge-info')
-                        .attr('title', i18n('workspaces.diff.unpublished_change.' + (
-                            formattedCount === 1 ?
-                            'one' : 'some'), formattedCount))
-                        .text(count > 0 ? formattedCount : '');
-
-                    if (count > 0) {
-                        self.animateBadge(badge, formattedCount);
-                    } else if (count === 0) {
-                        badge.popover('destroy');
+                        Diff.teardownAll();
                     }
-                })
+                });
+
+                badge.removePrefixedClasses('badge-').addClass('badge-info')
+                    .attr('title', i18n('workspaces.diff.unpublished_change.' + (
+                        formattedCount === 1 ?
+                        'one' : 'some'), formattedCount))
+                    .text(count > 0 ? formattedCount : '');
+
+                if (count > 0) {
+                    self.animateBadge(badge, formattedCount);
+                } else if (count === 0) {
+                    badge.popover('destroy');
+                }
+            })
         };
 
         var badgeReset, animateTimer;
@@ -424,8 +412,8 @@ define([
             }
             if (this.verticesCount === 0) {
                 this.edgesCount = 0;
-            } else if (data.relationships) {
-                this.edgesCount = data.relationships.length;
+            } else if (data.edges) {
+                this.edgesCount = data.edges.length;
             } else {
                 this.edgesCount = $('.cytoscape-container').cytoscape('get').edges().length;
             }

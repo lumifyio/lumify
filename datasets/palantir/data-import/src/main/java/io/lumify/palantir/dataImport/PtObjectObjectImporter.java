@@ -3,9 +3,6 @@ package io.lumify.palantir.dataImport;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.palantir.dataImport.model.PtLinkType;
 import io.lumify.palantir.dataImport.model.PtObjectObject;
-import org.securegraph.Vertex;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class PtObjectObjectImporter extends PtRowImporterBase<PtObjectObject> {
     protected PtObjectObjectImporter(final DataImporter dataImporter) {

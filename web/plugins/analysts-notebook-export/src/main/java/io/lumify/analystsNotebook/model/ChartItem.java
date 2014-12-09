@@ -215,7 +215,7 @@ public class ChartItem {
         }
 
         IconPicture iconPicture = null;
-        if (version.supports(AnalystsNotebookFeature.ICON_PICTURE)) {
+        if (version.supports(AnalystsNotebookFeature.ICON_PICTURE) && analystsNotebookExportConfiguration.enableIconPicture()) {
             String mimeType = LumifyProperties.MIME_TYPE.getPropertyValue(vertex);
             if (mimeType != null && mimeType.toLowerCase().startsWith("image/")) {
                 iconPicture = new IconPicture(getThumbnailBytes(vertex, artifactThumbnailRepository, user, analystsNotebookExportConfiguration));
@@ -252,7 +252,15 @@ public class ChartItem {
         return thumbnail.getThumbnailData();
     }
 
-    public static ChartItem createLink(AnalystsNotebookVersion version, String label, String from, String to) {
+    public static ChartItem createFromEdge(AnalystsNotebookVersion version, Edge edge, OntologyRepository ontologyRepository) {
+        String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
+        String from = edge.getVertexId(Direction.OUT);
+        String to = edge.getVertexId(Direction.IN);
+
+        return createLink(version, label, from, to);
+    }
+
+    private static ChartItem createLink(AnalystsNotebookVersion version, String chartItemLabel, String from, String to) {
         LinkStyle linkStyle = new LinkStyle();
         if (version.supports(AnalystsNotebookFeature.LINK_STYLE_STRENGTH)) {
             linkStyle.setStrength(1);
@@ -266,18 +274,33 @@ public class ChartItem {
         link.setLinkStyle(linkStyle);
 
         ChartItem chartItem = new ChartItem();
-        chartItem.setLabel(label);
+        chartItem.setLabel(chartItemLabel);
         chartItem.setDateSet(false);
         chartItem.setLink(link);
 
         return chartItem;
     }
 
-    public static ChartItem createFromEdge(AnalystsNotebookVersion version, Edge edge, OntologyRepository ontologyRepository) {
-        String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
-        String from = edge.getVertexId(Direction.OUT);
-        String to = edge.getVertexId(Direction.IN);
+    public static ChartItem createLabel(AnalystsNotebookVersion version, int x, int y, String chartItemLabel, String chartItemDescription, String labelId) {
+        Label label = new Label();
+        label.setLabelId(labelId);
 
-        return createLink(version, label, from, to);
+        End end = new End();
+        if (version.supports(AnalystsNotebookFeature.END_X)) {
+            end.setX(x);
+        }
+        end.setY(y);
+        end.setLabel(label);
+
+        ChartItem chartItem = new ChartItem();
+        chartItem.setLabel(chartItemLabel);
+        chartItem.setDescription(chartItemDescription);
+        chartItem.setDateSet(false);
+        if (version.supports(AnalystsNotebookFeature.CHART_ITEM_X_POSITION)) {
+            chartItem.setxPosition(x);
+        }
+        chartItem.setEnd(end);
+
+        return chartItem;
     }
 }

@@ -193,7 +193,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
                 boolean visible = sqlWorkspaceVertex.isVisible();
 
-                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY);
+                // TODO implement graphLayoutJson in sql
+                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY, null);
             }
         });
         return workspaceEntities;
@@ -223,7 +224,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     public void updateEntitiesOnWorkspace(Workspace workspace, Iterable<Update> updates, User user) {
         checkNotNull(workspace, "Workspace cannot be null");
 
-        if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
+        if (!hasCommentPermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
 
@@ -322,6 +323,20 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     @Override
     public ClientApiWorkspaceDiff getDiff(Workspace workspace, User user) {
         return new ClientApiWorkspaceDiff();
+    }
+
+    @Override
+    public boolean hasCommentPermissions(String workspaceId, User user) {
+        List<SqlWorkspaceUser> sqlWorkspaceUsers = getSqlWorkspaceUserLists(workspaceId);
+        for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
+            if (workspaceUser.getUser().getUserId().equals(user.getUserId()) && (
+                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.COMMENT.toString()) ||
+                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.WRITE.toString()
+            ))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

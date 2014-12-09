@@ -7,6 +7,8 @@ define([
     template) {
     'use strict';
 
+    var HIDE_PROPERTIES = ['http://lumify.io/comment#entry'];
+
     return defineComponent(FieldSelection);
 
     function FieldSelection() {
@@ -73,6 +75,10 @@ define([
 
                                         if (self.attr.onlySearchable) {
                                             return visible && p.searchable !== false;
+                                        }
+
+                                        if (~HIDE_PROPERTIES.indexOf(p.title)) {
+                                            return false;
                                         }
 
                                         return visible;

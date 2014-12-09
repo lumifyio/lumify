@@ -4,21 +4,18 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'service/admin',
     'tpl!util/alert',
     'util/messages',
     'util/formatters',
     'util/handlebars/helpers'
 ], function(defineComponent,
     registry,
-    AdminService,
     alertTemplate,
     i18n,
     F) {
     'use strict';
 
     var NODE_CLS_FOR_LESS_CONTAINMENT = 'admin_less_cls_',
-        adminService = new AdminService(),
         componentInc = 0;
 
     defineLumifyAdminPlugin.ALL_COMPONENTS = [];
@@ -27,7 +24,7 @@ define([
 
     function defineLumifyAdminPlugin(Component, options) {
 
-        var FlightComponent = defineComponent(Component),
+        var FlightComponent = defineComponent.apply(null, [Component].concat(options && options.mixins || [])),
             attachTo = FlightComponent.attachTo,
             cls = NODE_CLS_FOR_LESS_CONTAINMENT + (componentInc++);
 
@@ -42,7 +39,6 @@ define([
 
             var self = this;
             this.prototype.initialize = _.wrap(this.prototype.initialize, function(init) {
-                this.adminService = adminService;
                 this.showSuccess = function(message) {
                     this.$node.find('.alert').remove();
                     this.$node.prepend(alertTemplate({ message: message || i18n('admin.plugin.success') }));
@@ -52,17 +48,20 @@ define([
                     this.$node.prepend(alertTemplate({ error: message || i18n('admin.plugin.error') }));
                 };
                 this.handleSubmitButton = function(button, promise) {
-                    var text = button.text();
+                    var $button = $(button),
+                        text = $button.text();
 
-                    button.attr('disabled', true);
+                    $button.attr('disabled', true);
 
-                    return promise
-                        .progress(function(v) {
-                            button.text(F.number.percent(v) + ' ' + text);
+                    if (promise.progress) {
+                        promise.progress(function(v) {
+                            $button.text(F.number.percent(v) + ' ' + text);
                         })
-                        .always(function() {
-                            button.removeAttr('disabled').text(text);
-                        });
+                    }
+
+                    return promise.finally(function() {
+                        $button.removeAttr('disabled').text(text);
+                    });
                 };
                 return init.apply(this, Array.prototype.slice.call(arguments, 1));
             });

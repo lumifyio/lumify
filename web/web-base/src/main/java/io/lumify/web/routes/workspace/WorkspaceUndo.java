@@ -203,4 +203,5 @@ public class WorkspaceUndo extends BaseRequestHandler {
         LOGGER.debug("End undoProperties");
         graph.flush();
     }
+
 }

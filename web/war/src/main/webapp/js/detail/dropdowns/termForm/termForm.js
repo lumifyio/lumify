@@ -1,33 +1,27 @@
 define([
     'flight/lib/component',
     '../withDropdown',
-    'detail/properties/properties',
     'tpl!./termForm',
     'tpl!./entity',
-    'service/vertex',
-    'service/ontology',
+    'tpl!util/alert',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
-    'tpl!util/alert',
+    'util/withDataRequest',
     'util/jquery.removePrefixedClasses'
 ], function(
     defineComponent,
     withDropdown,
-    Properties,
     dropdownTemplate,
     entityTemplate,
-    VertexService,
-    OntologyService,
+    alertTemplate,
     F,
     ConceptSelector,
-    alertTemplate) {
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(TermForm, withDropdown);
+    return defineComponent(TermForm, withDropdown, withDataRequest);
 
     function TermForm() {
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             entityConceptMenuSelector: '.underneath .dropdown-menu a',
@@ -119,9 +113,10 @@ define([
                 if (conceptType === '' && self.attr.restrictConcept) {
                     conceptType = self.attr.restrictConcept;
                 }
+                this.selectedConceptId = conceptType;
 
                 this.deferredConcepts.done(function() {
-                    self.trigger(self.select('conceptContainerSelector').show(), 'selectConcept', {
+                    self.trigger(self.select('conceptContainerSelector').show(), 'selectConceptId', {
                         conceptId: conceptType
                     })
                     self.updateConceptLabel(conceptType)
@@ -150,14 +145,14 @@ define([
                 });
             } else if (this.attr.restrictConcept) {
                 this.deferredConcepts.done(function() {
-                    self.trigger(self.select('conceptContainerSelector'), 'selectConcept', {
+                    self.trigger(self.select('conceptContainerSelector'), 'selectConceptId', {
                         conceptId: self.attr.restrictConcept
                     })
                 });
             }
 
             if (newGraphVertexId) {
-                this.vertexService.getVertexProperties(newGraphVertexId)
+                this.dataRequest('vertex', 'store', { vertexIds: newGraphVertexId })
                     .done(function(v) {
                         self.updateResolveImageIcon(v);
                     });
@@ -216,27 +211,27 @@ define([
             }
 
             if (!this.unresolve) {
-                this.vertexService.resolveTerm(parameters)
-                    .fail(this.requestFailure.bind(this))
-                    .done(function(data) {
+                this.dataRequest('vertex', 'resolveTerm', parameters)
+                    .then(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
 
-                        self.trigger(document, 'refreshRelationships');
+                        self.trigger(document, 'loadEdges');
 
                         _.defer(self.teardown.bind(self));
-                    });
+                    })
+                    .catch(this.requestFailure.bind(this))
             } else {
                 parameters.termMentionId = this.termMentionId;
-                this.vertexService.unresolveTerm(parameters)
-                    .fail(this.requestFailure.bind(this))
-                    .done(function(data) {
+                this.dataRequest('vertex', 'unresolveTerm', parameters)
+                    .then(function(data) {
                         self.highlightTerm(data);
 
-                        self.trigger(document, 'refreshRelationships');
+                        self.trigger(document, 'loadEdges');
 
                         _.defer(self.teardown.bind(self));
-                    });
+                    })
+                    .catch(this.requestFailure.bind(this))
             }
         };
 
@@ -276,23 +271,23 @@ define([
 
         this.resolveDetectedObject = function(parameters) {
             var self = this;
-            this.vertexService.resolveDetectedObject(parameters)
-                .fail(this.requestFailure.bind(this))
-                .done(function(data) {
+            this.dataRequest('vertex', 'resolveDetectedObject', parameters)
+                .then(function(data) {
                     self.trigger('termCreated', data);
-                    self.trigger(document, 'refreshRelationships');
+                    self.trigger(document, 'loadEdges');
                     _.defer(self.teardown.bind(self));
-                });
+                })
+                .catch(this.requestFailure.bind(this))
         };
 
         this.unresolveDetectedObject = function(parameters) {
             var self = this;
-            this.vertexService.unresolveDetectedObject(parameters)
-                .fail(this.requestFailure.bind(this))
-                .done(function(data) {
-                    self.trigger(document, 'refreshRelationships');
+            this.dataRequest('vertex', 'unresolveDetectedObject', parameters)
+                .then(function(data) {
+                    self.trigger(document, 'loadEdges');
                     _.defer(self.teardown.bind(self));
-                });
+                })
+                .catch(this.requestFailure.bind(this))
         };
 
         this.onConceptSelected = function(event, data) {
@@ -413,7 +408,7 @@ define([
                     }
                 });
             } else if (vertex && !conceptId) {
-                updateCss(vertex.imageSrc);
+                updateCss(F.vertex.image(vertex));
             } else updateCss();
 
             function updateCss(src) {
@@ -456,47 +451,50 @@ define([
             });
 
             this.on('opened', function() {
+                var self = this;
+
                 this.loadConcepts()
-                    .done(this.setupObjectTypeAhead.bind(this))
-                    .done(function() {
-                        this.deferredConcepts.resolve(this.allConcepts);
-                    }.bind(this));
+                    .then(function() {
+                        self.setupObjectTypeAhead();
+                        self.deferredConcepts.resolve(self.allConcepts);
+                    })
             });
         };
 
         this.loadConcepts = function() {
             var self = this;
             self.allConcepts = [];
-            return self.ontologyService.concepts().done(function(concepts) {
-                var vertexInfo;
+            return this.dataRequest('ontology', 'concepts')
+                .then(function(concepts) {
+                    var vertexInfo;
 
-                if (self.attr.detectedObject) {
-                    vertexInfo = self.attr.dataInfo;
-                } else {
-                    var mentionVertex = $(self.attr.mentionNode);
-                    vertexInfo = mentionVertex.data('info');
-                }
+                    if (self.attr.detectedObject) {
+                        vertexInfo = self.attr.dataInfo;
+                    } else {
+                        var mentionVertex = $(self.attr.mentionNode);
+                        vertexInfo = mentionVertex.data('info');
+                    }
 
-                self.allConcepts = _.filter(concepts.byTitle, function(c) {
-                    return c.userVisible !== false;
+                    self.allConcepts = _.filter(concepts.byTitle, function(c) {
+                        return c.userVisible !== false;
+                    });
+
+                    self.selectedConceptId = vertexInfo && (
+                        vertexInfo['http://lumify.io#conceptType'] ||
+                        (
+                            vertexInfo.properties &&
+                            vertexInfo.properties['http://lumify.io#conceptType'].value
+                        )
+                    ) || '';
+
+                    self.trigger(self.select('conceptContainerSelector'), 'selectConceptId', {
+                        conceptId: self.selectedConceptId
+                    })
+
+                    if (!self.selectedConceptId) {
+                        self.select('actionButtonSelector').attr('disabled', true);
+                    }
                 });
-
-                self.selectedConceptId = vertexInfo && (
-                    vertexInfo['http://lumify.io#conceptType'] ||
-                    (
-                        vertexInfo.properties &&
-                        vertexInfo.properties['http://lumify.io#conceptType'].value
-                    )
-                ) || '';
-
-                self.trigger(self.select('conceptContainerSelector'), 'selectConcept', {
-                    conceptId: self.selectedConceptId
-                })
-
-                if (!self.selectedConceptId) {
-                    self.select('actionButtonSelector').attr('disabled', true);
-                }
-            });
         };
 
         this.runQuery = function(query) {
@@ -508,10 +506,10 @@ define([
 
             var badge = this.select('objectSignSelector').nextAll('.badge')
                     .addClass('loading'),
-                request = this.vertexService.search(query, null, this.attr.restrictConcept)
-                    .always(function() {
-                        badge.removeClass('loading');
-                    })
+                request = this.dataRequest('vertex', 'search', {
+                    query: query,
+                    conceptFilter: this.attr.restrictConcept
+                })
                     .then(function(response) {
                         var splitUpString = function(str) {
                                 return F.string.normalizeAccents(str.toLowerCase())
@@ -519,24 +517,26 @@ define([
                                     .split(/\s+/);
                             },
                             queryParts = splitUpString(query);
+                            vertices =  _.reject(response.vertices, function(v) {
+                                var queryPartsMissingFromTitle = _.difference(
+                                    queryParts,
+                                    splitUpString(F.vertex.title(v))
+                                ).length;
 
-                        return _.reject(response.vertices, function(v) {
-                            var queryPartsMissingFromTitle = _.difference(
-                                queryParts,
-                                splitUpString(F.vertex.title(v))
-                            ).length;
+                                return queryPartsMissingFromTitle;
+                            });
 
-                            return queryPartsMissingFromTitle;
-                        });
+                        self.updateQueryCountBadge(vertices);
+                        self.queryCache[query] = request;
+
+                        return vertices;
                     })
-                    .fail(function() {
+                    .catch(function() {
                         self.updateQueryCountBadge();
                     })
-                    .done(function(v) {
-                        self.updateQueryCountBadge(v);
-                        self.queryCache[query] = request;
+                    .finally(function() {
+                        badge.removeClass('loading');
                     });
-
             return request;
         };
 
@@ -556,195 +556,196 @@ define([
                 input = this.select('objectSignSelector'),
                 createNewText = i18n('detail.resolve.form.entity_search.resolve_as_new');
 
-            self.ontologyService.properties().done(function(ontologyProperties) {
-                var debouncedQuery = _.debounce(function(instance, query, callback) {
-                        self.runQuery(query)
-                            .fail(function() {
-                                callback([]);
-                            })
-                            .done(function(entities) {
-                                var all = _.map(entities, function(e) {
-                                    return $.extend({
-                                        toLowerCase: function() {
-                                            return F.vertex.title(e).toLowerCase();
-                                        },
-                                        toString: function() {
-                                            return e.id;
-                                        },
-                                        indexOf: function(s) {
-                                            return F.vertex.title(e).indexOf(s);
+            this.dataRequest('ontology', 'properties')
+                .done(function(ontologyProperties) {
+                    var debouncedQuery = _.debounce(function(instance, query, callback) {
+                            self.runQuery(query)
+                                .then(function(entities) {
+                                    var all = _.map(entities, function(e) {
+                                        return $.extend({
+                                            toLowerCase: function() {
+                                                return F.vertex.title(e).toLowerCase();
+                                            },
+                                            toString: function() {
+                                                return e.id;
+                                            },
+                                            indexOf: function(s) {
+                                                return F.vertex.title(e).indexOf(s);
+                                            }
+                                        }, e);
+                                    });
+
+                                    items = $.extend(true, [], items, _.indexBy(all, 'id'));
+                                    items[createNewText] = [query];
+
+                                    self.sourceCache[query] = function(aCallback) {
+                                        var list = [createNewText].concat(all);
+                                        aCallback(list);
+
+                                        var selectedId = self.currentGraphVertexId;
+                                        if (selectedId) {
+                                            var shouldSelect = instance.$menu.find('.gId-' + selectedId).closest('li');
+                                            if (shouldSelect.length) {
+                                                instance.$menu.find('.active').not(shouldSelect).removeClass('active');
+                                                shouldSelect.addClass('active');
+                                            }
                                         }
-                                    }, e);
+
+                                        self.updateQueryCountBadge(all);
+                                    };
+
+                                    self.sourceCache[query](callback);
+                                })
+                                .catch(function() {
+                                    callback([]);
+                                })
+                        }, 500),
+                        field = input.typeahead({
+                            items: 50,
+                            source: function(query, callback) {
+
+                                if (self.lastQuery && query !== self.lastQuery) {
+                                    self.reset();
+                                }
+
+                                if (!self.sourceCache) {
+                                    self.sourceCache = {};
+                                } else if (self.sourceCache[query]) {
+                                    self.sourceCache[query](callback);
+                                    return;
+                                }
+
+                                self.lastQuery = query;
+                                debouncedQuery(this, query, callback);
+                            },
+                            matcher: function(item) {
+                                if (item === createNewText) return true;
+                                return true;
+                            },
+                            sorter: function(items) {
+                                var sorted = Object.getPrototypeOf(this).sorter.apply(this, arguments),
+                                    index;
+
+                                sorted.forEach(function(item, i) {
+                                    if (item === createNewText) {
+                                        index = i;
+                                        return false;
+                                    }
                                 });
 
-                                items = $.extend(true, [], items, _.indexBy(all, 'id'));
-                                items[createNewText] = [query];
+                                if (index) {
+                                    sorted.splice(0, 0, sorted.splice(index, 1)[0]);
+                                }
 
-                                self.sourceCache[query] = function(aCallback) {
-                                    var list = [createNewText].concat(all);
-                                    aCallback(list);
+                                return sorted;
+                            },
+                            updater: function(item) {
+                                var matchingItem = items[item],
+                                    graphVertexId = '',
+                                    label = item;
 
-                                    var selectedId = self.currentGraphVertexId;
-                                    if (selectedId) {
-                                        var shouldSelect = instance.$menu.find('.gId-' + selectedId).closest('li');
-                                        if (shouldSelect.length) {
-                                            instance.$menu.find('.active').not(shouldSelect).removeClass('active');
-                                            shouldSelect.addClass('active');
-                                        }
+                                if (!matchingItem.length) {
+                                    matchingItem = [matchingItem];
+                                }
+
+                                if (matchingItem && matchingItem.length) {
+                                    graphVertexId = item;
+                                    label = matchingItem[0].properties ?
+                                        F.vertex.title(matchingItem[0]) :
+                                        matchingItem;
+
+                                    if (graphVertexId == createNewText) {
+                                        graphVertexId = '';
+                                        label = this.$element.val();
+                                    } else {
+                                        self.sign = label;
                                     }
 
-                                    self.updateQueryCountBadge(all);
-                                };
-
-                                self.sourceCache[query](callback);
-                            });
-                    }, 500),
-                    field = input.typeahead({
-                        items: 50,
-                        source: function(query, callback) {
-
-                            if (self.lastQuery && query !== self.lastQuery) {
-                                self.reset();
-                            }
-
-                            if (!self.sourceCache) {
-                                self.sourceCache = {};
-                            } else if (self.sourceCache[query]) {
-                                self.sourceCache[query](callback);
-                                return;
-                            }
-
-                            self.lastQuery = query;
-                            debouncedQuery(this, query, callback);
-                        },
-                        matcher: function(item) {
-                            if (item === createNewText) return true;
-                            return true;
-                        },
-                        sorter: function(items) {
-                            var sorted = Object.getPrototypeOf(this).sorter.apply(this, arguments),
-                                index;
-
-                            sorted.forEach(function(item, i) {
-                                if (item === createNewText) {
-                                    index = i;
-                                    return false;
-                                }
-                            });
-
-                            if (index) {
-                                sorted.splice(0, 0, sorted.splice(index, 1)[0]);
-                            }
-
-                            return sorted;
-                        },
-                        updater: function(item) {
-                            var matchingItem = items[item],
-                                graphVertexId = '',
-                                label = item;
-
-                            if (!matchingItem.length) {
-                                matchingItem = [matchingItem];
-                            }
-
-                            if (matchingItem && matchingItem.length) {
-                                graphVertexId = item;
-                                label = matchingItem[0].properties ?
-                                    F.vertex.title(matchingItem[0]) :
-                                    matchingItem;
-
-                                if (graphVertexId == createNewText) {
-                                    graphVertexId = '';
-                                    label = this.$element.val();
-                                } else {
-                                    self.sign = label;
+                                    matchingItem = matchingItem[0];
                                 }
 
-                                matchingItem = matchingItem[0];
-                            }
+                                self.lastQuery = label;
+                                self.graphVertexChanged(graphVertexId, matchingItem);
+                                return label;
+                            },
+                            highlighter: function(item) {
 
-                            self.lastQuery = label;
-                            self.graphVertexChanged(graphVertexId, matchingItem);
-                            return label;
-                        },
-                        highlighter: function(item) {
+                                var html = (item === createNewText) ?
+                                        item :
+                                        Object.getPrototypeOf(this).highlighter.apply(
+                                            this,
+                                            [F.vertex.title(item)]
+                                        ),
+                                    concept = _.find(self.allConcepts, function(c) {
+                                        return item.properties && c.id === F.vertex.prop(item, 'conceptType');
+                                    });
 
-                            var html = (item === createNewText) ?
-                                    item :
-                                    Object.getPrototypeOf(this).highlighter.apply(
-                                        this,
-                                        [F.vertex.title(item)]
-                                    ),
-                                concept = _.find(self.allConcepts, function(c) {
-                                    return item.properties && c.id === F.vertex.prop(item, 'conceptType');
+                                return entityTemplate({
+                                    html: html,
+                                    item: item,
+                                    F: F,
+                                    // TODO: show some properties
+                                    properties: [],
+                                    iconSrc: F.vertex.image(item),
+                                    concept: concept
                                 });
+                            }
+                        }),
+                        typeahead = field.data('typeahead'),
+                        show = typeahead.show,
+                        hide = typeahead.hide;
 
-                            return entityTemplate({
-                                html: html,
-                                item: item,
-                                F: F,
-                                // TODO: show some properties
-                                properties: [],
-                                iconSrc: item.imageSrc,
-                                concept: concept
-                            });
+                    typeahead.$menu.on('mousewheel DOMMouseScroll', function(e) {
+                        var delta = e.wheelDelta || (e.originalEvent && e.originalEvent.wheelDelta) || -e.detail,
+                            bottomOverflow = this.scrollTop + $(this).outerHeight() - this.scrollHeight >= 0,
+                            topOverflow = this.scrollTop <= 0;
+
+                        if ((delta < 0 && bottomOverflow) || (delta > 0 && topOverflow)) {
+                            e.preventDefault();
                         }
-                    }),
-                    typeahead = field.data('typeahead'),
-                    show = typeahead.show,
-                    hide = typeahead.hide;
+                    });
 
-                typeahead.$menu.on('mousewheel DOMMouseScroll', function(e) {
-                    var delta = e.wheelDelta || (e.originalEvent && e.originalEvent.wheelDelta) || -e.detail,
-                        bottomOverflow = this.scrollTop + $(this).outerHeight() - this.scrollHeight >= 0,
-                        topOverflow = this.scrollTop <= 0;
-
-                    if ((delta < 0 && bottomOverflow) || (delta > 0 && topOverflow)) {
-                        e.preventDefault();
-                    }
-                });
-
-                typeahead.hide = function() {
-                    hide.apply(typeahead);
-                    typeahead.$menu.css('max-height', 'none');
-                };
-
-                typeahead.show = function() {
-                    show.apply(typeahead);
-
-                    if (~typeahead.$menu.css('max-height').indexOf('px')) {
+                    typeahead.hide = function() {
+                        hide.apply(typeahead);
                         typeahead.$menu.css('max-height', 'none');
-                        _.defer(scrollToShow);
-                        return;
-                    } else {
-                        scrollToShow();
-                    }
+                    };
 
-                    function scrollToShow() {
+                    typeahead.show = function() {
+                        show.apply(typeahead);
 
-                        var scrollParent = typeahead.$element.scrollParent(),
-                            scrollTotalHeight = scrollParent[0].scrollHeight,
-                            scrollTop = scrollParent.scrollTop(),
-                            scrollHeight = scrollParent.outerHeight(true),
-                            menuHeight = Math.min(scrollHeight - 100, typeahead.$menu.outerHeight(true)),
-                            menuMaxY = menuHeight + typeahead.$menu.offset().top,
-                            bottomSpace = scrollHeight - menuMaxY,
-                            padding = 10;
-
-                        typeahead.$menu.css({
-                            maxHeight: (menuHeight - padding) + 'px',
-                            overflow: 'auto'
-                        });
-
-                        if (bottomSpace < 0) {
-                            var scrollNeeded = scrollTop + Math.abs(bottomSpace) + padding;
-                            scrollParent.animate({
-                                scrollTop: scrollNeeded
-                            });
+                        if (~typeahead.$menu.css('max-height').indexOf('px')) {
+                            typeahead.$menu.css('max-height', 'none');
+                            _.defer(scrollToShow);
+                            return;
+                        } else {
+                            scrollToShow();
                         }
-                    }
-                };
-            });
+
+                        function scrollToShow() {
+
+                            var scrollParent = typeahead.$element.scrollParent(),
+                                scrollTotalHeight = scrollParent[0].scrollHeight,
+                                scrollTop = scrollParent.scrollTop(),
+                                scrollHeight = scrollParent.outerHeight(true),
+                                menuHeight = Math.min(scrollHeight - 100, typeahead.$menu.outerHeight(true)),
+                                menuMaxY = menuHeight + typeahead.$menu.offset().top,
+                                bottomSpace = scrollHeight - menuMaxY,
+                                padding = 10;
+
+                            typeahead.$menu.css({
+                                maxHeight: (menuHeight - padding) + 'px',
+                                overflow: 'auto'
+                            });
+
+                            if (bottomSpace < 0) {
+                                var scrollNeeded = scrollTop + Math.abs(bottomSpace) + padding;
+                                scrollParent.animate({
+                                    scrollTop: scrollNeeded
+                                });
+                            }
+                        }
+                    };
+                });
         };
 
         this.highlightTerm = function(data) {

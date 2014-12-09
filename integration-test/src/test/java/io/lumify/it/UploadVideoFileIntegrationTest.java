@@ -66,7 +66,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         }
         assertTrue("foundTesseractVideoTranscript", foundTesseractVideoTranscript);
 
-        assertPublishAll(lumifyApi, 37);
+        assertPublishAll(lumifyApi, 25);
 
         lumifyApi.logout();
     }

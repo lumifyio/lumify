@@ -8,7 +8,7 @@ define([
     'use strict';
 
     // Add class name of <li> buttons here
-    var BUTTONS = 'dashboard graph map search workspaces admin activity chat logout'.split(' '),
+    var BUTTONS = 'dashboard graph map search workspaces admin activity logout'.split(' '),
         TOOLTIPS = {
             dashboard: i18n('menubar.icons.dashboard.tooltip'),
             graph: { html: i18n('menubar.icons.graph') +
@@ -18,15 +18,13 @@ define([
             search: i18n('menubar.icons.search.tooltip'),
             workspaces: i18n('menubar.icons.workspaces.tooltip'),
             admin: i18n('menubar.icons.admin.tooltip'),
-            chat: i18n('menubar.icons.chat.tooltip'),
             logout: i18n('menubar.icons.logout.tooltip')
         },
 
         // Which cannot both be active
         MUTALLY_EXCLUSIVE_SWITCHES = [
             { names: ['dashboard', 'graph','map'], options: { allowCollapse: false } },
-            { names: ['workspaces', 'search', 'admin'], options: { } },
-            { names: ['chat', 'activity'], options: { } }
+            { names: ['workspaces', 'search', 'admin'], options: { } }
         ],
 
         ACTION_TYPES = {
@@ -159,21 +157,8 @@ define([
 
             Activity.attachTo(this.select('activityIconSelector'));
 
-            this.attachSyncEventsToAnimateUsers();
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggle);
         });
-
-        this.attachSyncEventsToAnimateUsers = function() {
-            var self = this,
-                cls = 'synchronizing';
-
-            this.on(document, 'syncStarted', function() {
-                self.select('chatIconSelector').addClass(cls);
-            });
-            this.on(document, 'syncEnded', function() {
-                self.select('chatIconSelector').removeClass(cls);
-            });
-        };
 
         this.onMenubarToggle = function(e, data) {
             var self = this,

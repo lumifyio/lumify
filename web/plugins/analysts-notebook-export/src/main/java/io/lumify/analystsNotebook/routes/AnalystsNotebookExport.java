@@ -65,7 +65,7 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
         comments.add(String.format("%s/#w=%s", baseUrl, workspaceId));
         comments.add(String.format("Exported %1$tF %1$tT %1$tz for Analyst's Notebook version %2$s", new Date(), version.toString()));
 
-        String xml = AnalystsNotebookExporter.toXml(chart, comments);
+        String xml = chart.toXml(comments);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         response.setContentType(CONTENT_TYPE);
         setMaxAge(response, EXPIRES_1_HOUR);
@@ -79,24 +79,5 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
             in.close();
         }
         chain.next(request, response);
-    }
-
-    private String getBaseUrl(HttpServletRequest request) {
-
-        // TODO: check for proxy
-        // TODO: move to BaseRequestHandler
-
-        String scheme = request.getScheme();
-        String serverName = request.getServerName();
-        int port = request.getServerPort();
-        String contextPath = request.getContextPath();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(scheme).append("://").append(serverName);
-        if (!(scheme.equals("http") && port == 80 || scheme.equals("https") && port == 443)) {
-            sb.append(":").append(port);
-        }
-        sb.append(contextPath);
-        return sb.toString();
     }
 }

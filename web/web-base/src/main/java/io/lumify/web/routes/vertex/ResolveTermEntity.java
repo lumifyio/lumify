@@ -64,7 +64,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
 
-        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
         if (this.artifactHasEntityIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
         }
@@ -126,7 +126,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
             this.graph.flush();
 
-            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, user);
+            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, user);
         }
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?

@@ -20,6 +20,7 @@ public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+    public static final String BASE_URL = "base.url";
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_SOURCE_DIRECTORY = "hdfsLibcache.sourceDirectory";
     public static final String HDFS_LIB_CACHE_TEMP_DIRECTORY = "hdfsLibcache.tempDirectory";
@@ -63,11 +64,6 @@ public final class Configuration {
 
     private Map<String, String> config = new HashMap<String, String>();
 
-    /**
-     * Default value for a {@link String} property that could not be parsed
-     */
-    public static final String UNKNOWN_STRING = "Unknown";
-
     Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
         this.lumifyResourceBundleManager = new LumifyResourceBundleManager();
@@ -76,14 +72,6 @@ public final class Configuration {
                 set(entry.getKey().toString(), entry.getValue());
             }
         }
-    }
-
-    public String get(String propertyKey) {
-        return get(propertyKey, UNKNOWN_STRING);
-    }
-
-    public String getOrNull(String propertyKey) {
-        return get(propertyKey, null);
     }
 
     public String get(String propertyKey, String defaultValue) {
@@ -142,7 +130,7 @@ public final class Configuration {
                     throw new LumifyException("Invalid method to be configurable. Expected 1 argument. Found " + m.getParameterTypes().length + " arguments");
                 }
 
-                String propName = m.getName().substring("set" .length());
+                String propName = m.getName().substring("set".length());
                 if (propName.length() > 1) {
                     propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
                 }
@@ -246,7 +234,7 @@ public final class Configuration {
             if (key.toLowerCase().contains("password")) {
                 sb.append(key).append(": ********");
             } else {
-                sb.append(key).append(": ").append(get(key));
+                sb.append(key).append(": ").append(get(key, null));
             }
         }
 

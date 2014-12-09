@@ -8,17 +8,15 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     '../toolbar/toolbar',
-    'detail/dropdowns/termForm/termForm',
-    'detail/properties/properties',
+    '../dropdowns/termForm/termForm',
+    '../properties/properties',
+    '../comments/comments',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'hbs!./transcriptEntries',
     'tpl!util/alert',
     'util/vertex/formatters',
-    'service/ontology',
-    'service/vertex',
-    'service/config',
-    'data',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineComponent,
@@ -30,24 +28,19 @@ define([
     Toolbar,
     TermForm,
     Properties,
+    Comments,
     template,
     transcriptEntryTemplate,
     transcriptEntriesTemplate,
     alertTemplate,
     F,
-    OntologyService,
-    VertexService,
-    ConfigService,
-    appData,
+    withDataRequest,
     d3) {
     'use strict';
 
-    return defineComponent(Artifact, withTypeContent, withHighlighting);
+    return defineComponent(Artifact, withTypeContent, withHighlighting, withDataRequest);
 
     function Artifact() {
-
-        this.ontologyService = new OntologyService();
-        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             previewSelector: '.preview',
@@ -61,6 +54,7 @@ define([
             artifactSelector: '.artifact-image',
             toolbarSelector: '.comp-toolbar',
             propertiesSelector: '.properties',
+            commentsSelector: '.comments',
             titleSelector: '.artifact-title',
             timestampAnchorSelector: '.av-times a'
         });
@@ -119,18 +113,20 @@ define([
             var self = this,
                 vertex = self.attr.data;
 
-            $.when(
-                this.handleCancelling(appData.refresh(vertex)),
-                new ConfigService().getProperties()
-            ).done(this.handleVertexLoaded.bind(this));
+            this.dataRequest('config', 'properties')
+                .done(function(config) {
+                    self.handleVertexLoaded(self.attr.data, config);
+                })
         };
 
         this.handleVertexLoaded = function(vertex, config) {
             var self = this,
-                displayType = this.attr.data.concept.displayType,
+                concept = F.vertex.concept(vertex),
+                displayType = concept.displayType,
                 properties = vertex && vertex.properties;
 
             this.attr.data = vertex;
+            this.trigger('finishedLoadingTypeContent');
 
             if (properties && displayType) {
                 var durationProperty = _.findWhere(properties, {
@@ -144,10 +140,15 @@ define([
 
             this.$node.html(template({
                 vertex: vertex,
+                concept: concept,
                 F: F
             }));
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
+
+            Comments.attachTo(this.select('commentsSelector'), {
+                vertex: vertex
+            });
 
             Toolbar.attachTo(this.select('toolbarSelector'), {
                 toolbar: [
@@ -171,9 +172,9 @@ define([
                     },
                     {
                         title: i18n('detail.toolbar.add'),
-                        cls: 'requires-EDIT',
                         submenu: [
-                            Toolbar.ITEMS.ADD_PROPERTY
+                            Toolbar.ITEMS.ADD_PROPERTY,
+                            Toolbar.ITEMS.ADD_COMMENT
                         ]
                     },
                     Toolbar.ITEMS.AUDIT
@@ -197,7 +198,7 @@ define([
             this.select('titleSelector')
                 .text(F.vertex.title(this.attr.data))
                 .next('.subtitle')
-                .text(this.attr.data.concept.displayName);
+                .text(F.vertex.concept(this.attr.data).displayName);
         };
 
         this.updateDetectedObjects = function() {
@@ -221,11 +222,13 @@ define([
                 }
             });
 
-            $.when(
-                appData.refresh(needsLoading),
-                this.ontologyService.concepts()
-            ).done(function(vertices, concepts) {
-                var verticesById = _.indexBy(vertices, 'id'),
+            Promise.all([
+                this.dataRequest('vertex', 'store', { vertexIds: needsLoading }),
+                this.dataRequest('ontology', 'concepts')
+            ]).done(function(results) {
+                var vertices = results[0],
+                    concepts = results[1],
+                    verticesById = _.indexBy(vertices, 'id'),
                     detectedObjectKey = _.property('key');
 
                 d3.select(container.get(0))
@@ -376,24 +379,19 @@ define([
                     });
 
                     self.on('open.actionbar', function() {
-
-                        self.trigger('selectObjects', {
-                            vertices: [
-                                {
-                                    id: property.value.resolvedVertexId
-                                }
-                            ]
-                        });
+                        self.trigger('selectObjects', { vertexIds: property.value.resolvedVertexId });
                     });
                     self.on('unresolve.actionbar', function() {
-                        _.defer(
-                            self.showForm.bind(self),
-                            $.extend({}, property.value, {
-                                title: F.vertex.title(appData.cachedVertices[property.value.resolvedVertexId]),
-                                propertyKey: property.key
-                            }),
-                            $target
-                        );
+                        self.dataRequest('vertex', 'store', { vertexIds: property.value.resolvedVertexId })
+                            .done(function(vertex) {
+                                self.showForm(
+                                    $.extend({}, property.value, {
+                                        title: F.vertex.title(vertex),
+                                        propertyKey: property.key
+                                    }),
+                                    $target
+                                );
+                            });
                     });
 
                 } else if (Privileges.canEDIT) {
@@ -419,7 +417,7 @@ define([
 
         this.onCoordsChanged = function(event, data) {
             var self = this,
-                vertex = appData.vertex(this.attr.data.id),
+                vertex = this.attr.data,
                 detectedObject = F.vertex.propForNameAndKey(vertex, 'http://lumify.io#detectedObject', data.id),
                 width = parseFloat(data.x2) - parseFloat(data.x1),
                 height = parseFloat(data.y2) - parseFloat(data.y1),
@@ -478,9 +476,9 @@ define([
         this.videoSetup = function(vertex) {
             this.select('detectedObjectLabelsSelector').hide();
             VideoScrubber.attachTo(this.select('previewSelector'), {
-                rawUrl: vertex.imageRawSrc,
-                posterFrameUrl: vertex.imageSrc,
-                videoPreviewImageUrl: vertex.imageFramesSrc,
+                rawUrl: F.vertex.raw(vertex),
+                posterFrameUrl: F.vertex.image(vertex),
+                videoPreviewImageUrl: F.vertex.imageFrames(vertex),
                 duration: this.duration,
                 allowPlayback: true
             });
@@ -489,7 +487,7 @@ define([
         this.imageSetup = function(vertex) {
             var self = this,
                 data = {
-                    src: vertex.imageDetailSrc,
+                    src: F.vertex.imageDetail(vertex),
                     id: vertex.id
                 };
             Image.attachTo(this.select('imagePreviewSelector'), { data: data });

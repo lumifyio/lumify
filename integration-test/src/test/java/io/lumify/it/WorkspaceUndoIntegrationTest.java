@@ -4,10 +4,7 @@ import io.lumify.clavin.ClavinTermMentionFilter;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
-import io.lumify.web.clientapi.model.ClientApiArtifactImportResponse;
-import io.lumify.web.clientapi.model.ClientApiElement;
-import io.lumify.web.clientapi.model.ClientApiVertexEdges;
-import io.lumify.web.clientapi.model.VisibilityJson;
+import io.lumify.web.clientapi.model.*;
 import io.lumify.zipCodeResolver.ZipCodeResolverTermMentionFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +12,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceUndoIntegrationTest extends TestBase {
@@ -46,8 +43,19 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
         lumifyApi.getVertexApi().setProperty(jeffKunkleVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Jeff Kunkle", "", "test", null, null);
 
         lumifyApi.getEdgeApi().create(susanFengVertex.getId(), jeffKunkleVertex.getId(), TestOntology.EDGE_LABEL_WORKS_FOR, "");
+        lumifyApi.getEdgeApi().setProperty(susanFengVertex.getId(), "key1", "http://lumify.io/test#firstName", "edge property value", "", "");
         ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(susanFengVertex.getId(), null, null, null);
         assertEquals(1, edges.getRelationships().size());
+        List<ClientApiProperty> edgeProperties = edges.getRelationships().get(0).getRelationship().getProperties();
+        assertEquals(3, edgeProperties.size());
+        boolean foundFirstNameEdgeProperty = false;
+        for (ClientApiProperty edgeProperty : edgeProperties) {
+            if (edgeProperty.getKey().equals("key1") && edgeProperty.getName().equals("http://lumify.io/test#firstName")) {
+                assertEquals("edge property value", edgeProperty.getValue().toString());
+                foundFirstNameEdgeProperty = true;
+            }
+        }
+        assertTrue(foundFirstNameEdgeProperty);
 
         edges = lumifyApi.getVertexApi().getEdges(artifactVertexId, null, null, null);
         assertEquals(2, edges.getRelationships().size());
@@ -74,7 +82,7 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
 
     private void undoAll() throws IOException, ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        assertUndoAll(lumifyApi, 34);
+        assertUndoAll(lumifyApi, 35);
         lumifyApi.logout();
     }
 }

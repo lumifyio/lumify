@@ -5,34 +5,30 @@ define([
     'hbs!./filtersTpl',
     'tpl!./item',
     'tpl!./entityItem',
-    'data',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
-    'fields/selection/selection',
-    'service/ontology'
+    'util/withDataRequest',
+    'fields/selection/selection'
 ], function(
     defineComponent,
     registry,
     template,
     itemTemplate,
     entityItemTemplate,
-    appData,
     F,
     ConceptSelector,
-    FieldSelection,
-    OntologyService) {
+    withDataRequest,
+    FieldSelection) {
     'use strict';
 
     var FILTER_SEARCH_DELAY_SECONDS = 0.5;
 
-    return defineComponent(Filters);
+    return defineComponent(Filters, withDataRequest);
 
     function Filters() {
         this.propertyFilters = {};
         this.entityFilters = {};
         this.filterId = 0;
-
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             fieldSelectionSelector: '.newrow .add-property',
@@ -64,20 +60,22 @@ define([
 
         this.onSearchByRelatedEntity = function(event, data) {
             event.stopPropagation();
+            var self = this;
+            this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
+                .done(function(vertex) {
+                    var title = vertex && F.vertex.title(vertex) || vertex.id;
 
-            this.onClearFilters();
+                    self.onClearFilters();
 
-            this.entityFilters.relatedToVertexId = data.vertexId;
-            this.conceptFilter = data.conceptId || '';
-            this.trigger(this.select('conceptDropdownSelector'), 'selectConceptId', {
-                conceptId: data.conceptId || ''
-            });
-            var vertex = appData.vertex(data.vertexId),
-                title = vertex && F.vertex.title(vertex) || data.vertexId;
-
-            this.$node.find('.entity-filters')
-                .append(entityItemTemplate({title: title})).show();
-            this.notifyOfFilters();
+                    self.entityFilters.relatedToVertexId = vertex.id;
+                    self.conceptFilter = data.conceptId || '';
+                    self.trigger(self.select('conceptDropdownSelector'), 'selectConceptId', {
+                        conceptId: data.conceptId || ''
+                    });
+                    self.$node.find('.entity-filters')
+                        .append(entityItemTemplate({title: title})).show();
+                    self.notifyOfFilters();
+                });
         };
 
         this.onConceptChange = function(event, data) {
@@ -94,7 +92,7 @@ define([
 
             // Publish change to filter properties typeaheads
             if (this.conceptFilter) {
-                this.ontologyService.propertiesByConceptId(this.conceptFilter)
+                this.dataRequest('ontology', 'propertiesByConceptId', this.conceptFilter)
                     .done(deferred.resolve);
             } else {
                 deferred.resolve();
@@ -201,6 +199,9 @@ define([
         }
 
         this.createNewRowIfNeeded = function() {
+            if (!this.properties) {
+                return;
+            }
             if (this.$node.find('.newrow').length === 0) {
                 this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
                 this.createFieldSelection();
@@ -242,11 +243,12 @@ define([
         this.loadPropertyFilters = function() {
             var self = this;
 
-            this.ontologyService.properties().done(function(properties) {
-                self.properties = properties.list;
-                self.$node.find('.prop-filter-header').after(itemTemplate({}));
-                self.createFieldSelection();
-            });
+            this.dataRequest('ontology', 'properties')
+                .done(function(properties) {
+                    self.properties = properties.list;
+                    self.$node.find('.prop-filter-header').after(itemTemplate({}));
+                    self.createFieldSelection();
+                })
         };
     }
 });

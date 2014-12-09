@@ -1,19 +1,17 @@
 
 define([
     'flight/lib/component',
-    'data',
     'tpl!./menu',
-    'service/ontology',
-    'util/formatters'
-], function(defineComponent, appData, template, OntologyService, F) {
+    'util/vertex/formatters',
+    'util/withDataRequest'
+], function(defineComponent, template, F, withDataRequest) {
     'use strict';
 
-    return defineComponent(Menu);
+    return defineComponent(Menu, withDataRequest);
 
     function Menu() {
 
-        var ontologyService = new OntologyService(),
-            DIVIDER = 'DIVIDER',
+        var DIVIDER = 'DIVIDER',
             items = [
                 {
                     cls: 'requires-EDIT',
@@ -56,7 +54,7 @@ define([
                     label: i18n('vertex.contextmenu.add_related'),
                     event: 'addRelatedItems',
                     shouldDisable: function(selection, vertexId, target) {
-                        return !appData.workspaceEditable
+                        return !lumifyData.currentWorkspaceEditable;
                     }
                 },
 
@@ -69,8 +67,8 @@ define([
                     event: 'deleteSelected',
                     selection: 2,
                     shouldDisable: function(selection, vertexId, target) {
-                        return !appData.workspaceEditable ||
-                               !appData.inWorkspace(vertexId);
+                        return !lumifyData.currentWorkspaceEditable || false;
+                        // TODO:  !inWorkspace(vertexId);
                     }
                 }
 
@@ -95,8 +93,7 @@ define([
                 menuSelector: this.onMenuItemClick
             });
 
-            appData
-                .getVertexTitle(this.attr.vertexId)
+            this.dataRequest('vertex', 'store', { vertexIds: this.attr.vertexId })
                 .done(this.setupMenu.bind(this));
         });
 
@@ -120,8 +117,9 @@ define([
             );
         };
 
-        this.setupMenu = function(title) {
-            var self = this;
+        this.setupMenu = function(vertex) {
+            var self = this,
+                title = F.vertex.title(vertex);
 
             if (title.length > 15) {
                 title = title.substring(0, 15) + '...';
@@ -134,9 +132,9 @@ define([
 
             this.$node.append(template({
                 items: items,
-                vertex: appData.vertex(this.attr.vertexId),
+                vertex: vertex,
                 shouldDisable: function(item) {
-                    var currentSelection = appData.selectedVertexIds,
+                    var currentSelection = lumifyData.selectedObjects.vertexIds,
                         shouldDisable = _.isFunction(item.shouldDisable) ? item.shouldDisable(
                             currentSelection,
                             self.attr.vertexId,

@@ -5,11 +5,12 @@
     <parent>
         <artifactId>lumify-dev</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>lumify-dev-jetty-server</artifactId>
+    <packaging>jar</packaging>
     <name>Lumify: Dev: Jetty Server</name>
     <description>This project is only here to create a good classpath with the plugins for your IDE</description>
 

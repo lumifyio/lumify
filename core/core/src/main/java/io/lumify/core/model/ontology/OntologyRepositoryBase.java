@@ -5,6 +5,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.util.ExecutorServiceUtil;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -29,6 +30,7 @@ import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,9 +48,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         for (String key : config.getKeys(Configuration.ONTOLOGY_REPOSITORY_OWL)) {
             if (key.endsWith(".iri")) {
-                String iri = config.getOrNull(key);
-                String dir = config.getOrNull(key.replace(".iri", ".dir"));
-                String file = config.getOrNull(key.replace(".iri", ".file"));
+                String iri = config.get(key, null);
+                String dir = config.get(key.replace(".iri", ".dir"), null);
+                String file = config.get(key.replace(".iri", ".file"), null);
 
                 if (iri != null) {
                     if (dir != null) {
@@ -71,6 +73,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         importResourceOwl("base.owl", "http://lumify.io", authorizations);
         importResourceOwl("user.owl", "http://lumify.io/user", authorizations);
         importResourceOwl("workspace.owl", "http://lumify.io/workspace", authorizations);
+        importResourceOwl("comment.owl", "http://lumify.io/comment", authorizations);
     }
 
     private void importResourceOwl(String fileName, String iri, Authorizations authorizations) {
@@ -728,16 +731,34 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     @Override
     public ClientApiOntology getClientApiObject() {
+        Object[] results = ExecutorServiceUtil.runAllAndWait(
+                new Callable<Object>() {
+                    @Override
+                    public Object call() {
+                        Iterable<Concept> concepts = getConceptsWithProperties();
+                        return Concept.toClientApiConcepts(concepts);
+                    }
+                },
+                new Callable<Object>() {
+                    @Override
+                    public Object call() {
+                        Iterable<OntologyProperty> properties = getProperties();
+                        return OntologyProperty.toClientApiProperties(properties);
+                    }
+                },
+                new Callable<Object>() {
+                    @Override
+                    public Object call() {
+                        Iterable<Relationship> relationships = getRelationships();
+                        return Relationship.toClientApiRelationships(relationships);
+                    }
+                }
+        );
+
         ClientApiOntology ontology = new ClientApiOntology();
-
-        Iterable<Concept> concepts = getConceptsWithProperties();
-        ontology.addAllConcepts(Concept.toClientApiConcepts(concepts));
-
-        Iterable<OntologyProperty> properties = getProperties();
-        ontology.addAllProperties(OntologyProperty.toClientApiProperties(properties));
-
-        Iterable<Relationship> relationships = getRelationships();
-        ontology.addAllRelationships(Relationship.toClientApiRelationships(relationships));
+        ontology.addAllConcepts((Collection<ClientApiOntology.Concept>) results[0]);
+        ontology.addAllProperties((Collection<ClientApiOntology.Property>) results[1]);
+        ontology.addAllRelationships((Collection<ClientApiOntology.Relationship>) results[2]);
 
         return ontology;
     }

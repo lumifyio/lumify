@@ -7,6 +7,7 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -80,6 +81,12 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
+        if (propertyName.equals(LumifyProperties.COMMENT.getPropertyName()) && request.getPathInfo().equals("/vertex/property")) {
+            throw new LumifyException("Use /vertex/comment to save comment properties");
+        } else if (request.getPathInfo().equals("/vertex/comment") && !propertyName.equals(LumifyProperties.COMMENT.getPropertyName())) {
+            throw new LumifyException("Use /vertex/property to save non-comment properties");
+        }
+
         respondWithClientApiObject(response, handle(
                 graphVertexId,
                 propertyName,
@@ -119,17 +126,21 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
 
-        OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
-        if (property == null) {
-            throw new RuntimeException("Could not find property: " + propertyName);
-        }
-
         Object value;
-        try {
-            value = property.convertString(valueStr);
-        } catch (Exception ex) {
-            LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
-            throw new LumifyException(ex.getMessage(), ex);
+        if (propertyName == "http://lumify.io#comment") {
+            value = valueStr;
+        } else {
+            OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
+            if (property == null) {
+                throw new RuntimeException("Could not find property: " + propertyName);
+            }
+
+            try {
+                value = property.convertString(valueStr);
+            } catch (Exception ex) {
+                LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
+                throw new LumifyException(ex.getMessage(), ex);
+            }
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
@@ -153,10 +164,9 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), false, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, user);
 
-        // TODO: use property key from client when we implement multi-valued properties
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId, visibilitySource);
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, propertyKey, propertyName, workspaceId, visibilitySource);
 
         return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }
