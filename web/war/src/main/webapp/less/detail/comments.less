@@ -22,10 +22,23 @@
   }
 
   .replies {
+    .twizzle;
+    &:before {
+      left: 0;
+    }
+    &.open {
+      .twizzle-expand;
+    }
+    &:hover {
+      text-decoration: none;
+    }
     display: block;
-    padding: 0;
+    padding: 0.1em;
+    padding-left: 0.8em;
+    margin: 0;
     font-style: italic;
     font-size: 85%;
+    position: relative;
   }
 
   .underneath {
