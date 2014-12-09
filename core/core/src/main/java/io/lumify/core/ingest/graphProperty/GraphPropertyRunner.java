@@ -6,7 +6,6 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.workQueue.NoOpWorkQueueRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -61,6 +60,7 @@ public class GraphPropertyRunner {
         this.workerWrappers = new ArrayList<GraphPropertyThreadedWrapper>(workers.size());
         for (GraphPropertyWorker worker : workers) {
             try {
+                LOGGER.debug("preparing: %s", worker.getClass().getName());
                 worker.prepare(workerPrepareData);
             } catch (Exception ex) {
                 throw new LumifyException("Could not prepare graph property worker " + worker.getClass().getName(), ex);

@@ -25,13 +25,20 @@ import java.util.Map;
 public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TranslateGraphPropertyWorker.class);
     private Translator translator;
+    private static final Object detectorFactoryLoadLock = new Object();
+    private static boolean detectorFactoryLoaded = false;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        File profileDirectory = createTempProfileDirectory();
-        DetectorFactory.loadProfile(profileDirectory);
+        synchronized (detectorFactoryLoadLock) {
+            if (!detectorFactoryLoaded) {
+                File profileDirectory = createTempProfileDirectory();
+                DetectorFactory.loadProfile(profileDirectory);
+                detectorFactoryLoaded = true;
+            }
+        }
     }
 
     @Override
