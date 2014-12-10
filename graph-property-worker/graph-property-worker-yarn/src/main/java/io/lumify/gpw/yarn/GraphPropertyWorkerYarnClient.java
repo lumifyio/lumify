@@ -92,7 +92,8 @@ public class GraphPropertyWorkerYarnClient {
         YarnApplicationState appState = appReport.getYarnApplicationState();
         while (appState != YarnApplicationState.FINISHED &&
                 appState != YarnApplicationState.KILLED &&
-                appState != YarnApplicationState.FAILED) {
+                appState != YarnApplicationState.FAILED &&
+                appState != YarnApplicationState.RUNNING) {
             if (System.currentTimeMillis() > endTime.getTime()) {
                 break;
             }
