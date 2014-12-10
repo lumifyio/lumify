@@ -184,7 +184,7 @@ define([
 
                 willChange = willChange || changes.entityDeletes.length;
                 willChange = willChange || _.any(changes.entityUpdates, function(entityUpdate) {
-                    var workspaceVertex = _.findWhere(workspace.vertices, { vertexId: entityUpdate.vertexId });
+                    var workspaceVertex = workspace.vertices[entityUpdate.vertexId];
                     if (workspaceVertex) {
                         return !_.isEqual(workspaceVertex, entityUpdate);
                     } else {
