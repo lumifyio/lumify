@@ -97,6 +97,13 @@ define([
                 }
             })
 
+            allChanges.entityUpdates = _.filter(allChanges.entityUpdates, function(update) {
+                var inWorkspace = update.vertexId in workspace.vertices,
+                    hasGraphPosition = 'graphPosition' in update;
+
+                return !inWorkspace || hasGraphPosition;
+            });
+
             if (!store.workspaceShouldSave(workspace, allChanges)) {
                 return Promise.resolve({ saved: false, workspace: workspace });
             }

@@ -67,7 +67,9 @@ define(['require'], function(require) {
             },
             verticesDeleted: function(data) {
                 require(['../util/store'], function(store) {
-                    var storeObjects = _.compact(store.getObjects(publicData.currentWorkspaceId, 'vertex', data.vertexIds));
+                    var storeObjects = _.compact(
+                        store.getObjects(publicData.currentWorkspaceId, 'vertex', data.vertexIds)
+                    );
                     if (storeObjects.length) {
                         require(['../services/vertex'], function(service) {
                             service.multiple(_.pluck(storeObjects, 'id'))
