@@ -4,10 +4,10 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.yarn.api.ApplicationConstants;
-import org.apache.hadoop.yarn.api.protocolrecords.AllocateResponse;
 import org.apache.hadoop.yarn.api.records.*;
 import org.apache.hadoop.yarn.client.api.AMRMClient;
 import org.apache.hadoop.yarn.client.api.NMClient;
+import org.apache.hadoop.yarn.client.api.async.AMRMClientAsync;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.hadoop.yarn.exceptions.YarnException;
 import org.apache.hadoop.yarn.util.ConverterUtils;
@@ -16,7 +16,7 @@ import org.apache.hadoop.yarn.util.Records;
 import java.io.IOException;
 import java.util.*;
 
-public class GraphPropertyWorkerYarnApplicationMaster {
+public class GraphPropertyWorkerYarnApplicationMaster implements AMRMClientAsync.CallbackHandler {
     @Parameter(names = {"-memory", "-mem"}, description = "Memory for each process in MB.")
     private int memory = 512;
 
@@ -32,6 +32,12 @@ public class GraphPropertyWorkerYarnApplicationMaster {
     @Parameter(names = {"-remotepath"}, description = "Path to the remote files.")
     private String remotePath = null;
 
+    private NMClient nmClient;
+    private FileSystem fs;
+    private List<Path> resources;
+    private String classPathEnv;
+    private int numContainersToWaitFor;
+
     public static void main(String[] args) throws Exception {
         new GraphPropertyWorkerYarnApplicationMaster().run(args);
     }
@@ -39,6 +45,12 @@ public class GraphPropertyWorkerYarnApplicationMaster {
     private void run(String[] args) throws Exception {
         System.out.println("BEGIN " + GraphPropertyWorkerYarnApplicationMaster.class.getName());
         new JCommander(this, args);
+
+        System.out.println("memory: " + memory);
+        System.out.println("virtualCores: " + virtualCores);
+        System.out.println("instances: " + instances);
+        System.out.println("appName: " + appName);
+        System.out.println("remotePath: " + remotePath);
 
         if (remotePath == null) {
             throw new Exception("remotePath is required");
@@ -49,23 +61,33 @@ public class GraphPropertyWorkerYarnApplicationMaster {
         final String myClasspath = System.getProperty("java.class.path");
 
         final YarnConfiguration conf = new YarnConfiguration();
-        final FileSystem fs = FileSystem.get(conf);
-        final List<Path> resources = getResourceList(fs, new Path(remotePath));
+        fs = FileSystem.get(conf);
+        resources = getResourceList(fs, new Path(remotePath));
 
-        final StringBuilder classPathEnv = new StringBuilder(myClasspath);
+        final StringBuilder classPathEnvBuilder = new StringBuilder(myClasspath);
         for (Path p : resources) {
-            classPathEnv.append(':');
-            classPathEnv.append(p.getName());
+            classPathEnvBuilder.append(':');
+            classPathEnvBuilder.append(p.getName());
         }
-        System.out.println("Classpath: " + classPathEnv);
+        System.out.println("Classpath: " + classPathEnvBuilder);
+        classPathEnv = classPathEnvBuilder.toString();
 
-        AMRMClient<AMRMClient.ContainerRequest> rmClient = createResourceManagerClient(conf);
-        NMClient nmClient = createNodeManagerClient(conf);
+        nmClient = createNodeManagerClient(conf);
+
+        AMRMClientAsync<AMRMClient.ContainerRequest> rmClient = createResourceManagerClient(conf);
+        rmClient.registerApplicationMaster("", 0, "");
         makeContainerRequests(rmClient);
 
-        launchContainers(rmClient, nmClient, fs, resources, classPathEnv.toString());
+        System.out.println("[AM] waiting for containers to finish");
+        while (!doneWithContainers()) {
+            Thread.sleep(100);
+        }
 
         rmClient.unregisterApplicationMaster(FinalApplicationStatus.SUCCEEDED, "", "");
+    }
+
+    private boolean doneWithContainers() {
+        return numContainersToWaitFor == 0;
     }
 
     private List<Path> getResourceList(FileSystem fs, Path remotePath) throws IOException {
@@ -79,42 +101,6 @@ public class GraphPropertyWorkerYarnApplicationMaster {
         return resources;
     }
 
-    private void launchContainers(AMRMClient<AMRMClient.ContainerRequest> rmClient, NMClient nmClient, FileSystem fs, List<Path> resources, String classPathEnv) throws YarnException, IOException, InterruptedException {
-        int responseId = 0;
-        int completedContainers = 0;
-        while (completedContainers < instances) {
-            AllocateResponse response = rmClient.allocate(responseId++);
-            for (Container container : response.getAllocatedContainers()) {
-                launchContainer(nmClient, container, fs, resources, classPathEnv);
-            }
-            for (ContainerStatus status : response.getCompletedContainersStatuses()) {
-                completedContainers++;
-                System.out.println("Completed container " + status.getContainerId());
-            }
-            Thread.sleep(100);
-        }
-    }
-
-    private void launchContainer(NMClient nmClient, Container container, FileSystem fs, List<Path> resources, String classPathEnv) throws YarnException, IOException {
-        ContainerLaunchContext ctx = Records.newRecord(ContainerLaunchContext.class);
-
-        Map<String, LocalResource> localResources = createLocalResources(fs, resources);
-        ctx.setLocalResources(localResources);
-
-        String command = "${JAVA_HOME}/bin/java"
-                + " -Xmx" + memory + "M"
-                + " -Djava.net.preferIPv4Stack=true"
-                + " -cp " + classPathEnv
-                + " " + GraphPropertyWorkerYarnTask.class.getName()
-                + " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout"
-                + " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr";
-        System.out.println("Running: " + command);
-        ctx.setCommands(Collections.singletonList(command));
-
-        System.out.println("Launching container " + container.getId());
-        nmClient.startContainer(container, ctx);
-    }
-
     private Map<String, LocalResource> createLocalResources(FileSystem fs, List<Path> resources) throws IOException {
         Map<String, LocalResource> localResources = new HashMap<String, LocalResource>();
         for (Path p : resources) {
@@ -125,10 +111,11 @@ public class GraphPropertyWorkerYarnApplicationMaster {
         return localResources;
     }
 
-    private void makeContainerRequests(AMRMClient<AMRMClient.ContainerRequest> rmClient) {
+    private void makeContainerRequests(AMRMClientAsync<AMRMClient.ContainerRequest> rmClient) {
         Priority priority = createPriorityRecord();
         Resource capability = createResourceRecord();
 
+        numContainersToWaitFor = instances;
         for (int i = 0; i < instances; ++i) {
             AMRMClient.ContainerRequest containerAsk = new AMRMClient.ContainerRequest(capability, null, null, priority);
             System.out.println("Making res-req " + i);
@@ -156,13 +143,71 @@ public class GraphPropertyWorkerYarnApplicationMaster {
         return nmClient;
     }
 
-    private AMRMClient<AMRMClient.ContainerRequest> createResourceManagerClient(YarnConfiguration conf) throws IOException, YarnException {
-        AMRMClient<AMRMClient.ContainerRequest> rmClient = AMRMClient.createAMRMClient();
+    private AMRMClientAsync<AMRMClient.ContainerRequest> createResourceManagerClient(YarnConfiguration conf) throws IOException, YarnException {
+        AMRMClientAsync<AMRMClient.ContainerRequest> rmClient = AMRMClientAsync.createAMRMClientAsync(100, this);
         rmClient.init(conf);
         rmClient.start();
-
-        rmClient.registerApplicationMaster("", 0, "");
-
         return rmClient;
+    }
+
+    @Override
+    public void onContainersCompleted(List<ContainerStatus> statuses) {
+        for (ContainerStatus status : statuses) {
+            System.out.println("[AM] Completed container " + status.getContainerId());
+            synchronized (this) {
+                numContainersToWaitFor--;
+            }
+        }
+    }
+
+    @Override
+    public void onContainersAllocated(List<Container> containers) {
+        for (Container container : containers) {
+            try {
+                launchContainer(container);
+            } catch (Exception ex) {
+                System.err.println("[AM] Error launching container " + container.getId() + " " + ex);
+            }
+        }
+    }
+
+    private void launchContainer(Container container) throws YarnException, IOException {
+        ContainerLaunchContext ctx = Records.newRecord(ContainerLaunchContext.class);
+
+        Map<String, LocalResource> localResources = createLocalResources(fs, resources);
+        ctx.setLocalResources(localResources);
+
+        String command = "${JAVA_HOME}/bin/java"
+                + " -Xmx" + memory + "M"
+                + " -Djava.net.preferIPv4Stack=true"
+                + " -cp " + classPathEnv
+                + " " + GraphPropertyWorkerYarnTask.class.getName()
+                + " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout"
+                + " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr";
+        System.out.println("Running: " + command);
+        ctx.setCommands(Collections.singletonList(command));
+
+        System.out.println("Launching container " + container.getId());
+        nmClient.startContainer(container, ctx);
+    }
+
+    @Override
+    public void onShutdownRequest() {
+
+    }
+
+    @Override
+    public void onNodesUpdated(List<NodeReport> updatedNodes) {
+
+    }
+
+    @Override
+    public float getProgress() {
+        return 0;
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        System.out.println("[AM] error " + e);
     }
 }
