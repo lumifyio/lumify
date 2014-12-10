@@ -57,6 +57,7 @@ define([
             this.on('openFullscreen', this.onOpenFullscreen);
             this.on('toggleAudit', this.onAuditToggle);
             this.on('openSourceUrl', this.onOpenSourceUrl);
+            this.on('maskWithOverlay', this.onMaskWithOverlay);
 
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
@@ -107,6 +108,20 @@ define([
                 lumifyData.currentWorkspaceId
             );
             window.open(url);
+        };
+
+        this.onMaskWithOverlay = function(event, data) {
+            event.stopPropagation();
+
+            if (data.done) {
+                this.$node.find('.detail-overlay').remove();
+            } else {
+                $('<div>')
+                    .addClass('detail-overlay')
+                    .toggleClass('detail-overlay-loading', data.loading)
+                    .append($('<h1>').text(data.text))
+                    .appendTo(this.$node);
+            }
         };
 
         this.debouncedConceptTypeChange = function(vertex) {
