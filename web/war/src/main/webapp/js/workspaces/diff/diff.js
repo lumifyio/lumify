@@ -337,14 +337,14 @@ define([
                             vertexId: diff.elementId,
                             key: diff.key,
                             name: diff.name,
-                            action: 'update',
+                            action: diff.deleted ? 'delete' : 'update',
                             status: diff.sandboxStatus
                         };
 
                         case 'VertexDiffItem': return {
                             type: 'vertex',
                             vertexId: diff.vertexId,
-                            action: 'create', // TODO: ever delete?
+                            action: diff.deleted ? 'delete' : 'create',
                             status: diff.sandboxStatus
                         };
 
@@ -353,7 +353,7 @@ define([
                             edgeId: diff.edgeId,
                             sourceId: diff.outVertexId,
                             destId: diff.inVertexId,
-                            action: 'create',
+                            action: diff.deleted ? 'delete' : 'create',
                             status: diff.sandboxStatus
                         };
                     }
