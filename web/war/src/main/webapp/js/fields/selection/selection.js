@@ -22,6 +22,7 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.updatePropertiesSource();
             this.on('filterProperties', this.onFilterProperties);
 
             this.$node.html(template({placeholder: this.attr.placeholder}));
@@ -31,13 +32,6 @@ define([
                     .attr('placeholder', i18n('field.selection.no_valid'))
                     .attr('disabled', true);
             } else {
-                var properties = self.filteredProperties || self.attr.properties,
-                    displayName = function(p) {
-                        return p.displayName || p.title;
-                    },
-                    groupedByDisplay = _.groupBy(properties, displayName),
-                    displayForTitle = {};
-
                 this.queryPropertyMap = {};
 
                 this.select('findPropertySelection')
@@ -69,7 +63,7 @@ define([
                         minLength: 0,
                         items: 100,
                         source: function() {
-                            return _.chain(properties)
+                            return _.chain(self.propertiesForSource)
                                     .filter(function(p) {
                                         var visible = p.userVisible !== false;
 
@@ -85,7 +79,7 @@ define([
                                     })
                                     .map(function(p) {
                                         var name = displayName(p),
-                                            duplicates = groupedByDisplay[name].length > 1;
+                                            duplicates = self.groupedByDisplay[name].length > 1;
 
                                         self.queryPropertyMap[p.title] = p;
 
@@ -146,7 +140,7 @@ define([
         });
 
         this.onFilterProperties = function(event, data) {
-            this.filteredProperties = data.properties;
+            this.updatePropertiesSource(data.properties);
         };
 
         this.propertySelected = function(item) {
@@ -160,6 +154,17 @@ define([
                 }.bind(this));
             }
         };
+
+        this.updatePropertiesSource = function(filtered) {
+            var properties = filtered || this.attr.properties;
+
+            this.groupedByDisplay = _.groupBy(properties, displayName);
+            this.propertiesForSource = properties;
+        }
+    }
+
+    function displayName(p) {
+        return p.displayName || p.title;
     }
 
     function allowEmptyLookup() {
