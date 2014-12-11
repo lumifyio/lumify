@@ -204,9 +204,9 @@
     
 
 
-    <!-- http://lumify.io/user -->
+    <!-- http://lumify.io/user#user -->
 
-    <owl:Class rdf:about="http://lumify.io/user">
+    <owl:Class rdf:about="http://lumify.io/user#user">
         <lumify:userVisible>false</lumify:userVisible>
     </owl:Class>
 </rdf:RDF>
