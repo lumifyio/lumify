@@ -81,6 +81,18 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
+    protected void importOntologyAnnotationProperty(OWLOntology o, OWLAnnotationProperty annotationProperty, File inDir, Authorizations authorizations) {
+        super.importOntologyAnnotationProperty(o, annotationProperty, inDir, authorizations);
+
+        String about = annotationProperty.getIRI().toString();
+
+        DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(about);
+        definePropertyBuilder.dataType(PropertyType.getTypeClass(PropertyType.STRING));
+        definePropertyBuilder.textIndexHint(TextIndexHint.NONE);
+        definePropertyBuilder.define();
+    }
+
+    @Override
     public ClientApiOntology getClientApiObject() {
         ClientApiOntology o = this.clientApiCache.getIfPresent("clientApi");
         if (o != null) {
