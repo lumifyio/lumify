@@ -85,7 +85,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         super.importOntologyAnnotationProperty(o, annotationProperty, inDir, authorizations);
 
         String about = annotationProperty.getIRI().toString();
-
+        LOGGER.debug("disabling index for annotation property: " + about);
         DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(about);
         definePropertyBuilder.dataType(PropertyType.getTypeClass(PropertyType.STRING));
         definePropertyBuilder.textIndexHint(TextIndexHint.NONE);
