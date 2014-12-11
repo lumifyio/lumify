@@ -1,6 +1,5 @@
 package io.lumify.web.devTools.ontology;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.Concept;
@@ -9,11 +8,15 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import org.json.JSONArray;
 import org.securegraph.Authorizations;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class SaveOntologyConcept extends BaseRequestHandler {
     private OntologyRepository ontologyRepository;
@@ -30,6 +33,7 @@ public class SaveOntologyConcept extends BaseRequestHandler {
         String displayName = getRequiredParameter(request, "displayName");
         String color = getRequiredParameter(request, "color");
         String displayType = getRequiredParameter(request, "displayType");
+        HashSet<String> addRelatedConceptWhiteList = new HashSet<String>(Arrays.asList(getRequiredParameterArray(request, "addRelatedConceptWhiteList[]")));
         Boolean searchable = getOptionalParameterBoolean(request, "searchable", true);
         Boolean userVisible = getOptionalParameterBoolean(request, "userVisible", true);
         String titleFormula = getRequiredParameter(request, "titleFormula");
@@ -52,6 +56,12 @@ public class SaveOntologyConcept extends BaseRequestHandler {
         if (color.length() != 0) {
             concept.setProperty(LumifyProperties.COLOR.getPropertyName(), color, authorizations);
         }
+
+        JSONArray whiteList = new JSONArray();
+        for (String whitelistIri : addRelatedConceptWhiteList) {
+            whiteList.put(whitelistIri);
+        }
+        concept.setProperty(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName(), whiteList.toString(), authorizations);
 
         concept.setProperty(LumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
         concept.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);

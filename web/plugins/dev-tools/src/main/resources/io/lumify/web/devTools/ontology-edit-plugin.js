@@ -87,7 +87,9 @@ require([
                     userVisible: this.$node.find('.userVisible').is(':checked'),
                     titleFormula: this.$node.find('.titleFormula').val(),
                     subtitleFormula: this.$node.find('.subtitleFormula').val(),
-                    timeFormula: this.$node.find('.timeFormula').val()
+                    timeFormula: this.$node.find('.timeFormula').val(),
+                    addRelatedConceptWhiteList: this.$node.find('.addRelatedConceptWhiteList')
+                        .val().split(/[\n\s,]+/)
                 })
                     .then(function() {
                         self.showSuccess('Saved, refresh to see changes');
@@ -113,6 +115,9 @@ require([
                     data.concept.searchable = true;
                 }
                 _.each(data.concept, function(value, key) {
+                    if (key === 'addRelatedConceptWhiteList') {
+                        value = value.join('\n');
+                    }
                     self.updateFieldValue(key, value)
                 });
             } else {
