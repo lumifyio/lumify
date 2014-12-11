@@ -29,6 +29,9 @@ public class SaveOntologyConcept extends BaseRequestHandler {
         String conceptIRI = getRequiredParameter(request, "concept");
         String displayName = getRequiredParameter(request, "displayName");
         String color = getRequiredParameter(request, "color");
+        String displayType = getRequiredParameter(request, "displayType");
+        Boolean searchable = getOptionalParameterBoolean(request, "searchable", true);
+        Boolean userVisible = getOptionalParameterBoolean(request, "userVisible", true);
         String titleFormula = getRequiredParameter(request, "titleFormula");
         String subtitleFormula = getRequiredParameter(request, "subtitleFormula");
         String timeFormula = getRequiredParameter(request, "timeFormula");
@@ -49,6 +52,10 @@ public class SaveOntologyConcept extends BaseRequestHandler {
         if (color.length() != 0) {
             concept.setProperty(LumifyProperties.COLOR.getPropertyName(), color, authorizations);
         }
+
+        concept.setProperty(LumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
+        concept.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
+        concept.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
 
         if (timeFormula.length() != 0) {
             concept.setProperty(LumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);
