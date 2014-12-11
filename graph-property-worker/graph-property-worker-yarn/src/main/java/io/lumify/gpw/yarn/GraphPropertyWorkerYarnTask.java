@@ -9,15 +9,16 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.yarn.TaskBase;
 
-public class GraphPropertyWorkerYarnTask {
+public class GraphPropertyWorkerYarnTask extends TaskBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorkerYarnTask.class);
 
     public static void main(String[] args) {
         new GraphPropertyWorkerYarnTask().run(args);
     }
 
-    public void run(String[] args) {
+    public void run() {
         LOGGER.info("BEGIN Run");
         try {
             Configuration configuration = ConfigurationLoader.load();
