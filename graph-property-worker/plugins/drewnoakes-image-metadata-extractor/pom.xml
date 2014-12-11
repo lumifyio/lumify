@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-drewnoakes-image-metadata-extractor</artifactId>
+    <artifactId>lumify-gpw-drewnoakes-image-metadata-extractor</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Drew Noakes Image Metadata Extractor</name>
 
     <dependencies>

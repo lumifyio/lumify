@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-clavin</artifactId>
+    <artifactId>lumify-gpw-clavin</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Clavin</name>
 
     <properties>

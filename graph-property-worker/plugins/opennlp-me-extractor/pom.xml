@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-opennlp-me-extractor</artifactId>
+    <artifactId>lumify-gpw-opennlp-me-extractor</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: OpenNLP Maximum Entropy</name>
 
     <properties>

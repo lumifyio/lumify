@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-java-code-ingest</artifactId>
+    <artifactId>lumify-gpw-java-code-ingest</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Java Code</name>
 
     <dependencies>
