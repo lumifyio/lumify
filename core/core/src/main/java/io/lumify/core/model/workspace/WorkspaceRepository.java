@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class WorkspaceRepository {
     public static final String VISIBILITY_STRING = "workspace";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
-    public static final String WORKSPACE_CONCEPT_IRI = "http://lumify.io/workspace";
+    public static final String WORKSPACE_CONCEPT_IRI = "http://lumify.io/workspace#workspace";
     public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace/toEntity";
     public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace/toUser";
     public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";

@@ -32,7 +32,7 @@ import static org.securegraph.util.IterableUtils.toList;
 public abstract class UserRepository {
     public static final String VISIBILITY_STRING = "user";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
-    public static final String USER_CONCEPT_IRI = "http://lumify.io/user";
+    public static final String USER_CONCEPT_IRI = "http://lumify.io/user#user";
     private final Set<Privilege> defaultPrivileges;
     private LongRunningProcessRepository longRunningProcessRepository; // can't inject this because of circular dependencies
 
