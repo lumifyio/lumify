@@ -72,7 +72,18 @@ define(['require'], function(require) {
                     );
                     if (storeObjects.length) {
                         require(['../services/vertex'], function(service) {
-                            service.multiple(_.pluck(storeObjects, 'id'))
+                            service.multiple({ vertexIds: _.pluck(storeObjects, 'id') })
+                                .then(function(vertices) {
+                                    var deleted = _.without(data.vertexIds, _.pluck(vertices, 'id'));
+                                    if (deleted.length) {
+                                        dispatchMain('rebroadcastEvent', {
+                                            eventName: 'verticesDeleted',
+                                            data: {
+                                                vertexIds: data.vertexIds
+                                            }
+                                        });
+                                    }
+                                })
                                 .catch(function() {
                                     dispatchMain('rebroadcastEvent', {
                                         eventName: 'verticesDeleted',

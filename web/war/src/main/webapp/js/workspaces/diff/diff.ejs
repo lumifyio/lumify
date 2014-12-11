@@ -8,8 +8,10 @@
           <button data-action="publish"
             class="btn btn-mini select-all-publish requires-PUBLISH"><%= i18n('workspaces.diff.button.publish') %></button>
           <% } %>
+          <% if (Privileges.canPUBLISH) { %>
           <button data-action="undo"
-            class="btn btn-mini select-all-undo"><%= i18n('workspaces.diff.button.undo') %></button>
+            class="btn btn-mini select-all-undo requires-EDIT"><%= i18n('workspaces.diff.button.undo') %></button>
+          <% } %>
         </div>
       </div>
 
@@ -36,7 +38,7 @@
                 <span class="label action-type"><%= diff.action.display %></span>
                 <% } %>
               </th>
-              <% if (diff.action.type === 'create') { %>
+              <% if (diff.action.type !== 'update') { %>
                 <% include workspaces/diff/actions %>
               <% } else { %>
                 <td>&nbsp;</td>
@@ -68,7 +70,7 @@
           <% diff.edges.forEach(function(edge) { %>
           <tr class="<%= edge.className %>" data-diff-id="<%= edge.id %>">
             <td class="edge-label"><div><%= edge.displayLabel %><span>&#8594;</span></div></td>
-            <td class="edge-value"><%= edge.inVertex ? F.vertex.title(edge.inVertex) : edge.inVertexId %>
+            <td class="edge-value<%= edge.deleted ? ' deleted' : '' %>"><%= edge.inVertex ? F.vertex.title(edge.inVertex) : edge.inVertexId %>
                 <% if (edge.visibilityJson) { %>
                   <div class="visibility" data-visibility="<%= JSON.stringify(edge.visibilityJson['http://lumify.io#visibilityJson']) %>"></div>
                 <% } %>

@@ -40,6 +40,17 @@ define([
                     this.trigger('selectObjects');
                 }
             })
+            this.on('verticesDeleted', function(event, data) {
+                if (selectedObjects) {
+                    if (selectedObjects.vertices.length) {
+                        this.trigger('selectObjects', {
+                            vertices: _.reject(selectedObjects.vertices, function(v) {
+                                return ~data.vertexIds.indexOf(v.id)
+                            })
+                        });
+                    }
+                }
+            })
 
             this.on('searchTitle', this.onSearchTitle);
             this.on('searchRelated', this.onSearchRelated);
@@ -90,6 +101,11 @@ define([
 
         this.onSelectObjects = function(event, data) {
             var self = this,
+                hasItems = data &&
+                    (
+                        (data.vertexIds || data.vertices || []).length > 0 ||
+                        (data.edgeIds || data.edges || []).length > 0
+                    ),
                 promises = [];
 
             this.dataRequestPromise.done(function(dataRequest) {
@@ -118,9 +134,13 @@ define([
 
                 Promise.all(promises)
                     .done(function(result) {
-                        var vertices = result[0] || [],
+                        var vertices = _.compact(result[0] || []),
                             edge = result[1],
                             edges = edge ? [edge] : [];
+
+                        if (!edge && !vertices.length && hasItems) {
+                            return;
+                        }
 
                         selectedObjects = {
                             vertices: vertices,

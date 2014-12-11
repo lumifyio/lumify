@@ -167,10 +167,13 @@ define([
                                     diff.id = outputItem.id = vertexId;
                                     if (outputItem.vertex) {
                                         outputItem.title = F.vertex.title(outputItem.vertex);
+                                    } else if (diff.title) {
+                                        outputItem.title = diff.title;
                                     }
                                     outputItem.action = diff.deleted ? actionTypes.DELETE : actionTypes.CREATE;
                                     self.diffsForVertexId[vertexId] = diff;
                                     self.diffsById[vertexId] = diff;
+                                    addDiffDependency(diff.id);
                                     break;
 
                                 case 'PropertyDiffItem':
@@ -222,13 +225,15 @@ define([
                 if (!self.diffDependencies[id]) {
                     self.diffDependencies[id] = [];
                 }
-                self.diffDependencies[id].push(diff.id);
+                if (diff) {
+                    self.diffDependencies[id].push(diff.id);
 
-                // Undo dependencies are inverse
-                if (!self.undoDiffDependencies[diff.id]) {
-                    self.undoDiffDependencies[diff.id] = [];
+                    // Undo dependencies are inverse
+                    if (!self.undoDiffDependencies[diff.id]) {
+                        self.undoDiffDependencies[diff.id] = [];
+                    }
+                    self.undoDiffDependencies[diff.id].push(id);
                 }
-                self.undoDiffDependencies[diff.id].push(id);
             }
         };
 
@@ -553,12 +558,10 @@ define([
             switch (diff.type) {
 
                 case 'VertexDiffItem':
-
-                    if (!state) {
-                        // Unpublish all dependents
+                    if (!state || diff.deleted) {
                         var deps = this.diffDependencies[diff.id];
                         deps.forEach(function(diffId) {
-                            self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
+                            self.trigger('markPublishDiffItem', { diffId: diffId, state: state });
                         });
                     }
 
@@ -568,7 +571,7 @@ define([
 
                     if (state) {
                         var vertexDiff = this.diffsForVertexId[diff.elementId];
-                        if (vertexDiff) {
+                        if (vertexDiff && !diff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.elementId, state: true })
                         }
                     }
@@ -581,10 +584,10 @@ define([
                         var inVertexDiff = this.diffsForVertexId[diff.inVertexId],
                             outVertexDiff = this.diffsForVertexId[diff.outVertexId];
 
-                        if (inVertexDiff) {
+                        if (inVertexDiff && !diff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.inVertexId, state: true });
                         }
-                        if (outVertexDiff) {
+                        if (outVertexDiff && !diff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.outVertexId, state: true });
                         }
                     }
