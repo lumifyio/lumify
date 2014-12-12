@@ -120,17 +120,17 @@ define([
                 this.currentFilters.conceptFilter,
                 data.paging
             )
-                .fail(function() {
-                    trigger({ success: false });
-                })
-                .done(function(results) {
+                .then(function(results) {
                     trigger({
                         success: true,
                         vertices: results.vertices,
                         total: results.totalHits,
                         nextOffset: results.nextOffset
                     });
-                });
+                })
+                .catch(function() {
+                    trigger({ success: false });
+                })
         };
 
     }

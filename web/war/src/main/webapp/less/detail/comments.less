@@ -3,6 +3,46 @@
 
   .comment-content {
     .clearfix;
+
+    ul ul {
+      &.collapsed {
+        display:none;
+      }
+    }
+    
+    ul li .wrap { margin-left: 1em; }
+    ul ul li .wrap { margin-left: 2em; }
+    ul ul ul li .wrap { margin-left: 4em; }
+    ul ul ul ul li .wrap { margin-left: 5em; }
+    ul ul ul ul ul li .wrap { margin-left: 6em; }
+    ul ul ul ul ul ul li .wrap { margin-left: 7em; }
+    ul ul ul ul ul ul ul li .wrap { margin-left: 8em; }
+    ul ul ul ul ul ul ul ul li .wrap { margin-left: 8.5em; }
+    ul ul ul ul ul ul ul ul ul li .wrap { margin-left: 9em; }
+  }
+
+  .replies {
+    .twizzle;
+    &:before {
+      left: 0;
+    }
+    &.open {
+      .twizzle-expand;
+    }
+    &:hover {
+      text-decoration: none;
+    }
+    display: block;
+    padding: 0.1em;
+    padding-left: 0.8em;
+    margin: 0;
+    font-style: italic;
+    font-size: 85%;
+    position: relative;
+  }
+
+  .underneath {
+    float: none;
   }
 
   ul {
@@ -11,7 +51,7 @@
     padding: 0;
 
     li {
-      margin: 1em;
+      margin: 1em 0;
 
       .comment {
         text-align: left;    
@@ -23,6 +63,23 @@
 
       .comment-text {
         text-align: left;
+        p {
+          margin: 1em 0;
+          &:first-child {
+            margin: 0 0 1em 0;
+          }
+          &:last-child {
+            margin: 0
+          }
+        }
+        &.redacted {
+          font-style: italic;
+          .opacity(50);
+          p {
+            font-size: 90%;
+            margin-bottom: 0;
+          }
+        }
       }
 
       .date, .user {
@@ -36,6 +93,12 @@
         margin-right: 1ex;
         &:after {
           content: ','
+        }
+      }
+
+      .form {
+        textarea {
+          height: 7em;
         }
       }
     }

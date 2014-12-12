@@ -132,7 +132,7 @@ define([
                 var user = _.findWhere(remoteWorkspace.users, { userId: publicData.currentUser.id });
                 remoteWorkspace.editable = /WRITE/i.test(user && user.access);
                 remoteWorkspace.commentable = /(COMMENT|WRITE)/i.test(user && user.access);
-                remoteWorkspace.isSharedToUser = remoteWorkspace.createdBy !== publicData.currentUser.id;
+                remoteWorkspace.sharedToUser = remoteWorkspace.createdBy !== publicData.currentUser.id;
                 if (('vertices' in remoteWorkspace)) {
                     remoteWorkspace.vertices = _.indexBy(remoteWorkspace.vertices, 'vertexId');
                     parseJsonLayoutForVertices(remoteWorkspace.vertices);
@@ -184,7 +184,7 @@ define([
 
                 willChange = willChange || changes.entityDeletes.length;
                 willChange = willChange || _.any(changes.entityUpdates, function(entityUpdate) {
-                    var workspaceVertex = _.findWhere(workspace.vertices, { vertexId: entityUpdate.vertexId });
+                    var workspaceVertex = workspace.vertices[entityUpdate.vertexId];
                     if (workspaceVertex) {
                         return !_.isEqual(workspaceVertex, entityUpdate);
                     } else {

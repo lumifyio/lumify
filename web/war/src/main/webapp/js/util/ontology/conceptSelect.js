@@ -138,7 +138,7 @@ define([
                             concepts[self.attr.showAdminConcepts ? 'forAdmin' : 'byTitle']
                         )
                         .filter(function(c) {
-                            if (c.userVisible === false) {
+                            if (c.userVisible === false && self.attr.showAdminConcepts !== true) {
                                 return false;
                             }
 

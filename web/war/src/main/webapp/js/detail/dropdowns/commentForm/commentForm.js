@@ -76,6 +76,9 @@ define([
                 name: 'http://lumify.io/comment#entry',
                 key: this.attr.comment && this.attr.comment.key,
                 value: this.getValue(),
+                metadata: this.attr.path && {
+                    'http://lumify.io/comment#path': this.attr.path
+                },
                 visibilitySource: this.visibilitySource && this.visibilitySource.value || '',
                 sourceInfo: this.attr.sourceInfo
             })
