@@ -19,7 +19,9 @@ require([
 
         this.after('initialize', function() {
             var self = this,
-                loading = $('<span>').addClass('badge loading').appendTo(this.$node.empty())
+                loading = $('<span>')
+                    .addClass('badge loading')
+                    .appendTo(this.$node.empty().addClass('notificationList'));
 
             this.on(document, 'notificationAdded', this.onNotificationAdded);
             this.on(document, 'notificationDeleted', this.onNotificationDeleted);
@@ -61,7 +63,14 @@ require([
 
             d3.select(this.node)
                 .selectAll('section.collapsible')
-                .data(_.pairs(response.system))
+                .data(_.chain(response.system)
+                      .pairs()
+                      .sortBy(function(p) {
+                          return p[0];
+                      })
+                      .value()
+                )
+                .order()
                 .call(function() {
                     this.enter()
                         .append('section').attr('class', 'collapsible has-badge-number expanded')
@@ -71,7 +80,7 @@ require([
                                     this.append('span').attr('class', 'badge');
                                     this.append('strong');
                                 })
-                            this.append('div').append('ul').attr('class', 'nav-list');
+                            this.append('div').append('ol').attr('class', 'nav-list nav');
                         })
                     this.exit().remove();
 
@@ -83,7 +92,7 @@ require([
                         return F.number.pretty(n[1].length);
                     })
 
-                    this.select('ul.nav-list')
+                    this.select('.nav-list')
                         .selectAll('li')
                         .data(function(n) {
                             return n[1];
@@ -93,58 +102,47 @@ require([
                                 .append('li').attr('class', 'highlight-on-hover')
                                 .call(function() {
                                     this.append('button')
-                                        .attr('class', 'show-on-hover btn btn-danger')
+                                        .attr('class', 'show-on-hover btn btn-danger btn-small')
                                         .text('Delete')
                                     this.append('span').attr('class', 'nav-list-title')
                                     this.append('span').attr('class', 'nav-list-subtitle')
-                                    this.append('dl')
+                                        .call(function() {
+                                            this.append('span').attr('class', 'title')
+                                            this.append('span').attr('class', 'dates')
+                                        })
+                                    //this.append('dl')
                                 })
                             this.exit().remove();
+
+                            this.each(function() {
+                                var d = d3.select(this).datum();
+                                $(this)
+                                    .removeClass('INFORMATIONAL CRITICAL WARNING')
+                                    .addClass(d.severity.toUpperCase());
+                            });
 
                             this.select('.nav-list-title').text(function(n) {
                                 return n.title;
                             })
 
-                            this.select('.nav-list-subtitle').text(function(n) {
+                            this.select('.nav-list-subtitle .title').text(function(n) {
                                 return n.message;
+                            })
+                            this.select('.nav-list-subtitle .dates').text(function(n) {
+                                if (n.endDate) {
+                                    return n.startDate + ' – ' + n.endDate;
+                                }
+                                return n.startDate;
                             })
 
                             this.select('.btn-danger').on('click', function(n) {
                                 var btn = $(this)
                                     .addClass('loading').attr('disabled', true);
                                 self.dataRequest('admin', 'systemNotificationDelete', n.id)
-                                    .then(function() {
-                                        //btn.closest('li').remove();
-                                    })
                                     .finally(function() {
                                         btn.removeClass('loading').removeAttr('disabled');
                                     })
                             })
-
-                            this.select('dl')
-                                .selectAll('dt,dd')
-                                .data(function(n) {
-                                    return _.chain(n)
-                                        .omit('message', 'title')
-                                        .pairs()
-                                        .sortBy(function(p) {
-                                            return p[0].toLowerCase();
-                                        })
-                                        .flatten()
-                                        .value();
-                                })
-                                .order()
-                                .call(function() {
-                                    this.enter()
-                                        .append(function(v, i, j) {
-                                            return document.createElement(i % 2 === 0 ? 'dt' : 'dd')
-                                        })
-                                    this.exit().remove();
-
-                                    this.text(function(v, i) {
-                                        return v;
-                                    })
-                                })
                         })
                 })
         }

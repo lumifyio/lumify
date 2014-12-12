@@ -41,6 +41,9 @@ define([
         },
 
         systemNotificationCreate: function(options) {
+            if ('endDate' in options && !options.endDate) {
+                delete options.endDate;
+            }
             return ajax('POST', '/notification/system', options);
         },
 

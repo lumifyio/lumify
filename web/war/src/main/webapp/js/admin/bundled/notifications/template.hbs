@@ -1,2 +1,22 @@
-<button class="btn btn-primary">Create</button>
+<ul class="nav nav-list">
+    <li class="nav-header">Title</li>
+    <li><input type="text" placeholder="Title" class="title"></li>
+
+    <li class="nav-header">Message</li>
+    <li><input type="text" placeholder="Message" class="message"></li>
+
+    <li class="nav-header">Severity</li>
+    <li>
+      {{#each severity}}
+      <label><input type="radio" name="severity" value="{{ . }}"> {{ . }}</label>
+      {{/each}}
+    </li>
+
+    <li class="nav-header">Start Date</li>
+    <li><input type="text" class="startDate" value="2014-12-12 09:23"></li>
+
+    <li class="nav-header">End Date</li>
+    <li><input type="text" class="endDate"></li>
+</ul>
             
+<button class="btn btn-primary">Create</button>

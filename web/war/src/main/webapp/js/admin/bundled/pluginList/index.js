@@ -1,15 +1,17 @@
 require([
     'configuration/admin/plugin',
     'util/formatters',
-    'util/withDataRequest'
+    'util/withDataRequest',
+    'util/withCollapsibleSections'
 ], function(
     defineLumifyAdminPlugin,
     F,
-    withDataRequest) {
+    withDataRequest,
+    withCollapsibleSections) {
     'use strict';
 
     return defineLumifyAdminPlugin(PluginList, {
-        mixins: [withDataRequest],
+        mixins: [withDataRequest, withCollapsibleSections],
         section: 'Plugin',
         name: 'List',
         subtitle: 'Loaded plugins'
@@ -61,7 +63,7 @@ require([
                         this.enter()
                             .append('section').attr('class', 'collapsible has-badge-number')
                             .call(function() {
-                                this.append('h1')
+                                this.append('h1').attr('class', 'collapsible-header')
                                     .call(function() {
                                         this.append('span').attr('class', 'badge');
                                         this.append('strong');
