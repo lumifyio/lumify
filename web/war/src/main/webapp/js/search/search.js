@@ -2,17 +2,19 @@ define([
     'require',
     'flight/lib/component',
     'hbs!./searchTpl',
-    'tpl!util/alert'
+    'tpl!util/alert',
+    'util/withDataRequest'
 ], function(
     require,
     defineComponent,
     template,
-    alertTemplate) {
+    alertTemplate,
+    withDataRequest) {
     'use strict';
 
     var SEARCH_TYPES = ['Lumify', 'Workspace'];
 
-    return defineComponent(Search);
+    return defineComponent(Search, withDataRequest);
 
     function Search() {
 
@@ -145,27 +147,35 @@ define([
         };
 
         this.onFiltersChange = function(event, data) {
-            var hadFilters = this.hasFilters();
+            var self = this,
+                hadFilters = this.hasFilters();
 
             this.filters = data;
 
             var query = this.getQueryVal(),
                 hasFilters = this.hasFilters();
 
-            if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
-                this.select('querySelector').val('*');
-            }
+            this.dataRequest('config', 'properties')
+                .done(function(properties) {
+                    if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
+                        if (properties['search.disableWildcardSearch'] === 'true') {
+                            return;
+                        } else {
+                            self.select('querySelector').val('*');
+                        }
+                    }
 
-            if (query || hasFilters || hadFilters) {
-                if (data.options && data.options.isScrubbing) {
-                    this.triggerQueryUpdatedThrottled();
-                } else {
-                    this.triggerQueryUpdated();
-                }
-                this.triggerQuerySubmit();
-            }
+                    if (query || hasFilters || hadFilters) {
+                        if (data.options && data.options.isScrubbing) {
+                            self.triggerQueryUpdatedThrottled();
+                        } else {
+                            self.triggerQueryUpdated();
+                        }
+                        self.triggerQuerySubmit();
+                    }
 
-            this.updateClearSearch();
+                    self.updateClearSearch();
+                });
         };
 
         this.onQueryChange = function(event) {
