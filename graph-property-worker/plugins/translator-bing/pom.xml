@@ -9,13 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-translator-bing</artifactId>
+    <artifactId>lumify-gpw-translator-bing</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Translator Bing</name>
 
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-translate</artifactId>
+            <artifactId>lumify-gpw-translate</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-translate</artifactId>
+    <artifactId>lumify-gpw-translate</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Translate Language Detection</name>
     <description>https://code.google.com/p/language-detection/</description>
 

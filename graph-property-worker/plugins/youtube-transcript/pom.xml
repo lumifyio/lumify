@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-youtube-transcript</artifactId>
+    <artifactId>lumify-gpw-youtube-transcript</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Youtube Transcript</name>
 
     <dependencies>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-mime-type-ontology-mapper</artifactId>
+    <artifactId>lumify-gpw-mime-type-ontology-mapper</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Mime Type Ontology Mapper</name>
 
     <dependencies>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-reindex</artifactId>
+    <artifactId>lumify-gpw-reindex</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Search Reindex</name>
 
     <dependencies>

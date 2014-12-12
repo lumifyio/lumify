@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-sphinx</artifactId>
+    <artifactId>lumify-gpw-sphinx</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Sphinx</name>
 
     <dependencies>

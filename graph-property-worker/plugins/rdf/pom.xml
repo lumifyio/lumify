@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-rdf</artifactId>
+    <artifactId>lumify-gpw-rdf</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: RDF</name>
 
     <properties>

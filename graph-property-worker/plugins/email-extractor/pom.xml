@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-email-extractor</artifactId>
+    <artifactId>lumify-gpw-email-extractor</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: E-Mail Address Extractor</name>
 
     <dependencies>

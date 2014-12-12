@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-tesseract</artifactId>
+    <artifactId>lumify-gpw-tesseract</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Tesseract</name>
 
     <properties>
