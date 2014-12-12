@@ -1170,16 +1170,30 @@ define([
         };
 
         // Delete entities before saving (faster feeling interface)
-        this.onUpdateWorkspace = function(event, data) {
+        this.onUpdateWorkspace = function(cy, event, data) {
             if (data && data.entityDeletes && data.entityDeletes.length) {
-                this.cytoscapeReady(function(cy) {
-                    cy.$(
-                        data.entityDeletes.map(function(vertexId) {
-                        return '#' + toCyId(vertexId);
-                    }).join(',')).remove();
+                cy.$(
+                    data.entityDeletes.map(function(vertexId) {
+                    return '#' + toCyId(vertexId);
+                }).join(',')).remove();
 
-                    this.setWorkspaceDirty();
-                    this.updateVertexSelections(cy);
+                this.setWorkspaceDirty();
+                this.updateVertexSelections(cy);
+            }
+            if (data && data.entityUpdates && data.entityUpdates.length && this.$node.closest('.visible').length) {
+                data.entityUpdates.forEach(function(entityUpdate) {
+                    if ('graphLayoutJson' in entityUpdate) {
+                        var projectedPosition = cy.renderer().projectIntoViewport(
+                            entityUpdate.graphLayoutJson.pagePosition.x,
+                            entityUpdate.graphLayoutJson.pagePosition.y
+                        );
+
+                        entityUpdate.graphPosition = retina.pixelsToPoints({
+                            x: projectedPosition[0],
+                            y: projectedPosition[1]
+                        });
+                        delete entityUpdate.graphLayoutJson;
+                    }
                 });
             }
         }
@@ -1424,9 +1438,11 @@ define([
 
             this.$node.html(loadingTemplate({}));
 
+            this.cytoscapeReady(function(cy) {
+                this.on(document, 'updateWorkspace', this.onUpdateWorkspace.bind(this, cy));
+            })
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
-            this.on(document, 'updateWorkspace', this.onUpdateWorkspace);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
             this.on(document, 'verticesHoveringEnded', this.onVerticesHoveringEnded);
             this.on(document, 'verticesDropped', this.onVerticesDropped);

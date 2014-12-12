@@ -1,7 +1,7 @@
 
 var require = {
     baseUrl: 'jsc',
-    waitSeconds: 30,
+    waitSeconds: 0,
     paths: {
         'arbor': '../libs/cytoscape.js/lib/arbor',
         'async' : '../libs/requirejs-plugins/src/async',

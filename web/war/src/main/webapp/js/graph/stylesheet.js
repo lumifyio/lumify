@@ -144,7 +144,12 @@ define([
 
     function load(styleReady) {
         defaultStyle();
-        styleReady(style);
+        require(['configuration/plugins/graphStyle/plugin'], function(GraphStylePlugin) {
+            GraphStylePlugin.stylers.forEach(function(styler) {
+                styler(style);
+            });
+            styleReady(style);
+        });
     }
 
 });

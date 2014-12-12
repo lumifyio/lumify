@@ -20,6 +20,68 @@ define([
 
     return defineComponent(Comments, withCollapsibleSections, withDataRequest, withPropertyInfo);
 
+    function toCommentTree(properties) {
+        var comments = _.chain(properties)
+                .where({ name: 'http://lumify.io/comment#entry' })
+                .sortBy(function(p) {
+                    return p.metadata['http://lumify.io#createDate'];
+                })
+                .value(),
+            maxDepth = 1,
+            total = comments.length,
+            userIds = _.unique(_.map(comments, function(c) {
+                return c.metadata['http://lumify.io#modifiedBy'];
+            })),
+            commentsByKey = _.indexBy(_.map(comments, function(c) {
+                return [c, []];
+            }), function(a) {
+                return a[0].key;
+            }),
+            rootComments = _.filter(comments, function(p) {
+                return !p.metadata['http://lumify.io/comment#path'];
+            }),
+            roots = [];
+
+        comments.forEach(function(comment) {
+            var path = comment.metadata['http://lumify.io/comment#path'];
+            if (path) {
+                var components = path.split('/');
+                maxDepth = Math.max(maxDepth, components.length + 1);
+                components.forEach(function(key, i, components) {
+                    var value = commentsByKey[key];
+                    if (!value) {
+                        total++;
+                        value = commentsByKey[key] = [{
+                            key: key,
+                            redacted: true,
+                            metadata: {
+                                'http://lumify.io#createDate': '',
+                                'http://lumify.io#modifiedDate': ''
+                            }
+                        }, []];
+                        if (i === 0) {
+                            roots.push(value);
+                        } else {
+                            commentsByKey[components[i - 1]][1].push(value);
+                        }
+                    }
+                    if (i === (components.length - 1)) {
+                        value[1].push(commentsByKey[comment.key]);
+                    }
+                });
+            } else {
+                roots.push(commentsByKey[comment.key])
+            }
+        });
+
+        return {
+            roots: roots,
+            userIds: userIds,
+            maxDepth: maxDepth,
+            total: total
+        };
+    }
+
     function Comments() {
 
         this.after('initialize', function() {
@@ -62,57 +124,82 @@ define([
             }
         };
 
-        this.update = function() {
-            var self = this,
-                comments = _.chain(this.attr.data.properties)
-                    .where({ name: 'http://lumify.io/comment#entry' })
-                    .sortBy(function(p) {
-                        return p.metadata['http://lumify.io#createDate'];
-                    })
-                    .value()
-                selection = d3.select(this.$node.find('.comment-content ul').get(0))
-                    .selectAll('.comment')
-                    .data(comments)
-                    .order();
+        this.renderCommentLevel = function(maxDepth, level, selection) {
+            var self = this;
 
-            this.$node.find('.collapsible .badge').text(
-                F.number.pretty(comments.length)
-            );
+            if (level >= maxDepth) {
+                return;
+            }
 
             selection.enter()
-                .append('li').attr('class', 'comment')
+                .append('li').attr('class', 'comment comment-' + level)
                 .call(function() {
-                    this.append('div').attr('class', 'comment-text')
-                    this.append('span').attr('class', 'visibility')
-                    this.append('span').attr('class', 'user')
-                    this.append('span').attr('class', 'date')
-                    this.append('button').attr('class', 'info')
+                    this.append('div').attr('class', 'wrap')
+                        .call(function() {
+                            this.append('div').attr('class', 'comment-text')
+                            this.append('span').attr('class', 'visibility')
+                            this.append('span').attr('class', 'user')
+                            this.append('span').attr('class', 'date')
+                            this.append('button').attr('class', 'info')
+                            this.append('button').attr('class', 'replies btn-link btn')
+                        })
+                    this.append('ul').attr('class', 'collapsed');
                 })
 
-            selection.select('.comment-text').text(function(p) {
-                return p.value;
-            });
+            selection.select('.comment-text')
+                .classed('redacted', function(p) {
+                    return p[0].redacted || false;
+                })
+                .each(function() {
+                    var p = d3.select(this).datum();
+                    if (p[0].redacted) {
+                        $(this).html(
+                            i18n('detail.comments.missing') +
+                            '<p>' +
+                            i18n('detail.comments.missing.explanation') +
+                            '</p>'
+                        );
+                    } else {
+                        $(this).html(_.escape('\n' + p[0].value).replace(/\r?\n+/g, '<p>'));
+                    }
+                });
             selection.select('.visibility').each(function(p) {
                 this.textContent = '';
+                if (p[0].redacted) {
+                    $(this).hide();
+                    return;
+                }
                 F.vertex.properties.visibility(
                     this,
-                    { value: p.metadata && p.metadata[VISIBILITY_NAME] },
+                    { value: p[0].metadata && p[0].metadata[VISIBILITY_NAME] },
                     self.attr.data.id
                 );
             })
-            var users = this.dataRequest('user', 'getUserNames', _.map(comments, function(p) {
-                return p.metadata['http://lumify.io#modifiedBy'];
-            }));
             selection.select('.user').each(function(p, i) {
-                var $this = $(this).text('Loading...');
-                users.done(function(users) {
-                    $this.text(users[i]);
-                })
+                var $this = $(this);
+                if (p[0].redacted) {
+                    $this.hide();
+                } else {
+                    var currentUserId = $this.data('userId'),
+                        newUserId = p[0].metadata['http://lumify.io#modifiedBy'],
+                        currentText = $this.text(),
+                        loading = i18n('detail.comments.user.loading');
+                    if ((!currentUserId || currentUserId === newUserId) &&
+                        (!currentText || currentText === loading)) {
+                        $this.data('userId', newUserId).text(loading);
+                    }
+                }
             });
             selection.select('.date')
+                .attr('style', function(p) {
+                    return p[0].redacted ? 'display:none' : undefined;
+                })
                 .text(function(p) {
-                    var created = p.metadata['http://lumify.io#createDate'],
-                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                    if (p[0].redacted) {
+                        return '';
+                    }
+                    var created = p[0].metadata['http://lumify.io#createDate'],
+                        modified = p[0].metadata['http://lumify.io#modifiedDate'],
                         edited = created !== modified,
                         relativeString = F.date.relativeToNow(F.date.utc(created));
 
@@ -122,8 +209,11 @@ define([
                     return relativeString;
                 })
                 .attr('title', function(p) {
-                    var created = p.metadata['http://lumify.io#createDate'],
-                        modified = p.metadata['http://lumify.io#modifiedDate'],
+                    if (p[0].redacted) {
+                        return '';
+                    }
+                    var created = p[0].metadata['http://lumify.io#createDate'],
+                        modified = p[0].metadata['http://lumify.io#modifiedDate'],
                         edited = created !== modified;
                     if (edited) {
                         return i18n(
@@ -134,17 +224,70 @@ define([
                     }
                     return F.date.dateTimeString(created);
                 });
-            selection.select('.info').on('click', function(property) {
-                self.showPropertyInfo(this, self.attr.data.id, property);
-            });
-
+            selection.select('.replies')
+                .attr('style', function(p) {
+                    if (p[1].length === 0) {
+                        return 'display:none';
+                    }
+                })
+                .text(function(p) {
+                    return F.string.plural(p[1].length, 'reply', 'replies');
+                })
+                .on('click', function(property) {
+                    $(this).toggleClass('open')
+                        .closest('li').children('ul').toggleClass('collapsed')
+                });
+            selection.select('.info')
+                .attr('style', function(p) {
+                    return p[0].redacted ? 'display:none' : undefined;
+                })
+                .on('click', function(property) {
+                    if (property[0].redacted) {
+                        return;
+                    }
+                    self.showPropertyInfo(this, self.attr.data.id, property[0]);
+                });
             selection.exit().remove();
 
-            this.$node.find('.collapsible-header').toggle(comments.length > 0);
+            var nextLevel = level + 1,
+                subselection = selection
+                    .select(function() {
+                        return $(this).children('ul')[0];
+                    })
+                    .selectAll('.comment-' + nextLevel)
+                    .data(function(p) {
+                        return p[1] || [];
+                    });
+
+            this.renderCommentLevel(maxDepth, nextLevel, subselection);
+        };
+
+        this.update = function() {
+            var self = this,
+                commentsTreeResponse = toCommentTree(this.attr.data.properties),
+                commentsTree = commentsTreeResponse.roots,
+                selection = d3.select(this.$node.find('.comment-content ul').get(0))
+                    .selectAll('.comment-0')
+                    .data(commentsTree)
+                    .order();
+
+            this.renderCommentLevel(commentsTreeResponse.maxDepth, 0, selection);
+            this.dataRequest('user', 'getUserNames', commentsTreeResponse.userIds)
+                .done(function(users) {
+                    var usersById = _.object(commentsTreeResponse.userIds, users);
+                    self.$node.find('.user').each(function() {
+                        $(this).text(usersById[$(this).data('userId')]);
+                    })
+                })
+
+            this.$node.find('.collapsible .badge').text(
+                F.number.pretty(commentsTreeResponse.total)
+            );
+            this.$node.find('.collapsible-header').toggle(commentsTreeResponse.total > 0);
         };
 
         this.onEditProperty = function(event, data) {
-            this.onEditComment(event, { comment: data.property });
+            this.onEditComment(event, { path: data.path, comment: data.property });
         };
 
         this.onDeleteProperty = function(event, data) {
@@ -159,15 +302,17 @@ define([
         this.onEditComment = function(event, data) {
             var root = $('<div class="underneath">'),
                 comment = data && data.comment,
+                path = data && data.path,
                 sourceInfo = data && data.sourceInfo,
-                commentRow = comment && $(event.target).closest('li');
+                commentRow = (comment || path) && $(event.target).closest('li').children('ul');
 
             this.$node.find('button.info').popover('hide');
 
             if (commentRow && commentRow.length) {
-                root.appendTo(
-                    $('<li></li>').css({ margin:0 }).insertAfter(commentRow)
-                );
+                root.insertBefore(commentRow)
+                if (path) {
+                    commentRow.removeClass('collapsed')
+                }
             } else {
                 root.appendTo(this.$node.find('.comment-content'));
             }
@@ -200,6 +345,7 @@ define([
             CommentForm.attachTo(root, {
                 data: this.attr.data,
                 type: this.attr.type,
+                path: path,
                 sourceInfo: sourceInfo,
                 comment: comment
             });
