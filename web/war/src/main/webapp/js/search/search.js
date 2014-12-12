@@ -159,6 +159,7 @@ define([
                 .done(function(properties) {
                     if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
                         if (properties['search.disableWildcardSearch'] === 'true') {
+                            self.updateClearSearch();
                             return;
                         } else {
                             self.select('querySelector').val('*');
