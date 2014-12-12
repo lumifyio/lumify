@@ -17,6 +17,7 @@ import io.lumify.web.routes.edge.*;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessById;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessCancel;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessDelete;
+import io.lumify.web.routes.notification.NotificationDelete;
 import io.lumify.web.routes.notification.Notifications;
 import io.lumify.web.routes.notification.SystemNotificationCreate;
 import io.lumify.web.routes.ontology.Ontology;
@@ -64,7 +65,8 @@ public class Router extends HttpServlet {
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 
             app.get("/notification/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, Notifications.class);
-            app.post("/notification/system/create", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationCreate.class);
+            app.delete("/notification", authenticator, csrfProtector, AdminPrivilegeFilter.class, NotificationDelete.class);
+            app.post("/notification/system", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationCreate.class);
 
             app.get("/resource", authenticator, csrfProtector, ReadPrivilegeFilter.class, ResourceGet.class);
             app.get("/map/marker/image", csrfProtector, MapMarkerImage.class);  // TODO combine with /resource

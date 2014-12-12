@@ -29,6 +29,8 @@ public abstract class SystemNotificationRepository {
             Date endDate
     );
 
+    public abstract SystemNotification getNotification(String rowKey, User user);
+
     public abstract SystemNotification updateNotification(SystemNotification notification);
 
     public abstract void endNotification(SystemNotification notification);

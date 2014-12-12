@@ -105,7 +105,19 @@ define(['require'], function(require) {
                 if (data && data.graphVertexId) {
                     socketHandlers.propertyChange(data);
                 }
-            }
+            },
+            systemNotification: function(data) {
+                dispatchMain('rebroadcastEvent', {
+                    eventName: 'notificationAdded',
+                    data: data
+                });
+            },
+            systemNotificationEnded: function(data) {
+                dispatchMain('rebroadcastEvent', {
+                    eventName: 'notificationDeleted',
+                    data: data
+                });
+            },
         };
 
     return function(data) {
