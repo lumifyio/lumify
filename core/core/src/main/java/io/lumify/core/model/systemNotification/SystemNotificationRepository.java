@@ -41,8 +41,8 @@ public abstract class SystemNotificationRepository {
         json.put("severity", notification.getSeverity().toString());
         json.put("title", notification.getTitle());
         json.put("message", notification.getMessage());
-        json.put("startDate", notification.getStartDate());
-        json.put("endDate", notification.getEndDate());
+        json.put("startDate", notification.getStartDate().getTime());
+        json.put("endDate", notification.getEndDate() == null ? null : notification.getEndDate().getTime());
         return json;
     }
 

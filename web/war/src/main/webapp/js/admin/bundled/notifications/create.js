@@ -23,6 +23,9 @@ require([
         })
 
         this.after('initialize', function() {
+            var self = this,
+                notification = this.attr.notification;
+
             this.on('change keyup paste', {
                 inputSelector: this.checkValid
             });
@@ -31,13 +34,28 @@ require([
                 buttonSelector: this.onCreate
             });
 
-            this.$node
-                .html(template({
-                    severity: 'INFORMATIONAL WARNING CRITICAL'.split(' ')
-                }))
-                .find('*[name=severity]').eq(0).prop('checked', true)
+            require(['util/formatters'], function(F) {
+                if (notification) {
+                    notification.startDate = F.date.dateTimeString(notification.startDate)
+                    if (notification.endDate) {
+                        notification.endDate = F.date.dateTimeString(notification.endDate)
+                    }
+                }
 
-            this.checkValid();
+                self.$node
+                    .html(template({
+                        buttonText: notification ? 'Update' : 'Create',
+                        severity: _.map('INFORMATIONAL WARNING CRITICAL'.split(' '), function(name, i) {
+                            return {
+                                name: name,
+                                checked: (notification && notification.severity === name) || i === 0
+                            }
+                        }),
+                        notification: notification || {}
+                    }))
+
+                self.checkValid();
+            })
         });
 
         this.checkValid = function() {
@@ -57,13 +75,19 @@ require([
         }
 
         this.getNotification = function() {
-            return {
+            var self = this;
+
+            return _.tap({
                 title: $.trim(this.$node.find('.title').val()),
                 message: $.trim(this.$node.find('.message').val()),
                 severity: this.$node.find('*[name=severity]:checked').val(),
                 startDate: $.trim(this.$node.find('.startDate').val()),
                 endDate: this.$node.find('.endDate').val()
-            };
+            }, function(newNotification) {
+                if (self.attr.notification) {
+                    newNotification.notificationId = self.attr.notification.id;
+                }
+            });
         }
 
         this.onCreate = function(event) {
@@ -75,6 +99,7 @@ require([
                         self.$node.find('*[name=severity]').eq(0).prop('checked', true)
                         self.select('inputSelector').val('');
                         self.showSuccess('Saved Notification');
+                        delete self.attr.notification;
                     })
                     .catch(function() {
                         self.showError();

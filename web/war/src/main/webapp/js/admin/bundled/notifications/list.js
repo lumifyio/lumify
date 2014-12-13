@@ -101,16 +101,21 @@ require([
                             this.enter()
                                 .append('li').attr('class', 'highlight-on-hover')
                                 .call(function() {
-                                    this.append('button')
-                                        .attr('class', 'show-on-hover btn btn-danger btn-small')
-                                        .text('Delete')
+                                    this.append('div').attr('class', 'show-on-hover')
+                                        .call(function() {
+                                            this.append('button')
+                                                .attr('class', 'btn btn-default btn-mini')
+                                                .text('Edit');
+                                            this.append('button')
+                                                .attr('class', 'btn btn-danger btn-mini')
+                                                .text('Delete');
+                                        })
                                     this.append('span').attr('class', 'nav-list-title')
                                     this.append('span').attr('class', 'nav-list-subtitle')
                                         .call(function() {
                                             this.append('span').attr('class', 'title')
                                             this.append('span').attr('class', 'dates')
                                         })
-                                    //this.append('dl')
                                 })
                             this.exit().remove();
 
@@ -130,11 +135,20 @@ require([
                             })
                             this.select('.nav-list-subtitle .dates').text(function(n) {
                                 if (n.endDate) {
-                                    return n.startDate + ' – ' + n.endDate;
+                                    return F.date.dateTimeString(n.startDate) +
+                                        ' – ' +
+                                        F.date.dateTimeString(n.endDate);
                                 }
-                                return n.startDate;
+                                return F.date.dateTimeString(n.startDate);
                             })
 
+                            this.select('.btn-default').on('click', function(n) {
+                                self.trigger('showAdminPlugin', {
+                                    section: 'System Notifications',
+                                    name: 'Create',
+                                    notification: n
+                                });
+                            })
                             this.select('.btn-danger').on('click', function(n) {
                                 var btn = $(this)
                                     .addClass('loading').attr('disabled', true);

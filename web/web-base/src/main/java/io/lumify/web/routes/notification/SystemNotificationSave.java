@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class SystemNotificationSave extends BaseRequestHandler {
     private final SystemNotificationRepository systemNotificationRepository;
@@ -48,6 +49,7 @@ public class SystemNotificationSave extends BaseRequestHandler {
         String message = getRequiredParameter(request, MESSAGE_PARAMETER_NAME);
         String startDateParameter = getRequiredParameter(request, START_DATE_PARAMETER_NAME);
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date startDate = sdf.parse(startDateParameter);
         String endDateParameter = getOptionalParameter(request, END_DATE_PARAMETER_NAME);
         Date endDate = endDateParameter != null ? sdf.parse(endDateParameter) : null;

@@ -76,7 +76,7 @@ define([
 
             form.teardownAllComponents()
                 .removePrefixedClasses('admin_less_cls');
-            component.Component.attachTo(form);
+            component.Component.attachTo(form, data);
 
             this.trigger(container, 'paneResized');
         };
