@@ -271,12 +271,12 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushSystemNotificationEnded(String rowKey) {
+    public void pushSystemNotificationEnded(String notificationId) {
         JSONObject json = new JSONObject();
         json.put("type", "systemNotificationEnded");
         JSONObject data = new JSONObject();
         json.put("data", data);
-        data.put("notificationId", rowKey);
+        data.put("notificationId", notificationId);
         broadcastJson(json);
     }
 

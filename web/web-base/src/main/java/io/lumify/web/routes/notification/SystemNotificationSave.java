@@ -15,9 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SystemNotificationCreate extends BaseRequestHandler {
+public class SystemNotificationSave extends BaseRequestHandler {
     private final SystemNotificationRepository systemNotificationRepository;
     private final WorkQueueRepository workQueueRepository;
+    private static final String ID_PARAMETER_NAME = "notificationId";
     private static final String SEVERITY_PARAMETER_NAME = "severity";
     private static final String TITLE_PARAMETER_NAME = "title";
     private static final String MESSAGE_PARAMETER_NAME = "message";
@@ -26,7 +27,7 @@ public class SystemNotificationCreate extends BaseRequestHandler {
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
     @Inject
-    public SystemNotificationCreate(
+    public SystemNotificationSave(
             final SystemNotificationRepository systemNotificationRepository,
             final WorkQueueRepository workQueueRepository,
             final UserRepository userRepository,
@@ -40,6 +41,7 @@ public class SystemNotificationCreate extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        String notificationId = getOptionalParameter(request, ID_PARAMETER_NAME);
         String severityParameter = getRequiredParameter(request, SEVERITY_PARAMETER_NAME);
         SystemNotificationSeverity severity = SystemNotificationSeverity.valueOf(severityParameter);
         String title = getRequiredParameter(request, TITLE_PARAMETER_NAME);
@@ -50,7 +52,19 @@ public class SystemNotificationCreate extends BaseRequestHandler {
         String endDateParameter = getOptionalParameter(request, END_DATE_PARAMETER_NAME);
         Date endDate = endDateParameter != null ? sdf.parse(endDateParameter) : null;
 
-        SystemNotification notification = systemNotificationRepository.createNotification(severity, title, message, startDate, endDate);
+        SystemNotification notification;
+
+        if (notificationId == null) {
+            notification = systemNotificationRepository.createNotification(severity, title, message, startDate, endDate);
+        } else {
+            notification = systemNotificationRepository.getNotification(notificationId, getUser(request));
+            notification.setSeverity(severity);
+            notification.setTitle(title);
+            notification.setMessage(message);
+            notification.setStartDate(startDate);
+            notification.setEndDate(endDate);
+            notification = systemNotificationRepository.updateNotification(notification);
+        }
 
         if (notification.isActive()) {
             workQueueRepository.pushSystemNotification(notification);

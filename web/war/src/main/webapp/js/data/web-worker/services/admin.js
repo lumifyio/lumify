@@ -52,7 +52,7 @@ define([
         },
 
         systemNotificationDelete: function(id) {
-            return ajax('DELETE', '/notification', {
+            return ajax('DELETE', '/notification/system', {
                 notificationId: id
             });
         },

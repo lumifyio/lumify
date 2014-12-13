@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class NotificationDelete extends BaseRequestHandler {
+public class SystemNotificationDelete extends BaseRequestHandler {
     private final SystemNotificationRepository systemNotificationRepository;
     private final WorkQueueRepository workQueueRepository;
     private static final String ID_PARAMETER_NAME = "notificationId";
 
     @Inject
-    public NotificationDelete(
+    public SystemNotificationDelete(
             final SystemNotificationRepository systemNotificationRepository,
             final WorkQueueRepository workQueueRepository,
             final UserRepository userRepository,
@@ -35,17 +35,16 @@ public class NotificationDelete extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String rowKey = getRequiredParameter(request, ID_PARAMETER_NAME);
+        String notificationId = getRequiredParameter(request, ID_PARAMETER_NAME);
 
-
-        SystemNotification notification = systemNotificationRepository.getNotification(rowKey, getUser(request));
+        SystemNotification notification = systemNotificationRepository.getNotification(notificationId, getUser(request));
         if (notification == null) {
             respondWithNotFound(response);
             return;
         }
 
         systemNotificationRepository.endNotification(notification);
-        workQueueRepository.pushSystemNotificationEnded(rowKey);
+        workQueueRepository.pushSystemNotificationEnded(notificationId);
 
         respondWithSuccessJson(response);
     }
