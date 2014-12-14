@@ -8,6 +8,8 @@ require([
     template) {
     'use strict';
 
+    var F;
+
     return defineLumifyAdminPlugin(PluginList, {
         mixins: [withDataRequest],
         section: 'System Notifications',
@@ -34,24 +36,29 @@ require([
                 buttonSelector: this.onCreate
             });
 
-            require(['util/formatters'], function(F) {
+            require(['util/formatters'], function(_F) {
+                F = _F;
                 if (notification) {
                     notification.startDate = F.date.dateTimeString(notification.startDate)
                     if (notification.endDate) {
                         notification.endDate = F.date.dateTimeString(notification.endDate)
                     }
+                } else {
+                    notification = {
+                        startDate: F.date.dateTimeString(new Date())
+                    }
                 }
 
                 self.$node
                     .html(template({
-                        buttonText: notification ? 'Update' : 'Create',
+                        buttonText: notification.id ? 'Update' : 'Create',
                         severity: _.map('INFORMATIONAL WARNING CRITICAL'.split(' '), function(name, i) {
                             return {
                                 name: name,
-                                checked: (notification && notification.severity === name) || i === 0
+                                checked: notification.severity === name || i === 0
                             }
                         }),
-                        notification: notification || {}
+                        notification: notification
                     }))
 
                 self.checkValid();
@@ -87,6 +94,12 @@ require([
                 if (self.attr.notification) {
                     newNotification.notificationId = self.attr.notification.id;
                 }
+                if (newNotification.startDate) {
+                    newNotification.startDate = F.date.dateTimeStringUtc(newNotification.startDate)
+                }
+                if (newNotification.endDate) {
+                    newNotification.endDate = F.date.dateTimeStringUtc(newNotification.endDate)
+                }
             });
         }
 
@@ -95,11 +108,17 @@ require([
             require(['util/formatters'], function(F) {
                 self.dataRequest('admin', 'systemNotificationCreate', self.getNotification())
                     .then(function() {
-                        self.$node.find('*[name=severity]:checked').removeAttr('checked');
-                        self.$node.find('*[name=severity]').eq(0).prop('checked', true)
-                        self.select('inputSelector').val('');
-                        self.showSuccess('Saved Notification');
-                        delete self.attr.notification;
+                        if (self.attr.notification) {
+                            self.trigger('showAdminPlugin', {
+                                section: 'System Notifications',
+                                name: 'List'
+                            });
+                        } else {
+                            self.$node.find('*[name=severity]:checked').removeAttr('checked');
+                            self.$node.find('*[name=severity]').eq(0).prop('checked', true)
+                            self.select('inputSelector').val('');
+                            self.showSuccess('Saved Notification');
+                        }
                     })
                     .catch(function() {
                         self.showError();

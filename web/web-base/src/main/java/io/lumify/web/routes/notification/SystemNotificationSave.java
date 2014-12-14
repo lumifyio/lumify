@@ -25,7 +25,7 @@ public class SystemNotificationSave extends BaseRequestHandler {
     private static final String MESSAGE_PARAMETER_NAME = "message";
     private static final String START_DATE_PARAMETER_NAME = "startDate";
     private static final String END_DATE_PARAMETER_NAME = "endDate";
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm 'UTC'";
 
     @Inject
     public SystemNotificationSave(
