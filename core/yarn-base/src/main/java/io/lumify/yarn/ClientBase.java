@@ -35,7 +35,7 @@ public abstract class ClientBase {
     @Parameter(names = {"-instances", "-i"}, description = "Number of instances to start.")
     private int instances = 1;
 
-    @Parameter(names = {"-jar"}, description = "Path to jar.")
+    @Parameter(names = {"-jar"}, description = "Path to jar.", required = true)
     private String jar = null;
 
     protected int run(String[] args) throws Exception {
