@@ -37,6 +37,9 @@ public abstract class ApplicationMasterBase implements AMRMClientAsync.CallbackH
     private List<Path> resources;
     private String classPathEnv;
     private int numContainersToWaitFor;
+    private Priority priority;
+    private Resource capability;
+    private AMRMClientAsync<AMRMClient.ContainerRequest> rmClient;
 
     protected void run(String[] args) throws Exception {
         System.out.println("BEGIN " + this.getClass().getName());
@@ -70,9 +73,9 @@ public abstract class ApplicationMasterBase implements AMRMClientAsync.CallbackH
 
         nmClient = createNodeManagerClient(conf);
 
-        AMRMClientAsync<AMRMClient.ContainerRequest> rmClient = createResourceManagerClient(conf);
+        rmClient = createResourceManagerClient(conf);
         rmClient.registerApplicationMaster("", 0, "");
-        makeContainerRequests(rmClient);
+        makeContainerRequests();
 
         System.out.println("[AM] waiting for containers to finish");
         while (!doneWithContainers()) {
@@ -107,29 +110,35 @@ public abstract class ApplicationMasterBase implements AMRMClientAsync.CallbackH
         return localResources;
     }
 
-    private void makeContainerRequests(AMRMClientAsync<AMRMClient.ContainerRequest> rmClient) {
-        Priority priority = createPriorityRecord();
-        Resource capability = createResourceRecord();
-
+    private void makeContainerRequests() {
         numContainersToWaitFor = instances;
         for (int i = 0; i < instances; ++i) {
-            AMRMClient.ContainerRequest containerAsk = new AMRMClient.ContainerRequest(capability, null, null, priority);
             System.out.println("Making res-req " + i);
-            rmClient.addContainerRequest(containerAsk);
+            makeContainerRequest();
         }
     }
 
-    private Resource createResourceRecord() {
-        Resource capability = Records.newRecord(Resource.class);
-        capability.setMemory(memory);
-        capability.setVirtualCores(virtualCores);
-        return capability;
+    private void makeContainerRequest() {
+        ensureCreatePriorityRecord();
+        ensureCreateResourceRecord();
+
+        AMRMClient.ContainerRequest containerAsk = new AMRMClient.ContainerRequest(capability, null, null, priority);
+        rmClient.addContainerRequest(containerAsk);
     }
 
-    private Priority createPriorityRecord() {
-        Priority priority = Records.newRecord(Priority.class);
-        priority.setPriority(0);
-        return priority;
+    private void ensureCreateResourceRecord() {
+        if (capability == null) {
+            capability = Records.newRecord(Resource.class);
+            capability.setMemory(memory);
+            capability.setVirtualCores(virtualCores);
+        }
+    }
+
+    private void ensureCreatePriorityRecord() {
+        if (priority == null) {
+            priority = Records.newRecord(Priority.class);
+            priority.setPriority(0);
+        }
     }
 
     private NMClient createNodeManagerClient(YarnConfiguration conf) {
@@ -149,9 +158,15 @@ public abstract class ApplicationMasterBase implements AMRMClientAsync.CallbackH
     @Override
     public void onContainersCompleted(List<ContainerStatus> statuses) {
         for (ContainerStatus status : statuses) {
-            System.out.println("[AM] Completed container " + status.getContainerId());
-            synchronized (this) {
-                numContainersToWaitFor--;
+            int exitStatus = status.getExitStatus();
+            System.out.println("[AM] Completed container " + status.getContainerId() + " (return code: " + exitStatus + ")");
+            if (exitStatus != ContainerExitStatus.SUCCESS) {
+                System.out.println("[AM] Restarting failed process (return code: " + exitStatus + ")");
+                makeContainerRequest();
+            } else {
+                synchronized (this) {
+                    numContainersToWaitFor--;
+                }
             }
         }
     }
