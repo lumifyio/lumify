@@ -19,7 +19,6 @@ public class GraphPropertyWorkerYarnTask extends TaskBase {
     }
 
     public void run() {
-        LOGGER.info("BEGIN Run");
         try {
             Configuration configuration = ConfigurationLoader.load();
             InjectHelper.ModuleMaker moduleMaker = LumifyBootstrap.bootstrapModuleMaker(configuration);
@@ -30,8 +29,6 @@ public class GraphPropertyWorkerYarnTask extends TaskBase {
             graphPropertyRunner.run();
         } catch (Exception ex) {
             throw new LumifyException("GraphPropertyRunner failed", ex);
-        } finally {
-            LOGGER.info("END Run");
         }
     }
 }
