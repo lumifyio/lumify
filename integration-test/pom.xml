@@ -45,77 +45,77 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-tika-mime-type</artifactId>
+            <artifactId>lumify-gpw-tika-mime-type</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-tika-text-extractor</artifactId>
+            <artifactId>lumify-gpw-tika-text-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-phone-number-extractor</artifactId>
+            <artifactId>lumify-gpw-phone-number-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-opennlp-dictionary-extractor</artifactId>
+            <artifactId>lumify-gpw-opennlp-dictionary-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-opennlp-me-extractor</artifactId>
+            <artifactId>lumify-gpw-opennlp-me-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-email-extractor</artifactId>
+            <artifactId>lumify-gpw-email-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-zipcode-extractor</artifactId>
+            <artifactId>lumify-gpw-zipcode-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-csv</artifactId>
+            <artifactId>lumify-gpw-csv</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-rdf</artifactId>
+            <artifactId>lumify-gpw-rdf</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-ccextractor</artifactId>
+            <artifactId>lumify-gpw-ccextractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-youtube-transcript</artifactId>
+            <artifactId>lumify-gpw-youtube-transcript</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-subrip-transcript</artifactId>
+            <artifactId>lumify-gpw-subrip-transcript</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-mime-type-ontology-mapper</artifactId>
+            <artifactId>lumify-gpw-mime-type-ontology-mapper</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-opencv-object-detector</artifactId>
+            <artifactId>lumify-gpw-opencv-object-detector</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-tesseract</artifactId>
+            <artifactId>lumify-gpw-tesseract</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -125,12 +125,12 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-clavin</artifactId>
+            <artifactId>lumify-gpw-clavin</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-zipcode-resolver</artifactId>
+            <artifactId>lumify-gpw-zipcode-resolver</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

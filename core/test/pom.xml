@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-format</artifactId>
+            <artifactId>lumify-tools-format</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

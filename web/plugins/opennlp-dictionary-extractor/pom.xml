@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-opennlp-dictionary-extractor</artifactId>
+            <artifactId>lumify-gpw-opennlp-dictionary-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
