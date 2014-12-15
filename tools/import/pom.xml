@@ -9,7 +9,7 @@
         <version>0.4.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>lumify-import</artifactId>
+    <artifactId>lumify-tools-import</artifactId>
     <packaging>jar</packaging>
 
     <name>Lumify: Tools: Import</name>

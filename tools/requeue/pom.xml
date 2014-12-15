@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-tools-format</artifactId>
+    <artifactId>lumify-tools-requeue</artifactId>
     <packaging>jar</packaging>
-    <name>Lumify: Tools: Format</name>
+    <name>Lumify: Tools: Requeue</name>
 
     <dependencies>
         <dependency>
@@ -70,7 +70,7 @@
                     <descriptor>src/main/assembly/descriptor.xml</descriptor>
                     <archive>
                         <manifest>
-                            <mainClass>io.lumify.tools.format.FormatLumify</mainClass>
+                            <mainClass>io.lumify.tools.Requeue</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -24,5 +24,6 @@
         <module>format</module>
         <module>rdf-import</module>
         <module>assign-image-mr</module>
+        <module>requeue</module>
     </modules>
 </project>
