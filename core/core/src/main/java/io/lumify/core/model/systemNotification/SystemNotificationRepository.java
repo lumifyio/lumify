@@ -1,14 +1,18 @@
 package io.lumify.core.model.systemNotification;
 
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +39,16 @@ public abstract class SystemNotificationRepository {
 
     public abstract void endNotification(SystemNotification notification);
 
+    private static String hash(String s) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] md5 = digest.digest(s.getBytes());
+            return Hex.encodeHexString(md5);
+        } catch (NoSuchAlgorithmException e) {
+            throw new LumifyException("Could not find MD5", e);
+        }
+    }
+
     public static JSONObject toJSONObject(SystemNotification notification) {
         JSONObject json = new JSONObject();
         json.put("id", notification.getId());
@@ -43,6 +57,7 @@ public abstract class SystemNotificationRepository {
         json.put("message", notification.getMessage());
         json.put("startDate", notification.getStartDate().getTime());
         json.put("endDate", notification.getEndDate() == null ? null : notification.getEndDate().getTime());
+        json.put("hash", hash(json.toString()));
         return json;
     }
 
