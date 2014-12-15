@@ -53,7 +53,7 @@
 
         <!-- Dependency Versions -->
         <accumulo.version>1.6.1</accumulo.version>
-        <altamira.bigtable.version>0.5.0</altamira.bigtable.version>
+        <altamira.bigtable.version>0.5.1-SNAPSHOT</altamira.bigtable.version>
         <miniweb.version>0.5.1</miniweb.version>
         <ant.version>1.4.1</ant.version>
         <atmosphere.version>2.2.3</atmosphere.version>
@@ -542,6 +542,16 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-nosql</artifactId>
                 <version>${jetty.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-server</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mongodb</groupId>
+                        <artifactId>mongo-java-driver</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty.websocket</groupId>
