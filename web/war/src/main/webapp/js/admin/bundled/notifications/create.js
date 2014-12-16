@@ -117,6 +117,7 @@ require([
                             self.$node.find('*[name=severity]:checked').removeAttr('checked');
                             self.$node.find('*[name=severity]').eq(0).prop('checked', true)
                             self.select('inputSelector').val('');
+                            self.$node.find('.startDate').val(F.date.dateTimeString(new Date()));
                             self.showSuccess('Saved Notification');
                         }
                     })

@@ -108,7 +108,13 @@ define(['require'], function(require) {
             },
             systemNotification: function(data) {
                 dispatchMain('rebroadcastEvent', {
-                    eventName: 'notificationAdded',
+                    eventName: 'notificationActive',
+                    data: data
+                });
+            },
+            systemNotificationUpdated: function(data) {
+                dispatchMain('rebroadcastEvent', {
+                    eventName: 'notificationUpdated',
                     data: data
                 });
             },

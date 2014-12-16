@@ -23,7 +23,8 @@ require([
                     .addClass('badge loading')
                     .appendTo(this.$node.empty().addClass('notificationList'));
 
-            this.on(document, 'notificationAdded', this.onNotificationAdded);
+            this.on(document, 'notificationActive', this.onNotificationUpdated);
+            this.on(document, 'notificationUpdated', this.onNotificationUpdated);
             this.on(document, 'notificationDeleted', this.onNotificationDeleted);
 
             this.before('render', function() {
@@ -35,8 +36,24 @@ require([
             this.update();
         });
 
-        this.onNotificationAdded = function(event, data) {
-            this.update();
+        this.onNotificationUpdated = function(event, data) {
+            var currentIndex = -1;
+            _.each(this.notifications, function(n, i) {
+                if (n.id === data.notification.id) {
+                    currentIndex = i;
+                }
+            });
+
+            if (event.type === 'notificationActive') {
+                data.notification.active = true;
+            }
+
+            if (currentIndex >= 0) {
+                this.notifications.splice(currentIndex, 1, data.notification);
+            } else {
+                this.notifications.push(data.notification);
+            }
+            this.render();
         };
 
         this.onNotificationDeleted = function(event, data) {
@@ -46,24 +63,37 @@ require([
         this.update = function() {
             var self = this;
 
-            Promise.all([
-                this.dataRequest('admin', 'systemNotificationList'),
-                Promise.require('d3'),
-                Promise.require('util/formatters')
-            ]).done(function(results) {
-                var response = results.shift(),
-                    d3 = results.shift(),
-                    F = results.shift();
-                self.render(response, d3, F);
-            });
+            this.dataRequest('notification', 'systemNotificationList')
+                .done(function(response) {
+                    self.notifications = response.system.active.concat(response.system.future);
+                    self.render();
+                });
         }
 
-        this.render = function(response, d3, F) {
-            var self = this;
+        this.render = function(d3, F) {
+            var self = this,
+                now = Date.now();
+
+            if (!d3 || !F) {
+                return require(['d3', 'util/formatters'], function(d3, F) {
+                    self.render(d3, F);
+                })
+            }
+
+            if (this.notifications.length) {
+                this.$node.find('.none').remove();
+            } else {
+                $('<div>').addClass('none')
+                    .text('No Notications')
+                    .appendTo(this.node);
+            }
 
             d3.select(this.node)
                 .selectAll('section.collapsible')
-                .data(_.chain(response.system)
+                .data(_.chain(this.notifications)
+                      .groupBy(function(n) {
+                          return n.active || n.startDate <= now ? 'Active' : 'Future';
+                      })
                       .pairs()
                       .sortBy(function(p) {
                           return p[0];

@@ -1,0 +1,100 @@
+@import '../util/constants';
+@import '../util/selection';
+//@import (reference) '../libs/bootstrap/less/mixins';
+
+.notifications {
+  @padding: 10px;
+  position: absolute;
+  left: @menubar-width + @padding;
+  top: @padding;
+  cursor: pointer;
+  .above-graph(2);
+  .disable-text-selection;
+
+  .notification {
+    list-style: none;
+    background: fadeout(black, 40%);
+    color: white;
+    padding: 0.5em 1em;
+    margin: 0.5em 0;
+    padding-right: 3em;
+    &:first-child {
+      margin-top: 0;
+    }
+    position: relative;
+    border-radius: 4px;
+
+    h1, h2 {
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+      line-height: 1.5em;
+      .regular-font;
+      text-shadow: 0 1px solid black;
+    }
+
+    h1 {
+      font-size: 100%;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 90%;
+    }
+
+    button {
+      position: absolute;
+      right: 0.5em;
+      top: 50%;
+      background: url(../img/glyphicons/glyphicons_192_circle_remove@2x.png);
+      border: 0;
+      width: 20px;
+      height: 20px;
+      background-size: contain;
+      margin-left: -10px;
+      margin-top: -10px;
+      .opacity(40);
+    }
+    &:hover {
+      button {
+        .opacity(60);
+      }
+    }
+
+    .theme(@color: orange) {
+      #gradient > .vertical-three-colors(lighten(@color, 15%), @color, 90%, darken(@color, 5%));
+
+      color: darken(@color, 40%);
+      text-shadow: 0 1px 2px lighten(@color, 20%);
+
+      /*color: lighten(@color, 70%);*/
+      /*text-shadow: 0 1px 1px darken(@color, 10%);*/
+
+      .box-shadow(0 1px 10px fadeout(darken(@color, 0%), 70%));
+      h2 {
+        //color: lighten(@color, 40%);
+      }
+    }
+
+    //@orange: fadeout(lighten(@blue-color, 5%), 30%); //rgba(255, 165, 0, 70%);
+    @orange: fadeout(
+               lighten(
+                 @blue-color,
+                 10%),
+               30%
+             );
+    &.critical {
+      @red: fadeout(
+               lighten(
+                desaturate(@blue-color, 30%),
+                 10%),
+               30%
+             );
+      .theme(spin(@red, 160));
+    }
+    &.warning {
+      .theme(spin(@orange, 200));
+    }
+  }
+
+}

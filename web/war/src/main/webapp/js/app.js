@@ -200,7 +200,7 @@ define([
                     var oe = e.originalEvent;
                     if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
                         $(document.body).off(TRANSITION_END);
-                        self.trigger('loadCurrentWorkspace');
+                        self.applicationLoaded();
                         graphPane.focus();
                     }
                 });
@@ -208,7 +208,7 @@ define([
                     $(document.body).addClass('animateloginstart');
                 })
             } else {
-                this.trigger('loadCurrentWorkspace');
+                this.applicationLoaded();
             }
 
             _.delay(function() {
@@ -221,6 +221,18 @@ define([
                 }
             }, 500);
         });
+
+        this.applicationLoaded = function() {
+            var self = this;
+
+            this.on(document, 'workspaceLoaded', function handler() {
+                self.off(document, 'workspaceLoaded', handler);
+                require(['notifications/notifications'], function(Notifications) {
+                    Notifications.attachTo(self.$node);
+                });
+            })
+            this.trigger('loadCurrentWorkspace');
+        };
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;

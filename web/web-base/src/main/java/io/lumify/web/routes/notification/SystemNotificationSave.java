@@ -70,6 +70,8 @@ public class SystemNotificationSave extends BaseRequestHandler {
 
         if (notification.isActive()) {
             workQueueRepository.pushSystemNotification(notification);
+        } else {
+            workQueueRepository.pushSystemNotificationUpdate(notification);
         }
 
         respondWithSuccessJson(response);

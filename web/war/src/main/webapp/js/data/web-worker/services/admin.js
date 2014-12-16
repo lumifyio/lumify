@@ -47,10 +47,6 @@ define([
             return ajax('POST', '/notification/system', options);
         },
 
-        systemNotificationList: function() {
-            return ajax('GET', '/notification/all');
-        },
-
         systemNotificationDelete: function(id) {
             return ajax('DELETE', '/notification/system', {
                 notificationId: id
