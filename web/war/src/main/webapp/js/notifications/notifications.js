@@ -47,16 +47,30 @@ define([
 
         this.displayNotifications = function(notifications) {
             var self = this,
-                now = Date.now(),
                 shouldDisplay = notifications && _.filter(notifications, function(n) {
-                    if (self.userDismissed[n.id] && self.userDismissed[n.id] === n.hash) {
+                    if (self.attr.showUserDismissed !== true &&
+                        self.userDismissed[n.id] && self.userDismissed[n.id] === n.hash) {
                         return false;
                     }
-                    return n.severity !== 'INFORMATIONAL';
+                    return self.attr.showInformational === true || n.severity !== 'INFORMATIONAL';
                 });
 
             if (shouldDisplay && shouldDisplay.length) {
-                this.stack = this.stack.concat(shouldDisplay);
+                shouldDisplay.forEach(function(updated) {
+                    var index = -1;
+                    self.stack.forEach(function(n, i) {
+                        if (n.id === updated.id) {
+                            index = i;
+                        }
+                    });
+
+                    if (index >= 0) {
+                        self.stack.splice(index, 1, updated);
+                    } else {
+                        self.stack.push(updated);
+                    }
+                })
+                this.trigger('notificationCountUpdated', { count: this.stack.length });
                 this.update();
             }
         };
@@ -87,21 +101,28 @@ define([
                             .call(function() {
                                 this.append('h1')
                                 this.append('h2')
-                                this.append('button')
+                                if (self.attr.allowDismiss !== false) {
+                                    this.append('button')
+                                }
                             })
 
-                    this.on('click', function(clicked) {
-                        self.stack = _.reject(self.stack, function(n) {
-                            return n.id === clicked.id;
-                        });
-                        self.setUserDismissed(clicked.id, clicked.hash);
-                        self.update();
-                    })
+                    if (self.attr.allowDismiss !== false) {
+                        this.on('click', function(clicked) {
+                            self.stack = _.reject(self.stack, function(n) {
+                                return n.id === clicked.id;
+                            });
+                            self.setUserDismissed(clicked.id, clicked.hash);
+                            self.update();
+                        })
+                    }
                     this.classed('critical', function(n) {
                         return (/CRITICAL/i).test(n.severity);
                     })
                     this.classed('warning', function(n) {
                         return (/WARNING/i).test(n.severity);
+                    });
+                    this.classed('info', function(n) {
+                        return (/INFO/i).test(n.severity);
                     });
                     this.select('h1').text(function(n) {
                         return n.title
@@ -110,11 +131,15 @@ define([
                         return n.message
                     });
 
-                    newOnes.transition()
-                        .delay(function(d, i) {
-                            return i / newOnes.size() * 100 + 100;
-                        })
-                        .duration(750)
+                    if (self.attr.animated !== false) {
+                        newOnes = newOnes.transition()
+                            .delay(function(d, i) {
+                                return i / newOnes.size() * 100 + 100;
+                            })
+                            .duration(750)
+                    }
+
+                    newOnes
                         .style('left', '0px')
                         .style('opacity', 1)
 
@@ -123,20 +148,23 @@ define([
 
                     self.$container.css('min-width', self.$container.width() + 'px');
 
-                    exiting
-                        .style('left', '0px')
-                        .transition()
-                        .delay(function(d, i) {
-                            if (exitingSize === 1) {
-                                return 0;
-                            } else {
-                                return (exitingSize - 1 - i) / exitingSize * 100 + 100;
-                            }
-                        })
-                        .duration(500)
-                        .style('left', '-50px')
-                        .style('opacity', 0)
-                        .remove()
+                    if (self.attr.animated !== false) {
+                        exiting = exiting
+                            .style('left', '0px')
+                            .transition()
+                            .delay(function(d, i) {
+                                if (exitingSize === 1) {
+                                    return 0;
+                                } else {
+                                    return (exitingSize - 1 - i) / exitingSize * 100 + 100;
+                                }
+                            })
+                            .duration(500)
+                            .style('left', '-50px')
+                            .style('opacity', 0)
+                    }
+
+                    exiting.remove()
                 });
 
         };

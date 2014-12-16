@@ -188,7 +188,6 @@ define([
 
             $(document.body).toggleClass('animatelogin', !!this.attr.animateFromLogin)
 
-            // Open Page to Dashboard
             this.trigger(document, 'menubarToggleDisplay', { name: graphPane.data(DATA_MENUBAR_NAME) });
 
             this.setupWindowResizeTrigger();
