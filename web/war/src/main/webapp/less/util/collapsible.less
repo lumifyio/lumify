@@ -20,7 +20,7 @@
 .collapsible {
   @color: #999;
 
-  h1 {
+  & > h1 {
     .badge {      
       position: absolute;
       right: 1ex;
@@ -37,7 +37,7 @@
   }
 
   &.expanded {
-    h1 {
+    & > h1 {
       .twizzle-expand;
     }
     & > div, .collapsible-section {
@@ -61,7 +61,7 @@
     display: none;
   }
 
-  h1, .collapsible-header {
+  & > h1, .collapsible-header {
     font-size: 100%;
     padding: 0.25em 1em;
     margin: 0;

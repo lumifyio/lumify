@@ -265,7 +265,27 @@ public abstract class WorkQueueRepository {
     public void pushSystemNotification(SystemNotification notification) {
         JSONObject json = new JSONObject();
         json.put("type", "systemNotification");
-        json.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
+    public void pushSystemNotificationUpdate(SystemNotification notification) {
+        JSONObject json = new JSONObject();
+        json.put("type", "systemNotificationUpdated");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
+    public void pushSystemNotificationEnded(String notificationId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "systemNotificationEnded");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notificationId", notificationId);
         broadcastJson(json);
     }
 

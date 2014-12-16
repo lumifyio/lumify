@@ -81,6 +81,12 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
     }
 
     @Override
+    public SystemNotification getNotification(String rowKey, User user) {
+        Session session = sessionManager.getSession();
+        return (SystemNotification) session.byId(rowKey).getReference(SystemNotification.class);
+    }
+
+    @Override
     public void endNotification(SystemNotification notification) {
         Session session = sessionManager.getSession();
         notification.setEndDate(new Date());

@@ -61,6 +61,11 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
     }
 
     @Override
+    public SystemNotification getNotification(String rowKey, User user) {
+        return repository.findByRowKey(rowKey, user.getModelUserContext());
+    }
+
+    @Override
     public BigTableSystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, Date startDate, Date endDate) {
         if (startDate == null) {
             startDate = new Date();
