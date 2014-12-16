@@ -11,6 +11,7 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.userDismissed = {};
             this.stack = [];
 
             this.on(document, 'notificationActive', this.onNotificationActive);
@@ -40,6 +41,9 @@ define([
             var self = this,
                 now = Date.now(),
                 shouldDisplay = notifications && _.filter(notifications, function(n) {
+                    if (self.userDismissed[n.id] && self.userDismissed[n.id] === n.hash) {
+                        return false;
+                    }
                     return n.severity !== 'INFORMATIONAL';
                 });
 
@@ -73,6 +77,7 @@ define([
                         self.stack = _.reject(self.stack, function(n) {
                             return n.id === clicked.id;
                         });
+                        self.userDismissed[clicked.id] = clicked.hash;
                         self.update();
                     })
                     this.classed('critical', function(n) {

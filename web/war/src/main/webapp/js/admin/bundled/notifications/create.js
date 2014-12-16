@@ -116,8 +116,9 @@ require([
                         } else {
                             self.$node.find('*[name=severity]:checked').removeAttr('checked');
                             self.$node.find('*[name=severity]').eq(0).prop('checked', true)
-                            self.select('inputSelector').val('');
+                            self.$node.find('.title,.message,.startDate,.endDate').val('');
                             self.$node.find('.startDate').val(F.date.dateTimeString(new Date()));
+                            self.checkValid();
                             self.showSuccess('Saved Notification');
                         }
                     })

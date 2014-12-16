@@ -23,6 +23,8 @@ require([
                     .addClass('badge loading')
                     .appendTo(this.$node.empty().addClass('notificationList'));
 
+            this.notifications = [];
+
             this.on(document, 'notificationActive', this.onNotificationUpdated);
             this.on(document, 'notificationUpdated', this.onNotificationUpdated);
             this.on(document, 'notificationDeleted', this.onNotificationDeleted);
