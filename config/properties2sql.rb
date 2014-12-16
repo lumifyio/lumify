@@ -20,7 +20,7 @@ ARGV.each do |arg|
   if File.exist?(arg)
     File.open(arg, 'r') do |file|
       file.each_line do |line|
-        next if line.match(/\s*#|^\s*$/)
+        next if line.match(/^\s*#|^\s*$/)
         line.chomp!
         i = line.index(/:|=/)
         k = "#{key_prefix}.#{line[0..i-1]}"
