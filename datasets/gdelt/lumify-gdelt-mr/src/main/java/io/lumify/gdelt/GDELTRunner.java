@@ -32,7 +32,7 @@ public class GDELTRunner extends Configured implements Tool {
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
 //        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));
 
-        Job job = new Job(conf, "GDELTImport");
+        Job job = Job.getInstance(conf, "GDELTImport");
 
         String instanceName = accumuloGraphConfiguration.getAccumuloInstanceName();
         String zooKeepers = accumuloGraphConfiguration.getZookeeperServers();

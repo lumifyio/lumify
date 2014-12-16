@@ -62,7 +62,7 @@ public class ImportMR extends Configured implements Tool {
         verifyFriendsterUserConcept(ontologyRepository);
         verifyFriendsterUserToUserRelationship(ontologyRepository);
 
-        Job job = new Job(conf, "friendsterImport");
+        Job job = Job.getInstance(conf, "friendsterImport");
 
         String instanceName = accumuloGraphConfiguration.getAccumuloInstanceName();
         String zooKeepers = accumuloGraphConfiguration.getZookeeperServers();
