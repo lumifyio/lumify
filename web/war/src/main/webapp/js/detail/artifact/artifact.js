@@ -78,7 +78,7 @@ define([
 
             this.before('teardown', function() {
                 self.$node.off('.detectedObject');
-            })
+            });
 
             // Replace function to handle json transcripts
             this.processArtifactText = this.artifactTextHandler;
@@ -181,12 +181,12 @@ define([
                 ]
             });
 
-            this.update()
-            this.updateText();
-
             if (this[displayType + 'Setup']) {
                 this[displayType + 'Setup'](this.attr.data);
             }
+
+            this.update();
+            this.updateText();
         };
 
         this.update = function() {
@@ -202,6 +202,9 @@ define([
         };
 
         this.updateDetectedObjects = function() {
+            if (this.ignoreDetectedObjects) {
+                return;
+            }
             var self = this,
                 vertex = this.attr.data,
                 wasResolved = {},
@@ -238,7 +241,7 @@ define([
                         this.enter()
                             .append('span')
                             .attr('class', 'detected-object-tag')
-                            .append('a')
+                            .append('a');
 
                         this
                             .sort(function(a, b) {
@@ -359,7 +362,7 @@ define([
                 propertyKey = $target.closest('.label-info').data('propertyKey'),
                 property = F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
 
-            this.$node.find('.focused').removeClass('focused')
+            this.$node.find('.focused').removeClass('focused');
             $target.closest('.detected-object').parent().addClass('focused');
 
             require(['util/actionbar/actionbar'], function(ActionBar) {
@@ -426,7 +429,7 @@ define([
 
             if ((this.$node.width() * width) < 5 ||
                 (this.$node.height() * height) < 5) {
-                this.$node.find('.underneath').teardownComponent(TermForm)
+                this.$node.find('.underneath').teardownComponent(TermForm);
                 return;
             }
 
@@ -450,7 +453,7 @@ define([
         };
 
         this.onTeardownDropdowns = function() {
-            this.$node.find('.detected-object-labels .focused').removeClass('focused')
+            this.$node.find('.detected-object-labels .focused').removeClass('focused');
             this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectDoneEditing');
         };
 
@@ -474,7 +477,7 @@ define([
         };
 
         this.videoSetup = function(vertex) {
-            this.select('detectedObjectLabelsSelector').hide();
+            this.ignoreDetectedObjects = true;
             VideoScrubber.attachTo(this.select('previewSelector'), {
                 rawUrl: F.vertex.raw(vertex),
                 posterFrameUrl: F.vertex.image(vertex),
@@ -497,7 +500,7 @@ define([
         };
 
         this.showForm = function(dataInfo, $target) {
-            this.$node.find('.underneath').teardownComponent(TermForm)
+            this.$node.find('.underneath').teardownComponent(TermForm);
             var root = $('<div class="underneath">');
 
             if (dataInfo.isNew) {
