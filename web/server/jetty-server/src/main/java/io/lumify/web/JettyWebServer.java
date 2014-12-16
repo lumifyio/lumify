@@ -1,7 +1,9 @@
 package io.lumify.web;
 
+import com.altamiracorp.bigtable.jetty.BigTableSessionHandler;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.session.LumifyBigTableJettySessionManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -71,6 +73,7 @@ public class JettyWebServer extends WebServer {
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath(this.getContextPath());
         webAppContext.setWar(this.getWebAppDir());
+        webAppContext.setSessionHandler(new BigTableSessionHandler(new LumifyBigTableJettySessionManager()));
         webAppContext.getSessionHandler().getSessionManager().setMaxInactiveInterval(super.getSessionTimeout() * 60);
         LOGGER.info("getMaxInactiveInterval() is %d seconds", webAppContext.getSessionHandler().getSessionManager().getMaxInactiveInterval());
 

@@ -54,7 +54,7 @@
         <!-- Dependency Versions -->
         <accumulo.version>1.6.1</accumulo.version>
         <altamira.bigtable.version>0.5.1-SNAPSHOT</altamira.bigtable.version>
-        <miniweb.version>0.5.1-SNAPSHOT</miniweb.version>
+        <miniweb.version>0.5.1</miniweb.version>
         <ant.version>1.4.1</ant.version>
         <atmosphere.version>2.2.3</atmosphere.version>
         <commons.beanutils.version>1.9.1</commons.beanutils.version>

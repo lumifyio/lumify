@@ -16,7 +16,7 @@ function _configure_splits {
   local prefix=$2
 
   local filename=$(_write_split_file ${prefix})
-  /usr/lib/accumulo/bin/accumulo shell -u root -p password -e "addsplits -t ${tablename} -sf ${filename}"
+  /opt/accumulo/bin/accumulo shell -u root -p password -e "addsplits -t ${tablename} -sf ${filename}"
   rm -f ${filename}
 }
 
