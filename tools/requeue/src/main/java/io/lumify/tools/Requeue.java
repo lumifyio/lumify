@@ -28,7 +28,8 @@ public class Requeue extends CommandLineBase {
                 OptionBuilder
                         .withLongOpt(OPT_PROPERTYNAME)
                         .withDescription("The name of the property to requeue")
-                        .create("pn")
+                        .hasArg()
+                        .create("p")
         );
 
         return options;
@@ -38,6 +39,7 @@ public class Requeue extends CommandLineBase {
     protected int run(CommandLine cmd) throws Exception {
         String propertyName = cmd.getOptionValue(OPT_PROPERTYNAME);
 
+        System.out.println("requeue all vertices (property: " + propertyName + ")");
         LOGGER.info("requeue all vertices (property: %s)", propertyName);
         int count = 0;
         int pushedCount = 0;
