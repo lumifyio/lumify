@@ -11,7 +11,15 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.userDismissed = {};
+            if ('localStorage' in window) {
+                var previouslyDismissed = localStorage.getItem('notificationsDismissed');
+                if (previouslyDismissed) {
+                    this.userDismissed = JSON.parse(previouslyDismissed);
+                }
+            }
+            if (!this.userDismissed) {
+                this.userDismissed = {};
+            }
             this.stack = [];
 
             this.on(document, 'notificationActive', this.onNotificationActive);
@@ -53,6 +61,15 @@ define([
             }
         };
 
+        this.setUserDismissed = function(notificationId, notificationHash) {
+            this.userDismissed[notificationId] = notificationHash;
+            try {
+                if ('localStorage' in window) {
+                    localStorage.setItem('notificationsDismissed', JSON.stringify(this.userDismissed));
+                }
+            } catch(e) { }
+        };
+
         this.update = function() {
             var self = this;
 
@@ -77,7 +94,7 @@ define([
                         self.stack = _.reject(self.stack, function(n) {
                             return n.id === clicked.id;
                         });
-                        self.userDismissed[clicked.id] = clicked.hash;
+                        self.setUserDismissed(clicked.id, clicked.hash);
                         self.update();
                     })
                     this.classed('critical', function(n) {
