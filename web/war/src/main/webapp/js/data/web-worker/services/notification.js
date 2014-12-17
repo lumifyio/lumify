@@ -5,7 +5,7 @@ define([
     'use strict';
 
     var api = {
-        systemNotificationList: function() {
+        list: function() {
             return ajax('GET', '/notification/all');
         }
     };

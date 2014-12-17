@@ -34,10 +34,10 @@ public class BigTableUserNotificationRepository extends UserNotificationReposito
         Date now = new Date();
         List<UserNotification> activeNotifications = new ArrayList<UserNotification>();
         for (UserNotification notification : repository.findAll(user.getModelUserContext())) {
-            if (notification.getSentDate().before(now)) {
-                if (notification.isActive()) {
-                    activeNotifications.add(notification);
-                }
+            if (user.getUserId().equals(notification.getUser()) &&
+                    notification.getSentDate().before(now) &&
+                    notification.isActive()) {
+                activeNotifications.add(notification);
             }
         }
         LOGGER.debug("returning %d active user notifications", activeNotifications.size());

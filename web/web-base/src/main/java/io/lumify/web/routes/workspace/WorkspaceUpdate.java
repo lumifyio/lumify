@@ -26,9 +26,11 @@ import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class WorkspaceUpdate extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUpdate.class);
@@ -72,7 +74,10 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         deleteEntities(workspace, updateData.getEntityDeletes(), authUser);
 
-        updateUsers(workspace, updateData.getUserUpdates(), authUser);
+        ResourceBundle resource = getBundle(request);
+        String title = resource.getString("workspaces.notification.shared.title");
+        String message = resource.getString("workspaces.notification.shared.subtitle");
+        updateUsers(workspace, updateData.getUserUpdates(), authUser, title, message);
 
         workspace = workspaceRepository.findById(workspaceId, authUser);
         ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, true);
@@ -99,16 +104,16 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         }
     }
 
-    private void updateUsers(Workspace workspace, List<ClientApiWorkspaceUpdateData.UserUpdate> userUpdates, User authUser) {
+    private void updateUsers(Workspace workspace, List<ClientApiWorkspaceUpdateData.UserUpdate> userUpdates, User authUser, String title, String subtitle) {
+
         for (ClientApiWorkspaceUpdateData.UserUpdate update : userUpdates) {
             LOGGER.debug("user update (%s): %s", workspace.getWorkspaceId(), update.toString());
             String userId = update.getUserId();
             WorkspaceAccess workspaceAccess = update.getAccess();
             workspaceRepository.updateUserOnWorkspace(workspace, userId, workspaceAccess, authUser);
 
-            String title =  "Workspace shared with you";
-            String message = authUser.getDisplayName() + " has shared " + workspace.getDisplayTitle();
-            userNotificationRepository.createNotification(userId, title, message, new ExpirationAge(1, Calendar.MINUTE));
+            String message = MessageFormat.format(subtitle, authUser.getDisplayName(), workspace.getDisplayTitle());
+            userNotificationRepository.createNotification(userId, title, message, new ExpirationAge(7, Calendar.DAY_OF_WEEK));
         }
     }
 

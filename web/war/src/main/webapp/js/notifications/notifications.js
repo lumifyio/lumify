@@ -24,9 +24,9 @@ define([
 
             this.on(document, 'notificationActive', this.onNotificationActive);
             this.on(document, 'notificationDeleted', this.onNotificationDeleted);
-            this.dataRequest('notification', 'systemNotificationList')
+            this.dataRequest('notification', 'list')
                 .done(function(notifications) {
-                    self.displayNotifications(notifications.system.active);
+                    self.displayNotifications(notifications.system.active.concat(notifications.user));
                 });
 
             this.$container = $('<div>')
