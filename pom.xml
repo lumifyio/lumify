@@ -102,7 +102,6 @@
 
         <!-- Maven Plugin Versions -->
         <plugin.buildnumber.version>1.2</plugin.buildnumber.version>
-        <plugin.checkstyle.version>2.11</plugin.checkstyle.version>
         <plugin.cobertura.version>2.6</plugin.cobertura.version>
         <plugin.doxia.markdown.version>1.5</plugin.doxia.markdown.version>
         <plugin.findbugs.version>2.5.3</plugin.findbugs.version>
