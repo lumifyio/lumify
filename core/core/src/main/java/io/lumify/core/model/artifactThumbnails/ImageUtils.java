@@ -93,6 +93,8 @@ public class ImageUtils {
     public static int thumbnailType(BufferedImage image) {
         if (image.getColorModel().getNumComponents() > 3) {
             return BufferedImage.TYPE_4BYTE_ABGR;
+        } else if (image.getColorModel().getNumColorComponents() == 3) {
+            return BufferedImage.TYPE_3BYTE_BGR;
         }
         return BufferedImage.TYPE_INT_RGB;
     }
