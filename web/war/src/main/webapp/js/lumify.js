@@ -142,6 +142,7 @@ function(jQuery,
         Data.attachTo(document);
         Visibility.attachTo(document);
         Privileges.attachTo(document);
+        document.dispatchEvent(new Event('readyForPlugins'));
         $(window).on('hashchange', loadApplicationTypeBasedOnUrlHash);
 
         require([
