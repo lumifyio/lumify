@@ -34,9 +34,9 @@ being published to a queue. All `GraphPropertyWorker`s are then given an opportu
 optionally perform some kind of action, possibly publishing new property changes to the queue for other workers to
 process further.
 
-Lumify-provided `GraphPropertyWorker` implementations are found in the `lumify-graph-property-worker-plugins-group` module. Each is
-implemented as a plugin and will automatically run if found in the classpath. Please see the [yarn features](features.md)
-page for more information about each plugin.
+Lumify-provided `GraphPropertyWorker` implementations are found in the `lumify-graph-property-worker-plugins-group` module.
+Each is implemented as a plugin and will automatically run if found in the classpath. Please see
+the [yarn features](features.md) page for more information about each plugin.
 
 ### Map Reduce Ingestion
 

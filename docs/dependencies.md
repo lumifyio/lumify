@@ -9,17 +9,18 @@ Lumify leverages and rides on top of many other popular open source projects. Pl
 infrastructure components. Please see Lumify's [POM file](../pom.xml) for authoritative version numbers that are far
 less likely to get out of sync than this document.
 
-| Dependency | Version |
-| ---------- | ------- |
-| [Cloudera CDH](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) | 4.4 |
-| [Apache Accumulo](http://accumulo.apache.org) | 1.5.2 |
-| [Elasticsearch](http://www.elasticsearch.org/) | 1.1.2 |
-| [RabbitMQ](http://www.rabbitmq.com/) | 3.2.3 |
-| [Jetty](http://www.eclipse.org/jetty/) | 8.1.15.v20140411 |
+| Dependency                                                                                 | Version          |
+| ------------------------------------------------------------------------------------------ | ---------------- |
+| [Cloudera CDH](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) | 5.2.1            |
+| [Apache Accumulo](http://accumulo.apache.org)                                              | 1.6.1            |
+| [Elasticsearch](http://www.elasticsearch.org/)                                             | 1.4.1            |
+| [RabbitMQ](http://www.rabbitmq.com/)                                                       | 3.4.2            |
+| [Jetty](http://www.eclipse.org/jetty/)                                                     | 9.2.5.v20141112  |
 
 ## Example Installation on CentOS 6.5
 
-For step-by-step instructions on installing Lumify and all it's dependencies on CentOS 6.5, please see [setup-centos-6.5.md](setup-centos-6.5.md).
+For step-by-step instructions on installing Lumify and all it's dependencies on CentOS 6.5,
+please see [setup-centos-6.5.md](setup-centos-6.5.md).
 
 ## Lumify Dependencies by Feature
 
