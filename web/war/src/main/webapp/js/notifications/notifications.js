@@ -48,14 +48,14 @@ define([
         this.displayNotifications = function(notifications) {
             var self = this,
                 shouldDisplay = notifications && _.filter(notifications, function(n) {
-                    if (n.type === 'user') {
-                        return true;
-                    }
-
                     if (self.attr.showUserDismissed !== true &&
                         self.userDismissed[n.id] && self.userDismissed[n.id] === n.hash) {
                         return false;
                     }
+                    if (n.type === 'user') {
+                        return true;
+                    }
+
                     return self.attr.showInformational === true || n.severity !== 'INFORMATIONAL';
                 });
 
@@ -74,9 +74,9 @@ define([
                         self.stack.push(updated);
                     }
                 })
-                this.trigger('notificationCountUpdated', { count: this.stack.length });
                 this.update();
             }
+            this.trigger('notificationCountUpdated', { count: this.stack.length });
         };
 
         this.setUserDismissed = function(notificationId, notificationHash) {
