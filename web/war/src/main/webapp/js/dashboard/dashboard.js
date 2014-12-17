@@ -1,15 +1,19 @@
 define([
     'flight/lib/component',
     'tpl!./dashboard',
+    'util/withCollapsibleSections'
 ], function(defineComponent,
-    template) {
+    template,
+    withCollapsibleSections) {
     'use strict';
 
-    return defineComponent(DashboardView);
+    return defineComponent(DashboardView, withCollapsibleSections);
 
     function DashboardView() {
         this.defaultAttrs({
-            helpSelector: '.help'
+            helpSelector: '.help',
+            notificationsSelector: '.notifications-container',
+            notificationsNodeSelector: '.collapsible-section'
         });
 
         this.after('initialize', function() {
@@ -25,7 +29,15 @@ define([
                 e.stopPropagation();
             });
             this.on(document, 'graphPaddingUpdated', this.onPaddingUpdated);
+            this.on(document, 'didToggleDisplay', this.onDidToggleDisplay);
+            this.on('notificationCountUpdated', this.onNotificationCountUpdated);
         });
+
+        this.onNotificationCountUpdated = function(event, data) {
+            this.$node.find('.badge')
+                .removeClass('loading')
+                .text(data.count);
+        };
 
         this.onDashboardClicked = function(event) {
             this.trigger('selectObjects');
@@ -33,6 +45,21 @@ define([
 
         this.onHelp = function(event) {
             this.trigger('toggleHelp');
+        };
+
+        this.onDidToggleDisplay = function(event, data) {
+            var $notifications = this.select('notificationsNodeSelector');
+
+            if (data.name === 'dashboard' && !data.visible) {
+                require(['notifications/notifications'], function(Notifications) {
+                    Notifications.attachTo($notifications, {
+                        allowDismiss: false,
+                        animated: false,
+                        showUserDismissed: true,
+                        showInformational: true
+                    });
+                });
+            }
         };
 
         this.onPaddingUpdated = function(event, data) {

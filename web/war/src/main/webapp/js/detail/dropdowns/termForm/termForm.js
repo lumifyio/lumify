@@ -361,7 +361,7 @@ define([
                 data = this.attr.dataInfo;
                 objectSign = data && data.title;
                 existingEntity = this.attr.existing;
-                graphVertexId = data && data.resolvedToVertexId;
+                graphVertexId = data && (data.resolvedToVertexId || data.resolvedVertexId);
                 this.unresolve = graphVertexId && graphVertexId !== '';
             }
 

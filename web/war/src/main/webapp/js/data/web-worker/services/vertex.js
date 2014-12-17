@@ -174,6 +174,14 @@ define([
 
         unresolveTerm: function(params) {
             return ajax('POST', '/vertex/unresolve-term', params);
+        },
+
+        resolveDetectedObject: function(params) {
+            return ajax('POST', '/vertex/resolve-detected-object', params);
+        },
+
+        unresolveDetectedObject: function(params) {
+            return ajax('POST', '/vertex/unresolve-detected-object', params);
         }
     };
 

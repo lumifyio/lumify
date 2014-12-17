@@ -1,0 +1,22 @@
+<ul class="nav nav-list">
+    <li class="nav-header">Title</li>
+    <li><input type="text" placeholder="Title" class="title" value="{{ notification.title }}"></li>
+
+    <li class="nav-header">Message</li>
+    <li><input type="text" placeholder="Message" class="message" value="{{ notification.message }}"></li>
+
+    <li class="nav-header">Severity</li>
+    <li>
+      {{#each severity}}
+      <label><input type="radio" name="severity" value="{{ name }}" {{#if checked}}checked{{/if}}> {{ name }}</label>
+      {{/each}}
+    </li>
+
+    <li class="nav-header">Start Date</li>
+    <li><input type="text" class="startDate" value="{{ notification.startDate }}"></li>
+
+    <li class="nav-header">End Date</li>
+    <li><input type="text" class="endDate" value="{{ notification.endDate }}"></li>
+</ul>
+            
+<button class="btn btn-primary">{{ buttonText }}</button>
