@@ -48,6 +48,10 @@ define([
         this.displayNotifications = function(notifications) {
             var self = this,
                 shouldDisplay = notifications && _.filter(notifications, function(n) {
+                    if (n.type === 'user') {
+                        return true;
+                    }
+
                     if (self.attr.showUserDismissed !== true &&
                         self.userDismissed[n.id] && self.userDismissed[n.id] === n.hash) {
                         return false;
@@ -122,7 +126,7 @@ define([
                         return (/WARNING/i).test(n.severity);
                     });
                     this.classed('info', function(n) {
-                        return (/INFO/i).test(n.severity);
+                        return !n.severity || (/INFO/i).test(n.severity);
                     });
                     this.select('h1').text(function(n) {
                         return n.title

@@ -1,8 +1,8 @@
 package io.lumify.web.routes.notification;
 
 import com.google.inject.Inject;
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.miniweb.HandlerChain;
@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.List;
 
 public class Notifications extends BaseRequestHandler {
     private static final String FUTURE_DAYS_PARAMETER_NAME = "futureDays";

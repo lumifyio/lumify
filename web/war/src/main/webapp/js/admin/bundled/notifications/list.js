@@ -46,6 +46,10 @@ require([
                 }
             });
 
+            if (data.notification.type !== 'system') {
+                return;
+            }
+
             if (event.type === 'notificationActive') {
                 data.notification.active = true;
             }

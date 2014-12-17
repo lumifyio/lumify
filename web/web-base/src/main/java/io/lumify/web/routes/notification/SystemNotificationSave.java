@@ -1,9 +1,9 @@
 package io.lumify.web.routes.notification;
 
 import com.google.inject.Inject;
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotificationSeverity;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;

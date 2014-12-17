@@ -1,6 +1,5 @@
 @import '../util/constants';
 @import '../util/selection';
-//@import (reference) '../libs/bootstrap/less/mixins';
 
 .notifications {
   @padding: 10px;
@@ -63,37 +62,31 @@
 
     .theme(@color: orange) {
       #gradient > .vertical-three-colors(lighten(@color, 15%), @color, 90%, darken(@color, 5%));
-
       color: darken(@color, 40%);
       text-shadow: 0 1px 2px lighten(@color, 20%);
-
-      /*color: lighten(@color, 70%);*/
-      /*text-shadow: 0 1px 1px darken(@color, 10%);*/
-
       .box-shadow(0 1px 10px fadeout(darken(@color, 0%), 70%));
-      h2 {
-        //color: lighten(@color, 40%);
-      }
     }
 
-    //@orange: fadeout(lighten(@blue-color, 5%), 30%); //rgba(255, 165, 0, 70%);
-    @orange: fadeout(
+    @blue: fadeout(
                lighten(
                  @blue-color,
                  10%),
                30%
              );
+    &.info {
+      .theme(darken(@blue, 5%));
+    }
     &.critical {
-      @red: fadeout(
+      @desaturated-blue: fadeout(
                lighten(
                 desaturate(@blue-color, 30%),
                  10%),
                30%
              );
-      .theme(spin(@red, 160));
+      .theme(spin(@desaturated-blue, 160));
     }
     &.warning {
-      .theme(spin(@orange, 200));
+      .theme(spin(@blue, 200));
     }
   }
 

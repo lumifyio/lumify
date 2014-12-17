@@ -1,8 +1,8 @@
 package io.lumify.sql.model.systemNotification;
 
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotificationSeverity;
 import org.json.JSONObject;
 
 import javax.persistence.*;
