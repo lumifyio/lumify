@@ -18,6 +18,7 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     public static final String TITLE_COLUMN_NAME = "title";
     public static final String MESSAGE_COLUMN_NAME = "message";
     public static final String USER_COLUMN_NAME = "user";
+    public static final String READ_COLUMN_NAME = "read";
     public static final String SENT_DATE_COLUMN_NAME = "startDate";
     public static final String EXPIRATION_AGE_UNIT_COLUMN_NAME = "expirationAgeUnit";
     public static final String EXPIRATION_AGE_AMOUNT_COLUMN_NAME = "expirationAgeAmount";
@@ -61,6 +62,18 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     @Override
     public String getUser() {
         return Value.toString(getColumnFamily().get(USER_COLUMN_NAME));
+    }
+
+
+    @Override
+    public void setMarkedRead(Boolean markedRead) {
+        getColumnFamily().set(READ_COLUMN_NAME, markedRead ? 1 : 0);
+    }
+
+    @Override
+    public Boolean isMarkedRead() {
+        Object val = getColumnFamily().get(READ_COLUMN_NAME);
+        return val != null && Value.toInteger(getColumnFamily().get(READ_COLUMN_NAME)) == 1;
     }
 
     @Override

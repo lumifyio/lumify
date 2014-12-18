@@ -15,4 +15,8 @@ public interface UserNotification extends Notification {
     public void setExpirationAge(ExpirationAge expirationAge);
 
     public ExpirationAge getExpirationAge();
+
+    public void setMarkedRead(Boolean markedRead);
+
+    public Boolean isMarkedRead();
 }

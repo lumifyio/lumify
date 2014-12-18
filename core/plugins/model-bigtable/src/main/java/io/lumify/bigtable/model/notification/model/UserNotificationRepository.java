@@ -18,6 +18,7 @@ public class UserNotificationRepository extends Repository<BigTableUserNotificat
         notification.setTitle(Value.toString(cf.get(BigTableUserNotification.TITLE_COLUMN_NAME)));
         notification.setMessage(Value.toString(cf.get(BigTableUserNotification.MESSAGE_COLUMN_NAME)));
         notification.setUser(Value.toString(cf.get(BigTableUserNotification.USER_COLUMN_NAME)));
+        notification.setMarkedRead(Value.toInteger(cf.get(BigTableUserNotification.READ_COLUMN_NAME)) == 1);
         notification.setSentDate(new Date(Value.toLong(cf.get(BigTableUserNotification.SENT_DATE_COLUMN_NAME))));
         Integer ageUnit = Value.toInteger(cf.get(BigTableUserNotification.EXPIRATION_AGE_UNIT_COLUMN_NAME));
         Integer ageAmount = Value.toInteger(cf.get(BigTableUserNotification.EXPIRATION_AGE_AMOUNT_COLUMN_NAME));

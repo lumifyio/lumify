@@ -21,6 +21,8 @@ public abstract class UserNotificationRepository extends NotificationRepository 
             ExpirationAge expirationAge
     );
 
+    public abstract void markRead(String[] rowKeys, User user);
+
     public abstract UserNotification getNotification(String rowKey, User user);
 
     public abstract UserNotification updateNotification(UserNotification notification);
@@ -43,6 +45,9 @@ public abstract class UserNotificationRepository extends NotificationRepository 
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
         cal.setTime(notification.getSentDate());
         ExpirationAge age = notification.getExpirationAge();
+        if (notification.isMarkedRead()) {
+            return false;
+        }
         if (age == null) {
             return true;
         }
