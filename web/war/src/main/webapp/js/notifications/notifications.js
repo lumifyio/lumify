@@ -1,7 +1,8 @@
 define([
     'flight/lib/component',
-    'util/withDataRequest'
-], function(defineComponent, withDataRequest) {
+    'util/withDataRequest',
+    'd3'
+], function(defineComponent, withDataRequest, d3) {
     'use strict';
 
     return defineComponent(Notifications, withDataRequest);
@@ -24,10 +25,22 @@ define([
 
             this.on(document, 'notificationActive', this.onNotificationActive);
             this.on(document, 'notificationDeleted', this.onNotificationDeleted);
-            this.dataRequest('notification', 'list')
-                .done(function(notifications) {
-                    self.displayNotifications(notifications.system.active.concat(notifications.user));
-                });
+
+            this.update = _.debounce(this.update.bind(this), 250);
+
+            Promise.all([
+                this.dataRequest('config', 'properties'),
+                this.dataRequest('notification', 'list')
+            ]).done(function(result) {
+                var properties = result.shift(),
+                    notifications = result.shift();
+
+                self.autoDismissSeconds = {
+                    user: parseInt(properties['notifications.user.autoDismissSeconds'] || '-1'),
+                    system: parseInt(properties['notifications.system.autoDismissSeconds'] || '-1')
+                };
+                self.displayNotifications(notifications.system.active.concat(notifications.user));
+            })
 
             this.$container = $('<div>')
                 .addClass('notifications')
@@ -73,6 +86,15 @@ define([
                     } else {
                         self.stack.push(updated);
                     }
+
+                    if (self.attr.showUserDismissed !== true) {
+                        var autoDismiss = self.autoDismissSeconds[updated.type];
+                        if (autoDismiss > 0) {
+                            _.delay(function() {
+                                self.dismissNotification(updated);
+                            }, autoDismiss * 1000);
+                        }
+                    }
                 })
                 this.update();
             }
@@ -86,6 +108,14 @@ define([
                     localStorage.setItem('notificationsDismissed', JSON.stringify(this.userDismissed));
                 }
             } catch(e) { }
+        };
+
+        this.dismissNotification = function(notification) {
+            this.stack = _.reject(this.stack, function(n) {
+                return n.id === notification.id;
+            });
+            this.setUserDismissed(notification.id, notification.hash);
+            this.update();
         };
 
         this.update = function() {
@@ -112,11 +142,7 @@ define([
 
                     if (self.attr.allowDismiss !== false) {
                         this.on('click', function(clicked) {
-                            self.stack = _.reject(self.stack, function(n) {
-                                return n.id === clicked.id;
-                            });
-                            self.setUserDismissed(clicked.id, clicked.hash);
-                            self.update();
+                            self.dismissNotification(clicked);
                         })
                     }
                     this.classed('critical', function(n) {
