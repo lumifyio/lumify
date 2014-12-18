@@ -2,18 +2,18 @@ package io.lumify.core.model.notification;
 
 public class ExpirationAge {
     private int amount;
-    private int calendarUnit;
+    private ExpirationAgeUnit expirationAgeUnit;
 
-    public ExpirationAge(int amount, int calendarUnit) {
+    public ExpirationAge(int amount, ExpirationAgeUnit expirationAgeUnit) {
         this.amount = amount;
-        this.calendarUnit = calendarUnit;
+        this.expirationAgeUnit = expirationAgeUnit;
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public int getCalendarUnit() {
-        return calendarUnit;
+    public ExpirationAgeUnit getExpirationAgeUnit() {
+        return expirationAgeUnit;
     }
 }

@@ -1,16 +1,11 @@
 package io.lumify.core.model.notification;
 
 import io.lumify.core.user.User;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
 
 import java.util.*;
 
 public abstract class UserNotificationRepository extends NotificationRepository {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UserNotificationRepository.class);
-    private static final String LOCK_NAME = UserNotificationRepository.class.getName();
-    private boolean shutdown;
 
     public abstract List<UserNotification> getActiveNotifications(User user);
 
@@ -21,13 +16,9 @@ public abstract class UserNotificationRepository extends NotificationRepository 
             ExpirationAge expirationAge
     );
 
-    public abstract void markRead(String[] rowKeys, User user);
+    public abstract UserNotification getNotification(String notificationId, User user);
 
-    public abstract UserNotification getNotification(String rowKey, User user);
-
-    public abstract UserNotification updateNotification(UserNotification notification);
-
-    public abstract void endNotification(UserNotification notification);
+    public abstract void markRead(String[] notificationIds, User user);
 
     public static JSONObject toJSONObject(UserNotification notification) {
         JSONObject json = new JSONObject();
@@ -41,19 +32,18 @@ public abstract class UserNotificationRepository extends NotificationRepository 
     }
 
     public static boolean isActive(UserNotification notification) {
-        Date now = new Date();
-        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        cal.setTime(notification.getSentDate());
-        ExpirationAge age = notification.getExpirationAge();
         if (notification.isMarkedRead()) {
             return false;
         }
-        if (age == null) {
-            return true;
-        }
-        cal.add(age.getCalendarUnit(), age.getAmount());
-        Date expirationDate = cal.getTime();
-        return expirationDate.after(now);
+        Date now = new Date();
+        return notification.getSentDate().before(now) && getExpirationDate(notification).after(now);
     }
 
+    protected static Date getExpirationDate(UserNotification notification) {
+        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        cal.setTime(notification.getSentDate());
+        ExpirationAge age = notification.getExpirationAge();
+        cal.add(age.getExpirationAgeUnit().getCalendarUnit(), age.getAmount());
+        return cal.getTime();
+    }
 }

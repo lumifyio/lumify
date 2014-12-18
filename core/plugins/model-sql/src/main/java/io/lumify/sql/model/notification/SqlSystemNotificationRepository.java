@@ -1,4 +1,4 @@
-package io.lumify.sql.model.systemNotification;
+package io.lumify.sql.model.notification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

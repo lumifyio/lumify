@@ -270,7 +270,7 @@ public abstract class WorkQueueRepository {
 
         JSONObject permissions = new JSONObject();
         JSONArray users = new JSONArray();
-        users.put(notification.getUser());
+        users.put(notification.getUserId());
         permissions.put("users", users);
         json.put("permissions", permissions);
 

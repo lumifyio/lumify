@@ -4,9 +4,9 @@ import java.util.Date;
 
 public interface UserNotification extends Notification {
 
-    public void setUser(String userId);
+    public void setUserId(String userId);
 
-    public String getUser();
+    public String getUserId();
 
     public void setSentDate(Date startDate);
 

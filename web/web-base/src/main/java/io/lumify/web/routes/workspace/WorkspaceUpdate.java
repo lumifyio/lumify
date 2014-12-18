@@ -4,10 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.notification.ExpirationAge;
-import io.lumify.core.model.notification.SystemNotificationRepository;
-import io.lumify.core.model.notification.SystemNotificationSeverity;
-import io.lumify.core.model.notification.UserNotificationRepository;
+import io.lumify.core.model.notification.*;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -113,7 +110,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             workspaceRepository.updateUserOnWorkspace(workspace, userId, workspaceAccess, authUser);
 
             String message = MessageFormat.format(subtitle, authUser.getDisplayName(), workspace.getDisplayTitle());
-            userNotificationRepository.createNotification(userId, title, message, new ExpirationAge(7, Calendar.DAY_OF_WEEK));
+            userNotificationRepository.createNotification(userId, title, message, new ExpirationAge(7, ExpirationAgeUnit.DAY));
         }
     }
 

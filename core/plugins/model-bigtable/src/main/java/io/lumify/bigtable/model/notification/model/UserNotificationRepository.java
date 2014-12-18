@@ -3,6 +3,7 @@ package io.lumify.bigtable.model.notification.model;
 import com.altamiracorp.bigtable.model.*;
 import io.lumify.bigtable.model.notification.BigTableUserNotification;
 import io.lumify.core.model.notification.ExpirationAge;
+import io.lumify.core.model.notification.ExpirationAgeUnit;
 
 import java.util.Date;
 
@@ -17,14 +18,14 @@ public class UserNotificationRepository extends Repository<BigTableUserNotificat
         ColumnFamily cf = row.get(BigTableUserNotification.COLUMN_FAMILY_NAME);
         notification.setTitle(Value.toString(cf.get(BigTableUserNotification.TITLE_COLUMN_NAME)));
         notification.setMessage(Value.toString(cf.get(BigTableUserNotification.MESSAGE_COLUMN_NAME)));
-        notification.setUser(Value.toString(cf.get(BigTableUserNotification.USER_COLUMN_NAME)));
-        notification.setMarkedRead(Value.toInteger(cf.get(BigTableUserNotification.READ_COLUMN_NAME)) == 1);
+        notification.setUserId(Value.toString(cf.get(BigTableUserNotification.USER_ID_COLUMN_NAME)));
         notification.setSentDate(new Date(Value.toLong(cf.get(BigTableUserNotification.SENT_DATE_COLUMN_NAME))));
-        Integer ageUnit = Value.toInteger(cf.get(BigTableUserNotification.EXPIRATION_AGE_UNIT_COLUMN_NAME));
+        ExpirationAgeUnit ageUnit = ExpirationAgeUnit.valueOf(Value.toString(cf.get(BigTableUserNotification.EXPIRATION_AGE_UNIT_COLUMN_NAME)));
         Integer ageAmount = Value.toInteger(cf.get(BigTableUserNotification.EXPIRATION_AGE_AMOUNT_COLUMN_NAME));
         if (ageUnit != null && ageAmount != null) {
             notification.setExpirationAge(new ExpirationAge(ageAmount, ageUnit));
         }
+        notification.setMarkedRead(Value.toInteger(cf.get(BigTableUserNotification.READ_COLUMN_NAME)) == 1);
         return notification;
     }
 

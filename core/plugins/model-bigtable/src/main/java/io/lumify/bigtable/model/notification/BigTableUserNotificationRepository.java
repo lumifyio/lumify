@@ -31,7 +31,7 @@ public class BigTableUserNotificationRepository extends UserNotificationReposito
         Date now = new Date();
         List<UserNotification> activeNotifications = new ArrayList<UserNotification>();
         for (UserNotification notification : repository.findAll(user.getModelUserContext())) {
-            if (user.getUserId().equals(notification.getUser()) &&
+            if (user.getUserId().equals(notification.getUserId()) &&
                     notification.getSentDate().before(now) &&
                     notification.isActive()) {
                 activeNotifications.add(notification);
@@ -46,7 +46,7 @@ public class BigTableUserNotificationRepository extends UserNotificationReposito
         Collection<BigTableUserNotification> toSave = new ArrayList<BigTableUserNotification>();
         for (String rowKey : rowKeys) {
             UserNotification notification = getNotification(rowKey, user);
-            if (notification.getUser().equals(user.getUserId())) {
+            if (notification.getUserId().equals(user.getUserId())) {
                 notification.setMarkedRead(true);
                 toSave.add((BigTableUserNotification) notification);
             } else throw new LumifyException("User cannot mark notifications read that aren't issued to them");
@@ -64,7 +64,7 @@ public class BigTableUserNotificationRepository extends UserNotificationReposito
         Date now = new Date();
         String rowKey = Long.toString(now.getTime()) + ":" + UUID.randomUUID().toString();
         BigTableUserNotification notification = new BigTableUserNotification(new UserNotificationRowKey(rowKey));
-        notification.setUser(user);
+        notification.setUserId(user);
         notification.setTitle(title);
         notification.setMessage(message);
         notification.setSentDate(now);
@@ -75,16 +75,5 @@ public class BigTableUserNotificationRepository extends UserNotificationReposito
         repository.save(notification, FlushFlag.FLUSH);
         workQueueRepository.pushUserNotification(notification);
         return notification;
-    }
-
-    @Override
-    public UserNotification updateNotification(UserNotification notification) {
-        repository.save((BigTableUserNotification) notification, FlushFlag.FLUSH);
-        return notification;
-    }
-
-    @Override
-    public void endNotification(UserNotification notification) {
-        repository.delete(((BigTableUserNotification) notification).getRowKey());
     }
 }

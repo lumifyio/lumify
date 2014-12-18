@@ -213,7 +213,7 @@ public class SqlUser implements User {
         uiPreferencesString = uiPreferences.toString();
     }
 
-    @Column(name = "ui_preferences")
+    @Column(name = "ui_preferences", length = 4000)
     public String getUiPreferencesString() {
         return uiPreferencesString;
     }

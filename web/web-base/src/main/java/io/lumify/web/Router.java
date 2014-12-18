@@ -17,10 +17,10 @@ import io.lumify.web.routes.edge.*;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessById;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessCancel;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessDelete;
-import io.lumify.web.routes.notification.NotificationMarkRead;
 import io.lumify.web.routes.notification.Notifications;
 import io.lumify.web.routes.notification.SystemNotificationDelete;
 import io.lumify.web.routes.notification.SystemNotificationSave;
+import io.lumify.web.routes.notification.UserNotificationMarkRead;
 import io.lumify.web.routes.ontology.Ontology;
 import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.resource.ResourceGet;
@@ -66,7 +66,7 @@ public class Router extends HttpServlet {
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 
             app.get("/notification/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, Notifications.class);
-            app.post("/notification/mark-read", authenticator, csrfProtector, ReadPrivilegeFilter.class, NotificationMarkRead.class);
+            app.post("/notification/mark-read", authenticator, csrfProtector, ReadPrivilegeFilter.class, UserNotificationMarkRead.class);
             app.post("/notification/system", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationSave.class);
             app.delete("/notification/system", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationDelete.class);
 

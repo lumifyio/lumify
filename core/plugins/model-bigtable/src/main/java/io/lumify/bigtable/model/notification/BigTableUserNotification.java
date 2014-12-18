@@ -6,6 +6,7 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.Value;
 import io.lumify.bigtable.model.notification.model.UserNotificationRowKey;
 import io.lumify.core.model.notification.ExpirationAge;
+import io.lumify.core.model.notification.ExpirationAgeUnit;
 import io.lumify.core.model.notification.UserNotification;
 import io.lumify.core.model.notification.UserNotificationRepository;
 import org.json.JSONObject;
@@ -17,11 +18,11 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     public static final String COLUMN_FAMILY_NAME = "";
     public static final String TITLE_COLUMN_NAME = "title";
     public static final String MESSAGE_COLUMN_NAME = "message";
-    public static final String USER_COLUMN_NAME = "user";
-    public static final String READ_COLUMN_NAME = "read";
-    public static final String SENT_DATE_COLUMN_NAME = "startDate";
+    public static final String USER_ID_COLUMN_NAME = "userId";
+    public static final String SENT_DATE_COLUMN_NAME = "sentDate";
     public static final String EXPIRATION_AGE_UNIT_COLUMN_NAME = "expirationAgeUnit";
     public static final String EXPIRATION_AGE_AMOUNT_COLUMN_NAME = "expirationAgeAmount";
+    public static final String READ_COLUMN_NAME = "read";
 
     public BigTableUserNotification(UserNotificationRowKey rowKey) {
         super(TABLE_NAME, rowKey);
@@ -55,13 +56,13 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     }
 
     @Override
-    public void setUser(String userId) {
-        getColumnFamily().set(USER_COLUMN_NAME, userId);
+    public void setUserId(String userId) {
+        getColumnFamily().set(USER_ID_COLUMN_NAME, userId);
     }
 
     @Override
-    public String getUser() {
-        return Value.toString(getColumnFamily().get(USER_COLUMN_NAME));
+    public String getUserId() {
+        return Value.toString(getColumnFamily().get(USER_ID_COLUMN_NAME));
     }
 
 
@@ -93,7 +94,7 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     public void setExpirationAge(ExpirationAge expirationAge) {
         if (expirationAge != null) {
             getColumnFamily().set(EXPIRATION_AGE_AMOUNT_COLUMN_NAME, expirationAge.getAmount());
-            getColumnFamily().set(EXPIRATION_AGE_UNIT_COLUMN_NAME, expirationAge.getCalendarUnit());
+            getColumnFamily().set(EXPIRATION_AGE_UNIT_COLUMN_NAME, expirationAge.getExpirationAgeUnit().toString());
         } else {
             boolean existingExpiration = false;
             for (Column column : getColumnFamily().getColumns()) {
@@ -112,7 +113,7 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     @Override
     public ExpirationAge getExpirationAge() {
         Integer amount = Value.toInteger(getColumnFamily().get(EXPIRATION_AGE_AMOUNT_COLUMN_NAME));
-        Integer unit = Value.toInteger(getColumnFamily().get(EXPIRATION_AGE_UNIT_COLUMN_NAME));
+        ExpirationAgeUnit unit = ExpirationAgeUnit.valueOf(Value.toString(getColumnFamily().get(EXPIRATION_AGE_UNIT_COLUMN_NAME)));
         if (unit != null && amount != null) {
             return new ExpirationAge(amount, unit);
         }

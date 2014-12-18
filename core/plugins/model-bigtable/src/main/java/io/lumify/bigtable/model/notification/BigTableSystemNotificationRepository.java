@@ -89,6 +89,7 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
 
     @Override
     public void endNotification(SystemNotification notification) {
-        repository.delete(((BigTableSystemNotification) notification).getRowKey());
+        notification.setEndDate(new Date());
+        repository.save((BigTableSystemNotification) notification, FlushFlag.FLUSH);
     }
 }
