@@ -22,11 +22,13 @@ define([
                 this.userDismissed = {};
             }
             this.stack = [];
+            this.markRead = [];
 
             this.on(document, 'notificationActive', this.onNotificationActive);
             this.on(document, 'notificationDeleted', this.onNotificationDeleted);
 
             this.update = _.debounce(this.update.bind(this), 250);
+            this.sendMarkRead = _.debounce(this.sendMarkRead.bind(this), 5000);
 
             Promise.all([
                 this.dataRequest('config', 'properties'),
@@ -115,7 +117,34 @@ define([
                 return n.id === notification.id;
             });
             this.setUserDismissed(notification.id, notification.hash);
+            if (notification.type === 'user') {
+                this.markRead.push(notification.id);
+                this.sendMarkRead();
+            }
             this.update();
+        };
+
+        this.sendMarkRead = function() {
+            var self = this,
+                toSend = this.markRead.slice(0);
+
+            if (!this.markReadErrorCount) {
+                this.markReadErrorCount = 0;
+            }
+
+            this.markRead.length = 0;
+            this.dataRequest('notification', 'markRead', toSend)
+                .then(function() {
+                    self.markReadErrorCount = 0;
+                })
+                .catch(function(error) {
+                    self.markRead.splice(self.markRead.length - 1, 0, toSend);
+                    if (++self.markReadErrorCount < 2) {
+                        console.warn('Retrying to mark as read');
+                        self.sendMarkRead();
+                    }
+                })
+                .done();
         };
 
         this.update = function() {
