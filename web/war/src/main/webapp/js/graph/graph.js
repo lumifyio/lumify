@@ -168,7 +168,7 @@ define([
                             group: 'nodes',
                             classes: classes,
                             data: {
-                                id: tempId,
+                                id: tempId
                             },
                             renderedPosition: renderedPosition,
                             selected: false
@@ -309,7 +309,7 @@ define([
                                 group: 'nodes',
                                 classes: self.classesForVertex(vertex),
                                 data: {
-                                    id: toCyId(vertex),
+                                    id: toCyId(vertex)
                                 },
                                 grabbable: self.isWorkspaceEditable,
                                 selected: false // TODO: check selected?
@@ -1010,7 +1010,7 @@ define([
             var self = this,
                 nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
-                edgeIds = [];
+                edgeIds = [],
                 vertexIds = [];
 
             nodes.each(function(index, cyNode) {
@@ -1123,7 +1123,7 @@ define([
 
                     self.dataRequest('vertex', 'store', { vertexIds: fromCyId(nId) })
                         .done(function(vertex) {
-                            truncatedTitle = cyNode.data('truncatedTitle');
+                            var truncatedTitle = cyNode.data('truncatedTitle');
 
                             if (vertex) {
                                 cyNode.data('previousTruncated', truncatedTitle);
@@ -1350,7 +1350,7 @@ define([
 
                             position = {
                                 x: positionInNode.x + offset.left,
-                                y: positionInNode.y + offset.top,
+                                y: positionInNode.y + offset.top
                             };
 
                         } else if (anchorTo.page) {
