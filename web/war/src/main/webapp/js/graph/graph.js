@@ -16,6 +16,7 @@ define([
     'util/withAsyncQueue',
     'util/withDataRequest',
     'configuration/plugins/exportWorkspace/plugin',
+    'configuration/plugins/graphLayout/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -33,7 +34,8 @@ define([
     withContextMenu,
     withAsyncQueue,
     withDataRequest,
-    WorkspaceExporters,
+    WorkspaceExporter,
+    GraphLayout,
     colorjs) {
     'use strict';
 
@@ -562,7 +564,7 @@ define([
         };
 
         this.onContextMenuExportWorkspace = function(exporterId) {
-            var exporter = WorkspaceExporters.exportersById[exporterId],
+            var exporter = WorkspaceExporter.exportersById[exporterId],
                 $node = this.$node,
                 workspaceId = this.previousWorkspace;
 
@@ -931,33 +933,57 @@ define([
             if (menu) {
                 // Show/Hide the layout selection menu item
                 if (event.cy.nodes().filter(':selected').length) {
-                    menu.find('.layout-multi').show();
+                    menu.find('.layouts-multi').show();
                 } else {
-                    menu.find('.layout-multi').hide();
+                    menu.find('.layouts-multi').hide();
                 }
 
-                if (menu.is('.graph-context-menu') && WorkspaceExporters.exporters.length) {
-                    var $exporters = menu.find('.exporters');
+                if (menu.is(self.attr.contextMenuSelector)) {
+                    if (WorkspaceExporter.exporters.length) {
+                        var $exporters = menu.find('.exporters');
 
-                    if ($exporters.length === 0) {
-                        $exporters = $('<li class="dropdown-submenu"><a>' +
-                          i18n('graph.contextmenu.export_workspace') +
-                          '</a>' +
-                          '<ul class="dropdown-menu exporters"></ul></li>'
-                         ).appendTo(menu).before('<li class="divider"></li>').find('ul');
-                    }
+                        if ($exporters.length === 0) {
+                            $exporters = $('<li class="dropdown-submenu"><a>' +
+                                i18n('graph.contextmenu.export_workspace') +
+                                '</a>' +
+                                '<ul class="dropdown-menu exporters"></ul></li>'
+                            ).appendTo(menu).before('<li class="divider"></li>').find('ul');
+                        }
 
-                    $exporters.empty();
-                    WorkspaceExporters.exporters.forEach(function(exporter) {
-                        $exporters.append(
-                            $('<li><a href="#"></a></li>')
-                                .find('a')
+                        $exporters.empty();
+                        WorkspaceExporter.exporters.forEach(function(exporter) {
+                            $exporters.append(
+                                $('<li><a href="#"></a></li>')
+                                    .find('a')
                                     .text(exporter.menuItem)
                                     .attr('data-func', 'exportWorkspace')
                                     .attr('data-args', JSON.stringify([exporter._identifier]))
-                                .end()
-                        );
-                    });
+                                    .end()
+                            );
+                        });
+                    }
+
+                    if (GraphLayout.layouts.length) {
+                        var appendLayoutMenuItems = function($layoutMenu, onlySelected) {
+                            var onlySelectedArg = onlySelected ? ',{"onlySelected":true}' : '';
+
+                            $layoutMenu.find('.plugin').remove();
+
+                            GraphLayout.layouts.forEach(function(layout) {
+                                $layoutMenu.append(
+                                    $('<li class="plugin"><a href="#" tabindex="-1"></a></li>')
+                                        .find('a')
+                                        .text(layout.displayName)
+                                        .attr('data-func', 'layout')
+                                        .attr('data-args', '["' + layout.identifier + '"' + onlySelectedArg + ']')
+                                        .end()
+                                );
+                            });
+                        };
+
+                        appendLayoutMenuItems(menu.find('.layouts .dropdown-menu'), false);
+                        appendLayoutMenuItems(menu.find('.layouts-multi .dropdown-menu'), true);
+                    }
                 }
 
                 this.toggleMenu({positionUsingEvent: event}, menu);
@@ -1513,6 +1539,9 @@ define([
             var self = this;
 
             cytoscape('renderer', 'lumify', Renderer);
+            GraphLayout.layouts.forEach(function(layout) {
+                cytoscape('layout', layout.identifier, layout);
+            });
             cytoscape({
                 showOverlay: false,
                 minZoom: 1 / 4,

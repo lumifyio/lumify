@@ -49,6 +49,7 @@ var require = {
         'videojs': '../libs/video.js/dist/video-js/video',
     },
     shim: {
+        'arbor': { deps: ['jquery'] },
         'atmosphere': { init: function() { return $.atmosphere; }, deps:['jquery'] },
         'bootstrap': { exports:'window', deps:['jquery', 'jqueryui'] },
         'bootstrap-datepicker': { exports:'window', deps:['bootstrap'] },
