@@ -1,13 +1,16 @@
 
 FROM centos:centos6
 
-RUN \
-  rpm -Uhv http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm \
-  && yum update -y \
-  && yum install -y wget curl tar sudo openssh-server openssh-clients git nodejs npm libuuid-devel libtool zip unzip rsync which erlang
+# Add yum repositories
+ADD yum-repos/elasticsearch.repo /etc/yum.repos.d/elasticsearch.repo
 
-RUN \
-  npm install -g inherits bower grunt grunt-cli
+# Install RPM packages
+ADD scripts/install-rpm-packages.sh /opt/lumify/scripts/install-rpm-packages.sh
+RUN /bin/bash /opt/lumify/scripts/install-rpm-packages.sh
+
+# Install NPM packages
+ADD scripts/install-npm-packages.sh /opt/lumify/scripts/install-npm-packages.sh
+RUN /bin/bash /opt/lumify/scripts/install-npm-packages.sh
 
 # Passwordless SSH
 ADD scripts/install-ssh.sh /opt/lumify/scripts/install-ssh.sh
@@ -17,6 +20,7 @@ EXPOSE 22
 
 # Install Java
 ADD scripts/install-java.sh /opt/lumify/scripts/install-java.sh
+ADD java/java.sh /etc/profile.d/java.sh
 ENV PATH $PATH:/opt/jdk/bin
 ENV JAVA_HOME /opt/jdk
 ENV _JAVA_OPTIONS -Djava.net.preferIPv4Stack=true
@@ -73,6 +77,20 @@ ENV PATH $PATH:/opt/rabbitmq/sbin
 RUN /bin/bash /opt/lumify/scripts/install-rabbitmq.sh
 VOLUME ["/opt/rabbitmq_server-3.4.1/var"]
 EXPOSE 5672 5673 15672
+
+# Install Jetty
+ADD scripts/install-jetty.sh /opt/lumify/scripts/install-jetty.sh
+RUN /bin/bash /opt/lumify/scripts/install-jetty.sh
+ADD jetty/start.ini /opt/jetty/start.ini
+ADD jetty/jetty-logging.properties /opt/jetty/resources/jetty-logging.properties
+ADD jetty/jetty.xml /opt/jetty/etc/jetty.xml
+ADD jetty/jetty-http.xml /opt/jetty/etc/jetty-http.xml
+ADD jetty/jetty-https.xml /opt/jetty/etc/jetty-https.xml
+ADD jetty/jetty-ssl.xml /opt/jetty/etc/jetty-ssl.xml
+ADD jetty/jetty.jks /opt/jetty/etc/jetty.jks
+ENV PATH $PATH:/opt/jetty/bin
+VOLUME ["/opt/jetty/webapps"]
+EXPOSE 8080 8443
 
 # add scripts
 ADD start.sh /opt/start.sh
