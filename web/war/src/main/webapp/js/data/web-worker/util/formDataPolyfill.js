@@ -4,7 +4,7 @@
  * License: MIT
  * - append(name, value[, filename])
  * - XMLHttpRequest.prototype.send(object FormData)
- * 
+ *
  * Specification: http://www.w3.org/TR/XMLHttpRequest/#formdata
  *                http://www.w3.org/TR/XMLHttpRequest/#the-send-method
  * The .append() implementation also accepts Uint8Array and ArrayBuffer objects
@@ -25,9 +25,34 @@
         return;
     }
     // Export variable to the global scope
-    exports.FormData = FormData;
+    exports.FormData = function() {
+        // Force a Constructor
+        if (!(this instanceof FormData)) return new FormData();
+        // Generate a random boundary - This must be unique with respect to the form's contents.
+        this.boundary = '------RWWorkerFormDataBoundary' + Math.random().toString(36);
+        var internalData = this.data = [];
+        /**
+        * Internal method.
+        * @param inp String | ArrayBuffer | Uint8Array  Input
+        */
+        this.__append = function(inp) {
+            var i = 0, len;
+            if (typeof inp == 'string') {
+                for (len = inp.length; i < len; ++i) {
+                    internalData.push(inp.charCodeAt(i) & 0xff);
+                }
+            } else if (inp && inp.byteLength) {/*If ArrayBuffer or typed array */
+                if (!('byteOffset' in inp))   /* If ArrayBuffer, wrap in view */
+                    inp = new Uint8Array(inp);
+                for (len = inp.byteLength; i < len; ++i) {
+                    internalData.push(inp[i] & 0xff);
+                }
+            }
+        };
+    }
 
-    var ___send$rw = XMLHttpRequest.prototype.send;
+    var FormData = exports.FormData,
+        ___send$rw = XMLHttpRequest.prototype.send;
     XMLHttpRequest.prototype.send = function(data) {
         if (data instanceof FormData) {
             if (!data.__endedMultipart) data.__append('--' + data.boundary + '--\r\n');
@@ -39,29 +64,6 @@
         return ___send$rw.call(this, (data && data.buffer) || data);
     };
 
-    function FormData() {
-        // Force a Constructor
-        if (!(this instanceof FormData)) return new FormData();
-        // Generate a random boundary - This must be unique with respect to the form's contents.
-        this.boundary = '------RWWorkerFormDataBoundary' + Math.random().toString(36);
-        var internal_data = this.data = [];
-        /**
-        * Internal method.
-        * @param inp String | ArrayBuffer | Uint8Array  Input
-        */
-        this.__append = function(inp) {
-            var i = 0, len;
-            if (typeof inp == 'string') {
-                for (len = inp.length; i < len; ++i)
-                    internal_data.push(inp.charCodeAt(i) & 0xff);
-            } else if (inp && inp.byteLength) {/*If ArrayBuffer or typed array */
-                if (!('byteOffset' in inp))   /* If ArrayBuffer, wrap in view */
-                    inp = new Uint8Array(inp);
-                for (len = inp.byteLength; i < len; ++i)
-                    internal_data.push(inp[i] & 0xff);
-            }
-        };
-    }
     /**
     * @param name     String                                   Key name
     * @param value    String|Blob|File|typed array|ArrayBuffer Value
@@ -76,7 +78,7 @@
         if (arguments.length < 2) {
             throw new SyntaxError('Not enough arguments');
         }
-        var part = '--' + this.boundary + '\r\n' + 
+        var part = '--' + this.boundary + '\r\n' +
                 'Content-Disposition: form-data; name="' + name + '"';
 
         if (value instanceof File || value instanceof Blob) {
@@ -85,7 +87,7 @@
                             filename || value.name);
         } else if (typeof value.byteLength == 'number') {
             // Duck-typed typed array or array buffer
-            part += '; filename="'+ (filename || 'blob').replace(/"/g,'%22') +'"\r\n';
+            part += '; filename="' + (filename || 'blob').replace(/"/g,'%22') + '"\r\n';
             part += 'Content-Type: application/octet-stream\r\n\r\n';
             this.__append(part);
             this.__append(value);
