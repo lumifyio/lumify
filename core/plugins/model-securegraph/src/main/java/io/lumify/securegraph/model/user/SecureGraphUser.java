@@ -1,10 +1,10 @@
 package io.lumify.securegraph.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.web.clientapi.model.UserStatus;
 import io.lumify.web.clientapi.model.UserType;
-import io.lumify.web.clientapi.model.Privilege;
-import io.lumify.core.user.User;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -50,6 +50,9 @@ public class SecureGraphUser implements User, Serializable {
         this.privileges = privileges;
         this.currentWorkspaceId = currentWorkspaceId;
         this.preferences = preferences;
+        if (this.preferences == null) {
+            this.preferences = new JSONObject();
+        }
     }
 
     @Override
@@ -73,25 +76,39 @@ public class SecureGraphUser implements User, Serializable {
     }
 
     @Override
-    public String getEmailAddress() { return emailAddress; }
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 
     @Override
-    public Date getCreateDate() { return createDate; }
+    public Date getCreateDate() {
+        return createDate;
+    }
 
     @Override
-    public Date getCurrentLoginDate() { return currentLoginDate; }
+    public Date getCurrentLoginDate() {
+        return currentLoginDate;
+    }
 
     @Override
-    public String getCurrentLoginRemoteAddr() { return currentLoginRemoteAddr; }
+    public String getCurrentLoginRemoteAddr() {
+        return currentLoginRemoteAddr;
+    }
 
     @Override
-    public Date getPreviousLoginDate() { return previousLoginDate; }
+    public Date getPreviousLoginDate() {
+        return previousLoginDate;
+    }
 
     @Override
-    public String getPreviousLoginRemoteAddr() { return previousLoginRemoteAddr; }
+    public String getPreviousLoginRemoteAddr() {
+        return previousLoginRemoteAddr;
+    }
 
     @Override
-    public int getLoginCount() { return loginCount; }
+    public int getLoginCount() {
+        return loginCount;
+    }
 
     @Override
     public UserType getUserType() {
@@ -118,7 +135,9 @@ public class SecureGraphUser implements User, Serializable {
     }
 
     @Override
-    public JSONObject getUiPreferences() { return preferences; }
+    public JSONObject getUiPreferences() {
+        return preferences;
+    }
 
     @Override
     public String toString() {
