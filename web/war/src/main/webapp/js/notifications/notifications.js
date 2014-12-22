@@ -27,6 +27,7 @@ define([
             this.on(document, 'notificationActive', this.onNotificationActive);
             this.on(document, 'notificationDeleted', this.onNotificationDeleted);
 
+            this.immediateUpdate = this.update;
             this.update = _.debounce(this.update.bind(this), 250);
             this.sendMarkRead = _.debounce(this.sendMarkRead.bind(this), 5000);
 
@@ -113,7 +114,7 @@ define([
             } catch(e) { }
         };
 
-        this.dismissNotification = function(notification) {
+        this.dismissNotification = function(notification, immediate) {
             this.stack = _.reject(this.stack, function(n) {
                 return n.id === notification.id;
             });
@@ -122,7 +123,11 @@ define([
                 this.markRead.push(notification.id);
                 this.sendMarkRead();
             }
-            this.update();
+            if (immediate) {
+                this.immediateUpdate();
+            } else {
+                this.update();
+            }
         };
 
         this.sendMarkRead = function() {
@@ -172,7 +177,7 @@ define([
 
                     if (self.attr.allowDismiss !== false) {
                         this.on('click', function(clicked) {
-                            self.dismissNotification(clicked);
+                            self.dismissNotification(clicked, true);
                         })
                     }
                     this.classed('critical', function(n) {
@@ -206,7 +211,7 @@ define([
                     var exiting = this.exit(),
                         exitingSize = exiting.size();
 
-                    self.$container.css('min-width', self.$container.width() + 'px');
+                    self.$container.css('min-width', Math.max(self.$container.width(), 200) + 'px');
 
                     if (self.attr.animated !== false) {
                         exiting = exiting

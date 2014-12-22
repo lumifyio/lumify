@@ -1,5 +1,5 @@
-@import '../util/constants';
-@import '../util/selection';
+@import (reference) '../util/constants';
+@import (reference) '../util/selection';
 
 .notifications {
   @padding: 10px;
@@ -9,19 +9,19 @@
   cursor: pointer;
   .above-graph(2);
   .disable-text-selection;
+  .box-shadow(0 5px 20px fadeout(black, 95%));
 
   .notification {
     list-style: none;
-    background: fadeout(black, 40%);
-    color: white;
     padding: 0.5em 1em;
     margin: 0.5em 0;
     padding-right: 3em;
+    padding-left: 30px;
     &:first-child {
       margin-top: 0;
     }
     position: relative;
-    border-radius: 4px;
+    border-radius: 2px;
 
     h1, h2 {
       font-weight: normal;
@@ -29,7 +29,6 @@
       padding: 0;
       line-height: 1.5em;
       .regular-font;
-      text-shadow: 0 1px solid black;
     }
 
     h1 {
@@ -61,33 +60,68 @@
     }
 
     .theme(@color: orange) {
-      #gradient > .vertical-three-colors(lighten(@color, 15%), @color, 90%, darken(@color, 5%));
-      color: darken(@color, 40%);
-      text-shadow: 0 1px 2px lighten(@color, 20%);
-      .box-shadow(0 1px 10px fadeout(darken(@color, 0%), 70%));
+      background: fade(@color, 95%);
+      @text-color: mix(@color, white, 15%);
+      text-shadow: 0 -1px 0px fade(darken(@color, 10%), 50%);
+      color: @text-color;
+      h2 {
+        color: fadeout(desaturate(@text-color, 20%), 10%);
+      }
     }
 
-    @blue: fadeout(
-               lighten(
-                 @blue-color,
-                 10%),
-               30%
-             );
     &.info {
-      .theme(darken(@blue, 5%));
+      .theme(@notification-info);
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: darken(@notification-info, 20%);
+        left: 9px;
+        top: 50%;
+        border-radius: 6px;
+        margin-top: -5px;
+      }
     }
     &.critical {
-      @desaturated-blue: fadeout(
-               lighten(
-                desaturate(@blue-color, 30%),
-                 10%),
-               30%
-             );
-      .theme(spin(@desaturated-blue, 160));
+      .theme(@notification-critical);
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-width: 0 7px 12px 7px;
+        border-color: transparent;
+        border-bottom-color: lighten(@notification-critical, 20%);
+        border-style: solid;
+        left: 8px;
+        top: 50%;
+        margin-top: -8px;
+      }
     }
     &.warning {
-      .theme(spin(@blue, 200));
+      .theme(@notification-warning);
+
+      @text-color: darken(@notification-warning, 40%);
+      text-shadow: 0 1px 0px fade(lighten(@notification-warning, 20%), 50%);
+      color: @text-color;
+      h2 {
+        color: fadeout(desaturate(@text-color, 20%), 10%);
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        background: lighten(@notification-warning, 20%);
+        left: 10px;
+        top: 50%;
+        margin-top: -6px;
+        .rotate(45deg);
+      }
     }
   }
-
 }
