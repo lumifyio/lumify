@@ -13,7 +13,7 @@ define([], function() {
                     dispatchMain('dataRequestProgress', {
                         progress: p,
                         requestId: message.data.requestId,
-                        originalRequest: _.pick(message.data, 'service', 'method', 'parameters')
+                        originalRequest: _.pick(message.data, 'service', 'method')
                     });
                 })
                 .then(function(result) {
@@ -21,7 +21,7 @@ define([], function() {
                         success: true,
                         result: result,
                         requestId: message.data.requestId,
-                        originalRequest: _.pick(message.data, 'service', 'method', 'parameters')
+                        originalRequest: _.pick(message.data, 'service', 'method')
                     });
                 })
                 .catch(function(error) {
@@ -32,7 +32,7 @@ define([], function() {
                         success: false,
                         error: error,
                         requestId: message.data.requestId,
-                        originalRequest: _.pick(message.data, 'service', 'method', 'parameters')
+                        originalRequest: _.pick(message.data, 'service', 'method')
                     })
                 })
         });
