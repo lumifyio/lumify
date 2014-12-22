@@ -58,6 +58,7 @@ define([
                 return data.notificationId === n.id;
             });
             this.update();
+            this.trigger('notificationCountUpdated', { count: this.stack.length });
         };
 
         this.displayNotifications = function(notifications) {
