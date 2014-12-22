@@ -29,7 +29,7 @@ define([
 
             this.immediateUpdate = this.update;
             this.update = _.debounce(this.update.bind(this), 250);
-            this.sendMarkRead = _.debounce(this.sendMarkRead.bind(this), 5000);
+            this.sendMarkRead = _.debounce(this.sendMarkRead.bind(this), 3000);
 
             Promise.all([
                 this.dataRequest('config', 'properties'),
@@ -114,7 +114,10 @@ define([
             } catch(e) { }
         };
 
-        this.dismissNotification = function(notification, immediate) {
+        this.dismissNotification = function(notification, options) {
+            var immediate = options && options.immediate,
+                animate = options && options.animate;
+
             this.stack = _.reject(this.stack, function(n) {
                 return n.id === notification.id;
             });
@@ -124,9 +127,9 @@ define([
                 this.sendMarkRead();
             }
             if (immediate) {
-                this.immediateUpdate();
+                this.immediateUpdate(animate);
             } else {
-                this.update();
+                this.update(animate);
             }
         };
 
@@ -153,7 +156,11 @@ define([
                 .done();
         };
 
-        this.update = function() {
+        this.canDismissNotification = function(notification) {
+            return this.attr.allowDismiss !== false || notification.type === 'user';
+        };
+
+        this.update = function(forceAnimation) {
             var self = this;
 
             d3.select(this.$container[0])
@@ -170,16 +177,17 @@ define([
                             .call(function() {
                                 this.append('h1')
                                 this.append('h2')
-                                if (self.attr.allowDismiss !== false) {
-                                    this.append('button')
-                                }
+                                this.append('button').style('display', 'none');
                             })
 
-                    if (self.attr.allowDismiss !== false) {
-                        this.on('click', function(clicked) {
-                            self.dismissNotification(clicked, true);
-                        })
-                    }
+                    this.on('click', function(clicked) {
+                        if (self.canDismissNotification(clicked)) {
+                            self.dismissNotification(clicked, {
+                                immediate: true,
+                                animate: true
+                            });
+                        }
+                    });
                     this.classed('critical', function(n) {
                         return (/CRITICAL/i).test(n.severity);
                     })
@@ -189,6 +197,12 @@ define([
                     this.classed('info', function(n) {
                         return !n.severity || (/INFO/i).test(n.severity);
                     });
+                    this.classed('canDismiss', function(n) {
+                        return self.canDismissNotification(n);
+                    });
+                    this.select('button').style('display', function(n) {
+                        return self.canDismissNotification(n) ? '' : 'none';
+                    });
                     this.select('h1').text(function(n) {
                         return n.title
                     });
@@ -196,7 +210,7 @@ define([
                         return n.message
                     });
 
-                    if (self.attr.animated !== false) {
+                    if (forceAnimation || self.attr.animated !== false) {
                         newOnes = newOnes.transition()
                             .delay(function(d, i) {
                                 return i / newOnes.size() * 100 + 100;
@@ -213,7 +227,7 @@ define([
 
                     self.$container.css('min-width', Math.max(self.$container.width(), 200) + 'px');
 
-                    if (self.attr.animated !== false) {
+                    if (forceAnimation || self.attr.animated !== false) {
                         exiting = exiting
                             .style('left', '0px')
                             .transition()

@@ -23,6 +23,10 @@
     position: relative;
     border-radius: 2px;
 
+    &.canDismiss {
+      cursor: pointer;
+    }
+
     h1, h2 {
       font-weight: normal;
       margin: 0;
@@ -77,7 +81,7 @@
         position: absolute;
         width: 12px;
         height: 12px;
-        background: darken(@notification-info, 20%);
+        background: mix(@notification-info, white, 40%);
         left: 9px;
         top: 50%;
         border-radius: 6px;
@@ -94,7 +98,7 @@
         height: 0;
         border-width: 0 7px 12px 7px;
         border-color: transparent;
-        border-bottom-color: lighten(@notification-critical, 20%);
+        border-bottom-color: mix(@notification-critical, white, 40%);
         border-style: solid;
         left: 8px;
         top: 50%;
@@ -116,7 +120,7 @@
         position: absolute;
         width: 11px;
         height: 11px;
-        background: lighten(@notification-warning, 20%);
+        background: mix(@notification-warning, white, 40%);
         left: 10px;
         top: 50%;
         margin-top: -6px;
