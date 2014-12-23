@@ -17,9 +17,9 @@ import java.util.Date;
 
 public class ChangePassword extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ChangePassword.class);
-    private static final String TOKEN_PARAMETER_NAME = "token";
-    private static final String NEW_PASSWORD_PARAMETER_NAME = "newPassword";
-    private static final String NEW_PASSWORD_CONFIRMATION_PARAMETER_NAME = "newPasswordConfirmation";
+    public static final String TOKEN_PARAMETER_NAME = "token";
+    public static final String NEW_PASSWORD_PARAMETER_NAME = "newPassword";
+    public static final String NEW_PASSWORD_CONFIRMATION_PARAMETER_NAME = "newPasswordConfirmation";
 
     @Inject
     public ChangePassword(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {

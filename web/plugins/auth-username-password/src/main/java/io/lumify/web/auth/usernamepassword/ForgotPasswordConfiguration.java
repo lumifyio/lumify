@@ -11,7 +11,13 @@ public class ForgotPasswordConfiguration {
     private int mailServerPort;
     private String mailServerUsername;
     private String mailServerPassword;
+    private MailServerAuthentication mailServerAuthentication;
     private int tokenLifetimeMinutes;
+    private String emailFrom;
+    private String emailReplyTo;
+    private String emailSubject;
+    private String newPasswordLabel;
+    private String newPasswordConfirmationLabel;
 
     @Configurable(name = "enabled", defaultValue = "false")
     public void setEnabled(String enabled) {
@@ -38,17 +44,49 @@ public class ForgotPasswordConfiguration {
         this.mailServerPassword = mailServerPassword;
     }
 
+    @Configurable(name = "mailServerAuthentication", defaultValue = "NONE")
+    public void setMailServerAuthentication(String mailServerAuthentication) {
+        this.mailServerAuthentication = MailServerAuthentication.valueOf(mailServerAuthentication);
+    }
+
     @Configurable(name = "tokenLifetimeMinutes", defaultValue = "60")
     public void setTokenLifetimeMinutes(int tokenLifetimeMinutes) {
         this.tokenLifetimeMinutes = tokenLifetimeMinutes;
     }
 
-    @PostConfigurationValidator(description = "mail server settings are required if the forgot password feature is enabled")
+    @Configurable(name = "emailFrom", required = false)
+    public void setEmailFrom(String emailFrom) {
+        this.emailFrom = emailFrom;
+    }
+
+    @Configurable(name = "emailReplyTo", required = false)
+    public void setEmailReplyTo(String emailReplyTo) {
+        this.emailReplyTo = emailReplyTo;
+    }
+
+    @Configurable(name = "emailSubject", defaultValue = "Forgotten Lumify Password")
+    public void setEmailSubject(String emailSubject) {
+        this.emailSubject = emailSubject;
+    }
+
+    @Configurable(name = "newPasswordLabel", defaultValue = "New Password")
+    public void setNewPasswordLabel(String newPasswordLabel) {
+        this.newPasswordLabel = newPasswordLabel;
+    }
+
+    @Configurable(name = "newPasswordConfirmationLabel", defaultValue = "New Password (again)")
+    public void setNewPasswordConfirmationLabel(String newPasswordConfirmationLabel) {
+        this.newPasswordConfirmationLabel = newPasswordConfirmationLabel;
+    }
+
+    @PostConfigurationValidator(description = "mail server and from address settings are required if the forgot password feature is enabled")
     public boolean validateMailServerSettings() {
         return !enabled || (isNotNullOrBlank(mailServerHostname) &&
                             mailServerPort > 0 &&
                             isNotNullOrBlank(mailServerUsername) &&
-                            isNotNullOrBlank(mailServerPassword)
+                            isNotNullOrBlank(mailServerPassword) &&
+                            isNotNullOrBlank(emailFrom) &&
+                            isNotNullOrBlank(emailReplyTo)
         );
     }
 
@@ -72,11 +110,41 @@ public class ForgotPasswordConfiguration {
         return mailServerUsername;
     }
 
+    public MailServerAuthentication getMailServerAuthentication() {
+        return mailServerAuthentication;
+    }
+
     public int getTokenLifetimeMinutes() {
         return tokenLifetimeMinutes;
     }
 
+    public String getEmailFrom() {
+        return emailFrom;
+    }
+
+    public String getEmailReplyTo() {
+        return emailReplyTo;
+    }
+
+    public String getEmailSubject() {
+        return emailSubject;
+    }
+
+    public String getNewPasswordLabel() {
+        return newPasswordLabel;
+    }
+
+    public String getNewPasswordConfirmationLabel() {
+        return newPasswordConfirmationLabel;
+    }
+
     private boolean isNotNullOrBlank(String s) {
         return s != null && s.trim().length() > 0;
+    }
+
+    public enum MailServerAuthentication {
+        NONE,
+        TLS,
+        SSL
     }
 }

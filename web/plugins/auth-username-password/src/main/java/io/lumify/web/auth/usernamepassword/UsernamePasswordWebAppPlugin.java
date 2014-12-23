@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 
 public class UsernamePasswordWebAppPlugin implements WebAppPlugin {
     public static final String LOOKUP_TOKEN_ROUTE = "/forgotPassword";
+    public static final String CHANGE_PASSWORD_ROUTE = "/forgotPassword/changePassword";
     private Configuration configuration;
 
     @Override
@@ -37,7 +38,7 @@ public class UsernamePasswordWebAppPlugin implements WebAppPlugin {
         if (forgotPasswordConfiguration.isEnabled()) {
             app.post("/forgotPassword/requestToken", RequestToken.class);
             app.get(LOOKUP_TOKEN_ROUTE, LookupToken.class);
-            app.post("/forgotPassword/changePassword", ChangePassword.class);
+            app.post(CHANGE_PASSWORD_ROUTE, ChangePassword.class);
         }
     }
 
