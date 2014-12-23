@@ -103,5 +103,13 @@ public class SystemUser implements User {
         return "SystemUser";
     }
 
+    @Override
+    public String getPasswordResetToken() {
+        return null;
+    }
 
+    @Override
+    public Date getPasswordResetTokenExpirationDate() {
+        return null;
+    }
 }

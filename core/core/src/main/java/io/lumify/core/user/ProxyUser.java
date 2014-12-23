@@ -170,6 +170,24 @@ public class ProxyUser implements User {
         return proxiedUser.getPrivileges();
     }
 
+    @Override
+    public String getPasswordResetToken() {
+        ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
+        return proxiedUser.getPasswordResetToken();
+    }
+
+    @Override
+    public Date getPasswordResetTokenExpirationDate() {
+        ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
+        return proxiedUser.getPasswordResetTokenExpirationDate();
+    }
+
     private void ensureUser() {
         if (proxiedUser == null) {
             proxiedUser = userRepository.findById(userId);
