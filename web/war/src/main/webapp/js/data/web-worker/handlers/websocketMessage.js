@@ -106,7 +106,7 @@ define(['require'], function(require) {
                     socketHandlers.propertyChange(data);
                 }
             },
-            systemNotification: function(data) {
+            notification: function(data) {
                 dispatchMain('rebroadcastEvent', {
                     eventName: 'notificationActive',
                     data: data

@@ -1,11 +1,13 @@
 package io.lumify.opencvObjectDetector;
 
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibility;
@@ -43,6 +45,7 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
     private static final String PROCESS = OpenCVObjectDetectorPropertyWorker.class.getName();
 
     private List<CascadeClassifierHolder> objectClassifiers = new ArrayList<CascadeClassifierHolder>();
+    private ArtifactThumbnailRepository artifactThumbnailRepository;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -109,8 +112,9 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        BufferedImage bImage = ImageIO.read(in);
-
+        BufferedImage originalImage = ImageIO.read(in);
+        Vertex artifactVertex = (Vertex) data.getElement();
+        BufferedImage bImage = artifactThumbnailRepository.getTransformedImage(originalImage, artifactVertex);
         List<ArtifactDetectedObject> detectedObjects = detectObjects(bImage);
         saveDetectedObjects((Vertex) data.getElement(), data.getProperty(), detectedObjects);
     }
@@ -161,6 +165,11 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
 
         String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("image"));
+    }
+
+    @Inject
+    public void setArtifactThumbnailRepository(ArtifactThumbnailRepository artifactThumbnailRepository) {
+        this.artifactThumbnailRepository = artifactThumbnailRepository;
     }
 
     private class CascadeClassifierHolder {

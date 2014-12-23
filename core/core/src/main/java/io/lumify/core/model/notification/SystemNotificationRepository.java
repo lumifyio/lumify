@@ -1,4 +1,4 @@
-package io.lumify.core.model.systemNotification;
+package io.lumify.core.model.notification;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.lock.LockRepository;
@@ -16,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
-public abstract class SystemNotificationRepository {
+public abstract class SystemNotificationRepository extends NotificationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SystemNotificationRepository.class);
     private static final String LOCK_NAME = SystemNotificationRepository.class.getName();
     private boolean shutdown;
@@ -39,19 +39,10 @@ public abstract class SystemNotificationRepository {
 
     public abstract void endNotification(SystemNotification notification);
 
-    private static String hash(String s) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] md5 = digest.digest(s.getBytes());
-            return Hex.encodeHexString(md5);
-        } catch (NoSuchAlgorithmException e) {
-            throw new LumifyException("Could not find MD5", e);
-        }
-    }
-
     public static JSONObject toJSONObject(SystemNotification notification) {
         JSONObject json = new JSONObject();
         json.put("id", notification.getId());
+        json.put("type", "system");
         json.put("severity", notification.getSeverity().toString());
         json.put("title", notification.getTitle());
         json.put("message", notification.getMessage());

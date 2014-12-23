@@ -1,8 +1,8 @@
-package io.lumify.sql.model.systemNotification;
+package io.lumify.sql.model.notification;
 
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotificationSeverity;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -46,7 +46,7 @@ public class SqlSystemNotification implements SystemNotification {
     }
 
     @Override
-    @Column(name = "title")
+    @Column(name = "title", length = 1024)
     public String getTitle() {
         return title;
     }
@@ -57,7 +57,7 @@ public class SqlSystemNotification implements SystemNotification {
     }
 
     @Override
-    @Column(name = "message")
+    @Column(name = "message", length = 4000)
     public String getMessage() {
         return message;
     }

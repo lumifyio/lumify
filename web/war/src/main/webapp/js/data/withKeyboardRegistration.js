@@ -17,7 +17,7 @@ define([
                     'delete': {
                         fire: 'deleteSelected',
                         desc: i18n('lumify.help.delete')
-                    },
+                    }
                 }
             });
 
@@ -26,7 +26,7 @@ define([
                 shortcuts: {
                     'alt-r': { fire: 'addRelatedItems', desc: i18n('lumify.help.add_related') },
                     'alt-t': { fire: 'searchTitle', desc: i18n('lumify.help.search_title') },
-                    'alt-s': { fire: 'searchRelated', desc: i18n('lumify.help.search_related') },
+                    'alt-s': { fire: 'searchRelated', desc: i18n('lumify.help.search_related') }
                 }
             });
         });

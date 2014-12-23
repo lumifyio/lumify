@@ -1,4 +1,4 @@
-package io.lumify.core.model.systemNotification;
+package io.lumify.core.model.notification;
 
 public enum SystemNotificationSeverity {
     INFORMATIONAL,

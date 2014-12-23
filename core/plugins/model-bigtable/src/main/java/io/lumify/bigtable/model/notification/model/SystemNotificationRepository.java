@@ -1,8 +1,8 @@
-package io.lumify.bigtable.model.systemNotification.model;
+package io.lumify.bigtable.model.notification.model;
 
 import com.altamiracorp.bigtable.model.*;
-import io.lumify.bigtable.model.systemNotification.BigTableSystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.bigtable.model.notification.BigTableSystemNotification;
+import io.lumify.core.model.notification.SystemNotificationSeverity;
 
 import java.util.Date;
 
