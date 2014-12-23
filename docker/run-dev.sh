@@ -1,5 +1,14 @@
 #!/bin/bash
 
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+cd ${DIR}
+
 FS_DIR=$(pwd)/fs
 
 mkdir -p ${FS_DIR}/opt/lumify
@@ -15,8 +24,8 @@ mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/data
 mkdir -p ${FS_DIR}/opt/rabbitmq_server-3.4.1/var
 
 sudo docker run \
+  -v /opt/lumify:/opt/lumify \
   -v ${FS_DIR}/../../:/opt/lumify-source \
-  -v ${FS_DIR}/opt/lumify:/opt/lumify \
   -v ${FS_DIR}/var/log:/var/log \
   -v ${FS_DIR}/tmp:/tmp \
   -v ${FS_DIR}/var/lib/hadoop-hdfs:/var/lib/hadoop-hdfs \
