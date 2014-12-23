@@ -16,6 +16,8 @@ define([
     'util/withAsyncQueue',
     'util/withDataRequest',
     'configuration/plugins/exportWorkspace/plugin',
+    'configuration/plugins/graphLayout/plugin',
+    'configuration/plugins/graphSelector/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -33,7 +35,9 @@ define([
     withContextMenu,
     withAsyncQueue,
     withDataRequest,
-    WorkspaceExporters,
+    WorkspaceExporter,
+    GraphLayout,
+    GraphSelector,
     colorjs) {
     'use strict';
 
@@ -166,7 +170,7 @@ define([
                             group: 'nodes',
                             classes: classes,
                             data: {
-                                id: tempId,
+                                id: tempId
                             },
                             renderedPosition: renderedPosition,
                             selected: false
@@ -307,7 +311,7 @@ define([
                                 group: 'nodes',
                                 classes: self.classesForVertex(vertex),
                                 data: {
-                                    id: toCyId(vertex),
+                                    id: toCyId(vertex)
                                 },
                                 grabbable: self.isWorkspaceEditable,
                                 selected: false // TODO: check selected?
@@ -563,7 +567,7 @@ define([
         };
 
         this.onContextMenuExportWorkspace = function(exporterId) {
-            var exporter = WorkspaceExporters.exportersById[exporterId],
+            var exporter = WorkspaceExporter.exportersById[exporterId],
                 $node = this.$node,
                 workspaceId = this.previousWorkspace;
 
@@ -878,6 +882,24 @@ define([
             });
         };
 
+        this.onContextMenuSelect = function(select) {
+            this.cytoscapeReady(function(cy) {
+                if (select === 'all') {
+                    cy.nodes().filter(':unselected').select();
+                } else if (select === 'none') {
+                    cy.nodes().filter(':selected').unselect();
+                } else if (select === 'invert') {
+                    var selected = cy.nodes().filter(':selected'),
+                        unselected = cy.nodes().filter(':unselected');
+                    selected.unselect();
+                    unselected.select();
+                } else {
+                    var selector = GraphSelector.selectorsById[select];
+                    selector(cy);
+                }
+            });
+        };
+
         this.graphTap = throttle('selection', SELECTION_THROTTLE, function(event) {
             this.trigger('defocusPaths');
 
@@ -932,33 +954,77 @@ define([
             if (menu) {
                 // Show/Hide the layout selection menu item
                 if (event.cy.nodes().filter(':selected').length) {
-                    menu.find('.layout-multi').show();
+                    menu.find('.layouts-multi').show();
                 } else {
-                    menu.find('.layout-multi').hide();
+                    menu.find('.layouts-multi').hide();
                 }
 
-                if (menu.is('.graph-context-menu') && WorkspaceExporters.exporters.length) {
-                    var $exporters = menu.find('.exporters');
+                if (menu.is(self.attr.contextMenuSelector)) {
+                    if (WorkspaceExporter.exporters.length) {
+                        var $exporters = menu.find('.exporters');
 
-                    if ($exporters.length === 0) {
-                        $exporters = $('<li class="dropdown-submenu"><a>' +
-                          i18n('graph.contextmenu.export_workspace') +
-                          '</a>' +
-                          '<ul class="dropdown-menu exporters"></ul></li>'
-                         ).appendTo(menu).before('<li class="divider"></li>').find('ul');
-                    }
+                        if ($exporters.length === 0) {
+                            $exporters = $('<li class="dropdown-submenu"><a>' +
+                                i18n('graph.contextmenu.export_workspace') +
+                                '</a>' +
+                                '<ul class="dropdown-menu exporters"></ul></li>'
+                            ).appendTo(menu).before('<li class="divider"></li>').find('ul');
+                        }
 
-                    $exporters.empty();
-                    WorkspaceExporters.exporters.forEach(function(exporter) {
-                        $exporters.append(
-                            $('<li><a href="#"></a></li>')
-                                .find('a')
+                        $exporters.empty();
+                        WorkspaceExporter.exporters.forEach(function(exporter) {
+                            $exporters.append(
+                                $('<li><a href="#"></a></li>')
+                                    .find('a')
                                     .text(exporter.menuItem)
                                     .attr('data-func', 'exportWorkspace')
                                     .attr('data-args', JSON.stringify([exporter._identifier]))
-                                .end()
-                        );
-                    });
+                                    .end()
+                            );
+                        });
+                    }
+
+                    if (GraphSelector.selectors.length) {
+                        var $selectorMenu = menu.find('.selectors .dropdown-menu');
+                        $selectorMenu.find('.plugin').remove();
+                        var selected = event.cy.nodes().filter(':selected').length > 0;
+                        GraphSelector.selectors.forEach(function(selector) {
+                            if ((selected && _.contains(['always', 'selected'], selector.visibility)) ||
+                                (!selected && _.contains(['always', 'none-selected'], selector.visibility))) {
+
+                                $selectorMenu.append(
+                                    $('<li class="plugin"><a href="#" tabindex="-1"></a></li>')
+                                        .find('a')
+                                        .text(selector.displayName)
+                                        .attr('data-func', 'select')
+                                        .attr('data-args', '["' + selector.identifier + '"]')
+                                        .end()
+                                );
+                            }
+                        });
+                    }
+
+                    if (GraphLayout.layouts.length) {
+                        var appendLayoutMenuItems = function($layoutMenu, onlySelected) {
+                            var onlySelectedArg = onlySelected ? ',{"onlySelected":true}' : '';
+
+                            $layoutMenu.find('.plugin').remove();
+
+                            GraphLayout.layouts.forEach(function(layout) {
+                                $layoutMenu.append(
+                                    $('<li class="plugin"><a href="#" tabindex="-1"></a></li>')
+                                        .find('a')
+                                        .text(layout.displayName)
+                                        .attr('data-func', 'layout')
+                                        .attr('data-args', '["' + layout.identifier + '"' + onlySelectedArg + ']')
+                                        .end()
+                                );
+                            });
+                        };
+
+                        appendLayoutMenuItems(menu.find('.layouts .dropdown-menu'), false);
+                        appendLayoutMenuItems(menu.find('.layouts-multi .dropdown-menu'), true);
+                    }
                 }
 
                 this.toggleMenu({positionUsingEvent: event}, menu);
@@ -985,7 +1051,7 @@ define([
             var self = this,
                 nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
-                edgeIds = [];
+                edgeIds = [],
                 vertexIds = [];
 
             nodes.each(function(index, cyNode) {
@@ -1098,7 +1164,7 @@ define([
 
                     self.dataRequest('vertex', 'store', { vertexIds: fromCyId(nId) })
                         .done(function(vertex) {
-                            truncatedTitle = cyNode.data('truncatedTitle');
+                            var truncatedTitle = cyNode.data('truncatedTitle');
 
                             if (vertex) {
                                 cyNode.data('previousTruncated', truncatedTitle);
@@ -1171,16 +1237,30 @@ define([
         };
 
         // Delete entities before saving (faster feeling interface)
-        this.onUpdateWorkspace = function(event, data) {
+        this.onUpdateWorkspace = function(cy, event, data) {
             if (data && data.entityDeletes && data.entityDeletes.length) {
-                this.cytoscapeReady(function(cy) {
-                    cy.$(
-                        data.entityDeletes.map(function(vertexId) {
-                        return '#' + toCyId(vertexId);
-                    }).join(',')).remove();
+                cy.$(
+                    data.entityDeletes.map(function(vertexId) {
+                    return '#' + toCyId(vertexId);
+                }).join(',')).remove();
 
-                    this.setWorkspaceDirty();
-                    this.updateVertexSelections(cy);
+                this.setWorkspaceDirty();
+                this.updateVertexSelections(cy);
+            }
+            if (data && data.entityUpdates && data.entityUpdates.length && this.$node.closest('.visible').length) {
+                data.entityUpdates.forEach(function(entityUpdate) {
+                    if ('graphLayoutJson' in entityUpdate) {
+                        var projectedPosition = cy.renderer().projectIntoViewport(
+                            entityUpdate.graphLayoutJson.pagePosition.x,
+                            entityUpdate.graphLayoutJson.pagePosition.y
+                        );
+
+                        entityUpdate.graphPosition = retina.pixelsToPoints({
+                            x: projectedPosition[0],
+                            y: projectedPosition[1]
+                        });
+                        delete entityUpdate.graphLayoutJson;
+                    }
                 });
             }
         }
@@ -1311,7 +1391,7 @@ define([
 
                             position = {
                                 x: positionInNode.x + offset.left,
-                                y: positionInNode.y + offset.top,
+                                y: positionInNode.y + offset.top
                             };
 
                         } else if (anchorTo.page) {
@@ -1425,9 +1505,11 @@ define([
 
             this.$node.html(loadingTemplate({}));
 
+            this.cytoscapeReady(function(cy) {
+                this.on(document, 'updateWorkspace', this.onUpdateWorkspace.bind(this, cy));
+            })
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
-            this.on(document, 'updateWorkspace', this.onUpdateWorkspace);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
             this.on(document, 'verticesHoveringEnded', this.onVerticesHoveringEnded);
             this.on(document, 'verticesDropped', this.onVerticesDropped);
@@ -1498,6 +1580,9 @@ define([
             var self = this;
 
             cytoscape('renderer', 'lumify', Renderer);
+            GraphLayout.layouts.forEach(function(layout) {
+                cytoscape('layout', layout.identifier, layout);
+            });
             cytoscape({
                 showOverlay: false,
                 minZoom: 1 / 4,

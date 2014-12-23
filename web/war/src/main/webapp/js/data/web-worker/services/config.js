@@ -19,6 +19,13 @@ define([
 
             'vertex.relationships.maxPerSection': 5,
 
+            // Search
+            'search.disableWildcardSearch': 'false',
+
+            // Notifications
+            'notifications.system.autoDismissSeconds': '-1',
+            'notifications.user.autoDismissSeconds': '5',
+
             // Hide multivalue properties after this count
             'properties.multivalue.defaultVisibleCount': 2,
 

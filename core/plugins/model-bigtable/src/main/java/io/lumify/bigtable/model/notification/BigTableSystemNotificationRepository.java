@@ -1,13 +1,13 @@
-package io.lumify.bigtable.model.systemNotification;
+package io.lumify.bigtable.model.notification;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.google.inject.Inject;
-import io.lumify.bigtable.model.systemNotification.model.SystemNotificationRowKey;
+import io.lumify.bigtable.model.notification.model.SystemNotificationRowKey;
 import io.lumify.core.model.lock.LockRepository;
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotificationSeverity;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
@@ -21,14 +21,14 @@ import java.util.UUID;
 
 public class BigTableSystemNotificationRepository extends SystemNotificationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BigTableSystemNotificationRepository.class);
-    private io.lumify.bigtable.model.systemNotification.model.SystemNotificationRepository repository;
+    private io.lumify.bigtable.model.notification.model.SystemNotificationRepository repository;
 
     @Inject
     public BigTableSystemNotificationRepository(ModelSession modelSession,
                                                 LockRepository lockRepository,
                                                 UserRepository userRepository,
                                                 WorkQueueRepository workQueueRepository) {
-        repository = new io.lumify.bigtable.model.systemNotification.model.SystemNotificationRepository(modelSession);
+        repository = new io.lumify.bigtable.model.notification.model.SystemNotificationRepository(modelSession);
         startBackgroundThread(lockRepository, userRepository, workQueueRepository);
     }
 
@@ -61,6 +61,11 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
     }
 
     @Override
+    public SystemNotification getNotification(String rowKey, User user) {
+        return repository.findByRowKey(rowKey, user.getModelUserContext());
+    }
+
+    @Override
     public BigTableSystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, Date startDate, Date endDate) {
         if (startDate == null) {
             startDate = new Date();
@@ -84,6 +89,7 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
 
     @Override
     public void endNotification(SystemNotification notification) {
-        repository.delete(((BigTableSystemNotification) notification).getRowKey());
+        notification.setEndDate(new Date());
+        repository.save((BigTableSystemNotification) notification, FlushFlag.FLUSH);
     }
 }

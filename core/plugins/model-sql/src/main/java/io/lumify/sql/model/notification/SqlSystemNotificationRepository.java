@@ -1,11 +1,11 @@
-package io.lumify.sql.model.systemNotification;
+package io.lumify.sql.model.notification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.model.lock.LockRepository;
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotificationSeverity;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
@@ -78,6 +78,12 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
         Session session = sessionManager.getSession();
         session.update(notification);
         return notification;
+    }
+
+    @Override
+    public SystemNotification getNotification(String rowKey, User user) {
+        Session session = sessionManager.getSession();
+        return (SystemNotification) session.byId(rowKey).getReference(SystemNotification.class);
     }
 
     @Override

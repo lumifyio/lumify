@@ -4,8 +4,10 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.UserNotification;
+import io.lumify.core.model.notification.UserNotificationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
@@ -272,10 +274,46 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
+    public void pushUserNotification(UserNotification notification) {
+        JSONObject json = new JSONObject();
+        json.put("type", "notification");
+
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(notification.getUserId());
+        permissions.put("users", users);
+        json.put("permissions", permissions);
+
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", UserNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
     public void pushSystemNotification(SystemNotification notification) {
         JSONObject json = new JSONObject();
-        json.put("type", "systemNotification");
-        json.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        json.put("type", "notification");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
+    public void pushSystemNotificationUpdate(SystemNotification notification) {
+        JSONObject json = new JSONObject();
+        json.put("type", "systemNotificationUpdated");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
+    public void pushSystemNotificationEnded(String notificationId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "systemNotificationEnded");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notificationId", notificationId);
         broadcastJson(json);
     }
 

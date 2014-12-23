@@ -5,6 +5,8 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.util.ExecutorServiceUtil;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.core.util.LumifyLogger;
@@ -71,8 +73,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     private void importBaseOwlFile(Authorizations authorizations) {
         importResourceOwl("base.owl", "http://lumify.io", authorizations);
-        importResourceOwl("user.owl", "http://lumify.io/user", authorizations);
-        importResourceOwl("workspace.owl", "http://lumify.io/workspace", authorizations);
+        importResourceOwl("user.owl", UserRepository.USER_CONCEPT_IRI, authorizations);
+        importResourceOwl("workspace.owl", WorkspaceRepository.WORKSPACE_CONCEPT_IRI, authorizations);
         importResourceOwl("comment.owl", "http://lumify.io/comment", authorizations);
     }
 

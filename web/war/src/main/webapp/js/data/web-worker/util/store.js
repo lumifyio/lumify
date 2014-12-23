@@ -384,7 +384,8 @@ define([
                     eventName: 'storeVerticesChanged',
                     data: {
                         updated: updated,
-                        added: added
+                        added: added,
+                        workspaceId: workspaceId
                     }
                 });
             }

@@ -21,7 +21,8 @@
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUser"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceVertex"/>
-        <mapping class="io.lumify.sql.model.systemNotification.SqlSystemNotification"/>
+        <mapping class="io.lumify.sql.model.notification.SqlSystemNotification"/>
+        <mapping class="io.lumify.sql.model.notification.SqlUserNotification"/>
         <mapping class="io.lumify.sql.model.longRunningProcess.SqlLongRunningProcess"/>
     </session-factory>
 </hibernate-configuration>

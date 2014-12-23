@@ -1,4 +1,4 @@
-package io.lumify.bigtable.model.systemNotification.model;
+package io.lumify.bigtable.model.notification.model;
 
 import com.altamiracorp.bigtable.model.RowKey;
 

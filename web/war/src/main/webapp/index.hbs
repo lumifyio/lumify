@@ -28,6 +28,12 @@
           versionParameter = buildTokenReplaced ? buildNumber : Date.now();
 
       require.urlArgs = "v=" + versionParameter;
+
+      document.addEventListener('readyForPlugins', function() {
+        require([
+        {{#each pluginJsResources}}  '{{.}}'{{#unless @last}},{{/unless}}
+        {{/each}}]);
+      }, false);
     })();
   </script>
     <script data-main="lumify" src='libs/requirejs/require.js'></script>
@@ -40,8 +46,5 @@
 <div id='app'></div>
 <div id='login'></div>
 
-{{#each pluginJsResources}}
-<script src='{{.}}'></script>
-{{/each}}
 </body>
 </html>

@@ -55,23 +55,7 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             type = ImageUtils.thumbnailType(originalImage);
             format = ImageUtils.thumbnailFormat(originalImage);
 
-            int cwRotationNeeded = 0;
-            if (clockwiseRotationIri != null) {
-                Integer nullable = (Integer) artifactVertex.getPropertyValue(clockwiseRotationIri);
-                if (nullable != null) {
-                    cwRotationNeeded = nullable;
-                }
-            }
-            boolean yAxisFlipNeeded = false;
-            if (yAxisFlippedIri != null) {
-                Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlippedIri);
-                if (nullable != null) {
-                    yAxisFlipNeeded = nullable;
-                }
-            }
-
-            //Rotate and flip image.
-            BufferedImage transformedImage = ImageUtils.reOrientImage(originalImage, yAxisFlipNeeded, cwRotationNeeded);
+            BufferedImage transformedImage = getTransformedImage(originalImage, artifactVertex);
 
             //Get new image dimensions, which will be used for the icon.
             int[] transformedImageDims = new int[]{transformedImage.getWidth(), transformedImage.getHeight()};
@@ -82,8 +66,6 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
                         transformedImageDims[0], transformedImageDims[1],
                         newImageDims[0], newImageDims[1]);
             }
-
-
             //Resize the image.
             BufferedImage resizedImage = new BufferedImage(newImageDims[0], newImageDims[1], type);
             Graphics2D g = resizedImage.createGraphics();
@@ -100,6 +82,27 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             throw new LumifyResourceNotFoundException("Error reading inputstream");
         }
         return new ArtifactThumbnail(out.toByteArray(), type, format);
+    }
+
+    public BufferedImage getTransformedImage(BufferedImage originalImage, Vertex artifactVertex) {
+        int cwRotationNeeded = 0;
+        if (clockwiseRotationIri != null) {
+            Integer nullable = (Integer) artifactVertex.getPropertyValue(clockwiseRotationIri);
+            if (nullable != null) {
+                cwRotationNeeded = nullable;
+            }
+        }
+        boolean yAxisFlipNeeded = false;
+        if (yAxisFlippedIri != null) {
+            Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlippedIri);
+            if (nullable != null) {
+                yAxisFlipNeeded = nullable;
+            }
+        }
+
+        //Rotate and flip image.
+        BufferedImage transformedImage = ImageUtils.reOrientImage(originalImage, yAxisFlipNeeded, cwRotationNeeded);
+        return transformedImage;
     }
 
     public int[] getScaledDimension(int[] imgSize, int[] boundary) {

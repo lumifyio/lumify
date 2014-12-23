@@ -40,6 +40,19 @@ define([
             return ajax('GET', '/admin/plugins');
         },
 
+        systemNotificationCreate: function(options) {
+            if ('endDate' in options && !options.endDate) {
+                delete options.endDate;
+            }
+            return ajax('POST', '/notification/system', options);
+        },
+
+        systemNotificationDelete: function(id) {
+            return ajax('DELETE', '/notification/system', {
+                notificationId: id
+            });
+        },
+
         userDelete: function(userName) {
             return ajax('POST', '/user/delete', {
                 'user-name': userName
