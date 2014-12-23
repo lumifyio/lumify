@@ -1,13 +1,13 @@
-package io.lumify.bigtable.model.systemNotification;
+package io.lumify.bigtable.model.notification;
 
 import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.Value;
-import io.lumify.bigtable.model.systemNotification.model.SystemNotificationRowKey;
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.bigtable.model.notification.model.SystemNotificationRowKey;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotificationSeverity;
 import org.json.JSONObject;
 
 import java.util.Date;

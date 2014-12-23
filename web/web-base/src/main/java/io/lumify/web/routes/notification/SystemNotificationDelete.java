@@ -1,9 +1,8 @@
 package io.lumify.web.routes.notification;
 
 import com.google.inject.Inject;
-import io.lumify.core.model.systemNotification.SystemNotification;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
-import io.lumify.core.model.systemNotification.SystemNotificationSeverity;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -12,8 +11,6 @@ import io.lumify.web.BaseRequestHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class SystemNotificationDelete extends BaseRequestHandler {
     private final SystemNotificationRepository systemNotificationRepository;

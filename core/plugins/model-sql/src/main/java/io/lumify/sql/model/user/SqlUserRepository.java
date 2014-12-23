@@ -414,6 +414,65 @@ public class SqlUserRepository extends UserRepository {
         }
     }
 
+    @Override
+    public User findByPasswordResetToken(String token) {
+        Session session = sessionManager.getSession();
+        List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.passwordResetToken = :token")
+                .setParameter("token", token)
+                .list();
+        if (users.size() == 0) {
+            return null;
+        } else if (users.size() > 1) {
+            throw new LumifyException("more than one user was returned");
+        } else {
+            return users.get(0);
+        }
+    }
+
+    @Override
+    public void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate) {
+        Session session = sessionManager.getSession();
+        if (user == null || user.getUserId() == null || findById(user.getUserId()) == null) {
+            throw new LumifyException("User is not valid");
+        }
+
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            ((SqlUser) user).setPasswordResetToken(token);
+            ((SqlUser) user).setPasswordResetTokenExpirationDate(expirationDate);
+            session.update(user);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while setting token and expiration date", e);
+        }
+    }
+
+    @Override
+    public void clearPasswordResetTokenAndExpirationDate(User user) {
+        Session session = sessionManager.getSession();
+        if (user == null || user.getUserId() == null || findById(user.getUserId()) == null) {
+            throw new LumifyException("User is not valid");
+        }
+
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            ((SqlUser) user).setPasswordResetToken(null);
+            ((SqlUser) user).setPasswordResetTokenExpirationDate(null);
+            session.update(user);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while clearing token and expiration date", e);
+        }
+    }
+
     private SqlUser sqlUser(User user) {
         if (user instanceof ProxyUser) {
             return (SqlUser) ((ProxyUser) user).getProxiedUser();

@@ -35,6 +35,8 @@ public class SqlUser implements User {
     private String uiPreferencesString;
     private SqlWorkspace currentWorkspace;
     private List<SqlWorkspaceUser> sqlWorkspaceUserList;
+    private String passwordResetToken;
+    private Date passwordResetTokenExpirationDate;
 
     @Override
     @Id
@@ -213,7 +215,7 @@ public class SqlUser implements User {
         uiPreferencesString = uiPreferences.toString();
     }
 
-    @Column(name = "ui_preferences")
+    @Column(name = "ui_preferences", length = 4000)
     public String getUiPreferencesString() {
         return uiPreferencesString;
     }
@@ -244,6 +246,24 @@ public class SqlUser implements User {
 
     public void setSqlWorkspaceUserList(List<SqlWorkspaceUser> sqlWorkspaceUserList) {
         this.sqlWorkspaceUserList = sqlWorkspaceUserList;
+    }
+
+    @Column(name = "password_reset_token")
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    @Column(name = "password_reset_token_expiration_date")
+    public Date getPasswordResetTokenExpirationDate() {
+        return passwordResetTokenExpirationDate;
+    }
+
+    public void setPasswordResetTokenExpirationDate(Date passwordResetTokenExpirationDate) {
+        this.passwordResetTokenExpirationDate = passwordResetTokenExpirationDate;
     }
 
     @Override

@@ -8,7 +8,7 @@ import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.config.LumifyTestClusterConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
-import io.lumify.core.model.systemNotification.SystemNotificationRepository;
+import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.SystemUser;

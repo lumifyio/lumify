@@ -46,6 +46,10 @@ require([
                 }
             });
 
+            if (data.notification.type !== 'system') {
+                return;
+            }
+
             if (event.type === 'notificationActive') {
                 data.notification.active = true;
             }
@@ -65,7 +69,7 @@ require([
         this.update = function() {
             var self = this;
 
-            this.dataRequest('notification', 'systemNotificationList')
+            this.dataRequest('notification', 'list')
                 .done(function(response) {
                     self.notifications = response.system.active.concat(response.system.future);
                     self.render();

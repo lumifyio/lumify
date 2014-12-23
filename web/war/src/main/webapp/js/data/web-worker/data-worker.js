@@ -109,10 +109,11 @@ function dispatchMain(type, message) {
     try {
         postMessage(message);
     } catch(e) {
+        var jsonString = JSON.stringify(message);
         postMessage({
             type:'brokenWorkerConsole',
             logType: 'error',
-            messages: ['error posting', e.message, JSON.stringify(message).substring(0, 100)]
+            messages: ['error posting', e.message, jsonString]
         });
     }
 }

@@ -1,4 +1,5 @@
 @import (reference) '../util/positioning';
+@import (reference) '../util/constants';
 
 .logo-background {
   .fullscreen;
@@ -51,55 +52,40 @@
     position: static;
     overflow: auto;
     background: fadeout(white, 10%);
-    .box-shadow(0 5px 20px fadeout(black, 95%));
 
     .notification {
-      color: black;
-      text-shadow: none;
       background: none;
+      margin: 0.25em 0;
+      h1, h2 {
+        color: black;
+        text-shadow: none;
+      }
       padding-left: 28px;
 
       &.info {
+        h1 {
+          color: @notification-info;
+        }
         &:before {
-          content: '';
-          position: absolute;
-          width: 12px;
-          height: 12px;
-          background: @blue-color;
-          left: 4px;
-          top: 50%;
-          border-radius: 6px;
-          margin-top: -5px;
+          background: @notification-info;
         }
       }
 
       &.warning {
+        h1 {
+          color: @notification-warning;
+        }
         &:before {
-          content: '';
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          background: lighten(spin(@blue-color, 190), 10%);
-          left: 6px;
-          top: 50%;
-          margin-top: -5px;
-          .rotate(45deg);
+          background: @notification-warning;
         }
       }
 
       &.critical {
+        h1 {
+          color: @notification-critical;
+        }
         &:before {
-          content: '';
-          position: absolute;
-          width: 0;
-          height: 0;
-          border-width: 0 7px 11px 7px;
-          border-color: transparent;
-          border-bottom-color: lighten(spin(@blue-color, 170), 5%);
-          border-style: solid;
-          left: 3px;
-          top: 50%;
-          margin-top: -6px;
+          border-bottom-color: @notification-critical;
         }
       }
 

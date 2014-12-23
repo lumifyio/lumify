@@ -35,7 +35,7 @@ public class SqlLongRunningProcess {
         this.user = user;
     }
 
-    @Column(name = "json")
+    @Column(name = "json", length = 4000)
     public String getJson() {
         return json;
     }

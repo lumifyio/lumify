@@ -17,6 +17,7 @@ define([
     'util/withDataRequest',
     'configuration/plugins/exportWorkspace/plugin',
     'configuration/plugins/graphLayout/plugin',
+    'configuration/plugins/graphSelector/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -36,6 +37,7 @@ define([
     withDataRequest,
     WorkspaceExporter,
     GraphLayout,
+    GraphSelector,
     colorjs) {
     'use strict';
 
@@ -879,6 +881,24 @@ define([
             });
         };
 
+        this.onContextMenuSelect = function(select) {
+            this.cytoscapeReady(function(cy) {
+                if (select === 'all') {
+                    cy.nodes().filter(':unselected').select();
+                } else if (select === 'none') {
+                    cy.nodes().filter(':selected').unselect();
+                } else if (select === 'invert') {
+                    var selected = cy.nodes().filter(':selected'),
+                        unselected = cy.nodes().filter(':unselected');
+                    selected.unselect();
+                    unselected.select();
+                } else {
+                    var selector = GraphSelector.selectorsById[select];
+                    selector(cy);
+                }
+            });
+        };
+
         this.graphTap = throttle('selection', SELECTION_THROTTLE, function(event) {
             this.trigger('defocusPaths');
 
@@ -960,6 +980,26 @@ define([
                                     .attr('data-args', JSON.stringify([exporter._identifier]))
                                     .end()
                             );
+                        });
+                    }
+
+                    if (GraphSelector.selectors.length) {
+                        var $selectorMenu = menu.find('.selectors .dropdown-menu');
+                        $selectorMenu.find('.plugin').remove();
+                        var selected = event.cy.nodes().filter(':selected').length > 0;
+                        GraphSelector.selectors.forEach(function(selector) {
+                            if ((selected && _.contains(['always', 'selected'], selector.visibility)) ||
+                                (!selected && _.contains(['always', 'none-selected'], selector.visibility))) {
+
+                                $selectorMenu.append(
+                                    $('<li class="plugin"><a href="#" tabindex="-1"></a></li>')
+                                        .find('a')
+                                        .text(selector.displayName)
+                                        .attr('data-func', 'select')
+                                        .attr('data-args', '["' + selector.identifier + '"]')
+                                        .end()
+                                );
+                            }
                         });
                     }
 
