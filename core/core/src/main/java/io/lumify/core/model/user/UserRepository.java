@@ -22,10 +22,7 @@ import org.json.JSONObject;
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toList;
 
@@ -267,4 +264,10 @@ public abstract class UserRepository {
     public static String createRandomPassword() {
         return new BigInteger(120, new SecureRandom()).toString(32);
     }
+
+    public abstract User findByPasswordResetToken(String token);
+
+    public abstract void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate);
+
+    public abstract void clearPasswordResetTokenAndExpirationDate(User user);
 }

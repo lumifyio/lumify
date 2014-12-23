@@ -47,7 +47,8 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-web-auth-username-only</artifactId>
+            <!-- <artifactId>lumify-web-auth-username-only</artifactId> -->
+            <artifactId>lumify-web-auth-username-password</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

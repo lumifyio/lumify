@@ -95,9 +95,11 @@ public class SecureGraphUserRepository extends UserRepository {
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
         JSONObject preferences = UserLumifyProperties.UI_PREFERENCES.getPropertyValue(user);
+        String passwordResetToken = UserLumifyProperties.PASSWORD_RESET_TOKEN.getPropertyValue(user);
+        Date passwordResetTokenExpirationDate = UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.getPropertyValue(user);
 
         LOGGER.debug("Creating user from UserRow. username: %s", username);
-        return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences);
+        return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences, passwordResetToken, passwordResetTokenExpirationDate);
     }
 
     @Override
@@ -383,5 +385,29 @@ public class SecureGraphUserRepository extends UserRepository {
 
     private Set<Privilege> getPrivileges(Vertex userVertex) {
         return Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(userVertex));
+    }
+
+    @Override
+    public User findByPasswordResetToken(String token) {
+        return createFromVertex(singleOrDefault(graph.query(authorizations)
+                .has(UserLumifyProperties.PASSWORD_RESET_TOKEN.getPropertyName(), token)
+                .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .vertices(), null));
+    }
+
+    @Override
+    public void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        UserLumifyProperties.PASSWORD_RESET_TOKEN.setProperty(userVertex, token, VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.setProperty(userVertex, expirationDate, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
+    }
+
+    @Override
+    public void clearPasswordResetTokenAndExpirationDate(User user) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        UserLumifyProperties.PASSWORD_RESET_TOKEN.removeProperty(userVertex, authorizations);
+        UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.removeProperty(userVertex, authorizations);
+        graph.flush();
     }
 }

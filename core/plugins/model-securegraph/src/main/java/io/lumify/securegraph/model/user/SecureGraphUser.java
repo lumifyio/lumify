@@ -28,13 +28,15 @@ public class SecureGraphUser implements User, Serializable {
     private Set<Privilege> privileges;
     private String currentWorkspaceId;
     private JSONObject preferences;
+    private String passwordResetToken;
+    private Date passwordResetTokenExpirationDate;
 
     // required for Serializable
     protected SecureGraphUser() {
 
     }
 
-    public SecureGraphUser(String userId, String username, String displayName, String emailAddress, Date createDate, Date currentLoginDate, String currentLoginRemoteAddr, Date previousLoginDate, String previousLoginRemoteAddr, int loginCount, ModelUserContext modelUserContext, UserStatus userStatus, Set<Privilege> privileges, String currentWorkspaceId, JSONObject preferences) {
+    public SecureGraphUser(String userId, String username, String displayName, String emailAddress, Date createDate, Date currentLoginDate, String currentLoginRemoteAddr, Date previousLoginDate, String previousLoginRemoteAddr, int loginCount, ModelUserContext modelUserContext, UserStatus userStatus, Set<Privilege> privileges, String currentWorkspaceId, JSONObject preferences, String passwordResetToken, Date passwordResetTokenExpirationDate) {
         this.userId = userId;
         this.username = username;
         this.displayName = displayName;
@@ -53,6 +55,8 @@ public class SecureGraphUser implements User, Serializable {
         if (this.preferences == null) {
             this.preferences = new JSONObject();
         }
+        this.passwordResetToken = passwordResetToken;
+        this.passwordResetTokenExpirationDate = passwordResetTokenExpirationDate;
     }
 
     @Override
@@ -137,6 +141,16 @@ public class SecureGraphUser implements User, Serializable {
     @Override
     public JSONObject getUiPreferences() {
         return preferences;
+    }
+
+    @Override
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    @Override
+    public Date getPasswordResetTokenExpirationDate() {
+        return passwordResetTokenExpirationDate;
     }
 
     @Override

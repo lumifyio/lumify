@@ -19,4 +19,6 @@ public final class UserLumifyProperties {
     public static final JsonLumifyProperty UI_PREFERENCES = new JsonLumifyProperty("http://lumify.io/user/uiPreferences");
     public static final ByteArrayLumifyProperty PASSWORD_SALT = new ByteArrayLumifyProperty("http://lumify.io/user/passwordSalt");
     public static final ByteArrayLumifyProperty PASSWORD_HASH = new ByteArrayLumifyProperty("http://lumify.io/user/passwordHash");
+    public static final StringLumifyProperty PASSWORD_RESET_TOKEN = new StringLumifyProperty("http://lumify.io/user#passwordResetToken");
+    public static final DateLumifyProperty PASSWORD_RESET_TOKEN_EXPIRATION_DATE = new DateLumifyProperty("http://lumify.io/user#passwordResetTokenExpirationDate");
 }
