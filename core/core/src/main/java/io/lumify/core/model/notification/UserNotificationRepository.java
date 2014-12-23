@@ -36,10 +36,15 @@ public abstract class UserNotificationRepository extends NotificationRepository 
             return false;
         }
         Date now = new Date();
+        Date expirationDate = getExpirationDate(notification);
+        Date sentDate = notification.getSentDate();
+        if (expirationDate.equals(now) || sentDate.equals(now)) {
+            return true;
+        }
         return notification.getSentDate().before(now) && getExpirationDate(notification).after(now);
     }
 
-    protected static Date getExpirationDate(UserNotification notification) {
+    public static Date getExpirationDate(UserNotification notification) {
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
         cal.setTime(notification.getSentDate());
         ExpirationAge age = notification.getExpirationAge();
