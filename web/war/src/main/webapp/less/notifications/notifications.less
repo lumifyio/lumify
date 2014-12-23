@@ -1,6 +1,5 @@
-@import '../util/constants';
-@import '../util/selection';
-//@import (reference) '../libs/bootstrap/less/mixins';
+@import (reference) '../util/constants';
+@import (reference) '../util/selection';
 
 .notifications {
   @padding: 10px;
@@ -10,19 +9,23 @@
   cursor: pointer;
   .above-graph(2);
   .disable-text-selection;
+  .box-shadow(0 5px 20px fadeout(black, 95%));
 
   .notification {
     list-style: none;
-    background: fadeout(black, 40%);
-    color: white;
     padding: 0.5em 1em;
     margin: 0.5em 0;
     padding-right: 3em;
+    padding-left: 30px;
     &:first-child {
       margin-top: 0;
     }
     position: relative;
-    border-radius: 4px;
+    border-radius: 2px;
+
+    &.canDismiss {
+      cursor: pointer;
+    }
 
     h1, h2 {
       font-weight: normal;
@@ -30,7 +33,6 @@
       padding: 0;
       line-height: 1.5em;
       .regular-font;
-      text-shadow: 0 1px solid black;
     }
 
     h1 {
@@ -62,39 +64,68 @@
     }
 
     .theme(@color: orange) {
-      #gradient > .vertical-three-colors(lighten(@color, 15%), @color, 90%, darken(@color, 5%));
-
-      color: darken(@color, 40%);
-      text-shadow: 0 1px 2px lighten(@color, 20%);
-
-      /*color: lighten(@color, 70%);*/
-      /*text-shadow: 0 1px 1px darken(@color, 10%);*/
-
-      .box-shadow(0 1px 10px fadeout(darken(@color, 0%), 70%));
+      background: fade(@color, 95%);
+      @text-color: mix(@color, white, 15%);
+      text-shadow: 0 -1px 0px fade(darken(@color, 10%), 50%);
+      color: @text-color;
       h2 {
-        //color: lighten(@color, 40%);
+        color: fadeout(desaturate(@text-color, 20%), 10%);
       }
     }
 
-    //@orange: fadeout(lighten(@blue-color, 5%), 30%); //rgba(255, 165, 0, 70%);
-    @orange: fadeout(
-               lighten(
-                 @blue-color,
-                 10%),
-               30%
-             );
+    &.info {
+      .theme(@notification-info);
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: mix(@notification-info, white, 40%);
+        left: 9px;
+        top: 50%;
+        border-radius: 6px;
+        margin-top: -5px;
+      }
+    }
     &.critical {
-      @red: fadeout(
-               lighten(
-                desaturate(@blue-color, 30%),
-                 10%),
-               30%
-             );
-      .theme(spin(@red, 160));
+      .theme(@notification-critical);
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-width: 0 7px 12px 7px;
+        border-color: transparent;
+        border-bottom-color: mix(@notification-critical, white, 40%);
+        border-style: solid;
+        left: 8px;
+        top: 50%;
+        margin-top: -8px;
+      }
     }
     &.warning {
-      .theme(spin(@orange, 200));
+      .theme(@notification-warning);
+
+      @text-color: darken(@notification-warning, 40%);
+      text-shadow: 0 1px 0px fade(lighten(@notification-warning, 20%), 50%);
+      color: @text-color;
+      h2 {
+        color: fadeout(desaturate(@text-color, 20%), 10%);
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        background: mix(@notification-warning, white, 40%);
+        left: 10px;
+        top: 50%;
+        margin-top: -6px;
+        .rotate(45deg);
+      }
     }
   }
-
 }

@@ -212,6 +212,7 @@ require([
                                 has: user.privileges.indexOf(p) >= 0
                             };
                         });
+                        user.canDelete = user.id !== lumifyData.currentUser.id;
                     })
                     .value()
                 ));
