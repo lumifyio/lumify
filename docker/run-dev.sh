@@ -14,6 +14,7 @@ FS_DIR=$(pwd)/fs
 mkdir -p ${FS_DIR}/opt/lumify
 mkdir -p ${FS_DIR}/opt/lumify/logs
 chmod a+w ${FS_DIR}/opt/lumify/logs
+mkdir -p ${FS_DIR}/opt/lumify/lib
 mkdir -p ${FS_DIR}/opt/lumify/config
 mkdir -p ${FS_DIR}/var/log/hadoop
 mkdir -p ${FS_DIR}/var/log/accumulo
@@ -23,6 +24,14 @@ mkdir -p ${FS_DIR}/var/lib/hadoop-hdfs
 mkdir -p ${FS_DIR}/var/local/hadoop
 mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/data
 mkdir -p ${FS_DIR}/opt/rabbitmq_server-3.4.1/var
+mkdir -p ${FS_DIR}/opt/jetty/webapps
+
+if [ ! -e ${FS_DIR}/opt/lumify/config/lumify.properties ]; then
+  cp ../config/lumify.properties ${FS_DIR}/opt/lumify/config/lumify.properties
+fi
+if [ ! -e ${FS_DIR}/opt/lumify/config/log4j.xml ]; then
+  cp ../config/log4j.xml ${FS_DIR}/opt/lumify/config/log4j.xml
+fi
 
 sudo=
 if [[ `uname` == 'Linux' ]]; then
@@ -38,7 +47,7 @@ $sudo docker run \
   -v ${FS_DIR}/var/local/hadoop:/var/local/hadoop \
   -v ${FS_DIR}/opt/elasticsearch-1.4.0/data:/opt/elasticsearch-1.4.0/data \
   -v ${FS_DIR}/opt/rabbitmq_server-3.4.1/var:/opt/rabbitmq_server-3.4.1/var \
-  -v ${FS_DIR}/../../web/war/target:/opt/jetty/webapps \
+  -v ${FS_DIR}/opt/jetty/webapps:/opt/jetty/webapps \
   -p 2181:2181 `# ZooKeeper` \
   -p 5672:5672 `# RabbitMQ` \
   -p 5673:5673 `# RabbitMQ` \

@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://192.168.33.10:3306/lumify</property>
+        <property name="hibernate.connection.url">jdbc:mysql://lumify-dev:3306/lumify</property>
         <property name="hibernate.connection.username">lumify</property>
         <property name="hibernate.connection.password">lumify</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>

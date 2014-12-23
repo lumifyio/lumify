@@ -9,8 +9,20 @@ Lumify is an open source big data analysis and visualization platform. Please se
 To get started quickly, you can try out a hosted installation of Lumify, or download a virtual machine image with Lumify installed and pre-configured.
 
 - [Try Lumify Now](http://lumify.io/try.html)
-- [Download a Virtual Machine Image](docs/prebuilt-vm.md)
 - [Watch Lumify Videos](https://www.youtube.com/playlist?list=PLDX7b-6_sNA7SCJw5rB9EF0TDpQyrO2XR)
+
+## Quick Start
+
+1. [Install docker](https://docs.docker.com/installation/#installation)
+1. Add ```127.0.0.1   lumify-dev``` to your ```/etc/hosts``` file.
+1. Create the docker image ```./docker/build-dev.sh```
+1. Run the docker image ```./docker/run-dev.sh``` (This will start ZooKeeper, HDFS, YARN, ElasticSearch, and RabbitMQ).
+1. Create a war file ```mvn package -P web-war -pl web/war -am -DskipTests -Dsource.skip=true```
+1. Copy the war file ```cp web/war/target/lumify-web-war*.war docker/fs/opt/jetty/webapps/root.war```
+1. Package an auth plugin ```mvn package -pl ./web/plugins/auth-username-only -am -DskipTests```
+1. Copy the auth plugin for use in the docker image: ```cp ./web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar docker/fs/opt/lumify/lib/```
+1. Inside the docker image run Jetty: ```/opt/jetty/bin/jetty.sh start```
+1. Open a browser and go to ```http://lumify-dev:8080/```
 
 ## Developing / Contributing
 

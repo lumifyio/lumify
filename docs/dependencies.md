@@ -17,11 +17,6 @@ less likely to get out of sync than this document.
 | [RabbitMQ](http://www.rabbitmq.com/)                                                       | 3.4.2            |
 | [Jetty](http://www.eclipse.org/jetty/)                                                     | 9.2.5.v20141112  |
 
-## Example Installation on CentOS 6.5
-
-For step-by-step instructions on installing Lumify and all it's dependencies on CentOS 6.5,
-please see [setup-centos-6.5.md](setup-centos-6.5.md).
-
 ## Lumify Dependencies by Feature
 
 Some optional Lumify features require the installation of additional dependencies. These dependencies must be installed on the server(s) where YARN is running.
