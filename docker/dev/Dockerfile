@@ -93,13 +93,16 @@ VOLUME ["/opt/jetty/webapps"]
 EXPOSE 8080 8443
 
 # add scripts
+ADD docker-entrypoint.sh /opt/docker-entrypoint.sh
 ADD start.sh /opt/start.sh
 ADD stop.sh /opt/stop.sh
 
 RUN \
-  chmod +x /opt/start.sh
+  chmod +x /opt/start.sh \
+  && chmod +x /opt/docker-entrypoint.sh
 
 # Set working environment
 VOLUME ["/tmp", "/var/log", "/opt/lumify", "/opt/lumify-source"]
 WORKDIR /home/root/lumify
-CMD ["/opt/start.sh", "-d"]
+ENTRYPOINT ["/opt/docker-entrypoint.sh"]
+CMD ["start"]
