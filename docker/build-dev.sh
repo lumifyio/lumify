@@ -9,4 +9,10 @@ done
 DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 cd ${DIR}
 
-sudo docker build -t lumifyio/dev dev
+unamestr=`uname`
+
+if [[ "$unamestr" == 'Linux' ]]; then
+   sudo docker build -t lumifyio/dev dev
+elif [[ "$unamestr" == 'Darwin' ]]; then
+   docker build -t lumifyio/dev dev
+fi

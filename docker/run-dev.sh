@@ -13,6 +13,7 @@ FS_DIR=$(pwd)/fs
 
 mkdir -p ${FS_DIR}/opt/lumify
 mkdir -p ${FS_DIR}/opt/lumify/logs
+chmod a+w ${FS_DIR}/opt/lumify/logs
 mkdir -p ${FS_DIR}/opt/lumify/config
 mkdir -p ${FS_DIR}/var/log/hadoop
 mkdir -p ${FS_DIR}/var/log/accumulo
@@ -23,8 +24,13 @@ mkdir -p ${FS_DIR}/var/local/hadoop
 mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/data
 mkdir -p ${FS_DIR}/opt/rabbitmq_server-3.4.1/var
 
-sudo docker run \
-  -v /opt/lumify:/opt/lumify \
+sudo=
+if [[ `uname` == 'Linux' ]]; then
+   sudo=sudo
+fi
+
+$sudo docker run \
+  -v ${FS_DIR}/opt/lumify:/opt/lumify \
   -v ${FS_DIR}/../../:/opt/lumify-source \
   -v ${FS_DIR}/var/log:/var/log \
   -v ${FS_DIR}/tmp:/tmp \
@@ -32,13 +38,16 @@ sudo docker run \
   -v ${FS_DIR}/var/local/hadoop:/var/local/hadoop \
   -v ${FS_DIR}/opt/elasticsearch-1.4.0/data:/opt/elasticsearch-1.4.0/data \
   -v ${FS_DIR}/opt/rabbitmq_server-3.4.1/var:/opt/rabbitmq_server-3.4.1/var \
+  -v ${FS_DIR}/../../web/war/target:/opt/jetty/webapps \
   -p 2181:2181 `# ZooKeeper` \
   -p 5672:5672 `# RabbitMQ` \
   -p 5673:5673 `# RabbitMQ` \
   -p 8020:8020 `# Hadoop: HDFS` \
   -p 8032:8032 `# Hadoop: Resource Manager` \
   -p 8042:8042 `# Hadoop: Node Manager: Web UI` \
+  -p 8080:8080 `# Jetty HTTP` \
   -p 8088:8088 `# Hadoop: Resource Manager: Web UI` \
+  -p 8443:8443 `# Jetty HTTPS` \
   -p 9000:9000 `# Hadoop: Name Node: Metadata Service` \
   -p 9200:9200 `# Elasticsearch` \
   -p 9300:9300 `# Elasticsearch` \

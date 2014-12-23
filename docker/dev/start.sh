@@ -62,6 +62,7 @@ function start_rabbitmq {
 
 function ensure_lumify_config {
   start_msg "Lumify Config"
+  hadoop fs -mkdir -p /lumify/libcache
   hadoop fs -mkdir -p /lumify/config/opencv
   hadoop fs -mkdir -p /lumify/config/opennlp
   hadoop fs -put /opt/lumify-source/config/opencv/haarcascade_frontalface_alt.xml /lumify/config/opencv/
