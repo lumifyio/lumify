@@ -28,5 +28,5 @@
         </li>
     {{/each}}
 
-    <li><button style="margin-top: 4em" class="delete-user btn btn-danger">Delete User</button></li>
+    <li><button style="margin-top: 4em" class="delete-user btn btn-danger" {{#unless canDelete}}disabled{{/unless}}>Delete User</button></li>
 </ul>
