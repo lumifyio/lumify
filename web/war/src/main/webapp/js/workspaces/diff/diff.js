@@ -182,6 +182,8 @@ define([
                         } else {
                             outputItem.edgeId = elementId;
                             outputItem.edge = edgesById[elementId];
+                            outputItem.edgeLabel = self.ontologyRelationships.byTitle[outputItem.edge.label]
+                                .displayName;
                         }
 
                         diffs.forEach(function(diff) {
