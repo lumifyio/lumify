@@ -189,11 +189,6 @@ define([
                             switch (diff.type) {
                                 case 'VertexDiffItem':
                                     diff.id = elementId;
-                                    outputItem.action = actionTypes.CREATE;
-                                        outputItem.title = F.vertex.title(outputItem.vertex);
-                                    } else if (diff.title) {
-                                        outputItem.title = diff.title;
-                                    }
                                     outputItem.action = diff.deleted ? actionTypes.DELETE : actionTypes.CREATE;
                                     self.diffsForElementId[elementId] = diff;
                                     self.diffsById[elementId] = diff;
@@ -290,8 +285,8 @@ define([
             if (vertexId) {
                 self.trigger('selectObjects', {
                     vertexIds: (!alreadySelected && vertexId) ? [vertexId] : []
-            } else if (edgeId) {
                 });
+            } else if (edgeId) {
                 self.trigger('selectObjects', {
                     edgeIds: (!alreadySelected && edgeId) ? [edgeId] : []
                 });
