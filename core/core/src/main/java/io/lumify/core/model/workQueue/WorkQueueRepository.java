@@ -2,8 +2,8 @@ package io.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerSpout;
 import io.lumify.core.model.notification.SystemNotification;
 import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.notification.UserNotification;
@@ -390,10 +390,6 @@ public abstract class WorkQueueRepository {
 
     }
 
-    // TODO this is pretty awful but returning backtype.storm.topology.IRichSpout causes a dependency hell problem because it requires storm jar
-    //      one possibility would be to return a custom type but this just pushes the problem
-    public abstract Object createSpout(Configuration configuration, String queueName);
-
     public abstract void flush();
 
     public abstract void format();
@@ -405,6 +401,8 @@ public abstract class WorkQueueRepository {
     public abstract void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer);
 
     public abstract LongRunningProcessMessage getNextLongRunningProcessMessage();
+
+    public abstract GraphPropertyWorkerSpout createGraphPropertyWorkerSpout();
 
     public void shutdown() {
 

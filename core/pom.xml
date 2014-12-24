@@ -16,5 +16,6 @@
         <module>core</module>
         <module>plugins</module>
         <module>test</module>
+        <module>yarn-base</module>
     </modules>
 </project>

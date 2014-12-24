@@ -64,7 +64,9 @@ public abstract class WebServer extends CommandLineBase {
         }
     }
 
-    public boolean getRequireClientCert() { return requireClientCert; }
+    public boolean getRequireClientCert() {
+        return requireClientCert;
+    }
 
     public String getContextPath() {
         return contextPath;
@@ -74,7 +76,9 @@ public abstract class WebServer extends CommandLineBase {
         return webAppDir;
     }
 
-    public int getSessionTimeout() { return sessionTimeout; }
+    public int getSessionTimeout() {
+        return sessionTimeout;
+    }
 
     @Override
     protected Options getOptions() {

@@ -105,7 +105,9 @@ public class ResolveTermIntegrationTest extends TestBase {
             }
         }
         for (ClientApiWorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
-            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem && ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId)) {
+            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem &&
+                    ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId) &&
+                    ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementType().equals("edge")) {
                 foundEdgeVisibilityJsonDiffItem = true;
             }
         }

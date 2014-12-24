@@ -10,9 +10,6 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.miniweb.App;
 import io.lumify.miniweb.Handler;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.clientapi.model.ClientApiObject;
@@ -30,37 +27,36 @@ import javax.servlet.http.Part;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * Represents the base behavior that a {@link Handler} must support
  * and provides common methods for handler usage
  */
-public abstract class BaseRequestHandler implements Handler {
-    public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
-    public static final String LUMIFY_TIME_ZONE_HEADER_NAME = "Lumify-TimeZone";
-    public static final String TIME_ZONE_ATTRIBUTE_NAME = "timeZone";
-    public static final String TIME_ZONE_PARAMETER_NAME = "timeZone";
-    public static final String LOCALE_LANGUAGE_PARAMETER = "localeLanguage";
-    public static final String LOCALE_COUNTRY_PARAMETER = "localeCountry";
-    public static final String LOCALE_VARIANT_PARAMETER = "localeVariant";
+public abstract class BaseRequestHandler extends MinimalRequestHandler {
     protected static final int EXPIRES_1_HOUR = 60 * 60;
+    private static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
+    private static final String LUMIFY_TIME_ZONE_HEADER_NAME = "Lumify-TimeZone";
+    private static final String TIME_ZONE_ATTRIBUTE_NAME = "timeZone";
+    private static final String TIME_ZONE_PARAMETER_NAME = "timeZone";
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
-    private final Configuration configuration;
     private final ObjectMapper objectMapper = ObjectMapperFactory.getInstance();
 
     protected BaseRequestHandler(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {
+        super(configuration);
         this.userRepository = userRepository;
         this.workspaceRepository = workspaceRepository;
-        this.configuration = configuration;
     }
 
     @Override
     public abstract void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception;
 
     protected String getBaseUrl(HttpServletRequest request) {
-        String configuredBaseUrl = configuration.get(Configuration.BASE_URL, null);
+        String configuredBaseUrl = getConfiguration().get(Configuration.BASE_URL, null);
         if (configuredBaseUrl != null && configuredBaseUrl.trim().length() > 0) {
             return configuredBaseUrl;
         }
@@ -77,166 +73,6 @@ public abstract class BaseRequestHandler implements Handler {
         }
         sb.append(contextPath);
         return sb.toString();
-    }
-
-    protected Locale getLocale(HttpServletRequest request) {
-        String language = getOptionalParameter(request, LOCALE_LANGUAGE_PARAMETER);
-        String country = getOptionalParameter(request, LOCALE_COUNTRY_PARAMETER);
-        String variant = getOptionalParameter(request, LOCALE_VARIANT_PARAMETER);
-
-        if (language != null) {
-            return WebApp.getLocal(language, country, variant);
-        }
-        return request.getLocale();
-    }
-
-    protected ResourceBundle getBundle(HttpServletRequest request) {
-        WebApp webApp = getWebApp(request);
-        Locale locale = getLocale(request);
-        return webApp.getBundle(locale);
-    }
-
-    protected String getString(HttpServletRequest request, String key) {
-        ResourceBundle resourceBundle = getBundle(request);
-        return resourceBundle.getString(key);
-    }
-
-    /**
-     * Attempts to extract the specified parameter from the provided request
-     *
-     * @param request       The request instance containing the parameter
-     * @param parameterName The name of the parameter to extract
-     * @return The value of the specified parameter
-     * @throws RuntimeException Thrown if the required parameter was not in the request
-     */
-    protected String getRequiredParameter(final HttpServletRequest request, final String parameterName) {
-        Preconditions.checkNotNull(request, "The provided request was invalid");
-
-        return getParameter(request, parameterName, false);
-    }
-
-    protected String[] getOptionalParameterArray(HttpServletRequest request, String parameterName) {
-        Preconditions.checkNotNull(request, "The provided request was invalid");
-
-        return request.getParameterValues(parameterName);
-    }
-
-    protected String[] getRequiredParameterArray(HttpServletRequest request, String parameterName) {
-        Preconditions.checkNotNull(request, "The provided request was invalid");
-
-        String[] value = request.getParameterValues(parameterName);
-        if (value == null) {
-            throw new LumifyException(String.format("Parameter: '%s' is required in the request", parameterName));
-        }
-        return value;
-    }
-
-    protected long getOptionalParameterLong(final HttpServletRequest request, final String parameterName, long defaultValue) {
-        String val = getOptionalParameter(request, parameterName);
-        if (val == null) {
-            return defaultValue;
-        }
-        return Long.parseLong(val);
-    }
-
-    protected boolean getOptionalParameterBoolean(final HttpServletRequest request, final String parameterName, boolean defaultValue) {
-        String val = getOptionalParameter(request, parameterName);
-        if (val == null) {
-            return defaultValue;
-        }
-        return Boolean.parseBoolean(val);
-    }
-
-    protected double getOptionalParameterDouble(final HttpServletRequest request, final String parameterName, double defaultValue) {
-        String val = getOptionalParameter(request, parameterName);
-        if (val == null) {
-            return defaultValue;
-        }
-        return Double.parseDouble(val);
-    }
-
-    /**
-     * Attempts to extract the specified parameter from the provided request and convert it to a long value
-     *
-     * @param request       The request instance containing the parameter
-     * @param parameterName The name of the parameter to extract
-     * @return The long value of the specified parameter
-     * @throws RuntimeException Thrown if the required parameter was not in the request
-     */
-    protected long getRequiredParameterAsLong(final HttpServletRequest request, final String parameterName) {
-        return Long.parseLong(getRequiredParameter(request, parameterName));
-    }
-
-
-    /**
-     * Attempts to extract the specified parameter from the provided request and convert it to a double value
-     *
-     * @param request       The request instance containing the parameter
-     * @param parameterName The name of the parameter to extract
-     * @return The double value of the specified parameter
-     * @throws RuntimeException Thrown if the required parameter was not in the request
-     */
-    protected double getRequiredParameterAsDouble(final HttpServletRequest request, final String parameterName) {
-        return Double.parseDouble(getRequiredParameter(request, parameterName));
-    }
-
-
-    /**
-     * Attempts to extract the specified parameter from the provided request, if available
-     *
-     * @param request       The request instance containing the parameter
-     * @param parameterName The name of the parameter to extract
-     * @return The value of the specified parameter if found, null otherwise
-     */
-    protected String getOptionalParameter(final HttpServletRequest request, final String parameterName) {
-        Preconditions.checkNotNull(request, "The provided request was invalid");
-
-        return getParameter(request, parameterName, true);
-    }
-
-    protected String[] getOptionalParameterAsStringArray(final HttpServletRequest request, final String parameterName) {
-        Preconditions.checkNotNull(request, "The provided request was invalid");
-
-        return getParameterValues(request, parameterName, true);
-    }
-
-    protected String[] getParameterValues(final HttpServletRequest request, final String parameterName, final boolean optional) {
-        final String[] paramValues = request.getParameterValues(parameterName);
-
-        if (paramValues == null) {
-            if (!optional) {
-                throw new RuntimeException(String.format("Parameter: '%s' is required in the request", parameterName));
-            }
-            return null;
-        }
-
-        for (int i = 0; i < paramValues.length; i++) {
-            paramValues[i] = paramValues[i];
-        }
-
-        return paramValues;
-    }
-
-    private String getParameter(final HttpServletRequest request, final String parameterName, final boolean optional) {
-        final String paramValue = request.getParameter(parameterName);
-
-        if (paramValue == null) {
-            if (!optional) {
-                throw new LumifyException(String.format("Parameter: '%s' is required in the request", parameterName));
-            }
-
-            return null;
-        }
-
-        return paramValue;
-    }
-
-    protected String getAttributeString(final HttpServletRequest request, final String name) {
-        String attr = (String) request.getAttribute(name);
-        if (attr != null) {
-            return attr;
-        }
-        return getRequiredParameter(request, name);
     }
 
     protected String getActiveWorkspaceId(final HttpServletRequest request) {
@@ -268,7 +104,7 @@ public abstract class BaseRequestHandler implements Handler {
             if (timeZone == null || timeZone.trim().length() == 0) {
                 timeZone = getOptionalParameter(request, TIME_ZONE_PARAMETER_NAME);
                 if (timeZone == null || timeZone.trim().length() == 0) {
-                    timeZone = configuration.get(Configuration.DEFAULT_TIME_ZONE, TimeZone.getDefault().getDisplayName());
+                    timeZone = getConfiguration().get(Configuration.DEFAULT_TIME_ZONE, TimeZone.getDefault().getDisplayName());
                 }
             }
         }
@@ -343,11 +179,6 @@ public abstract class BaseRequestHandler implements Handler {
 
     /**
      * Send a Bad Request response with JSON object mapping field error messages
-     *
-     * @param response
-     * @param parameterName
-     * @param errorMessage
-     * @param invalidValue
      */
     protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage, final String invalidValue) throws IOException {
         List<String> values = null;
@@ -362,11 +193,6 @@ public abstract class BaseRequestHandler implements Handler {
 
     /**
      * Send a Bad Request response with JSON object mapping field error messages
-     *
-     * @param response
-     * @param parameterName
-     * @param errorMessage
-     * @param invalidValues
      */
     protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage, final List<String> invalidValues) throws IOException {
         JSONObject error = new JSONObject();
@@ -383,10 +209,6 @@ public abstract class BaseRequestHandler implements Handler {
 
     /**
      * Send a Bad Request response with JSON object mapping field error messages
-     *
-     * @param response
-     * @param parameterName
-     * @param errorMessage
      */
     protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage) throws IOException {
         respondWithBadRequest(response, parameterName, errorMessage, new ArrayList<String>());
@@ -500,16 +322,8 @@ public abstract class BaseRequestHandler implements Handler {
         return userRepository;
     }
 
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
     public WorkspaceRepository getWorkspaceRepository() {
         return workspaceRepository;
-    }
-
-    public WebApp getWebApp(HttpServletRequest request) {
-        return (WebApp) App.getApp(request);
     }
 
     public ObjectMapper getObjectMapper() {

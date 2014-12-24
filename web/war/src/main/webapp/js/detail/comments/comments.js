@@ -127,7 +127,7 @@ define([
         this.renderCommentLevel = function(maxDepth, level, selection) {
             var self = this;
 
-            if (level >= maxDepth) {
+            if (level > maxDepth) {
                 return;
             }
 
@@ -230,6 +230,9 @@ define([
                         return 'display:none';
                     }
                 })
+                .classed('open', function() {
+                    return !$(this).closest('li').children('ul').hasClass('collapsed');
+                })
                 .text(function(p) {
                     return F.string.plural(p[1].length, 'reply', 'replies');
                 })
@@ -247,7 +250,13 @@ define([
                     }
                     self.showPropertyInfo(this, self.attr.data.id, property[0]);
                 });
-            selection.exit().remove();
+            selection.exit()
+                .call(function() {
+                    this.select('.info').each(function() {
+                        $(this).teardownAllComponents();
+                    })
+                })
+                .remove();
 
             var nextLevel = level + 1,
                 subselection = selection

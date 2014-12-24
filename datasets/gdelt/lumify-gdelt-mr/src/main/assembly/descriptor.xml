@@ -14,7 +14,6 @@
             <unpack>true</unpack>
             <scope>runtime</scope>
             <excludes>
-                <exclude>storm:storm</exclude>
                 <exclude>org.slf4j:slf4j-api</exclude>
                 <exclude>org.slf4j:slf4j-log4j12</exclude>
             </excludes>

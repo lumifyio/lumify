@@ -71,7 +71,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
     }
 
-    private void importBaseOwlFile(Authorizations authorizations) {
+    protected void importBaseOwlFile(Authorizations authorizations) {
         importResourceOwl("base.owl", "http://lumify.io", authorizations);
         importResourceOwl("user.owl", UserRepository.USER_CONCEPT_IRI, authorizations);
         importResourceOwl("workspace.owl", WorkspaceRepository.WORKSPACE_CONCEPT_IRI, authorizations);
@@ -191,10 +191,17 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
 
         long totalStartTime = System.currentTimeMillis();
+
         long startTime = System.currentTimeMillis();
-        importOntologyClasses(o, inDir, authorizations);
+        importOntologyAnnotationProperties(o, inDir, authorizations);
         clearCache(); // this is required to cause a new lookup of classes for data and object properties.
         long endTime = System.currentTimeMillis();
+        long importAnnotationPropertiesTime = endTime - startTime;
+
+        startTime = System.currentTimeMillis();
+        importOntologyClasses(o, inDir, authorizations);
+        clearCache(); // this is required to cause a new lookup of classes for data and object properties.
+        endTime = System.currentTimeMillis();
         long importConceptsTime = endTime - startTime;
 
         startTime = System.currentTimeMillis();
@@ -214,6 +221,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         long importInverseOfObjectPropertiesTime = endTime - startTime;
         long totalEndTime = System.currentTimeMillis();
 
+        LOGGER.debug("import annotation properties time: %dms", importAnnotationPropertiesTime);
         LOGGER.debug("import concepts time: %dms", importConceptsTime);
         LOGGER.debug("import data properties time: %dms", importDataPropertiesTime);
         LOGGER.debug("import object properties time: %dms", importObjectPropertiesTime);
@@ -248,6 +256,16 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
             importDataProperty(o, dataTypeProperty);
         }
+    }
+
+    protected void importOntologyAnnotationProperties(OWLOntology o, File inDir, Authorizations authorizations) {
+        for (OWLAnnotationProperty annotation : o.getAnnotationPropertiesInSignature()) {
+            importOntologyAnnotationProperty(o, annotation, inDir, authorizations);
+        }
+    }
+
+    protected void importOntologyAnnotationProperty(OWLOntology o, OWLAnnotationProperty annotationProperty, File inDir, Authorizations authorizations) {
+
     }
 
     private void importOntologyClasses(OWLOntology o, File inDir, Authorizations authorizations) throws IOException {

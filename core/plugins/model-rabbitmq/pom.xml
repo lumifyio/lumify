@@ -13,7 +13,7 @@
     <name>Lumify: Core: Plugin: Model: RabbitMQ</name>
 
     <properties>
-        <rabbitmq.version>3.3.0</rabbitmq.version>
+        <rabbitmq.version>3.4.1</rabbitmq.version>
     </properties>
 
     <dependencies>
@@ -21,11 +21,6 @@
             <groupId>io.lumify</groupId>
             <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.storm</groupId>
-            <artifactId>storm-core</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

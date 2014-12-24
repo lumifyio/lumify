@@ -121,12 +121,8 @@ define([
                 }
 
                 if (data && data.edgeIds && data.edgeIds.length) {
-                    // Only supports one
-                    if (_.isArray(data.edgeIds)) {
-                        data.edgeIds = data.edgeIds[0];
-                    }
                     promises.push(
-                        dataRequest('edge', 'store', { edgeId: data.edgeIds })
+                        dataRequest('edge', 'store', { edgeIds: data.edgeIds.slice(0, 1) })
                     );
                 } else if (data && data.edges) {
                     promises.push(Promise.resolve(data.edges));
@@ -135,10 +131,9 @@ define([
                 Promise.all(promises)
                     .done(function(result) {
                         var vertices = _.compact(result[0] || []),
-                            edge = result[1],
-                            edges = edge ? [edge] : [];
+                            edges = result[1] || [];
 
-                        if (!edge && !vertices.length && hasItems) {
+                        if (!edges.length && !vertices.length && hasItems) {
                             return;
                         }
 

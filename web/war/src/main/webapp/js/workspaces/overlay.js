@@ -61,7 +61,9 @@ define([
             this.on(document, 'edgesLoaded', this.onEdgesLoaded);
 
             this.on(document, 'verticesUpdated', this.updateDiffBadge);
+            this.on(document, 'verticesAdded', this.updateDiffBadge);
             this.on(document, 'verticesDeleted', this.updateDiffBadge);
+            this.on(document, 'edgesUpdated', this.updateDiffBadge);
             this.on(document, 'edgesDeleted', this.updateDiffBadge);
             this.on(document, 'updateDiff', this.updateDiffBadge);
 

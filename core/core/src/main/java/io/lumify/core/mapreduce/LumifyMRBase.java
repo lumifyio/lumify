@@ -39,7 +39,7 @@ public abstract class LumifyMRBase extends Configured implements Tool {
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
         InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));
 
-        Job job = new Job(conf, getJobName());
+        Job job = Job.getInstance(conf, getJobName());
 
         instanceName = accumuloGraphConfiguration.getAccumuloInstanceName();
         zooKeepers = accumuloGraphConfiguration.getZookeeperServers();

@@ -11,15 +11,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class SqlUserNotificationTest {
 
     @Test
-    public void testSqlUserNotification() {
+    public void testSqlUserNotification() throws InterruptedException {
         SqlUserNotification notification = new SqlUserNotification();
         notification.setId("one");
         notification.setUserId("lumifyUser1");

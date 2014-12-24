@@ -27,6 +27,7 @@ import io.lumify.web.routes.resource.ResourceGet;
 import io.lumify.web.routes.user.*;
 import io.lumify.web.routes.vertex.*;
 import io.lumify.web.routes.workspace.*;
+import org.eclipse.jetty.server.Request;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -44,7 +45,8 @@ public class Router extends HttpServlet {
      * Copied from org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT.
      * TODO: Examine why this is necessary and how it can be abstracted to any servlet container.
      */
-    private static final String JETTY_MULTIPART_CONFIG_ELEMENT = "org.eclipse.multipartConfig";
+    private static final String JETTY_MULTIPART_CONFIG_ELEMENT8 = "org.eclipse.multipartConfig";
+    private static final String JETTY_MULTIPART_CONFIG_ELEMENT9 = "org.eclipse.jetty.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
 
@@ -106,6 +108,7 @@ public class Router extends HttpServlet {
             app.post("/edge/comment", authenticator, csrfProtector, CommentPrivilegeFilter.class, SetEdgeProperty.class);
             app.delete("/edge", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeDelete.class);
             app.delete("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteEdgeProperty.class);
+            app.post("/edge/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeMultiple.class);
             app.post("/edge/create", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeCreate.class);
             app.get("/edge/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeProperties.class);
             app.post("/edge/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeSetVisibility.class);
@@ -159,7 +162,8 @@ public class Router extends HttpServlet {
     public void service(ServletRequest req, ServletResponse resp) throws ServletException, IOException {
         try {
             if (req.getContentType() != null && req.getContentType().startsWith("multipart/form-data")) {
-                req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
+                req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT8, MULTI_PART_CONFIG);
+                req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT9, MULTI_PART_CONFIG);
             }
 
             HttpServletResponse httpResponse = (HttpServletResponse) resp;

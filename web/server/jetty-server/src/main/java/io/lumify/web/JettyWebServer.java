@@ -1,16 +1,15 @@
 package io.lumify.web;
 
+import com.altamiracorp.bigtable.jetty.BigTableSessionHandler;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.session.LumifyBigTableJettySessionManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.http.HttpVersion;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -46,29 +45,41 @@ public class JettyWebServer extends WebServer {
 
     @Override
     protected int run(CommandLine cmd) throws Exception {
-        SelectChannelConnector httpConnector = new SelectChannelConnector();
+        server = new org.eclipse.jetty.server.Server();
+
+        HttpConfiguration http_config = new HttpConfiguration();
+        http_config.setSecureScheme("https");
+        http_config.setSecurePort(super.getHttpsPort());
+
+        ServerConnector httpConnector = new ServerConnector(server,
+                new HttpConnectionFactory(http_config));
         httpConnector.setPort(super.getHttpPort());
-        httpConnector.setConfidentialPort(super.getHttpsPort());
 
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStorePath(super.getKeyStorePath());
         sslContextFactory.setKeyStorePassword(super.getKeyStorePassword());
-        sslContextFactory.setTrustStore(super.getTrustStorePath());
+        sslContextFactory.setTrustStorePath(super.getTrustStorePath());
         sslContextFactory.setTrustStorePassword(super.getTrustStorePassword());
         sslContextFactory.setNeedClientAuth(super.getRequireClientCert());
-        SslSelectChannelConnector httpsConnector = new SslSelectChannelConnector(sslContextFactory);
+
+        HttpConfiguration https_config = new HttpConfiguration(http_config);
+        https_config.addCustomizer(new SecureRequestCustomizer());
+
+        ServerConnector httpsConnector = new ServerConnector(server,
+                new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),
+                new HttpConnectionFactory(https_config));
         httpsConnector.setPort(super.getHttpsPort());
 
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath(this.getContextPath());
         webAppContext.setWar(this.getWebAppDir());
+        webAppContext.setSessionHandler(new BigTableSessionHandler(new LumifyBigTableJettySessionManager()));
         webAppContext.getSessionHandler().getSessionManager().setMaxInactiveInterval(super.getSessionTimeout() * 60);
         LOGGER.info("getMaxInactiveInterval() is %d seconds", webAppContext.getSessionHandler().getSessionManager().getMaxInactiveInterval());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[]{webAppContext});
 
-        server = new org.eclipse.jetty.server.Server();
         server.setConnectors(new Connector[]{httpConnector, httpsConnector});
         server.setHandler(contexts);
 

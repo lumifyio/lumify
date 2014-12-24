@@ -5,8 +5,10 @@ import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
+import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerSpout;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -59,11 +61,6 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
             channel.queueDeclare(queueName, true, false, false, null);
             declaredQueues.add(queueName);
         }
-    }
-
-    @Override
-    public Object createSpout(Configuration configuration, String queueName) {
-        return new RabbitMQWorkQueueSpout(queueName);
     }
 
     @Override
@@ -150,6 +147,11 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
         } catch (Exception e) {
             throw new LumifyException("Could not read long running process queue", e);
         }
+    }
+
+    @Override
+    public GraphPropertyWorkerSpout createGraphPropertyWorkerSpout() {
+        return InjectHelper.inject(new RabbitMQWorkQueueSpout(GRAPH_PROPERTY_QUEUE_NAME));
     }
 
     private class RabbitMQLongRunningProcessMessage extends LongRunningProcessMessage {

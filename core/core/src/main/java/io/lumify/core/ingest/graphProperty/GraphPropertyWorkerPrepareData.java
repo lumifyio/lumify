@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 public class GraphPropertyWorkerPrepareData {
-    private final Map stormConf;
+    private final Map configuration;
     private final List<TermMentionFilter> termMentionFilters;
     private final FileSystem hdfsFileSystem;
     private final User user;
     private final Authorizations authorizations;
     private final Injector injector;
 
-    public GraphPropertyWorkerPrepareData(Map stormConf, List<TermMentionFilter> termMentionFilters, FileSystem hdfsFileSystem, User user, Authorizations authorizations, Injector injector) {
-        this.stormConf = stormConf;
+    public GraphPropertyWorkerPrepareData(Map configuration, List<TermMentionFilter> termMentionFilters, FileSystem hdfsFileSystem, User user, Authorizations authorizations, Injector injector) {
+        this.configuration = configuration;
         this.termMentionFilters = termMentionFilters;
         this.hdfsFileSystem = hdfsFileSystem;
         this.user = user;
@@ -29,8 +29,8 @@ public class GraphPropertyWorkerPrepareData {
         return termMentionFilters;
     }
 
-    public Map getStormConf() {
-        return stormConf;
+    public Map getConfiguration() {
+        return configuration;
     }
 
     public User getUser() {

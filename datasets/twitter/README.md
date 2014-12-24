@@ -26,13 +26,11 @@ twitter.query= # Keywords to search Twitter for, e.g. twitter
 4. cd into your ```lumify-twitter``` directory
 5. <a name="step-5"/>```mvn clean package```
 6. ```cd target```
-7. Copy the jar file to location of where you are running your Storm Topology for Lumify.
-   * In the [Lumify Pre-Built VM](https://github.com/altamiracorp/lumify/blob/master/docs/PREBUILT_VM.md), please run the following command ```/opt/storm/bin/storm jar [location of jar file] com.altamiracorp.lumify.twitter.storm.StormRunner```
+7. Copy the jar file to location of where you are running your Graph Property Workers.
 
 Proceed if you are not using the Pre-built VM provided by [Lumify](https://lumify.io)
 
-1. Deploy lumify storm topology.
-2. Deploy lumify-twitter storm topology. 
+1. Deploy lumify Graph Property Worker YARN Application.
 3. Deploy web war file.
 
 ## Generating Twitter API Keys

@@ -65,13 +65,16 @@ define([
             })
         },
 
+        multiple: function(options) {
+            return ajax('POST', '/edge/multiple', options);
+        },
+
         store: storeHelper.createStoreAccessorOrDownloader(
-            'edge', 'edgeId', null,
+            'edge', 'edgeIds', 'edges',
             function(toRequest) {
-                if (toRequest.length > 1) {
-                    throw new Error('Can only get one edge at a time');
-                }
-                return api.properties(toRequest[0]);
+                return api.multiple({
+                    edgeIds: toRequest
+                });
             }),
 
         setVisibility: function(edgeId, visibilitySource) {

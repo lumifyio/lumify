@@ -14,7 +14,7 @@
 
     <properties>
         <!-- Same version as hadoop's protobuf -->
-        <protobuf.version>2.4.0a</protobuf.version>
+        <protobuf.version>2.5.0</protobuf.version>
     </properties>
 
     <dependencies>

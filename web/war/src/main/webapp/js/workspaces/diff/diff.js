@@ -124,55 +124,79 @@ define([
         this.processDiffs = function(diffs) {
             var self = this,
                 referencedVertices = [],
-                groupedByVertex = _.groupBy(diffs, function(diff) {
-                    referencedVertices.push(diff.vertexId || diff.elementId || diff.outVertexId);
-                    if (diff.inVertexId) referencedVertices.push(diff.inVertexId);
+                referencedEdges = [],
+                groupedByElement = _.groupBy(diffs, function(diff) {
+                    if (diff.elementType === 'vertex' || diff.type === 'VertexDiffItem') {
+                        referencedVertices.push(diff.vertexId || diff.elementId || diff.outVertexId);
+                    } else if (diff.elementType === 'edge' || diff.type === 'EdgeDiffItem') {
+                        referencedEdges.push(diff.edgeId || diff.elementId);
+                    }
+                    if (diff.inVertexId) {
+                        referencedVertices.push(diff.inVertexId);
+                    }
+                    if (diff.outVertexId) {
+                        referencedVertices.push(diff.outVertexId);
+                    }
                     if (diff.vertexId) return diff.vertexId;
+                    if (diff.edgeId) return diff.edgeId;
                     if (diff.elementId) return diff.elementId;
                     return diff.outVertexId;
                 }),
                 output = [];
 
-            return this.dataRequest('vertex', 'store', { vertexIds: referencedVertices })
-                .then(function(vertices) {
-                    var verticesById = _.indexBy(vertices, 'id');
+            return Promise.all([
+                this.dataRequest('vertex', 'store', { vertexIds: _.unique(referencedVertices) }),
+                this.dataRequest('edge', 'store', { edgeIds: _.unique(referencedEdges) })
+            ])
+                .then(function(result) {
+                    var vertices = result.shift(),
+                        edges = result.shift(),
+                        verticesById = _.indexBy(vertices, 'id'),
+                        edgesById = _.indexBy(edges, 'id');
 
-                    self.diffsForVertexId = {};
+                    self.diffsForElementId = {};
                     self.diffsById = {};
                     self.diffDependencies = {};
                     self.undoDiffDependencies = {};
 
-                    _.keys(groupedByVertex).forEach(function(vertexId) {
-                        var diffs = groupedByVertex[vertexId],
-                            actionTypes = {
+                    _.each(groupedByElement, function(diffs, elementId) {
+                        var actionTypes = {
                                 CREATE: { type: 'create', display: i18n('workspaces.diff.action.types.create') },
                                 UPDATE: { type: 'update', display: i18n('workspaces.diff.action.types.update') },
                                 DELETE: { type: 'delete', display: i18n('workspaces.diff.action.types.delete') }
                             },
                             outputItem = {
-                                id: '',
-                                vertexId: vertexId,
-                                title: '',
                                 properties: [],
-                                edges: [],
                                 action: {},
-                                className: F.className.to(vertexId),
-                                vertex: verticesById[vertexId]
-                            };
+                                className: F.className.to(elementId),
+                            },
+                            isElementVertex = (
+                                diffs[0].elementType === 'vertex' ||
+                                diffs[0].type === 'VertexDiffItem'
+                            );
+
+                        if (isElementVertex) {
+                            outputItem.vertexId = elementId;
+                            outputItem.vertex = verticesById[elementId];
+                            outputItem.title = F.vertex.title(outputItem.vertex);
+                        } else {
+                            outputItem.edgeId = elementId;
+                            outputItem.edge = edgesById[elementId];
+                        }
 
                         diffs.forEach(function(diff) {
 
                             switch (diff.type) {
                                 case 'VertexDiffItem':
-                                    diff.id = outputItem.id = vertexId;
-                                    if (outputItem.vertex) {
+                                    diff.id = elementId;
+                                    outputItem.action = actionTypes.CREATE;
                                         outputItem.title = F.vertex.title(outputItem.vertex);
                                     } else if (diff.title) {
                                         outputItem.title = diff.title;
                                     }
                                     outputItem.action = diff.deleted ? actionTypes.DELETE : actionTypes.CREATE;
-                                    self.diffsForVertexId[vertexId] = diff;
-                                    self.diffsById[vertexId] = diff;
+                                    self.diffsForElementId[elementId] = diff;
+                                    self.diffsById[elementId] = diff;
                                     addDiffDependency(diff.id);
                                     break;
 
@@ -180,10 +204,10 @@ define([
 
                                     var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
                                     if (ontologyProperty && ontologyProperty.userVisible) {
-                                        diff.id = vertexId + diff.name + diff.key;
+                                        diff.id = elementId + diff.name + diff.key;
                                         addDiffDependency(diff.elementId, diff);
 
-                                        if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
+                                        if (diff.name === 'title' && self.diffsForElementId[diff.elementId]) {
                                             outputItem.title = diff['new'].value;
                                         } else {
                                             diff.className = F.className.to(diff.id);
@@ -196,23 +220,25 @@ define([
                                 case 'EdgeDiffItem':
                                     diff.id = diff.edgeId;
                                     diff.inVertex = verticesById[diff.inVertexId];
+                                    diff.outVertex = verticesById[diff.outVertexId];
                                     diff.className = F.className.to(diff.edgeId);
                                     diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
+                                    self.diffsForElementId[diff.edgeId] = diff;
+                                    outputItem.action = actionTypes.CREATE;
                                     addDiffDependency(diff.inVertexId, diff);
                                     addDiffDependency(diff.outVertexId, diff);
-                                    outputItem.edges.push(diff);
                                     self.diffsById[diff.id] = diff;
                                     break;
 
                                 default:
                                     console.warn('Unknown diff item type', diff.type)
                             }
+
+                            addDiffDependency(diff.id);
                         });
 
-                        if (!outputItem.title && outputItem.vertex) {
+                        if (_.isEmpty(outputItem.action)) {
                             outputItem.action = actionTypes.UPDATE;
-                            outputItem.title = F.vertex.title(outputItem.vertex)
-                            outputItem.id = outputItem.vertex.id;
                         }
 
                         output.push(outputItem);
@@ -258,11 +284,16 @@ define([
                 $target = $(event.target).not('button').closest('tr'),
                 vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
                 alreadySelected = vertexRow.is('.active'),
-                vertexId = vertexRow.data('vertexId');
+                vertexId = vertexRow.data('vertexId'),
+                edgeId = vertexRow.data('edgeId');
 
             if (vertexId) {
                 self.trigger('selectObjects', {
                     vertexIds: (!alreadySelected && vertexId) ? [vertexId] : []
+            } else if (edgeId) {
+                });
+                self.trigger('selectObjects', {
+                    edgeIds: (!alreadySelected && edgeId) ? [edgeId] : []
                 });
             }
         };
@@ -332,14 +363,15 @@ define([
 
                     switch (diff.type) {
 
-                        case 'PropertyDiffItem': return {
+                        case 'PropertyDiffItem': return _.tap({
                             type: 'property',
-                            vertexId: diff.elementId,
                             key: diff.key,
                             name: diff.name,
                             action: diff.deleted ? 'delete' : 'update',
                             status: diff.sandboxStatus
-                        };
+                        }, function(obj) {
+                            obj[diff.elementType + 'Id'] = diff.elementId;
+                        });
 
                         case 'VertexDiffItem': return {
                             type: 'vertex',
@@ -363,22 +395,23 @@ define([
             this.dataRequest('workspace', type, diffsToSend)
                 .finally(function() {
                     bothButtons.hide().removeAttr('disabled').removeClass('loading');
+                    self.$node.find('.diff-content .alert').remove();
                     self.trigger(document, 'updateDiff');
                 })
                 .then(function(response) {
                     var failures = response.failures,
                         success = response.success;
 
-                    self.$node.find('.header .alert').remove();
-
                     if (failures && failures.length) {
                         var error = $('<div>')
                             .addClass('alert alert-error')
                             .html(
                                 '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                                '<ul><li>' + _.pluck(failures, 'error_msg').join('</li><li>') + '</li></ul>'
+                                '<ul><li>' + _.pluck(failures, 'errorMessage').join('</li><li>') + '</li></ul>'
                             )
-                            .appendTo(header);
+                            .prependTo(self.$node.find('.diff-content'))
+                            .alert();
+                        self.updateHeader();
                     }
                 })
                 .catch(function(errorText) {
@@ -388,7 +421,8 @@ define([
                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                             i18n('workspaces.diff.error', type, errorText)
                         )
-                        .appendTo(header);
+                        .prependTo(self.$node.find('.diff-content'))
+                        .alert();
 
                     button.show();
 
@@ -504,7 +538,7 @@ define([
                 case 'PropertyDiffItem':
 
                     if (!state) {
-                        var vertexDiff = self.diffsForVertexId[diff.elementId];
+                        var vertexDiff = self.diffsForElementId[diff.elementId];
                         if (vertexDiff) {
                             self.trigger('markUndoDiffItem', { diffId: vertexDiff.id, state: false });
                         }
@@ -514,9 +548,13 @@ define([
 
                 case 'EdgeDiffItem':
 
-                    if (!state) {
-                        var inVertex = self.diffsForVertexId[diff.inVertexId],
-                            outVertex = self.diffsForVertexId[diff.outVertexId];
+                    if (state) {
+                        deps.forEach(function(diffId) {
+                            self.trigger('markUndoDiffItem', { diffId: diffId, state: true });
+                        })
+                    } else {
+                        var inVertex = self.diffsForElementId[diff.inVertexId],
+                            outVertex = self.diffsForElementId[diff.outVertexId];
 
                         if (inVertex) {
                             self.trigger('markUndoDiffItem', { diffId: inVertex.id, state: false });
@@ -559,8 +597,8 @@ define([
 
                 case 'VertexDiffItem':
                     if (!state || diff.deleted) {
-                        var deps = this.diffDependencies[diff.id];
-                        deps.forEach(function(diffId) {
+                        // Unpublish all dependents
+                        this.diffDependencies[diff.id].forEach(function(diffId) {
                             self.trigger('markPublishDiffItem', { diffId: diffId, state: state });
                         });
                     }
@@ -570,7 +608,7 @@ define([
                 case 'PropertyDiffItem':
 
                     if (state) {
-                        var vertexDiff = this.diffsForVertexId[diff.elementId];
+                        var vertexDiff = this.diffsForElementId[diff.elementId];
                         if (vertexDiff && !diff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.elementId, state: true })
                         }
@@ -580,9 +618,14 @@ define([
 
                 case 'EdgeDiffItem':
 
-                    if (state) {
-                        var inVertexDiff = this.diffsForVertexId[diff.inVertexId],
-                            outVertexDiff = this.diffsForVertexId[diff.outVertexId];
+                    if (!state) {
+                        // Unpublish all dependents
+                        this.diffDependencies[diff.id].forEach(function(diffId) {
+                            self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
+                        });
+                    } else {
+                        var inVertexDiff = this.diffsForElementId[diff.inVertexId],
+                            outVertexDiff = this.diffsForElementId[diff.outVertexId];
 
                         if (inVertexDiff && !diff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.inVertexId, state: true });

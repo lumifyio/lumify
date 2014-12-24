@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-rdf</artifactId>
+            <artifactId>lumify-gpw-rdf</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

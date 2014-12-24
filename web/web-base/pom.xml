@@ -58,6 +58,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-nosql</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>miniweb</artifactId>
         </dependency>

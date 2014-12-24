@@ -1,12 +1,11 @@
 
-| Component | Admin URL | Notes |
-| --------- | --------- | ----- |
-| Hadoop HDFS Namenode | http://192.168.33.10:50070 |
-| Hadoop HDFS Secondary Namenode | http://192.168.33.10:50090 |
-| Hadoop HDFS Datanode | http://192.168.33.10:50075 |
-| Hadoop M/R Job Tracker | http://192.168.33.10:50030 |
-| Hadoop M/R Task Tracker | http://192.168.33.10:50060 |
-| Accumulo | http://192.168.33.10:50095 |
-| ElasticSearch | http://192.168.33.10:9200/_plugin/head/ | [head plugin](http://mobz.github.io/elasticsearch-head/) |
-| RabbitMQ | http://192.168.33.10:15672 | login with guest/guest |
-| Storm | http://192.168.33.10:8081 |
+| Component                      | Admin URL                            | Notes                                                    |
+| ------------------------------ | ------------------------------------ | -------------------------------------------------------- |
+| Hadoop HDFS Namenode           | http://lumify-dev:50070              |
+| Hadoop HDFS Secondary Namenode | http://lumify-dev:50090              |
+| Hadoop HDFS Datanode           | http://lumify-dev:50075              |
+| Hadoop YARN Resource Manager   | http://lumify-dev:8088               |
+| Hadoop YARN Node Manager       | http://lumify-dev:8042               |
+| Accumulo                       | http://lumify-dev:50095              |
+| ElasticSearch                  | http://lumify-dev:9200/_plugin/head/ | [head plugin](http://mobz.github.io/elasticsearch-head/) |
+| RabbitMQ                       | http://lumify-dev:15672              | login with guest/guest                                   |

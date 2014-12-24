@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-format</artifactId>
+    <artifactId>lumify-tools-format</artifactId>
     <packaging>jar</packaging>
     <name>Lumify: Tools: Format</name>
 

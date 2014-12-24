@@ -38,15 +38,13 @@ public class FileImport {
         this.visibilityTranslator = visibilityTranslator;
     }
 
-    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
+    public void importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
         ensureInitialized();
-
-        ArrayList<Vertex> results = new ArrayList<Vertex>();
 
         LOGGER.debug("Importing files from %s", dataDir);
         File[] files = dataDir.listFiles();
         if (files == null || files.length == 0) {
-            return results;
+            return;
         }
 
         int totalFileCount = files.length;
@@ -63,8 +61,7 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    Vertex vertex = importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
-                    results.add(vertex);
+                    importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
                     importedFileCount++;
                 } catch (Exception ex) {
                     LOGGER.error("Could not import %s", f.getAbsolutePath(), ex);
@@ -76,7 +73,6 @@ public class FileImport {
         }
 
         LOGGER.debug(String.format("Imported %d, skipped %d files from %s", importedFileCount, fileCount - importedFileCount, dataDir));
-        return results;
     }
 
     private boolean isSupportingFile(File f) {

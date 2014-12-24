@@ -34,8 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mongodb.util.MyAsserts.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestBase {
     protected LumifyLogger LOGGER;
@@ -125,7 +126,7 @@ public class TestBase {
     protected void assertHasProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName) {
         ClientApiProperty property = getProperty(properties, propertyKey, propertyName);
         if (property == null) {
-            assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
+            fail("could not find property " + propertyKey + ":" + propertyName);
         }
     }
 
@@ -162,7 +163,7 @@ public class TestBase {
             }
             assertEquals("property value does not match for property " + propertyKey + ":" + propertyName, expectedValue, value);
         } else {
-            assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
+            fail("could not find property " + propertyKey + ":" + propertyName);
         }
     }
 
@@ -172,7 +173,7 @@ public class TestBase {
         assertEquals(expectedDiffsBeforePublish, diff.getDiffs().size());
         ClientApiWorkspacePublishResponse publishAllResult = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
         LOGGER.info("publish all results: %s", publishAllResult.toString());
-        Assert.assertTrue("publish all failed: " + publishAllResult, publishAllResult.isSuccess());
+        assertTrue("publish all failed: " + publishAllResult, publishAllResult.isSuccess());
         assertEquals("publish all expected 0 failures: " + publishAllResult, 0, publishAllResult.getFailures().size());
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
@@ -186,7 +187,7 @@ public class TestBase {
         assertEquals(expectedDiffsBeforeUndo, diff.getDiffs().size());
         ClientApiWorkspaceUndoResponse undoAllResult = lumifyApi.getWorkspaceApi().undoAll(diff.getDiffs());
         LOGGER.info("undo all results: %s", undoAllResult.toString());
-        Assert.assertTrue("undo all failed: " + undoAllResult, undoAllResult.isSuccess());
+        assertTrue("undo all failed: " + undoAllResult, undoAllResult.isSuccess());
         assertEquals("undo all expected 0 failures: " + undoAllResult, 0, undoAllResult.getFailures().size());
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
