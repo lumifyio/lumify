@@ -14,7 +14,9 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 ## Quick Start
 
 1. [Install docker](https://docs.docker.com/installation/#installation)
-1. Add ```127.0.0.1   lumify-dev``` to your ```/etc/hosts``` file.
+1. Update your ```/etc/hosts``` file.
+      - Linux: Add ```127.0.0.1   lumify-dev``` to your ```/etc/hosts``` file.
+      - OSX: Run ```boot2docker ip```. Add ```<boot to docker ip>   lumify-dev``` to your ```/etc/hosts``` file.
 1. Create the docker image ```./docker/build-dev.sh```
 1. Run the docker image ```./docker/run-dev.sh``` (This will start ZooKeeper, HDFS, YARN, ElasticSearch, and RabbitMQ).
 1. Create a war file ```mvn package -P web-war -pl web/war -am -DskipTests -Dsource.skip=true```
