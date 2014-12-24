@@ -356,14 +356,15 @@ define([
 
                     switch (diff.type) {
 
-                        case 'PropertyDiffItem': return {
+                        case 'PropertyDiffItem': return _.tap({
                             type: 'property',
-                            vertexId: diff.elementId,
                             key: diff.key,
                             name: diff.name,
                             action: 'update',
                             status: diff.sandboxStatus
-                        };
+                        }, function(obj) {
+                            obj[diff.elementType + 'Id'] = diff.elementId;
+                        });
 
                         case 'VertexDiffItem': return {
                             type: 'vertex',
@@ -387,22 +388,23 @@ define([
             this.dataRequest('workspace', type, diffsToSend)
                 .finally(function() {
                     bothButtons.hide().removeAttr('disabled').removeClass('loading');
+                    self.$node.find('.diff-content .alert').remove();
                     self.trigger(document, 'updateDiff');
                 })
                 .then(function(response) {
                     var failures = response.failures,
                         success = response.success;
 
-                    self.$node.find('.header .alert').remove();
-
                     if (failures && failures.length) {
                         var error = $('<div>')
                             .addClass('alert alert-error')
                             .html(
                                 '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                                '<ul><li>' + _.pluck(failures, 'error_msg').join('</li><li>') + '</li></ul>'
+                                '<ul><li>' + _.pluck(failures, 'errorMessage').join('</li><li>') + '</li></ul>'
                             )
-                            .appendTo(header);
+                            .prependTo(self.$node.find('.diff-content'))
+                            .alert();
+                        self.updateHeader();
                     }
                 })
                 .catch(function(errorText) {
@@ -412,7 +414,8 @@ define([
                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                             i18n('workspaces.diff.error', type, errorText)
                         )
-                        .appendTo(header);
+                        .prependTo(self.$node.find('.diff-content'))
+                        .alert();
 
                     button.show();
 
