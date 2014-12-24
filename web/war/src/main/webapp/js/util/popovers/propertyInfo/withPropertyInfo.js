@@ -22,5 +22,13 @@ define([], function() {
             });
         };
 
+        this.hidePropertyInfo = function(button) {
+            var $target = $(button);
+
+            require(['util/popovers/propertyInfo/propertyInfo'], function(PropertyInfo) {
+                $target.teardownComponent(PropertyInfo);
+            });
+        }
+
     }
 });

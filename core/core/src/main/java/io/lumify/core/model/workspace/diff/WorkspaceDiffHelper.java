@@ -127,6 +127,7 @@ public class WorkspaceDiffHelper {
         }
         JsonNode newData = JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(workspaceProperty));
         return new ClientApiWorkspaceDiff.PropertyItem(
+                element instanceof Edge ? "edge" : "vertex",
                 element.getId(),
                 workspaceProperty.getName(),
                 workspaceProperty.getKey(),

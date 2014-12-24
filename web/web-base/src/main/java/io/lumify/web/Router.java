@@ -107,6 +107,7 @@ public class Router extends HttpServlet {
             app.post("/edge/comment", authenticator, csrfProtector, CommentPrivilegeFilter.class, SetEdgeProperty.class);
             app.delete("/edge", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeDelete.class);
             app.delete("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteEdgeProperty.class);
+            app.post("/edge/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeMultiple.class);
             app.post("/edge/create", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeCreate.class);
             app.get("/edge/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeProperties.class);
             app.post("/edge/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeSetVisibility.class);
