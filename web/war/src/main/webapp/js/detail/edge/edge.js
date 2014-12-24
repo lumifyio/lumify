@@ -96,10 +96,11 @@ define([
 
             Promise.all([
                 this.dataRequest('ontology', 'ontology'),
-                this.dataRequest('edge', 'store', { edgeId: data.id })
+                this.dataRequest('edge', 'store', { edgeIds: [data.id] })
             ]).done(function(results) {
                 var ontology = results.shift(),
-                    edge = results.shift();
+                    edges = results.shift(),
+                    edge = edges[0];
 
                 self.ontologyRelationships = ontology.relationships;
                 self.edge = edge;
