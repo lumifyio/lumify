@@ -538,7 +538,11 @@ define([
 
                 case 'EdgeDiffItem':
 
-                    if (!state) {
+                    if (state) {
+                        deps.forEach(function(diffId) {
+                            self.trigger('markUndoDiffItem', { diffId: diffId, state: true });
+                        })
+                    } else {
                         var inVertex = self.diffsForElementId[diff.inVertexId],
                             outVertex = self.diffsForElementId[diff.outVertexId];
 
@@ -585,8 +589,7 @@ define([
 
                     if (!state) {
                         // Unpublish all dependents
-                        var deps = this.diffDependencies[diff.id];
-                        deps.forEach(function(diffId) {
+                        this.diffDependencies[diff.id].forEach(function(diffId) {
                             self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
                         });
                     }
@@ -608,8 +611,7 @@ define([
 
                     if (!state) {
                         // Unpublish all dependents
-                        var deps = this.diffDependencies[diff.id];
-                        deps.forEach(function(diffId) {
+                        this.diffDependencies[diff.id].forEach(function(diffId) {
                             self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
                         });
                     } else {
