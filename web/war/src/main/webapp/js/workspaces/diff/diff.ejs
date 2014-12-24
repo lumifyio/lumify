@@ -49,7 +49,7 @@
             <tr class="vertex-row <%= diff.className %> <%= diff.deleted ? 'deleted' : '' %>" data-diff-id="<%= diff.edgeId %>" data-edge-id="<%= diff.edgeId %>">
                 <th class="vertex-label" colspan="2">
                   <div class="img"></div>
-                  <h1 data-edge-id="<%= diff.edgeId %>"><%= F.vertex.title(diff.edge.source) %> &#8594; <%= F.vertex.title(diff.edge.target) %>
+                  <h1 data-edge-id="<%= diff.edgeId %>"><%= F.vertex.title(diff.edge.source) %> <span class="edge-label"><%= diff.edgeLabel %> </span> <%= F.vertex.title(diff.edge.target) %>
                   <% if (diff.edge['http://lumify.io#visibilityJson']) { %>
                     <div class="visibility" data-visibility="<%= JSON.stringify(diff.edge['http://lumify.io#visibilityJson']) %>"></div>
                   <% } %>

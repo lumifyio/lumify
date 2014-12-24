@@ -57,10 +57,18 @@ define(['require'], function(require) {
                 }
 
                 require(['../util/store'], function(store) {
-                    var storeObject = store.getObject(publicData.currentWorkspaceId, type, objectId);
-                    if (storeObject) {
+                    var storeObject = store.getObject(publicData.currentWorkspaceId, type, objectId),
+                        edgeCreation = type === 'edge' && !('propertyName' in data);
+                    if (storeObject || edgeCreation) {
                         require(['../services/' + type], function(service) {
-                            service.properties(objectId).done();
+                            service.properties(objectId)
+                                .catch(function(error) {
+                                    // Ignore 404's since we need to check if
+                                    // we have access to changed object
+                                    if (!error || error.status !== 404) {
+                                        throw error;
+                                    }
+                                }).done();
                         });
                     }
                 });

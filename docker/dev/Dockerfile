@@ -45,6 +45,7 @@ ADD hadoop/core-site.xml.template /opt/hadoop-2.3.0/etc/hadoop/core-site.xml.tem
 ADD hadoop/hdfs-site.xml /opt/hadoop-2.3.0/etc/hadoop/hdfs-site.xml
 ADD hadoop/mapred-site.xml /opt/hadoop-2.3.0/etc/hadoop/mapred-site.xml
 ADD hadoop/yarn-site.xml /opt/hadoop-2.3.0/etc/hadoop/yarn-site.xml
+COPY hadoop/hadoop-native-64bit.tar.gz /opt/hadoop-2.3.0/hadoop-native-64bit.tar.gz
 ENV HADOOP_PREFIX /opt/hadoop
 ENV HADOOP_COMMON_HOME /opt/hadoop
 ENV HADOOP_HDFS_HOME /opt/hadoop
