@@ -1389,8 +1389,6 @@ define([
                 return console.error('Registering for position events requires a vertexId');
             }
 
-            //this.onUnregisterForPositionChanges();
-
             this.cytoscapeReady().done(function(cy) {
 
                 event.stopPropagation();
