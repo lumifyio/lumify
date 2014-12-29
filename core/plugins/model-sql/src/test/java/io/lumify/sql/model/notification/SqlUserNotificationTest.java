@@ -53,9 +53,9 @@ public class SqlUserNotificationTest {
         notification.setExpirationAge(new ExpirationAge(1, ExpirationAgeUnit.SECOND));
         notification.setSentDate(new Date());
 
-        assertTrue(notification.isActive());
-        Thread.sleep(1000);
-        assertFalse(notification.isActive());
+        assertTrue("notification should be active", notification.isActive());
+        Thread.sleep(1500);
+        assertFalse("notification should not be active", notification.isActive());
     }
 
     @Test
