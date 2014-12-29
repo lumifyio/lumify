@@ -147,16 +147,18 @@ define([
                         self.promptAddVertices = vertices;
                         promptAdd.text(i18n('popovers.add_related.button.prompt_add', count)).show();
                     } else {
-                        self.trigger('updateWorkspace', {
-                            entityUpdates: vertices.map(function(vertex) {
-                                return {
-                                    vertexId: vertex.id,
-                                    graphLayoutJson: {
-                                        relatedToVertexId: self.attr.relatedToVertexId
-                                    }
-                                };
-                            })
-                        });
+                        _.defer(function() {
+                            self.trigger('updateWorkspace', {
+                                entityUpdates: vertices.map(function(vertex) {
+                                    return {
+                                        vertexId: vertex.id,
+                                        graphLayoutJson: {
+                                            relatedToVertexId: self.attr.relatedToVertexId
+                                        }
+                                    };
+                                })
+                            });
+                        })
                         self.teardown();
                     }
 

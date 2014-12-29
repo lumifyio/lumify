@@ -398,24 +398,23 @@ define([
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
                         v.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v.vertexId)).position());
-                        self.workspaceVertices[v.vertexId] = v;
                     });
 
                     if (options.fit && cy.nodes().length) {
 
                         _.defer(self.fit.bind(self));
 
-                    } else if (isVisible && options.addingVerticesRelatedTo) {
-                        var relatedToCyNode = cy.getElementById(self.toCyId(options.addingVerticesRelatedTo));
-                        if (relatedToCyNode.length) {
-                            var nodes = addedCyNodes.add(relatedToCyNode);
+                    } else if (isVisible && options.fitToVertexIds && options.fitToVertexIds.length) {
+                        var zoomOutToNodes = cy.$(
+                            options.fitToVertexIds.map(function(v) {
+                            return '#' + toCyId(v);
+                        }).join(','));
 
-                            _.defer(function() {
-                                cy.zoomOutToFit(nodes, {
-                                    padding: self.paddingForZoomOut()
-                                });
-                            })
-                        }
+                        _.defer(function() {
+                            cy.zoomOutToFit(zoomOutToNodes, {
+                                padding: self.paddingForZoomOut()
+                            });
+                        })
                     }
 
                     if (options.animate) {
@@ -1248,7 +1247,7 @@ define([
             }
             if (data && data.entityUpdates && data.entityUpdates.length && this.$node.closest('.visible').length) {
                 data.entityUpdates.forEach(function(entityUpdate) {
-                    if ('graphLayoutJson' in entityUpdate) {
+                    if ('graphLayoutJson' in entityUpdate && 'pagePosition' in entityUpdate.graphLayoutJson) {
                         var projectedPosition = cy.renderer().projectIntoViewport(
                             entityUpdate.graphLayoutJson.pagePosition.x,
                             entityUpdate.graphLayoutJson.pagePosition.y
@@ -1269,13 +1268,16 @@ define([
                 this.isWorkspaceEditable = data.workspace.editable;
                 this.cytoscapeReady(function(cy) {
                     var self = this,
+                        fitToIds = [],
                         allNodes = cy.nodes();
 
                     allNodes[data.workspace.editable ? 'grabify' : 'ungrabify']();
 
                     data.entityUpdates.forEach(function(entityUpdate) {
-                        var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId));
-                        if (cyNode.length && !cyNode.grabbed()) {
+                        var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId)),
+                            previousWorkspaceVertex = self.workspaceVertices[entityUpdate.vertexId];
+
+                        if (cyNode.length && !cyNode.grabbed() && ('graphPosition' in entityUpdate)) {
                             cyNode
                                 .stop(true)
                                 .animate(
@@ -1288,6 +1290,23 @@ define([
                                     }
                                 );
                         }
+
+                        var noPreviousGraphPosition = (
+                                !previousWorkspaceVertex ||
+                                !('graphPosition' in previousWorkspaceVertex)
+                            ),
+                            nowHasGraphPosition = 'graphPosition' in entityUpdate,
+                            newVertex = !!(noPreviousGraphPosition && nowHasGraphPosition);
+
+                        if (previousWorkspaceVertex &&
+                            previousWorkspaceVertex.graphLayoutJson &&
+                            previousWorkspaceVertex.graphLayoutJson.relatedToVertexId) {
+                            fitToIds.push(previousWorkspaceVertex.graphLayoutJson.relatedToVertexId)
+                        }
+                        if (newVertex) {
+                            fitToIds.push(entityUpdate.vertexId);
+                        }
+
                         self.workspaceVertices[entityUpdate.vertexId] = entityUpdate;
                     });
                     self.workspaceVertices = _.omit(self.workspaceVertices, data.entityDeletes);
@@ -1298,7 +1317,9 @@ define([
                             this.cyNodesToRemoveOnWorkspaceUpdated.remove();
                             this.cyNodesToRemoveOnWorkspaceUpdated = null;
                         }
-                        this.addVertices(data.newVertices)
+                        this.addVertices(data.newVertices, {
+                            fitToVertexIds: _.unique(fitToIds)
+                        })
                     }
                     this.setWorkspaceDirty();
                     this.updateVertexSelections(cy);
