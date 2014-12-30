@@ -47,7 +47,6 @@ public class TesseractGraphPropertyWorkerTest extends GraphPropertyWorkerTestBas
         assertNotNull("textValue was null", textValue);
         String textValueString = IOUtils.toString(textValue.getInputStream());
         assertTrue("does not contain Tesseract", textValueString.contains("Tesseract"));
-        assertTrue("does not contain According to the Oxford English Dictionary", textValueString.contains("According to the Oxford English Dictionary"));
 
         assertEquals(1, getGraphPropertyQueue().size());
         JSONObject graphPropertyQueueItem = getGraphPropertyQueue().peek();
