@@ -63,6 +63,12 @@ public class TesseractGraphPropertyWorkerTest extends GraphPropertyWorkerTestBas
         if (tessdataDir.exists()) {
             map.put(TesseractGraphPropertyWorker.CONFIG_DATA_PATH, tessdataDir.getAbsolutePath());
         }
+
+        tessdataDir = new File("/usr/local/share/tessdata");
+        if (tessdataDir.exists()) {
+            map.put(TesseractGraphPropertyWorker.CONFIG_DATA_PATH, tessdataDir.getAbsolutePath());
+        }
+
         return map;
     }
 }
