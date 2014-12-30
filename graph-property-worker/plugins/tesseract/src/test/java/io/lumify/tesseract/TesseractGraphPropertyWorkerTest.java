@@ -1,6 +1,5 @@
 package io.lumify.tesseract;
 
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.test.GraphPropertyWorkerTestBase;
 import org.apache.commons.io.IOUtils;
@@ -61,10 +60,9 @@ public class TesseractGraphPropertyWorkerTest extends GraphPropertyWorkerTestBas
     protected Map getConfigurationMap() {
         Map map = super.getConfigurationMap();
         File tessdataDir = new File("/usr/share/tesseract-ocr/tessdata/");
-        if (!tessdataDir.exists()) {
-            throw new LumifyException("Could not find tessdata path: " + tessdataDir.getAbsolutePath());
+        if (tessdataDir.exists()) {
+            map.put(TesseractGraphPropertyWorker.CONFIG_DATA_PATH, tessdataDir.getAbsolutePath());
         }
-        map.put("tesseract.dataPath", tessdataDir.getAbsolutePath());
         return map;
     }
 }
