@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-dev-jetty-server</artifactId>
+            <artifactId>lumify-jetty-server</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
