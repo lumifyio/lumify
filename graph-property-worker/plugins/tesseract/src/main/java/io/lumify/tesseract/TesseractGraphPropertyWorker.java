@@ -1,5 +1,6 @@
 package io.lumify.tesseract;
 
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
@@ -40,6 +41,13 @@ public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
         String dataPath = getConfiguration().get(CONFIG_DATA_PATH, null);
         if (dataPath != null) {
             tesseract.setDatapath(dataPath);
+        }
+
+        String jaiClassName = "com.sun.media.imageio.plugins.tiff.TIFFImageWriteParam";
+        try {
+            Class.forName(jaiClassName);
+        } catch (Exception ex) {
+            throw new LumifyException("Could not find class " + jaiClassName + ". Make sure you have Java Advanced Imaging (JAI) installed (http://www.oracle.com/technetwork/java/current-142188.html)");
         }
     }
 
