@@ -26,5 +26,6 @@
         <module>terms-of-use</module>
         <module>analysts-notebook-export</module>
         <module>change-password</module>
+        <module>change-email</module>
     </modules>
 </project>
