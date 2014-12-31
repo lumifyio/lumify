@@ -24,6 +24,7 @@ public class SystemNotificationSave extends BaseRequestHandler {
     private static final String TITLE_PARAMETER_NAME = "title";
     private static final String MESSAGE_PARAMETER_NAME = "message";
     private static final String START_DATE_PARAMETER_NAME = "startDate";
+    private static final String EXTERNAL_URL_PARAMETER_NAME = "externalUrl";
     private static final String END_DATE_PARAMETER_NAME = "endDate";
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm 'UTC'";
 
@@ -53,11 +54,12 @@ public class SystemNotificationSave extends BaseRequestHandler {
         Date startDate = sdf.parse(startDateParameter);
         String endDateParameter = getOptionalParameter(request, END_DATE_PARAMETER_NAME);
         Date endDate = endDateParameter != null ? sdf.parse(endDateParameter) : null;
+        String externalUrl = getOptionalParameter(request, EXTERNAL_URL_PARAMETER_NAME);
 
         SystemNotification notification;
 
         if (notificationId == null) {
-            notification = systemNotificationRepository.createNotification(severity, title, message, startDate, endDate);
+            notification = systemNotificationRepository.createNotification(severity, title, message, externalUrl, startDate, endDate);
         } else {
             notification = systemNotificationRepository.getNotification(notificationId, getUser(request));
             notification.setSeverity(severity);
@@ -65,6 +67,9 @@ public class SystemNotificationSave extends BaseRequestHandler {
             notification.setMessage(message);
             notification.setStartDate(startDate);
             notification.setEndDate(endDate);
+            if (externalUrl != null) {
+                notification.setExternalUrl(externalUrl);
+            }
             notification = systemNotificationRepository.updateNotification(notification);
         }
 

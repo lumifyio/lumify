@@ -15,4 +15,6 @@ public interface SystemNotification extends Notification {
     public void setEndDate(Date endDate);
 
     public Date getEndDate();
+
+    public void setExternalUrl(String externalUrl);
 }

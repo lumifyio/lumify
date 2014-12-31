@@ -12,6 +12,7 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -60,7 +61,7 @@ public class BigTableUserNotificationRepository extends UserNotificationReposito
     }
 
     @Override
-    public BigTableUserNotification createNotification(String user, String title, String message, ExpirationAge expirationAge) {
+    public BigTableUserNotification createNotification(String user, String title, String message, String actionEvent, JSONObject actionPayload, ExpirationAge expirationAge) {
         Date now = new Date();
         String rowKey = Long.toString(now.getTime()) + ":" + UUID.randomUUID().toString();
         BigTableUserNotification notification = new BigTableUserNotification(new UserNotificationRowKey(rowKey));
@@ -68,6 +69,13 @@ public class BigTableUserNotificationRepository extends UserNotificationReposito
         notification.setTitle(title);
         notification.setMessage(message);
         notification.setSentDate(now);
+        if (actionEvent != null) {
+            notification.setActionEvent(actionEvent);
+        }
+        if (actionPayload != null) {
+            notification.setActionPayload(actionPayload);
+        }
+
         notification.setMarkedRead(false);
         if (expirationAge != null) {
             notification.setExpirationAge(expirationAge);

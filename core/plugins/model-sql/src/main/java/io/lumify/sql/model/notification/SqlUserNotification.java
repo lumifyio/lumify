@@ -20,6 +20,8 @@ public class SqlUserNotification implements UserNotification {
     private int expirationAgeAmount;
     private String expirationAgeUnit;
     private boolean markedRead;
+    private String actionEvent;
+    private String actionPayload;
 
     public void setId(String id) {
         this.id = id;
@@ -118,6 +120,41 @@ public class SqlUserNotification implements UserNotification {
     @Column(name = "marked_read")
     public Boolean isMarkedRead() {
         return markedRead;
+    }
+
+    @Column(name = "action_payload", length = 4000)
+    private String getActionPayloadString() {
+        return actionPayload;
+    }
+
+    public void setActionPayload(String actionPayload) {
+        this.actionPayload = actionPayload;
+    }
+
+    @Override
+    public void setActionEvent(String actionEvent) {
+        this.actionEvent = actionEvent;
+    }
+
+    @Override
+    @Column(name = "action_event")
+    public String getActionEvent() {
+        return this.actionEvent;
+    }
+
+    @Override
+    public void setActionPayload(JSONObject jsonData) {
+        this.setActionPayload(jsonData.toString());
+    }
+
+    @Transient
+    @Override
+    public JSONObject getActionPayload() {
+        String payload = getActionPayloadString();
+        if (payload != null) {
+            return new JSONObject(payload);
+        }
+        return null;
     }
 
     @Transient

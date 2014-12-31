@@ -181,6 +181,18 @@ define([
                             })
 
                     this.on('click', function(clicked) {
+                        if (clicked.action) {
+                            var a = clicked.action;
+                            if (a.event === 'EXTERNAL_URL' &&
+                                a.data &&
+                                a.data.url) {
+                                window.open(a.data.url);
+                            } else {
+                                _.defer(function() {
+                                    self.trigger(a.event, a.data);
+                                });
+                            }
+                        }
                         if (self.canDismissNotification(clicked)) {
                             self.dismissNotification(clicked, {
                                 immediate: true,

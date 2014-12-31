@@ -9,16 +9,21 @@ public abstract class UserNotificationRepository extends NotificationRepository 
 
     public abstract List<UserNotification> getActiveNotifications(User user);
 
-    public abstract UserNotification createNotification(
-            String userId,
-            String title,
-            String message,
-            ExpirationAge expirationAge
-    );
+    public abstract UserNotification createNotification(String user, String title, String message, String actionEvent, JSONObject actionPayload, ExpirationAge expirationAge);
 
     public abstract UserNotification getNotification(String notificationId, User user);
 
     public abstract void markRead(String[] notificationIds, User user);
+
+    public UserNotification createNotification(String user, String title, String message, String actionUrl, ExpirationAge expirationAge) {
+        JSONObject payload = new JSONObject();
+        payload.put("url", actionUrl);
+        return createNotification(user, title, message, Notification.ACTION_EVENT_EXTERNAL_URL, payload, expirationAge);
+    }
+    
+    public UserNotification createNotification(String user, String title, String message, ExpirationAge expirationAge) {
+        return createNotification(user, title, message, null, null, expirationAge);
+    }
 
     public static JSONObject toJSONObject(UserNotification notification) {
         JSONObject json = new JSONObject();
@@ -27,6 +32,12 @@ public abstract class UserNotificationRepository extends NotificationRepository 
         json.put("title", notification.getTitle());
         json.put("message", notification.getMessage());
         json.put("sentDate", notification.getSentDate().getTime());
+        if (notification.getActionEvent() != null) {
+            JSONObject action = new JSONObject();
+            action.put("event", notification.getActionEvent());
+            action.putOpt("data", notification.getActionPayload());
+            json.put("action", action);
+        }
         json.put("hash", hash(json.toString()));
         return json;
     }

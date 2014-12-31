@@ -5,6 +5,7 @@ import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.Value;
 import io.lumify.bigtable.model.notification.model.SystemNotificationRowKey;
+import io.lumify.core.model.notification.Notification;
 import io.lumify.core.model.notification.SystemNotification;
 import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.notification.SystemNotificationSeverity;
@@ -18,6 +19,8 @@ public class BigTableSystemNotification extends Row<SystemNotificationRowKey> im
     public static final String SEVERITY_COLUMN_NAME = "severity";
     public static final String TITLE_COLUMN_NAME = "title";
     public static final String MESSAGE_COLUMN_NAME = "message";
+    public static final String ACTION_EVENT_COLUMN_NAME = "actionEvent";
+    public static final String ACTION_PAYLOAD_COLUMN_NAME = "actionPayload";
     public static final String START_DATE_COLUMN_NAME = "startDate";
     public static final String END_DATE_COLUMN_NAME = "endDate";
 
@@ -98,6 +101,35 @@ public class BigTableSystemNotification extends Row<SystemNotificationRowKey> im
             return new Date(endDate);
         }
         return null;
+    }
+
+    @Override
+    public void setActionEvent(String actionEvent) {
+        getColumnFamily().set(ACTION_EVENT_COLUMN_NAME, actionEvent);
+    }
+
+    @Override
+    public String getActionEvent() {
+        return Value.toString(getColumnFamily().get(ACTION_EVENT_COLUMN_NAME));
+    }
+
+    @Override
+    public void setActionPayload(JSONObject jsonData) {
+        getColumnFamily().set(ACTION_PAYLOAD_COLUMN_NAME, jsonData.toString());
+    }
+
+    @Override
+    public JSONObject getActionPayload() {
+        String jsonString = Value.toString(getColumnFamily().get(ACTION_PAYLOAD_COLUMN_NAME));
+        return jsonString == null ? null : new JSONObject(jsonString);
+    }
+
+    @Override
+    public void setExternalUrl(String externalUrl) {
+        this.setActionEvent(Notification.ACTION_EVENT_EXTERNAL_URL);
+        JSONObject payload = new JSONObject();
+        payload.put("url", externalUrl);
+        this.setActionPayload(payload);
     }
 
     @Override

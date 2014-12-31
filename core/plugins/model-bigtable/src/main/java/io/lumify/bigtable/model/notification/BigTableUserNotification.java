@@ -20,6 +20,8 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     public static final String MESSAGE_COLUMN_NAME = "message";
     public static final String USER_ID_COLUMN_NAME = "userId";
     public static final String SENT_DATE_COLUMN_NAME = "sentDate";
+    public static final String ACTION_EVENT_COLUMN_NAME = "actionEvent";
+    public static final String ACTION_PAYLOAD_COLUMN_NAME = "actionPayload";
     public static final String EXPIRATION_AGE_UNIT_COLUMN_NAME = "expirationAgeUnit";
     public static final String EXPIRATION_AGE_AMOUNT_COLUMN_NAME = "expirationAgeAmount";
     public static final String READ_COLUMN_NAME = "read";
@@ -88,6 +90,27 @@ public class BigTableUserNotification extends Row<UserNotificationRowKey> implem
     @Override
     public Date getSentDate() {
         return new Date(Value.toLong(getColumnFamily().get(SENT_DATE_COLUMN_NAME)));
+    }
+
+    @Override
+    public void setActionEvent(String actionEvent) {
+        getColumnFamily().set(ACTION_EVENT_COLUMN_NAME, actionEvent);
+    }
+
+    @Override
+    public String getActionEvent() {
+        return Value.toString(getColumnFamily().get(ACTION_EVENT_COLUMN_NAME));
+    }
+
+    @Override
+    public void setActionPayload(JSONObject jsonData) {
+        getColumnFamily().set(ACTION_PAYLOAD_COLUMN_NAME, jsonData.toString());
+    }
+
+    @Override
+    public JSONObject getActionPayload() {
+        String jsonString = Value.toString(getColumnFamily().get(ACTION_PAYLOAD_COLUMN_NAME));
+        return jsonString == null ? null : new JSONObject(jsonString);
     }
 
     @Override

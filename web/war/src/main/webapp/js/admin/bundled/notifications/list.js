@@ -86,9 +86,8 @@ require([
                 })
             }
 
-            if (this.notifications.length) {
-                this.$node.find('.none').remove();
-            } else {
+            this.$node.find('.none').remove();
+            if (!this.notifications.length) {
                 $('<div>').addClass('none')
                     .text('No Notications')
                     .appendTo(this.node);
