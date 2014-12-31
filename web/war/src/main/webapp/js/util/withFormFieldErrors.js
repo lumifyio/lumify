@@ -31,6 +31,8 @@ define(['tpl!./alert'], function(alertTemplate) {
             if (_.isObject(error)) {
                 _.keys(error).forEach(function(fieldName) {
                     switch (fieldName) {
+                        case 'invalidValues': break;
+
                         case 'visibilitySource':
                             rootEl.find('.visibility')
                                 .each(function() {
@@ -49,6 +51,10 @@ define(['tpl!./alert'], function(alertTemplate) {
                                 });
                             messages.push(error[fieldName]);
                         break;
+
+                        default:
+                            messages.push(error[fieldName]);
+                            break;
                     }
                 });
             } else {

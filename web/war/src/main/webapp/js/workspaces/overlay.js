@@ -385,24 +385,24 @@ define([
 
         this.updateUserTooltip = function(data) {
             if (data && data.user) {
-                this.select('userSelector').text(data.user.displayName)
-                    .tooltip('destroy')
+                this.select('userSelector')
+                    .text(data.user.displayName)
+                    .css({ cursor: 'pointer' })
+                    .on('click', function() {
+                        require([
+                            'hbs!workspaces/userAccount/modal',
+                            'workspaces/userAccount/userAccount'
+                        ], function(modalTemplate, UserAccount) {
+                            var modal = $(modalTemplate({})).appendTo(document.body);
+                            UserAccount.attachTo(modal);
+                            modal.modal('show');
+                        });
+                    })
                     .tooltip({
                         placement: 'right',
-                        html: true,
-                        title: '<span><strong>' +
-                            i18n('workspaces.overlay.authorizations') +
-                            '</strong> ' +
-                                    (data.user.authorizations.join(', ') ||
-                                     i18n('workspaces.overlay.authorizations.none')) +
-                                '</span>' +
-                                '<div><strong>' +
-                                i18n('workspaces.overlay.privileges') +
-                                '</strong> ' +
-                                    _.without(data.user.privileges, 'READ').join(', ') +
-                                '</div>',
+                        title: i18n('workspaces.overlay.open.useraccount'),
                         trigger: 'hover',
-                        delay: { show: 500, hide: 0 }
+                        delay: { show: 250, hide: 0 }
                     })
             }
         }
