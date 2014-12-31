@@ -127,7 +127,7 @@ public class SqlUserNotification implements UserNotification {
         return actionPayload;
     }
 
-    public void setActionPayload(String actionPayload) {
+    public void setActionPayloadString(String actionPayload) {
         this.actionPayload = actionPayload;
     }
 
@@ -144,7 +144,7 @@ public class SqlUserNotification implements UserNotification {
 
     @Override
     public void setActionPayload(JSONObject jsonData) {
-        this.setActionPayload(jsonData.toString());
+        this.setActionPayloadString(jsonData.toString());
     }
 
     @Transient

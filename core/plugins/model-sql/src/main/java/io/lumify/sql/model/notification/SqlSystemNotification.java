@@ -92,7 +92,7 @@ public class SqlSystemNotification implements SystemNotification {
         return actionPayload;
     }
 
-    public void setActionPayload(String actionPayload) {
+    public void setActionPayloadString(String actionPayload) {
         this.actionPayload = actionPayload;
     }
 
@@ -109,7 +109,7 @@ public class SqlSystemNotification implements SystemNotification {
 
     @Override
     public void setActionPayload(JSONObject jsonData) {
-        this.setActionPayload(jsonData.toString());
+        this.setActionPayloadString(jsonData.toString());
     }
 
     @Override
