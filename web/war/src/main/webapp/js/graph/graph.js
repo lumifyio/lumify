@@ -66,9 +66,10 @@ define([
                 var vId = _.isString(v) ? v : v.id;
                 return F.className.to(vId);
             },
-            cyEdgeFromEdge = function(e, sourceNode, destNode) {
+            cyEdgeFromEdge = function(e, sourceNode, destNode, ontologyRelationships) {
                 var source = e.sourceVertexId || (e.source && e.source.id),
-                    target = e.destVertexId || (e.target && e.target.id);
+                    target = e.destVertexId || (e.target && e.target.id),
+                    ontology = ontologyRelationships.byTitle[e.relationshipType || e.label];
 
                 return {
                     group: 'edges',
@@ -76,6 +77,7 @@ define([
                         id: toCyId(e.id),
                         source: sourceNode.id(),
                         target: destNode.id(),
+                        label: ontology && ontology.displayName || '',
                         edge: {
                             id: e.id,
                             diffType: e.diffType,
@@ -600,14 +602,15 @@ define([
 
         this.onEdgesUpdated = function(event, data) {
             this.cytoscapeReady(function(cy) {
-                var newEdges = _.compact(data.edges.map(function(edge) {
+                var self = this,
+                    newEdges = _.compact(data.edges.map(function(edge) {
                         var cyEdge = cy.getElementById(toCyId(edge.id));
                         if (cyEdge.length === 0) {
                             var sourceNode = cy.getElementById(toCyId(edge.source.id)),
                                 destNode = cy.getElementById(toCyId(edge.target.id));
 
                             if (sourceNode.length && destNode.length) {
-                                return cyEdgeFromEdge(edge, sourceNode, destNode);
+                                return cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships);
                             }
                         }
                     }));
@@ -1347,6 +1350,8 @@ define([
 
         this.onEdgesLoaded = function(evt, relationshipData) {
             this.cytoscapeReady(function(cy) {
+                var self = this;
+
                 if (relationshipData.edges) {
                     var relationshipEdges = [];
                     relationshipData.edges.forEach(function(edge) {
@@ -1354,7 +1359,9 @@ define([
                             destNode = cy.getElementById(toCyId(edge.destVertexId));
 
                         if (sourceNode.length && destNode.length) {
-                            relationshipEdges.push(cyEdgeFromEdge(edge, sourceNode, destNode));
+                            relationshipEdges.push(
+                                cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships)
+                            );
                         }
                     });
                     // Hide edges when zooming if more than threshold
@@ -1571,14 +1578,15 @@ define([
                 this.addVertices(self.attr.vertices);
             }
 
-            this.dataRequest('ontology', 'concepts')
-                .done(function(concepts) {
-                    var templateData = {
-                        firstLevelConcepts: concepts.entityConcept.children || [],
-                        pathHopOptions: ['2','3','4']
-                    };
+            this.dataRequest('ontology', 'ontology')
+                .done(function(ontology) {
+                    var concepts = ontology.concepts,
+                        relationships = ontology.relationships,
+                        templateData = {
+                            firstLevelConcepts: concepts.entityConcept.children || [],
+                            pathHopOptions: ['2','3','4']
+                        };
 
-                    // TODO: make context menus work better
                     self.$node.append(template(templateData)).find('.shortcut').each(function() {
                         var $this = $(this), command = $this.text();
                         $this.text(F.string.shortcut($this.text()));
@@ -1588,6 +1596,7 @@ define([
 
                     Controls.attachTo(self.select('graphToolsSelector'));
 
+                    self.ontologyRelationships = relationships;
                     stylesheet(function(style) {
                         self.initializeGraph(style);
                     });
