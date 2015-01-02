@@ -18,6 +18,7 @@ define([
     'configuration/plugins/exportWorkspace/plugin',
     'configuration/plugins/graphLayout/plugin',
     'configuration/plugins/graphSelector/plugin',
+    'configuration/plugins/graphView/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -38,6 +39,7 @@ define([
     WorkspaceExporter,
     GraphLayout,
     GraphSelector,
+    GraphView,
     colorjs) {
     'use strict';
 
@@ -45,6 +47,7 @@ define([
     var HOVER_FOCUS_DELAY_SECONDS = 0.25,
         MAX_TITLE_LENGTH = 15,
         SELECTION_THROTTLE = 100,
+        GRAPH_PADDING_BORDER = 20,
         // How many edges are required before we don't show them on zoom/pan
         SHOW_EDGES_ON_ZOOM_THRESHOLD = 50,
         GRID_LAYOUT_X_INCREMENT = 175,
@@ -101,6 +104,7 @@ define([
             cytoscapeContainerSelector: '.cytoscape-container',
             emptyGraphSelector: '.empty-graph',
             graphToolsSelector: '.controls',
+            graphViewsSelector: '.graph-views',
             contextMenuSelector: '.graph-context-menu',
             vertexContextMenuSelector: '.vertex-context-menu',
             edgeContextMenuSelector: '.edge-context-menu'
@@ -824,18 +828,19 @@ define([
         };
 
         this.onGraphPaddingUpdated = function(e, data) {
-            var self = this,
-                border = 20;
+            var self = this;
 
             this.graphPaddingRight = data.padding.r;
 
             var padding = $.extend({}, data.padding);
 
             padding.r += this.select('graphToolsSelector').outerWidth(true) || 65;
-            padding.l += border;
-            padding.t += border;
-            padding.b += border;
+            padding.l += GRAPH_PADDING_BORDER;
+            padding.t += GRAPH_PADDING_BORDER;
+            padding.b += GRAPH_PADDING_BORDER;
             this.graphPadding = padding;
+
+            this.updateGraphViewsPosition();
 
             if (this.nodesToFitAfterGraphPadding) {
                 this.cytoscapeReady().done(function(cy) {
@@ -845,6 +850,13 @@ define([
                     self.nodesToFitAfterGraphPadding = null;
                 });
             }
+        };
+
+        this.updateGraphViewsPosition = function() {
+            this.select('graphViewsSelector').css({
+                left: (this.graphPadding.l - GRAPH_PADDING_BORDER) + 'px',
+                right: (this.graphPaddingRight) + 'px'
+            });
         };
 
         this.onContextMenuLayout = function(layout, opts) {
@@ -1595,6 +1607,17 @@ define([
                     self.bindContextMenuClickEvent();
 
                     Controls.attachTo(self.select('graphToolsSelector'));
+
+                    var $views = $();
+                    self.updateGraphViewsPosition();
+                    GraphView.views.forEach(function(view) {
+                        var $view = $('<div>').addClass(view.className);
+                        require([view.componentPath], function(View) {
+                            View.attachTo($view);
+                        })
+                        $views = $views.add($view);
+                    });
+                    self.select('graphViewsSelector').append($views);
 
                     self.ontologyRelationships = relationships;
                     stylesheet(function(style) {
