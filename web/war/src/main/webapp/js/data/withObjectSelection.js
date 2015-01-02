@@ -62,6 +62,10 @@ define([
             var self = this;
 
             require(['util/privileges'], function(Privileges) {
+                if (!Privileges.canEDIT) {
+                    return;
+                }
+
                 if (data && data.vertexId) {
                     self.trigger('updateWorkspace', {
                         entityDeletes: [data.vertexId]
@@ -71,7 +75,7 @@ define([
                         self.trigger('updateWorkspace', {
                             entityDeletes: _.pluck(selectedObjects.vertices, 'id')
                         });
-                    } else if (selectedObjects.edges && Privileges.canEDIT) {
+                    } else if (selectedObjects.edges.length) {
                         self.trigger('deleteEdges', { edges: selectedObjects.edges });
                     }
                 }
