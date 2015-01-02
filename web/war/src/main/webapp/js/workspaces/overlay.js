@@ -66,21 +66,21 @@ define([
             this.on(document, 'edgesDeleted', this.updateDiffBadge);
             this.on(document, 'updateDiff', this.updateDiffBadge);
 
-            this.on(document, 'showDiffPanel', this.showDiffPanel);
+            this.on(document, 'toggleDiffPanel', this.toggleDiffPanel);
             this.on(document, 'escape', this.closeDiffPanel);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
-                    'alt-d':  { fire: 'showDiffPanel', desc: i18n('workspaces.help.show_diff') }
+                    'alt-d':  { fire: 'toggleDiffPanel', desc: i18n('workspaces.help.show_diff') }
                 }
             });
         });
 
-        this.showDiffPanel = function() {
+        this.toggleDiffPanel = function() {
             var badge = this.$node.find('.badge');
             if (badge.is(':visible')) {
-                badge.popover('show');
+                badge.popover('toggle');
             }
         };
 
