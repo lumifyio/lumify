@@ -17,11 +17,24 @@ define([
 
         this.defaultAttrs({
             pannerSelector: '.panner',
-            buttonSelector: 'button'
+            buttonSelector: 'button',
+            toggleOptionsSelector: '.options button',
+            optionsContainerSelector: '.options-container'
         })
 
         this.after('initialize', function() {
-            this.$node.html(template({}));
+            var self = this,
+                hasOptions = !!this.attr.optionsComponentPath;
+
+            this.$node.html(template({
+                options: hasOptions
+            }));
+
+            if (hasOptions) {
+                require([this.attr.optionsComponentPath], function(Options) {
+                    Options.attachTo(self.$node.find('.options-container'), self.attr.optionsAttributes);
+                });
+            }
 
             this.attachEvents();
         });
@@ -33,9 +46,19 @@ define([
             this.on('mousedown mouseup', {
                 buttonSelector: this.onButton
             });
+            this.on('click', {
+                toggleOptionsSelector: this.onToggleOptions
+            });
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
             $(window).on('mouseup blur', this.handleUp.bind(this));
+        };
+
+        this.onToggleOptions = function(event) {
+            event.stopPropagation();
+            event.target.blur();
+            this.select('optionsContainerSelector').toggle();
+            $(event.target).toggleClass('active');
         };
 
         this.onGraphPaddingUpdated = function(e, data) {
@@ -51,6 +74,10 @@ define([
             var $target = $(e.target),
                 eventName = $target.data('event'),
                 repeat = $target.data('repeat');
+
+            if (!eventName) {
+                return;
+            }
 
             this.trigger(eventName);
 
