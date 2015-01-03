@@ -49,12 +49,23 @@ define([
             this.on('click', {
                 toggleOptionsSelector: this.onToggleOptions
             });
+            this.visible = false;
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
+            this.on(document, 'click', this.hideOptions);
 
             $(window).on('mouseup blur', this.handleUp.bind(this));
         };
 
+        this.hideOptions = function(event) {
+            if (this.visible && $(event.target).closest(this.$node).length === 0) {
+                this.select('optionsContainerSelector').hide();
+                this.select('toggleOptionsSelector').removeClass('active');
+                this.visible = false;
+            }
+        };
+
         this.onToggleOptions = function(event) {
+            this.visible = !this.visible;
             event.stopPropagation();
             event.target.blur();
             this.select('optionsContainerSelector').toggle();
