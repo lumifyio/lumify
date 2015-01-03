@@ -18,7 +18,6 @@ define([
                 })
                 .find('input').on('change', function() {
                     var checked = $(this).is(':checked');
-                    console.log(checked)
                     self.attr.cy.done(function(cy) {
                         cy.style().selector('edge')
                             .css({
