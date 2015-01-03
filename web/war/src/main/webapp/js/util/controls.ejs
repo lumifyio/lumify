@@ -1,3 +1,9 @@
+<% if (options) { %>
+<div class="options">
+  <button title="<%= i18n('controls.options') %>">O</button>
+  <div style="display:none" class="options-container"></div>
+</div>
+<% } %>
 <button data-event="fit"><%= i18n('controls.fit') %></button>
 <div class="panner"><div class="arrow-bottom"/><div class="arrow-right"/><div class="arrow-top"/><div class="arrow-left"/></div>
 <button class="zoom" data-repeat="true" data-event="zoomOut">-</button>
