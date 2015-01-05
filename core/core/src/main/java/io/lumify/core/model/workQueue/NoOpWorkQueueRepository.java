@@ -3,7 +3,7 @@ package io.lumify.core.model.workQueue;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerSpout;
+import io.lumify.core.ingest.WorkerSpout;
 import org.json.JSONObject;
 import org.securegraph.Graph;
 
@@ -49,7 +49,7 @@ public class NoOpWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public GraphPropertyWorkerSpout createGraphPropertyWorkerSpout() {
+    public WorkerSpout createWorkerSpout() {
         throw new LumifyException("Not supported");
     }
 }
