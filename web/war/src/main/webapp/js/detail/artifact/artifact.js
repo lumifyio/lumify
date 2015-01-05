@@ -91,12 +91,13 @@ define([
         });
 
         this.onOpenOriginal = function(event) {
-            window.open(this.attr.data.imageRawSrc);
+            window.open(F.vertex.raw(this.attr.data));
         };
 
         this.onDownloadOriginal = function(event) {
-            window.open(this.attr.data.imageRawSrc + (
-                /\?/.test(this.attr.data.imageRawSrc) ? '&' : '?'
+            var rawSrc = F.vertex.raw(this.attr.data);
+            window.open(rawSrc + (
+                /\?/.test(rawSrc) ? '&' : '?'
             ) + 'download=true');
         };
 
@@ -472,7 +473,7 @@ define([
 
         this.audioSetup = function(vertex) {
             AudioScrubber.attachTo(this.select('audioPreviewSelector'), {
-                rawUrl: vertex.imageRawSrc
+                rawUrl: F.vertex.raw(vertex)
             })
         };
 
