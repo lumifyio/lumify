@@ -70,7 +70,12 @@ public class UploadRdfIntegrationTest extends TestBase {
 
         assertSearch(lumifyApi);
         assertGetEdges(lumifyApi);
-        assertFindPath(lumifyApi);
+
+        // TODO/BUG The following is commented out until long-running processes are supported in integration tests.
+        //          Leaving this in causes the test to hang indefinitely because the long-running process queue is
+        //          not being read.
+        // assertFindPath(lumifyApi);
+
         assertFindRelated(lumifyApi);
         assertFindMultiple(lumifyApi);
         assertWorkspace(lumifyApi);
