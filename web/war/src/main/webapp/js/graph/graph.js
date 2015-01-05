@@ -1379,18 +1379,18 @@ define([
                     var relationshipEdges = [];
                         collapsedEdges = _.chain(relationshipData.edges)
                             .groupBy(function(e) {
-                                return e.sourceVertexId + e.destVertexId + e.label; 
+                                return e.sourceVertexId + e.destVertexId + e.label;
                             })
                             .values()
                             .map(function(v) {
                                 return v.length > 1 ?
                                     _.extend({
-                                        internalEdges: v 
+                                        internalEdges: v
                                     }, v[0]) :
-                                    v[0] 
+                                    v[0]
                             })
                             .value();
-                        
+
                     collapsedEdges.forEach(function(edge) {
                         var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
                             destNode = cy.getElementById(toCyId(edge.destVertexId));
