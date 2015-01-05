@@ -114,7 +114,7 @@ define([
 
                 if (data && data.edgeIds && data.edgeIds.length) {
                     promises.push(
-                        dataRequest('edge', 'store', { edgeIds: data.edgeIds.slice(0, 1) })
+                        dataRequest('edge', 'store', { edgeIds: data.edgeIds })
                     );
                 } else if (data && data.edges) {
                     promises.push(Promise.resolve(data.edges));

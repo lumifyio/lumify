@@ -80,12 +80,17 @@ define([
                         id: toCyId(e.id),
                         source: sourceNode.id(),
                         target: destNode.id(),
-                        label: ontology && ontology.displayName || '',
+                        label: (ontology && ontology.displayName || '') + (
+                            (e.internalEdges && e.internalEdges.length > 1) ?
+                                (' (' + F.number.pretty(e.internalEdges.length) + ')') :
+                                ''
+                        ),
                         edge: {
                             id: e.id,
                             diffType: e.diffType,
                             source: { id: source },
                             target: { id: target },
+                            internalEdges: e.internalEdges,
                             properties: {
                                 'http://lumify.io#conceptType': 'relationship',
                                 relationshipType: e.relationshipType || e.label,
@@ -1075,7 +1080,13 @@ define([
 
             edges.each(function(index, cyEdge) {
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                    edgeIds.push(fromCyId(cyEdge.id()));
+                    if (cyEdge.data('edge').internalEdges) {
+                        cyEdge.data('edge').internalEdges.forEach(function(e) {
+                            edgeIds.push(e.id);
+                        })
+                    } else {
+                        edgeIds.push(fromCyId(cyEdge.id()));
+                    }
                 }
             });
 
@@ -1366,7 +1377,21 @@ define([
 
                 if (relationshipData.edges) {
                     var relationshipEdges = [];
-                    relationshipData.edges.forEach(function(edge) {
+                        collapsedEdges = _.chain(relationshipData.edges)
+                            .groupBy(function(e) {
+                                return e.sourceVertexId + e.destVertexId + e.label; 
+                            })
+                            .values()
+                            .map(function(v) {
+                                return v.length > 1 ?
+                                    _.extend({
+                                        internalEdges: v 
+                                    }, v[0]) :
+                                    v[0] 
+                            })
+                            .value();
+                        
+                    collapsedEdges.forEach(function(edge) {
                         var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
                             destNode = cy.getElementById(toCyId(edge.destVertexId));
 
