@@ -106,7 +106,8 @@ define([
                 'font-size': 11 * retina.devicePixelRatio,
                 'target-arrow-shape': 'triangle',
                 color: '#aaa',
-                content: 'data(label)',
+                content: lumifyData.currentUser.uiPreferences.edgeLabels !== 'false' ?
+                    'data(label)' : '',
                 'text-outline-color': 'white',
                 'text-outline-width': 2,
                 width: 1.5 * retina.devicePixelRatio,
