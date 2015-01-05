@@ -1607,7 +1607,7 @@ define([
                     self.bindContextMenuClickEvent();
 
                     Controls.attachTo(self.select('graphToolsSelector'), {
-                        optionsComponentPath: 'graph/options',
+                        optionsComponentPath: 'graph/options/container',
                         optionsAttributes: {
                             cy: self.cytoscapeReady()
                         }
