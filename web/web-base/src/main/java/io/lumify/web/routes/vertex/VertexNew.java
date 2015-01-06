@@ -22,8 +22,6 @@ import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 public class VertexNew extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexNew.class);
@@ -73,8 +71,8 @@ public class VertexNew extends BaseRequestHandler {
 
         VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility);
         LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, visibility);
-        Map<String, Object> propertyMetadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
+        Metadata propertyMetadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptType, propertyMetadata, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
         this.graph.flush();

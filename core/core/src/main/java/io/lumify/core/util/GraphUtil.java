@@ -14,7 +14,9 @@ import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class GraphUtil {
     public static final double SET_PROPERTY_CONFIDENCE = 0.5;
@@ -81,13 +83,13 @@ public class GraphUtil {
         return sandboxStatuses;
     }
 
-    public static Map<String, Object> metadataStringToMap(String metadataString) {
-        Map<String, Object> metadata = new HashMap<String, Object>();
+    public static Metadata metadataStringToMap(String metadataString, Visibility visibility) {
+        Metadata metadata = new Metadata();
         if (metadataString != null && metadataString.length() > 0) {
             JSONObject metadataJson = new JSONObject(metadataString);
             for (Object keyObj : metadataJson.keySet()) {
                 String key = "" + keyObj;
-                metadata.put(key, metadataJson.get(key));
+                metadata.add(key, metadataJson.get(key), visibility);
             }
         }
         return metadata;
@@ -103,7 +105,13 @@ public class GraphUtil {
         }
     }
 
-    public static <T extends Element> VisibilityAndElementMutation<T> updateElementVisibilitySource(VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId, Authorizations authorizations) {
+    public static <T extends Element> VisibilityAndElementMutation<T> updateElementVisibilitySource(
+            VisibilityTranslator visibilityTranslator,
+            Element element,
+            SandboxStatus sandboxStatus,
+            String visibilitySource,
+            String workspaceId,
+            Authorizations authorizations) {
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
         visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJson, visibilitySource);
 
@@ -112,12 +120,12 @@ public class GraphUtil {
         ExistingElementMutation m = element.prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
         if (LumifyProperties.VISIBILITY_JSON.getPropertyValue(element) != null) {
             Property visibilityJsonProperty = LumifyProperties.VISIBILITY_JSON.getProperty(element);
-            m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyProperties.VISIBILITY_JSON.getPropertyName(), lumifyVisibility.getVisibility());
+            m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityTranslator.getDefaultVisibility());
         }
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson.toString());
+        Metadata metadata = new Metadata();
+        metadata.add(LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson.toString(), visibilityTranslator.getDefaultVisibility());
 
-        LumifyProperties.VISIBILITY_JSON.setProperty(m, visibilityJson, metadata, lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_JSON.setProperty(m, visibilityJson, metadata, visibilityTranslator.getDefaultVisibility());
         m.save(authorizations);
         return new VisibilityAndElementMutation<T>(lumifyVisibility, m);
     }
@@ -128,7 +136,7 @@ public class GraphUtil {
             String propertyName,
             String propertyKey,
             Object value,
-            Map<String, Object> metadata,
+            Metadata metadata,
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
@@ -141,7 +149,7 @@ public class GraphUtil {
         visibilityJson.addWorkspace(workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         Property oldProperty = element.getProperty(propertyKey, propertyName, lumifyVisibility.getVisibility());
-        Map<String, Object> propertyMetadata;
+        Metadata propertyMetadata;
         if (oldProperty != null) {
             propertyMetadata = oldProperty.getMetadata();
             if (oldProperty.getName().equals(propertyName) && oldProperty.getKey().equals(propertyKey)) {
@@ -149,7 +157,7 @@ public class GraphUtil {
                 graph.flush();
             }
         } else {
-            propertyMetadata = new HashMap<String, Object>();
+            propertyMetadata = new Metadata();
         }
 
         mergeMetadata(propertyMetadata, metadata);
@@ -159,39 +167,35 @@ public class GraphUtil {
         visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
         Date now = new Date();
         if (LumifyProperties.CREATE_DATE.getMetadataValue(propertyMetadata, null) == null) {
-            LumifyProperties.CREATE_DATE.setMetadata(propertyMetadata, now);
+            LumifyProperties.CREATE_DATE.setMetadata(propertyMetadata, now, visibilityTranslator.getDefaultVisibility());
         }
-        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
-        LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, now);
-        LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId());
-        LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, SET_PROPERTY_CONFIDENCE);
+        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
+        LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, now, visibilityTranslator.getDefaultVisibility());
+        LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId(), visibilityTranslator.getDefaultVisibility());
+        LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, SET_PROPERTY_CONFIDENCE, visibilityTranslator.getDefaultVisibility());
 
         lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            if (propertyMetadata.containsKey(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {
-                propertyMetadata.remove(PropertySourceMetadata.PROPERTY_SOURCE_METADATA);
-            }
-            propertyMetadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata);
+            propertyMetadata.remove(PropertySourceMetadata.PROPERTY_SOURCE_METADATA);
+            propertyMetadata.add(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata, lumifyVisibility.getVisibility());
         } else if (sourceObject.length() > 0) {
             PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceObject);
-            if (propertyMetadata.containsKey(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
-                propertyMetadata.remove(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION);
-            }
-            propertyMetadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
+            propertyMetadata.remove(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION);
+            propertyMetadata.add(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata, lumifyVisibility.getVisibility());
         }
 
         elementMutation.addPropertyValue(propertyKey, propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         return new VisibilityAndElementMutation<T>(lumifyVisibility, elementMutation);
     }
 
-    private static void mergeMetadata(Map<String, Object> metadata, Map<String, Object> additionalMetadata) {
+    private static void mergeMetadata(Metadata metadata, Metadata additionalMetadata) {
         if (additionalMetadata == null) {
             return;
         }
-        for (Map.Entry<String, Object> entry : additionalMetadata.entrySet()) {
-            metadata.put(entry.getKey(), entry.getValue());
+        for (Metadata.Entry entry : additionalMetadata.entrySet()) {
+            metadata.add(entry.getKey(), entry.getValue(), entry.getVisibility());
         }
     }
 

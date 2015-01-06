@@ -88,7 +88,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
 
         in = getClass().getResourceAsStream("bffls.txt");
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         extractor.execute(in, workData);
 
         List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, termMentionAuthorizations));

@@ -10,10 +10,7 @@ import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.clientapi.model.VisibilityJson;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.ElementBuilder;
-import org.securegraph.Vertex;
+import org.securegraph.*;
 import org.securegraph.type.GeoPoint;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.prefs.CsvPreference;
@@ -105,8 +102,8 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
             String id = String.format("GEO-ZIPCODE-%s", zipCodeEntry.getZipCode());
             String title = String.format("%s - %s, %s", zipCodeEntry.getZipCode(), zipCodeEntry.getCity(), zipCodeEntry.getState());
             VisibilityJson sourceVertexVisibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
-            Map<String, Object> metadata = new HashMap<String, Object>();
-            LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, sourceVertexVisibilityJson);
+            Metadata metadata = new Metadata();
+            LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, sourceVertexVisibilityJson, getVisibilityTranslator().getDefaultVisibility());
             GeoPoint geoPoint = new GeoPoint(zipCodeEntry.getLatitude(), zipCodeEntry.getLongitude());
             ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
                     .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, metadata, sourceVertex.getVisibility());

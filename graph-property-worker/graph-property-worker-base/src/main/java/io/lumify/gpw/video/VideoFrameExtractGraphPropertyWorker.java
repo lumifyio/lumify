@@ -17,10 +17,7 @@ import io.lumify.core.util.ProcessRunner;
 import io.lumify.gpw.MediaPropertyConfiguration;
 import io.lumify.gpw.util.FFprobeRotationUtil;
 import org.apache.commons.io.FileUtils;
-import org.securegraph.Element;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
 
@@ -28,7 +25,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,9 +78,9 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     StreamingPropertyValue frameValue = new StreamingPropertyValue(frameFileIn, byte[].class);
                     frameValue.searchIndex(false);
                     String key = String.format("%08d", Math.max(0L, frameStartTime));
-                    Map<String, Object> metadata = data.createPropertyMetadata();
-                    metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), "image/png");
-                    metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
+                    Metadata metadata = data.createPropertyMetadata();
+                    metadata.add(LumifyProperties.MIME_TYPE.getPropertyName(), "image/png", getVisibilityTranslator().getDefaultVisibility());
+                    metadata.add(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime, getVisibilityTranslator().getDefaultVisibility());
 
                     MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, newVisibility);
                     propertyKeys.add(key);
@@ -152,7 +151,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = LumifyProperties.MIME_TYPE.getMetadataValue(property.getMetadata(), null);
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }
@@ -230,8 +229,8 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         Collections.sort(videoFrameProperties, new Comparator<Property>() {
             @Override
             public int compare(Property p1, Property p2) {
-                Long p1StartTime = (Long) p1.getMetadata().get(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
-                Long p2StartTime = (Long) p2.getMetadata().get(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
+                Long p1StartTime = (Long) p1.getMetadata().getValue(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
+                Long p2StartTime = (Long) p2.getMetadata().getValue(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
                 return p1StartTime.compareTo(p2StartTime);
             }
         });

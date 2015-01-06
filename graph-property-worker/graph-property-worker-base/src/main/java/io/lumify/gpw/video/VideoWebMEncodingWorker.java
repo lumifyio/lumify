@@ -8,9 +8,10 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.gpw.util.FFprobeRotationUtil;
 import io.lumify.gpw.MediaPropertyConfiguration;
+import io.lumify.gpw.util.FFprobeRotationUtil;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -20,8 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = VideoWebMEncodingWorker.class.getName();
@@ -52,8 +51,8 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
             try {
                 StreamingPropertyValue spv = new StreamingPropertyValue(webmFileIn, byte[].class);
                 spv.searchIndex(false);
-                Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
+                Metadata metadata = new Metadata();
+                metadata.add(LumifyProperties.MIME_TYPE.getPropertyName(), MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM, getVisibilityTranslator().getDefaultVisibility());
                 MediaLumifyProperties.VIDEO_WEBM.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save(getAuthorizations());
             } finally {
@@ -123,7 +122,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = LumifyProperties.MIME_TYPE.getMetadataValue(property.getMetadata(), null);
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

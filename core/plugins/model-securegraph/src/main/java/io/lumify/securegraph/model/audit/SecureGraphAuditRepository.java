@@ -27,7 +27,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -105,9 +104,18 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue, Object newValue,
-                                     String process, String comment, Map<String, Object> metadata, User user,
-                                     Visibility visibility) {
+    public Audit auditEntityProperty(
+            AuditAction action,
+            Object id,
+            String propertyKey,
+            String propertyName,
+            Object oldValue,
+            Object newValue,
+            String process,
+            String comment,
+            Metadata metadata,
+            User user,
+            Visibility visibility) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(id, "id cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
@@ -153,7 +161,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         }
         audit.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        if (metadata != null && !metadata.isEmpty()) {
+        if (metadata != null && !metadata.entrySet().isEmpty()) {
             audit.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
         }
 
@@ -303,8 +311,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
         auditSourceDest.getAuditProperty().setPropertyName(propertyName, visibility);
         auditEdge.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        Map<String, Object> metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
-        if (metadata != null && !metadata.isEmpty()) {
+        Metadata metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
+        if (metadata != null && !metadata.entrySet().isEmpty()) {
             auditDestSource.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
             auditSourceDest.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
             auditEdge.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
@@ -393,8 +401,19 @@ public class SecureGraphAuditRepository extends AuditRepository {
             for (Property property : vertexElementMutation.getProperties()) {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property (" + property + ") value cannot be null");
-                auditEntityProperty(action, vertex.getId(), property.getKey(), property.getName(), null, newPropertyValue, process, "",
-                        property.getMetadata(), user, visibility);
+                auditEntityProperty(
+                        action,
+                        vertex.getId(),
+                        property.getKey(),
+                        property.getName(),
+                        null,
+                        newPropertyValue,
+                        process,
+                        "",
+                        property.getMetadata(),
+                        user,
+                        visibility
+                );
             }
         }
     }
@@ -429,15 +448,15 @@ public class SecureGraphAuditRepository extends AuditRepository {
         getModelSession().alterColumnsVisibility(audit, orVisibility(originalEdgeVisibility).getVisibilityString(), visibilityString, FlushFlag.FLUSH);
     }
 
-    private JSONObject jsonMetadata(Map<String, Object> metadata) {
+    private JSONObject jsonMetadata(Metadata metadata) {
         JSONObject json = new JSONObject();
-        for (String key : metadata.keySet()) {
-            if (key.equals(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
-                json.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, ((PropertyJustificationMetadata) metadata.get(key)).toJson());
-            } else if (key.equals(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {
-                json.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, ((PropertySourceMetadata) metadata.get(key)).toJson());
+        for (Metadata.Entry metadataEntry : metadata.entrySet()) {
+            if (metadataEntry.getKey().equals(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
+                json.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, ((PropertyJustificationMetadata) metadataEntry.getValue()).toJson());
+            } else if (metadataEntry.getKey().equals(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {
+                json.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, ((PropertySourceMetadata) metadataEntry.getValue()).toJson());
             } else {
-                json.put(key, metadata.get(key));
+                json.put(metadataEntry.getKey(), metadataEntry.getValue());
             }
         }
         return json;

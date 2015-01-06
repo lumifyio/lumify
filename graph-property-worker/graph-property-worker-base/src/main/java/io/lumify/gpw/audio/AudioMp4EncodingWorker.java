@@ -7,6 +7,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -15,8 +16,6 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AudioMp4EncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = AudioMp4EncodingWorker.class.getName();
@@ -44,8 +43,8 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
             try {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp4FileIn, byte[].class);
                 spv.searchIndex(false);
-                Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), MediaLumifyProperties.MIME_TYPE_AUDIO_MP4);
+                Metadata metadata = new Metadata();
+                metadata.add(LumifyProperties.MIME_TYPE.getPropertyName(), MediaLumifyProperties.MIME_TYPE_AUDIO_MP4, getVisibilityTranslator().getDefaultVisibility());
                 MediaLumifyProperties.AUDIO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save(getAuthorizations());
             } finally {
@@ -65,7 +64,7 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
         if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = LumifyProperties.MIME_TYPE.getMetadataValue(property.getMetadata(), null);
         if (mimeType == null || !mimeType.startsWith("audio")) {
             return false;
         }

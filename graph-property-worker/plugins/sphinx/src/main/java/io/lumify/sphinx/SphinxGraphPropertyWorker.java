@@ -8,6 +8,7 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -16,7 +17,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,8 +34,8 @@ public class SphinxGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
-        Map<String, Object> metadata = data.createPropertyMetadata();
-        metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Audio Transcript");
+        Metadata metadata = data.createPropertyMetadata();
+        metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Audio Transcript", getVisibilityTranslator().getDefaultVisibility());
         addVideoTranscriptAsTextPropertiesToMutation(m, MULTI_VALUE_KEY, transcript, metadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, MULTI_VALUE_KEY, getUser(), data.getVisibility());
@@ -51,7 +51,7 @@ public class SphinxGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("audio"));
     }
 

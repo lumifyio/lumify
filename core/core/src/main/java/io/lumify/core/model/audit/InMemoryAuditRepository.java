@@ -3,15 +3,11 @@ package io.lumify.core.model.audit;
 import com.altamiracorp.bigtable.model.Row;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.user.User;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class InMemoryAuditRepository extends AuditRepository {
     private List<VertexElementMutation> vertexElementMutations = new ArrayList<VertexElementMutation>();
@@ -47,7 +43,7 @@ public class InMemoryAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue, Object newValue, String process, String comment, Map<String, Object> metadata, User user, Visibility visibility) {
+    public Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue, Object newValue, String process, String comment, Metadata metadata, User user, Visibility visibility) {
         throw new LumifyException("not implemented");
     }
 

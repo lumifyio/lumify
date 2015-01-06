@@ -13,6 +13,8 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.audit.InMemoryAuditRepository;
 import io.lumify.core.model.user.InMemoryUser;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.web.clientapi.model.Privilege;
 import org.apache.commons.io.IOUtils;
@@ -45,6 +47,7 @@ public abstract class GraphPropertyWorkerTestBase {
     private User user;
     private AuditRepository auditRepository;
     private WorkQueueRepository workQueueRepository;
+    private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
 
     protected GraphPropertyWorkerTestBase() {
 
@@ -164,6 +167,7 @@ public abstract class GraphPropertyWorkerTestBase {
             gpw.setConfiguration(getConfiguration());
             gpw.setAuditRepository(getAuditRepository());
             gpw.setGraph(getGraph());
+            gpw.setVisibilityTranslator(getVisibilityTranslator());
             gpw.setWorkQueueRepository(getWorkQueueRepository());
             gpw.prepare(workerPrepareData);
         } catch (Exception ex) {
@@ -179,7 +183,7 @@ public abstract class GraphPropertyWorkerTestBase {
         }
 
         try {
-            GraphPropertyWorkData executeData = new GraphPropertyWorkData(e, prop, workspaceId, visibilitySource);
+            GraphPropertyWorkData executeData = new GraphPropertyWorkData(visibilityTranslator, e, prop, workspaceId, visibilitySource);
             gpw.execute(in, executeData);
         } catch (Exception ex) {
             throw new LumifyException("Failed to execute: " + gpw.getClass().getName(), ex);
@@ -203,6 +207,10 @@ public abstract class GraphPropertyWorkerTestBase {
             auditRepository = new InMemoryAuditRepository();
         }
         return auditRepository;
+    }
+
+    protected VisibilityTranslator getVisibilityTranslator() {
+        return visibilityTranslator;
     }
 
     protected Configuration getConfiguration() {

@@ -13,7 +13,6 @@ import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.hadoop.fs.FileSystem;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,7 +89,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         in = asStream(PHONE_TEXT);
         extractor.execute(in, workData);
 
@@ -126,7 +125,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         in = asStream(PHONE_NEW_LINES);
         extractor.execute(in, workData);
 
@@ -161,7 +160,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         in = asStream(PHONE_MISSING);
         extractor.execute(in, workData);
 
