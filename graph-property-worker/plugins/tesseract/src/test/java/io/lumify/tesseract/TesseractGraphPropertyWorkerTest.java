@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
@@ -14,7 +15,6 @@ import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +29,8 @@ public class TesseractGraphPropertyWorkerTest extends GraphPropertyWorkerTestBas
     public void testTesseractTestImage01() throws Exception {
         byte[] imageData = getResourceAsByteArray(TesseractGraphPropertyWorkerTest.class, "testImage01.jpg");
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.MIME_TYPE.setMetadata(metadata, "image/jpg");
+        Metadata metadata = new Metadata();
+        LumifyProperties.MIME_TYPE.setMetadata(metadata, "image/jpg", visibility);
         StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(imageData), byte[].class);
         Vertex v1 = getGraph().prepareVertex("v1", visibility)
                 .addPropertyValue("k1", "image", value, metadata, visibility)

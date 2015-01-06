@@ -16,7 +16,6 @@ import org.securegraph.Property;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.*;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -104,7 +103,7 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
             if (obj instanceof Resource) {
                 if (isConceptTypeResource(statement)) {
                     String value = statement.getResource().toString();
-                    Map<String, Object> metadata = null;
+                    Metadata metadata = null;
                     if (data != null) {
                         metadata = data.createPropertyMetadata();
                     }
@@ -157,7 +156,7 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
             value = convertStreamingValueJsonToValueObject(baseDir, valueString);
         }
 
-        Map<String, Object> metadata = null;
+        Metadata metadata = null;
         if (data != null) {
             metadata = data.createPropertyMetadata();
         }

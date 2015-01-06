@@ -15,12 +15,12 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.*;
-import java.util.Map;
 
 public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TranslateGraphPropertyWorker.class);
@@ -61,7 +61,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         ExistingElementMutation m = data.getElement().prepareMutation()
-                .alterPropertyMetadata(data.getProperty(), LumifyProperties.META_DATA_LANGUAGE, language);
+                .setPropertyMetadata(data.getProperty(), LumifyProperties.META_DATA_LANGUAGE, language, getVisibilityTranslator().getDefaultVisibility());
 
         boolean translated = false;
         String translatedTextPropertyKey = data.getProperty().getKey() + "#en";
@@ -75,14 +75,14 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
                 } else {
                     translatedTextValue = translatedText;
                 }
-                Map<String, Object> metadata = data.createPropertyMetadata();
-                metadata.put(LumifyProperties.META_DATA_LANGUAGE, "en");
-                String description = (String) data.getProperty().getMetadata().get(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                Metadata metadata = data.createPropertyMetadata();
+                metadata.add(LumifyProperties.META_DATA_LANGUAGE, "en", getVisibilityTranslator().getDefaultVisibility());
+                String description = (String) data.getProperty().getMetadata().getValue(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
                 if (description == null || description.length() == 0) {
                     description = "Text";
                 }
-                metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, description + " (en)");
-                metadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+                metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, description + " (en)", getVisibilityTranslator().getDefaultVisibility());
+                metadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", getVisibilityTranslator().getDefaultVisibility());
                 m.addPropertyValue(translatedTextPropertyKey, data.getProperty().getName(), translatedTextValue, metadata, data.getProperty().getVisibility());
                 translated = true;
             }

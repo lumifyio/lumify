@@ -23,7 +23,6 @@ import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 public class SetEdgeProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SetEdgeProperty.class);
@@ -76,7 +75,7 @@ public class SetEdgeProperty extends BaseRequestHandler {
             propertyKey = this.graph.getIdGenerator().nextId();
         }
 
-        Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
+        Metadata metadata = GraphUtil.metadataStringToMap(metadataString, visibilityTranslator.getDefaultVisibility());
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);

@@ -22,14 +22,10 @@ import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiElement;
 import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -124,7 +120,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             propertyKey = this.graph.getIdGenerator().nextId();
         }
 
-        Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
+        Metadata metadata = GraphUtil.metadataStringToMap(metadataString, this.visibilityTranslator.getDefaultVisibility());
 
         Object value;
         if (propertyName == "http://lumify.io#comment") {

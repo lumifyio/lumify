@@ -8,9 +8,9 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.imageMetadataHelper.*;
 import io.lumify.gpw.MediaPropertyConfiguration;
 import io.lumify.gpw.util.FileSizeUtil;
+import io.lumify.imageMetadataHelper.*;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
@@ -39,7 +38,7 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
         getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
     }
 
-    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Map<String, Object> metadata, GraphPropertyWorkData data, List<String> properties) {
+    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, org.securegraph.Metadata metadata, GraphPropertyWorkData data, List<String> properties) {
         if (iri != null && value != null) {
             mutation.addPropertyValue(MULTI_VALUE_KEY, iri, value, metadata, data.getVisibility());
             properties.add(iri);
@@ -48,7 +47,7 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        Map<String, Object> metadata = data.createPropertyMetadata();
+        org.securegraph.Metadata metadata = data.createPropertyMetadata();
         ExistingElementMutation<Vertex> mutation = data.getElement().prepareMutation();
         List<String> properties = new ArrayList<String>();
 
@@ -92,11 +91,11 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = LumifyProperties.MIME_TYPE.getMetadataValue(property.getMetadata(), null);
         if (mimeType != null && (
-               mimeType.startsWith("image/png") ||
-               mimeType.startsWith("image/jpeg") ||
-               mimeType.startsWith("image/tiff"))) {
+                mimeType.startsWith("image/png") ||
+                        mimeType.startsWith("image/jpeg") ||
+                        mimeType.startsWith("image/tiff"))) {
             return true;
         }
 

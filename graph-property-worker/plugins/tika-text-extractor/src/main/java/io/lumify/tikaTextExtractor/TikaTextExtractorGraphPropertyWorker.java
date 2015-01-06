@@ -29,17 +29,15 @@ import org.securegraph.property.StreamingPropertyValue;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.Normalizer;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -98,7 +96,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String mimeType = (String) data.getProperty().getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) data.getProperty().getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         checkNotNull(mimeType, LumifyProperties.MIME_TYPE.getPropertyName() + " is a required metadata field");
 
         Charset charset = Charset.forName("UTF-8");
@@ -119,9 +117,9 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         String customImageMetadata = extractTextField(metadata, customFlickrMetadataKeys);
-        Map<String, Object> textMetadata = data.createPropertyMetadata();
-        textMetadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
-        textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Extracted Text");
+        org.securegraph.Metadata textMetadata = data.createPropertyMetadata();
+        textMetadata.add(LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain", getVisibilityTranslator().getDefaultVisibility());
+        textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Extracted Text", getVisibilityTranslator().getDefaultVisibility());
 
         if (customImageMetadata != null && !customImageMetadata.equals("")) {
             try {
@@ -138,8 +136,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
                 // TODO set("retrievalTime", Long.parseLong(customImageMetadataJson.get("atc:retrieval-timestamp").toString()));
 
-                Map<String, Object> titleMetadata = data.createPropertyMetadata();
-                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4);
+                org.securegraph.Metadata titleMetadata = data.createPropertyMetadata();
+                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4, getVisibilityTranslator().getDefaultVisibility());
                 LumifyProperties.TITLE.addPropertyValue(m, MULTI_VALUE_KEY, customImageMetadataJson.get("title").toString(), titleMetadata, data.getVisibility());
             } catch (JSONException e) {
                 LOGGER.warn("Image returned invalid custom metadata");
@@ -151,8 +149,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             LumifyProperties.CREATE_DATE.addPropertyValue(m, MULTI_VALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
             String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ");
             if (title != null && title.length() > 0) {
-                Map<String, Object> titleMetadata = data.createPropertyMetadata();
-                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4);
+                org.securegraph.Metadata titleMetadata = data.createPropertyMetadata();
+                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4, getVisibilityTranslator().getDefaultVisibility());
                 LumifyProperties.TITLE.addPropertyValue(m, MULTI_VALUE_KEY, title, titleMetadata, data.getVisibility());
             }
 
@@ -292,15 +290,15 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         return extractedText
                 // Normalize line breaks
                 .replaceAll("\r", "\n")
-                // Remove tabs
+                        // Remove tabs
                 .replaceAll("\t", " ")
-                // Remove non-breaking spaces
+                        // Remove non-breaking spaces
                 .replaceAll("\u00A0", " ")
-                // Remove newlines that are just paragraph wrapping
+                        // Remove newlines that are just paragraph wrapping
                 .replaceAll("(?<![\\n])[\\n](?![\\n])", " ")
-                // Remove remaining newlines with exactly 2
+                        // Remove remaining newlines with exactly 2
                 .replaceAll("([ ]*\\n[ ]*)+", "\n\n")
-                // Remove duplicate spaces
+                        // Remove duplicate spaces
                 .replaceAll("[ ]+", " ");
     }
 
@@ -314,7 +312,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null) {
             return false;
         }

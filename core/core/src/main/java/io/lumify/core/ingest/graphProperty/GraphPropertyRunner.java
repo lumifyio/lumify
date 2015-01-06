@@ -8,6 +8,7 @@ import io.lumify.core.ingest.WorkerSpout;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -38,6 +39,7 @@ public class GraphPropertyRunner {
     private UserRepository userRepository;
     private Configuration configuration;
     private WorkQueueRepository workQueueRepository;
+    private VisibilityTranslator visibilityTranslator;
 
     public void prepare(User user) {
         this.user = user;
@@ -171,7 +173,7 @@ public class GraphPropertyRunner {
             }
         }
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(element, property, workspaceId, visibilitySource);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, element, property, workspaceId, visibilitySource);
 
         LOGGER.debug("Begin work on element %s property %s", element.getId(), propertyText);
         if (property != null && property.getValue() instanceof StreamingPropertyValue) {
@@ -298,6 +300,11 @@ public class GraphPropertyRunner {
     @Inject
     public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
         this.workQueueRepository = workQueueRepository;
+    }
+
+    @Inject
+    public void setVisibilityTranslator(VisibilityTranslator visibilityTranslator) {
+        this.visibilityTranslator = visibilityTranslator;
     }
 
     public void run() throws Exception {

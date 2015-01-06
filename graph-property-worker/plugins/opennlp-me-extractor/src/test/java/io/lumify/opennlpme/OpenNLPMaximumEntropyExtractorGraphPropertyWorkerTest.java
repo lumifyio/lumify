@@ -89,7 +89,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
                 .setProperty(LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson, new Visibility(""))
                 .save(new InMemoryAuthorizations());
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, vertex.getProperty("text"), null, null);
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.execute(new ByteArrayInputStream(text.getBytes("UTF-8")), workData);
 

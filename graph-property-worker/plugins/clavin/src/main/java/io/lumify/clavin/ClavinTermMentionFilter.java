@@ -25,10 +25,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.ElementBuilder;
-import org.securegraph.Vertex;
+import org.securegraph.*;
 import org.securegraph.type.GeoPoint;
 
 import java.io.File;
@@ -231,8 +228,8 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 String conceptType = getOntologyClassUri(loc, termMentionConceptType);
 
                 VisibilityJson sourceVertexVisibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
-                Map<String, Object> metadata = new HashMap<String, Object>();
-                LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, sourceVertexVisibilityJson);
+                Metadata metadata = new Metadata();
+                LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, sourceVertexVisibilityJson, getVisibilityTranslator().getDefaultVisibility());
                 ElementBuilder<Vertex> resolvedToVertexBuilder = getGraph().prepareVertex(id, sourceVertex.getVisibility())
                         .addPropertyValue(MULTI_VALUE_PROPERTY_KEY, geoLocationIri, geoPoint, metadata, sourceVertex.getVisibility());
                 LumifyProperties.CONCEPT_TYPE.addPropertyValue(resolvedToVertexBuilder, MULTI_VALUE_PROPERTY_KEY, conceptType, metadata, sourceVertex.getVisibility());

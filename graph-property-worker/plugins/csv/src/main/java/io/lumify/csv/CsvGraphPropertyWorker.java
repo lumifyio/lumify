@@ -24,7 +24,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -49,7 +48,7 @@ public class CsvGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         if (csvConceptTypeIri != null) {
-            Map<String, Object> metadata = data.createPropertyMetadata();
+            Metadata metadata = data.createPropertyMetadata();
             LumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), csvConceptTypeIri, metadata, data.getVisibility(), getAuthorizations());
         }
 
@@ -140,7 +139,7 @@ public class CsvGraphPropertyWorker extends GraphPropertyWorker {
                     foundVisibilityJson = true;
                 }
 
-                Map<String, Object> metadata = state.getData().createPropertyMetadata();
+                Metadata metadata = state.getData().createPropertyMetadata();
                 Object value = getPropertyValue(state, property);
                 if (value != null) {
                     v.addPropertyValue(propertyKey, propertyName, value, metadata, visibility);

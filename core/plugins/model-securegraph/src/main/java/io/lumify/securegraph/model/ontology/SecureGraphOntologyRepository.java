@@ -125,9 +125,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     public void storeOntologyFile(InputStream in, IRI documentIRI) {
         StreamingPropertyValue value = new StreamingPropertyValue(in, byte[].class);
         value.searchIndex(false);
-        Map<String, Object> metadata = new HashMap<String, Object>();
+        Metadata metadata = new Metadata();
         Vertex rootConceptVertex = ((SecureGraphConcept) getRootConcept()).getVertex();
-        metadata.put("index", toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME)).size());
+        metadata.add("index", toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME)).size(), VISIBILITY.getVisibility());
         rootConceptVertex.addPropertyValue(documentIRI.toString(), ONTOLOGY_FILE_PROPERTY_NAME, value, metadata, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
@@ -169,8 +169,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         Collections.sort(ontologyFiles, new Comparator<Property>() {
             @Override
             public int compare(Property ontologyFile1, Property ontologyFile2) {
-                Integer index1 = (Integer) ontologyFile1.getMetadata().get("index");
-                Integer index2 = (Integer) ontologyFile2.getMetadata().get("index");
+                Integer index1 = (Integer) ontologyFile1.getMetadata().getValue("index");
+                Integer index2 = (Integer) ontologyFile2.getMetadata().getValue("index");
                 return index1.compareTo(index2);
             }
         });

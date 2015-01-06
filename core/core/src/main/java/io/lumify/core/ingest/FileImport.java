@@ -20,7 +20,10 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.securegraph.util.IterableUtils.toList;
 
@@ -118,9 +121,9 @@ public class FileImport {
             VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
-            Map<String, Object> propertyMetadata = new HashMap<String, Object>();
-            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1);
-            LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
+            Metadata propertyMetadata = new Metadata();
+            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1, visibilityTranslator.getDefaultVisibility());
+            LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
             VertexBuilder vertexBuilder;
             if (predefinedId == null) {

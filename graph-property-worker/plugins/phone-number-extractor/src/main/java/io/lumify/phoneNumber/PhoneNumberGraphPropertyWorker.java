@@ -92,7 +92,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = LumifyProperties.MIME_TYPE.getMetadataValue(property.getMetadata(), null);
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 }

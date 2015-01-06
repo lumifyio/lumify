@@ -7,13 +7,13 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.gpw.video.SubRip;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.InputStream;
-import java.util.Map;
 
 public class SubRipTranscriptGraphPropertyWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = SubRipTranscriptGraphPropertyWorker.class.getName();
@@ -24,8 +24,8 @@ public class SubRipTranscriptGraphPropertyWorker extends GraphPropertyWorker {
         VideoTranscript videoTranscript = SubRip.read(youtubeccValue.getInputStream());
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
-        Map<String, Object> metadata = data.createPropertyMetadata();
-        metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Sub-rip Transcript");
+        Metadata metadata = data.createPropertyMetadata();
+        metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Sub-rip Transcript", getVisibilityTranslator().getDefaultVisibility());
         addVideoTranscriptAsTextPropertiesToMutation(m, PROPERTY_KEY, videoTranscript, metadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, PROPERTY_KEY, getUser(), data.getVisibility());
@@ -50,7 +50,7 @@ public class SubRipTranscriptGraphPropertyWorker extends GraphPropertyWorker {
         if (!property.getName().equals(LumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

@@ -109,7 +109,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
                 .save(new InMemoryAuthorizations());
         graph.flush();
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, "");
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, vertex.getProperty("text"), null, "");
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
 
         List<Vertex> termMentions = toList(termMentionRepository.findBySourceGraphVertex(vertex.getId(), authorizations));
