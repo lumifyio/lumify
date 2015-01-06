@@ -37,8 +37,12 @@ public class AssignImageMRMapper extends LumifyElementMapperBase<Text, Element> 
 
         if (isEmpty(vertex.getProperties(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName()))
                 && isEmpty(vertex.getProperties(LumifyProperties.ENTITY_IMAGE_URL.getPropertyName()))) {
+            LOGGER.debug("no image on vertex '%s', finding best image.", vertex.getId());
             String imageVertexId = findBestImageVertexId(vertex);
-            if (imageVertexId != null) {
+            if (imageVertexId == null) {
+                LOGGER.debug("no image found for vertex '%s'", vertex.getId());
+            } else {
+                LOGGER.debug("image '%s' found for vertex '%s'. assigning.", imageVertexId, vertex.getId());
                 VertexBuilder m = prepareVertex(vertex.getId(), vertex.getVisibility());
                 LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(m, PROPERTY_KEY, imageVertexId, this.config.getVisibility());
                 m.save(this.config.getAuthorizations());
