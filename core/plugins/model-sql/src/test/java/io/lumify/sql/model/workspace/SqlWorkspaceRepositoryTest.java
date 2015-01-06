@@ -50,7 +50,7 @@ public class SqlWorkspaceRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();

@@ -74,7 +74,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
 
         extractor = new OpenNLPDictionaryExtractorGraphPropertyWorker() {
             @Override

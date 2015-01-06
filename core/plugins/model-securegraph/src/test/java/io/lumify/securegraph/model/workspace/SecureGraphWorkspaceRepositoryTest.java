@@ -63,7 +63,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         Authorizations authorizations = new InMemoryAuthorizations();
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
         idGenerator = new QueueIdGenerator();
-        graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
+        graph = InMemoryGraph.create(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(new HashMap()).createConfiguration();

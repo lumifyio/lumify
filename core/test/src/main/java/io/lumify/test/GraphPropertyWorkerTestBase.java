@@ -113,7 +113,7 @@ public abstract class GraphPropertyWorkerTestBase {
         if (graph == null) {
             Map graphConfiguration = getConfigurationMap();
             InMemoryGraphConfiguration inMemoryGraphConfiguration = new InMemoryGraphConfiguration(graphConfiguration);
-            graph = new InMemoryGraph(inMemoryGraphConfiguration, getGraphIdGenerator(), getGraphSearchIndex());
+            graph = InMemoryGraph.create(inMemoryGraphConfiguration, getGraphIdGenerator(), getGraphSearchIndex());
         }
         return graph;
     }
