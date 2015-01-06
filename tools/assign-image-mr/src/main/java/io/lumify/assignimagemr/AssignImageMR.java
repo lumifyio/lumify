@@ -9,7 +9,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.ToolRunner;
-import org.securegraph.ElementType;
 import org.securegraph.Graph;
 import org.securegraph.accumulo.AccumuloGraph;
 import org.securegraph.accumulo.mapreduce.AccumuloElementOutputFormat;
@@ -18,7 +17,6 @@ import org.securegraph.accumulo.mapreduce.AccumuloVertexInputFormat;
 public class AssignImageMR extends LumifyMRBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AssignImageMR.class);
     private AccumuloGraph graph;
-    private ElementType elementType;
 
     public static void main(String[] args) throws Exception {
         int res = ToolRunner.run(new Configuration(), new AssignImageMR(), args);
@@ -49,7 +47,7 @@ public class AssignImageMR extends LumifyMRBase {
 
     @Override
     protected String getJobName() {
-        return "lumifyAssignImage-" + elementType;
+        return "lumifyAssignImage";
     }
 
     @Inject
