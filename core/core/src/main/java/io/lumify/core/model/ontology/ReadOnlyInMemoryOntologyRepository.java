@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -121,9 +122,12 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean searchable,
             String displayType,
             String propertyGroup,
-            Double boost) {
+            Double boost,
+            String validationFormula,
+            String displayFormula,
+            ImmutableList<String> dependentPropertyIris) {
         checkNotNull(concepts, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIri, dataType, displayName, possibleValues, userVisible, searchable, displayType, propertyGroup, boost);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIri, dataType, displayName, possibleValues, userVisible, searchable, displayType, propertyGroup, boost, validationFormula, displayFormula, dependentPropertyIris);
         for (Concept concept : concepts) {
             concept.getProperties().add(property);
         }
@@ -149,7 +153,10 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean searchable,
             String displayType,
             String propertyGroup,
-            Double boost) {
+            Double boost,
+            String validationFormula,
+            String displayFormula,
+            ImmutableList<String> dependentPropertyIris) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getPropertyByIRI(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();
@@ -160,6 +167,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setBoost(boost);
             property.setDisplayType(displayType);
             property.setPropertyGroup(propertyGroup);
+            property.setValidationFormula(validationFormula);
+            property.setDisplayFormula(displayFormula);
+            property.setDependentPropertyIris(dependentPropertyIris);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }

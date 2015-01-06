@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.collect.ImmutableList;
 import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONArray;
@@ -47,6 +48,12 @@ public abstract class OntologyProperty {
 
     public abstract String getPropertyGroup();
 
+    public abstract String getValidationFormula();
+
+    public abstract String getDisplayFormula();
+
+    public abstract ImmutableList<String> getDependentPropertyIris();
+
     public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
         Collection<ClientApiOntology.Property> results = new ArrayList<ClientApiOntology.Property>();
         for (OntologyProperty property : properties) {
@@ -65,6 +72,9 @@ public abstract class OntologyProperty {
             result.setDataType(getDataType());
             result.setDisplayType(getDisplayType());
             result.setPropertyGroup(getPropertyGroup());
+            result.setValidationFormula(getValidationFormula());
+            result.setDisplayFormula(getDisplayFormula());
+            result.setDependentPropertyIris(getDependentPropertyIris());
             if (getPossibleValues() != null) {
                 result.getPossibleValues().putAll(getPossibleValues());
             }

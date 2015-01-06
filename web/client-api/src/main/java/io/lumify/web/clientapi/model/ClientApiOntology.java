@@ -179,6 +179,9 @@ public class ClientApiOntology implements ClientApiObject {
         private String displayType;
         private String propertyGroup;
         private Map<String, String> possibleValues = new HashMap<String, String>();
+        private String validationFormula;
+        private String displayFormula;
+        private String[] dependentPropertyIris;
 
         public String getTitle() {
             return title;
@@ -239,6 +242,38 @@ public class ClientApiOntology implements ClientApiObject {
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         public Map<String, String> getPossibleValues() {
             return possibleValues;
+        }
+
+        public void setValidationFormula(String validationFormula) {
+            this.validationFormula = validationFormula;
+        }
+
+        public String getValidationFormula() {
+            return validationFormula;
+        }
+
+        public void setDisplayFormula(String displayFormula) {
+            this.displayFormula = displayFormula;
+        }
+
+        public String getDisplayFormula() {
+            return displayFormula;
+        }
+
+        public void setDependentPropertyIris(String[] dependentPropertyIris) {
+            this.dependentPropertyIris = dependentPropertyIris;
+        }
+
+        public void setDependentPropertyIris(Collection<String> dependentPropertyIris) {
+            if (dependentPropertyIris == null || dependentPropertyIris.size() == 0) {
+                this.dependentPropertyIris = null;
+            } else {
+                this.dependentPropertyIris = dependentPropertyIris.toArray(new String[dependentPropertyIris.size()]);
+            }
+        }
+
+        public String[] getDependentPropertyIris() {
+            return dependentPropertyIris;
         }
     }
 
