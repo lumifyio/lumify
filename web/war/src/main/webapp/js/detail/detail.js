@@ -78,7 +78,10 @@ define([
 
             if (vertices.length > 1) {
                 moduleName = 'multiple';
-                moduleData = vertices;
+                moduleData = {
+                    vertices: vertices,
+                    edges: []
+                };
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
                     concept = F.vertex.concept(vertex),
@@ -95,6 +98,12 @@ define([
                     ) || 'entity').toLowerCase();
                 }
                 moduleData = vertex;
+            } else if (edges.length > 1) {
+                moduleName = 'multiple';
+                moduleData = {
+                    vertices: [],
+                    edges: edges
+                };
             } else {
                 moduleName = 'edge';
                 moduleData = edges[0];

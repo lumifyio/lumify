@@ -512,9 +512,26 @@ define([
                     cyNodes;
                 if (vertices.length || edges.length) {
                     cyNodes = cy.$(
-                        vertices.concat(edges).map(function(v) {
-                            return '#' + toCyId(v);
-                        }).join(',')
+                        _.chain(
+                            _.map(vertices, function(v) {
+                                return '#' + toCyId(v);
+                            })
+                            .concat(
+                                _.map(edges, function(e) {
+                                    return [
+                                        '#' + toCyId(e.id),
+                                        '#' + toCyId(
+                                            e.sourceVertexId +
+                                            e.destVertexId +
+                                            e.label
+                                        )
+                                    ];
+                                })
+                            )
+                        )
+                        .flatten()
+                        .value()
+                        .join(',')
                     ).select();
                 }
 
@@ -609,17 +626,65 @@ define([
             this.trigger('deleteEdges', { edges: [edge] });
         };
 
+        this.onEdgesLoaded = function(evt, relationshipData) {
+            this.cytoscapeReady(function(cy) {
+                var self = this;
+
+                if (relationshipData.edges) {
+                    var relationshipEdges = [],
+                        generateId = function(e) {
+                            return e.sourceVertexId + e.destVertexId + e.label;
+                        },
+                        collapsedEdges = _.chain(relationshipData.edges)
+                            .groupBy(generateId)
+                            .values()
+                            .map(function(v) {
+                                return v.length > 1 ?
+                                    _.extend({
+                                        internalEdges: _.pluck(v, 'id')
+                                    }, v[0], {
+                                        id: generateId(v[0])
+                                    }) :
+                                    v[0]
+                            })
+                            .value();
+
+                    collapsedEdges.forEach(function(edge) {
+                        var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
+                            destNode = cy.getElementById(toCyId(edge.destVertexId));
+
+                        if (sourceNode.length && destNode.length) {
+                            relationshipEdges.push(
+                                cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships)
+                            );
+                        }
+                    });
+
+                    if (relationshipEdges.length) {
+                        cy.edges().remove();
+                        cy.add(relationshipEdges);
+                    }
+
+                    // Hide edges when zooming if more than threshold
+                    this.updateEdgeOptions(cy);
+                }
+            });
+        };
+
         this.onEdgesUpdated = function(event, data) {
             this.cytoscapeReady(function(cy) {
                 var self = this,
                     newEdges = _.compact(data.edges.map(function(edge) {
-                        var cyEdge = cy.getElementById(toCyId(edge.id));
-                        if (cyEdge.length === 0) {
-                            var sourceNode = cy.getElementById(toCyId(edge.source.id)),
-                                destNode = cy.getElementById(toCyId(edge.target.id));
+                        var cyEdge = cy.getElementById(toCyId(edge.sourceVertexId + edge.destVertexId + edge.label))
+                        if (!cyEdge.length) {
+                            cyEdge = cy.getElementById(toCyId(edge.id));
+                            if (cyEdge.length === 0) {
+                                var sourceNode = cy.getElementById(toCyId(edge.source.id)),
+                                    destNode = cy.getElementById(toCyId(edge.target.id));
 
-                            if (sourceNode.length && destNode.length) {
-                                return cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships);
+                                if (sourceNode.length && destNode.length) {
+                                    return cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships);
+                                }
                             }
                         }
                     }));
@@ -632,8 +697,30 @@ define([
 
         this.onEdgesDeleted = function(event, data) {
             this.cytoscapeReady(function(cy) {
-                var edge = cy.getElementById(this.toCyId(data.edgeId));
-                edge.remove();
+                var self = this,
+                    edge = cy.getElementById(this.toCyId(data.edgeId));
+
+                if (edge.length) {
+                    edge.remove();
+                } else {
+                    _.each(cy.edges(), function(cyEdge) {
+                        var edges = cyEdge.data('edge').internalEdges;
+                        if (edges) {
+                            var ontology = self.ontologyRelationships
+                                .byTitle[cyEdge.data('edge').properties.relationshipType];
+
+                            edges = _.without(edges, data.edgeId);
+                            cyEdge.data('edge').internalEdges = edges;
+                            cyEdge.data('label',
+                                (ontology && ontology.displayName || '') + (
+                                    (edges && edges.length > 1) ?
+                                        (' (' + F.number.pretty(edges.length) + ')') :
+                                        ''
+                                )
+                           );
+                        }
+                    });
+                }
             });
         };
 
@@ -693,6 +780,7 @@ define([
             this.cytoscapeReady(function(cy) {
                 var vertexIds = data.vertexIds;
                 this.hoverDelay = _.delay(function() {
+                    // TODO: make work with collapsed edges
                     var nodes = this.verticesForGraphIds(cy, vertexIds, 'nodes')
                             .css('borderWidth', 0)
                             .addClass('focus'),
@@ -1082,7 +1170,7 @@ define([
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
                     if (cyEdge.data('edge').internalEdges) {
                         cyEdge.data('edge').internalEdges.forEach(function(e) {
-                            edgeIds.push(e.id);
+                            edgeIds.push(e);
                         })
                     } else {
                         edgeIds.push(fromCyId(cyEdge.id()));
@@ -1371,47 +1459,6 @@ define([
             this.previousWorkspace = workspace.workspaceId;
         };
 
-        this.onEdgesLoaded = function(evt, relationshipData) {
-            this.cytoscapeReady(function(cy) {
-                var self = this;
-
-                if (relationshipData.edges) {
-                    var relationshipEdges = [];
-                        collapsedEdges = _.chain(relationshipData.edges)
-                            .groupBy(function(e) {
-                                return e.sourceVertexId + e.destVertexId + e.label;
-                            })
-                            .values()
-                            .map(function(v) {
-                                return v.length > 1 ?
-                                    _.extend({
-                                        internalEdges: v
-                                    }, v[0]) :
-                                    v[0]
-                            })
-                            .value();
-
-                    collapsedEdges.forEach(function(edge) {
-                        var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
-                            destNode = cy.getElementById(toCyId(edge.destVertexId));
-
-                        if (sourceNode.length && destNode.length) {
-                            relationshipEdges.push(
-                                cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships)
-                            );
-                        }
-                    });
-                    // Hide edges when zooming if more than threshold
-                    if (relationshipEdges.length) {
-                        cy.edges().remove();
-                        cy.add(relationshipEdges);
-                    }
-
-                    this.updateEdgeOptions(cy);
-                }
-            });
-        };
-
         this.onMenubarToggleDisplay = function(e, data) {
             if (data.name === 'graph' && this.$node.is(':visible')) {
                 this.cytoscapeReady(function(cy) {
@@ -1578,7 +1625,6 @@ define([
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
-            this.on(document, 'edgesLoaded', this.onEdgesLoaded);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
             this.on(document, 'devicePixelRatioChanged', this.onDevicePixelRatioChanged);
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggleDisplay);
@@ -1586,6 +1632,7 @@ define([
             this.on(document, 'defocusVertices', this.onDefocusVertices);
             this.on(document, 'focusPaths', this.onFocusPaths);
             this.on(document, 'defocusPaths', this.onDefocusPaths);
+            this.on(document, 'edgesLoaded', this.onEdgesLoaded);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
             this.on(document, 'edgesUpdated', this.onEdgesUpdated);
 

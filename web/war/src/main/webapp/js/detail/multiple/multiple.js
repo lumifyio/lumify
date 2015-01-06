@@ -136,14 +136,17 @@ define([
 
         this.after('initialize', function() {
             var self = this,
-                vertices = _.reject(this.attr.data, F.vertex.isEdge),
-                ids = _.pluck(vertices, 'id');
+                vertices = this.attr.data.vertices || [],
+                edges = this.attr.data.edges || [],
+                vertexIds = _.pluck(vertices, 'id'),
+                edgeIds = _.pluck(edges, 'id');
 
-            this.displayingVertexIds = ids;
+            this.displayingIds = vertexIds.concat(edgeIds);
 
             this.$node.html(template({
                 getClasses: this.classesForVertex,
-                vertices: vertices
+                vertices: vertices,
+                edges: edges
             }));
 
             this.on('click', {
@@ -158,20 +161,24 @@ define([
 
             Promise.all([
                 Promise.require('d3'),
-                this.dataRequest('vertex', 'store', { vertexIds: ids }),
+                vertexIds.length ?
+                    this.dataRequest('vertex', 'store', { vertexIds: vertexIds }) :
+                    this.dataRequest('edge', 'store', { edgeIds: edgeIds }),
                 this.dataRequest('ontology', 'concepts'),
                 this.dataRequest('ontology', 'properties')
             ]).done(function(results) {
                 var _d3 = results.shift(),
-                    vertices = results.shift(),
+                    verticesOrEdges = results.shift(),
                     concepts = results.shift(),
                     properties = results.shift();
 
                 d3 = _d3;
 
-                VertexList.attachTo(self.select('vertexListSelector'), {
-                    vertices: vertices
-                });
+                if (vertexIds.length) {
+                    VertexList.attachTo(self.select('vertexListSelector'), {
+                        vertices: vertices
+                    });
+                }
 
                 Toolbar.attachTo(self.select('toolbarSelector'), {
                     toolbar: [
@@ -186,7 +193,9 @@ define([
 
                 self.drawHistograms = _.partial(self.renderHistograms, _, concepts, properties);
                 self.select('histogramSelector').remove();
-                self.drawHistograms(vertices, { duration: 0 });
+                if (vertexIds.length) {
+                    self.drawHistograms(vertices, { duration: 0 });
+                }
             });
 
         });
@@ -194,9 +203,9 @@ define([
         this.onVerticesUpdated = function(event, data) {
             var self = this;
             if (data && data.vertices) {
-                var intersection = _.intersection(this.displayingVertexIds, _.pluck(data.vertices, 'id'));
+                var intersection = _.intersection(this.displayingIds, _.pluck(data.vertices, 'id'));
                 if (intersection.length) {
-                    this.dataRequest('vertex', 'store', { vertexIds: this.displayingVertexIds })
+                    this.dataRequest('vertex', 'store', { vertexIds: this.displayingIds })
                         .done(function(vertices) {
                             self.drawHistograms(vertices);
                         });
