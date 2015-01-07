@@ -72,7 +72,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
         visibility = new Visibility("");
         extractor.prepare(workerPrepareData);
         extractor.setGraph(graph);

@@ -44,7 +44,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
 
     @Before
     public void before() throws Exception {
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
         visibility = new Visibility("");
         authorizations = new InMemoryAuthorizations();
         textExtractor = new TikaTextExtractorGraphPropertyWorker();
@@ -62,6 +62,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         textExtractor.setGraph(graph);
         textExtractor.setWorkQueueRepository(workQueueRepository);
         textExtractor.setAuditRepository(auditRepository);
+        textExtractor.setVisibilityTranslator(visibilityTranslator);
         textExtractor.prepare(prepareData);
     }
 

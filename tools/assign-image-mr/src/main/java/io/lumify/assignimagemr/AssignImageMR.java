@@ -1,6 +1,7 @@
 package io.lumify.assignimagemr;
 
 import com.google.inject.Inject;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.mapreduce.LumifyMRBase;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.util.LumifyLogger;
@@ -28,6 +29,11 @@ public class AssignImageMR extends LumifyMRBase {
         String[] authorizations = new String[]{
                 LumifyVisibility.SUPER_USER_VISIBILITY_STRING
         };
+
+        AssignImageConfiguration assignImageConfiguration = new AssignImageConfiguration(job.getConfiguration());
+        if (assignImageConfiguration.getHasImageLabels().length == 0) {
+            throw new LumifyException("No " + AssignImageConfiguration.HAS_IMAGE_LABELS + " configured.");
+        }
 
         job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);
         job.getConfiguration().setBoolean("mapred.reduce.tasks.speculative.execution", false);
