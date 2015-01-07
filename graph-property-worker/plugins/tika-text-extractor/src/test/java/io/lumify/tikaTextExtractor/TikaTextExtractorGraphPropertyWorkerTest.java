@@ -62,6 +62,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         textExtractor.setGraph(graph);
         textExtractor.setWorkQueueRepository(workQueueRepository);
         textExtractor.setAuditRepository(auditRepository);
+        textExtractor.setVisibilityTranslator(visibilityTranslator);
         textExtractor.prepare(prepareData);
     }
 
