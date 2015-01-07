@@ -3,7 +3,7 @@ package io.lumify.core.model.workQueue;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerSpout;
+import io.lumify.core.ingest.WorkerSpout;
 import io.lumify.core.model.notification.SystemNotification;
 import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.notification.UserNotification;
@@ -402,7 +402,7 @@ public abstract class WorkQueueRepository {
 
     public abstract LongRunningProcessMessage getNextLongRunningProcessMessage();
 
-    public abstract GraphPropertyWorkerSpout createGraphPropertyWorkerSpout();
+    public abstract WorkerSpout createWorkerSpout();
 
     public void shutdown() {
 

@@ -1,6 +1,7 @@
 package io.lumify.assignimagemr;
 
 import com.google.inject.Inject;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.mapreduce.LumifyMRBase;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.util.LumifyLogger;
@@ -9,7 +10,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.ToolRunner;
-import org.securegraph.ElementType;
 import org.securegraph.Graph;
 import org.securegraph.accumulo.AccumuloGraph;
 import org.securegraph.accumulo.mapreduce.AccumuloElementOutputFormat;
@@ -18,7 +18,6 @@ import org.securegraph.accumulo.mapreduce.AccumuloVertexInputFormat;
 public class AssignImageMR extends LumifyMRBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AssignImageMR.class);
     private AccumuloGraph graph;
-    private ElementType elementType;
 
     public static void main(String[] args) throws Exception {
         int res = ToolRunner.run(new Configuration(), new AssignImageMR(), args);
@@ -30,6 +29,11 @@ public class AssignImageMR extends LumifyMRBase {
         String[] authorizations = new String[]{
                 LumifyVisibility.SUPER_USER_VISIBILITY_STRING
         };
+
+        AssignImageConfiguration assignImageConfiguration = new AssignImageConfiguration(job.getConfiguration());
+        if (assignImageConfiguration.getHasImageLabels().length == 0) {
+            throw new LumifyException("No " + AssignImageConfiguration.HAS_IMAGE_LABELS + " configured.");
+        }
 
         job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);
         job.getConfiguration().setBoolean("mapred.reduce.tasks.speculative.execution", false);
@@ -49,7 +53,7 @@ public class AssignImageMR extends LumifyMRBase {
 
     @Override
     protected String getJobName() {
-        return "lumifyAssignImage-" + elementType;
+        return "lumifyAssignImage";
     }
 
     @Inject

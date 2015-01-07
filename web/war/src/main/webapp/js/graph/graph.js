@@ -18,6 +18,7 @@ define([
     'configuration/plugins/exportWorkspace/plugin',
     'configuration/plugins/graphLayout/plugin',
     'configuration/plugins/graphSelector/plugin',
+    'configuration/plugins/graphView/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -38,6 +39,7 @@ define([
     WorkspaceExporter,
     GraphLayout,
     GraphSelector,
+    GraphView,
     colorjs) {
     'use strict';
 
@@ -45,6 +47,7 @@ define([
     var HOVER_FOCUS_DELAY_SECONDS = 0.25,
         MAX_TITLE_LENGTH = 15,
         SELECTION_THROTTLE = 100,
+        GRAPH_PADDING_BORDER = 20,
         // How many edges are required before we don't show them on zoom/pan
         SHOW_EDGES_ON_ZOOM_THRESHOLD = 50,
         GRID_LAYOUT_X_INCREMENT = 175,
@@ -66,9 +69,10 @@ define([
                 var vId = _.isString(v) ? v : v.id;
                 return F.className.to(vId);
             },
-            cyEdgeFromEdge = function(e, sourceNode, destNode) {
+            cyEdgeFromEdge = function(e, sourceNode, destNode, ontologyRelationships) {
                 var source = e.sourceVertexId || (e.source && e.source.id),
-                    target = e.destVertexId || (e.target && e.target.id);
+                    target = e.destVertexId || (e.target && e.target.id),
+                    ontology = ontologyRelationships.byTitle[e.relationshipType || e.label];
 
                 return {
                     group: 'edges',
@@ -76,6 +80,7 @@ define([
                         id: toCyId(e.id),
                         source: sourceNode.id(),
                         target: destNode.id(),
+                        label: ontology && ontology.displayName || '',
                         edge: {
                             id: e.id,
                             diffType: e.diffType,
@@ -99,6 +104,7 @@ define([
             cytoscapeContainerSelector: '.cytoscape-container',
             emptyGraphSelector: '.empty-graph',
             graphToolsSelector: '.controls',
+            graphViewsSelector: '.graph-views',
             contextMenuSelector: '.graph-context-menu',
             vertexContextMenuSelector: '.vertex-context-menu',
             edgeContextMenuSelector: '.edge-context-menu'
@@ -398,24 +404,23 @@ define([
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
                         v.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v.vertexId)).position());
-                        self.workspaceVertices[v.vertexId] = v;
                     });
 
                     if (options.fit && cy.nodes().length) {
 
                         _.defer(self.fit.bind(self));
 
-                    } else if (isVisible && options.addingVerticesRelatedTo) {
-                        var relatedToCyNode = cy.getElementById(self.toCyId(options.addingVerticesRelatedTo));
-                        if (relatedToCyNode.length) {
-                            var nodes = addedCyNodes.add(relatedToCyNode);
+                    } else if (isVisible && options.fitToVertexIds && options.fitToVertexIds.length) {
+                        var zoomOutToNodes = cy.$(
+                            options.fitToVertexIds.map(function(v) {
+                            return '#' + toCyId(v);
+                        }).join(','));
 
-                            _.defer(function() {
-                                cy.zoomOutToFit(nodes, {
-                                    padding: self.paddingForZoomOut()
-                                });
-                            })
-                        }
+                        _.defer(function() {
+                            cy.zoomOutToFit(zoomOutToNodes, {
+                                padding: self.paddingForZoomOut()
+                            });
+                        })
                     }
 
                     if (options.animate) {
@@ -602,14 +607,15 @@ define([
 
         this.onEdgesUpdated = function(event, data) {
             this.cytoscapeReady(function(cy) {
-                var newEdges = _.compact(data.edges.map(function(edge) {
+                var self = this,
+                    newEdges = _.compact(data.edges.map(function(edge) {
                         var cyEdge = cy.getElementById(toCyId(edge.id));
                         if (cyEdge.length === 0) {
                             var sourceNode = cy.getElementById(toCyId(edge.source.id)),
                                 destNode = cy.getElementById(toCyId(edge.target.id));
 
                             if (sourceNode.length && destNode.length) {
-                                return cyEdgeFromEdge(edge, sourceNode, destNode);
+                                return cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships);
                             }
                         }
                     }));
@@ -823,18 +829,19 @@ define([
         };
 
         this.onGraphPaddingUpdated = function(e, data) {
-            var self = this,
-                border = 20;
+            var self = this;
 
             this.graphPaddingRight = data.padding.r;
 
             var padding = $.extend({}, data.padding);
 
             padding.r += this.select('graphToolsSelector').outerWidth(true) || 65;
-            padding.l += border;
-            padding.t += border;
-            padding.b += border;
+            padding.l += GRAPH_PADDING_BORDER;
+            padding.t += GRAPH_PADDING_BORDER;
+            padding.b += GRAPH_PADDING_BORDER;
             this.graphPadding = padding;
+
+            this.updateGraphViewsPosition();
 
             if (this.nodesToFitAfterGraphPadding) {
                 this.cytoscapeReady().done(function(cy) {
@@ -844,6 +851,13 @@ define([
                     self.nodesToFitAfterGraphPadding = null;
                 });
             }
+        };
+
+        this.updateGraphViewsPosition = function() {
+            this.select('graphViewsSelector').css({
+                left: (this.graphPadding.l - GRAPH_PADDING_BORDER) + 'px',
+                right: (this.graphPaddingRight) + 'px'
+            });
         };
 
         this.onContextMenuLayout = function(layout, opts) {
@@ -1249,7 +1263,7 @@ define([
             }
             if (data && data.entityUpdates && data.entityUpdates.length && this.$node.closest('.visible').length) {
                 data.entityUpdates.forEach(function(entityUpdate) {
-                    if ('graphLayoutJson' in entityUpdate) {
+                    if ('graphLayoutJson' in entityUpdate && 'pagePosition' in entityUpdate.graphLayoutJson) {
                         var projectedPosition = cy.renderer().projectIntoViewport(
                             entityUpdate.graphLayoutJson.pagePosition.x,
                             entityUpdate.graphLayoutJson.pagePosition.y
@@ -1270,13 +1284,16 @@ define([
                 this.isWorkspaceEditable = data.workspace.editable;
                 this.cytoscapeReady(function(cy) {
                     var self = this,
+                        fitToIds = [],
                         allNodes = cy.nodes();
 
                     allNodes[data.workspace.editable ? 'grabify' : 'ungrabify']();
 
                     data.entityUpdates.forEach(function(entityUpdate) {
-                        var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId));
-                        if (cyNode.length && !cyNode.grabbed()) {
+                        var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId)),
+                            previousWorkspaceVertex = self.workspaceVertices[entityUpdate.vertexId];
+
+                        if (cyNode.length && !cyNode.grabbed() && ('graphPosition' in entityUpdate)) {
                             cyNode
                                 .stop(true)
                                 .animate(
@@ -1289,6 +1306,23 @@ define([
                                     }
                                 );
                         }
+
+                        var noPreviousGraphPosition = (
+                                !previousWorkspaceVertex ||
+                                !('graphPosition' in previousWorkspaceVertex)
+                            ),
+                            nowHasGraphPosition = 'graphPosition' in entityUpdate,
+                            newVertex = !!(noPreviousGraphPosition && nowHasGraphPosition);
+
+                        if (previousWorkspaceVertex &&
+                            previousWorkspaceVertex.graphLayoutJson &&
+                            previousWorkspaceVertex.graphLayoutJson.relatedToVertexId) {
+                            fitToIds.push(previousWorkspaceVertex.graphLayoutJson.relatedToVertexId)
+                        }
+                        if (newVertex) {
+                            fitToIds.push(entityUpdate.vertexId);
+                        }
+
                         self.workspaceVertices[entityUpdate.vertexId] = entityUpdate;
                     });
                     self.workspaceVertices = _.omit(self.workspaceVertices, data.entityDeletes);
@@ -1299,7 +1333,9 @@ define([
                             this.cyNodesToRemoveOnWorkspaceUpdated.remove();
                             this.cyNodesToRemoveOnWorkspaceUpdated = null;
                         }
-                        this.addVertices(data.newVertices)
+                        this.addVertices(data.newVertices, {
+                            fitToVertexIds: _.unique(fitToIds)
+                        })
                     }
                     this.setWorkspaceDirty();
                     this.updateVertexSelections(cy);
@@ -1327,6 +1363,8 @@ define([
 
         this.onEdgesLoaded = function(evt, relationshipData) {
             this.cytoscapeReady(function(cy) {
+                var self = this;
+
                 if (relationshipData.edges) {
                     var relationshipEdges = [];
                     relationshipData.edges.forEach(function(edge) {
@@ -1334,7 +1372,9 @@ define([
                             destNode = cy.getElementById(toCyId(edge.destVertexId));
 
                         if (sourceNode.length && destNode.length) {
-                            relationshipEdges.push(cyEdgeFromEdge(edge, sourceNode, destNode));
+                            relationshipEdges.push(
+                                cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships)
+                            );
                         }
                     });
                     // Hide edges when zooming if more than threshold
@@ -1368,8 +1408,6 @@ define([
             if (!anchorTo || (!anchorTo.vertexId && !anchorTo.page)) {
                 return console.error('Registering for position events requires a vertexId');
             }
-
-            //this.onUnregisterForPositionChanges();
 
             this.cytoscapeReady().done(function(cy) {
 
@@ -1553,14 +1591,15 @@ define([
                 this.addVertices(self.attr.vertices);
             }
 
-            this.dataRequest('ontology', 'concepts')
-                .done(function(concepts) {
-                    var templateData = {
-                        firstLevelConcepts: concepts.entityConcept.children || [],
-                        pathHopOptions: ['2','3','4']
-                    };
+            this.dataRequest('ontology', 'ontology')
+                .done(function(ontology) {
+                    var concepts = ontology.concepts,
+                        relationships = ontology.relationships,
+                        templateData = {
+                            firstLevelConcepts: concepts.entityConcept.children || [],
+                            pathHopOptions: ['2','3','4']
+                        };
 
-                    // TODO: make context menus work better
                     self.$node.append(template(templateData)).find('.shortcut').each(function() {
                         var $this = $(this), command = $this.text();
                         $this.text(F.string.shortcut($this.text()));
@@ -1570,6 +1609,18 @@ define([
 
                     Controls.attachTo(self.select('graphToolsSelector'));
 
+                    var $views = $();
+                    self.updateGraphViewsPosition();
+                    GraphView.views.forEach(function(view) {
+                        var $view = $('<div>').addClass(view.className);
+                        require([view.componentPath], function(View) {
+                            View.attachTo($view);
+                        })
+                        $views = $views.add($view);
+                    });
+                    self.select('graphViewsSelector').append($views);
+
+                    self.ontologyRelationships = relationships;
                     stylesheet(function(style) {
                         self.initializeGraph(style);
                     });

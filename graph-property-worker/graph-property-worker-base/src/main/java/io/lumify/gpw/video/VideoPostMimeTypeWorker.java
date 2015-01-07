@@ -5,10 +5,11 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.PostMimeTypeWorker;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.gpw.util.*;
 import io.lumify.gpw.MediaPropertyConfiguration;
+import io.lumify.gpw.util.*;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
+import org.securegraph.Metadata;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -16,7 +17,6 @@ import org.securegraph.mutation.ExistingElementMutation;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class VideoPostMimeTypeWorker extends PostMimeTypeWorker {
     public static final String MULTI_VALUE_PROPERTY_KEY = VideoPostMimeTypeWorker.class.getName();
@@ -33,7 +33,7 @@ public class VideoPostMimeTypeWorker extends PostMimeTypeWorker {
         JSONObject videoMetadata = FFprobeExecutor.getJson(processRunner, localFile.getAbsolutePath());
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         List<String> properties = new ArrayList<String>();
-        Map<String, Object> metadata = data.createPropertyMetadata();
+        Metadata metadata = data.createPropertyMetadata();
         if (videoMetadata != null) {
             setProperty(config.durationIri, FFprobeDurationUtil.getDuration(videoMetadata), m, metadata, data, properties);
             setProperty(config.geoLocationIri, FFprobeGeoLocationUtil.getGeoPoint(videoMetadata), m, metadata, data, properties);
@@ -58,7 +58,7 @@ public class VideoPostMimeTypeWorker extends PostMimeTypeWorker {
         getGraph().flush();
     }
 
-    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Map<String, Object> metadata, GraphPropertyWorkData data, List<String> properties) {
+    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Metadata metadata, GraphPropertyWorkData data, List<String> properties) {
         if (iri != null && value != null) {
             mutation.addPropertyValue(MULTI_VALUE_PROPERTY_KEY, iri, value, metadata, new Visibility(data.getVisibilitySource()));
             properties.add(iri);

@@ -72,7 +72,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
         visibility = new Visibility("");
         extractor.prepare(workerPrepareData);
         extractor.setGraph(graph);
@@ -88,7 +88,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
 
         in = getClass().getResourceAsStream("bffls.txt");
         Property property = vertex.getProperty(LumifyProperties.TEXT.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         extractor.execute(in, workData);
 
         List<Vertex> termMentions = toList(vertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, termMentionAuthorizations));

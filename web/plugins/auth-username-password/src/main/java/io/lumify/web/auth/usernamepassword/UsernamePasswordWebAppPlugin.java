@@ -35,6 +35,7 @@ public class UsernamePasswordWebAppPlugin implements WebAppPlugin {
 
         ForgotPasswordConfiguration forgotPasswordConfiguration = new ForgotPasswordConfiguration();
         configuration.setConfigurables(forgotPasswordConfiguration, ForgotPasswordConfiguration.CONFIGURATION_PREFIX);
+        configuration.set("web.ui." + ForgotPasswordConfiguration.CONFIGURATION_PREFIX + ".enabled", forgotPasswordConfiguration.isEnabled());
         if (forgotPasswordConfiguration.isEnabled()) {
             app.post("/forgotPassword/requestToken", RequestToken.class);
             app.get(LOOKUP_TOKEN_ROUTE, LookupToken.class);

@@ -8,6 +8,8 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.InMemoryAuthorizationRepository;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.dbpedia.mapreduce.model.LineData;
 import io.lumify.dbpedia.mapreduce.model.LinkValue;
 import io.lumify.securegraph.model.ontology.SecureGraphOntologyRepository;
@@ -15,6 +17,7 @@ import io.lumify.wikipedia.WikipediaConstants;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Counter;
+import org.securegraph.Metadata;
 import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
@@ -28,7 +31,9 @@ import java.util.Map;
 public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private static final String DBPEDIA_ID_PREFIX = "DBPEDIA_";
     private Counter linesProcessedCounter;
+    private VisibilityTranslator visibilityTranslator;
     private Visibility visibility;
+    private Visibility defaultVisibility;
     private AccumuloAuthorizations authorizations;
     private SecureGraphOntologyRepository ontologyRepository;
     private static final Map<String, Integer> conceptTypeDepthCache = new HashMap<String, Integer>();
@@ -45,7 +50,9 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
 
-        this.visibility = new Visibility("");
+        this.visibilityTranslator = new DirectVisibilityTranslator();
+        this.visibility = this.visibilityTranslator.getDefaultVisibility();
+        this.defaultVisibility = this.visibilityTranslator.getDefaultVisibility();
         this.authorizations = new AccumuloAuthorizations();
         AuthorizationRepository authorizationRepository = new InMemoryAuthorizationRepository();
         try {
@@ -91,8 +98,8 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         VertexBuilder linkedPageVertexBuilder = prepareVertex(linkedPageVertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
 
-        Map<String, Object> linkedTitleMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(linkedTitleMetadata, 0.1);
+        Metadata linkedTitleMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(linkedTitleMetadata, 0.1, defaultVisibility);
         LumifyProperties.TITLE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY, linkValue.getPageTitle(), linkedTitleMetadata, visibility);
 
         Vertex linkedPageVertex = linkedPageVertexBuilder.save(authorizations);
@@ -108,12 +115,12 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         String dbpediaEntityVertexId = getDbpediaEntityVertexId(lineData.getPageTitle());
         VertexBuilder entityVertexBuilder = prepareVertex(dbpediaEntityVertexId, visibility);
 
-        Map<String, Object> conceptTypeMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(conceptTypeMetadata, 0.1);
+        Metadata conceptTypeMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(conceptTypeMetadata, 0.1, defaultVisibility);
         LumifyProperties.CONCEPT_TYPE.addPropertyValue(entityVertexBuilder, ImportMR.MULTI_VALUE_KEY, "http://www.w3.org/2002/07/owl#Thing", conceptTypeMetadata, visibility);
 
-        Map<String, Object> titleMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1);
+        Metadata titleMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1, defaultVisibility);
         LumifyProperties.TITLE.addPropertyValue(entityVertexBuilder, ImportMR.MULTI_VALUE_KEY, lineData.getPageTitle(), titleMetadata, visibility);
 
         if (lineData.getPropertyIri().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type") && lineData.getValue() instanceof LinkValue) {
@@ -121,8 +128,8 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
 
             Integer ontologyDepth = getConceptDepth(linkValue.getValueString());
             if (ontologyDepth != null) {
-                conceptTypeMetadata = new HashMap<String, Object>();
-                LumifyProperties.CONFIDENCE.setMetadata(conceptTypeMetadata, 0.2 + ((double) ontologyDepth / 1000.0));
+                conceptTypeMetadata = new Metadata();
+                LumifyProperties.CONFIDENCE.setMetadata(conceptTypeMetadata, 0.2 + ((double) ontologyDepth / 1000.0), defaultVisibility);
                 String multiValueKey = ImportMR.MULTI_VALUE_KEY + "#" + linkValue.getValueString();
                 LumifyProperties.CONCEPT_TYPE.addPropertyValue(entityVertexBuilder, multiValueKey, linkValue.getValueString(), conceptTypeMetadata, visibility);
             }
@@ -169,8 +176,8 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         VertexBuilder pageVertexBuilder = prepareVertex(wikipediaPageVertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
 
-        Map<String, Object> titleMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1);
+        Metadata titleMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1, defaultVisibility);
         LumifyProperties.TITLE.addPropertyValue(pageVertexBuilder, ImportMR.MULTI_VALUE_KEY, lineData.getPageTitle(), titleMetadata, visibility);
 
         return pageVertexBuilder.save(authorizations);

@@ -141,18 +141,6 @@
                 <cluster.dependency.scope>provided</cluster.dependency.scope>
             </properties>
         </profile>
-
-        <profile>
-            <id>codeQuality</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>cobertura-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
     <build>

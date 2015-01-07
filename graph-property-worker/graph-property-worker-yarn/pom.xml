@@ -36,11 +36,6 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-model-bigtable</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
             <artifactId>lumify-graph-property-worker-base</artifactId>
             <version>${project.version}</version>
         </dependency>

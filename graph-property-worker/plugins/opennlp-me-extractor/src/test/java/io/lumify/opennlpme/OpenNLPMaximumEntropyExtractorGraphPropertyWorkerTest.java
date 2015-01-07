@@ -56,7 +56,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
 
     @Before
     public void setUp() throws Exception {
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
 
         Map config = new HashMap();
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
@@ -89,7 +89,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
                 .setProperty(LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson, new Visibility(""))
                 .save(new InMemoryAuthorizations());
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, vertex.getProperty("text"), null, null);
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.execute(new ByteArrayInputStream(text.getBytes("UTF-8")), workData);
 

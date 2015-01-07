@@ -4,9 +4,11 @@ import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.WorkerSpout;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -37,6 +39,7 @@ public class GraphPropertyRunner {
     private UserRepository userRepository;
     private Configuration configuration;
     private WorkQueueRepository workQueueRepository;
+    private VisibilityTranslator visibilityTranslator;
 
     public void prepare(User user) {
         this.user = user;
@@ -170,7 +173,7 @@ public class GraphPropertyRunner {
             }
         }
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(element, property, workspaceId, visibilitySource);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, element, property, workspaceId, visibilitySource);
 
         LOGGER.debug("Begin work on element %s property %s", element.getId(), propertyText);
         if (property != null && property.getValue() instanceof StreamingPropertyValue) {
@@ -299,26 +302,31 @@ public class GraphPropertyRunner {
         this.workQueueRepository = workQueueRepository;
     }
 
+    @Inject
+    public void setVisibilityTranslator(VisibilityTranslator visibilityTranslator) {
+        this.visibilityTranslator = visibilityTranslator;
+    }
+
     public void run() throws Exception {
-        GraphPropertyWorkerSpout graphPropertyWorkerSpout = prepareGraphPropertyWorkerSpout();
+        WorkerSpout workerSpout = prepareGraphPropertyWorkerSpout();
         while (true) {
-            GraphPropertyWorkerTuple tuple = graphPropertyWorkerSpout.nextTuple();
+            GraphPropertyWorkerTuple tuple = (GraphPropertyWorkerTuple) workerSpout.nextTuple();
             if (tuple == null) {
                 Thread.sleep(100);
                 continue;
             }
             try {
                 process(tuple.getJson());
-                graphPropertyWorkerSpout.ack(tuple.getMessageId());
+                workerSpout.ack(tuple.getMessageId());
             } catch (Throwable ex) {
                 LOGGER.error("Could not process tuple: %s", tuple, ex);
-                graphPropertyWorkerSpout.fail(tuple.getMessageId());
+                workerSpout.fail(tuple.getMessageId());
             }
         }
     }
 
-    protected GraphPropertyWorkerSpout prepareGraphPropertyWorkerSpout() {
-        GraphPropertyWorkerSpout spout = workQueueRepository.createGraphPropertyWorkerSpout();
+    protected WorkerSpout prepareGraphPropertyWorkerSpout() {
+        WorkerSpout spout = workQueueRepository.createWorkerSpout();
         spout.open();
         return spout;
     }

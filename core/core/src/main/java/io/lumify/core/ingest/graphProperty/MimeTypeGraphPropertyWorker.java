@@ -8,13 +8,13 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Map;
 
 public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MimeTypeGraphPropertyWorker.class);
@@ -58,13 +58,13 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         ExistingElementMutation<Vertex> m = ((Vertex) data.getElement()).prepareMutation();
-        Map<String, Object> mimeTypeMetadata = data.createPropertyMetadata();
+        Metadata mimeTypeMetadata = data.createPropertyMetadata();
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(data.getElement());
         if (visibilityJson != null) {
-            LumifyProperties.VISIBILITY_JSON.setMetadata(mimeTypeMetadata, visibilityJson);
+            LumifyProperties.VISIBILITY_JSON.setMetadata(mimeTypeMetadata, visibilityJson, getVisibilityTranslator().getDefaultVisibility());
         }
         LumifyProperties.MIME_TYPE.setProperty(m, mimeType, mimeTypeMetadata, data.getVisibility());
-        m.alterPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
+        m.setPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType, getVisibilityTranslator().getDefaultVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, this.getClass().getName(), getUser(), data.getVisibility());
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());

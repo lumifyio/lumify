@@ -13,6 +13,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import org.hibernate.Session;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
@@ -56,7 +57,7 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
     }
 
     @Override
-    public SystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, Date startDate, Date endDate) {
+    public SystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, String actionEvent, JSONObject actionPayload, Date startDate, Date endDate) {
         if (startDate == null) {
             startDate = new Date();
         }
@@ -69,6 +70,12 @@ public class SqlSystemNotificationRepository extends SystemNotificationRepositor
         notification.setMessage(message);
         notification.setStartDate(startDate);
         notification.setEndDate(endDate);
+        if (actionEvent != null) {
+            notification.setActionEvent(actionEvent);
+        }
+        if (actionPayload != null) {
+            notification.setActionPayload(actionPayload);
+        }
         session.save(notification);
         return notification;
     }

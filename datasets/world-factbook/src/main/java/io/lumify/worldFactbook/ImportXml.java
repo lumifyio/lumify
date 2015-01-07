@@ -5,9 +5,11 @@ import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.ingest.FileImport;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.VisibilityTranslator;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.securegraph.Metadata;
 import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
@@ -22,8 +24,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ImportXml extends CommandLineBase {
     private static final String CMD_OPT_INPUT = "in";
@@ -36,6 +36,7 @@ public class ImportXml extends CommandLineBase {
     private XPathExpression fieldsXPath;
     private Visibility visibility = new Visibility("");
     private OntologyRepository ontologyRepository;
+    private VisibilityTranslator visibilityTranslator;
     private FileImport fileImport;
     private String visibilitySource = "";
     private String entityHasImageIri;
@@ -132,12 +133,12 @@ public class ImportXml extends CommandLineBase {
         Vertex flagVertex = fileImport.importFile(flagFileName, false, visibilitySource, null, getUser(), getAuthorizations());
 
         String flagTitle = "Flag of " + LumifyProperties.TITLE.getPropertyValue(countryVertex);
-        Map<String, Object> flagImageMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(flagImageMetadata, 0.5);
+        Metadata flagImageMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(flagImageMetadata, 0.5, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.TITLE.addPropertyValue(flagVertex, MULTI_VALUE_KEY, flagTitle, flagImageMetadata, visibility, getAuthorizations());
 
         getGraph().addEdge(FLAG_EDGE_ID_PREFIX + countryId, countryVertex, flagVertex, entityHasImageIri, visibility, getAuthorizations());
-        LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(countryVertex, MULTI_VALUE_KEY, flagVertex.getId().toString(), visibility, getAuthorizations());
+        LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(countryVertex, MULTI_VALUE_KEY, flagVertex.getId(), visibility, getAuthorizations());
 
         return flagVertex;
     }
@@ -152,8 +153,8 @@ public class ImportXml extends CommandLineBase {
         Vertex mapVertex = fileImport.importFile(mapFileName, false, visibilitySource, null, getUser(), getAuthorizations());
 
         String flagTitle = "Map of " + LumifyProperties.TITLE.getPropertyValue(countryVertex);
-        Map<String, Object> mapImageMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(mapImageMetadata, 0.5);
+        Metadata mapImageMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(mapImageMetadata, 0.5, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.TITLE.addPropertyValue(mapVertex, MULTI_VALUE_KEY, flagTitle, mapImageMetadata, visibility, getAuthorizations());
 
         getGraph().addEdge(MAP_EDGE_ID_PREFIX + countryId, countryVertex, mapVertex, entityHasImageIri, visibility, getAuthorizations());
@@ -197,5 +198,10 @@ public class ImportXml extends CommandLineBase {
     @Inject
     public void setOntologyRepository(OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
+    }
+
+    @Inject
+    public void setVisibilityTranslator(VisibilityTranslator visibilityTranslator) {
+        this.visibilityTranslator = visibilityTranslator;
     }
 }

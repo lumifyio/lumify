@@ -14,4 +14,6 @@ public abstract class VisibilityTranslator {
     public abstract LumifyVisibility toVisibility(VisibilityJson visibilityJson);
 
     public abstract Visibility toVisibilityNoSuperUser(VisibilityJson visibilityJson);
+
+    public abstract Visibility getDefaultVisibility();
 }

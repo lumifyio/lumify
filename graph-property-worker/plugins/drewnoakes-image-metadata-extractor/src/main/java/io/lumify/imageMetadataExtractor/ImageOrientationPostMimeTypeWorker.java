@@ -4,22 +4,22 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.PostMimeTypeWorker;
-import io.lumify.imageMetadataHelper.ImageTransformExtractor;
 import io.lumify.gpw.MediaPropertyConfiguration;
+import io.lumify.imageMetadataHelper.ImageTransformExtractor;
 import org.securegraph.Authorizations;
+import org.securegraph.Metadata;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
     private static final String MULTI_VALUE_PROPERTY_KEY = ImageOrientationPostMimeTypeWorker.class.getName();
     private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
 
-    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Map<String, Object> metadata, GraphPropertyWorkData data, List<String> properties) {
+    private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Metadata metadata, GraphPropertyWorkData data, List<String> properties) {
         if (iri != null && value != null) {
             mutation.addPropertyValue(MULTI_VALUE_PROPERTY_KEY, iri, value, metadata, data.getVisibility());
             properties.add(iri);
@@ -33,7 +33,7 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
         }
 
         File localFile = getLocalFileForRaw(data.getElement());
-        Map<String, Object> metadata = data.createPropertyMetadata();
+        Metadata metadata = data.createPropertyMetadata();
         ExistingElementMutation<Vertex> mutation = data.getElement().prepareMutation();
         ArrayList<String> properties = new ArrayList<String>();
 

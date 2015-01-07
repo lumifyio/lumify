@@ -1,5 +1,6 @@
 package io.lumify.sql.model.notification;
 
+import io.lumify.core.model.notification.Notification;
 import io.lumify.core.model.notification.SystemNotification;
 import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.notification.SystemNotificationSeverity;
@@ -17,6 +18,8 @@ public class SqlSystemNotification implements SystemNotification {
     private String message;
     private Date startDate;
     private Date endDate;
+    private String actionEvent;
+    private String actionPayload;
 
     public void setId(String id) {
         this.id = id;
@@ -82,6 +85,49 @@ public class SqlSystemNotification implements SystemNotification {
     @Column(name = "end_date")
     public Date getEndDate() {
         return endDate;
+    }
+
+    @Column(name = "action_payload", length = 4000)
+    private String getActionPayloadString() {
+        return actionPayload;
+    }
+
+    public void setActionPayloadString(String actionPayload) {
+        this.actionPayload = actionPayload;
+    }
+
+    @Override
+    public void setActionEvent(String actionEvent) {
+        this.actionEvent = actionEvent;
+    }
+
+    @Override
+    @Column(name = "action_event")
+    public String getActionEvent() {
+        return this.actionEvent;
+    }
+
+    @Override
+    public void setActionPayload(JSONObject jsonData) {
+        this.setActionPayloadString(jsonData.toString());
+    }
+
+    @Override
+    public void setExternalUrl(String externalUrl) {
+        this.setActionEvent(Notification.ACTION_EVENT_EXTERNAL_URL);
+        JSONObject payload = new JSONObject();
+        payload.put("url", externalUrl);
+        this.setActionPayload(payload);
+    }
+
+    @Transient
+    @Override
+    public JSONObject getActionPayload() {
+        String payload = getActionPayloadString();
+        if (payload != null) {
+            return new JSONObject(payload);
+        }
+        return null;
     }
 
     @Transient

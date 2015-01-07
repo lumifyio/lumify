@@ -52,6 +52,11 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
+            <artifactId>lumify-web-change-email</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-geocoder-bing</artifactId>
             <version>${project.version}</version>
         </dependency>

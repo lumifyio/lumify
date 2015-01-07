@@ -18,6 +18,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ public class SqlUserNotificationRepository extends UserNotificationRepository {
     }
 
     @Override
-    public UserNotification createNotification(String userId, String title, String message, ExpirationAge expirationAge) {
+    public UserNotification createNotification(String userId, String title, String message, String actionEvent, JSONObject actionPayload, ExpirationAge expirationAge) {
         Date now = new Date();
         String id = Long.toString(now.getTime()) + ":" + UUID.randomUUID().toString();
         Session session = sessionManager.getSession();
@@ -49,6 +50,13 @@ public class SqlUserNotificationRepository extends UserNotificationRepository {
             notification.setSentDate(now);
             notification.setExpirationAge(expirationAge);
             notification.setMarkedRead(false);
+            if (actionEvent != null) {
+                notification.setActionEvent(actionEvent);
+            }
+            if (actionPayload != null) {
+                notification.setActionPayload(actionPayload);
+            }
+
             session.save(notification);
             transaction.commit();
             return notification;

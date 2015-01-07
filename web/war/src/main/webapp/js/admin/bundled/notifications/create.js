@@ -10,14 +10,14 @@ require([
 
     var F;
 
-    return defineLumifyAdminPlugin(PluginList, {
+    return defineLumifyAdminPlugin(CreateNotification, {
         mixins: [withDataRequest],
         section: 'System Notifications',
         name: 'Create',
         subtitle: 'Create a New Notification'
     });
 
-    function PluginList() {
+    function CreateNotification() {
 
         this.defaultAttrs({
             buttonSelector: '.btn-primary',
@@ -39,6 +39,8 @@ require([
             require(['util/formatters'], function(_F) {
                 F = _F;
                 if (notification) {
+                    notification.externalUrl = notification.action && notification.action.data &&
+                        notification.action.data.url;
                     notification.startDate = F.date.dateTimeString(notification.startDate)
                     if (notification.endDate) {
                         notification.endDate = F.date.dateTimeString(notification.endDate)
@@ -89,7 +91,8 @@ require([
                 message: $.trim(this.$node.find('.message').val()),
                 severity: this.$node.find('*[name=severity]:checked').val(),
                 startDate: $.trim(this.$node.find('.startDate').val()),
-                endDate: this.$node.find('.endDate').val()
+                endDate: this.$node.find('.endDate').val(),
+                externalUrl: this.$node.find('.externalUrl').val()
             }, function(newNotification) {
                 if (self.attr.notification) {
                     newNotification.notificationId = self.attr.notification.id;
@@ -116,7 +119,7 @@ require([
                         } else {
                             self.$node.find('*[name=severity]:checked').removeAttr('checked');
                             self.$node.find('*[name=severity]').eq(0).prop('checked', true)
-                            self.$node.find('.title,.message,.startDate,.endDate').val('');
+                            self.$node.find('.title,.externalUrl,.message,.startDate,.endDate').val('');
                             self.$node.find('.startDate').val(F.date.dateTimeString(new Date()));
                             self.checkValid();
                             self.showSuccess('Saved Notification');

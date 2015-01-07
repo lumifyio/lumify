@@ -6,6 +6,8 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +22,6 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
     private Visibility visibility;
     private Authorizations authorizations;
     private TikaTextExtractorGraphPropertyWorker textExtractor;
+    private VisibilityTranslator visibilityTranslator;
 
     @Mock
     private WorkQueueRepository workQueueRepository;
@@ -42,10 +44,11 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
 
     @Before
     public void before() throws Exception {
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
         visibility = new Visibility("");
         authorizations = new InMemoryAuthorizations();
         textExtractor = new TikaTextExtractorGraphPropertyWorker();
+        visibilityTranslator = new DirectVisibilityTranslator();
 
         Map config = new HashMap();
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PERSON, "http://lumify.io/test#person");
@@ -59,6 +62,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         textExtractor.setGraph(graph);
         textExtractor.setWorkQueueRepository(workQueueRepository);
         textExtractor.setAuditRepository(auditRepository);
+        textExtractor.setVisibilityTranslator(visibilityTranslator);
         textExtractor.prepare(prepareData);
     }
 
@@ -81,7 +85,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
@@ -99,8 +103,8 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         VertexBuilder v = graph.prepareVertex("v1", visibility);
         StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(data.getBytes("UTF-8")), byte[].class);
         textValue.searchIndex(false);
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
+        Metadata metadata = new Metadata();
+        metadata.add(LumifyProperties.MIME_TYPE.getPropertyName(), mimeType, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.RAW.setProperty(v, textValue, metadata, visibility);
         v.save(authorizations);
     }
@@ -120,7 +124,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
@@ -142,7 +146,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes());
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);
@@ -163,7 +167,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         InputStream in = new ByteArrayInputStream(data.getBytes("UTF-8"));
         Vertex vertex = graph.getVertex("v1", authorizations);
         Property property = vertex.getProperty(LumifyProperties.RAW.getPropertyName());
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property, null, null);
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, property, null, null);
         textExtractor.execute(in, workData);
 
         vertex = graph.getVertex("v1", authorizations);

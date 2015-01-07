@@ -6,15 +6,11 @@ import com.beust.jcommander.internal.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.user.User;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Singleton
 public class NoOpAuditRepository extends AuditRepository {
@@ -50,7 +46,7 @@ public class NoOpAuditRepository extends AuditRepository {
 
     @Override
     public Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue,
-                                     Object newValue, String process, String comment, Map<String, Object> metadata, User user, Visibility visibility) {
+                                     Object newValue, String process, String comment, Metadata metadata, User user, Visibility visibility) {
         throw new RuntimeException("not supported");
     }
 

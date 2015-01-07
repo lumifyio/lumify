@@ -1,5 +1,6 @@
 package io.lumify.tesseract;
 
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
@@ -12,6 +13,7 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.vietocr.ImageHelper;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -23,13 +25,12 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TesseractGraphPropertyWorker.class);
     private static final List<String> ICON_MIME_TYPES = Arrays.asList("image/x-icon", "image/vnd.microsoft.icon");
     public static final String TEXT_PROPERTY_KEY = TesseractGraphPropertyWorker.class.getName();
-    private static final String CONFIG_DATA_PATH = "tesseract.dataPath";
+    public static final String CONFIG_DATA_PATH = "tesseract.dataPath";
     private Tesseract tesseract;
 
     @Override
@@ -40,6 +41,13 @@ public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
         String dataPath = getConfiguration().get(CONFIG_DATA_PATH, null);
         if (dataPath != null) {
             tesseract.setDatapath(dataPath);
+        }
+
+        String jaiClassName = "com.sun.media.imageio.plugins.tiff.TIFFImageWriteParam";
+        try {
+            Class.forName(jaiClassName);
+        } catch (Exception ex) {
+            throw new LumifyException("Could not find class " + jaiClassName + ". Make sure you have Java Advanced Imaging (JAI) installed (http://www.oracle.com/technetwork/java/current-142188.html)");
         }
     }
 
@@ -61,9 +69,9 @@ public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
         StreamingPropertyValue textValue = new StreamingPropertyValue(textIn, String.class);
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
-        Map<String, Object> textMetadata = data.createPropertyMetadata();
-        textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "OCR Text");
-        textMetadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+        Metadata textMetadata = data.createPropertyMetadata();
+        textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "OCR Text", getVisibilityTranslator().getDefaultVisibility());
+        textMetadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", getVisibilityTranslator().getDefaultVisibility());
         LumifyProperties.TEXT.addPropertyValue(m, textPropertyKey, textValue, textMetadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, TEXT_PROPERTY_KEY, getUser(), data.getVisibility());
@@ -90,7 +98,7 @@ public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null) {
             return false;
         }

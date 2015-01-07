@@ -1,18 +1,14 @@
 package io.lumify.core.model.notification;
 
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -25,13 +21,38 @@ public abstract class SystemNotificationRepository extends NotificationRepositor
 
     public abstract List<SystemNotification> getFutureNotifications(Date maxDate, User user);
 
-    public abstract SystemNotification createNotification(
+
+    public abstract SystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, String actionEvent, JSONObject actionPayload, Date startDate, Date endDate);
+
+    public SystemNotification createNotification(
             SystemNotificationSeverity severity,
             String title,
             String message,
             Date startDate,
             Date endDate
-    );
+    ) {
+        return createNotification(severity, title, message, null, null, startDate, endDate);
+    }
+
+    public SystemNotification createNotification(
+            SystemNotificationSeverity severity,
+            String title,
+            String message,
+            String externalUrl,
+            Date startDate,
+            Date endDate
+    ) {
+        String actionEvent = null;
+        JSONObject actionPayload = null;
+
+        if (externalUrl != null) {
+            actionEvent = Notification.ACTION_EVENT_EXTERNAL_URL;
+            actionPayload = new JSONObject();
+            actionPayload.put("url", externalUrl);
+        }
+
+        return createNotification(severity, title, message, actionEvent, actionPayload, startDate, endDate);
+    }
 
     public abstract SystemNotification getNotification(String rowKey, User user);
 
@@ -46,6 +67,12 @@ public abstract class SystemNotificationRepository extends NotificationRepositor
         json.put("severity", notification.getSeverity().toString());
         json.put("title", notification.getTitle());
         json.put("message", notification.getMessage());
+        if (notification.getActionEvent() != null) {
+            JSONObject action = new JSONObject();
+            action.put("event", notification.getActionEvent());
+            action.putOpt("data", notification.getActionPayload());
+            json.put("action", action);
+        }
         json.put("startDate", notification.getStartDate().getTime());
         json.put("endDate", notification.getEndDate() == null ? null : notification.getEndDate().getTime());
         json.put("hash", hash(json.toString()));

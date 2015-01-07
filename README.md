@@ -14,6 +14,7 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 ## Quick Start
 
 1. [Install docker](https://docs.docker.com/installation/#installation)
+1. Install node and npm. Then run ```npm install -g inherits bower grunt grunt-cli```
 1. Update your ```/etc/hosts``` file.
       - Linux: Add ```127.0.0.1   lumify-dev``` to your ```/etc/hosts``` file.
       - OSX: Run ```boot2docker ip```. Add ```<boot to docker ip>   lumify-dev``` to your ```/etc/hosts``` file.

@@ -19,6 +19,7 @@ import io.lumify.web.clientapi.model.ClientApiWorkspaceUpdateData;
 import io.lumify.web.clientapi.model.GraphPosition;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
+import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
@@ -110,7 +111,9 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             workspaceRepository.updateUserOnWorkspace(workspace, userId, workspaceAccess, authUser);
 
             String message = MessageFormat.format(subtitle, authUser.getDisplayName(), workspace.getDisplayTitle());
-            userNotificationRepository.createNotification(userId, title, message, new ExpirationAge(7, ExpirationAgeUnit.DAY));
+            JSONObject payload = new JSONObject();
+            payload.put("workspaceId", workspace.getWorkspaceId());
+            userNotificationRepository.createNotification(userId, title, message, "switchWorkspace", payload, new ExpirationAge(7, ExpirationAgeUnit.DAY));
         }
     }
 

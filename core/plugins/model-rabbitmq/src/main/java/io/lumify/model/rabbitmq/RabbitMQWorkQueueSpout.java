@@ -6,7 +6,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerSpout;
+import io.lumify.core.ingest.WorkerSpout;
+import io.lumify.core.ingest.WorkerTuple;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerTuple;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -14,7 +15,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class RabbitMQWorkQueueSpout extends GraphPropertyWorkerSpout {
+public class RabbitMQWorkQueueSpout extends WorkerSpout {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RabbitMQWorkQueueSpout.class);
     private final String queueName;
     private Channel channel;
@@ -53,7 +54,7 @@ public class RabbitMQWorkQueueSpout extends GraphPropertyWorkerSpout {
     }
 
     @Override
-    public GraphPropertyWorkerTuple nextTuple() throws InterruptedException {
+    public WorkerTuple nextTuple() throws InterruptedException {
         QueueingConsumer.Delivery delivery = this.consumer.nextDelivery(100);
         if (delivery == null) {
             return null;

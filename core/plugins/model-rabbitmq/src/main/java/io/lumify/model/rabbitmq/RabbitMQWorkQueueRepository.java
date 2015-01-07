@@ -8,7 +8,7 @@ import com.rabbitmq.client.QueueingConsumer;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerSpout;
+import io.lumify.core.ingest.WorkerSpout;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -150,7 +150,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public GraphPropertyWorkerSpout createGraphPropertyWorkerSpout() {
+    public WorkerSpout createWorkerSpout() {
         return InjectHelper.inject(new RabbitMQWorkQueueSpout(GRAPH_PROPERTY_QUEUE_NAME));
     }
 

@@ -133,6 +133,11 @@
             <artifactId>lumify-gpw-zipcode-resolver</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-web-auth-username-only</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 

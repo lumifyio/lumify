@@ -46,4 +46,9 @@ public class DirectVisibilityTranslator extends VisibilityTranslator {
         }
         return new Visibility(visibilityString.toString());
     }
+
+    @Override
+    public Visibility getDefaultVisibility() {
+        return new Visibility("");
+    }
 }

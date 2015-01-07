@@ -1,16 +1,16 @@
 package io.lumify.core.util;
 
 import io.lumify.core.model.properties.LumifyProperties;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 
 import java.util.Comparator;
-import java.util.Map;
 
 public class ConfidencePropertyComparator implements Comparator<Property> {
     @Override
     public int compare(Property p1, Property p2) {
-        Map<String, Object> p1meta = p1.getMetadata();
-        Map<String, Object> p2meta = p2.getMetadata();
+        Metadata p1meta = p1.getMetadata();
+        Metadata p2meta = p2.getMetadata();
 
         if (p1meta == null && p2meta == null) {
             return 0;

@@ -74,7 +74,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
 
         extractor = new OpenNLPDictionaryExtractorGraphPropertyWorker() {
             @Override
@@ -109,7 +109,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
                 .save(new InMemoryAuthorizations());
         graph.flush();
 
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, vertex.getProperty("text"), null, "");
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, vertex.getProperty("text"), null, "");
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
 
         List<Vertex> termMentions = toList(termMentionRepository.findBySourceGraphVertex(vertex.getId(), authorizations));

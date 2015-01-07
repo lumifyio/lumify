@@ -13,6 +13,7 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,7 +67,7 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
     }
 
     @Override
-    public BigTableSystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, Date startDate, Date endDate) {
+    public BigTableSystemNotification createNotification(SystemNotificationSeverity severity, String title, String message, String actionEvent, JSONObject actionPayload, Date startDate, Date endDate) {
         if (startDate == null) {
             startDate = new Date();
         }
@@ -77,6 +78,12 @@ public class BigTableSystemNotificationRepository extends SystemNotificationRepo
         notification.setMessage(message);
         notification.setStartDate(startDate);
         notification.setEndDate(endDate);
+        if (actionEvent != null) {
+            notification.setActionEvent(actionEvent);
+        }
+        if (actionPayload != null) {
+            notification.setActionPayload(actionPayload);
+        }
         repository.save(notification, FlushFlag.FLUSH);
         return notification;
     }
