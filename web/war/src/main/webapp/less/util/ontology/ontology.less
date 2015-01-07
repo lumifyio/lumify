@@ -1,0 +1,38 @@
+
+.concept-selection {
+  position: relative;
+
+  .typeahead {
+    font-size: 90%;
+    a {
+      margin: 0;
+      padding: 0.2em 0.3em;
+    }
+    .concept {
+      
+      padding-left: 0.5em;
+      
+      .icon {
+        @size: 16px;
+        width: @size;
+        height: @size;
+        display: inline-block;
+        margin-right: 1ex;
+        position: relative;
+        top: 0.5ex;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+      }
+    }
+    .color {
+      @size: 8px;
+      width: @size;
+      height: @size;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 1ex;
+      .opacity(50);      
+    }
+  }
+}

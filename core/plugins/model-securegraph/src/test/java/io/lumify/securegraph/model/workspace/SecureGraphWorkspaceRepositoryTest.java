@@ -5,13 +5,13 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.lock.LocalLockRepository;
 import io.lumify.core.model.lock.LockRepository;
-import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.Relationship;
+import io.lumify.core.model.ontology.ReadOnlyInMemoryOntologyRepository;
 import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
-import io.lumify.core.model.workspace.diff.WorkspaceDiff;
+import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,31 +33,16 @@ import java.util.Map;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.when;
 import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SecureGraphWorkspaceRepositoryTest {
     private InMemoryGraph graph;
 
-    @Mock
-    private OntologyRepository ontologyRepository;
+    private ReadOnlyInMemoryOntologyRepository ontologyRepository;
 
     @Mock
-    private Concept rootConcept;
-
-    @Mock
-    private Concept workspaceConcept;
-
-    @Mock
-    private Relationship workspaceToEntityRelationship;
-
-    @Mock
-    private Relationship workspaceToUserRelationship;
-
-    @Mock
-    private WorkspaceDiff workspaceDiff;
+    private WorkspaceDiffHelper workspaceDiff;
 
     private InMemoryUser user1;
 
@@ -73,16 +58,16 @@ public class SecureGraphWorkspaceRepositoryTest {
     private UserListenerUtil userListenerUtil;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         Visibility visibility = new Visibility("");
         Authorizations authorizations = new InMemoryAuthorizations();
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
-        LockRepository lockRepository = new LocalLockRepository();
         idGenerator = new QueueIdGenerator();
-        graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
+        graph = InMemoryGraph.create(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(new HashMap()).createConfiguration();
+        LockRepository lockRepository = new LocalLockRepository(lumifyConfiguration);
         InMemoryUserRepository userRepository = new InMemoryUserRepository(lumifyConfiguration, userListenerUtil);
         user1 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user1.getUserId(), visibility, authorizations);
@@ -90,16 +75,8 @@ public class SecureGraphWorkspaceRepositoryTest {
         user2 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
-        when(ontologyRepository.getConceptByIRI(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);
-
-        when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(WorkspaceRepository.WORKSPACE_CONCEPT_NAME), anyString(), (java.io.File) anyObject())).thenReturn(workspaceConcept);
-        when(workspaceConcept.getTitle()).thenReturn(WorkspaceRepository.WORKSPACE_CONCEPT_NAME);
-
-        when(workspaceToEntityRelationship.getIRI()).thenReturn("workspaceToEntityRelationshipId");
-        when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToEntityRelationship);
-
-        when(workspaceToUserRelationship.getIRI()).thenReturn("workspaceToUserRelationshipId");
-        when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
+        ontologyRepository = new ReadOnlyInMemoryOntologyRepository();
+        ontologyRepository.init(lumifyConfiguration);
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 
@@ -246,7 +223,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edges between workspaces and users
 
         try {
-            workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 100, 100, user2);
+            workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, new GraphPosition(100, 100), user2);
             fail("user2 should not have write access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
@@ -254,11 +231,11 @@ public class SecureGraphWorkspaceRepositoryTest {
         }
 
         idGenerator.push(workspaceId + "_to_" + entity1Vertex.getId());
-        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 100, 200, user1);
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, new GraphPosition(100, 200), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
 
-        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 200, 300, user1);
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, new GraphPosition(200, 300), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
 
@@ -290,7 +267,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users
         boolean foundRemovedEdge = false;
         for (InMemoryEdge edge : edgesAfterDelete.values()) {
-            if (edge.getLabel().equals(workspaceToEntityRelationship.getIRI())) {
+            if (edge.getLabel().equals(SecureGraphWorkspaceRepository.WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI)) {
                 assertEquals(false, WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.getPropertyValue(edge));
                 foundRemovedEdge = true;
             }

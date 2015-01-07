@@ -1,0 +1,36 @@
+
+.user-row {
+  padding-left: 10px;
+  .user-status {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    margin-top: -2px;
+    
+    &.active {
+      background: rgb(60, 214, 60);
+    }
+    &.idle {
+      background: #FFA50A;
+    }
+    &.unknown, &.offline {
+      background: #999;
+    }
+  }
+}
+.typeahead .user-row {  
+  padding-left: 0;
+  .user-status {
+    left: 0.5em;
+    top: 1em;
+  }
+}
+
+.active .user-row {
+  .active {
+    background: rgb(74, 245, 31);
+  }
+}

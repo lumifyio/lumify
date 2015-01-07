@@ -1,0 +1,35 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "apis": [
+        {
+            "path": "/user.json",
+            "description": "User operations"
+        },
+        {
+            "path": "/workspace.json",
+            "description": "Workspace operations"
+        },
+        {
+            "path": "/admin.json",
+            "description": "Admin operations"
+        },
+        {
+            "path": "/vertex.json",
+            "description": "Vertex operations"
+        },
+        {
+            "path": "/edge.json",
+            "description": "Edge operations"
+        },
+        {
+            "path": "/ontology.json",
+            "description": "Ontology operations"
+        },
+        {
+            "path": "/longRunningProcess.json",
+            "description": "Long running process operations"
+        }
+    ]
+}

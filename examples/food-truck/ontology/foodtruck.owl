@@ -80,6 +80,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/foodtruck#geoLocationDate">
         <rdfs:label xml:lang="en">Location Date</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/foodtruck#foodTruck"/>
         <rdfs:domain rdf:resource="http://lumify.io/foodtruck#location"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>

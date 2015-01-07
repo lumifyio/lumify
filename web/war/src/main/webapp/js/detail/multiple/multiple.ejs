@@ -1,16 +1,11 @@
 <div class="multiple">
 
   <div class="multiple-container">
-    <div class="detail-toolbar">
-      <div class="btn-toolbar">
-        <%- fullscreenButton %>
-      </div>
-    </div>
-
-    <ul class="histograms nav nav-bar">
-      <li class="nav-header"><%= i18n('detail.multiple.selected', vertices.length) %></li>
-      <li class="nav-header histogram"><%= i18n('detail.multiple.histogram') %><span class="badge loading"/></li>
-    </ul>
+      <div style="position:relative" class="comp-toolbar"></div>
+      <ul class="histograms nav nav-bar">
+        <li class="nav-header"><%= i18n('detail.multiple.selected', vertices.length) %></li>
+        <li class="nav-header histogram"><%= i18n('detail.multiple.histogram') %><span class="badge loading"/></li>
+      </ul>
   </div>
 
   <div class="details-container"><div class="content"></div></div>

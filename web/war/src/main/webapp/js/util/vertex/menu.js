@@ -1,20 +1,17 @@
 
 define([
     'flight/lib/component',
-    'data',
     'tpl!./menu',
-    'service/ontology',
-    'util/formatters'
-], function(defineComponent, appData, template, OntologyService, F) {
+    'util/vertex/formatters',
+    'util/withDataRequest'
+], function(defineComponent, template, F, withDataRequest) {
     'use strict';
 
-    return defineComponent(Menu);
+    return defineComponent(Menu, withDataRequest);
 
     function Menu() {
 
-        var ontologyService = new OntologyService(),
-            DIVIDER = 'DIVIDER',
-            relatedSubmenuItems = null,
+        var DIVIDER = 'DIVIDER',
             items = [
                 {
                     cls: 'requires-EDIT',
@@ -55,9 +52,10 @@ define([
 
                 {
                     label: i18n('vertex.contextmenu.add_related'),
-                    submenu: (relatedSubmenuItems = [
-                        { label: 'Items', shortcut: 'alt+r', event: 'addRelatedItems', selection: 1 }
-                    ])
+                    event: 'addRelatedItems',
+                    shouldDisable: function(selection, vertexId, target) {
+                        return !lumifyData.currentWorkspaceEditable;
+                    }
                 },
 
                 DIVIDER,
@@ -69,39 +67,12 @@ define([
                     event: 'deleteSelected',
                     selection: 2,
                     shouldDisable: function(selection, vertexId, target) {
-                        return !appData.workspaceEditable ||
-                               !appData.inWorkspace(vertexId);
+                        return !lumifyData.currentWorkspaceEditable || false;
+                        // TODO:  !inWorkspace(vertexId);
                     }
                 }
 
-            ],
-            concepts = ontologyService.concepts().done(function(concepts) {
-                var list = concepts.entityConcept.children || [];
-
-                if (list.length) {
-                    relatedSubmenuItems.push(DIVIDER);
-
-                    list.forEach(function(concept) {
-                        if (concept.userVisible !== false) {
-                            relatedSubmenuItems.push({
-                                shouldHide: function(vertex) {
-                                    var whitelist = vertex.concept.addRelatedConceptWhiteList;
-                                    if (whitelist && whitelist.length) {
-                                        return whitelist.indexOf(concept.id) === -1;
-                                    }
-                                    return false;
-                                },
-                                label: concept.pluralDisplayName,
-                                event: relatedSubmenuItems[0].event,
-                                selection: 1,
-                                args: {
-                                    limitParentConceptId: concept.id
-                                }
-                            })
-                        }
-                    });
-                }
-            });
+            ];
 
         this.defaultAttrs({
             menuSelector: '.vertex-menu a'
@@ -122,8 +93,7 @@ define([
                 menuSelector: this.onMenuItemClick
             });
 
-            appData
-                .getVertexTitle(this.attr.vertexId)
+            this.dataRequest('vertex', 'store', { vertexIds: this.attr.vertexId })
                 .done(this.setupMenu.bind(this));
         });
 
@@ -147,8 +117,9 @@ define([
             );
         };
 
-        this.setupMenu = function(title) {
-            var self = this;
+        this.setupMenu = function(vertex) {
+            var self = this,
+                title = F.vertex.title(vertex);
 
             if (title.length > 15) {
                 title = title.substring(0, 15) + '...';
@@ -161,9 +132,9 @@ define([
 
             this.$node.append(template({
                 items: items,
-                vertex: appData.vertex(this.attr.vertexId),
+                vertex: vertex,
                 shouldDisable: function(item) {
-                    var currentSelection = appData.selectedVertexIds,
+                    var currentSelection = lumifyData.selectedObjects.vertexIds,
                         shouldDisable = _.isFunction(item.shouldDisable) ? item.shouldDisable(
                             currentSelection,
                             self.attr.vertexId,

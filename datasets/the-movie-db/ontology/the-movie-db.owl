@@ -129,6 +129,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/themoviedb#birthdate">
         <rdfs:label xml:lang="en">Birthdate</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
@@ -149,6 +150,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/themoviedb#deathdate">
         <rdfs:label xml:lang="en">Death Date</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#person"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
@@ -169,6 +171,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/themoviedb#releaseDate">
         <rdfs:label xml:lang="en">Release Date</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/themoviedb#movie"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>

@@ -1,16 +1,14 @@
 package io.lumify.web.routes.ontology;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.Relationship;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiOntology;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,14 +28,15 @@ public class Ontology extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        JSONObject resultJson = ontologyRepository.getJson();
+        ClientApiOntology result = ontologyRepository.getClientApiObject();
 
-        String eTag = generateETag(resultJson.toString().getBytes());
+        String json = ObjectMapperFactory.getInstance().writeValueAsString(result);
+        String eTag = generateETag(json.getBytes());
         if (testEtagHeaders(request, response, eTag)) {
             return;
         }
 
         addETagHeader(response, eTag);
-        respondWithJson(response, resultJson);
+        respondWithClientApiObject(response, result);
     }
 }

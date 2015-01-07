@@ -1,8 +1,10 @@
 package io.lumify.core.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.Privilege;
+import io.lumify.web.clientapi.model.UserStatus;
+import io.lumify.web.clientapi.model.UserType;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -22,6 +24,8 @@ public class InMemoryUser implements User {
     private Date previousLoginDate;
     private String previousLoginRemoteAddr;
     private int loginCount;
+    private String passwordResetToken;
+    private Date passwordResetTokenExpirationDate;
 
     public InMemoryUser(String userName, String displayName, String emailAddress, Set<Privilege> privileges, String[] authorizations, String currentWorkspaceId) {
         this.userId = UUID.randomUUID().toString();
@@ -47,7 +51,9 @@ public class InMemoryUser implements User {
     }
 
     @Override
-    public String getUsername() { return userName; }
+    public String getUsername() {
+        return userName;
+    }
 
     @Override
     public String getDisplayName() {
@@ -55,25 +61,39 @@ public class InMemoryUser implements User {
     }
 
     @Override
-    public String getEmailAddress() { return emailAddress; }
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 
     @Override
-    public Date getCreateDate() { return createDate; }
+    public Date getCreateDate() {
+        return createDate;
+    }
 
     @Override
-    public Date getCurrentLoginDate() { return currentLoginDate; }
+    public Date getCurrentLoginDate() {
+        return currentLoginDate;
+    }
 
     @Override
-    public String getCurrentLoginRemoteAddr() { return currentLoginRemoteAddr; }
+    public String getCurrentLoginRemoteAddr() {
+        return currentLoginRemoteAddr;
+    }
 
     @Override
-    public Date getPreviousLoginDate() { return previousLoginDate; }
+    public Date getPreviousLoginDate() {
+        return previousLoginDate;
+    }
 
     @Override
-    public String getPreviousLoginRemoteAddr() { return previousLoginRemoteAddr; }
+    public String getPreviousLoginRemoteAddr() {
+        return previousLoginRemoteAddr;
+    }
 
     @Override
-    public int getLoginCount() { return loginCount; }
+    public int getLoginCount() {
+        return loginCount;
+    }
 
     @Override
     public UserType getUserType() {
@@ -81,7 +101,7 @@ public class InMemoryUser implements User {
     }
 
     @Override
-    public String getUserStatus() {
+    public UserStatus getUserStatus() {
         throw new RuntimeException("not implemented");
     }
 
@@ -103,9 +123,21 @@ public class InMemoryUser implements User {
     }
 
     @Override
-    public JSONObject getUiPreferences() { return preferences; }
+    public JSONObject getUiPreferences() {
+        return preferences;
+    }
 
     public void setPreferences(JSONObject preferences) {
         this.preferences = preferences;
+    }
+
+    @Override
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    @Override
+    public Date getPasswordResetTokenExpirationDate() {
+        return passwordResetTokenExpirationDate;
     }
 }

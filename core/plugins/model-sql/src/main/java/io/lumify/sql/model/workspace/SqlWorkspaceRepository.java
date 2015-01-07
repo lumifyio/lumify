@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.workspace.*;
-import io.lumify.core.model.workspace.diff.DiffItem;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceEntity;
+import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.model.workspace.WorkspaceUser;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -13,6 +15,8 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -32,14 +36,13 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlWorkspaceRepository.class);
     private final SqlUserRepository userRepository;
     private final HibernateSessionManager sessionManager;
-    private final Graph graph;
 
     @Inject
     public SqlWorkspaceRepository(final SqlUserRepository userRepository, final HibernateSessionManager sessionManager,
                                   final Graph graph) {
+        super(graph);
         this.userRepository = userRepository;
         this.sessionManager = sessionManager;
-        this.graph = graph;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public Workspace add(String title, User user) {
+    public Workspace add(String workspaceId, String title, User user) {
         Session session = sessionManager.getSession();
 
         Transaction transaction = null;
@@ -90,7 +93,6 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         try {
             transaction = session.beginTransaction();
             newWorkspace = new SqlWorkspace();
-            String workspaceId = WORKSPACE_ID_PREFIX + graph.getIdGenerator().nextId();
             newWorkspace.setDisplayTitle(title);
             if (user instanceof ProxyUser) {
                 user = userRepository.findById(user.getUserId());
@@ -179,7 +181,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
         Session session = sessionManager.getSession();
         SqlWorkspace sqlWorkspace = (SqlWorkspace) session.get(SqlWorkspace.class, workspace.getWorkspaceId());
-        List<WorkspaceEntity> workspaceEntities = new ArrayList<WorkspaceEntity>();
+        List<WorkspaceEntity> workspaceEntities;
         List<SqlWorkspaceVertex> sqlWorkspaceVertices = sqlWorkspace.getSqlWorkspaceVertices();
         workspaceEntities = toList(new ConvertingIterable<SqlWorkspaceVertex, WorkspaceEntity>(sqlWorkspaceVertices) {
             @Override
@@ -190,7 +192,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
                 boolean visible = sqlWorkspaceVertex.isVisible();
 
-                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY);
+                // TODO implement graphLayoutJson in sql
+                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY, null);
             }
         });
         return workspaceEntities;
@@ -217,10 +220,10 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, String vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
+    public void updateEntitiesOnWorkspace(Workspace workspace, Iterable<Update> updates, User user) {
         checkNotNull(workspace, "Workspace cannot be null");
 
-        if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
+        if (!hasCommentPermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
 
@@ -228,26 +231,32 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            List vertices = session.createCriteria(SqlWorkspaceVertex.class)
-                    .add(Restrictions.eq("vertexId", vertexId))
-                    .add(Restrictions.eq("workspace.workspaceId", workspace.getWorkspaceId()))
-                    .list();
-            SqlWorkspaceVertex sqlWorkspaceVertex;
-            if (vertices.size() > 1) {
-                throw new LumifyException("more than one vertex was returned");
-            } else if (vertices.size() == 0) {
-                sqlWorkspaceVertex = new SqlWorkspaceVertex();
-                sqlWorkspaceVertex.setVertexId(vertexId.toString());
-                sqlWorkspaceVertex.setWorkspace((SqlWorkspace) workspace);
-                ((SqlWorkspace) workspace).getSqlWorkspaceVertices().add(sqlWorkspaceVertex);
-                session.update(workspace);
-            } else {
-                sqlWorkspaceVertex = (SqlWorkspaceVertex) vertices.get(0);
+
+            for (Update update : updates) {
+                List vertices = session.createCriteria(SqlWorkspaceVertex.class)
+                        .add(Restrictions.eq("vertexId", update.getVertexId()))
+                        .add(Restrictions.eq("workspace.workspaceId", workspace.getWorkspaceId()))
+                        .list();
+                SqlWorkspaceVertex sqlWorkspaceVertex;
+                if (vertices.size() > 1) {
+                    throw new LumifyException("more than one vertex was returned");
+                } else if (vertices.size() == 0) {
+                    sqlWorkspaceVertex = new SqlWorkspaceVertex();
+                    sqlWorkspaceVertex.setVertexId(update.getVertexId());
+                    sqlWorkspaceVertex.setWorkspace((SqlWorkspace) workspace);
+                    ((SqlWorkspace) workspace).getSqlWorkspaceVertices().add(sqlWorkspaceVertex);
+                    session.update(workspace);
+                } else {
+                    sqlWorkspaceVertex = (SqlWorkspaceVertex) vertices.get(0);
+                }
+                sqlWorkspaceVertex.setVisible(update.getVisible());
+                if (update.getGraphPosition() != null) {
+                    sqlWorkspaceVertex.setGraphPositionX(update.getGraphPosition().getX());
+                    sqlWorkspaceVertex.setGraphPositionY(update.getGraphPosition().getY());
+                }
+                session.saveOrUpdate(sqlWorkspaceVertex);
             }
-            sqlWorkspaceVertex.setVisible(visible);
-            sqlWorkspaceVertex.setGraphPositionX(graphPositionX);
-            sqlWorkspaceVertex.setGraphPositionY(graphPositionY);
-            session.saveOrUpdate(sqlWorkspaceVertex);
+
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -311,8 +320,22 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public List<DiffItem> getDiff(Workspace workspace, User user) {
-        return new ArrayList<DiffItem>();
+    public ClientApiWorkspaceDiff getDiff(Workspace workspace, User user) {
+        return new ClientApiWorkspaceDiff();
+    }
+
+    @Override
+    public boolean hasCommentPermissions(String workspaceId, User user) {
+        List<SqlWorkspaceUser> sqlWorkspaceUsers = getSqlWorkspaceUserLists(workspaceId);
+        for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
+            if (workspaceUser.getUser().getUserId().equals(user.getUserId()) && (
+                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.COMMENT.toString()) ||
+                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.WRITE.toString()
+            ))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -340,7 +363,6 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         }
         return false;
     }
-
 
     protected List<SqlWorkspaceUser> getSqlWorkspaceUserLists(String workspaceId) {
         Session session = sessionManager.getSession();

@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify-core-group</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
     <artifactId>lumify-core</artifactId>
     <packaging>jar</packaging>
@@ -49,15 +49,20 @@
             <artifactId>commons-lang</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mozilla</groupId>
+            <artifactId>rhino</artifactId>
+            <version>1.7R4</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.netflix.curator</groupId>
+            <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.netflix.curator</groupId>
+            <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
         </dependency>
         <dependency>
@@ -109,6 +114,11 @@
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-distribution</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-client-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Runtime Dependencies -->
         <dependency>
@@ -130,18 +140,6 @@
             <properties>
                 <cluster.dependency.scope>provided</cluster.dependency.scope>
             </properties>
-        </profile>
-
-        <profile>
-            <id>codeQuality</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>cobertura-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 

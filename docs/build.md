@@ -2,11 +2,11 @@
 
 In the majority of cases, most Lumify components can be built by simply opening a terminal to the component root
 directory and running `mvn package`. The two most common components that are a little less straight-forward are the
-web application and storm ingest components. Additional instructions for both can be found below.
+web application and yarn ingest components. Additional instructions for both can be found below.
 
-## Storm Plugin Build Instructions
+## YARN Plugin Build Instructions
 
-Each storm ingestion plugin can be build independently using the following Maven command.
+Each yarn ingestion plugin can be build independently using the following Maven command.
 
 ```Shell
 mvn package -pl <path_to_plugin_dir> -am
@@ -22,11 +22,11 @@ As an example, to build and deploy the `tika-mime-type-plugin` one would run the
 the Lumify project.
 
 ```Shell
-mvn package -pl storm/plugins/tika-mime-type -am
-hadoop fs -put storm/plugins/tika-mime-type/target/lumify-tika-mime-*-jar-with-dependencies.jar /lumify/libcache
+mvn package -pl graph-property-worker/plugins/tika-mime-type -am
+hadoop fs -put graph-property-worker/plugins/tika-mime-type/target/lumify-tika-mime-*-jar-with-dependencies.jar /lumify/libcache
 ```
 
-Lumify's storm topology will automatically detect the plugin in the classpath.
+Lumify's yarn topology will automatically detect the plugin in the classpath.
 
 ## Web Application Build Instructions
 

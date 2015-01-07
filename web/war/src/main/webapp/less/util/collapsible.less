@@ -1,17 +1,46 @@
 
-section.collapsible {
-  .badge {      
+.twizzle {
+  &:before {
+    content: '▶';          
+    font-style: normal;
     position: absolute;
-    right: 1ex;
-    left: auto;
-    top: 0.4ex;
+    left: 1.5ex;
+    font-size: 50%;
+    .transition-transform(ease-in-out);
+    .transform-origin(~"30% 45%");
+  }
+}
+
+.twizzle-expand {
+  &:before {
+    .rotate(90deg);
+  }
+}
+
+.collapsible {
+  @color: #999;
+
+  & > h1 {
+    .badge {      
+      position: absolute;
+      right: 1ex;
+      left: auto;
+      top: 0.4ex;
+
+      &:not(.loading) {
+        background: inherit;
+        color: @color;
+        text-shadow: 0 1px 0 white;
+        line-height: 2.8ex;
+      }
+    }
   }
 
   &.expanded {
-    h1:before {
-      .rotate(90deg);
+    & > h1 {
+      .twizzle-expand;
     }
-    & > div {
+    & > div, .collapsible-section {
       display: block;
     }
   }
@@ -28,11 +57,11 @@ section.collapsible {
     }
   }
 
-  & > div {
+  & > div, .collapsible-section {
     display: none;
   }
 
-  h1 {
+  & > h1, .collapsible-header {
     font-size: 100%;
     padding: 0.25em 1em;
     margin: 0;
@@ -44,18 +73,11 @@ section.collapsible {
     &:before, strong {
       font-size: 80%;
       font-variant: small-caps;
-      color: #999;      
+      color: @color;
       text-shadow: 0 1px 0 white;
       text-transform: uppercase;
     }
-    &:before {
-      content: '▶';          
-      position: absolute;
-      left: 1.5ex;
-      font-size: 50%;
-      .transition-transform(ease-in-out);
-      .transform-origin(~"30% 45%");
-    }
+    .twizzle;
 
     &:hover {
       background: darken(@pane-background, 6%);

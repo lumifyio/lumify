@@ -24,6 +24,8 @@ module.exports = function(config) {
 
                 // Images
                 {pattern: 'img/**/*.*', included: false},
+                {pattern: 'tz/**', included: false},
+                {pattern: 'test/assets/*', included: false},
 
                 // Included libs
                 'libs/jquery/jquery.js',
@@ -46,6 +48,10 @@ module.exports = function(config) {
 
             // list of files to exclude
             exclude: [ ],
+
+            proxies: {
+                '/resource': '/base/test/assets/resource'
+            },
 
             // test results reporter to use
             // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'

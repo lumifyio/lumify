@@ -1,11 +1,11 @@
 package io.lumify.web;
 
-import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import org.securegraph.Graph;
 
 import javax.naming.InvalidNameException;
@@ -14,8 +14,6 @@ import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
@@ -48,8 +46,8 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
                 respondWithAuthenticationFailure(response);
                 return;
             }
-            userRepository.recordLogin(user, request.getRemoteAddr());
-            CurrentUser.set(request, user.getUserId());
+            userRepository.recordLogin(user, getRemoteAddr(request));
+            CurrentUser.set(request, user.getUserId(), user.getUsername());
         }
         chain.next(request, response);
     }
@@ -63,7 +61,7 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
         if (displayName == null || displayName.trim().equals("")) {
             return null;
         }
-        String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
+        String randomPassword = UserRepository.createRandomPassword();
         return userRepository.findOrAddUser(username, displayName, null, randomPassword, new String[0]);
     }
 

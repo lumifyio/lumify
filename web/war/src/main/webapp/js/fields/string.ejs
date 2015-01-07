@@ -7,13 +7,21 @@
     </td>
 
     <td class="input-row">
-      <input placeholder="<%= property.displayName %>" value="<%= value %>" type="text"/>
+      <% if(property.displayType === 'textarea') { %>
+        <textarea placeholder="<%= property.displayName %>"><%= value %></textarea>
+      <% } else { %>
+        <input placeholder="<%= property.displayName %>" value="<%= value %>" type="text"/>
+      <% } %>
     </td>
   </tr>
   <% } else { %>
     <tr>
       <td class="input-row">
-        <input placeholder="<%= property.displayName %>" value="<%= value %>" type="text"/>
+        <% if(property.displayType === 'textarea') { %>
+          <textarea placeholder="<%= property.displayName %>"><%= value %></textarea>
+        <% } else { %>
+          <input placeholder="<%= property.displayName %>" value="<%= value %>" type="text"/>
+        <% } %>
       </td>
     </tr>
   <% } %>

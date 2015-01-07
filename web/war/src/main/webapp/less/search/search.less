@@ -24,6 +24,19 @@ width: 215px;
     padding-right: 28px;
   }
 
+  .search-hits {
+    font-size: 95%;
+    margin: 0 1em;
+    color: #999;
+    text-align: right;
+    text-shadow: 0 1px 0 white;
+    font-style: italic;
+    text-align: right;
+    &:empty {
+      display: none;
+    }
+  }
+
   .search-query-container {
     position: relative;
 
@@ -134,7 +147,7 @@ width: 215px;
   left: 0;
   right: 0;
   bottom: 0;
-  top: 7em;  
+  top: 7.5em;  
   .content {
     overflow: auto;
     overflow-x: hidden;
@@ -214,11 +227,6 @@ width: 215px;
   }
 
   .typeahead {
-    width: 100%;
-    min-height: 100px;
-    max-height: 250px;
-    min-width: inherit;
-    overflow: auto;
     li { margin-bottom: 0; }
   }
 
@@ -244,6 +252,10 @@ width: 215px;
       &::-moz-placeholder { color: @color; }
       &:-moz-placeholder { color: @color; }
     }
+  }
+  
+  .entity-filter-row .add-property input {
+    color: #999999;
   }
 
   .newrow .remove { display:none; }

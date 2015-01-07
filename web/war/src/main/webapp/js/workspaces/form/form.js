@@ -4,32 +4,29 @@ define([
     'tpl!./form',
     'tpl!./shareRow',
     'tpl!./permissions',
-    'service/user',
-    'service/workspace'
+    'util/users/userSelect',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     shareRowTemplate,
     permissionsTemplate,
-    UserService,
-    WorkspaceService) {
+    UserSelect,
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(Form);
+    return defineComponent(Form, withDataRequest);
 
     function Form() {
-
-        this.userService = new UserService();
-        this.workspaceService = new WorkspaceService();
 
         this.defaultAttrs({
             titleSelector: '.workspace-title',
             shareListSelector: '.share-list',
             shareHeader: '.share-header',
             shareFormSelector: '.share-form',
-            userSearchSelector: '.share-form input',
             permissionsSelector: '.permissions',
             permissionsRadioSelector: '.popover input',
+            permissionsRadioLabelSelector: '.popover label',
             deleteSelector: '.delete',
             removeAccessSelector: '.remove-access'
         });
@@ -41,27 +38,47 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.editable = this.attr.data.isEditable;
+            this.on(document, 'userStatusChange', this.onUserStatusChange);
+
+            this.editable = this.attr.data.editable;
 
             this.$node.html(template({
                 workspace: this.attr.data,
                 editable: this.editable
             }));
-            this.userService.getCurrentUsers().done(this.loadUserPermissionsList.bind(this));
+            this.loadUserPermissionsList();
 
             if (this.editable) {
-                this.setupTypeahead();
+
+                this.on('userSelected', function(event, data) {
+                    if (data && data.user) {
+                        self.trigger('shareWorkspaceWithUser', {
+                            workspace: self.attr.data,
+                            user: data.user
+                        });
+                        self.trigger(this.select('shareFormSelector'), 'clearUser');
+                    }
+                });
+
+                UserSelect.attachTo(this.select('shareFormSelector'), {
+                    filterUserIds: _.pluck(self.attr.data.users, 'userId'),
+                    placeholder: i18n('workspaces.form.sharing.placeholder')
+                });
+
                 $(document).on('click.permPopover', function(event) {
                     var $target = $(event.target);
 
-                    if ($target.closest('.permissions').length === 0) {
-                        self.$node.find('.permissions').popover('hide');
+                    if ($target.closest('.permissions-list').length === 0) {
+                        self.$node.find('.permissions-list').popover('hide');
                     }
                 });
                 this.on('shareWorkspaceWithUser', this.onShareWorkspaceWithUser);
                 this.on('click', {
                     deleteSelector: this.onDelete,
-                    removeAccessSelector: this.onRevokeAccess
+                    removeAccessSelector: this.onRevokeAccess,
+                    permissionsRadioLabelSelector: function(e) {
+                        e.stopPropagation();
+                    }
                 });
                 this.on('change', {
                     permissionsRadioSelector: this.onPermissionsChange
@@ -69,6 +86,17 @@ define([
                 this.select('titleSelector').on('change keyup paste', this.onChangeTitle.bind(this));
             }
         });
+
+        this.onUserStatusChange = function(event, user) {
+            this.$node.find('.share-list > .user-row').each(function() {
+                var $this = $(this);
+                if ($this.data('userId') === user.id) {
+                    $this.find('.user-status')
+                        .removeClass('active idle offline unknown')
+                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                }
+            })
+        };
 
         var timeout;
         this.saveWorkspace = function(immediate, options) {
@@ -78,16 +106,17 @@ define([
                 d = $.Deferred(),
                 save = function() {
                     self.trigger(document, 'workspaceSaving', self.attr.data);
-                    return self.workspaceService.save(self.attr.data.workspaceId, changes)
-                        .fail(function() {
+
+                    self.dataRequest('workspace', 'save', self.attr.data.workspaceId, changes)
+                        .then(function(workspace) {
+                            self.trigger(document, 'workspaceSaved', self.attr.data);
+                            d.resolve({ workspace: self.attr.data });
+                        })
+                        .catch(function() {
                             self.attr.data = revert;
                             self.trigger(document, 'workspaceSaved', revert);
                             d.reject();
                         })
-                        .done(function(workspace) {
-                            self.trigger(document, 'workspaceSaved', self.attr.data);
-                            d.resolve({ workspace: self.attr.data });
-                        });
                 }
 
             if (immediate) {
@@ -102,40 +131,54 @@ define([
             return d;
         };
 
-        this.loadUserPermissionsList = function(response) {
+        this.loadUserPermissionsList = function() {
             var self = this,
                 workspace = this.attr.data,
+                workspaceUsers = workspace.users || (workspace.users = []),
+                userIds = _.pluck(workspaceUsers, 'userId'),
                 html = $();
 
-            this.currentUsers = response.users;
+            this.dataRequest('user', 'search', { userIds: userIds })
+                .done(function(users) {
+                    var usersById = _.indexBy(users, 'id');
+                    self.currentUsers = usersById;
 
-            (workspace.users || (workspace.users = [])).forEach(function(userPermission) {
-                if (userPermission.userId != window.currentUser.id) {
-                    var data = self.shareRowDataForPermission(userPermission);
-                    if (data) {
-                        html = html.add(shareRowTemplate(data));
+                    _.sortBy(workspaceUsers, function(userPermission) {
+                        var user = usersById[userPermission.userId];
+                        return user && user.displayName || 1;
+                    }).forEach(function(userPermission) {
+                        if (userPermission.userId != lumifyData.currentUser.id) {
+                            var data = self.shareRowDataForPermission(userPermission);
+                            if (data) {
+                                html = html.add(shareRowTemplate(data));
+                            }
+                        }
+                    });
+                    self.select('shareHeader').after(html).find('.loading').remove();
+                    if (self.editable) {
+                        self.select('shareFormSelector').show();
+                        self.updatePopovers();
                     }
-                }
-            });
-            this.select('shareHeader').after(html).find('.loading').remove();
-            if (this.editable) {
-                this.select('shareFormSelector').show();
-                this.updatePopovers();
-            }
+
+                })
         };
 
-        this.shareRowDataForPermission = function(userPermission) {
-            var user = _.findWhere(this.currentUsers, { id: userPermission.userId });
+        this.shareRowDataForPermission = function(userPermission, _user) {
+            var user = _user || this.currentUsers[userPermission.userId];
             if (user) {
                 return {
                     user: {
                         access: userPermission.access,
                         permissionLabel: {
                             read: i18n('workspaces.form.sharing.access.view'),
+                            comment: i18n('workspaces.form.sharing.access.comment'),
                             write: i18n('workspaces.form.sharing.access.edit')
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,
-                        displayName: user.displayName
+                        status: user.status,
+                        displayName: user.displayName,
+                        email: user.email,
+                        userName: user.userName
                     },
                     editable: this.editable
                 };
@@ -147,13 +190,16 @@ define([
         };
 
         this.makePopover = function(el) {
+            var self = this;
+
             el.popover({
                 html: true,
                 placement: 'bottom',
                 container: this.$node,
                 content: function() {
-                    var row = $(this).closest('.user-row');
-                    return $(permissionsTemplate($(this).data())).data('userRow', row);
+                    var row = $(this).closest('.user-row'),
+                        data = $(this).data();
+                    return $(permissionsTemplate(data)).data('userRow', row);
                 }
             });
         };
@@ -198,7 +244,7 @@ define([
             if (user) {
                 var revert = $.extend(true, {}, this.attr.data);
                 user.access = newPermissions;
-                badge.popover('disable').addClass('loading');
+                badge.popover('hide').popover('disable').addClass('loading');
                 this.saveWorkspace(true, {
                     changes: {
                         userUpdates: [user]
@@ -223,13 +269,13 @@ define([
 
             $target.text(i18n('workspaces.form.button.deleting')).attr('disabled', true);
 
-            this.workspaceService['delete'](workspaceId)
-                .always(function() {
+            this.dataRequest('workspace', 'delete', workspaceId)
+                .then(function() {
+                    //self.trigger('workspaceDeleted', { workspaceId: workspaceId });
+                })
+                .catch(function() {
                     $target.text(previousText).removeAttr('disabled');
                 })
-                .done(function() {
-                    self.trigger('workspaceDeleted', { workspaceId: workspaceId });
-                });
         };
 
         this.onRevokeAccess = function(event) {
@@ -237,7 +283,7 @@ define([
                 list = $(event.target).closest('.permissions-list'),
                 row = list.data('userRow'),
                 userId = row.data('userId'),
-                badge = row.find('.permissions').popover('disable').addClass('loading'),
+                badge = row.find('.permissions').popover('hide').popover('disable').addClass('loading'),
                 revert = $.extend(true, {}, this.attr.data);
 
             this.attr.data.users = _.reject(this.attr.data.users, function(user) {
@@ -258,10 +304,20 @@ define([
                 })
                 .done(function() {
                     row.remove();
+                    self.updateUserSelectionFilter();
                 });
         };
 
+        this.updateUserSelectionFilter = function() {
+            this.trigger(this.select('shareFormSelector'), 'updateFilterUserIds', {
+                userIds: _.pluck(this.attr.data.users, 'userId')
+            });
+        };
+
         this.onShareWorkspaceWithUser = function(event, data) {
+            if (this.currentUsers) {
+                this.currentUsers[data.user.id] = data.user;
+            }
 
             var self = this,
                 form = this.select('shareFormSelector'),
@@ -269,7 +325,7 @@ define([
                     userId: data.user.id,
                     access: 'READ'
                 },
-                row = $(shareRowTemplate(this.shareRowDataForPermission(user))).insertBefore(form),
+                row = $(shareRowTemplate(this.shareRowDataForPermission(user, data.user))).insertBefore(form),
                 badge = row.find('.permissions'),
                 revert = $.extend(true, {}, this.attr.data);
 
@@ -295,46 +351,10 @@ define([
                 .done(function() {
                     _.defer(function() {
                         self.makePopover(badge);
+                        self.updateUserSelectionFilter();
                     });
                 });
         };
 
-        this.setupTypeahead = function() {
-            var self = this,
-                userMap = {};
-
-            this.select('userSearchSelector').typeahead({
-                source: function(query, callback) {
-                    // TODO: pass query to backend to scale
-                    self.userService.getCurrentUsers()
-                        .done(function(response) {
-                            var users = response.users,
-                                regex = new RegExp(query, 'i'),
-                                search = users.filter(function(user) {
-                                    userMap[user.displayName] = user;
-
-                                    // Can't share with oneself
-                                    if (user.id === self.attr.data.createdBy) return false;
-
-                                    return regex.test(user.displayName);
-                                }),
-                                names = _.pluck(search, 'displayName');
-
-                            self.currentUsers = users;
-                            callback(names);
-                        });
-                },
-                updater: function(displayName) {
-                    var user = userMap[displayName];
-                    if (user) {
-                        self.trigger('shareWorkspaceWithUser', {
-                            workspace: self.attr.data,
-                            user: user
-                        });
-                    }
-                    return '';
-                }
-            });
-        };
     }
 });

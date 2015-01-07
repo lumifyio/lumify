@@ -31,4 +31,5 @@ io.lumify.web.JettyWebServer \
 --port=8080 \
 --httpsPort=8443 \
 --keyStorePath=${DIR}/../dev/jetty-server/config/lumify-vm.lumify.io.jks \
---keyStorePassword=password
+--keyStorePassword=password \
+--webAppDir=${DIR}/../web/war/src/main/webapp

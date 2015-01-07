@@ -20,10 +20,11 @@
     <owl:Ontology rdf:about="http://lumify.io/user">
         <owl:imports rdf:resource="http://lumify.io"/>
     </owl:Ontology>
-    
 
 
-    <!-- 
+
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Data properties
@@ -31,7 +32,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://lumify.io/user#authorizations -->
@@ -42,7 +43,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#createDate -->
@@ -52,7 +53,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#currentLoginDate -->
@@ -62,7 +63,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#currentLoginRemoteAddr -->
@@ -73,7 +74,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#currentWorkspace -->
@@ -84,7 +85,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#displayName -->
@@ -95,7 +96,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#loginCount -->
@@ -105,7 +106,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#passwordHash -->
@@ -115,7 +116,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#passwordSalt -->
@@ -125,7 +126,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#previousLoginDate -->
@@ -135,7 +136,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#previousLoginRemoteAddr -->
@@ -146,7 +147,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#privileges -->
@@ -157,7 +158,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#status -->
@@ -168,7 +169,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#uiPreferences -->
@@ -179,7 +180,7 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io/user#username -->
@@ -190,10 +191,39 @@
         <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
 
 
-    <!-- 
+
+    <!-- http://lumify.io/user#emailAddress -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/user#emailAddress">
+        <lumify:userVisible>false</lumify:userVisible>
+        <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+    <!-- http://lumify.io/user#passwordResetToken -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/user#passwordResetToken">
+        <lumify:userVisible>false</lumify:userVisible>
+        <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+
+    <!-- http://lumify.io/user#passwordResetTokenExpirationDate -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/user#passwordResetTokenExpirationDate">
+        <lumify:userVisible>false</lumify:userVisible>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/user#user"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Classes
@@ -201,7 +231,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://lumify.io/user#user -->

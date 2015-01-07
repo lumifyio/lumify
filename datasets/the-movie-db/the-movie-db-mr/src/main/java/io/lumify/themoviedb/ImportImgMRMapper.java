@@ -68,7 +68,7 @@ public class ImportImgMRMapper extends LumifyElementMapperBase<SequenceFileKey, 
         Vertex profileImageVertex = m.save(authorizations);
 
         VertexBuilder sourceVertexMutation = prepareVertex(sourceVertexId, visibility);
-        LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.addPropertyValue(sourceVertexMutation, MULTI_VALUE_KEY, profileImageVertex.getId(), visibility);
+        LumifyProperties.ENTITY_IMAGE_VERTEX_ID.addPropertyValue(sourceVertexMutation, MULTI_VALUE_KEY, profileImageVertex.getId(), visibility);
         Vertex sourceVertex = sourceVertexMutation.save(authorizations);
 
         addEdge(edgeId, sourceVertex, profileImageVertex, edgeLabel, visibility, authorizations);

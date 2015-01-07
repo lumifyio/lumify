@@ -4,15 +4,18 @@ require([
     'hbs!io/lumify/web/importExportWorkspaces/import',
     'configuration/admin/utils/fileUpload',
     'util/messages',
+    'util/withDataRequest'
 ], function(
     defineLumifyAdminPlugin,
     template,
     FileUpload,
-    i18n
+    i18n,
+    withDataRequest
 ) {
     'use strict';
 
     defineLumifyAdminPlugin(WorkspaceImport, {
+        mixins: [withDataRequest],
         section: i18n('admin.workspace.section'),
         name: i18n('admin.workspace.button.import'),
         subtitle: i18n('admin.workspace.import.subtitle')
@@ -40,12 +43,12 @@ require([
                 importButton = this.select('importButtonSelector').attr('disabled', true);
 
             this.handleSubmitButton(importButton,
-                this.adminService.workspaceImport(this.workspaceFile)
-                    .fail(this.showError.bind(this, i18n('admin.workspace.import.error')))
-                    .done(this.showSuccess.bind(this, i18n('admin.workspace.import.success')))
-                    .done(function() {
+                this.dataRequest('admin', 'workspaceImport', this.workspaceFile)
+                    .then(this.showSuccess.bind(this, i18n('admin.workspace.import.success')))
+                    .then(function() {
                         self.trigger(self.select('uploadSelector'), 'reset');
                     })
+                    .catch(this.showError.bind(this, i18n('admin.workspace.import.error')))
             );
         };
 

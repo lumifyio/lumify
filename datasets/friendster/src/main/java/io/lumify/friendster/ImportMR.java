@@ -6,8 +6,6 @@ import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.ontology.Relationship;
-import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.accumulo.core.client.AccumuloException;
@@ -64,7 +62,7 @@ public class ImportMR extends Configured implements Tool {
         verifyFriendsterUserConcept(ontologyRepository);
         verifyFriendsterUserToUserRelationship(ontologyRepository);
 
-        Job job = new Job(conf, "friendsterImport");
+        Job job = Job.getInstance(conf, "friendsterImport");
 
         String instanceName = accumuloGraphConfiguration.getAccumuloInstanceName();
         String zooKeepers = accumuloGraphConfiguration.getZookeeperServers();
@@ -102,8 +100,7 @@ public class ImportMR extends Configured implements Tool {
     }
 
     private void verifyFriendsterUserToUserRelationship(OntologyRepository ontologyRepository) {
-        Relationship rel = ontologyRepository.getRelationshipByIRI(FriendsterOntology.EDGE_LABEL_FRIEND);
-        if (rel == null) {
+        if (!ontologyRepository.hasRelationshipByIRI(FriendsterOntology.EDGE_LABEL_FRIEND)) {
             throw new RuntimeException(FriendsterOntology.EDGE_LABEL_FRIEND + " relationship not found");
         }
     }
@@ -131,7 +128,6 @@ public class ImportMR extends Configured implements Tool {
         splits.addAll(getSplits(graph, graph.getVerticesTableName()));
         splits.addAll(getSplits(graph, graph.getEdgesTableName()));
         splits.addAll(getSplits(graph, graph.getDataTableName()));
-        splits.addAll(getSplits(graph, TermMentionModel.TABLE_NAME));
         Collections.sort(splits);
         return splits;
     }

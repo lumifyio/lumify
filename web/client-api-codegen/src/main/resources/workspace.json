@@ -1,0 +1,171 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/workspace",
+    "apis": [
+        {
+            "path": "/workspace/all",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets all workspaces",
+                    "type": "ClientApiWorkspaces",
+                    "nickname": "getAll"
+                }
+            ]
+        },
+        {
+            "path": "/workspace",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get a workspace",
+                    "type": "ClientApiWorkspace",
+                    "nickname": "getById",
+                    "parameters": [
+                        {
+                            "name": "workspaceId",
+                            "description": "ID of the workspace",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/create",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Create a new workspace",
+                    "type": "ClientApiWorkspace",
+                    "nickname": "create"
+                }
+            ]
+        },
+        {
+            "path": "/workspace/update",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Update items on a workspace",
+                    "type": "void",
+                    "nickname": "update",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "data",
+                            "description": "the update data",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/diff",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get a workspace diff",
+                    "type": "ClientApiWorkspaceDiff",
+                    "nickname": "getDiff",
+                    "parameters": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/publish",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "publish diff items",
+                    "type": "ClientApiWorkspacePublishResponse",
+                    "nickname": "publish",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "publishData",
+                            "description": "data to publish",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/undo",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "undo diff items",
+                    "type": "ClientApiWorkspaceUndoResponse",
+                    "nickname": "undo",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "undoData",
+                            "description": "data to undo",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/edges",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Get all the workspace edges (this is a POST because ids can be quite large)",
+                    "type": "ClientApiWorkspaceEdges",
+                    "nickname": "getEdges",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "ids[]",
+                            "description": "additional vertex ids to search for",
+                            "required": false,
+                            "type": "List[string]",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/workspace/vertices",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get workspace vertices",
+                    "type": "ClientApiWorkspaceVertices",
+                    "nickname": "getVertices",
+                    "parameters": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+
+    }
+}

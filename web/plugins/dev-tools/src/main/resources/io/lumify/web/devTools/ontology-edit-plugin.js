@@ -1,21 +1,22 @@
 require([
     'configuration/admin/plugin',
     'hbs!io/lumify/web/devTools/templates/ontology-edit',
-    'service/ontology',
     'util/formatters',
+    'util/ontology/conceptSelect',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
     template,
-    OntologyService,
     F,
+    ConceptSelector,
+    withDataRequest,
     d3
     ) {
     'use strict';
 
-    var ontologyService = new OntologyService();
-
     return defineLumifyAdminPlugin(OntologyEdit, {
+        mixins: [withDataRequest],
         section: 'Ontology',
         name: 'Edit',
         subtitle: 'Modify the current ontology'
@@ -53,43 +54,23 @@ require([
     function OntologyEdit() {
 
         this.defaultAttrs({
-            conceptSelector: '.concept',
+            conceptSelector: '.concept-container',
             buttonSelector: '.btn-primary'
         });
 
         this.after('initialize', function() {
             var self = this;
 
-            this.on('change', {
-                conceptSelector: this.onChange
-            });
+            this.on('conceptSelected', this.onConceptSelected);
             this.on('click', {
                 buttonSelector: this.onSave
             });
 
             this.$node.html(template({}));
 
-            ontologyService.concepts()
-                .always(function() {
-                    self.$node.find('.badge').remove();
-                })
-                .done(function(concepts) {
-                    self.concepts = concepts;
-                    self.select('conceptSelector')
-                        .append(
-                            _.chain(concepts.byId)
-                            .values()
-                            .sortBy(function(concept) {
-                                return concept.displayName.toLowerCase();
-                            })
-                            .map(function(concept) {
-                                return $('<option>')
-                                    .val(concept.title)
-                                    .text(concept.displayName || concept.title)
-                            })
-                            .value()
-                        ).change();
-                });
+            ConceptSelector.attachTo(this.select('conceptSelector'), {
+                showAdminConcepts: true
+            });
         });
 
         this.onSave = function() {
@@ -97,38 +78,75 @@ require([
 
             this.handleSubmitButton(
                 this.select('buttonSelector'),
-                this.adminService.ontologyEdit({
-                    concept: this.select('conceptSelector').val(),
+                this.dataRequest('admin', 'ontologyEdit', {
+                    concept: this.currentConcept,
                     displayName: this.$node.find('.displayName').val(),
                     color: hexToRgb(this.$node.find('.color').val()),
+                    displayType: this.$node.find('.displayType').val(),
+                    searchable: this.$node.find('.searchable').is(':checked'),
+                    userVisible: this.$node.find('.userVisible').is(':checked'),
                     titleFormula: this.$node.find('.titleFormula').val(),
                     subtitleFormula: this.$node.find('.subtitleFormula').val(),
-                    timeFormula: this.$node.find('.timeFormula').val()
+                    timeFormula: this.$node.find('.timeFormula').val(),
+                    addRelatedConceptWhiteList: this.$node.find('.addRelatedConceptWhiteList')
+                        .val().split(/[\n\s,]+/)
                 })
-                    .fail(function() {
-                        self.showError();
-                    })
-                    .done(function() {
+                    .then(function() {
                         self.showSuccess('Saved, refresh to see changes');
                     })
+                    .catch(function() {
+                        self.showError();
+                    })
+
             )
         };
 
-        this.onChange = function() {
-            var self = this,
-                conceptId = this.select('conceptSelector').val(),
-                concept = this.concepts.byId[conceptId];
+        this.onConceptSelected = function(event, data) {
+            var self = this;
 
-            this.$node.find('.btn-primary').removeAttr('disabled');
+            if (data.concept) {
+                this.currentConcept = data.concept.id;
+                this.$node.find('.btn-primary').removeAttr('disabled');
 
-            _.each(concept, function(value, key) {
-                self.$node.find('.' + key).val(
-                    key === 'color' ?
-                    rgbToHex(value) :
-                    value
-                );
-            });
+                if (!('userVisible' in data.concept)) {
+                    data.concept.userVisible = true;
+                }
+                if (!('searchable' in data.concept)) {
+                    data.concept.searchable = true;
+                }
+                _.each(data.concept, function(value, key) {
+                    if (key === 'addRelatedConceptWhiteList') {
+                        value = value.join('\n');
+                    }
+                    self.updateFieldValue(key, value)
+                });
+            } else {
+                this.$node.find('.btn-primary').attr('disabled', true);
+            }
+        };
 
+        this.updateFieldValue = function(field, value) {
+            var $field = this.$node.find('.' + field),
+                type = $field.prop('type');
+
+            if (!$field.length) {
+                return;
+            }
+
+            switch (type) {
+                case 'text':
+                case 'textarea':
+                    $field.val(value);
+                    break;
+                case 'checkbox':
+                    $field.attr('checked', value);
+                    break;
+                case 'color':
+                    $field.val(rgbToHex(value));
+                    break;
+                default:
+                    console.error('Unhandled type', type);
+            }
         }
 
     }

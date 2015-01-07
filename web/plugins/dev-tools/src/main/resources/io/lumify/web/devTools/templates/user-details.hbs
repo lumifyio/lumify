@@ -7,7 +7,7 @@
 
     <li class="nav-header">Authorizations</li>
     {{#each authorizations}}
-        <li data-auth="{{ this }}" class="auth-item highlight-on-hover"><button style="margin-right: 1em;" class="btn btn-mini btn-danger show-on-hover">Delete</button><span style="line-height: 1.2em">{{ this }}</span></li>
+        <li data-auth="{{ this }}" class="auth-item highlight-on-hover"><button class="btn btn-mini btn-danger show-on-hover">Delete</button><span style="line-height: 1.2em">{{ this }}</span></li>
     {{/each}}
 
     <li>
@@ -17,7 +17,7 @@
     <li class="nav-header">Workspaces</li>
     {{#each workspaces}}
         <li data-workspace-id="{{ workspaceId }}" class="highlight-on-hover">
-            <button style="margin-right:1em;" class="share show-on-hover btn btn-mini btn-primary">Share with Me</button>
+            <button class="share show-on-hover btn btn-mini btn-primary">Share with Me</button>
             <span class="nav-list-title">{{title}}{{#if isCurrent }} (current){{/if}}</span>
             <span class="nav-list-subtitle">{{ workspaceId }}</span>
             <ul class="inner-list">
@@ -28,5 +28,5 @@
         </li>
     {{/each}}
 
-    <li><button style="margin-top: 4em" class="delete-user btn btn-danger">Delete User</button></li>
+    <li><button style="margin-top: 4em" class="delete-user btn btn-danger" {{#unless canDelete}}disabled{{/unless}}>Delete User</button></li>
 </ul>

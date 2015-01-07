@@ -5,9 +5,9 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">lumify</property>
-        <property name="hibernate.connection.url">jdbc:mysql://192.168.33.10:3306/lumify</property>
+        <property name="hibernate.connection.url">jdbc:mysql://lumify-dev:3306/lumify</property>
         <property name="hibernate.connection.username">lumify</property>
+        <property name="hibernate.connection.password">lumify</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
@@ -18,8 +18,11 @@
         <property name="hibernate.c3p0.idle_test_period">3000</property>
         <mapping class="io.lumify.sql.model.user.SqlUser"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspace"/>
-        <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUser"/>
+        <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
         <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceVertex"/>
+        <mapping class="io.lumify.sql.model.notification.SqlSystemNotification"/>
+        <mapping class="io.lumify.sql.model.notification.SqlUserNotification"/>
+        <mapping class="io.lumify.sql.model.longRunningProcess.SqlLongRunningProcess"/>
     </session-factory>
 </hibernate-configuration>

@@ -39,6 +39,11 @@ module.exports = function(grunt) {
             command: 'npm install -q && make',
             stdout: false,
             cwd: 'libs/PathFinding.js'
+        },
+        rewritePromiseSourceMapUrl: {
+            command: 'sed -i".bak" \'/# sourceMappingURL=/d\' promise-*.js',
+            stdout: false,
+            cwd: 'libs/promise-polyfill/polyfills/output'
         }
     },
 
@@ -104,10 +109,16 @@ module.exports = function(grunt) {
             jshintrc: true
         },
         development: {
-            src: ['js/**/*\.js']
+            src: [
+                'js/**/*\.js',
+                '!js/plugin-development/**/libs/**/*.js'
+            ]
         },
         ci: {
-            src: ['js/**/*\.js'],
+            src: [
+                'js/**/*\.js',
+                '!js/plugin-development/**/libs/**/*.js'
+            ],
             options: {
                 reporter: 'checkstyle',
                 reporterOutput: 'build/jshint-checkstyle.xml'
@@ -125,6 +136,7 @@ module.exports = function(grunt) {
                 'test/spec/**/*.js',
                 '!js/**/three-plugins/*.js',
                 '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
+                '!js/plugin-development/**/*.js',
                 '!js/require.config.js'
             ],
         },
@@ -134,6 +146,7 @@ module.exports = function(grunt) {
                 'test/spec/**/*.js',
                 '!js/**/three-plugins/*.js',
                 '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
+                '!js/plugin-development/**/*.js',
                 '!js/require.config.js'
             ],
             options: {
@@ -172,7 +185,14 @@ module.exports = function(grunt) {
             tasks: ['less:development', 'notify:css']
         },
         scripts: {
-            files: ['js/**/*.js', 'js/**/*.ejs', 'js/**/*.hbs'],
+            files: [
+                'js/**/*.js',
+                'js/**/*.less',
+                'js/**/*.ejs',
+                'js/**/*.hbs',
+                'js/**/*.vsh',
+                'js/**/*.fsh'
+            ],
             tasks: ['requirejs:development', 'notify:js'],
             options: {
                 livereload: {

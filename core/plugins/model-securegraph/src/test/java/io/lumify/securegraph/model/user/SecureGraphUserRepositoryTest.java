@@ -44,14 +44,14 @@ public class SecureGraphUserRepositoryTest {
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
         authorizationRepository = new InMemoryAuthorizationRepository();
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.SUPER_USER_VISIBILITY_STRING.toString());
-        when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString(), (java.io.File) anyObject())).thenReturn(userConcept);
-        when(userConcept.getTitle()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
+        when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.USER_CONCEPT_IRI), anyString(), (java.io.File) anyObject())).thenReturn(userConcept);
+        when(userConcept.getTitle()).thenReturn(UserRepository.USER_CONCEPT_IRI);
 
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(new HashMap()).createConfiguration();;
         secureGraphUserRepository = new SecureGraphUserRepository(
                 lumifyConfiguration,
                 authorizationRepository,
-                new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())),
+                InMemoryGraph.create(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())),
                 ontologyRepository,
                 userListenerUtil);
     }

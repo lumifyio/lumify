@@ -1,8 +1,7 @@
 
 define([
-    'flight/lib/component',
-    'util/formatters'
-], function(defineComponent, F) {
+    'flight/lib/component'
+], function(defineComponent) {
     'use strict';
 
     return defineComponent(Keyboard);
@@ -59,14 +58,16 @@ define([
                 } else scopes = [data.scope];
             }
 
-            scopes.forEach(function(scope) {
-                Object.keys(data.shortcuts).forEach(function(key) {
-                    var shortcut = $.extend({}, data.shortcuts[key], F.object.shortcut(key));
+            require(['util/formatters'], function(F) {
+                scopes.forEach(function(scope) {
+                    Object.keys(data.shortcuts).forEach(function(key) {
+                        var shortcut = $.extend({}, data.shortcuts[key], F.object.shortcut(key));
 
-                    if (!shortcutsByScope[scope]) shortcutsByScope[scope] = {};
-                    shortcuts[shortcut.forEventLookup] = shortcutsByScope[scope][shortcut.normalized] = shortcut;
+                        if (!shortcutsByScope[scope]) shortcutsByScope[scope] = {};
+                        shortcuts[shortcut.forEventLookup] = shortcutsByScope[scope][shortcut.normalized] = shortcut;
+                    });
                 });
-            });
+            })
         };
 
         this.onFocus = function(e) {
@@ -154,8 +155,8 @@ define([
         }
 
         this.onMouseMove = function(e) {
-            this.mousePageX = e.pageX;
-            this.mousePageY = e.pageY;
+            window.lastMousePositionX = this.mousePageX = e.pageX || 0;
+            window.lastMousePositionY = this.mousePageY = e.pageY || 0;
         }
 
         this.pushToStackIfNotLast = function(el) {
@@ -183,8 +184,8 @@ define([
 
         this.fireEvent = function(name, data) {
             var te = this.getTriggerElement();
-            data.pageX = this.mousePageX || 0;
-            data.pageY = this.mousePageY || 0;
+            data.pageX = this.mousePageX;
+            data.pageY = this.mousePageY;
             this.trigger(te, name, data);
         }
     }

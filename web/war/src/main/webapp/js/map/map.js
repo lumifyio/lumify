@@ -1,33 +1,27 @@
 
 define([
     'flight/lib/component',
-    'data',
     'tpl!./template',
     'tpl!./instructions/regionCenter',
     'tpl!./instructions/regionRadius',
     'tpl!./instructions/regionLoading',
-    'service/vertex',
-    'service/ontology',
-    'service/config',
     'util/retina',
     'util/controls',
     'util/vertex/formatters',
     'util/withAsyncQueue',
-    'util/withContextMenu'
+    'util/withContextMenu',
+    'util/withDataRequest'
 ], function(defineComponent,
-    appData,
     template,
     centerTemplate,
     radiusTemplate,
     loadingTemplate,
-    VertexService,
-    OntologyService,
-    ConfigService,
     retina,
     Controls,
     F,
     withAsyncQueue,
-    withContextMenu) {
+    withContextMenu,
+    withDataRequest) {
     'use strict';
 
     var MODE_NORMAL = 0,
@@ -35,15 +29,12 @@ define([
         MODE_REGION_SELECTION_MODE_RADIUS = 2,
         MODE_REGION_SELECTION_MODE_LOADING = 3;
 
-    return defineComponent(MapViewOpenLayers, withContextMenu, withAsyncQueue);
+    return defineComponent(MapViewOpenLayers, withContextMenu, withAsyncQueue, withDataRequest);
 
     function MapViewOpenLayers() {
 
         var ol, latlon, point;
 
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
-        this.configService = new ConfigService();
         this.mode = MODE_NORMAL;
 
         this.defaultAttrs({
@@ -66,6 +57,8 @@ define([
         })
 
         this.after('initialize', function() {
+            var self = this;
+
             this.initialized = false;
             this.setupAsyncQueue('map');
             this.$node.html(template({})).find('.shortcut').each(function() {
@@ -96,10 +89,15 @@ define([
 
             this.attachToZoomPanControls();
 
-            var verticesInWorkspace = appData.verticesInWorkspace();
-            if (verticesInWorkspace.length) {
-                this.updateOrAddVertices(verticesInWorkspace, { adding: true, preventShake: true });
-            }
+            this.dataRequest('workspace', 'store')
+                .then(function(workspaceVertices) {
+                    return self.dataRequest('vertex', 'store', { vertexIds: _.keys(workspaceVertices) });
+                })
+                .done(function(vertices) {
+                    if (vertices.length) {
+                        self.updateOrAddVertices(vertices, { adding: true, preventShake: true });
+                    }
+                });
         });
 
         this.attachToZoomPanControls = function() {
@@ -164,7 +162,7 @@ define([
 
         this.onWorkspaceLoaded = function(evt, workspaceData) {
             var self = this;
-            this.isWorkspaceEditable = workspaceData.isEditable;
+            this.isWorkspaceEditable = workspaceData.editable;
             this.mapReady(function(map) {
 
                 map.featuresLayer.removeAllFeatures();
@@ -236,7 +234,7 @@ define([
                         return;
                     }
 
-                    if (!~selectedIds.indexOf(feature.id)) {
+                    if (!~selectedIds.indexOf(feature.data.vertex.id)) {
                         if (feature.data.inWorkspace) {
                             feature.style.externalGraphic = feature.style.externalGraphic.replace(/&selected/, '');
                         } else {
@@ -251,7 +249,7 @@ define([
 
                 // Create new features for new selections
                 vertices.forEach(function(vertex) {
-                    self.findOrCreateMarker(map, vertex);
+                    self.findOrCreateMarkers(map, vertex);
                 });
 
                 var sf = this.clusterStrategy.selectedFeatures = {};
@@ -263,63 +261,69 @@ define([
             });
         };
 
-        this.findOrCreateMarker = function(map, vertex) {
+        this.findOrCreateMarkers = function(map, vertex) {
             var self = this,
-                feature = map.featuresLayer.getFeatureById(vertex.id),
-                geoLocations = this.ontologyProperties.byDataType.geoLocation,
-                geoLocation = geoLocations &&
-                    _.chain(geoLocations)
+                geoLocationProperties = this.ontologyProperties.byDataType.geoLocation,
+                geoLocations = geoLocationProperties &&
+                    _.chain(geoLocationProperties)
                         .map(function(geoLocationProperty) {
-                            return F.vertex.prop(vertex, geoLocationProperty.title);
+                            return F.vertex.props(vertex, geoLocationProperty.title);
                         })
                         .compact()
-                        .first()
+                        .flatten()
+                        .filter(function(g) {
+                            return g.value && g.value.latitude && g.value.longitude;
+                        })
                         .value(),
                 conceptType = F.vertex.prop(vertex, 'conceptType'),
-                selected = ~appData.selectedVertexIds.indexOf(vertex.id),
+                selected = vertex.id in lumifyData.selectedObjects.vertexIds,
                 iconUrl =  'map/marker/image?' + $.param({
                     type: conceptType,
                     scale: retina.devicePixelRatio > 1 ? '2' : '1'
                 }),
                 heading = F.vertex.heading(vertex);
 
-            if (!geoLocation || !geoLocation.latitude || !geoLocation.longitude) return;
-
+            if (!geoLocations || geoLocations.length === 0) return;
             if (selected) iconUrl += '&selected';
 
-            if (!feature) {
-                map.featuresLayer.features.forEach(function(f) {
-                    if (!feature && f.cluster) {
-                        feature = _.findWhere(f.cluster, { id: vertex.id });
-                    }
-                });
-            }
+            return geoLocations.map(function(geoLocation) {
+                var featureId = vertex.id + geoLocation.key,
+                    feature = map.featuresLayer.getFeatureById(featureId);
 
-            if (!feature) {
-                feature = new ol.Feature.Vector(
-                    point(geoLocation.latitude, geoLocation.longitude),
-                    { vertex: vertex },
-                    {
-                        graphic: true,
-                        externalGraphic: iconUrl,
-                        graphicWidth: 22,
-                        graphicHeight: 40,
-                        graphicXOffset: -11,
-                        graphicYOffset: -40,
-                        rotation: heading,
-                        cursor: 'pointer'
-                    }
-                );
-                feature.id = vertex.id;
-                map.featuresLayer.addFeatures(feature);
-            } else {
-                if (feature.style.externalGraphic !== iconUrl) {
-                    feature.style.externalGraphic = iconUrl;
+                if (!feature) {
+                    map.featuresLayer.features.forEach(function(f) {
+                        if (!feature && f.cluster) {
+                            feature = _.findWhere(f.cluster, { id: featureId });
+                        }
+                    });
                 }
-                feature.move(latLon(geoLocation.latitude, geoLocation.longitude));
-            }
 
-            return feature;
+                if (!feature) {
+                    feature = new ol.Feature.Vector(
+                        point(geoLocation.value.latitude, geoLocation.value.longitude),
+                        { vertex: vertex },
+                        {
+                            graphic: true,
+                            externalGraphic: iconUrl,
+                            graphicWidth: 22,
+                            graphicHeight: 40,
+                            graphicXOffset: -11,
+                            graphicYOffset: -40,
+                            rotation: heading,
+                            cursor: 'pointer'
+                        }
+                    );
+                    feature.id = featureId;
+                    map.featuresLayer.addFeatures(feature);
+                } else {
+                    if (feature.style.externalGraphic !== iconUrl) {
+                        feature.style.externalGraphic = iconUrl;
+                    }
+                    feature.move(latLon(geoLocation.value.latitude, geoLocation.value.longitude));
+                }
+
+                return feature;
+            })
         };
 
         this.updateOrAddVertices = function(vertices, options) {
@@ -329,36 +333,51 @@ define([
                 validAddition = false;
 
             this.mapReady(function(map) {
-                vertices.forEach(function(vertex) {
-                    var inWorkspace = appData.inWorkspace(vertex),
-                        marker;
+                self.dataRequest('workspace', 'store')
+                    .done(function(workspaceVertices) {
+                        vertices.forEach(function(vertex) {
+                            var inWorkspace = vertex.id in workspaceVertices,
+                                markers = [];
 
-                    if (!adding && !inWorkspace) {
-                        // Only update marker if it exists
-                        marker = map.featuresLayer.getFeatureById(vertex.id);
-                        if (marker) {
-                            marker = self.findOrCreateMarker(map, vertex);
+                            if (!adding && !inWorkspace) {
+
+                                // Only update marker if it exists
+                                map.featuresLayer.features.forEach(function(f) {
+                                    if (f.cluster) {
+                                        markers.push(_.find(f.cluster, function(f) {
+                                            return f.data.vertex.id === vertex.id;
+                                        }))
+                                    } else if (f.data.vertex.id === vertex.id) {
+                                        markers.push(f);
+                                    }
+                                });
+
+                                if (markers.length) {
+                                    markers = self.findOrCreateMarkers(map, vertex);
+                                }
+                            } else {
+                                markers = self.findOrCreateMarkers(map, vertex);
+                            }
+
+                            if (markers && markers.length) {
+                                markers.forEach(function(m) {
+                                    validAddition = true;
+                                    m.data.inWorkspace = inWorkspace;
+                                });
+                            }
+                        });
+
+                        self.clusterStrategy.cluster();
+                        map.featuresLayer.redraw();
+
+                        if (adding && vertices.length && validAddition) {
+                            self.fit(map);
                         }
-                    } else {
-                        marker = self.findOrCreateMarker(map, vertex);
-                    }
 
-                    if (marker) {
-                        validAddition = true;
-                        marker.data.inWorkspace = inWorkspace;
-                    }
-                });
-
-                this.clusterStrategy.cluster();
-                map.featuresLayer.redraw();
-
-                if (adding && vertices.length && validAddition) {
-                    this.fit(map);
-                }
-
-                if (adding && !validAddition && !preventShake) {
-                    this.invalidMap();
-                }
+                        if (adding && !validAddition && !preventShake) {
+                            self.invalidMap();
+                        }
+                    })
             });
 
         };
@@ -570,13 +589,27 @@ define([
                     self.$node.find('.instructions').remove();
                     self.$node.append(loadingTemplate({}));
 
-                    self.vertexService.locationSearch(
+                    self.dataRequest('vertex', 'geo-search',
                         lonlat.lat,
                         lonlat.lon,
-                        radius).done(
+                        radius
+                    ).done(
                         function(data) {
                             self.endRegionSelection();
-                            self.trigger(document, 'addVertices', data);
+                            self.trigger('updateWorkspace', {
+                                entityUpdates: data.vertices.map(function(vertex) {
+                                    return {
+                                        vertexId: vertex.id,
+                                        graphLayoutJson: {
+                                            fromMapRegion: {
+                                                lat: lonlat.lat,
+                                                lon: lonlat.lon,
+                                                radius: radius
+                                            }
+                                        }
+                                    };
+                                })
+                            });
                         }
                     );
 
@@ -594,7 +627,7 @@ define([
             require(['openlayers'], openlayersDeferred.resolve);
             require(['map/clusterStrategy'], clusterStrategyDeferred.resolve);
 
-            this.configService.getProperties().done(function(configProperties) {
+            this.dataRequest('config', 'properties').done(function(configProperties) {
               if (configProperties['map.provider'] == 'google') {
                 require(['goog!maps,3,other_params:sensor=false'], function() {
                   google.maps.visualRefresh = true;
@@ -741,7 +774,7 @@ define([
             // Prevent map shake on initialize while catching up with vertexAdd
             // events
 
-            this.ontologyService.properties()
+            this.dataRequest('ontology', 'properties')
                 .done(function(p) {
                     self.ontologyProperties = p;
                     self.preventShake = true;

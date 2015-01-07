@@ -1,6 +1,5 @@
 package io.lumify.web.routes.workspace;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
@@ -9,8 +8,9 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,10 +38,8 @@ public class WorkspaceById extends BaseRequestHandler {
             respondWithNotFound(response);
         } else {
             LOGGER.debug("Successfully found workspace");
-            final JSONObject resultJSON = getWorkspaceRepository().toJson(workspace, authUser, true);
-            respondWithJson(response, resultJSON);
+            ClientApiWorkspace result = getWorkspaceRepository().toClientApi(workspace, authUser, true);
+            respondWithClientApiObject(response, result);
         }
-
-        chain.next(request, response);
     }
 }

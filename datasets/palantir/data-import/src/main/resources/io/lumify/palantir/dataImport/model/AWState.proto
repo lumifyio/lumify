@@ -1,0 +1,27 @@
+package io.lumify.palantir.dataImport.model.protobuf;
+
+message Wrapper1 {
+    required Wrapper2 wrapper2 = 1;
+}
+
+message Wrapper2 {
+    required Wrapper3 wrapper3 = 1;
+}
+
+message Wrapper3 {
+    repeated Vertex vertex = 1;
+}
+
+message Vertex {
+    required VertexInner vertexInner = 1;
+    required int32 unknown1 = 2;
+}
+
+message VertexInner {
+    required int32 unknown1 = 1;
+    required sfixed64 object_id = 2;
+    required int32 x = 3;
+    required int32 y = 4;
+    optional sfixed64 unknown2 = 5;
+    repeated sfixed64 unknown3 = 6 [packed = true];
+}

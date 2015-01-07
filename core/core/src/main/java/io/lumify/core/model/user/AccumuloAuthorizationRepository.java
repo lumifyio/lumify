@@ -10,10 +10,7 @@ import org.securegraph.Graph;
 import org.securegraph.accumulo.AccumuloAuthorizations;
 import org.securegraph.accumulo.AccumuloGraph;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toArray;
 
@@ -65,7 +62,7 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
                         AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
                         String principal = accumuloGraph.getConnector().whoami();
                         Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
-                        if (!currentAuthorizations.contains(auth)) {
+                        if (!currentAuthorizations.toString().contains(auth)) {
                             return;
                         }
                         byte[] authBytes = auth.getBytes(Constants.UTF8);
@@ -109,7 +106,20 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public org.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet) {
-        return new AccumuloAuthorizations(toArray(authorizationsSet, String.class));
+        return createAuthorizations(toArray(authorizationsSet, String.class));
+    }
+
+    @Override
+    public org.securegraph.Authorizations createAuthorizations(String[] authorizations) {
+        return new AccumuloAuthorizations(authorizations);
+    }
+
+    @Override
+    public org.securegraph.Authorizations createAuthorizations(org.securegraph.Authorizations authorizations, String... additionalAuthorizations) {
+        Set<String> authList = new HashSet<String>();
+        Collections.addAll(authList, authorizations.getAuthorizations());
+        Collections.addAll(authList, additionalAuthorizations);
+        return createAuthorizations(authList);
     }
 
     @Inject

@@ -2,17 +2,19 @@ define([
     'require',
     'flight/lib/component',
     'hbs!./searchTpl',
-    'tpl!util/alert'
+    'tpl!util/alert',
+    'util/withDataRequest'
 ], function(
     require,
     defineComponent,
     template,
-    alertTemplate) {
+    alertTemplate,
+    withDataRequest) {
     'use strict';
 
     var SEARCH_TYPES = ['Lumify', 'Workspace'];
 
-    return defineComponent(Search);
+    return defineComponent(Search, withDataRequest);
 
     function Search() {
 
@@ -28,6 +30,7 @@ define([
             formSelector: '.navbar-search',
             querySelector: '.navbar-search .search-query',
             queryValidationSelector: '.search-query-validation',
+            hitsSelector: '.search-hits',
             queryContainerSelector: '.search-query-container',
             clearSearchSelector: '.search-query-container a',
             segmentedControlSelector: '.segmented-control',
@@ -60,19 +63,27 @@ define([
             var self = this,
                 d = $.Deferred();
 
-            if (this.$node.closest('.visible').length === 0) {
-                this.trigger(document, 'menubarToggleDisplay', { name: 'search' });
-            }
-
-            if (this.searchType === searchType) {
-                d.resolve();
-            } else {
-                this.on('searchtypeloaded', function loadedHandler() {
-                    self.off('searchtypeloaded', loadedHandler);
+            new Promise(function(fulfill, reject) {
+                if (self.$node.closest('.visible').length === 0) {
+                    self.searchType = null;
+                    self.on(document, 'searchPaneVisible', function handler(data) {
+                        self.off(document, 'searchPaneVisible', handler);
+                        fulfill();
+                    })
+                    self.trigger(document, 'menubarToggleDisplay', { name: 'search' });
+                } else fulfill();
+            }).done(function() {
+                if (self.searchType === searchType) {
                     d.resolve();
-                });
-            }
-            this.switchSearchType(searchType);
+                } else {
+                    self.on('searchtypeloaded', function loadedHandler() {
+                        self.off('searchtypeloaded', loadedHandler);
+                        d.resolve();
+                    });
+                }
+                self.switchSearchType(searchType);
+            });
+
             return d;
         };
 
@@ -101,7 +112,11 @@ define([
         };
 
         this.onSearchPaneVisible = function(event, data) {
-            this.select('querySelector').focus();
+            var self = this;
+
+            _.delay(function() {
+                self.select('querySelector').focus();
+            }, 250);
         };
 
         this.onSearchResultsBegan = function() {
@@ -114,13 +129,17 @@ define([
         };
 
         this.updateQueryError = function(data) {
-            var $error = this.select('queryValidationSelector')
+            var $error = this.select('queryValidationSelector'),
+                $hits = this.select('hitsSelector');
 
             this.$node.toggleClass('hasError', !!(data && !data.success));
 
             if (!data || data.success) {
                 $error.empty();
+
+                $hits.text(data && data.message || '');
             } else {
+                $hits.empty();
                 $error.html(
                     alertTemplate({ error: data.error || i18n('search.query.error') })
                 )
@@ -128,27 +147,36 @@ define([
         };
 
         this.onFiltersChange = function(event, data) {
-            var hadFilters = this.hasFilters();
+            var self = this,
+                hadFilters = this.hasFilters();
 
             this.filters = data;
 
             var query = this.getQueryVal(),
                 hasFilters = this.hasFilters();
 
-            if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
-                this.select('querySelector').val('*');
-            }
+            this.dataRequest('config', 'properties')
+                .done(function(properties) {
+                    if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
+                        if (properties['search.disableWildcardSearch'] === 'true') {
+                            self.updateClearSearch();
+                            return;
+                        } else {
+                            self.select('querySelector').val('*');
+                        }
+                    }
 
-            if (query || hasFilters || hadFilters) {
-                if (data.options && data.options.isScrubbing) {
-                    this.triggerQueryUpdatedThrottled();
-                } else {
-                    this.triggerQueryUpdated();
-                }
-                this.triggerQuerySubmit();
-            }
+                    if (query || hasFilters || hadFilters) {
+                        if (data.options && data.options.isScrubbing) {
+                            self.triggerQueryUpdatedThrottled();
+                        } else {
+                            self.triggerQueryUpdated();
+                        }
+                        self.triggerQuerySubmit();
+                    }
 
-            this.updateClearSearch();
+                    self.updateClearSearch();
+                });
         };
 
         this.onQueryChange = function(event) {
@@ -256,14 +284,18 @@ define([
         };
 
         this.updateQueryValue = function(newSearchType) {
-            var $query = this.select('querySelector');
+            var $query = this.select('querySelector'),
+                $hits = this.select('hitsSelector');
+
             if (this.searchType) {
                 this.savedQueries[this.searchType].query = $query.val();
+                this.savedQueries[this.searchType].hits = $hits.text();
             }
             this.searchType = newSearchType;
             this.otherSearchType = _.without(SEARCH_TYPES, this.searchType)[0];
 
             $query.val(this.savedQueries[newSearchType].query);
+            $hits.text(this.savedQueries[newSearchType].hits || '');
 
             this.updateClearSearch();
         };

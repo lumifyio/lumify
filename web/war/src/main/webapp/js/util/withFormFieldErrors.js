@@ -5,6 +5,10 @@ define(['tpl!./alert'], function(alertTemplate) {
 
     function withFormFieldErrors() {
 
+        this.clearFieldErrors = function(root) {
+            $(root || this.$node).find('.errors').empty();
+        };
+
         this.markFieldErrors = function(error, root) {
             var self = this,
                 rootEl = root || this.$node,
@@ -27,6 +31,8 @@ define(['tpl!./alert'], function(alertTemplate) {
             if (_.isObject(error)) {
                 _.keys(error).forEach(function(fieldName) {
                     switch (fieldName) {
+                        case 'invalidValues': break;
+
                         case 'visibilitySource':
                             rootEl.find('.visibility')
                                 .each(function() {
@@ -45,6 +51,10 @@ define(['tpl!./alert'], function(alertTemplate) {
                                 });
                             messages.push(error[fieldName]);
                         break;
+
+                        default:
+                            messages.push(error[fieldName]);
+                            break;
                     }
                 });
             } else {

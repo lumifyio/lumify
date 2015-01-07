@@ -19,16 +19,18 @@ public class InjectHelper {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(InjectHelper.class);
     private static Injector injector;
 
-    public static void inject(Object o, ModuleMaker moduleMaker) {
+    public static <T> T inject(T o, ModuleMaker moduleMaker) {
         ensureInjectorCreated(moduleMaker);
         inject(o);
+        return o;
     }
 
-    public static void inject(Object o) {
+    public static <T> T inject(T o) {
         if (injector == null) {
             throw new RuntimeException("Could not find injector");
         }
         injector.injectMembers(o);
+        return o;
     }
 
     public static Injector getInjector() {
@@ -53,6 +55,14 @@ public class InjectHelper {
             inject(worker);
         }
         return workers;
+    }
+
+    public static void shutdown() {
+        injector = null;
+    }
+
+    public static boolean hasInjector() {
+        return injector != null;
     }
 
     public static interface ModuleMaker {

@@ -12,6 +12,8 @@
 @import "util/popovers/popovers";
 @import "util/vertexList/list";
 @import "util/actionbar/actionbar";
+@import "util/users/userSelect";
+@import "util/ontology/ontology";
 @import "util/instructions";
 @import "util/jquery-ui-draggable-multiselect";
 @import "util/context-menu";
@@ -36,6 +38,8 @@
 @import "sync/sync";
 @import "fields/fields";
 @import "login/login";
+@import "notifications/notifications";
+@import "workspaces/userAccount";
 
 html.fullscreenApp {
   height: 100%;
@@ -69,7 +73,7 @@ html.fullscreenDetails {
 .left-pane(@left-padding: 0) {
   .transition-transform(ease-in-out, 0.2s);
 
-  .translate3d(@pane-animation-distance * -1, 0, 0);
+  .translate3d(-100%, 0, 0);
   &.visible {
     .translate3d(@menubar-width + @left-padding, 0, 0);
   }
@@ -84,14 +88,13 @@ html.fullscreenDetails {
   .transition-transform(ease-in-out, 0.2s);
 
   &.visible {
-    max-width: 500px;
     .translate3d(0, 0, 0);
     .transition-transform(ease-in-out, 0.2s);
   }
 }
 
 .fullscreenApp {
-  .chat-pane,
+  .activity-pane,
   .search-pane,
   .workspaces-pane,
   .admin-pane,
@@ -132,7 +135,7 @@ html.fullscreenDetails {
   }
 }
 
-.graph-pane, .map-pane, .dashboard-pane {
+.graph-pane, .map-pane, .dashboard-pane, .fullscreen-pane {
   display: none;
 
   &.visible {
@@ -170,19 +173,17 @@ html.fullscreenDetails {
 .admin-pane {
   .left-pane;
 
-  .translate3d(@pane-animation-distance * -1.5, 0, 0);
   @import "admin/admin";
 }
 
-.fullscreenApp .chat-pane {
+.fullscreenApp .activity-pane {
   @padding: 10px;
   .above-graph(2);
   .left-pane(@padding);
 
   bottom: @padding;
-  height: 200px;
 
-  @import "chat/chat";
+  @import "activity/activity";
 }
 
 .graph-pane {
@@ -190,6 +191,11 @@ html.fullscreenDetails {
   left: @menubar-width;
 
   @import "graph/graph";
+}
+
+.fullscreen-pane {
+  .fullscreen;
+  left: @menubar-width;
 }
 
 .map-pane {

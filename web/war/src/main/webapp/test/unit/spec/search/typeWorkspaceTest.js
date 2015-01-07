@@ -4,7 +4,7 @@ describeComponent('search/types/typeWorkspace', function(TypeWorkspace) {
     describe('SearchTypeWorkspace', function() {
 
         beforeEach(function() {
-            setupComponent()
+            setupComponent(this)
         })
 
         it('should trigger filter on query updated', function() {

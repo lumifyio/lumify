@@ -1,6 +1,5 @@
 package io.lumify.web.routes.workspace;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
@@ -8,11 +7,12 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceVertices;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -49,8 +49,9 @@ public class WorkspaceVertices extends BaseRequestHandler {
         final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
         Iterable<String> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
-        JSONArray results = JsonSerializer.toJson(graphVertices, workspaceId, authorizations);
-        respondWithJson(response, results);
+        ClientApiWorkspaceVertices results = new ClientApiWorkspaceVertices();
+        results.getVertices().addAll(ClientApiConverter.toClientApiVertices(graphVertices, workspaceId, authorizations));
+        respondWithClientApiObject(response, results);
     }
 
     private LookAheadIterable<WorkspaceEntity, String> getVisibleWorkspaceEntityIds(final List<WorkspaceEntity> workspaceEntities) {

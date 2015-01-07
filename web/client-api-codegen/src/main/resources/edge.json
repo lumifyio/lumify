@@ -1,0 +1,161 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/edge",
+    "apis": [
+        {
+            "path": "/edge/properties",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the edge properties",
+                    "type": "ClientApiEdgeWithVertexData",
+                    "nickname": "getByEdgeId",
+                    "parameters": [
+                        {
+                            "name": "graphEdgeId",
+                            "description": "ID of the edge",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Edge not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/edge/create",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates an edge",
+                    "type": "ClientApiEdgeWithVertexData",
+                    "nickname": "create",
+                    "parameters": [
+                        {
+                            "name": "sourceGraphVertexId",
+                            "description": "Source vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "destGraphVertexId",
+                            "description": "Destination vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "predicateLabel",
+                            "description": "Label to apply",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "visibility source of new edge",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "Justification for new edge",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "Source information",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/edge/property",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Sets an edge property",
+                    "type": "void",
+                    "nickname": "setProperty",
+                    "parameters": [
+                        {
+                            "name": "edgeId",
+                            "description": "edge id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "the property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "value",
+                            "description": "the property value",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "the visibility source of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationString",
+                            "description": "The justification text",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "source info",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "metadata",
+                            "description": "metadata",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+
+    }
+}

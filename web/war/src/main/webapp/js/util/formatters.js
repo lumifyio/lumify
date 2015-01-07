@@ -36,9 +36,9 @@ define([
             }
         };
 
-    timezoneJS.timezone.zoneFileBasePath = '/tz';
-    timezoneJS.timezone.defaultZoneFile = [];
-    timezoneJS.timezone.init();
+    timezoneJS.timezone.zoneFileBasePath = 'tz';
+    timezoneJS.timezone.defaultZoneFile = ['northamerica'];
+    timezoneJS.timezone.init({ async: false });
 
     function checkIfMac() {
         return ~navigator.userAgent.indexOf('Mac OS X');
@@ -151,7 +151,7 @@ define([
             }
         },
 
-        boolean: {
+        'boolean': {
             pretty: function(bool) {
                 return bool ? i18n('boolean.true') : i18n('boolean.false');
             }
@@ -264,6 +264,16 @@ define([
             }
         },
         string: {
+            normalizeAccents: function(str) {
+                return str
+                    .replace(/[áàãâä]/gi,'a')
+                    .replace(/[éè¨ê]/gi,'e')
+                    .replace(/[íìïî]/gi,'i')
+                    .replace(/[óòöôõ]/gi,'o')
+                    .replace(/[úùüû]/gi, 'u')
+                    .replace(/[ç]/gi, 'c')
+                    .replace(/[ñ]/gi, 'n');
+            },
             shortcut: function(character, metaKeys) {
                 if (!metaKeys) {
                     metaKeys = FORMATTERS.object.shortcut(character);
@@ -337,12 +347,18 @@ define([
                 if (_.isUndefined(millisStr)) return '';
                 return sf('{0:yyyy-MM-dd}', FORMATTERS.date.local(millisStr));
             },
-            dateTimeString: function(millisStr) {
+            dateTimeString: function(millisStr, overrideTzInfo) {
                 if (_.isUndefined(millisStr)) return '';
-                var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                var timezoneAbbreviation = overrideTzInfo;
+                if (!timezoneAbbreviation) {
+                    var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                    if (tzInfo) {
+                        timezoneAbbreviation = tzInfo.tzAbbr;
+                    }
+                }
                 return sf('{0:yyyy-MM-dd HH:mm}{1}',
                     FORMATTERS.date.local(millisStr),
-                    tzInfo ? (' ' + tzInfo.tzAbbr) : ''
+                    timezoneAbbreviation ? (' ' + timezoneAbbreviation) : ''
                 );
             },
             dateStringUtc: function(millisStr) {
@@ -351,7 +367,7 @@ define([
             },
             dateTimeStringUtc: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr));
+                return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr), 'UTC');
             },
             timeString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
@@ -487,7 +503,7 @@ define([
                 return $.extend({}, tz, tzInfo);
             },
 
-            currentTimezone: function(withOffsetForDate) {
+            currentTimezone: function() {
                 return FORMATTERS.timezone.lookupTimezone(jstz.determine().name());
             }
         }

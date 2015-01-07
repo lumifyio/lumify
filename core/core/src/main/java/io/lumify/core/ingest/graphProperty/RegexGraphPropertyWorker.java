@@ -2,15 +2,14 @@ package io.lumify.core.ingest.graphProperty;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import org.securegraph.Visibility;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -43,26 +42,28 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         final Matcher matcher = pattern.matcher(text);
 
-        List<TermMention> termMentions = new ArrayList<TermMention>();
+        Vertex sourceVertex = (Vertex) data.getElement();
+
+        List<Vertex> termMentions = new ArrayList<Vertex>();
         while (matcher.find()) {
-            TermMention termMention = createTerm(matcher, data.getProperty().getKey(), data.getVisibility());
+            final String patternGroup = matcher.group();
+            int start = matcher.start();
+            int end = matcher.end();
+
+            Vertex termMention = new TermMentionBuilder()
+                    .sourceVertex(sourceVertex)
+                    .propertyKey(data.getProperty().getKey())
+                    .start(start)
+                    .end(end)
+                    .title(patternGroup)
+                    .conceptIri(getOntologyClassUri())
+                    .visibilityJson(data.getVisibilityJson())
+                    .process(getClass().getName())
+                    .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
             termMentions.add(termMention);
         }
-        Vertex v = (Vertex)data.getElement();
-        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
-        saveTermMentions((Vertex) data.getElement(), termMentions, data.getWorkspaceId(), data.getVisibilitySource());
-    }
-
-    private TermMention createTerm(final Matcher matched, String propertyKey, Visibility visibility) {
-        final String patternGroup = matched.group();
-        int start = matched.start();
-        int end = matched.end();
-
-        return new TermMention.Builder(start, end, patternGroup, getOntologyClassUri(), propertyKey, visibility)
-                .resolved(false)
-                .useExisting(true)
-                .process(getClass().getName())
-                .build();
+        applyTermMentionFilters(sourceVertex, termMentions);
+        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, sourceVertex, getClass().getSimpleName(), getUser(), sourceVertex.getVisibility());
     }
 
     @Override
@@ -75,7 +76,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 }

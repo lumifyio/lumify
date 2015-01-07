@@ -1,15 +1,18 @@
 package io.lumify.core.model.ontology;
 
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.PropertyType;
+
+import java.util.Map;
 
 public class InMemoryOntologyProperty extends OntologyProperty {
     private String title;
     private boolean userVisible;
     private boolean searchable;
     private String displayName;
+    private String propertyGroup;
     private PropertyType dataType;
-    private JSONObject possibleValues;
-    private Boolean displayTime;
+    private Map<String, String> possibleValues;
+    private String displayType;
     private Double boost;
 
     @Override
@@ -38,8 +41,13 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     }
 
     @Override
-    public JSONObject getPossibleValues() {
+    public Map<String, String> getPossibleValues() {
         return possibleValues;
+    }
+
+    @Override
+    public String getPropertyGroup() {
+        return propertyGroup;
     }
 
     @Override
@@ -47,9 +55,8 @@ public class InMemoryOntologyProperty extends OntologyProperty {
         return searchable;
     }
 
-    @Override
-    public Boolean getDisplayTime() {
-        return displayTime;
+    public String getDisplayType() {
+        return displayType;
     }
 
     public void setSearchable(boolean searchable) {
@@ -58,10 +65,6 @@ public class InMemoryOntologyProperty extends OntologyProperty {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setDisplayTime(Boolean displayTime) {
-        this.displayTime = displayTime;
     }
 
     public void setUserVisible(boolean userVisible) {
@@ -76,11 +79,19 @@ public class InMemoryOntologyProperty extends OntologyProperty {
         this.dataType = dataType;
     }
 
-    public void setPossibleValues(JSONObject possibleValues) {
+    public void setPossibleValues(Map<String, String> possibleValues) {
         this.possibleValues = possibleValues;
     }
 
     public void setBoost(Double boost) {
         this.boost = boost;
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
+    }
+
+    public void setPropertyGroup(String propertyGroup) {
+        this.propertyGroup = propertyGroup;
     }
 }

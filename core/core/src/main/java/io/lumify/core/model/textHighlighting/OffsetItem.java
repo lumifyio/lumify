@@ -1,8 +1,6 @@
 package io.lumify.core.model.textHighlighting;
 
-import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
-import io.lumify.core.util.RowKeyHelper;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class OffsetItem implements Comparable {
-    public static final int VIDEO_TRANSCRIPT_INDEX_BITS = 12;
-    public static final int VIDEO_TRANSCRIPT_OFFSET_BITS = 20;
+    public static final int VIDEO_TRANSCRIPT_INDEX_BITS = 12; // duplicated in io.lumify.web.clientapi.codegen.EntityApiExt
+    public static final int VIDEO_TRANSCRIPT_OFFSET_BITS = 20; // duplicated in io.lumify.web.clientapi.codegen.EntityApiExt
 
     public abstract long getStart();
 
@@ -24,15 +22,19 @@ public abstract class OffsetItem implements Comparable {
 
     public abstract String getType();
 
-    public abstract String getRowKey();
+    public abstract String getId();
 
     public abstract String getProcess();
 
-    public String getGraphVertexId() {
+    public String getSourceVertexId() {
         return null;
     }
 
-    public String getEdgeId() {
+    public String getResolvedToVertexId() {
+        return null;
+    }
+
+    public String getResolvedToEdgeId() {
         return null;
     }
 
@@ -41,13 +43,16 @@ public abstract class OffsetItem implements Comparable {
     public JSONObject getInfoJson() {
         try {
             JSONObject infoJson = new JSONObject();
+            infoJson.put("id", getId());
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
+            infoJson.put("sourceVertexId", getSourceVertexId());
             infoJson.put("sandboxStatus", getSandboxStatus().toString());
-            infoJson.put(LumifyProperties.ROW_KEY.getPropertyName(), RowKeyHelper.jsonEncode(getRowKey()));
-            if (getGraphVertexId() != null && !getGraphVertexId().equals("") && getEdgeId() != null && !getEdgeId().equals("")) {
-                infoJson.put("graphVertexId", getGraphVertexId());
-                infoJson.put("edgeId", getEdgeId());
+            if (getResolvedToVertexId() != null) {
+                infoJson.put("resolvedToVertexId", getResolvedToVertexId());
+            }
+            if (getResolvedToEdgeId() != null) {
+                infoJson.put("resolvedToEdgeId", getResolvedToEdgeId());
             }
             infoJson.put("type", getType());
             infoJson.put("process", getProcess());
@@ -59,7 +64,7 @@ public abstract class OffsetItem implements Comparable {
 
     public List<String> getCssClasses() {
         ArrayList<String> classes = new ArrayList<String>();
-        if (getGraphVertexId() != null && !getGraphVertexId().equals("")) {
+        if (getResolvedToVertexId() != null) {
             classes.add("resolved");
         }
         return classes;
@@ -91,7 +96,7 @@ public abstract class OffsetItem implements Comparable {
 
     @Override
     public String toString() {
-        return "rowKey: " + getRowKey() + ", start: " + getStart() + ", end: " + getEnd() + ", title: " + getTitle();
+        return "id: " + getId() + ", start: " + getStart() + ", end: " + getEnd() + ", title: " + getTitle();
     }
 
     @Override
@@ -110,19 +115,19 @@ public abstract class OffsetItem implements Comparable {
             return getOffset(getEnd()) < getOffset(other.getEnd()) ? -1 : 1;
         }
 
-        if (getGraphVertexId() == null && other.getGraphVertexId() == null) {
+        if (getResolvedToVertexId() == null && other.getResolvedToVertexId() == null) {
             return 0;
         }
 
-        if (getGraphVertexId() == null) {
+        if (getResolvedToVertexId() == null) {
             return 1;
         }
 
-        if (other.getGraphVertexId() == null) {
+        if (other.getResolvedToVertexId() == null) {
             return -1;
         }
 
-        return getGraphVertexId().compareTo(other.getGraphVertexId());
+        return getResolvedToVertexId().compareTo(other.getResolvedToVertexId());
     }
 
     public static long getOffset(long offset) {

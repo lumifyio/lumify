@@ -1,5 +1,7 @@
 package io.lumify.core.model.user;
 
+import org.securegraph.Authorizations;
+
 import java.util.List;
 import java.util.Set;
 
@@ -11,5 +13,9 @@ public interface AuthorizationRepository {
 
     List<String> getGraphAuthorizations();
 
-    org.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet);
+    Authorizations createAuthorizations(Set<String> authorizationsSet);
+
+    Authorizations createAuthorizations(String[] authorizations);
+
+    Authorizations createAuthorizations(Authorizations authorizations, String... additionalAuthorizations);
 }

@@ -1,11 +1,12 @@
 package io.lumify.web.auth.oauth.routes;
 
-import io.lumify.miniweb.Handler;
-import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.CurrentUser;
 import io.lumify.web.auth.oauth.OAuthConfiguration;
 import org.json.JSONObject;
@@ -17,8 +18,6 @@ import org.scribe.oauth.OAuthService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -107,12 +106,12 @@ public class Twitter implements Handler {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             // For form based authentication, username and displayName will be the same
-            String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
+            String randomPassword = UserRepository.createRandomPassword();
             user = userRepository.addUser(username, displayName, null, randomPassword, new String[0]);
         }
-        userRepository.recordLogin(user, httpRequest.getRemoteAddr());
+        userRepository.recordLogin(user, AuthenticationHandler.getRemoteAddr(httpRequest));
 
-        CurrentUser.set(httpRequest, user.getUserId());
+        CurrentUser.set(httpRequest, user.getUserId(), user.getUsername());
 
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");
     }

@@ -1,22 +1,22 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
@@ -57,19 +57,24 @@ public class VertexSetVisibility extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
-        if (graphVertex == null) {
-            respondWithNotFound(response);
-            return;
-        }
-
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
             respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
             chain.next(request, response);
             return;
         }
-        LOGGER.info("changing vertex (%s) visibility source to %s", graphVertex.getId().toString(), visibilitySource);
+
+        ClientApiElement element = handle(graphVertexId, visibilitySource, workspaceId, user, authorizations);
+        respondWithClientApiObject(response, element);
+    }
+
+    private ClientApiElement handle(String graphVertexId, String visibilitySource, String workspaceId, User user, Authorizations authorizations) {
+        Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
+        if (graphVertex == null) {
+            return null;
+        }
+
+        LOGGER.info("changing vertex (%s) visibility source to %s", graphVertex.getId(), visibilitySource);
 
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphVertex, GraphUtil.getSandboxStatus(graphVertex, workspaceId), visibilitySource, workspaceId, authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
@@ -77,9 +82,8 @@ public class VertexSetVisibility extends BaseRequestHandler {
         this.graph.flush();
 
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null,
-                LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), workspaceId, visibilitySource);
+                LumifyProperties.VISIBILITY_JSON.getPropertyName(), workspaceId, visibilitySource);
 
-        JSONObject json = JsonSerializer.toJson(graphVertex, workspaceId, authorizations);
-        respondWithJson(response, json);
+        return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }
 }

@@ -2,14 +2,14 @@ define([
     'flight/lib/registry',
     '../filters/filters',
     'hbs!./templates/type',
-    'util/withServiceRequest',
+    'util/withDataRequest',
     'util/formatters',
     'util/vertex/list'
 ], function(
     registry,
     Filters,
     template,
-    withServiceRequest,
+    withDataRequest,
     F,
     VertexList
 ) {
@@ -19,7 +19,7 @@ define([
 
     function withSearch() {
 
-        withServiceRequest.call(this);
+        withDataRequest.call(this);
 
         this.defaultAttrs({
             resultsSelector: '.search-results',
@@ -29,6 +29,8 @@ define([
 
         this.after('initialize', function() {
             this.render();
+
+            this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
 
             this.on('searchRequestCompleted', function(event, data) {
                 if (data.success && data.result) {
@@ -47,15 +49,20 @@ define([
                                 result.totalHits === 0
                         );
 
-                    VertexList.attachTo($resultsContainer, {
-                        vertices: vertices,
-                        nextOffset: result.nextOffset,
-                        infiniteScrolling: this.attr.infiniteScrolling,
-                        total: result.totalHits
-                    });
-                    this.makeResizable($searchResults);
-                    $searchResults.show().find('.multi-select');
-                    this.trigger(document, 'paneResized');
+                    if (result.totalHits === 0) {
+                        $searchResults.hide();
+                    } else {
+                        $searchResults.show().children('.content').scrollTop(0);
+
+                        VertexList.attachTo($resultsContainer, {
+                            vertices: vertices,
+                            nextOffset: result.nextOffset,
+                            infiniteScrolling: this.attr.infiniteScrolling,
+                            total: result.totalHits
+                        });
+                        this.makeResizable($searchResults);
+                    }
+                    this.trigger($searchResults, 'paneResized');
                 }
             });
             this.on('clearSearch', function() {
@@ -65,6 +72,12 @@ define([
                 this.trigger(filters, 'clearfilters');
             });
         });
+
+        this.onToggleDisplay = function(event, data) {
+            if (data.name === 'search' && this.$node.closest('.visible').length === 0) {
+                this.hideSearchResults();
+            }
+        };
 
         this.render = function() {
             this.$node.html(template({}));

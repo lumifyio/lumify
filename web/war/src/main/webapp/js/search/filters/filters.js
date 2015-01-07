@@ -5,40 +5,36 @@ define([
     'hbs!./filtersTpl',
     'tpl!./item',
     'tpl!./entityItem',
-    'data',
     'util/vertex/formatters',
-    'hbs!util/ontology/concept-options',
-    'fields/selection/selection',
-    'service/ontology'
+    'util/ontology/conceptSelect',
+    'util/withDataRequest',
+    'fields/selection/selection'
 ], function(
     defineComponent,
     registry,
     template,
     itemTemplate,
     entityItemTemplate,
-    appData,
     F,
-    conceptsTemplate,
-    FieldSelection,
-    OntologyService) {
+    ConceptSelector,
+    withDataRequest,
+    FieldSelection) {
     'use strict';
 
     var FILTER_SEARCH_DELAY_SECONDS = 0.5;
 
-    return defineComponent(Filters);
+    return defineComponent(Filters, withDataRequest);
 
     function Filters() {
         this.propertyFilters = {};
         this.entityFilters = {};
         this.filterId = 0;
 
-        this.ontologyService = new OntologyService();
-
         this.defaultAttrs({
             fieldSelectionSelector: '.newrow .add-property',
             removeEntityRowSelector: '.entity-filters button.remove',
             removeRowSelector: '.prop-filters button.remove',
-            conceptsSelector: '.concepts-dropdown select'
+            conceptDropdownSelector: '.concepts-dropdown'
         });
 
         this.after('initialize', function() {
@@ -55,9 +51,7 @@ define([
                 removeEntityRowSelector: this.onRemoveEntityRow,
                 removeRowSelector: this.onRemoveRow
             });
-            this.on('change', {
-                conceptsSelector: this.onConceptChange
-            });
+            this.on('conceptSelected', this.onConceptChange);
             this.on('searchByRelatedEntity', this.onSearchByRelatedEntity);
 
             this.loadPropertyFilters();
@@ -66,20 +60,25 @@ define([
 
         this.onSearchByRelatedEntity = function(event, data) {
             event.stopPropagation();
+            var self = this;
+            this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
+                .done(function(vertex) {
+                    var title = vertex && F.vertex.title(vertex) || vertex.id;
 
-            this.onClearFilters();
+                    self.onClearFilters();
 
-            this.entityFilters.relatedToVertexId = data.vertexId;
-            var vertex = appData.vertex(data.vertexId),
-                title = vertex && F.vertex.title(vertex) || data.vertexId;
-
-            this.$node.find('.entity-filter-header')
-                .after(entityItemTemplate({title: title}))
-                .closest('.entity-filters').show();
-            this.notifyOfFilters();
+                    self.entityFilters.relatedToVertexId = vertex.id;
+                    self.conceptFilter = data.conceptId || '';
+                    self.trigger(self.select('conceptDropdownSelector'), 'selectConceptId', {
+                        conceptId: data.conceptId || ''
+                    });
+                    self.$node.find('.entity-filters')
+                        .append(entityItemTemplate({title: title})).show();
+                    self.notifyOfFilters();
+                });
         };
 
-        this.onConceptChange = function(event) {
+        this.onConceptChange = function(event, data) {
             var self = this,
                 deferred = $.Deferred().done(function(properties) {
                     self.select('fieldSelectionSelector').each(function() {
@@ -89,11 +88,11 @@ define([
                     });
                 });
 
-            this.conceptFilter = $(event.target).val();
+            this.conceptFilter = data.concept && data.concept.id || '';
 
             // Publish change to filter properties typeaheads
             if (this.conceptFilter) {
-                this.ontologyService.propertiesByConceptId(this.conceptFilter)
+                this.dataRequest('ontology', 'propertiesByConceptId', this.conceptFilter)
                     .done(deferred.resolve);
             } else {
                 deferred.resolve();
@@ -110,14 +109,13 @@ define([
                 self.teardownField($(this));
             }).closest('li:not(.newrow)').remove();
 
-            this.select('conceptsSelector').val('');
+            this.trigger(this.select('conceptDropdownSelector'), 'clearSelectedConcept');
             this.conceptFilter = '';
 
             this.createNewRowIfNeeded();
 
             this.entityFilters = {};
-            this.$node.find('.entity-filter-header').nextAll().remove();
-            this.$node.find('.entity-filter-header').closest('.entity-filters').hide();
+            this.$node.find('.entity-filters').hide().empty();
             if (!data || data.triggerUpdates !== false) {
                 this.notifyOfFilters();
             }
@@ -192,14 +190,21 @@ define([
             this.notifyOfFilters();
         };
 
+        this.createFieldSelection = function() {
+            FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
+                properties: this.properties,
+                onlySearchable: true,
+                placeholder: i18n('search.filters.add_filter.placeholder')
+            });
+        }
+
         this.createNewRowIfNeeded = function() {
+            if (!this.properties) {
+                return;
+            }
             if (this.$node.find('.newrow').length === 0) {
                 this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
-                FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
-                    properties: this.properties,
-                    onlySearchable: true,
-                    placeholder: 'Add Filter'
-                });
+                this.createFieldSelection();
             }
         };
 
@@ -229,35 +234,21 @@ define([
         };
 
         this.loadConcepts = function() {
-            var self = this;
-
-            this.ontologyService.concepts().done(function(concepts) {
-                self.select('conceptsSelector').html(
-                    conceptsTemplate({
-                        defaultText: i18n('search.filters.all_concepts'),
-                        concepts: _.filter(concepts.byTitle, function(c) {
-                            return c.userVisible !== false;
-                        })
-                    })
-                );
-            });
+            ConceptSelector.attachTo(this.select('conceptDropdownSelector'), {
+                onlySearchable: true,
+                defaultText: i18n('search.filters.all_concepts')
+            })
         };
 
         this.loadPropertyFilters = function() {
             var self = this;
 
-            this.ontologyService.properties().done(function(properties) {
-                self.properties = _.filter(properties.list, function(p) {
-                    if (p.title === 'boundingBox') return false;
-                    if (/^_/.test(p.title)) return false;
-                    return true;
-                });
-                self.$node.find('.prop-filter-header').after(itemTemplate({}));
-                FieldSelection.attachTo(self.select('fieldSelectionSelector'), {
-                    properties: self.properties,
-                    placeholder: i18n('search.filters.add_filter.placeholder')
-                });
-            });
+            this.dataRequest('ontology', 'properties')
+                .done(function(properties) {
+                    self.properties = properties.list;
+                    self.$node.find('.prop-filter-header').after(itemTemplate({}));
+                    self.createFieldSelection();
+                })
         };
     }
 });

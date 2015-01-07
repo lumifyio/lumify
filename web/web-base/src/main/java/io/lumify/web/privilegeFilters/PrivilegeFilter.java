@@ -4,7 +4,7 @@ import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
 

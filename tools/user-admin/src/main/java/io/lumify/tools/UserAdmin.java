@@ -1,8 +1,9 @@
 package io.lumify.tools;
 
 import io.lumify.core.cmdline.CommandLineBase;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.User;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
@@ -19,16 +20,21 @@ import static org.securegraph.util.IterableUtils.toList;
 public class UserAdmin extends CommandLineBase {
     private static final String CMD_ACTION_CREATE = "create";
     private static final String CMD_ACTION_LIST = "list";
+    private static final String CMD_ACTION_ACTIVE = "active";
     private static final String CMD_ACTION_UPDATE_PASSWORD = "update-password";
     private static final String CMD_ACTION_DELETE = "delete";
     private static final String CMD_ACTION_SET_PRIVILEGES = "set-privileges";
     private static final String CMD_ACTION_SET_AUTHORIZATIONS = "set-authorizations";
+    private static final String CMD_ACTION_SET_DISPLAYNAME_EMAIL = "set-displayname-and-or-email";
 
     private static final String CMD_OPT_USERID = "userid";
     private static final String CMD_OPT_USERNAME = "username";
     private static final String CMD_OPT_PASSWORD = "password";
     private static final String CMD_OPT_PRIVILEGES = "privileges";
     private static final String CMD_OPT_AUTHORIZATIONS = "authorizations";
+    private static final String CMD_OPT_DISPLAYNAME = "displayname";
+    private static final String CMD_OPT_EMAIL = "email";
+    private static final String CMD_OPT_IDLE = "idle";
 
     private static final String CMD_OPT_AS_TABLE = "as-table";
 
@@ -85,9 +91,32 @@ public class UserAdmin extends CommandLineBase {
 
         opts.addOption(
                 OptionBuilder
+                        .withLongOpt(CMD_OPT_DISPLAYNAME)
+                        .withDescription("Display name to set")
+                        .hasOptionalArg()
+                        .create("d")
+        );
+
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_EMAIL)
+                        .withDescription("E-mail address to set")
+                        .hasOptionalArg()
+                        .create("e")
+        );
+
+        opts.addOption(
+                OptionBuilder
                         .withLongOpt(CMD_OPT_AS_TABLE)
                         .withDescription("List users in a table")
                         .create("t")
+        );
+
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_IDLE)
+                        .withDescription("Include idle users")
+                        .create()
         );
 
         return opts;
@@ -103,6 +132,9 @@ public class UserAdmin extends CommandLineBase {
         if (args.contains(CMD_ACTION_LIST)) {
             return list(cmd);
         }
+        if (args.contains(CMD_ACTION_ACTIVE)) {
+            return active(cmd);
+        }
         if (args.contains(CMD_ACTION_UPDATE_PASSWORD)) {
             return updatePassword(cmd);
         }
@@ -114,6 +146,9 @@ public class UserAdmin extends CommandLineBase {
         }
         if (args.contains(CMD_ACTION_SET_AUTHORIZATIONS)) {
             return setAuthorizations(cmd);
+        }
+        if (args.contains(CMD_ACTION_SET_DISPLAYNAME_EMAIL)) {
+            return setDisplayNameAndOrEmail(cmd);
         }
 
         String actions = StringUtils.join(getActions(), " | ");
@@ -175,6 +210,40 @@ public class UserAdmin extends CommandLineBase {
                 printUser(user);
             }
         }
+        return 0;
+    }
+
+    private int active(CommandLine cmd) {
+        int skip = 0;
+        int limit = 100;
+        List<User> activeUsers = new ArrayList<User>();
+        while (true) {
+            List<User> users = toList(getUserRepository().findByStatus(skip, limit, UserStatus.ACTIVE));
+            if (users.size() == 0) {
+                break;
+            }
+            activeUsers.addAll(users);
+            skip += limit;
+        }
+        System.out.println(activeUsers.size() + " " + UserStatus.ACTIVE + " user" + (activeUsers.size() == 1 ? "" : "s"));
+        printUsers(activeUsers);
+
+        if (cmd.hasOption(CMD_OPT_IDLE)) {
+            skip = 0;
+            limit = 100;
+            List<User> idleUsers = new ArrayList<User>();
+            while (true) {
+                List<User> users = toList(getUserRepository().findByStatus(skip, limit, UserStatus.IDLE));
+                if (users.size() == 0) {
+                    break;
+                }
+                idleUsers.addAll(users);
+                skip += limit;
+            }
+            System.out.println(idleUsers.size() + " " + UserStatus.IDLE + " user" + (idleUsers.size() == 1 ? "" : "s"));
+            printUsers(idleUsers);
+        }
+
         return 0;
     }
 
@@ -255,6 +324,33 @@ public class UserAdmin extends CommandLineBase {
         }
         System.out.println("");
 
+        printUser(user);
+        return 0;
+    }
+
+    private int setDisplayNameAndOrEmail(CommandLine cmd) {
+        String displayName = cmd.getOptionValue(CMD_OPT_DISPLAYNAME);
+        String emailAddress = cmd.getOptionValue(CMD_OPT_EMAIL);
+
+        if (displayName == null && emailAddress == null) {
+            System.out.println("no display name or e-mail address provided");
+            return -2;
+        }
+
+        User user = findUser(cmd);
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        if (displayName != null) {
+            getUserRepository().setDisplayName(user, displayName);
+        }
+        if (emailAddress != null) {
+            getUserRepository().setEmailAddress(user, emailAddress);
+        }
+
+        user = findUser(cmd); // reload the user so we have our new value(s)
         printUser(user);
         return 0;
     }

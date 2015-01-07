@@ -66,12 +66,12 @@ public class FlightAware extends CommandLineBase {
             }
         }
         String query = cmd.getOptionValue(CMD_OPT_QUERY);
-        String apiKey = getConfiguration().get(CONFIG_API_KEY);
+        String apiKey = getConfiguration().get(CONFIG_API_KEY, null);
         if (apiKey == null) {
             System.err.println("Could not find configuration " + CONFIG_API_KEY);
             return 1;
         }
-        String userName = getConfiguration().get(CONFIG_USERNAME);
+        String userName = getConfiguration().get(CONFIG_USERNAME, null);
         if (userName == null) {
             System.err.println("Could not find configuration " + CONFIG_USERNAME);
             return 1;

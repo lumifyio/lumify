@@ -1,7 +1,7 @@
 <li class="<%= selected === workspace.workspaceId ? 'active' : '' %>"
     data-users="<%= JSON.stringify(workspace.users || []) %>"
     data-created-by="<%= workspace.createdBy || '' %>"
-    data-is-editable="<%= workspace.isEditable || false %>"
+    data-editable="<%= workspace.editable || false %>"
     data-title="<%= workspace.title %>"
     data-workspace-id="<%= workspace.workspaceId %>"
     ><a>

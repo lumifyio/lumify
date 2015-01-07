@@ -7,12 +7,13 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserListenerUtil;
 import io.lumify.core.model.workspace.Workspace;
-import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceUser;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
+import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.junit.After;
@@ -49,7 +50,7 @@ public class SqlWorkspaceRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
@@ -207,16 +208,16 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
         String vertexId = "1234";
 
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, 0, 0, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, new GraphPosition(0, 0), testUser);
         List<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
-        ;
+
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertTrue(sqlWorkspaceVertex.isVisible());
 
         sqlWorkspaceRepository.softDeleteEntityFromWorkspace(sqlWorkspace, "1234", testUser);
         sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
-        ;
+
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertFalse(sqlWorkspaceVertex.isVisible());
@@ -227,7 +228,7 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
         String vertexId = "1234";
 
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, 0, 0, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, new GraphPosition(0, 0), testUser);
 
         List<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
@@ -237,7 +238,7 @@ public class SqlWorkspaceRepositoryTest {
         assertEquals(0, sqlWorkspaceVertex.getGraphPositionY().intValue());
         assertTrue(sqlWorkspaceVertex.isVisible());
 
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, false, 1, 10, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, false, new GraphPosition(1, 10), testUser);
 
         sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
@@ -251,10 +252,10 @@ public class SqlWorkspaceRepositoryTest {
     @Test
     public void testFindEntities() throws Exception {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, 0, 0, testUser);
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "345", true, 1, 0, testUser);
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "678", true, 2, 0, testUser);
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "910", true, 3, 0, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, new GraphPosition(0, 0), testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "345", true, new GraphPosition(1, 0), testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "678", true, new GraphPosition(2, 0), testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "910", true, new GraphPosition(3, 0), testUser);
 
         List<WorkspaceEntity> workspaceEntities = sqlWorkspaceRepository.findEntities(sqlWorkspace, testUser);
         assertTrue(workspaceEntities.size() == 4);
@@ -265,7 +266,7 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
         assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAll(testUser)) == 1);
 
-        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, 0, 0, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, new GraphPosition(0, 0), testUser);
         sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(sqlWorkspace.getWorkspaceId(), testUser);
 
         SqlWorkspace copySqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.copy(sqlWorkspace, testUser);

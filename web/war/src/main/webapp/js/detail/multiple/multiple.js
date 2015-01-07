@@ -1,34 +1,30 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'data',
     '../withTypeContent',
-    'service/vertex',
-    'service/ontology',
-    'sf',
+    '../toolbar/toolbar',
     'tpl!./multiple',
     'tpl!./histogram',
     'util/vertex/list',
-    'util/vertex/formatters'
+    'util/vertex/formatters',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     registry,
-    appData,
     withTypeContent,
-    VertexService,
-    OntologyService,
-    sf,
+    Toolbar,
     template,
     histogramTemplate,
     VertexList,
-    F) {
+    F,
+    withDataRequest) {
     'use strict';
 
     var HISTOGRAM_STYLE = 'max', // max or sum
         BAR_HEIGHT = 25,
         PADDING = 5,
         ANIMATION_DURATION = 400,
-        BINABLE_TYPES = 'double date currency'.split(' '), // TODO: heading
+        BINABLE_TYPES = 'double date currency integer number'.split(' '), // TODO: heading
         SCALE_COLOR_BASED_ON_WIDTH = false,
         SCALE_COLOR_BASED_ON_WIDTH_RANGE = ['#00A1F8', '#0088cc'],
         SCALE_OPACITY_BASED_ON_WIDTH = true,
@@ -36,9 +32,10 @@ define([
         NO_HISTOGRAM_DATATYPES = [
             'geoLocation'
         ],
-        HIDE_IF_ALL_UNIQUE_AND_BINS = 5;
+        MAX_BINS_FOR_NON_HISTOGRAM_TYPES = 5,
+        OTHER_PLACEHOLDER = '${OTHER-CATEGORY}';
 
-    return defineComponent(Multiple, withTypeContent);
+    return defineComponent(Multiple, withTypeContent, withDataRequest);
 
     function propertyDisplayName(properties, pair) {
         var o = properties.byTitle[pair[0]];
@@ -51,8 +48,10 @@ define([
             propertyName = bin.name,
             display = propertyValue;
 
-        if (propertyName == 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
+        if (propertyName === 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
             display = concepts.byId[propertyValue].displayName;
+        } else if (display === OTHER_PLACEHOLDER) {
+            display = i18n('detail.multiple.histogram.other');
         } else if (properties.byTitle[propertyName]) {
             if ('dx' in bin) {
                 display =
@@ -90,16 +89,27 @@ define([
     }
 
     function positionTextNumber() {
-        var t = this.previousSibling,
+        var self = this,
+            t = this.previousSibling,
             tX = t.x.baseVal[0].value,
-            w = t.offsetWidth,
+            getWidthOfNodeByClass = function(cls) {
+                var node = self.parentNode;
+                while ((node = node.nextSibling)) {
+                    if (node.classList.contains(cls)) {
+                        return node.getBBox().width;
+                    }
+                }
+                return 0;
+            },
+            textWidth = getWidthOfNodeByClass('on-bar-text'),
+            textNumberWidth = getWidthOfNodeByClass('on-number-bar-text'),
             barRect = this.parentNode.nextSibling,
             barWidthVal = barRect.width.baseVal,
             barWidth = barWidthVal.value,
-            remainingBarWidth = barWidth - w - tX - PADDING;
+            remainingBarWidth = barWidth - textWidth - tX - PADDING;
 
-        if (remainingBarWidth <= this.offsetWidth) {
-            this.setAttribute('x', Math.max(barWidth, tX + w) + PADDING);
+        if (remainingBarWidth <= textNumberWidth) {
+            this.setAttribute('x', Math.max(barWidth, tX + textWidth) + PADDING);
             this.setAttribute('text-anchor', 'start');
             this.setAttribute('dx', 0);
         } else {
@@ -111,14 +121,13 @@ define([
 
     function Multiple() {
         var d3;
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             histogramSelector: '.multiple .histogram',
             histogramListSelector: '.multiple .histograms',
             vertexListSelector: '.multiple .vertices-list',
-            histogramBarSelector: 'g.histogram-bar'
+            histogramBarSelector: 'g.histogram-bar',
+            toolbarSelector: '.comp-toolbar'
         });
 
         this.before('teardown', function() {
@@ -134,8 +143,7 @@ define([
 
             this.$node.html(template({
                 getClasses: this.classesForVertex,
-                vertices: vertices,
-                fullscreenButton: self.fullscreenButton(ids)
+                vertices: vertices
             }));
 
             this.on('click', {
@@ -148,18 +156,32 @@ define([
             this.onGraphPaddingUpdated = _.debounce(this.onGraphPaddingUpdated.bind(this), 100);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
-            var d3Deferred = $.Deferred();
-            require(['d3'], d3Deferred.resolve);
-            $.when(
-                this.handleCancelling(appData.refresh(ids)),
-                this.handleCancelling(this.ontologyService.concepts()),
-                this.handleCancelling(this.ontologyService.properties()),
-                d3Deferred
-            ).done(function(vertices, concepts, properties, _d3) {
+            Promise.all([
+                Promise.require('d3'),
+                this.dataRequest('vertex', 'store', { vertexIds: ids }),
+                this.dataRequest('ontology', 'concepts'),
+                this.dataRequest('ontology', 'properties')
+            ]).done(function(results) {
+                var _d3 = results.shift(),
+                    vertices = results.shift(),
+                    concepts = results.shift(),
+                    properties = results.shift();
+
                 d3 = _d3;
 
                 VertexList.attachTo(self.select('vertexListSelector'), {
                     vertices: vertices
+                });
+
+                Toolbar.attachTo(self.select('toolbarSelector'), {
+                    toolbar: [
+                        {
+                            title: i18n('detail.toolbar.open'),
+                            submenu: [
+                                Toolbar.ITEMS.FULLSCREEN
+                            ]
+                        }
+                    ]
                 });
 
                 self.drawHistograms = _.partial(self.renderHistograms, _, concepts, properties);
@@ -170,11 +192,14 @@ define([
         });
 
         this.onVerticesUpdated = function(event, data) {
+            var self = this;
             if (data && data.vertices) {
                 var intersection = _.intersection(this.displayingVertexIds, _.pluck(data.vertices, 'id'));
                 if (intersection.length) {
-                    appData.refresh(this.displayingVertexIds)
-                        .done(this.drawHistograms.bind(this));
+                    this.dataRequest('vertex', 'store', { vertexIds: this.displayingVertexIds })
+                        .done(function(vertices) {
+                            self.drawHistograms(vertices);
+                        });
                 }
             }
         };
@@ -194,7 +219,8 @@ define([
             this.$node.find('.vertices-list').hide();
             this.$node.find('.multiple').addClass('viewing-vertex');
 
-            var detailsContainer = this.$node.find('.details-container'),
+            var self = this,
+                detailsContainer = this.$node.find('.details-container'),
                 detailsContent = detailsContainer.find('.content'),
                 instanceInfos = registry.findInstanceInfoByNode(detailsContent[0]);
             if (instanceInfos.length) {
@@ -203,39 +229,47 @@ define([
                 });
             }
 
-            var vertices = data.vertices,
-                first = vertices[0];
-
-            if (vertices.length === 0) {
-                return;
-            }
-            if (this._selectedGraphId === first.id) {
-                this.$node.find('.multiple').removeClass('viewing-vertex');
-                this.$node.find('.vertices-list').show().find('.active').removeClass('active');
-                this._selectedGraphId = null;
-                return;
-            }
-
-            var self = this,
-                type = first.concept.displayType;
-
-            if (type === 'relationship') {
-                moduleName = type;
+            if (data && data.vertexIds) {
+                if (!_.isArray(data.vertexIds)) {
+                    data.vertexIds = [data.vertexIds];
+                }
+                promise = this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds });
             } else {
-                moduleName = (((type != 'document' &&
-                                type != 'image' &&
-                                type != 'video') ? 'entity' : 'artifact'
-                ) || 'entity').toLowerCase();
+                promise = Promise.resolve(data && data.vertices || []);
             }
+            promise.done(function(vertices) {
+                if (vertices.length === 0) {
+                    return;
+                }
 
-            this._selectedGraphId = first.id;
-            require([
-                'detail/' + moduleName + '/' + moduleName,
-            ], function(Module) {
-                Module.attachTo(detailsContent, {
-                    data: first
+                var first = vertices[0];
+                if (this._selectedGraphId === first.id) {
+                    this.$node.find('.multiple').removeClass('viewing-vertex');
+                    this.$node.find('.vertices-list').show().find('.active').removeClass('active');
+                    this._selectedGraphId = null;
+                    return;
+                }
+
+                var type = F.vertex.concept(first).displayType;
+
+                if (type === 'relationship') {
+                    moduleName = type;
+                } else {
+                    moduleName = (((type != 'document' &&
+                                    type != 'image' &&
+                                    type != 'video') ? 'entity' : 'artifact'
+                    ) || 'entity').toLowerCase();
+                }
+
+                this._selectedGraphId = first.id;
+                require([
+                    'detail/' + moduleName + '/' + moduleName,
+                ], function(Module) {
+                    Module.attachTo(detailsContent, {
+                        data: first
+                    });
+                    self.$node.find('.vertices-list').show();
                 });
-                self.$node.find('.vertices-list').show();
             });
         };
 
@@ -268,15 +302,61 @@ define([
                             return true;
                         }
 
-                        var values = _.chain(pair[1])
-                            .countBy('value')
-                            .values()
-                            .value();
+                        var valueCounts = _.groupBy(pair[1], 'value'),
+                            values = _.map(valueCounts, function(value, key) {
+                                return value.length;
+                            }),
+                            len = values.length;
 
-                        return values.length < HIDE_IF_ALL_UNIQUE_AND_BINS ||
-                             !_.every(values, function(v) {
-                                 return v === 1;
-                             });
+                        if (len <= MAX_BINS_FOR_NON_HISTOGRAM_TYPES) {
+                            return true;
+                        }
+
+                        var orderedCounts = _.unique(values)
+                                .sort(function(a, b) {
+                                    return a - b;
+                                }),
+                            collapseSmallest = function(orderedCounts, valueCounts, len) {
+                                if (orderedCounts.length === 0 || len <= MAX_BINS_FOR_NON_HISTOGRAM_TYPES) {
+                                    return;
+                                }
+
+                                var moveToOtherWithCount = orderedCounts.shift(),
+                                    toMove = _.chain(valueCounts)
+                                        .pairs()
+                                        .filter(function(p) {
+                                            return p[1].length === moveToOtherWithCount;
+                                        })
+                                        .value(),
+                                    toMoveNames = _.map(toMove, function(p) {
+                                            return p[0];
+                                        });
+
+                                pair[1] = _.reject(pair[1], function(p) {
+                                    return ~toMoveNames.indexOf(p.value);
+                                });
+
+                                for (var i = 0; i < toMove.length; i++) {
+                                    for (var j = 0; j < toMove[i][1].length; j++) {
+                                        pair[1].push({
+                                            value: OTHER_PLACEHOLDER,
+                                            vertexId: toMove[i][1][j].vertexId
+                                        });
+                                    }
+                                }
+
+                                valueCounts = _.groupBy(pair[1], 'value');
+                                values = _.map(valueCounts, function(value, key) {
+                                    return value.length;
+                                });
+                                len = values.length;
+
+                                collapseSmallest(orderedCounts, valueCounts, len);
+                            };
+
+                        collapseSmallest(orderedCounts, valueCounts, len);
+
+                        return true;
                     })
                     .sortBy(function(pair) {
                         var ontologyProperty = properties.byTitle[pair[0]],
@@ -386,6 +466,10 @@ define([
                                                 _.chain(values)
                                                 .unique()
                                                 .sortBy(function(f) {
+                                                    if (f === OTHER_PLACEHOLDER) {
+                                                        return 999;
+                                                    }
+
                                                     var bin = [f];
                                                     bin.name = d[0];
                                                     return (100 - groupedByValue[f].length) +
@@ -506,9 +590,11 @@ define([
                                             });
 
                                         this.select('use.on-bar-text')
+                                            .call(markOther)
                                             .attr('xlink:href', _.compose(toRefId, textId))
                                             .attr('mask', _.compose(toUrlId, append('_0'), maskId));
                                         this.select('use.off-bar-text')
+                                            .call(markOther)
                                             .attr('xlink:href', _.compose(toRefId, textId))
                                             .attr('mask', _.compose(toUrlId, append('_1'), maskId));
                                         this.select('use.on-number-bar-text')
@@ -518,7 +604,16 @@ define([
                                             .attr('xlink:href', _.compose(toRefId, textNumberId))
                                             .attr('mask', _.compose(toUrlId, append('_1'), maskId));
 
+                                        d3.selectAll('defs .text-number')
+                                            .each(positionTextNumber);
+
                                     })
+
+                                function markOther(useTag) {
+                                    useTag.classed('other', function(pair) {
+                                        return pair[0] === OTHER_PLACEHOLDER;
+                                    })
+                                }
 
                                 function append(toAppend) {
                                     return function(str) {
@@ -617,7 +712,7 @@ define([
         this.histogramClick = function(event, object) {
             var vertexIds = $(event.target).closest('g').data('vertexIds');
 
-            this.trigger(document, 'selectObjects', { vertices: appData.vertices(vertexIds) });
+            this.trigger(document, 'selectObjects', { vertexIds: vertexIds });
             this.trigger(document, 'defocusVertices', { vertexIds: vertexIds });
         };
 

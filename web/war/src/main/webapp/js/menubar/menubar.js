@@ -1,10 +1,41 @@
 
 define([
     'flight/lib/component',
+    'configuration/plugins/menubar/plugin',
     './activity/activity',
     'tpl!./menubar'
-], function(defineComponent, Activity, template) {
+], function(defineComponent, menubarPlugin, Activity, template) {
     'use strict';
+
+    // Add class name of <li> buttons here
+    var BUTTONS = 'dashboard graph map search workspaces admin activity logout'.split(' '),
+        TOOLTIPS = {
+            dashboard: i18n('menubar.icons.dashboard.tooltip'),
+            graph: { html: i18n('menubar.icons.graph') +
+                ' <span class="subtitle">' +
+                i18n('menubar.icons.graph.tooltip.suffix') + '</span>' },
+            map: i18n('menubar.icons.map.tooltip'),
+            search: i18n('menubar.icons.search.tooltip'),
+            workspaces: i18n('menubar.icons.workspaces.tooltip'),
+            admin: i18n('menubar.icons.admin.tooltip'),
+            logout: i18n('menubar.icons.logout.tooltip')
+        },
+
+        // Which cannot both be active
+        MUTALLY_EXCLUSIVE_SWITCHES = [
+            { names: ['dashboard', 'graph','map'], options: { allowCollapse: false } },
+            { names: ['workspaces', 'search', 'admin'], options: { } }
+        ],
+
+        ACTION_TYPES = {
+            full: MUTALLY_EXCLUSIVE_SWITCHES[0],
+            pane: MUTALLY_EXCLUSIVE_SWITCHES[1]
+        },
+
+        // Don't change state to highlighted on click
+        DISABLE_ACTIVE_SWITCH = 'logout'.split(' '),
+
+        DISABLE_HIDE_TOOLTIP_ON_CLICK = 'logout'.split(' ');
 
     return defineComponent(Menubar);
 
@@ -12,33 +43,50 @@ define([
         return i18n('menubar.icons.' + name);
     }
 
+    function menubarItemHandler(name) {
+        var sel = name + 'IconSelector';
+
+        return function(e) {
+            e.preventDefault();
+
+            var self = this,
+                isSwitch = false;
+
+            if (DISABLE_ACTIVE_SWITCH.indexOf(name) === -1) {
+                MUTALLY_EXCLUSIVE_SWITCHES.forEach(function(exclusive, i) {
+                    if (exclusive.names.indexOf(name) !== -1 && exclusive.options.allowCollapse === false) {
+                        isSwitch = true;
+                    }
+                });
+            }
+            var icon = this.select(sel);
+            if (!_.contains(DISABLE_HIDE_TOOLTIP_ON_CLICK, name)) {
+                icon.tooltip('hide');
+            }
+            if (isSwitch && icon.hasClass('active')) {
+
+                icon.toggleClass('toggled');
+
+                // Special case to toggle 2d/3d graph
+                if (name === 'graph') {
+                    requestAnimationFrame(function() {
+                        self.trigger(document, 'toggleGraphDimensions');
+                    });
+                }
+                return;
+            } else {
+                requestAnimationFrame(function() {
+                    var data = { name: name };
+                    if (name in self.extensions) {
+                        data.action = self.extensions[name].action;
+                    }
+                    self.trigger(document, 'menubarToggleDisplay', data);
+                });
+            }
+        };
+    }
+
     function Menubar() {
-
-        // Add class name of <li> buttons here
-        var BUTTONS = 'dashboard graph map search workspaces admin activity chat logout'.split(' '),
-            TOOLTIPS = {
-                dashboard: i18n('menubar.icons.dashboard.tooltip'),
-                graph: { html: i18n('menubar.icons.graph') +
-                    ' <span class="subtitle">' +
-                    i18n('menubar.icons.graph.tooltip.suffix') + '</span>' },
-                map: i18n('menubar.icons.map.tooltip'),
-                search: i18n('menubar.icons.search.tooltip'),
-                workspaces: i18n('menubar.icons.workspaces.tooltip'),
-                admin: i18n('menubar.icons.admin.tooltip'),
-                chat: i18n('menubar.icons.chat.tooltip'),
-                logout: i18n('menubar.icons.logout.tooltip')
-            },
-
-            // Which cannot both be active
-            MUTALLY_EXCLUSIVE_SWITCHES = [
-                { names: ['dashboard', 'graph','map'], options: { allowCollapse: false } },
-                { names: ['workspaces', 'search', 'admin'], options: { } }
-            ],
-
-            // Don't change state to highlighted on click
-            DISABLE_ACTIVE_SWITCH = 'activity logout'.split(' '),
-
-            DISABLE_HIDE_TOOLTIP_ON_CLICK = 'activity logout'.split(' ');
 
         this.activities = 0;
 
@@ -47,48 +95,55 @@ define([
             var sel = name + 'IconSelector';
 
             attrs[sel] = '.' + name;
-            events[sel] = function(e) {
-                e.preventDefault();
+            events[sel] = menubarItemHandler(name);
+        });
 
-                var self = this,
-                    isSwitch = false;
+        var self = this,
+            extensionCount = 0,
+            extensions = {};
 
-                if (DISABLE_ACTIVE_SWITCH.indexOf(name) === -1) {
-                    MUTALLY_EXCLUSIVE_SWITCHES.forEach(function(exclusive, i) {
-                        if (exclusive.names.indexOf(name) !== -1 && exclusive.options.allowCollapse === false) {
-                            isSwitch = true;
-                        }
-                    });
-                }
-                var icon = this.select(sel);
-                if (!_.contains(DISABLE_HIDE_TOOLTIP_ON_CLICK, name)) {
-                    icon.tooltip('hide');
-                }
-                if (isSwitch && icon.hasClass('active')) {
+        menubarPlugin.items.forEach(function(data) {
+            var cls = 'extension-' + extensionCount++,
+                type = data.action.type;
 
-                    icon.toggleClass('toggled');
+            if (type in ACTION_TYPES) {
+                ACTION_TYPES[type].names.push(cls);
+            }
 
-                    // Special case to toggle 2d/3d graph
-                    if (name === 'graph') {
-                        requestAnimationFrame(function() {
-                            self.trigger(document, 'toggleGraphDimensions');
-                        });
-                    }
-                    return;
-                } else {
-                    requestAnimationFrame(function() {
-                        self.trigger(document, 'menubarToggleDisplay', {name: name});
-                    });
-                }
-            };
+            extensions[cls] = data;
+            attrs[cls + 'IconSelector'] = '.' + cls;
+            events[cls + 'IconSelector'] = menubarItemHandler(cls);
         });
 
         this.defaultAttrs(attrs);
 
         this.after('initialize', function() {
-            this.$node.html(template({}));
-
             var self = this;
+
+            this.$node.html(template({}));
+            this.extensions = extensions;
+
+            _.each(this.extensions, function(item, cls) {
+                var options = $.extend({
+                        placementHint: 'top',
+                        tooltip: item.title,
+                        anchorCss: {}
+                    }, item.options);
+
+                $('<li>')
+                    .addClass(cls)
+                    .append(
+                        $('<a>')
+                        .text(item.title)
+                        .css(
+                            $.extend({
+                                'background-image': item.icon
+                            }, options.anchorCss)
+                        )
+                    )
+                    .insertBefore(self.$node.find('.menu-' + options.placementHint + ' .divider:last-child'));
+            })
+
             Object.keys(TOOLTIPS).forEach(function(selectorClass) {
                 self.$node.find('.' + selectorClass).tooltip({
                     placement: 'right',
@@ -98,26 +153,12 @@ define([
                 });
             });
 
-            Activity.attachTo(this.select('activityIconSelector'));
-
             this.on('click', events);
 
-            this.attachSyncEventsToAnimateUsers();
+            Activity.attachTo(this.select('activityIconSelector'));
 
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggle);
         });
-
-        this.attachSyncEventsToAnimateUsers = function() {
-            var self = this,
-                cls = 'synchronizing';
-
-            this.on(document, 'syncStarted', function() {
-                self.select('chatIconSelector').addClass(cls);
-            });
-            this.on(document, 'syncEnded', function() {
-                self.select('chatIconSelector').removeClass(cls);
-            });
-        };
 
         this.onMenubarToggle = function(e, data) {
             var self = this,

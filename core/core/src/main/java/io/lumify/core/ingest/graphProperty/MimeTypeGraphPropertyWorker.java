@@ -4,18 +4,17 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Map;
 
 public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MimeTypeGraphPropertyWorker.class);
@@ -58,14 +57,14 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
             return;
         }
 
-        ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
-        Map<String, Object> mimeTypeMetadata = data.createPropertyMetadata();
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(data.getElement());
+        ExistingElementMutation<Vertex> m = ((Vertex) data.getElement()).prepareMutation();
+        Metadata mimeTypeMetadata = data.createPropertyMetadata();
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(data.getElement());
         if (visibilityJson != null) {
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(mimeTypeMetadata, visibilityJson);
+            LumifyProperties.VISIBILITY_JSON.setMetadata(mimeTypeMetadata, visibilityJson, getVisibilityTranslator().getDefaultVisibility());
         }
         LumifyProperties.MIME_TYPE.setProperty(m, mimeType, mimeTypeMetadata, data.getVisibility());
-        m.alterPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
+        m.setPropertyMetadata(data.getProperty(), LumifyProperties.MIME_TYPE.getPropertyName(), mimeType, getVisibilityTranslator().getDefaultVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, this.getClass().getName(), getUser(), data.getVisibility());
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
@@ -85,6 +84,9 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
             } catch (Exception ex) {
                 throw new LumifyException("Failed running PostMimeTypeWorker " + postMimeTypeWorker.getClass().getName(), ex);
             }
+        }
+        if (postMimeTypeWorkers.size() > 0) {
+            getGraph().flush();
         }
     }
 

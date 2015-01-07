@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+        <!ENTITY lumify "http://lumify.io#" >
+        <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+        <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+        <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+        <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+
+        <!ENTITY importIri "http://lumify.io/dev" >
+        <!ENTITY imageIri "http://lumify.io/dev#image" >
+        <!ENTITY audioIri "http://lumify.io/dev#audio" >
+        <!ENTITY videoIri "http://lumify.io/dev#video" >
+        <!ENTITY geolocationIri "http://lumify.io/dev#geolocation" >
+        ]>
+
+<rdf:RDF xmlns="http://lumify.io/media#"
+         xml:base="http://lumify.io/media"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:lumify="http://lumify.io#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/media">
+        <owl:imports rdf:resource="&importIri;"/>
+    </owl:Ontology>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#yAxisFlipped">
+        <rdfs:label xml:lang="en">Y Axis Flipped</rdfs:label>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#clockwiseRotation">
+        <rdfs:label xml:lang="en">Clockwise Rotation</rdfs:label>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+
+    <rdf:Description rdf:about="&geolocationIri;">
+        <rdfs:domain rdf:resource="&imageIri;"/>
+    </rdf:Description>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#imageHeading">
+        <rdfs:label xml:lang="en">Image Heading</rdfs:label>
+        <lumify:displayType xml:lang="en">heading</lumify:displayType>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#dateTaken">
+        <rdfs:label xml:lang="en">Date Taken</rdfs:label>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceMake">
+        <rdfs:label xml:lang="en">Device Make</rdfs:label>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceModel">
+        <rdfs:label xml:lang="en">Device Model</rdfs:label>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#width">
+        <rdfs:label xml:lang="en">Width</rdfs:label>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#height">
+        <rdfs:label xml:lang="en">Height</rdfs:label>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#fileSize">
+        <rdfs:label xml:lang="en">File Size</rdfs:label>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:domain rdf:resource="&audioIri;"/>
+        <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+        <lumify:displayType xml:lang="en">byte</lumify:displayType>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#metadata">
+        <rdfs:label xml:lang="en">Metadata</rdfs:label>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="&imageIri;"/>
+        <rdfs:domain rdf:resource="&videoIri;"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+</rdf:RDF>

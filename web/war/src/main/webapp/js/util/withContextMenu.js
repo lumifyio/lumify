@@ -7,7 +7,6 @@ define([], function() {
     function withContextMenu() {
 
         this.after('initialize', function() {
-            this.bindContextMenuClickEvent();
         });
 
         this.bindContextMenuClickEvent = function() {
@@ -51,6 +50,7 @@ define([], function() {
         };
 
         this.toggleMenu = function(position, menuElement) {
+            this.bindContextMenuClickEvent();
 
             var offset = this.$node.offset(),
                 padding = 10,

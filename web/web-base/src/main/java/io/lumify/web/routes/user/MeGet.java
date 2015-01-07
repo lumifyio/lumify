@@ -1,15 +1,14 @@
 package io.lumify.web.routes.user;
 
-import io.lumify.miniweb.HandlerChain;
-import io.lumify.miniweb.handlers.CSRFHandler;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.miniweb.handlers.CSRFHandler;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.LumifyCsrfHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,9 +30,9 @@ public class MeGet extends BaseRequestHandler {
             return;
         }
 
-        JSONObject userJson = getUserRepository().toJsonWithAuths(user);
-        userJson.put(LumifyCsrfHandler.PARAMETER_NAME, CSRFHandler.getSavedToken(request, true));
+        ClientApiUser userMe = getUserRepository().toClientApiPrivate(user);
+        userMe.setCsrfToken(CSRFHandler.getSavedToken(request, true));
 
-        respondWithJson(response, userJson);
+        respondWithClientApiObject(response, userMe);
     }
 }

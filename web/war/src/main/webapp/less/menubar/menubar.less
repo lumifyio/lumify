@@ -32,8 +32,9 @@ background: @menubar-background;
 
   .activity, .dashboard, .logout {
     background-position: center;    
-    font-size: 0;
+    
     a {
+      font-size: 0;
       padding: 5px 0;
     }
   }
@@ -97,19 +98,6 @@ background: @menubar-background;
     background-image: url(../img/glyphicons/white/glyphicons_027_search@2x.png);
   }
 
-  .chat { 
-
-    &.synchronizing a:before {
-      .spinning-image('glyphicons_081_refresh@2x', 10px, 1px, -22px);
-      .spin(4s, forward);
-      .animation-play-state(running);
-    }
-
-    a {
-      background-image: url(../img/glyphicons/white/glyphicons_245_chat@2x.png);
-      background-size: auto 19px;
-    }
-  }
   .metrics a { background-image: url(../img/glyphicons/white/glyphicons_041_charts@2x.png); }
   .prefs a { background-image: url(../img/glyphicons/white/glyphicons_280_settings@2x.png); }
 
@@ -127,6 +115,29 @@ background: @menubar-background;
         .spinning-image('white/glyphicons_019_cogwheel@2x', 14px, 6px, 6px);
         .spin(4s, reverse);
       }
+    }
+
+    .activityCount {
+      display: block;
+      background: #ccc;      
+      box-shadow: 0 1px 1px fadeOut(black, 50%);
+      @size: 1em;
+      width: @size;
+      height: @size;
+      line-height: @size;      
+      text-align: center;
+      padding: 0.5ex;      
+      position: absolute;
+      top: -0.9ex;
+      right: -0.7ex;
+      color: #777;
+      font-size: 85%;   
+      font-variant: small-caps;
+      font-weight: bold;     
+      border-radius: @size;
+      text-shadow: 0 1px 0px white;
+      .disable-text-selection;
+      cursor: pointer;
     }
 
     &.animating a:before {
@@ -184,7 +195,7 @@ background: @menubar-background;
     }
 }
 @media (max-height:16em) {    
-    .menu-bottom .chat, .menu-bottom .divider {
+    .menu-bottom .divider {
         display: none;        
     }
 }

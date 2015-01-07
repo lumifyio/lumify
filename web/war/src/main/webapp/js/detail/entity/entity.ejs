@@ -2,24 +2,16 @@
 <div class="entity-background">
   <div class="entity-glyphIcon"/>
 
-  <h1 title="<%= F.vertex.title(vertex) %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= F.vertex.title(vertex) %><div class="subtitle"><%= vertex.concept.displayName %></div></h1>
+  <h1 title="<%= F.vertex.title(vertex) %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= F.vertex.title(vertex) %></h1>
+  <div class="subtitle"><%= F.vertex.concept(vertex).displayName %></div>
+  <div class="comp-toolbar"></div>
 
-  <div class="detail-toolbar">
-    <div class="btn-toolbar">
-      <% var sourceUrl = _.findWhere(vertex.properties, { name: 'http://lumify.io#sourceUrl' }); %>
-      <% if (sourceUrl) { %>
-        <a title="<%= i18n('detail.entity.source_url.button') %>" class="btn btn-small" target="_blank" href="<%= sourceUrl.value %>"><i class="icon-share"></i></a>
-      <% } %>
-      <%- fullscreenButton %>
-
-      <%- auditsButton %>
-    </div>
-  </div>
 </div>
 
 <div class="nav-with-background">
   <div class="properties"></div>
   <div class="relationships"></div>
+  <div class="comments"></div>
   <div class="texts"></div>
 </div>
 

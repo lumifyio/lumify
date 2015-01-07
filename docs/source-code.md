@@ -24,9 +24,9 @@ with more specific information.
 * `dev` - components to facilitate Lumify development
 * `docs` - Lumify documentation, like the page you're reading now
 * `examples` - examples demonstrating the use of Lumify
-* `storm` - all of Lumify's storm related code
+* `graph-property-worker` - all of Lumify's graph property worker related code
   * `plugins` - the guts of all ingest and processing/analytics
-  * `storm` - core storm classes used by the plugins
+  * `graph-property-worker-base` - core graph property worker classes used by the plugins
 * `tools` - combination of dev and production command-line tools
 * `web` - everything related to Lumify's webapp
   * `plugins` - optional webapp plugins

@@ -5,17 +5,36 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.util.JSONUtil;
 import org.codehaus.plexus.util.IOUtil;
 import org.json.JSONArray;
 import org.securegraph.Authorizations;
+import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.*;
 
 public class SecureGraphConcept extends Concept {
+    private static Set<String> PROPERTIES_NOT_IN_METADATA = new HashSet<String>();
     private final Vertex vertex;
+
+    static {
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.DISPLAY_NAME.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.DISPLAY_TYPE.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.GLYPH_ICON.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.ONTOLOGY_TITLE.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.CONCEPT_TYPE.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.COLOR.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.SUBTITLE_FORMULA.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.TITLE_FORMULA.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.TIME_FORMULA.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.SEARCHABLE.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.USER_VISIBLE.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(SecureGraphOntologyRepository.ONTOLOGY_FILE_PROPERTY_NAME);
+    }
 
     public SecureGraphConcept(Vertex vertex) {
         this(vertex, null, null);
@@ -63,6 +82,11 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
+    public Boolean getSearchable() {
+        return LumifyProperties.SEARCHABLE.getPropertyValue(vertex);
+    }
+
+    @Override
     public String getSubtitleFormula() {
         return LumifyProperties.SUBTITLE_FORMULA.getPropertyValue(vertex);
     }
@@ -78,7 +102,25 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
-    public String getAddRelatedConceptWhiteList () { return LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyValue(vertex); }
+    public Map<String, String> getMetadata() {
+        Map<String, String> metadata = new HashMap<String, String>();
+        for (Property p : vertex.getProperties()) {
+            if (PROPERTIES_NOT_IN_METADATA.contains(p.getName())) {
+                continue;
+            }
+            metadata.put(p.getName(), p.getValue().toString());
+        }
+        return metadata;
+    }
+
+    @Override
+    public List<String> getAddRelatedConceptWhiteList() {
+        JSONArray arr = LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyValue(vertex);
+        if (arr == null) {
+            return null;
+        }
+        return JSONUtil.toStringList(arr);
+    }
 
     @Override
     public void setProperty(String name, Object value, Authorizations authorizations) {

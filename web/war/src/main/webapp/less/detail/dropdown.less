@@ -133,11 +133,16 @@ width: 100%;
   .resolve-wrapper {
     position: relative;
     .preview {
-      width: 2em; height: 2em; 
-      background-size: auto 70%; position: absolute;
+      @size: 1.3em;
+      width: @size; 
+      height: @size; 
+      top: 50%;
+      margin-top: @size / -2;
+      background-size: contain; 
+      position: absolute;
       background-color: transparent;
       background-repeat: no-repeat;
-      left: 5px;
+      left: 1ex;
       background-position: center;
 
       &.icon-unknown {
@@ -145,7 +150,7 @@ width: 100%;
       }
     }
     input {
-      padding-left: 2.5em;
+      padding-left: 2.2em;
       padding-right: 6ex;
     }
     .badge {
@@ -242,7 +247,14 @@ input {
 
 select {
   width: 100%;
-  margin-bottom: 1em;
   font-size: 90%;
+}
+
+.input-row select {
+  margin-bottom: 0;
+}
+
+select, .input-row-select select {
+  margin-bottom: 1em;
 }
 

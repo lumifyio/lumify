@@ -1,7 +1,5 @@
 package io.lumify.web.auth.oauth.routes;
 
-import io.lumify.miniweb.Handler;
-import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
@@ -11,6 +9,9 @@ import io.lumify.http.HttpConnection;
 import io.lumify.http.HttpGetMethod;
 import io.lumify.http.HttpPostMethod;
 import io.lumify.http.URLBuilder;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.CurrentUser;
 import io.lumify.web.auth.oauth.OAuthConfiguration;
 import org.json.JSONObject;
@@ -18,10 +19,8 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.SecureRandom;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -75,7 +74,7 @@ public class Google implements Handler {
     }
 
     private String generateState() {
-        return new BigInteger(120, new SecureRandom()).toString(32);
+        return UserRepository.createRandomPassword();
     }
 
     private void login(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws IOException {
@@ -123,12 +122,12 @@ public class Google implements Handler {
         String username = "google/" + userid;
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
+            String randomPassword = UserRepository.createRandomPassword();
             user = userRepository.addUser(username, displayName, email, randomPassword, new String[0]);
         }
-        userRepository.recordLogin(user, httpRequest.getRemoteAddr());
+        userRepository.recordLogin(user, AuthenticationHandler.getRemoteAddr(httpRequest));
 
-        CurrentUser.set(httpRequest, user.getUserId());
+        CurrentUser.set(httpRequest, user.getUserId(), user.getUsername());
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");
     }
 

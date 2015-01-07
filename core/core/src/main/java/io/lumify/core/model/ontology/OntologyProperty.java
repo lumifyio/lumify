@@ -1,5 +1,7 @@
 package io.lumify.core.model.ontology;
 
+import io.lumify.web.clientapi.model.ClientApiOntology;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,9 @@ import org.securegraph.type.GeoPoint;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,37 +37,38 @@ public abstract class OntologyProperty {
 
     public abstract boolean getSearchable();
 
-    public abstract Boolean getDisplayTime();
-
     public abstract PropertyType getDataType();
 
     public abstract Double getBoost();
 
-    public abstract JSONObject getPossibleValues();
+    public abstract Map<String, String> getPossibleValues();
 
-    public static JSONArray toJsonProperties(Iterable<OntologyProperty> properties) {
-        JSONArray json = new JSONArray();
+    public abstract String getDisplayType();
+
+    public abstract String getPropertyGroup();
+
+    public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
+        Collection<ClientApiOntology.Property> results = new ArrayList<ClientApiOntology.Property>();
         for (OntologyProperty property : properties) {
-            json.put(property.toJson());
+            results.add(property.toClientApi());
         }
-        return json;
+        return results;
     }
 
-    public JSONObject toJson() {
+    public ClientApiOntology.Property toClientApi() {
         try {
-            JSONObject json = new JSONObject();
-            json.put("title", getTitle());
-            json.put("displayName", getDisplayName());
-            if (getDisplayTime() != null) {
-                json.put("displayTime", getDisplayTime());
-            }
-            json.put("userVisible", getUserVisible());
-            json.put("searchable", getSearchable());
-            json.put("dataType", getDataType().toString());
+            ClientApiOntology.Property result = new ClientApiOntology.Property();
+            result.setTitle(getTitle());
+            result.setDisplayName(getDisplayName());
+            result.setUserVisible(getUserVisible());
+            result.setSearchable(getSearchable());
+            result.setDataType(getDataType());
+            result.setDisplayType(getDisplayType());
+            result.setPropertyGroup(getPropertyGroup());
             if (getPossibleValues() != null) {
-                json.put("possibleValues", getPossibleValues());
+                result.getPossibleValues().putAll(getPossibleValues());
             }
-            return json;
+            return result;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -88,6 +94,9 @@ public abstract class OntologyProperty {
             case DOUBLE:
                 value = Double.parseDouble(valueStr);
                 break;
+            case INTEGER:
+                value = Integer.parseInt(valueStr);
+                break;
             case BOOLEAN:
                 value = Boolean.parseBoolean(valueStr);
                 break;
@@ -112,6 +121,8 @@ public abstract class OntologyProperty {
                 );
             case CURRENCY:
                 return new BigDecimal(values.getString(index));
+            case INTEGER:
+                return values.getInt(index);
             case DOUBLE:
                 return values.getDouble(index);
             case BOOLEAN:

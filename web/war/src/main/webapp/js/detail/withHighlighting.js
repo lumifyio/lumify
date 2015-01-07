@@ -7,12 +7,11 @@ define([
     'util/privileges',
     'util/range',
     'colorjs',
-    'service/vertex',
-    'service/ontology',
+    'util/withDataRequest',
     'util/vertex/formatters',
     'util/popovers/withElementScrollingPositionUpdates',
     'util/range',
-    'util/jquery.withinScrollable'
+    'util/jquery.withinScrollable',
 ], function(
     TermForm,
     StatementForm,
@@ -21,8 +20,7 @@ define([
     Privileges,
     rangeUtils,
     colorjs,
-    VertexService,
-    OntologyService,
+    withDataRequest,
     F,
     withPositionUpdates,
     range) {
@@ -34,6 +32,10 @@ define([
             { name: 'Underline', selector: 'underline' },
             { name: 'Colors', selector: 'colors' }
         ],
+        TEXT_PROPERTIES = [
+            'http://lumify.io#videoTranscript',
+            'http://lumify.io#text'
+        ],
         DEFAULT = 2,
         useDefaultStyle = true;
 
@@ -42,9 +44,7 @@ define([
     function WithHighlighting() {
 
         withPositionUpdates.call(this);
-
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
+        withDataRequest.call(this);
 
         this.defaultAttrs({
             resolvableSelector: '.text .entity',
@@ -68,8 +68,12 @@ define([
             $(document).off('ignoreSelectionChanges.detail');
             $(document).off('resumeSelectionChanges.detail');
             $(document).off('termCreated');
-            this.highlightNode().off('scrollstop');
+            this.highlightNode().off('scrollstop scroll');
         });
+
+        this.before('initialize', function() {
+            this.updateEntityAndArtifactDraggables = _.throttle(this.updateEntityAndArtifactDraggables.bind(this), 250);
+        })
 
         this.after('initialize', function() {
             var self = this;
@@ -85,7 +89,8 @@ define([
             });
             $(document).trigger('resumeSelectionChanges');
 
-            this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables.bind(this));
+            this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables);
+            this.highlightNode().on('scroll', this.updateEntityAndArtifactDraggables);
             this.on('click', {
                 resolvableSelector: this.onResolvableClick,
                 textContainerHeaderSelector: this.onTextHeaderClicked,
@@ -99,6 +104,7 @@ define([
             this.on('mousedown mouseup click dblclick contextmenu', this.trackMouse.bind(this));
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
             this.on(document, 'textUpdated', this.onTextUpdated);
+            this.on(document, 'verticesUpdated', this.onVerticesUpdatedWithHighlighting);
             this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
 
             this.applyHighlightStyle();
@@ -110,43 +116,30 @@ define([
             }
         };
 
+        this.onVerticesUpdatedWithHighlighting = function(event, data) {
+            var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
+            if (vertex && data.options && data.options.originalData && data.options.originalData.properties) {
+                var foundTextLikePropertyChange = _.some(data.options.originalData.properties, function(p) {
+                    return _.some(TEXT_PROPERTIES, function(name) {
+                        return p.propertyName === name;
+                    });
+                });
+
+                if (foundTextLikePropertyChange) {
+                    this.updateText();
+                }
+            }
+        };
+
         this.onCopyText = function(event) {
             var selection = getSelection(),
                 target = event.target;
 
             if (!selection.isCollapsed && selection.rangeCount === 1) {
 
-                var $anchor = $(selection.anchorNode),
-                    $focus = $(selection.focusNode),
-                    isTranscript = $anchor.closest('.av-times').length,
-                    offsetsFunction = isTranscript ?
-                        'offsetsForTranscript' :
-                        'offsetsForText',
-                    offsets = this[offsetsFunction]([
-                        {el: $anchor, offset: selection.anchorOffset},
-                        {el: $focus, offset: selection.focusOffset}
-                    ], '.text', _.identity),
-                    range = selection.getRangeAt(0),
-                    output = {},
-                    contextRange = rangeUtils.expandRangeByWords(range, 4, output),
-                    context = contextRange.toString(),
-                    contextHighlight =
-                        '...' +
-                        output.before +
-                        '<span class="selection">' + selection.toString() + '</span>' +
-                        output.after +
-                        '...';
-
-                if (offsets) {
-                    this.trigger('copydocumenttext', {
-                        startOffset: offsets[0],
-                        endOffset: offsets[1],
-                        snippet: contextHighlight,
-                        vertexId: this.attr.data.id,
-                        textPropertyKey: $anchor.closest('.text-section').data('key'),
-                        text: selection.toString(),
-                        vertexTitle: F.vertex.title(this.attr.data)
-                    });
+                var data = this.transformSelection(selection);
+                if (data.startOffset && data.endOffset) {
+                    this.trigger('copydocumenttext', data);
                 }
             }
         };
@@ -163,6 +156,39 @@ define([
             } else {
                 this.openText(propertyKey);
             }
+        };
+
+        this.transformSelection = function(selection) {
+            var $anchor = $(selection.anchorNode),
+                $focus = $(selection.focusNode),
+                isTranscript = $anchor.closest('.av-times').length,
+                offsetsFunction = isTranscript ?
+                    'offsetsForTranscript' :
+                    'offsetsForText',
+                offsets = this[offsetsFunction]([
+                    {el: $anchor, offset: selection.anchorOffset},
+                    {el: $focus, offset: selection.focusOffset}
+                ], '.text', _.identity),
+                range = selection.getRangeAt(0),
+                output = {},
+                contextRange = rangeUtils.expandRangeByWords(range, 4, output),
+                context = contextRange.toString(),
+                contextHighlight =
+                    '...' +
+                    output.before +
+                    '<span class="selection">' + selection.toString() + '</span>' +
+                    output.after +
+                    '...';
+
+            return {
+                startOffset: offsets && offsets[0],
+                endOffset: offsets && offsets[1],
+                snippet: contextHighlight,
+                vertexId: this.attr.data.id,
+                textPropertyKey: $anchor.closest('.text-section').data('key'),
+                text: selection.toString(),
+                vertexTitle: F.vertex.title(this.attr.data)
+            };
         };
 
         this.trackMouse = function(event) {
@@ -232,8 +258,7 @@ define([
             this.highlightNode().addClass('highlight-' + style.selector);
 
             if (!style.styleApplied) {
-
-                this.ontologyService.concepts().done(function(concepts) {
+                this.dataRequest('ontology', 'concepts').done(function(concepts) {
                     var styleFile = 'tpl!detail/highlight-styles/' + style.selector + '.css',
                         detectedObjectStyleFile = 'tpl!detail/highlight-styles/detectedObject.css';
 
@@ -404,28 +429,38 @@ define([
                     ActionBar.attachTo(self.node, {
                         alignTo: 'textselection',
                         actions: {
-                            Resolve: 'resolve.actionbar'
+                            Resolve: 'resolve.actionbar',
+                            Comment: 'comment.actionbar'
                         }
                     });
 
-                    self.off('.actionbar').on('resolve.actionbar', function(event) {
-                        event.stopPropagation();
+                    self.off('.actionbar')
+                        .on('comment.actionbar', function(event) {
+                            event.stopPropagation();
 
-                        var isEndTextNode = endContainer.nodeType === 1;
-                        if (isEndTextNode) {
-                            self.dropdownEntity(true, endContainer, selection, text);
-                        } else {
+                            var data = self.transformSelection(sel);
+                            if (data.startOffset && data.endOffset) {
+                                self.trigger(self.select('commentsSelector'), 'commentOnSelection', data);
+                            }
+                        })
+                        .on('resolve.actionbar', function(event) {
+                            event.stopPropagation();
 
-                            // Move to first space in end so as to not break up word when splitting
-                            var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
-                            do {
-                                character = endContainer.textContent.substring(++i, i + 1);
-                            } while (whitespaceCheck.test(character));
+                            var isEndTextNode = endContainer.nodeType === 1;
+                            if (isEndTextNode) {
+                                self.dropdownEntity(true, endContainer, selection, text);
+                            } else {
 
-                            endContainer.splitText(i);
-                            self.dropdownEntity(true, endContainer, selection, text);
-                        }
-                    });
+                                // Move to first space in end so as to not break up word when splitting
+                                var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
+                                do {
+                                    character = endContainer.textContent.substring(++i, i + 1);
+                                } while (whitespaceCheck.test(character));
+
+                                endContainer.splitText(i);
+                                self.dropdownEntity(true, endContainer, selection, text);
+                            }
+                        });
                 });
             }
         }, 250);
@@ -449,7 +484,7 @@ define([
 
         this.onResolvedContextClick = function(event) {
             var $target = $(event.target).closest('span'),
-                vertexId = $target.data('info').graphVertexId;
+                vertexId = $target.data('info').resolvedToVertexId;
 
             range.clearSelection();
 
@@ -491,14 +526,7 @@ define([
                     self.off('.actionbar')
                         .on('open.actionbar', function(event) {
                             event.stopPropagation();
-
-                            self.trigger('selectObjects', {
-                                vertices: [
-                                    {
-                                        id: $target.data('info').graphVertexId
-                                    }
-                                ]
-                            });
+                            self.trigger('selectObjects', { vertexIds: $target.data('info').resolvedToVertexId });
                     });
                     self.on('unresolve.actionbar', function(event) {
                         event.stopPropagation();
@@ -527,7 +555,7 @@ define([
             var self = this,
                 words = this.select('draggablesSelector');
 
-            this.ontologyService.concepts()
+            this.dataRequest('ontology', 'concepts')
                 .done(function(concepts) {
 
                     // Filter list to those in visible scroll area
@@ -609,14 +637,16 @@ define([
                 scrollTop = scrollParent.scrollTop(),
                 expandedKey = this.$node.find('.text-section.expanded').data('key'),
                 textProperties = _.filter(this.attr.data.properties, function(p) {
-                    return p.name === 'http://lumify.io#videoTranscript' ||
-                        p.name === 'http://lumify.io#text'
+                    return _.some(TEXT_PROPERTIES, function(name) {
+                        return name === p.name;
+                    });
                 });
 
             this.select('textContainerSelector').html(
                 _.map(textProperties, function(p) {
+                    var textDescription = 'http://lumify.io#textDescription';
                     return textTemplate({
-                        description: p['http://lumify.io#textDescription'] || p.key,
+                        description: p[textDescription] || p.metadata[textDescription] || p.key,
                         key: p.key,
                         cls: F.className.to(p.key)
                     })
@@ -669,21 +699,21 @@ define([
                 this.openTextRequest.abort();
             }
 
-            return this.handleCancelling(
-                this.openTextRequest = this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
-            ).done(function(artifactText) {
-                var html = self.processArtifactText(artifactText);
-                if (expand) {
-                    $section.find('.text').html(html);
-                    $section.addClass('expanded');
-                    $badge.removeClass('loading');
+            // TODO: support cancelling
+            return this.dataRequest('vertex', 'highlighted-text', this.attr.data.id, propertyKey)
+                .then(function(artifactText) {
+                    var html = self.processArtifactText(artifactText);
+                    if (expand) {
+                        $section.find('.text').html(html);
+                        $section.addClass('expanded');
+                        $badge.removeClass('loading');
 
-                    self.updateEntityAndArtifactDraggables();
-                    if (!options || options.scrollToSection !== false) {
-                        self.scrollToRevealSection($section);
+                        self.updateEntityAndArtifactDraggables();
+                        if (!options || options.scrollToSection !== false) {
+                            self.scrollToRevealSection($section);
+                        }
                     }
-                }
-            });
+                });
         };
 
         this.offsetsForText = function(input, parentSelector, offsetTransform) {
@@ -763,8 +793,12 @@ define([
             var self = this,
                 warningText = i18n('detail.text.none_available');
 
-            return !text ?  alertTemplate({ warning: warningText }) : text.replace(/(\n+)/g, '<br><br>$1');
+            return !text ?  alertTemplate({ warning: warningText }) : this.normalizeString(text);
         }
+
+        this.normalizeString = function(text) {
+            return text.replace(/(\n+)/g, '<br><br>$1');
+        };
 
     }
 });

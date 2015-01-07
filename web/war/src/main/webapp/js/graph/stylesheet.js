@@ -66,6 +66,7 @@ define([
 
             .selector('edge.focus')
             .css({
+                color: '#72AECC',
                 'line-color': '#a5e1ff',
                 'source-arrow-color': '#a5e1ff',
                 'target-arrow-color': '#a5e1ff'
@@ -102,12 +103,17 @@ define([
 
             .selector('edge')
             .css({
+                'font-size': 11 * retina.devicePixelRatio,
+                'target-arrow-shape': 'triangle',
+                color: '#aaa',
+                content: 'data(label)',
+                'text-outline-color': 'white',
+                'text-outline-width': 2,
                 width: 1.5 * retina.devicePixelRatio,
-                'target-arrow-shape': 'triangle'
             })
 
             .selector('edge.label')
-                .css({
+            .css({
                 content: 'data(label)',
                 'font-size': 12 * retina.devicePixelRatio,
                 color: '#0088cc',
@@ -144,7 +150,12 @@ define([
 
     function load(styleReady) {
         defaultStyle();
-        styleReady(style);
+        require(['configuration/plugins/graphStyle/plugin'], function(GraphStylePlugin) {
+            GraphStylePlugin.stylers.forEach(function(styler) {
+                styler(style);
+            });
+            styleReady(style);
+        });
     }
 
 });

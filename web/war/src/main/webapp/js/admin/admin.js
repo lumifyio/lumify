@@ -3,14 +3,13 @@ define([
     'configuration/admin/plugin',
     'hbs!./template',
     'tpl!util/alert',
-    'd3',
-    './plugin-list'
+    './bundled/pluginList/index',
+    './bundled/notifications/index'
 ], function(
     defineComponent,
     lumifyAdminPlugins,
     template,
-    alertTemplate,
-    d3) {
+    alertTemplate) {
     'use strict';
 
     return defineComponent(AdminList);
@@ -25,12 +24,24 @@ define([
 
         this.after('initialize', function() {
             this.on(document, 'showAdminPlugin', this.onShowAdminPlugin);
+            this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
             this.on('click', {
                 pluginItemSelector: this.onClickPluginItem
             });
             this.$node.html(template({}));
             this.update();
         });
+
+        this.onToggleDisplay = function(event, data) {
+            if (data.name === 'admin' && this.$node.closest('.visible').length === 0) {
+                this.$node.find('.admin-list .active').removeClass('active');
+                this.select('formSelector')
+                    .hide()
+                    .find('.content')
+                        .teardownAllComponents()
+                        .removePrefixedClasses('admin_less_cls');
+            }
+        };
 
         this.onClickPluginItem = function(event) {
             event.preventDefault();
@@ -65,9 +76,9 @@ define([
 
             form.teardownAllComponents()
                 .removePrefixedClasses('admin_less_cls');
-            component.Component.attachTo(form);
+            component.Component.attachTo(form, data);
 
-            this.trigger(document, 'paneResized');
+            this.trigger(container, 'paneResized');
         };
 
         this.update = function() {
@@ -86,58 +97,60 @@ define([
                 items.push(component);
             });
 
-            d3.select(this.select('listSelector').get(0))
-                .selectAll('li')
-                .data(items)
-                .call(function() {
-                    this.enter().append('li')
-                        .attr('class', function(component) {
-                            if (_.isString(component)) {
-                                return 'nav-header';
-                            }
-                        }).each(function(component) {
-                            if (!_.isString(component)) {
-                                d3.select(this).append('a').attr('href', '#');
-                            }
-                        });
-
-                    this.each(function(component) {
-                        if (_.isString(component)) {
-                            this.textContent = component;
-                            return;
-                        }
-
-                        d3.select(this)
-                            .attr('data-component', JSON.stringify(
-                                _.chain(component)
-                                .pick('section', 'name')
-                                .tap(function(c) {
-                                    c.name = c.name.toLowerCase();
-                                    c.section = c.section.toLowerCase();
-                                }).value()
-                            ))
-                            .select('a')
-                            .call(function() {
-                                this.append('div')
-                                    .attr('class', 'nav-list-title')
-                                    .text(component.name)
-
-                                this.append('div')
-                                    .attr('class', 'nav-list-subtitle')
-                                    .attr('title', component.subtitle)
-                                    .text(component.subtitle)
+            require(['d3'], function(d3) {
+                d3.select(self.select('listSelector').get(0))
+                    .selectAll('li')
+                    .data(items)
+                    .call(function() {
+                        this.enter().append('li')
+                            .attr('class', function(component) {
+                                if (_.isString(component)) {
+                                    return 'nav-header';
+                                }
+                            }).each(function(component) {
+                                if (!_.isString(component)) {
+                                    d3.select(this).append('a');
+                                }
                             });
-                    });
-                })
-                .exit().remove();
 
-            if (items.length === 0) {
-                this.$node.prepend(alertTemplate({
-                    warning: i18n('admin.plugins.none_available')
-                }));
-            } else {
-                this.$node.children('.alert').remove();
-            }
+                        this.each(function(component) {
+                            if (_.isString(component)) {
+                                this.textContent = component;
+                                return;
+                            }
+
+                            d3.select(this)
+                                .attr('data-component', JSON.stringify(
+                                    _.chain(component)
+                                    .pick('section', 'name')
+                                    .tap(function(c) {
+                                        c.name = c.name.toLowerCase();
+                                        c.section = c.section.toLowerCase();
+                                    }).value()
+                                ))
+                                .select('a')
+                                .call(function() {
+                                    this.append('div')
+                                        .attr('class', 'nav-list-title')
+                                        .text(component.name)
+
+                                    this.append('div')
+                                        .attr('class', 'nav-list-subtitle')
+                                        .attr('title', component.subtitle)
+                                        .text(component.subtitle)
+                                });
+                        });
+                    })
+                    .exit().remove();
+
+                if (items.length === 0) {
+                    self.$node.prepend(alertTemplate({
+                        warning: i18n('admin.plugins.none_available')
+                    }));
+                } else {
+                    self.$node.children('.alert').remove();
+                }
+            });
         }
     }
 });

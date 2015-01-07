@@ -4,6 +4,8 @@ define([
 ], function(registry) {
     'use strict';
 
+    // TODO: make this work? or delete
+
     return withWorkspaceData;
 
     function withWorkspaceData() {

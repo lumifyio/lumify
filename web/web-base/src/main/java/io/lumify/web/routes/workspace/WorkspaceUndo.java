@@ -1,35 +1,33 @@
 package io.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.miniweb.HandlerChain;
+import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
+import org.securegraph.util.IterableUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -65,12 +63,12 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.workQueueRepository = workQueueRepository;
         this.auditRepository = auditRepository;
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }
 
-        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
+        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY, null);
         if (this.artifactContainsImageOfEntityIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
         }
@@ -78,93 +76,148 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final JSONArray undoData = new JSONArray(getRequiredParameter(request, "undoData"));
+        String undoDataString = getRequiredParameter(request, "undoData");
+        ClientApiUndoItem[] undoData = getObjectMapper().readValue(undoDataString, ClientApiUndoItem[].class);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        JSONArray failures = new JSONArray();
-        JSONArray successArray = new JSONArray();
-        JSONArray verticesDeleted = new JSONArray();
+        LOGGER.debug("undoing:\n%s", Joiner.on("\n").join(undoData));
+        ClientApiWorkspaceUndoResponse workspaceUndoResponse = new ClientApiWorkspaceUndoResponse();
+        undoVertices(undoData, workspaceUndoResponse, workspaceId, user, authorizations);
+        undoEdges(undoData, workspaceUndoResponse, workspaceId, user, authorizations);
+        undoProperties(undoData, workspaceUndoResponse, workspaceId, user, authorizations);
+        LOGGER.debug("undoing results: %s", workspaceUndoResponse);
+        respondWithClientApiObject(response, workspaceUndoResponse);
+    }
 
-        for (int i = 0; i < undoData.length(); i++) {
-            JSONObject data = undoData.getJSONObject(i);
-            String type = data.getString("type");
-            if (type.equals("vertex")) {
-                checkNotNull(data.getString("vertexId"));
-                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
+    private void undoVertices(ClientApiUndoItem[] undoItem, ClientApiWorkspaceUndoResponse workspaceUndoResponse, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN undoVertices");
+        JSONArray verticesDeleted = new JSONArray();
+        for (ClientApiUndoItem data : undoItem) {
+            try {
+                if (!(data instanceof ClientApiVertexUndoItem)) {
+                    continue;
+                }
+                ClientApiVertexUndoItem vertexUndoItem = (ClientApiVertexUndoItem) data;
+                String vertexId = vertexUndoItem.getVertexId();
+                checkNotNull(vertexId);
+                Vertex vertex = graph.getVertex(vertexId, authorizations);
                 checkNotNull(vertex);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
                     String msg = "Cannot undo a public vertex";
                     LOGGER.warn(msg);
-                    data.put("error_msg", msg);
-                    failures.put(data);
+                    data.setErrorMessage(msg);
+                    workspaceUndoResponse.addFailure(data);
                     continue;
                 }
-                JSONObject responseResult = new JSONObject();
-                responseResult.put("vertex", undoVertex(vertex, workspaceId, authorizations, user));
-                successArray.put(responseResult);
-                verticesDeleted.put(vertex.getId());
-            } else if (type.equals("relationship")) {
-                Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
-                Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
-                if (sourceVertex == null || destVertex == null) {
-                    continue;
-                }
-                Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
-                checkNotNull(edge);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                    String error_msg = "Cannot undo a public edge";
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
-                    continue;
-                }
-                JSONObject responseResult = new JSONObject();
-                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex,
-                        entityHasImageIri, user, workspaceId, authorizations));
-                successArray.put(responseResult);
-            } else if (type.equals("property")) {
-                checkNotNull(data.getString("vertexId"));
-                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
-                if (vertex == null) {
-                    continue;
-                }
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                    String error_msg = "Cannot undo a public property";
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
-                    continue;
-                }
-                Property property = vertex.getProperty(data.getString("key"), data.getString("name"));
-                JSONObject responseResult = new JSONObject();
-                responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId, user, authorizations));
-                successArray.put(responseResult);
+                undoVertex(vertex, workspaceId, authorizations, user);
+                verticesDeleted.put(vertexId);
+            } catch (Exception ex) {
+                LOGGER.error("Error undoing %s", data.toString(), ex);
+                data.setErrorMessage(ex.getMessage());
+                workspaceUndoResponse.addFailure(data);
             }
         }
-
+        LOGGER.debug("END undoVertices");
         if (verticesDeleted.length() > 0) {
             workQueueRepository.pushVerticesDeletion(verticesDeleted);
         }
+        graph.flush();
+    }
 
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("success", successArray);
-        resultJson.put("failures", failures);
-        respondWithJson(response, resultJson);
+    private void undoEdges(ClientApiUndoItem[] undoItem, ClientApiWorkspaceUndoResponse workspaceUndoResponse, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN undoEdges");
+        for (ClientApiUndoItem data : undoItem) {
+            try {
+                if (!(data instanceof ClientApiRelationshipUndoItem)) {
+                    continue;
+                }
+
+                ClientApiRelationshipUndoItem relationshipUndoItem = (ClientApiRelationshipUndoItem) data;
+                Edge edge = graph.getEdge(relationshipUndoItem.getEdgeId(), authorizations);
+                if (edge == null) {
+                    continue;
+                }
+                Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
+                Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
+                if (sourceVertex == null || destVertex == null) {
+                    continue;
+                }
+
+                checkNotNull(edge);
+                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
+                    String error_msg = "Cannot undo a public edge";
+                    LOGGER.warn(error_msg);
+                    data.setErrorMessage(error_msg);
+                    workspaceUndoResponse.addFailure(data);
+                    continue;
+                }
+                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+            } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(), ex);
+                data.setErrorMessage(ex.getMessage());
+                workspaceUndoResponse.addFailure(data);
+            }
+        }
+        LOGGER.debug("END undoEdges");
+        graph.flush();
+    }
+
+    private void undoProperties(ClientApiUndoItem[] undoItem, ClientApiWorkspaceUndoResponse workspaceUndoResponse, String workspaceId, User user, Authorizations authorizations) {
+        LOGGER.debug("BEGIN undoProperties");
+        for (ClientApiUndoItem data : undoItem) {
+            try {
+                if (!(data instanceof ClientApiPropertyUndoItem)) {
+                    continue;
+                }
+                ClientApiPropertyUndoItem propertyUndoItem = (ClientApiPropertyUndoItem) data;
+                Vertex vertex = graph.getVertex(propertyUndoItem.getVertexId(), authorizations);
+                if (vertex == null) {
+                    continue;
+                }
+                String propertyKey = propertyUndoItem.getKey();
+                String propertyName = propertyUndoItem.getName();
+                String propertyVisibilityString = propertyUndoItem.getVisibilityString();
+                List<Property> properties = IterableUtils.toList(vertex.getProperties(propertyKey, propertyName));
+                SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
+                for (int propertyIndex = 0; propertyIndex < properties.size(); propertyIndex++) {
+                    Property property = properties.get(propertyIndex);
+                    if (propertyVisibilityString != null &&
+                            !property.getVisibility().getVisibilityString().equals(propertyVisibilityString)) {
+                        continue;
+                    }
+                    SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
+
+                    if (propertySandboxStatus == SandboxStatus.PUBLIC) {
+                        String error_msg = "Cannot undo a public property";
+                        LOGGER.warn(error_msg);
+                        data.setErrorMessage(error_msg);
+                        workspaceUndoResponse.addFailure(data);
+                        continue;
+                    }
+                    workspaceHelper.deleteProperty(vertex, property, workspaceId, user, authorizations);
+                }
+            } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(), ex);
+                data.setErrorMessage(ex.getMessage());
+                workspaceUndoResponse.addFailure(data);
+            }
+        }
+        LOGGER.debug("End undoProperties");
+        graph.flush();
     }
 
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         for (Edge edge : vertex.getEdges(Direction.BOTH, entityHasImageIri, authorizations)) {
             if (edge.getVertexId(Direction.IN).equals(vertex.getId())) {
                 Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
-                Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+                Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
                 outVertex.removeProperty(entityHasImage.getName(), authorizations);
                 this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage);
             }
@@ -181,17 +234,16 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     auditRepository.auditRelationship(AuditAction.DELETE, outVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
                     this.workQueueRepository.pushEdgeDeletion(edge);
                     this.workQueueRepository.pushGraphPropertyQueue(outVertex, multiValueKey,
-                            LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getString("source"));
+                            LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getSource());
                 }
             }
         }
 
-        for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
-            if (termMentionModel != null) {
-                TermMentionRowKey termMentionRowKey = new TermMentionRowKey(rowKeyProperty.getValue().toString());
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
-            }
+        for (Vertex termMention : termMentionRepository.findResolvedTo(vertex.getId(), authorizations)) {
+            workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations);
+            JSONObject result = new JSONObject();
+            result.put("success", true);
+            unresolved.put(result);
         }
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);

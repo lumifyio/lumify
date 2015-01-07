@@ -1,17 +1,15 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.security.LumifyVisibility;
-import net.lingala.zip4j.exception.ZipException;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -26,17 +24,15 @@ public interface OntologyRepository {
 
     void clearCache();
 
-    Iterable<Relationship> getRelationshipLabels();
+    Iterable<Relationship> getRelationships();
 
     Iterable<OntologyProperty> getProperties();
 
-    Iterable<Concept> getConcepts();
-
     String getDisplayNameForLabel(String relationshipIRI);
 
-    OntologyProperty getProperty(String propertyIRI);
+    OntologyProperty getPropertyByIRI(String propertyIRI);
 
-    Relationship getRelationshipByIRI(String relationshipIRI);
+    boolean hasRelationshipByIRI(String relationshipIRI);
 
     Iterable<Concept> getConceptsWithProperties();
 
@@ -52,7 +48,7 @@ public interface OntologyRepository {
 
     Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir);
 
-    Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName);
+    Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName);
 
     OWLOntologyManager createOwlOntologyManager(OWLOntologyLoaderConfiguration config, IRI excludeDocumentIRI) throws Exception;
 
@@ -64,7 +60,7 @@ public interface OntologyRepository {
 
     void writePackage(File file, IRI documentIRI, Authorizations authorizations) throws Exception;
 
-    JSONObject getJson();
+    ClientApiOntology getClientApiObject();
 
     String guessDocumentIRIFromPackage(File inFile) throws Exception;
 }

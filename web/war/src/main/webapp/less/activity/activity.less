@@ -1,0 +1,122 @@
+@import (reference) "../util/constants";
+
+background: #efefef;
+position: absolute;
+height: 20em;
+width: 25em;  
+
+.content {
+  position: relative;
+  display: block;
+  max-width: none;  
+  box-sizing: border-box;
+  white-space: normal;
+  overflow: auto;
+  
+  h1.no-activity {
+    position: absolute;
+    top: 50%;
+    left: 0;    
+    margin: -1em 0 0 0;
+    padding: 0;    
+    width: 100%;
+    text-align: center;
+    font-size: 140%;
+    color: darken(white, 15%);
+  }
+
+  section {    
+    & > h1 {
+      line-height: 1em;
+      margin: 0;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0;
+        padding: 0.5em 1em;
+        border-bottom: 1px solid darken(white, 10%);
+        position: relative;
+        overflow: auto;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .actions-container {
+          display: none;
+          float: right;   
+          margin: 0;                           
+          button {
+            width: 100%;
+            margin: 0.5em;            
+            display: block;
+          }
+        }
+
+        &.finished {
+          .actions-container {
+            display: block;
+          }
+          .progress-container {
+            display: none;
+          }
+        }
+
+        & > * {
+          margin: 0.35em 0;
+        }
+
+        .type-container {
+          font-weight: bold;
+          color: #555;
+        }
+
+        .progress-container {
+
+          button {
+            float: right;
+            margin-left: 0.5em;
+            border: 0;            
+            display: inline-block;
+            width: 1.3em;
+            height: 1.3em;
+            border-radius: 50%;
+            margin-top: -0.8ex;            
+            background: url(../img/glyphicons/glyphicons_192_circle_remove@2x.png) no-repeat;
+            background-size: contain;
+            background-position: center;
+            .opacity(30);
+          }
+
+          &.no-cancel button {
+            display: none;
+          }
+        
+          .progress {
+            border-radius: 0.5ex;
+            height: 1ex;
+            margin: 0;                      
+            background: darken(white, 5%);            
+            &.determinate {            
+              .bar {
+                background: lighten(@blue-color, 5%);
+              }
+            }
+          }
+        }
+
+        .progress-description {
+          color: #777;
+          font-size: 90%;          
+        }        
+      }
+    }
+  }
+}

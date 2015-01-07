@@ -2,7 +2,9 @@ package io.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.user.UserType;
+import io.lumify.web.clientapi.model.Privilege;
+import io.lumify.web.clientapi.model.UserStatus;
+import io.lumify.web.clientapi.model.UserType;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -133,7 +135,7 @@ public class ProxyUser implements User {
     }
 
     @Override
-    public String getUserStatus() {
+    public UserStatus getUserStatus() {
         ensureUser();
         if (proxiedUser == null) {
             return null;
@@ -163,9 +165,27 @@ public class ProxyUser implements User {
     public Set<Privilege> getPrivileges() {
         ensureUser();
         if (proxiedUser == null) {
-            return  null;
+            return null;
         }
         return proxiedUser.getPrivileges();
+    }
+
+    @Override
+    public String getPasswordResetToken() {
+        ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
+        return proxiedUser.getPasswordResetToken();
+    }
+
+    @Override
+    public Date getPasswordResetTokenExpirationDate() {
+        ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
+        return proxiedUser.getPasswordResetTokenExpirationDate();
     }
 
     private void ensureUser() {

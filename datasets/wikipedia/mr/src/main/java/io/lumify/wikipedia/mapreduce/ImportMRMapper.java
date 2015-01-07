@@ -8,15 +8,17 @@ import io.lumify.core.mapreduce.LumifyElementMapperBase;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionModel;
-import io.lumify.core.model.termMention.TermMentionRowKey;
+import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.version.VersionService;
 import io.lumify.securegraph.model.audit.SecureGraphAuditRepository;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import io.lumify.wikipedia.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.hadoop.io.LongWritable;
@@ -47,7 +49,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     public static final String REVISION_TIMESTAMP_XPATH = "/page/revision/timestamp/text()";
     public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     public static final String CONFIG_SOURCE_FILE_NAME = "sourceFileName";
+    private static final String WIKIPEDIA_PROCESS = ImportMR.class.getName();
 
     private XPathExpression<org.jdom2.Text> textXPath;
     private XPathExpression<org.jdom2.Text> titleXPath;
@@ -72,8 +74,10 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private String sourceFileName;
     private Counter pagesProcessedCounter;
     private Text auditTableNameText;
-    private Text termMentionTableText;
     private Counter pagesSkippedCounter;
+    private VisibilityJson visibilityJson;
+    private VisibilityTranslator visibilityTranslator;
+    private Visibility defaultVisibility;
 
     public ImportMRMapper() {
         this.textXPath = XPathFactory.instance().compile(TEXT_XPATH, Filters.text());
@@ -85,7 +89,10 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
-        this.visibility = new Visibility("");
+        this.visibilityTranslator = new DirectVisibilityTranslator();
+        this.visibility = this.visibilityTranslator.getDefaultVisibility();
+        this.defaultVisibility = this.visibilityTranslator.getDefaultVisibility();
+        this.visibilityJson = new VisibilityJson();
         this.authorizations = new AccumuloAuthorizations();
         this.user = new SystemUser(null);
         VersionService versionService = new VersionService();
@@ -103,7 +110,6 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         pagesProcessedCounter = context.getCounter(WikipediaImportCounters.PAGES_PROCESSED);
         pagesSkippedCounter = context.getCounter(WikipediaImportCounters.PAGES_SKIPPED);
         auditTableNameText = new Text(Audit.TABLE_NAME);
-        termMentionTableText = new Text(TermMentionModel.TABLE_NAME);
     }
 
     @Override
@@ -127,7 +133,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
             return;
         }
 
-        String wikipediaPageVertexId = ImportMR.getWikipediaPageVertexId(parsePage.getPageTitle());
+        String wikipediaPageVertexId = WikipediaConstants.getWikipediaPageVertexId(parsePage.getPageTitle());
         context.setStatus(wikipediaPageVertexId);
 
         try {
@@ -171,29 +177,29 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         LumifyProperties.CONCEPT_TYPE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
         LumifyProperties.MIME_TYPE.setProperty(pageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
         LumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
-        LumifyProperties.SOURCE.setProperty(pageVertexBuilder, ImportMR.WIKIPEDIA_SOURCE, visibility);
+        LumifyProperties.SOURCE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_SOURCE, visibility);
 
-        Map<String, Object> rawMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(rawMetadata, isRedirect ? 0.3 : 0.4);
+        Metadata rawMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(rawMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
         LumifyProperties.RAW.addPropertyValue(pageVertexBuilder, multiKey, rawPropertyValue, rawMetadata, visibility);
 
-        Map<String, Object> titleMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, isRedirect ? 0.3 : 0.4);
+        Metadata titleMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
         LumifyProperties.TITLE.addPropertyValue(pageVertexBuilder, multiKey, parsePage.getPageTitle(), titleMetadata, visibility);
 
-        Map<String, Object> sourceUrlMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(sourceUrlMetadata, isRedirect ? 0.3 : 0.4);
+        Metadata sourceUrlMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(sourceUrlMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
         LumifyProperties.SOURCE_URL.addPropertyValue(pageVertexBuilder, multiKey, parsePage.getSourceUrl(), sourceUrlMetadata, visibility);
 
         if (parsePage.getRevisionTimestamp() != null) {
-            Map<String, Object> publishedDateMetadata = new HashMap<String, Object>();
-            LumifyProperties.CONFIDENCE.setMetadata(publishedDateMetadata, isRedirect ? 0.3 : 0.4);
+            Metadata publishedDateMetadata = new Metadata();
+            LumifyProperties.CONFIDENCE.setMetadata(publishedDateMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
             LumifyProperties.PUBLISHED_DATE.addPropertyValue(pageVertexBuilder, multiKey, parsePage.getRevisionTimestamp(), publishedDateMetadata, visibility);
         }
 
         if (!isRedirect) {
-            Map<String, Object> textMetadata = new HashMap<String, Object>();
-            textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text");
+            Metadata textMetadata = new Metadata();
+            textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text", defaultVisibility);
             LumifyProperties.TEXT.addPropertyValue(pageVertexBuilder, multiKey, textPropertyValue, textMetadata, visibility);
         }
 
@@ -229,36 +235,38 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
 
     private void savePageLink(Context context, Vertex pageVertex, LinkWithOffsets link, String pageTextKey) throws IOException, InterruptedException {
         String linkTarget = link.getLinkTargetWithoutHash();
-        String linkVertexId = ImportMR.getWikipediaPageVertexId(linkTarget);
+        String linkVertexId = WikipediaConstants.getWikipediaPageVertexId(linkTarget);
         context.setStatus(pageVertex.getId() + " [" + linkVertexId + "]");
         VertexBuilder linkedPageVertexBuilder = prepareVertex(linkVertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
         LumifyProperties.MIME_TYPE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_MIME_TYPE, visibility);
-        LumifyProperties.SOURCE.setProperty(linkedPageVertexBuilder, ImportMR.WIKIPEDIA_SOURCE, visibility);
+        LumifyProperties.SOURCE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_SOURCE, visibility);
         LumifyProperties.FILE_NAME.setProperty(linkedPageVertexBuilder, sourceFileName, visibility);
 
-        Map<String, Object> titleMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1);
+        Metadata titleMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1, defaultVisibility);
         String linkTargetHash = Base64.encodeBase64String(linkTarget.trim().toLowerCase().getBytes());
         LumifyProperties.TITLE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY + "#" + linkTargetHash, linkTarget, titleMetadata, visibility);
 
         Vertex linkedPageVertex = linkedPageVertexBuilder.save(authorizations);
-        Edge edge = addEdge(ImportMR.getWikipediaPageToPageEdgeId(pageVertex, linkedPageVertex),
+        Edge edge = addEdge(WikipediaConstants.getWikipediaPageToPageEdgeId(pageVertex, linkedPageVertex),
                 pageVertex,
                 linkedPageVertex,
                 WikipediaConstants.WIKIPEDIA_PAGE_INTERNAL_LINK_WIKIPEDIA_PAGE_CONCEPT_URI,
                 visibility,
                 authorizations);
 
-        TermMentionModel termMention = new TermMentionModel(new TermMentionRowKey(pageVertex.getId(), pageTextKey, link.getStartOffset(),
-                link.getEndOffset()));
-        termMention.getMetadata()
-                .setConceptGraphVertexId(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility)
-                .setSign(linkTarget, visibility)
-                .setVertexId(linkedPageVertex.getId(), visibility)
-                .setEdgeId(edge.getId(), visibility)
-                .setOntologyClassUri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI, visibility);
-        context.write(termMentionTableText, AccumuloSession.createMutationFromRow(termMention));
+        new TermMentionBuilder()
+                .sourceVertex(pageVertex)
+                .propertyKey(pageTextKey)
+                .start(link.getStartOffset())
+                .end(link.getEndOffset())
+                .title(linkTarget)
+                .conceptIri(WikipediaConstants.WIKIPEDIA_PAGE_CONCEPT_URI)
+                .visibilityJson(visibilityJson)
+                .process(WIKIPEDIA_PROCESS)
+                .resolvedTo(linkedPageVertex, edge)
+                .save(getGraph(), visibilityTranslator, authorizations);
     }
 
     private Iterable<LinkWithOffsets> getLinks(TextConverter textConverter) {

@@ -1,0 +1,86 @@
+{
+  "apiVersion": "0.4.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://localhost:8889",
+  "resourcePath": "/user",
+  "apis": [
+    {
+      "path": "/user/me",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Gets the current user info",
+          "type": "ClientApiUser",
+          "nickname": "getMe"
+        }
+      ]
+    },
+    {
+      "path": "/user/all",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Gets all the users",
+          "type": "ClientApiUsers",
+          "nickname": "getAll",
+          "parameters": [
+            {
+              "name": "q",
+              "description": "Query",
+              "required": false,
+              "type": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "workspaceId",
+              "description": "The workspaceId to check for users",
+              "required": false,
+              "type": "string",
+              "paramType": "query"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "summary": "Gets many users by id",
+          "type": "ClientApiUsers",
+          "nickname": "getManyByIds",
+          "consumes": [
+            "multipart/form-data"
+          ],
+          "parameters": [
+            {
+              "name": "userIds[]",
+              "description": "User ids to get",
+              "required": true,
+              "type": "List[string]",
+              "paramType": "form"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/user",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Gets a user by user name (Admin only)",
+          "type": "ClientApiUser",
+          "nickname": "getByUserName",
+          "parameters": [
+            {
+              "name": "user-name",
+              "description": "Query",
+              "required": true,
+              "type": "string",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+  }
+}

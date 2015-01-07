@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+        <!ENTITY lumify "http://lumify.io#" >
+        <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+        <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+        <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+        <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+        ]>
+
+
+<rdf:RDF xmlns="http://lumify.io/csv#"
+         xml:base="http://lumify.io/csv"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/csv">
+        <owl:imports rdf:resource="http://lumify.io"/>
+    </owl:Ontology>
+
+
+    <!-- http://lumify.io/csv#mappingJson -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/csv#mappingJson">
+        <rdfs:label xml:lang="en">Mapping JSON</rdfs:label>
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
+</rdf:RDF>

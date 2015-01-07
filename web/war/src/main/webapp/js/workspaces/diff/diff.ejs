@@ -23,25 +23,49 @@
   <div class="diff-content">
     <table class="table">
         <% diffs.forEach(function(diff) { %>
-          <tr class="vertex-row <%= diff.className %>" data-diff-id="<%= diff.id %>" data-vertex-id="<%= diff.vertexId %>">
-              <th class="vertex-label" colspan="2">
-                <div class="img" <% if (diff.vertex) { %> style="background-image:url(<%= diff.vertex.imageSrc %>)"<% } %>></div>
-                <h1 data-vertex-id="<%= diff.vertexId %>"><%= diff.title %>
-                <% if (diff.vertex['http://lumify.io#visibilityJson']) { %>
-                  <div class="visibility" data-visibility="<%= JSON.stringify(diff.vertex['http://lumify.io#visibilityJson']) %>"></div>
-                <% } %>
-                </h1>
+          <% if (diff.vertex) { %>
+            <tr class="vertex-row <%= diff.className %>" data-diff-id="<%= diff.vertexId %>" data-vertex-id="<%= diff.vertexId %>">
+                <th class="vertex-label" colspan="2">
+                  <div class="img" <% if (diff.vertex) { %> style="background-image:url(<%= F.vertex.image(diff.vertex) %>)"<% } %>></div>
+                  <h1 data-vertex-id="<%= diff.vertexId %>"><%= diff.title %>
+                  <% if (diff.vertex['http://lumify.io#visibilityJson']) { %>
+                    <div class="visibility" data-visibility="<%= JSON.stringify(diff.vertex['http://lumify.io#visibilityJson']) %>"></div>
+                  <% } %>
+                  </h1>
 
-                <% if (diff.action.type !== 'update') { %>
-                <span class="label action-type"><%= diff.action.display %></span>
+                  <% if (diff.action.type !== 'update') { %>
+                  <span class="label action-type"><%= diff.action.display %></span>
+                  <% } %>
+                </th>
+                <% if (diff.action.type === 'create') { %>
+                  <% include workspaces/diff/actions %>
+                <% } else { %>
+                  <td>&nbsp;</td>
                 <% } %>
-              </th>
-              <% if (diff.action.type === 'create') { %>
-                <% include workspaces/diff/actions %>
-              <% } else { %>
-                <td>&nbsp;</td>
-              <% } %>
-          </tr>
+            </tr>
+          <% } else if (diff.edge) { %>
+            <tr class="vertex-row <%= diff.className %>" data-diff-id="<%= diff.edgeId %>" data-edge-id="<%= diff.edgeId %>">
+                <th class="vertex-label" colspan="2">
+                  <div class="img"></div>
+                  <h1 data-edge-id="<%= diff.edgeId %>"><%= F.vertex.title(diff.edge.source) %> <span class="edge-label"><%= diff.edgeLabel %> </span> <%= F.vertex.title(diff.edge.target) %>
+                  <% if (diff.edge['http://lumify.io#visibilityJson']) { %>
+                    <div class="visibility" data-visibility="<%= JSON.stringify(diff.edge['http://lumify.io#visibilityJson']) %>"></div>
+                  <% } %>
+                  </h1>
+
+                  <% if (diff.action.type !== 'update') { %>
+                  <span class="label action-type"><%= diff.action.display %></span>
+                  <% } %>
+                </th>
+                <% if (diff.action.type === 'create') { %>
+                  <% include workspaces/diff/actions %>
+                <% } else { %>
+                  <td>&nbsp;</td>
+                <% } %>
+            </tr>
+          <% } %>
+
+
 
           <% diff.properties.forEach(function(property) { %>
           <tr class="<%= property.className %>" data-diff-id="<%= property.id %>">
@@ -65,17 +89,6 @@
           </tr>
           <% }); %>
 
-          <% diff.edges.forEach(function(edge) { %>
-          <tr class="<%= edge.className %>" data-diff-id="<%= edge.id %>">
-            <td class="edge-label"><div><%= edge.displayLabel %><span>&#8594;</span></div></td>
-            <td class="edge-value"><%= edge.inVertex ? F.vertex.title(edge.inVertex) : edge.inVertexId %>
-                <% if (edge.visibilityJson) { %>
-                  <div class="visibility" data-visibility="<%= JSON.stringify(edge.visibilityJson['http://lumify.io#visibilityJson']) %>"></div>
-                <% } %>
-            </td>
-            <% include workspaces/diff/actions %>
-          </tr>
-          <% }); %>
         <% }); %>
     </table>
   </div>

@@ -9,12 +9,22 @@
   .entity {
     border-bottom: 0 !important;
   }
+  
+  .no_audit_events {
+    padding: 0 1em;
+    color: #999;
+    font-style: italic;
+  }
 
   tr.audit-row {
     td {
       color: #777;
       vertical-align:top;   
-
+      
+      &.audit-subtitle {
+        line-height: 2ex;  
+      }
+      
       &.audit-subtitle, &.audit-date {
         text-align: right; 
         padding-left: 0.5em;

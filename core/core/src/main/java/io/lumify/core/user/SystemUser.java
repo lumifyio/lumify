@@ -1,8 +1,9 @@
 package io.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.core.model.user.UserStatus;
-import io.lumify.core.model.user.UserType;
+import io.lumify.web.clientapi.model.Privilege;
+import io.lumify.web.clientapi.model.UserStatus;
+import io.lumify.web.clientapi.model.UserType;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -38,25 +39,39 @@ public class SystemUser implements User {
     }
 
     @Override
-    public String getEmailAddress() { return SYSTEM_USERNAME; }
+    public String getEmailAddress() {
+        return SYSTEM_USERNAME;
+    }
 
     @Override
-    public Date getCreateDate() { return new Date(0); }
+    public Date getCreateDate() {
+        return new Date(0);
+    }
 
     @Override
-    public Date getCurrentLoginDate() { return null; }
+    public Date getCurrentLoginDate() {
+        return null;
+    }
 
     @Override
-    public String getCurrentLoginRemoteAddr() { return null; }
+    public String getCurrentLoginRemoteAddr() {
+        return null;
+    }
 
     @Override
-    public Date getPreviousLoginDate() { return null; }
+    public Date getPreviousLoginDate() {
+        return null;
+    }
 
     @Override
-    public String getPreviousLoginRemoteAddr() { return null; }
+    public String getPreviousLoginRemoteAddr() {
+        return null;
+    }
 
     @Override
-    public int getLoginCount() { return 0; }
+    public int getLoginCount() {
+        return 0;
+    }
 
     @Override
     public UserType getUserType() {
@@ -64,8 +79,8 @@ public class SystemUser implements User {
     }
 
     @Override
-    public String getUserStatus() {
-        return UserStatus.OFFLINE.name();
+    public UserStatus getUserStatus() {
+        return UserStatus.OFFLINE;
     }
 
     @Override
@@ -74,7 +89,9 @@ public class SystemUser implements User {
     }
 
     @Override
-    public JSONObject getUiPreferences() { return new JSONObject(); }
+    public JSONObject getUiPreferences() {
+        return new JSONObject();
+    }
 
     @Override
     public Set<Privilege> getPrivileges() {
@@ -86,5 +103,13 @@ public class SystemUser implements User {
         return "SystemUser";
     }
 
+    @Override
+    public String getPasswordResetToken() {
+        return null;
+    }
 
+    @Override
+    public Date getPasswordResetTokenExpirationDate() {
+        return null;
+    }
 }

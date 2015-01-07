@@ -5,8 +5,10 @@ import io.lumify.core.util.ClassUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -18,20 +20,28 @@ public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+    public static final String BASE_URL = "base.url";
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_SOURCE_DIRECTORY = "hdfsLibcache.sourceDirectory";
+    public static final String HDFS_LIB_CACHE_TEMP_DIRECTORY = "hdfsLibcache.tempDirectory";
+    public static final String HDFS_LIB_CACHE_HDFS_USER = "hdfsLibcache.user";
     public static final String LIB_DIRECTORY = "lib-directory";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
-    public static final String FILESYSTEM_PROVIDER = "fs.provider";
     public static final String USER_REPOSITORY = "repository.user";
     public static final String WORKSPACE_REPOSITORY = "repository.workspace";
     public static final String AUTHORIZATION_REPOSITORY = "repository.authorization";
     public static final String ONTOLOGY_REPOSITORY = "repository.ontology";
     public static final String AUDIT_REPOSITORY = "repository.audit";
-    public static final String TERM_MENTION_REPOSITORY = "repository.termMention";
     public static final String ARTIFACT_THUMBNAIL_REPOSITORY = "repository.artifactThumbnail";
     public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
+    public static final String LONG_RUNNING_PROCESS_REPOSITORY = "repository.longRunningProcess";
+    public static final String SYSTEM_NOTIFICATION_REPOSITORY = "repository.systemNotification";
+    public static final String WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED = "webAppEmbedded.longRunningProcessRunner.enabled";
+    public static final String WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT = "webAppEmbedded.longRunningProcessRunner.threadCount";
+    public static final String WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED = "webAppEmbedded.graphPropertyWorkerRunner.enabled";
+    public static final String WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT = "webAppEmbedded.graphPropertyWorkerRunner.threadCount";
+    public static final String USER_NOTIFICATION_REPOSITORY = "repository.userNotification";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
     public static final String ONTOLOGY_IRI_PREFIX = "ontology.iri.";
     public static final String ONTOLOGY_IRI_ENTITY_IMAGE = ONTOLOGY_IRI_PREFIX + "entityImage";
@@ -47,30 +57,24 @@ public final class Configuration {
     public static final String DEFAULT_PRIVILEGES = "newuser.privileges";
     public static final String WEB_PROPERTIES_PREFIX = "web.ui.";
     public static final String WEB_GEOCODER_ENABLED = WEB_PROPERTIES_PREFIX + "geocoder.enabled";
+    public static final String DEV_MODE = "devMode";
+    public static final String DEFAULT_SEARCH_RESULT_COUNT = "search.defaultSearchCount";
+    public static final String LOCK_REPOSITORY_PATH_PREFIX = "lockRepository.pathPrefix";
+    public static final String USER_SESSION_COUNTER_PATH_PREFIX = "userSessionCounter.pathPrefix";
+    public static final String DEFAULT_TIME_ZONE = "default.timeZone";
     private final ConfigurationLoader configurationLoader;
+    private final LumifyResourceBundleManager lumifyResourceBundleManager;
 
     private Map<String, String> config = new HashMap<String, String>();
 
-    /**
-     * Default value for a {@link String} property that could not be parsed
-     */
-    public static final String UNKNOWN_STRING = "Unknown";
-
     Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
+        this.lumifyResourceBundleManager = new LumifyResourceBundleManager();
         for (Map.Entry entry : config.entrySet()) {
             if (entry.getValue() != null) {
                 set(entry.getKey().toString(), entry.getValue());
             }
         }
-    }
-
-    public String get(String propertyKey) {
-        return get(propertyKey, UNKNOWN_STRING);
-    }
-
-    public String getOrNull(String propertyKey) {
-        return get(propertyKey, null);
     }
 
     public String get(String propertyKey, String defaultValue) {
@@ -120,6 +124,7 @@ public final class Configuration {
 
     public void setConfigurables(Object o, Map<String, String> config) {
         ConvertUtilsBean convertUtilsBean = new ConvertUtilsBean();
+        Map<Method, PostConfigurationValidator> validatorMap = new HashMap<Method, PostConfigurationValidator>();
 
         for (Method m : o.getClass().getMethods()) {
             Configurable configurableAnnotation = m.getAnnotation(Configurable.class);
@@ -161,6 +166,31 @@ public final class Configuration {
                 } catch (Exception ex) {
                     throw new LumifyException("Could not set property " + m.getName() + " on " + o.getClass().getName());
                 }
+            }
+
+            PostConfigurationValidator validatorAnnotation = m.getAnnotation(PostConfigurationValidator.class);
+            if (validatorAnnotation != null) {
+                if (m.getParameterTypes().length != 0) {
+                    throw new LumifyException("Invalid validator method " + o.getClass().getName() + "." + m.getName() + "(). Expected 0 arguments. Found " + m.getParameterTypes().length + " arguments");
+                }
+                if (m.getReturnType() != Boolean.TYPE) {
+                    throw new LumifyException("Invalid validator method " + o.getClass().getName() + "." + m.getName() + "(). Expected Boolean return type. Found " + m.getReturnType());
+                }
+                validatorMap.put(m, validatorAnnotation);
+            }
+        }
+
+        for (Method method : validatorMap.keySet()) {
+            try {
+                if (!(Boolean) method.invoke(o)) {
+                    String description = validatorMap.get(method).description();
+                    description = description.equals("") ? "()" : "(" + description + ")";
+                    throw new LumifyException(o.getClass().getName() + "." + method.getName() + description + " returned false");
+                }
+            } catch (InvocationTargetException e) {
+                throw new LumifyException("InvocationTargetException invoking validator " + o.getClass().getName() + "." + method.getName(), e);
+            } catch (IllegalAccessException e) {
+                throw new LumifyException("IllegalAccessException invoking validator " + o.getClass().getName() + "." + method.getName(), e);
             }
         }
     }
@@ -207,7 +237,7 @@ public final class Configuration {
             if (key.toLowerCase().contains("password")) {
                 sb.append(key).append(": ********");
             } else {
-                sb.append(key).append(": ").append(get(key));
+                sb.append(key).append(": ").append(get(key, null));
             }
         }
 
@@ -235,5 +265,36 @@ public final class Configuration {
     public File resolveFileName(String fileName) {
         return this.configurationLoader.resolveFileName(fileName);
     }
-}
 
+
+    public JSONObject toJSON(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return toJSON(lumifyResourceBundleManager.getBundle(locale));
+    }
+
+    public JSONObject toJSON(ResourceBundle resourceBundle) {
+        JSONObject properties = new JSONObject();
+        for (String key : getKeys()) {
+            if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
+                properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
+            } else if (key.startsWith(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PREFIX)) {
+                properties.put(key, get(key, ""));
+            }
+        }
+
+        JSONObject messages = new JSONObject();
+        if (resourceBundle != null) {
+            for (String key : resourceBundle.keySet()) {
+                messages.put(key, resourceBundle.getString(key));
+            }
+        }
+
+        JSONObject configuration = new JSONObject();
+        configuration.put("properties", properties);
+        configuration.put("messages", messages);
+
+        return configuration;
+    }
+}

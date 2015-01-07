@@ -1,30 +1,12 @@
 <div class="popover connect-dialog top">
-  <div class="popover-title">
-    <div class="find-path-form dropdown" style="font-size:100%">
-      <a class="btn btn-mini dropdown-toggle"
-         data-toggle="dropdown" 
-         href="#"
-      ><%= i18n('popovers.find_path.hops.display', 2) %> <span class="caret"></span></a>
-      <ul class="dropdown-menu">
-        <li class="disabled"><a tabindex="-1" data-hops="2" 
-          data-display-text="<%= i18n('popovers.find_path.hops.display', 2) %>" href="#"
-            ><%= i18n('popovers.find_path.hops.option', 2) %></a></li>
-        <li><a tabindex="-1" data-hops="3" 
-          data-display-text="<%= i18n('popovers.find_path.hops.display', 3) %>" href="#"
-            ><%= i18n('popovers.find_path.hops.option', 3) %></a></li>
-        <li><a tabindex="-1" data-hops="4"
-          data-display-text="<%= i18n('popovers.find_path.hops.display', 4) %>" href="#"
-            ><%= i18n('popovers.find_path.hops.option', 4) %></a></li>
-      </ul>
-    </div>
-    <span class="title"></span>
-  </div>
   <div class="arrow"></div>
   <div class="popover-content">
     <div class="errors"></div>
     <div class="form find-path-form">
       <span class="path"></span>
-      <button class="btn btn-primary"><%= i18n('popovers.find_path.button.add') %></button>
+      <button data-hops="2" class="btn"><%= i18n('popovers.find_path.hops.option', 2) %></button>
+      <button data-hops="3" class="btn"><%= i18n('popovers.find_path.hops.option', 3) %></button>
+      <button data-hops="4" class="btn"><%= i18n('popovers.find_path.hops.option', 4) %></button>
     </div>
   </div>
 </div>

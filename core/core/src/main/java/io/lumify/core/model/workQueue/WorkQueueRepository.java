@@ -2,20 +2,24 @@ package io.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.metrics.PausableTimerContext;
+import io.lumify.core.ingest.WorkerSpout;
+import io.lumify.core.model.notification.SystemNotification;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.UserNotification;
+import io.lumify.core.model.notification.UserNotificationRepository;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.user.UserStatus;
-import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -23,6 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class WorkQueueRepository {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
     public static final String GRAPH_PROPERTY_QUEUE_NAME = "graphProperty";
+    public static final String LONG_RUNNING_PROCESS_QUEUE_NAME = "longRunningProcess";
     private final Graph graph;
 
     @Inject
@@ -86,6 +91,33 @@ public abstract class WorkQueueRepository {
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
 
         broadcastPropertyChange(element, propertyKey, propertyName, workspaceId);
+    }
+
+    public void pushLongRunningProcessQueue(JSONObject queueItem, String userId) {
+        queueItem.put("enqueueTime", System.currentTimeMillis());
+        queueItem.put("userId", userId);
+        pushOnQueue(LONG_RUNNING_PROCESS_QUEUE_NAME, FlushFlag.DEFAULT, queueItem);
+    }
+
+    public void broadcastLongRunningProcessChange(JSONObject longRunningProcessQueueItem) {
+        String userId = longRunningProcessQueueItem.optString("userId");
+        checkNotNull(userId, "userId cannot be null");
+        JSONObject json = new JSONObject();
+        json.put("type", "longRunningProcessChange");
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        json.put("permissions", permissions);
+        JSONObject dataJson = new JSONObject(longRunningProcessQueueItem.toString());
+
+        /// because results can get quite large we don't want this going on in a web socket message
+        if (dataJson.has("results")) {
+            dataJson.remove("results");
+        }
+
+        json.put("data", dataJson);
+        broadcastJson(json);
     }
 
     public void pushElement(Element element) {
@@ -155,8 +187,12 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushUserWorkspaceChange(User user, String workspaceId) {
+    public void pushUserCurrentWorkspaceChange(User user, String workspaceId) {
         broadcastUserWorkspaceChange(user, workspaceId);
+    }
+
+    public void pushWorkspaceChange(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers, String changedByUserId) {
+        broadcastWorkspace(workspace, previousUsers, changedByUserId);
     }
 
     protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
@@ -165,6 +201,109 @@ public abstract class WorkQueueRepository {
         JSONObject data = UserRepository.toJson(user);
         data.put("workspaceId", workspaceId);
         json.put("data", data);
+        broadcastJson(json);
+    }
+
+    protected void broadcastWorkspace(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers, String changedByUserId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceChange");
+        json.put("modifiedBy", changedByUserId);
+        json.put("permissions", getPermissionsWithUsers(workspace, previousUsers));
+        json.put("data", new JSONObject(ClientApiConverter.clientApiToString(workspace)));
+        broadcastJson(json);
+    }
+
+    public void pushWorkspaceDelete(ClientApiWorkspace workspace) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceDelete");
+        json.put("permissions", getPermissionsWithUsers(workspace, null));
+        json.put("workspaceId", workspace.getWorkspaceId());
+        broadcastJson(json);
+    }
+
+    public void pushWorkspaceDelete(String workspaceId, String userId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "workspaceDelete");
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        json.put("permissions", permissions);
+        json.put("workspaceId", workspaceId);
+        broadcastJson(json);
+    }
+
+    private JSONObject getPermissionsWithUsers(ClientApiWorkspace workspace, List<ClientApiWorkspace.User> previousUsers) {
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        if (previousUsers != null) {
+            for (ClientApiWorkspace.User user : previousUsers) {
+                users.put(user.getUserId());
+            }
+        }
+        for (ClientApiWorkspace.User user : workspace.getUsers()) {
+            users.put(user.getUserId());
+        }
+        permissions.put("users", users);
+        return permissions;
+    }
+
+    public void pushSessionExpiration(String userId, String sessionId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "sessionExpiration");
+
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(userId);
+        permissions.put("users", users);
+        JSONArray sessionIds = new JSONArray();
+        sessionIds.put(sessionId);
+        permissions.put("sessionIds", sessionIds);
+        json.put("permissions", permissions);
+        json.putOpt("sessionId", sessionId);
+        broadcastJson(json);
+    }
+
+    public void pushUserNotification(UserNotification notification) {
+        JSONObject json = new JSONObject();
+        json.put("type", "notification");
+
+        JSONObject permissions = new JSONObject();
+        JSONArray users = new JSONArray();
+        users.put(notification.getUserId());
+        permissions.put("users", users);
+        json.put("permissions", permissions);
+
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", UserNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
+    public void pushSystemNotification(SystemNotification notification) {
+        JSONObject json = new JSONObject();
+        json.put("type", "notification");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
+    public void pushSystemNotificationUpdate(SystemNotification notification) {
+        JSONObject json = new JSONObject();
+        json.put("type", "systemNotificationUpdated");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notification", SystemNotificationRepository.toJSONObject(notification));
+        broadcastJson(json);
+    }
+
+    public void pushSystemNotificationEnded(String notificationId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "systemNotificationEnded");
+        JSONObject data = new JSONObject();
+        json.put("data", data);
+        data.put("notificationId", notificationId);
         broadcastJson(json);
     }
 
@@ -196,57 +335,42 @@ public abstract class WorkQueueRepository {
     protected abstract void broadcastJson(JSONObject json);
 
     protected JSONObject getBroadcastEntityImageJson(Vertex graphVertex) {
-        JSONObject dataJson = new JSONObject();
-
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null, null);
-        dataJson.put("vertex", vertexJson);
-        dataJson.put("graphVertexId", graphVertex.getId());
-
+        // TODO: only broadcast to workspace users if sandboxStatus is PRIVATE
         JSONObject json = new JSONObject();
         json.put("type", "entityImageUpdated");
+
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("graphVertexId", graphVertex.getId());
+
         json.put("data", dataJson);
         return json;
     }
 
     protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName, String workspaceId) {
-        JSONObject dataJson = new JSONObject();
-
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId, null);
-        dataJson.put("vertex", vertexJson);
-
-        JSONObject propertyJson = new JSONObject();
-        propertyJson.put("graphVertexId", graphVertex.getId());
-        propertyJson.put("propertyKey", propertyKey);
-        propertyJson.put("propertyName", propertyName);
-        JSONArray propertiesJson = new JSONArray();
-        propertiesJson.put(propertyJson);
-
-        dataJson.put("properties", propertiesJson);
-
+        // TODO: only broadcast to workspace users if sandboxStatus is PRIVATE
         JSONObject json = new JSONObject();
-        json.put("type", "propertiesChange");
+        json.put("type", "propertyChange");
+
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("graphVertexId", graphVertex.getId());
+        dataJson.putOpt("workspaceId", workspaceId);
+
         json.put("data", dataJson);
+
         return json;
     }
 
     protected JSONObject getBroadcastPropertyChangeJson(Edge edge, String propertyKey, String propertyName, String workspaceId) {
-        JSONObject dataJson = new JSONObject();
-
-        JSONObject vertexJson = JsonSerializer.toJson(edge, workspaceId, null);
-        dataJson.put("edge", vertexJson);
-
-        JSONObject propertyJson = new JSONObject();
-        propertyJson.put("graphEdgeId", edge.getId());
-        propertyJson.put("propertyKey", propertyKey);
-        propertyJson.put("propertyName", propertyName);
-        JSONArray propertiesJson = new JSONArray();
-        propertiesJson.put(propertyJson);
-
-        dataJson.put("properties", propertiesJson);
-
+        // TODO: only broadcast to workspace users if sandboxStatus is PRIVATE
         JSONObject json = new JSONObject();
-        json.put("type", "propertiesChange");
+        json.put("type", "propertyChange");
+
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("graphEdgeId", edge.getId());
+        dataJson.putOpt("workspaceId", workspaceId);
+
         json.put("data", dataJson);
+
         return json;
     }
 
@@ -255,10 +379,6 @@ public abstract class WorkQueueRepository {
     public void init(Map map) {
 
     }
-
-    // TODO this is pretty awful but returning backtype.storm.topology.IRichSpout causes a dependency hell problem because it requires storm jar
-    //      one possibility would be to return a custom type but this just pushes the problem
-    public abstract Object createSpout(Configuration configuration, String queueName);
 
     public abstract void flush();
 
@@ -270,11 +390,33 @@ public abstract class WorkQueueRepository {
 
     public abstract void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer);
 
+    public abstract LongRunningProcessMessage getNextLongRunningProcessMessage();
+
+    public abstract WorkerSpout createWorkerSpout();
+
     public void shutdown() {
 
     }
 
     public static abstract class BroadcastConsumer {
         public abstract void broadcastReceived(JSONObject json);
+    }
+
+    public static abstract class LongRunningProcessMessage {
+        private final JSONObject message;
+
+        public LongRunningProcessMessage(JSONObject message) {
+            this.message = message;
+        }
+
+        public JSONObject getMessage() {
+            return message;
+        }
+
+        public abstract void complete(Throwable ex);
+
+        public void complete() {
+            complete(null);
+        }
     }
 }

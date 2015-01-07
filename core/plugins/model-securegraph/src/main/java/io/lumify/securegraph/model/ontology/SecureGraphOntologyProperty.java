@@ -1,11 +1,14 @@
 package io.lumify.securegraph.model.ontology;
 
 import io.lumify.core.model.ontology.OntologyProperty;
-import io.lumify.core.model.ontology.PropertyType;
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.util.JSONUtil;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONObject;
 import org.securegraph.Vertex;
 
-import static io.lumify.core.model.properties.LumifyProperties.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SecureGraphOntologyProperty extends OntologyProperty {
     private final Vertex vertex;
@@ -15,37 +18,44 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
     }
 
     public String getTitle() {
-        return ONTOLOGY_TITLE.getPropertyValue(vertex);
+        return LumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
     public String getDisplayName() {
-        return DISPLAY_NAME.getPropertyValue(vertex);
+        return LumifyProperties.DISPLAY_NAME.getPropertyValue(vertex);
+    }
+
+    public String getPropertyGroup() {
+        return LumifyProperties.PROPERTY_GROUP.getPropertyValue(vertex);
     }
 
     public boolean getUserVisible() {
-        return USER_VISIBLE.getPropertyValue(vertex);
+        return LumifyProperties.USER_VISIBLE.getPropertyValue(vertex);
     }
 
     public boolean getSearchable() {
-        return SEARCHABLE.getPropertyValue(vertex);
-    }
-
-    @Override
-    public Boolean getDisplayTime() {
-        return DISPLAY_TIME.getPropertyValue(vertex);
+        return LumifyProperties.SEARCHABLE.getPropertyValue(vertex);
     }
 
     public PropertyType getDataType() {
-        return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
+        return PropertyType.convert(LumifyProperties.DATA_TYPE.getPropertyValue(vertex));
+    }
+
+    public String getDisplayType() {
+        return LumifyProperties.DISPLAY_TYPE.getPropertyValue(vertex);
     }
 
     @Override
     public Double getBoost() {
-        return BOOST.getPropertyValue(vertex);
+        return LumifyProperties.BOOST.getPropertyValue(vertex);
     }
 
-    public JSONObject getPossibleValues() {
-        return POSSIBLE_VALUES.getPropertyValue(vertex);
+    public Map<String, String> getPossibleValues() {
+        JSONObject propertyValue = LumifyProperties.POSSIBLE_VALUES.getPropertyValue(vertex);
+        if (propertyValue == null) {
+            return null;
+        }
+        return JSONUtil.toMap(propertyValue);
     }
 
     public Vertex getVertex() {

@@ -43,6 +43,9 @@ define([
 
             this.popover = this.dialog.find('.popover');
 
+            this.on(this.popover, 'positionDialog', this.positionDialog);
+            this.on(this.popover, 'closePopover', this.teardown);
+
             $(document).off('.popoverclose').on('click.popoverclose', function(e) {
                 if (self.attr.teardownOnTap !== false) {
                     if ($(e.target).closest(self.popover).length) {

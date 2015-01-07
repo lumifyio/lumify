@@ -2,7 +2,7 @@
 describeComponent('search/types/typeLumify', function(TypeLumify) {
 
     beforeEach(function() {
-        setupComponent()
+        setupComponent(this)
     })
 
     describe('SearchTypeLumify', function() {

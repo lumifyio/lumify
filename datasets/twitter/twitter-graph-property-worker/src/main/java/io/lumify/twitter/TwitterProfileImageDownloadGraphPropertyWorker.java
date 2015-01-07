@@ -27,7 +27,7 @@ public class TwitterProfileImageDownloadGraphPropertyWorker extends GraphPropert
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }
@@ -64,7 +64,7 @@ public class TwitterProfileImageDownloadGraphPropertyWorker extends GraphPropert
             LOGGER.debug("created vertex: %s", profileImageVertex.getId());
 
             getGraph().addEdge((Vertex) data.getElement(), profileImageVertex, entityHasImageIri, data.getVisibility(), getAuthorizations());
-            LumifyProperties.ENTITY_IMAGE_VERTEX_ID.setProperty(data.getElement(), profileImageVertex.getId().toString(), data.getVisibility(), getAuthorizations());
+            LumifyProperties.ENTITY_IMAGE_VERTEX_ID.setProperty(data.getElement(), profileImageVertex.getId(), data.getVisibility(), getAuthorizations());
             getGraph().flush();
 
         } finally {

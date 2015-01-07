@@ -4,7 +4,7 @@ describeMixin('util/withAsyncQueue', function() {
     var MY_QUEUE_OBJECT = { valid: true };
 
     beforeEach(function() {
-        setupComponent();
+        setupComponent(this);
     })
 
     it('should provide implementations', function() {

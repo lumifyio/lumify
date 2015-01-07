@@ -4,21 +4,28 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.user.*;
-import io.lumify.core.user.Privilege;
+import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.model.user.UserListenerUtil;
+import io.lumify.core.model.user.UserPasswordUtil;
+import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.HibernateSessionManager;
 import io.lumify.sql.model.workspace.SqlWorkspace;
+import io.lumify.web.clientapi.model.Privilege;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.json.JSONObject;
 import org.securegraph.Graph;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -45,6 +52,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User findByUsername(String username) {
+        username = formatUsername(username);
         Session session = sessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.username=:username")
                 .setParameter("username", username)
@@ -69,6 +77,17 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
+    public Iterable<User> findByStatus(int skip, int limit, UserStatus status) {
+        Session session = sessionManager.getSession();
+        List<User> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.status = :status")
+                .setParameter("status", status.toString())
+                .setFirstResult(skip)
+                .setMaxResults(limit)
+                .list();
+        return users;
+    }
+
+    @Override
     public User findById(String userId) {
         Session session = sessionManager.getSession();
         List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.userId=:id")
@@ -85,6 +104,8 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
+        username = formatUsername(username);
+        displayName = displayName.trim();
         Session session = sessionManager.getSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -95,8 +116,8 @@ public class SqlUserRepository extends UserRepository {
         try {
             transaction = session.beginTransaction();
             newUser = new SqlUser();
-            String id = "USER_" + graph.getIdGenerator().nextId().toString();
-            newUser.setUserId (id);
+            String id = "USER_" + graph.getIdGenerator().nextId();
+            newUser.setUserId(id);
             newUser.setUsername(username);
             newUser.setDisplayName(displayName);
             newUser.setCreateDate(new Date());
@@ -106,7 +127,7 @@ public class SqlUserRepository extends UserRepository {
                 byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
                 newUser.setPassword(salt, passwordHash);
             }
-            newUser.setUserStatus(UserStatus.OFFLINE.name());
+            newUser.setUserStatus(UserStatus.OFFLINE);
             newUser.setPrivilegesString(Privilege.toString(getDefaultPrivileges()));
             LOGGER.debug("add %s to user table", displayName);
             session.save(newUser);
@@ -151,7 +172,7 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public boolean isPasswordValid(User user, String password) {
         checkNotNull(password);
-        if (user == null || user.getUserId() == null|| (user.getUserId() != null && findById(user.getUserId()) == null)) {
+        if (user == null || user.getUserId() == null || (user.getUserId() != null && findById(user.getUserId()) == null)) {
             throw new LumifyException("User is not valid");
         }
 
@@ -278,7 +299,7 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            sqlUser.setUserStatus(status.name());
+            sqlUser.setUserStatus(status);
             session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
@@ -304,8 +325,48 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
+    public void setDisplayName(User user, String displayName) {
+        SqlUser sqlUser = sqlUser(user);
+        Session session = sessionManager.getSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            sqlUser.setDisplayName(displayName);
+
+            session.update(sqlUser);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while setting display name", e);
+        }
+    }
+
+    @Override
+    public void setEmailAddress(User user, String emailAddress) {
+        SqlUser sqlUser = sqlUser(user);
+        Session session = sessionManager.getSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            sqlUser.setEmailAddress(emailAddress);
+
+            session.update(sqlUser);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while setting e-mail address", e);
+        }
+    }
+
+    @Override
     public Set<Privilege> getPrivileges(User user) {
-        return EnumSet.of(Privilege.READ);
+        return sqlUser(user).getPrivileges();
     }
 
     @Override
@@ -350,6 +411,65 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new LumifyException("HibernateException while setting privileges", e);
+        }
+    }
+
+    @Override
+    public User findByPasswordResetToken(String token) {
+        Session session = sessionManager.getSession();
+        List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.passwordResetToken = :token")
+                .setParameter("token", token)
+                .list();
+        if (users.size() == 0) {
+            return null;
+        } else if (users.size() > 1) {
+            throw new LumifyException("more than one user was returned");
+        } else {
+            return users.get(0);
+        }
+    }
+
+    @Override
+    public void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate) {
+        Session session = sessionManager.getSession();
+        if (user == null || user.getUserId() == null || findById(user.getUserId()) == null) {
+            throw new LumifyException("User is not valid");
+        }
+
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            ((SqlUser) user).setPasswordResetToken(token);
+            ((SqlUser) user).setPasswordResetTokenExpirationDate(expirationDate);
+            session.update(user);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while setting token and expiration date", e);
+        }
+    }
+
+    @Override
+    public void clearPasswordResetTokenAndExpirationDate(User user) {
+        Session session = sessionManager.getSession();
+        if (user == null || user.getUserId() == null || findById(user.getUserId()) == null) {
+            throw new LumifyException("User is not valid");
+        }
+
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            ((SqlUser) user).setPasswordResetToken(null);
+            ((SqlUser) user).setPasswordResetTokenExpirationDate(null);
+            session.update(user);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while clearing token and expiration date", e);
         }
     }
 

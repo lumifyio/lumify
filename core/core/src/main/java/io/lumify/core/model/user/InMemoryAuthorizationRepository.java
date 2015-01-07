@@ -5,9 +5,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Authorizations;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toArray;
 
@@ -35,6 +33,19 @@ public class InMemoryAuthorizationRepository implements AuthorizationRepository 
 
     @Override
     public Authorizations createAuthorizations(Set<String> authorizationsSet) {
-        return new InMemoryAuthorizations(toArray(authorizationsSet, String.class));
+        return createAuthorizations(toArray(authorizationsSet, String.class));
+    }
+
+    @Override
+    public Authorizations createAuthorizations(String[] authorizations) {
+        return new InMemoryAuthorizations(authorizations);
+    }
+
+    @Override
+    public Authorizations createAuthorizations(Authorizations authorizations, String... additionalAuthorizations) {
+        Set<String> authList = new HashSet<String>();
+        Collections.addAll(authList, authorizations.getAuthorizations());
+        Collections.addAll(authList, additionalAuthorizations);
+        return createAuthorizations(authList);
     }
 }

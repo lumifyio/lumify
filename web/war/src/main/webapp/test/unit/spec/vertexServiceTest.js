@@ -9,7 +9,7 @@ define(['service/vertex'], function(Service) {
 
 		it('should have some functions', function() {
 			var service = new Service({});
-			expect(service.graphVertexSearch).to.be.a('function');
+			expect(service.search).to.be.a('function');
 			expect(service.getVertexProperties).to.be.a('function');
 		});
 

@@ -1,6 +1,5 @@
 package io.lumify.termsOfUse;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -9,6 +8,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.codec.binary.Hex;
 import org.json.JSONObject;
@@ -45,7 +45,7 @@ public class TermsOfUse extends BaseRequestHandler {
         String html = configuration.get(HTML_PROPERTY, DEFAULT_HTML);
         termsHash = hash(html);
         Date date = null;
-        String dateString = configuration.getOrNull(DATE_PROPERTY);
+        String dateString = configuration.get(DATE_PROPERTY, null);
         if (dateString != null) {
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_PROPERTY_FORMAT);
             try {

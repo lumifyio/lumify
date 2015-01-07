@@ -48,7 +48,7 @@ define([
         vertexIds.forEach(function(vId) {
             if (layoutPositions[vId]) return;
 
-            var pathVertices = layoutOptions.map[vId],
+            var pathVertices = layoutOptions.map[vId] || {},
             sourcePosition, targetPosition,
             clonedGrid = grid.clone();
 

@@ -12,11 +12,12 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.*;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.Privilege;
+import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.securegraph.Graph;
@@ -64,7 +65,7 @@ public class SecureGraphUserRepository extends UserRepository {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
 
-        Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser", null);
+        Concept userConcept = ontologyRepository.getOrCreateConcept(null, USER_CONCEPT_IRI, "lumifyUser", null);
         userConceptId = userConcept.getTitle();
 
         Set<String> authorizationsSet = new HashSet<String>();
@@ -78,7 +79,7 @@ public class SecureGraphUserRepository extends UserRepository {
             return null;
         }
 
-        String userId = (String) user.getId();
+        String userId = user.getId();
         String username = UserLumifyProperties.USERNAME.getPropertyValue(user);
         String displayName = UserLumifyProperties.DISPLAY_NAME.getPropertyValue(user);
         String emailAddress = UserLumifyProperties.EMAIL_ADDRESS.getPropertyValue(user);
@@ -90,17 +91,20 @@ public class SecureGraphUserRepository extends UserRepository {
         int loginCount = UserLumifyProperties.LOGIN_COUNT.getPropertyValue(user, 0);
         String[] authorizations = toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
-        String userStatus = UserLumifyProperties.STATUS.getPropertyValue(user);
+        UserStatus userStatus = UserStatus.valueOf(UserLumifyProperties.STATUS.getPropertyValue(user));
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
         JSONObject preferences = UserLumifyProperties.UI_PREFERENCES.getPropertyValue(user);
+        String passwordResetToken = UserLumifyProperties.PASSWORD_RESET_TOKEN.getPropertyValue(user);
+        Date passwordResetTokenExpirationDate = UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.getPropertyValue(user);
 
         LOGGER.debug("Creating user from UserRow. username: %s", username);
-        return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences);
+        return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences, passwordResetToken, passwordResetTokenExpirationDate);
     }
 
     @Override
     public User findByUsername(String username) {
+        username = formatUsername(username);
         return createFromVertex(singleOrDefault(graph.query(authorizations)
                 .has(UserLumifyProperties.USERNAME.getPropertyName(), username)
                 .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
@@ -122,6 +126,21 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
+    public Iterable<User> findByStatus(int skip, int limit, UserStatus status) {
+        return new ConvertingIterable<Vertex, User>(graph.query(authorizations)
+                .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .has(UserLumifyProperties.STATUS.getPropertyName(), status.toString())
+                .skip(skip)
+                .limit(limit)
+                .vertices()) {
+            @Override
+            protected User convert(Vertex vertex) {
+                return createFromVertex(vertex);
+            }
+        };
+    }
+
+    @Override
     public User findById(String userId) {
         return createFromVertex(findByIdUserVertex(userId));
     }
@@ -132,6 +151,8 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
+        username = formatUsername(username);
+        displayName = displayName.trim();
         User existingUser = findByUsername(username);
         if (existingUser != null) {
             throw new LumifyException("duplicate username");
@@ -142,7 +163,7 @@ public class SecureGraphUserRepository extends UserRepository {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
-        String id = "USER_" + graph.getIdGenerator().nextId().toString();
+        String id = "USER_" + graph.getIdGenerator().nextId();
         VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility());
 
         LumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
@@ -242,7 +263,7 @@ public class SecureGraphUserRepository extends UserRepository {
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         UserLumifyProperties.STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility(), authorizations);
         graph.flush();
-        user.setUserStatus(status.toString());
+        user.setUserStatus(status);
         return user;
     }
 
@@ -319,6 +340,20 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
+    public void setDisplayName(User user, String displayName) {
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        UserLumifyProperties.DISPLAY_NAME.setProperty(userVertex, displayName, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
+    }
+
+    @Override
+    public void setEmailAddress(User user, String emailAddress) {
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        UserLumifyProperties.EMAIL_ADDRESS.setProperty(userVertex, emailAddress, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
+    }
+
+    @Override
     public Set<Privilege> getPrivileges(User user) {
         Set<Privilege> privileges;
         if (user instanceof SystemUser) {
@@ -350,5 +385,29 @@ public class SecureGraphUserRepository extends UserRepository {
 
     private Set<Privilege> getPrivileges(Vertex userVertex) {
         return Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(userVertex));
+    }
+
+    @Override
+    public User findByPasswordResetToken(String token) {
+        return createFromVertex(singleOrDefault(graph.query(authorizations)
+                .has(UserLumifyProperties.PASSWORD_RESET_TOKEN.getPropertyName(), token)
+                .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .vertices(), null));
+    }
+
+    @Override
+    public void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        UserLumifyProperties.PASSWORD_RESET_TOKEN.setProperty(userVertex, token, VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.setProperty(userVertex, expirationDate, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
+    }
+
+    @Override
+    public void clearPasswordResetTokenAndExpirationDate(User user) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        UserLumifyProperties.PASSWORD_RESET_TOKEN.removeProperty(userVertex, authorizations);
+        UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.removeProperty(userVertex, authorizations);
+        graph.flush();
     }
 }

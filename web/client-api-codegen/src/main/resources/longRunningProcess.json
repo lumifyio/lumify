@@ -1,0 +1,63 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/long-running-process",
+    "apis": [
+        {
+            "path": "/long-running-process",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the vertex properties",
+                    "type": "RawString",
+                    "nickname": "findByIdRaw",
+                    "parameters": [
+                        {
+                            "name": "longRunningProcessId",
+                            "description": "ID of the long running process",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Long running process not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/long-running-process/cancel",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Cancels a long running process",
+                    "type": "void",
+                    "nickname": "cancel",
+                    "parameters": [
+                        {
+                            "name": "longRunningProcessId",
+                            "description": "ID of the long running process",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Long running process not found"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+
+    }
+}

@@ -12,7 +12,7 @@ these layers, but is not shown in the diagram. There are numerous other librarie
     /---------+--------+--------+-----------+------------+--------+---------\
     | OpenNLP | CLAVIN | OpenCV | tesseract | CMU Sphinx | FFmpeg | more... |
     +---------+--------+--------+-----------+------------+--------+---------+
-    |                               Storm                                   |
+    |                               YARN                                    |
     +------------------------------------------------------+----------------+
     |                   Secure Graph                       |                |
     +----------------------------------+-------------------+                |
@@ -23,25 +23,25 @@ these layers, but is not shown in the diagram. There are numerous other librarie
 
 ## Ingestion Pipeline
 
-The ingestion pipeline is primarily implemented using Apache Storm, although you can also ingest data using map reduce.
+The ingestion pipeline is primarily implemented using Apache YARN, although you can also ingest data using map reduce.
 Instances of both approaches can be found in the Lumify code base.
 
-### Storm-based Ingestion
+### YARN-based Ingestion
 
-Storm-based ingestion within Lumify works on top of an abstraction called `GraphPropertyWorker`(s). The abstraction
+YARN-based ingestion within Lumify works on top of an abstraction called `GraphPropertyWorker`(s). The abstraction
 works a lot like data binding within GUI programming toolkits, with changes to properties of vertices in the graph
 being published to a queue. All `GraphPropertyWorker`s are then given an opportunity to inspect the property change and
 optionally perform some kind of action, possibly publishing new property changes to the queue for other workers to
 process further.
 
-Lumify-provided `GraphPropertyWorker` implementations are found in the `lumify-storm-plugins-group` module. Each is
-implemented as a plugin and will automatically run if found in the classpath. Please see the [storm features](features.md)
-page for more information about each plugin.
+Lumify-provided `GraphPropertyWorker` implementations are found in the `lumify-graph-property-worker-plugins-group` module.
+Each is implemented as a plugin and will automatically run if found in the classpath. Please see
+the [yarn features](features.md) page for more information about each plugin.
 
 ### Map Reduce Ingestion
 
 Map reduce is a more appropriate programming model for batch ingestion of large datasets. Lumify doesn't currently
-provide any batch ingestion abstraction similar to what's provided for storm-based ingestion. You can see several map
+provide any batch ingestion abstraction similar to what's provided for yarn-based ingestion. You can see several map
 reduce ingestion examples in the datasets directory. The most important thing to remember about those examples
 is that they require running a re-indexing map reduce job after ingestion.
 

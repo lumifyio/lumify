@@ -1,4 +1,9 @@
 <li class="user-row" data-user-id="<%= user.userId %>"
 ><span class="badge permissions"
        data-access="<%= user.access.toUpperCase() %>"
-       ><%= user.permissionLabel %> <% if (editable) { %><span class="caret"></span><% } %></span><%= user.displayName %></li>
+       ><%= user.permissionLabel %> <% if (editable) { %><span class="caret"></span><% } %></span><%= user.displayName %>
+  <% if (user.displayName.toLowerCase() !== (user.email || user.userName).toLowerCase()) { %>
+  <div class="subtitle"><%= user.email || user.userName %></div>
+  <% } %>
+  <div class="user-status <%= user.status ? user.status.toLowerCase() : 'unknown' %>"></div>
+</li>

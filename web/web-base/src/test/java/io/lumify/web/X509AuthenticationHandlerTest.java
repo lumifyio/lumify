@@ -1,8 +1,8 @@
 package io.lumify.web;
 
-import io.lumify.miniweb.HandlerChain;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.HandlerChain;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,7 +90,6 @@ public class X509AuthenticationHandlerTest {
         when(userRepository.findOrAddUser(eq(TEST_USERNAME), eq("valid"), isNull(String.class), anyString(), any(String[].class))).thenReturn(user);
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);
-        verify(httpSession).setAttribute(CurrentUser.CURRENT_USER_REQ_ATTR_NAME, user.getUserId());
         verify(chain).next(request, response);
     }
 

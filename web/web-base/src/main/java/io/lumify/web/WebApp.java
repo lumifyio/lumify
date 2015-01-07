@@ -1,20 +1,25 @@
 package io.lumify.web;
 
-import io.lumify.miniweb.App;
-import io.lumify.miniweb.Handler;
 import com.google.inject.Injector;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.config.LumifyResourceBundleManager;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.apache.commons.io.IOUtils;
+import io.lumify.miniweb.App;
+import io.lumify.miniweb.Handler;
+import io.lumify.miniweb.handlers.AppendableStaticResourceHandler;
+import io.lumify.miniweb.handlers.StaticResourceHandler;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,13 +28,29 @@ import static org.securegraph.util.CloseableUtils.closeQuietly;
 public class WebApp extends App {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WebApp.class);
     private final Injector injector;
-    private Map<String, String> javaScriptSources = new HashMap<String, String>();
-    private Map<String, String> cssSources = new HashMap<String, String>();
+    private final boolean devMode;
+    private final AppendableStaticResourceHandler pluginsJsResourceHandler = new No404AppendableStaticResourceHandler("application/javascript");
+    private final List<String> pluginsJsResources = new ArrayList<String>();
+    private final AppendableStaticResourceHandler pluginsCssResourceHandler = new No404AppendableStaticResourceHandler("text/css");
+    private final List<String> pluginsCssResources = new ArrayList<String>();
     private LumifyResourceBundleManager lumifyResourceBundleManager = new LumifyResourceBundleManager();
 
     public WebApp(final ServletContext servletContext, final Injector injector) {
         super(servletContext);
         this.injector = injector;
+
+        Configuration config = injector.getInstance(Configuration.class);
+        this.devMode = "true".equals(config.get(Configuration.DEV_MODE, "false"));
+
+        if (!devMode) {
+            String pluginsJsRoute = "plugins.js";
+            this.get("/" + pluginsJsRoute, pluginsJsResourceHandler);
+            pluginsJsResources.add(pluginsJsRoute);
+
+            String pluginsCssRoute = "plugins.css";
+            this.get("/" + pluginsCssRoute, pluginsCssResourceHandler);
+            pluginsCssResources.add(pluginsCssRoute);
+        }
     }
 
     @Override
@@ -51,32 +72,22 @@ public class WebApp extends App {
     }
 
     public void registerJavaScript(String scriptResourceName) {
-        InputStream stream = WebApp.class.getResourceAsStream(scriptResourceName);
-        if (stream == null) {
-            throw new LumifyException("Could not find script resource: " + scriptResourceName);
-        }
-        try {
-            LOGGER.info("registering JavaScript plugin file: %s", scriptResourceName);
-            javaScriptSources.put(scriptResourceName, IOUtils.toString(stream, "UTF-8"));
-        } catch (IOException e) {
-            throw new LumifyException("Could not read script resource: " + scriptResourceName);
-        } finally {
-            closeQuietly(stream);
+        String resourcePath = "js" + scriptResourceName;
+        if (devMode) {
+            get("/" + resourcePath, new StaticResourceHandler(this.getClass(), scriptResourceName, "application/javascript"));
+            pluginsJsResources.add(resourcePath);
+        } else {
+            pluginsJsResourceHandler.appendResource(scriptResourceName);
         }
     }
 
     public void registerCss(String cssResourceName) {
-        InputStream stream = WebApp.class.getResourceAsStream(cssResourceName);
-        if (stream == null) {
-            throw new LumifyException("Could not find css resource: " + cssResourceName);
-        }
-        try {
-            LOGGER.info("registering CSS plugin file: %s", cssResourceName);
-            cssSources.put(cssResourceName, IOUtils.toString(stream, "UTF-8"));
-        } catch (IOException e) {
-            throw new LumifyException("Could not read css resource: " + cssResourceName);
-        } finally {
-            closeQuietly(stream);
+        String resourcePath = "css" + cssResourceName;
+        if (devMode) {
+            get("/" + resourcePath, new StaticResourceHandler(this.getClass(), cssResourceName, "text/css"));
+            pluginsCssResources.add(resourcePath);
+        } else {
+            pluginsCssResourceHandler.appendResource(cssResourceName);
         }
     }
 
@@ -123,11 +134,15 @@ public class WebApp extends App {
         return lumifyResourceBundleManager.getBundle(locale);
     }
 
-    public Map<String, String> getJavaScriptSources() {
-        return javaScriptSources;
+    public List<String> getPluginsJsResources() {
+        return pluginsJsResources;
     }
 
-    public Map<String, String> getCssSources() {
-        return cssSources;
+    public List<String> getPluginsCssResources() {
+        return pluginsCssResources;
+    }
+
+    public boolean isDevModeEnabled() {
+        return devMode;
     }
 }

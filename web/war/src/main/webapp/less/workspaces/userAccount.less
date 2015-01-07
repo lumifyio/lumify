@@ -1,0 +1,40 @@
+.user-account.modal {
+
+  .modal-body {
+    min-height: 50vh;
+    padding: 0;
+
+    @width: 11em;
+
+    .nav-list {
+      position: absolute;
+      left: 0;
+      width: @width;
+      margin: 0;
+      .box-sizing(border-box);
+
+      li a {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+
+    .page {
+      position: absolute;
+      left: @width;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      overflow: auto;
+      padding: 0.25em 1em;
+
+      h1 {
+        font-size: 105%;
+        padding: 0;
+        margin: 0;
+        line-height: 2em;
+      }
+    }
+  }
+}

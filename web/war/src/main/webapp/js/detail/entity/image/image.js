@@ -2,29 +2,27 @@
 define([
     'flight/lib/component',
     'tpl!./image',
-    'data',
     'util/retina',
     'util/withFileDrop',
     'util/privileges',
-    'service/vertex'
+    'util/vertex/formatters',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
-    appData,
     retina,
     withFileDrop,
     Privileges,
-    VertexService) {
+    F,
+    withDataRequest) {
     'use strict';
 
     // Limit previews to 1MB since it's a dataUri
     var MAX_PREVIEW_FILE_SIZE = 1024 * 1024;
 
-    return defineComponent(ImageView, withFileDrop);
+    return defineComponent(ImageView, withFileDrop, withDataRequest);
 
     function ImageView() {
-
-        var vertexService = new VertexService();
 
         this.defaultAttrs({
             canvasSelector: 'canvas',
@@ -38,7 +36,9 @@ define([
             this.on('fileprogress', this.onUpdateProgress);
             this.on('filecomplete', this.onUploadComplete);
             this.on('fileerror', this.onUploadError);
-            this.on(document, 'iconUpdated', this.onUpdateIcon);
+            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+            this.updateImageBackgroundSize = _.throttle(this.updateImageBackgroundSize.bind(this), 100);
+            this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
             this.updateImageBackground();
 
@@ -54,6 +54,8 @@ define([
                     change: this.onFileChange.bind(this)
                 });
 
+                this.on('setImage', this.onSetImage);
+
                 this.$node.addClass('upload-available');
                 this.$node.on({
                     mouseenter: function() {
@@ -66,20 +68,89 @@ define([
             }
         });
 
+        this.onSetImage = function(e, data) {
+            this.handleFilesDropped(data.files);
+        }
+
+        this.onGraphPaddingUpdated = function(event, data) {
+            if (data.padding.r && this.imageNaturalSize) {
+                this.updateImageBackgroundSize();
+            }
+        };
+
+        this.updateImageBackgroundSize = function() {
+            if (this.imageNaturalSize &&
+                this.imageNaturalSize[0] > 0 &&
+                this.imageNaturalSize[1] > 0) {
+                var widthViewport = this.$node.width(),
+                    heightViewport = this.$node.height(),
+                    widthImage = this.imageNaturalSize[0],
+                    heightImage = this.imageNaturalSize[1],
+                    ratioViewport = widthViewport / heightViewport,
+                    ratioImage = widthImage / heightImage,
+
+                    widthCover = ratioImage <= ratioViewport ?
+                        widthViewport : heightViewport * ratioImage,
+                    heightCover = ratioImage <= ratioViewport ?
+                        widthViewport / ratioImage : heightViewport,
+
+                    widthContain = ratioImage <= ratioViewport ?
+                        heightViewport * ratioImage : widthViewport,
+                    heightContain = ratioImage <= ratioViewport ?
+                        heightViewport : widthViewport / ratioImage,
+
+                    hiddenPercent = 1 - (ratioImage <= ratioViewport ?
+                        heightViewport / heightCover :
+                        widthViewport / widthCover
+                    ),
+
+                    // Switch to contain if cover will hide > 40%
+                    shouldUseContain =
+                        hiddenPercent > 0.4 ||
+                        widthCover > widthImage ||
+                        heightCover > heightImage;
+
+                this.$node.css('backgroundSize',
+                    shouldUseContain ?
+                            (
+                                Math.min(widthContain, widthImage) + 'px ' +
+                                Math.min(heightContain, heightImage) + 'px'
+                            ) :
+                        'cover'
+                );
+            }
+        }
+
         this.srcForGlyphIconUrl = function(url) {
-            if (url === this.attr.data.imageDetailSrc) {
+            if (url === F.vertex.imageDetail(this.attr.data)) {
                 return url;
             }
-            return url ? url.replace(/\/thumbnail/, '/raw') : '';
+            return url || '';
         };
 
         this.updateImageBackground = function(src) {
+            var self = this,
+                imageUrl = this.srcForGlyphIconUrl(src || F.vertex.imageDetail(this.attr.data)),
+                customImage = !!(src || !F.vertex.imageIsFromConcept(this.attr.data));
+
+            if (imageUrl && customImage) {
+                self.$node.closest('.entity-background').addClass('loading');
+                var image = new Image();
+                image.onload = function() {
+                    self.imageNaturalSize = [image.naturalWidth, image.naturalHeight];
+                    self.updateImageBackgroundSize();
+                    self.$node.closest('.entity-background').removeClass('loading');
+                }
+                image.onerror = function() {
+                    self.$node.closest('.entity-background').removeClass('loading');
+                }
+                image.src = imageUrl;
+            }
             this.$node
                 .addClass('accepts-file')
-                .css({ backgroundImage: 'url("' +
-                     this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc) + '")'
-                })
-                .toggleClass('custom-image', !!(src || !this.attr.data.imageSrcIsFromConcept));
+                .css({ backgroundImage: 'url("' + imageUrl + '")' })
+                .toggleClass('custom-image', customImage)
+                .closest('.type-content').toggleClass('custom-entity-image', customImage);
         };
 
         this.onFileChange = function(e) {
@@ -108,11 +179,16 @@ define([
             }.bind(this), 1000);
         };
 
-        this.onUpdateIcon = function(e, data) {
-            var src = this.srcForGlyphIconUrl(data.src);
+        this.onVerticesUpdated = function(e, data) {
+            var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
+            if (vertex) {
+                var src = F.vertex.imageDetail(vertex),
+                    oldSrc = F.vertex.imageDetail(this.attr.data);
 
-            if (src !== this.srcForGlyphIconUrl(this.attr.data.imageDetailSrc)) {
-                this.updateImageBackground(src);
+                this.attr.data = vertex;
+                if (src !== oldSrc) {
+                    this.updateImageBackground(src);
+                }
             }
         };
 
@@ -137,16 +213,16 @@ define([
             this.manualAnimation = false;
             this.firstProgressUpdate = true;
 
-            vertexService.uploadImage(this.attr.data.id, file)
+            this.dataRequest('vertex', 'uploadImage', this.attr.data.id, file)
                 .progress(function(complete) {
                     self.trigger('fileprogress', { complete: complete });
                 })
-                .fail(function(xhr, message, error) {
-                    self.trigger('fileerror', { status: xhr.status, response: error });
-                })
-                .done(function(vertex) {
+                .then(function(vertex) {
                     self.trigger('filecomplete', { vertex: vertex });
-                });
+                })
+                .catch(function(xhr) {
+                    self.trigger('fileerror', { status: xhr.status, response: xhr.error });
+                })
         };
 
         this.handleFileDrop = function(file) {
@@ -207,9 +283,7 @@ define([
                 this.cleanup(true);
             }
 
-            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageDetailSrc));
-
-            this.trigger(document, 'updateVertices', { vertices: [data.vertex] });
+            this.updateImageBackground(this.srcForGlyphIconUrl(F.vertex.imageDetail(data.vertex)));
         };
 
         this.onUpdateProgress = function(event, data) {

@@ -7,8 +7,8 @@ import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
-import io.lumify.core.security.LumifyVisibilityProperties;
+import io.lumify.web.clientapi.model.SandboxStatus;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,8 +26,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
 
 public class JsonSerializer {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(JsonSerializer.class);
-
     public static JSONArray toJson(Iterable<? extends Element> elements, String workspaceId, Authorizations authorizations) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
@@ -89,12 +87,9 @@ public class JsonSerializer {
         json.put("id", element.getId());
         json.put("properties", toJsonProperties(element.getProperties(), workspaceId));
         json.put("sandboxStatus", GraphUtil.getSandboxStatus(element, workspaceId).toString());
-        if (element.getVisibility() != null) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getPropertyName(), element.getVisibility().toString());
-        }
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
+        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
         if (visibilityJson != null) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), visibilityJson);
+            json.put("visibilitySource", visibilityJson.getSource());
         }
 
         return json;
@@ -110,7 +105,7 @@ public class JsonSerializer {
             String sandboxStatus = sandboxStatuses[i].toString();
             VideoFrameInfo videoFrameInfo;
             if ((videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property)) != null) {
-                String textDescription = (String) property.getMetadata().get(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                String textDescription = (String) property.getMetadata().getValue(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
                 addVideoFramePropertyToResults(resultsJson, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
             } else {
                 JSONObject propertyJson = toJsonProperty(property);
@@ -183,12 +178,8 @@ public class JsonSerializer {
             result.put("value", toJsonValue(propertyValue));
         }
 
-        if (property.getVisibility() != null) {
-            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getPropertyName(), property.getVisibility().toString());
-        }
-        for (String key : property.getMetadata().keySet()) {
-            Object value = property.getMetadata().get(key);
-            result.put(key, toJsonValue(value));
+        for (Metadata.Entry metadataEntry : property.getMetadata().entrySet()) {
+            result.put(metadataEntry.getKey(), toJsonValue(metadataEntry.getValue()));
         }
 
         return result;

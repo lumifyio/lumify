@@ -92,9 +92,6 @@ require([
 
     'util/visibility',
     'util/privileges',
-    'util/vertex/urlFormatters',
-    'util/messages',
-    'service/user',
 
     'easing',
     'scrollStop',
@@ -103,7 +100,7 @@ require([
     'util/jquery.flight',
     'util/jquery.removePrefixedClasses',
 
-    'util/handlebars/helpers'
+    'util/promise'
 ],
 function(jQuery,
          jQueryui,
@@ -117,26 +114,17 @@ function(jQuery,
          debug,
          _,
          Visibility,
-         Privileges,
-         F,
-         messages,
-         UserService) {
+         Privileges) {
     'use strict';
 
-    // Make localization global
-    if ('i18n' in window) {
-        console.error('i18n function exists');
-    }
-    window.i18n = messages;
+    var App, FullScreenApp, Login, F, withDataRequest;
 
-    var App, FullScreenApp, Login;
+    require(['data/data'], configureApplication);
 
-    configureApplication();
-
-    function configureApplication() {
+    function configureApplication(Data) {
         // Flight Logging
         try {
-            debug.enable(true);
+            debug.enable(false);
             DEBUG.events.logNone();
         } catch(e) {
             console.warn('Error enabling DEBUG mode for flight, probably because Safari Private Browsing enabled', e);
@@ -151,11 +139,23 @@ function(jQuery,
         $.fn.datepicker.defaults.format = 'yyyy-mm-dd';
         $.fn.datepicker.defaults.autoclose = true;
 
+        Data.attachTo(document);
         Visibility.attachTo(document);
         Privileges.attachTo(document);
+        document.dispatchEvent(new Event('readyForPlugins'));
         $(window).on('hashchange', loadApplicationTypeBasedOnUrlHash);
 
-        loadApplicationTypeBasedOnUrlHash();
+        require([
+            'util/messages',
+            'util/vertex/urlFormatters',
+            'util/withDataRequest',
+            'util/handlebars/helpers'
+        ], function(i18n, _F, _withDataRequest) {
+            window.i18n = i18n;
+            F = _F;
+            withDataRequest = _withDataRequest;
+            loadApplicationTypeBasedOnUrlHash();
+        });
     }
 
     /**
@@ -177,6 +177,10 @@ function(jQuery,
             // Is this the default lumify application?
             mainApp = !popoutDetails;
 
+        if (event && isAddUrl(event.oldURL) && isMainApp(event.newURL)) {
+            return;
+        }
+
         if (event && isPopoutUrl(event.oldURL) && isPopoutUrl(event.newURL)) {
             return $('#app').trigger('vertexUrlChanged', {
                 graphVertexIds: ids,
@@ -184,18 +188,16 @@ function(jQuery,
             });
         }
 
-        new UserService().isLoginRequired()
-            .done(function(user) {
-                window.currentUser = user;
-                $(document).trigger('currentUserChanged', { user: user });
+        withDataRequest.dataRequest('user', 'me')
+            .then(function(user) {
                 attachApplication(false);
             })
-            .fail(function(message, options) {
-                attachApplication(true, message, options);
-            });
+            .catch(function() {
+                attachApplication(true, '', {});
+            })
 
         function attachApplication(loginRequired, message, options) {
-            var user = !loginRequired && window.currentUser;
+            var user = !loginRequired && lumifyData.currentUser;
 
             if (!event) {
                 $('html')
@@ -262,6 +264,14 @@ function(jQuery,
 
     function isPopoutUrl(url) {
         return F.vertexUrl.isFullscreenUrl(url);
+    }
+
+    function isAddUrl(url) {
+        return /#add=/.test(url);
+    }
+
+    function isMainApp(url) {
+        return /#\s*$/.test(url) || url.indexOf('#') === -1;
     }
 
 });

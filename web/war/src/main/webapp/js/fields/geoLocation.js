@@ -3,12 +3,11 @@ define([
     'flight/lib/component',
     'tpl!./geoLocation',
     './withPropertyField',
-    'service/map',
-    'service/config'
-], function(defineComponent, template, withPropertyField, MapService, ConfigService) {
+    'util/withDataRequest'
+], function(defineComponent, template, withPropertyField, withDataRequest) {
     'use strict';
 
-    return defineComponent(GeoLocationField, withPropertyField);
+    return defineComponent(GeoLocationField, withPropertyField, withDataRequest);
 
     function makeNumber(v) {
         return parseFloat(v, 10);
@@ -33,11 +32,12 @@ define([
                 d;
 
             if (this.attr.predicates) {
-                d = this.hasGeocoder().done(function(enabled) {
+                d = this.hasGeocoder();
+                d.done(function(enabled) {
                     self.attr.hasGeocoder = enabled;
                 });
             } else {
-                d = $.Deferred().resolve();
+                d = Promise.resolve();
             }
 
             d.done(function() {
@@ -95,10 +95,9 @@ define([
         };
 
         this.hasGeocoder = function() {
-            return (new ConfigService()).getProperties()
-                .then(function(config) {
-                    return config['geocoder.enabled'] === 'true';
-                });
+            return this.dataRequest('config', 'properties').then(function(config) {
+                return config['geocoder.enabled'] === 'true';
+            });
         };
 
         this.setupDescriptionTypeahead = function() {
@@ -106,9 +105,7 @@ define([
 
             this.hasGeocoder().done(function(enabled) {
                 if (enabled) {
-                    var mapService = new MapService(),
-                        savedResults,
-                        request;
+                    var savedResults, request;
 
                     self.select('descriptionSelector')
                         .parent().css('position', 'relative').end()
@@ -116,18 +113,18 @@ define([
                             items: 15,
                             minLength: 3,
                             source: function(q, process) {
-                                if (request && request.abort) {
-                                    request.abort();
+                                if (request && request.cancel) {
+                                    request.cancel();
                                 }
 
-                                request = mapService.geocode(q)
-                                    .fail(function() {
-                                        process([]);
-                                    })
-                                    .done(function(data) {
+                                request = self.dataRequest('map', 'geocode', q)
+                                    .then(function(data) {
                                         savedResults = _.indexBy(data.results, 'name');
                                         process(_.keys(savedResults));
-                                    });
+                                    })
+                                    .catch(function() {
+                                        process([]);
+                                    })
                             },
                             updater: function(item) {
                                 var result = savedResults[item];

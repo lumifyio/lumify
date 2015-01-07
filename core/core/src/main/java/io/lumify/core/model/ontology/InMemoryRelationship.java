@@ -10,8 +10,8 @@ public class InMemoryRelationship extends Relationship {
     private String displayName;
     private List<Relationship> inverseOfs = new ArrayList<Relationship>();
 
-    protected InMemoryRelationship(String relationshipIRI, String displayName, String sourceConceptIRI, String destConceptIRI) {
-        super(sourceConceptIRI, destConceptIRI);
+    protected InMemoryRelationship(String relationshipIRI, String displayName, List<String> domainConceptIRIs, List<String> rangeConceptIRIs) {
+        super(domainConceptIRIs, rangeConceptIRIs);
         this.relationshipIRI = relationshipIRI;
         this.displayName = displayName;
     }

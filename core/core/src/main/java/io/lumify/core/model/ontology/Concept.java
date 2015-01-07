@@ -1,15 +1,16 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
+import io.lumify.web.clientapi.model.ClientApiOntology;
 import org.atteo.evo.inflector.English;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.securegraph.Authorizations;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public abstract class Concept {
     private final String parentConceptIRI;
@@ -32,13 +33,17 @@ public abstract class Concept {
 
     public abstract String getTitleFormula();
 
+    public abstract Boolean getSearchable();
+
     public abstract String getSubtitleFormula();
 
     public abstract String getTimeFormula();
 
     public abstract boolean getUserVisible();
 
-    public abstract String getAddRelatedConceptWhiteList ();
+    public abstract Map<String, String> getMetadata();
+
+    public abstract List<String> getAddRelatedConceptWhiteList();
 
     public Collection<OntologyProperty> getProperties() {
         return properties;
@@ -48,52 +53,54 @@ public abstract class Concept {
         return this.parentConceptIRI;
     }
 
-    public JSONObject toJson() {
+    public ClientApiOntology.Concept toClientApi() {
         try {
-            JSONObject result = new JSONObject();
-            result.put("id", getTitle());
-            result.put("title", getTitle());
-            result.put("displayName", getDisplayName());
+            ClientApiOntology.Concept concept = new ClientApiOntology.Concept();
+            concept.setId(getTitle());
+            concept.setTitle(getTitle());
+            concept.setDisplayName(getDisplayName());
             if (getDisplayType() != null) {
-                result.put("displayType", getDisplayType());
+                concept.setDisplayType(getDisplayType());
             }
             if (getTitleFormula() != null) {
-                result.put("titleFormula", getTitleFormula());
+                concept.setTitleFormula(getTitleFormula());
+            }
+            if (getSearchable() != null) {
+                concept.setSearchable(getSearchable());
             }
             if (getSubtitleFormula() != null) {
-                result.put("subtitleFormula", getSubtitleFormula());
+                concept.setSubtitleFormula(getSubtitleFormula());
             }
             if (getTimeFormula() != null) {
-                result.put("timeFormula", getTimeFormula());
+                concept.setTimeFormula(getTimeFormula());
             }
             if (getParentConceptIRI() != null) {
-                result.put("parentConcept", getParentConceptIRI());
+                concept.setParentConcept(getParentConceptIRI());
             }
             if (getDisplayName() != null) {
-                result.put("pluralDisplayName", English.plural(getDisplayName()));
+                concept.setPluralDisplayName(English.plural(getDisplayName()));
             }
             if (!getUserVisible()) {
-                result.put("userVisible", getUserVisible());
+                concept.setUserVisible(getUserVisible());
             }
             if (hasGlyphIconResource()) {
-                result.put("glyphIconHref", "resource?id=" + URLEncoder.encode(getTitle(), "utf8"));
+                concept.setGlyphIconHref("resource?id=" + URLEncoder.encode(getTitle(), "utf8"));
             }
             if (getColor() != null) {
-                result.put("color", getColor());
+                concept.setColor(getColor());
             }
             if (getAddRelatedConceptWhiteList() != null) {
-                result.put("addRelatedConceptWhiteList", new JSONArray(getAddRelatedConceptWhiteList()));
+                concept.getAddRelatedConceptWhiteList().addAll(getAddRelatedConceptWhiteList());
             }
             if (this.properties != null) {
-                JSONArray propertiesJson = new JSONArray();
                 for (OntologyProperty property : this.properties) {
-                    propertiesJson.put(property.getTitle());
+                    concept.getProperties().add(property.getTitle());
                 }
-                result.put("properties", propertiesJson);
             }
-            return result;
-        } catch (JSONException e) {
-            throw new LumifyException("could not create json", e);
+            for (Map.Entry<String, String> additionalProperty : getMetadata().entrySet()) {
+                concept.getMetadata().put(additionalProperty.getKey(), additionalProperty.getValue());
+            }
+            return concept;
         } catch (UnsupportedEncodingException e) {
             throw new LumifyException("bad encoding", e);
         }
@@ -104,12 +111,12 @@ public abstract class Concept {
         return String.format("%s (%s)", getDisplayName(), getTitle());
     }
 
-    public static JSONArray toJsonConcepts(Iterable<Concept> concepts) {
-        JSONArray conceptsJson = new JSONArray();
+    public static Collection<ClientApiOntology.Concept> toClientApiConcepts(Iterable<Concept> concepts) {
+        Collection<ClientApiOntology.Concept> results = new ArrayList<ClientApiOntology.Concept>();
         for (Concept concept : concepts) {
-            conceptsJson.put(concept.toJson());
+            results.add(concept.toClientApi());
         }
-        return conceptsJson;
+        return results;
     }
 
     public abstract void setProperty(String name, Object value, Authorizations authorizations);

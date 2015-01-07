@@ -9,7 +9,7 @@ describeComponent('graph/graph', function(Graph) {
         }
 
     beforeEach(function() {
-        setupComponent();
+        setupComponent(this);
         this.component.ontologyService.concepts = function() {
             conceptDeferred = $.Deferred();
             conceptDeferred.resolve(defaultConcepts);

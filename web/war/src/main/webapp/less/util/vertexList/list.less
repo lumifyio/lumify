@@ -76,6 +76,12 @@ body > .vertex-dragging {
         padding-top: 0.8em;          
         line-height: 2.2em;
       }
+      &.relation-from a:before {
+        content: '← ';
+      }
+      &.relation-to a:before {
+        content: '→ ';
+      }
       &.has-timeSubtitle, &.has-subtitle {
         a {
           line-height: 1.2em;
@@ -137,6 +143,16 @@ body > .vertex-dragging {
             background-image: url(../img/glyphicons/glyphicons_242_google_maps@2x.png);
           }
         }
+      }
+
+      &.loading a {
+        background-image: url(../img/loading.gif);
+        background-size: auto 12px;
+        background-repeat: no-repeat;
+        background-position: 4px center;
+      }
+      &.loading.active a {
+        background-image: url(../img/loading-active.gif);
       }
     }
   }

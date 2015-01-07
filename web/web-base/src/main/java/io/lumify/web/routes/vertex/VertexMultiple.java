@@ -1,6 +1,5 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyAccessDeniedException;
@@ -8,16 +7,18 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.ClientApiConverter;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiVertexMultipleResponse;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.securegraph.util.IterableUtils.toIterable;
 
@@ -36,23 +37,21 @@ public class VertexMultiple extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String[] vertexStringIds = getRequiredParameterArray(request, "vertexIds[]");
+        HashSet<String> vertexStringIds = new HashSet<String>(Arrays.asList(getRequiredParameterArray(request, "vertexIds[]")));
         boolean fallbackToPublic = getOptionalParameterBoolean(request, "fallbackToPublic", false);
         User user = getUser(request);
         GetAuthorizationsResult getAuthorizationsResult = getAuthorizations(request, fallbackToPublic, user);
         String workspaceId = getWorkspaceId(request);
 
-        Iterable<String> vertexIds = toIterable(vertexStringIds);
+        Iterable<String> vertexIds = toIterable(vertexStringIds.toArray(new String[vertexStringIds.size()]));
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, getAuthorizationsResult.authorizations);
-        JSONObject results = new JSONObject();
-        JSONArray vertices = new JSONArray();
-        results.put("vertices", vertices);
-        results.put("requiredFallback", getAuthorizationsResult.requiredFallback);
+        ClientApiVertexMultipleResponse result = new ClientApiVertexMultipleResponse();
+        result.setRequiredFallback(getAuthorizationsResult.requiredFallback);
         for (Vertex v : graphVertices) {
-            vertices.put(JsonSerializer.toJson(v, workspaceId, getAuthorizationsResult.authorizations));
+            result.getVertices().add(ClientApiConverter.toClientApiVertex(v, workspaceId, getAuthorizationsResult.authorizations));
         }
 
-        respondWithJson(response, results);
+        respondWithClientApiObject(response, result);
     }
 
     private GetAuthorizationsResult getAuthorizations(HttpServletRequest request, boolean fallbackToPublic, User user) {

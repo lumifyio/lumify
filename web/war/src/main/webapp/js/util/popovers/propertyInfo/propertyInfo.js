@@ -2,20 +2,18 @@
 define([
     'flight/lib/component',
     '../withPopover',
-    'service/config',
     'util/vertex/formatters',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineComponent,
     withPopover,
-    ConfigService,
     F,
+    withDataRequest,
     d3) {
     'use strict';
 
-    var configService = new ConfigService();
-
-    return defineComponent(PropertyInfo, withPopover);
+    return defineComponent(PropertyInfo, withPopover, withDataRequest);
 
     function PropertyInfo() {
 
@@ -23,6 +21,7 @@ define([
             deleteButtonSelector: '.btn-danger',
             editButtonSelector: '.btn-edit',
             addButtonSelector: '.btn-add',
+            replyButtonSelector: '.reply',
             justificationValueSelector: 'a'
         });
 
@@ -34,36 +33,38 @@ define([
             var self = this;
 
             this.after('setupWithTemplate', function() {
-                configService.getProperties().done(function(config) {
-                    var splitRegex = /\s*,\s*/,
-                        metadataDisplay =
-                            config['properties.metadata.propertyNamesDisplay'].split(splitRegex).map(i18n),
-                        metadataType =
-                            config['properties.metadata.propertyNamesType'].split(splitRegex);
+                this.dataRequest('config', 'properties')
+                    .done(function(config) {
+                        var splitRegex = /\s*,\s*/,
+                            metadataDisplay =
+                                config['properties.metadata.propertyNamesDisplay'].split(splitRegex).map(i18n),
+                            metadataType =
+                                config['properties.metadata.propertyNamesType'].split(splitRegex);
 
-                    self.metadataProperties =
-                        config['properties.metadata.propertyNames'].split(splitRegex);
+                        self.metadataProperties =
+                            config['properties.metadata.propertyNames'].split(splitRegex);
 
-                    if (self.metadataProperties.length !== metadataDisplay.length ||
-                        self.metadataProperties.length !== metadataType.length) {
-                        throw new Error('Metadata properties must have display names and types');
-                    }
-                    self.metadataPropertiesDisplayMap = _.object(self.metadataProperties, metadataDisplay);
-                    self.metadataPropertiesTypeMap = _.object(self.metadataProperties, metadataType);
+                        if (self.metadataProperties.length !== metadataDisplay.length ||
+                            self.metadataProperties.length !== metadataType.length) {
+                            throw new Error('Metadata properties must have display names and types');
+                        }
+                        self.metadataPropertiesDisplayMap = _.object(self.metadataProperties, metadataDisplay);
+                        self.metadataPropertiesTypeMap = _.object(self.metadataProperties, metadataType);
 
-                    self.on(self.popover, 'click', {
-                        deleteButtonSelector: self.onDelete,
-                        editButtonSelector: self.onEdit,
-                        addButtonSelector: self.onAdd,
-                        justificationValueSelector: self.teardown
+                        self.on(self.popover, 'click', {
+                            deleteButtonSelector: self.onDelete,
+                            editButtonSelector: self.onEdit,
+                            addButtonSelector: self.onAdd,
+                            replyButtonSelector: self.onReply,
+                            justificationValueSelector: self.teardown
+                        });
+
+                        self.contentRoot = d3.select(self.popover.get(0))
+                            .select('.popover-content');
+                        self.update(self.attr.property);
+
+                        self.on(document, 'verticesUpdated', self.onVerticesUpdated);
                     });
-
-                    self.contentRoot = d3.select(self.popover.get(0))
-                        .select('.popover-content');
-                    self.update(self.attr.property);
-
-                    self.on(document, 'verticesUpdated', self.onVerticesUpdated);
-                });
             });
         });
 
@@ -72,16 +73,38 @@ define([
                 positionDialog = this.positionDialog.bind(this),
                 displayNames = this.metadataPropertiesDisplayMap,
                 displayTypes = this.metadataPropertiesTypeMap,
-                canEdit = F.vertex.sandboxStatus(property) ||
-                    property.name === 'http://lumify.io#visibilityJson',
+                isComment = property.name === 'http://lumify.io/comment#entry',
+                isCommentCreator = isComment &&
+                    property.metadata['http://lumify.io#modifiedBy'] === lumifyData.currentUser.id,
+                canEdit = isComment ?
+                    isCommentCreator :
+                    (
+                        F.vertex.sandboxStatus(property) ||
+                        property.name === 'http://lumify.io#visibilityJson'
+                    ),
                 canDelete = canEdit && property.name !== 'http://lumify.io#visibilityJson',
-                metadata = _.pick.apply(_, [property].concat(this.metadataProperties)),
-                transformed = _.chain(metadata)
-                    .pairs()
-                    .value(),
+                metadata = _.chain(this.metadataProperties || [])
+                    .map(function(name) {
+                        if ('metadata' in property) {
+                            if (name in property.metadata) {
+                                return [name, property.metadata[name]];
+                            }
+                        }
+                        if (name in property) {
+                            return [name, property[name]];
+                        }
+                    })
+                    .compact()
+                    .filter(function(m) {
+                        if (m[0] === 'http://lumify.io#confidence' && isComment) {
+                            return false;
+                        }
+                        return true;
+                    })
+                    .value()
                 row = this.contentRoot.select('table')
                     .selectAll('tr')
-                    .data(transformed)
+                    .data(metadata)
                     .call(function() {
                         this.enter()
                             .append('tr')
@@ -92,15 +115,28 @@ define([
                     });
 
             this.contentRoot.select('.btn-danger')
-                .style('display', canDelete ? 'inline' : 'none');
+                .style('display', canDelete ? 'inline' : 'none')
+                .classed('requires-EDIT', !isComment)
+                .classed('requires-COMMENT', isComment)
             this.contentRoot.select('.editadd')
+                .style('display', isComment && !isCommentCreator ? 'none' : 'inline')
                 .classed('btn-edit', canEdit)
                 .classed('btn-add', !canEdit)
+                .classed('requires-EDIT', !isComment)
+                .classed('requires-COMMENT', isComment)
                 .classed('nodelete', !canDelete)
                 .text(canEdit ?
                   i18n('popovers.property_info.button.edit') :
                   i18n('popovers.property_info.button.add')
                 );
+            this.contentRoot.select('.reply').each(function() {
+                var $this = $(this);
+                if (isComment) {
+                    $this.show();
+                } else {
+                    $this.hide();
+                }
+            })
             this.contentRoot.selectAll('tr')
                 .call(function() {
                     var self = this;
@@ -122,10 +158,10 @@ define([
                                 formatter(this, value);
                             } else if (formatterAsync) {
                                 formatterAsync(self, value, property, vertexId)
-                                    .fail(function() {
+                                    .catch(function() {
                                         d3.select(self).text(i18n('popovers.property_info.error', value));
                                     })
-                                    .always(positionDialog);
+                                    .finally(positionDialog);
                                 d3.select(this).text(i18n('popovers.property_info.loading'));
                             } else {
                                 console.warn('No metadata type formatter: ' + typeName);
@@ -141,7 +177,8 @@ define([
 
             // Justification
             var justification = [];
-            if (property._justificationMetadata || property._sourceMetadata) {
+            if (property.metadata &&
+                (property.metadata._justificationMetadata || property.metadata._sourceMetadata)) {
                 justification.push(true);
             }
 
@@ -169,8 +206,8 @@ define([
                         require(['util/vertex/justification/viewer'], function(JustificationViewer) {
                             $(node).teardownAllComponents();
                             JustificationViewer.attachTo(node, {
-                                justificationMetadata: property._justificationMetadata,
-                                sourceMetadata: property._sourceMetadata
+                                justificationMetadata: property.metadata._justificationMetadata,
+                                sourceMetadata: property.metadata._sourceMetadata
                             });
                             positionDialog();
                         });
@@ -198,6 +235,16 @@ define([
             }
         };
 
+        this.onReply = function() {
+            var metadata = this.attr.property.metadata['http://lumify.io/comment#path'],
+                path = (metadata ? (metadata + '/') : '') + this.attr.property.key;
+
+            this.trigger('editProperty', {
+                path: path
+            });
+            this.teardown();
+        };
+
         this.onAdd = function() {
             this.trigger('editProperty', {
                 property: _.omit(this.attr.property, 'key')
@@ -213,7 +260,8 @@ define([
         };
 
         this.onDelete = function(e) {
-            var button = this.select('deleteButtonSelector').addClass('loading').attr('disabled', true);
+            e.stopPropagation();
+            var button = this.popover.find('.btn-danger').addClass('loading').attr('disabled', true);
             this.trigger('deleteProperty', {
                 property: _.pick(this.attr.property, 'name', 'key')
             });

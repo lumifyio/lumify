@@ -1,0 +1,24 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/ontology",
+    "apis": [
+        {
+            "path": "/ontology",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the ontology",
+                    "type": "ClientApiOntology",
+                    "nickname": "get",
+                    "parameters": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+
+    }
+}

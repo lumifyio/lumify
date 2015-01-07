@@ -4,7 +4,7 @@ describeComponent('configuration/plugins/visibility/visibilityDisplay', function
     var VALUE = 'A value';
 
     beforeEach(function() {
-        setupComponent({ value: VALUE })
+        setupComponent(this, { value: VALUE })
     })
 
     it('Should populate the node with value attribue', function() {

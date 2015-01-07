@@ -1,46 +1,32 @@
 
-<div class="detail-toolbar">
-  <div class="btn-toolbar">
+<div class="entity-background">
+  <div class="entity-glyphIcon" style="background-image: url(<%= concept.glyphIconHref %>)"></div>
+  <h1 class="generic-draggable artifact-title" 
+    data-vertex-id='<%= vertex.id %>'><%= F.vertex.title(vertex) %></h1>
+  <div class="subtitle"><%= concept.displayName %></div>
 
-    <div class="btn-group">
-      <a class="btn btn-small dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-share"></i>
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li><a class="" href="<%= vertex.imageRawSrc %>" target="_blank"><%= i18n('detail.artifact.open.button', vertex.concept.displayType) %></a></li>
-        <li><a class="" href="<%= vertex.imageRawSrc %><%= /\?/.test(vertex.imageRawSrc) ? '&' : '?' %>download=true" target="_blank"><%= i18n('detail.artifact.download.button', vertex.concept.displayType) %></a></li>
-        <% var sourceUrl = _.findWhere(vertex.properties, { name: 'http://lumify.io#sourceUrl' }); %>
-        <% if (sourceUrl) { %>
-          <li><a target="_blank" class="" href="<%= sourceUrl.value %>"><%= i18n('detail.entity.source_url.button') %></a></li>
-        <% } %>
-      </ul>
-    </div>
+  <div class="comp-toolbar"></div>
+</div>
 
-    <%- fullscreenButton %>
+<div class="nav-with-background">
+  <% if(concept.displayType == 'video') { %>
+    <div class="preview"/>
+    <div class="currentTranscript"></div>
+  <% } %>
+  <% if(concept.displayType == 'image') { %>
+    <div class="image-preview opens-dropdown"></div>
+  <% } %>
+  <% if(concept.displayType == 'audio') { %>
+    <div class="audio-preview"></div>
+    <div class="currentTranscript"></div>
+  <% } %>
 
-    <%- auditsButton %>
+  <div class='detected-object-labels'></div>
+
+  <div class="artifact-header">
+    <div class="properties"></div>
+    <div class="comments"></div>
   </div>
+
+  <div class="texts"></div>
 </div>
-
-<h1 class="generic-draggable artifact-title" 
-  data-vertex-id='<%= vertex.id %>'><%= F.vertex.title(vertex) %><div class="subtitle"><%= vertex.concept.displayName %></div></h1>
-
-<% if(vertex.concept.displayType == 'video') { %>
-  <div class="preview"/>
-  <div class="currentTranscript"></div>
-<% } %>
-<% if(vertex.concept.displayType == 'image') { %>
-  <div class="image-preview opens-dropdown"></div>
-<% } %>
-<% if(vertex.concept.displayType == 'audio') { %>
-  <div class="audio-preview"></div>
-  <div class="currentTranscript"></div>
-<% } %>
-
-<div class='detected-object-labels'></div>
-
-<div class="artifact-header">
-  <div class="properties"></div>
-</div>
-
-<div class="texts"></div>

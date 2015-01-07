@@ -6,15 +6,21 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 public abstract class WebServer extends CommandLineBase {
-    private static final String PORT_OPTION_VALUE = "port";
-    private static final String HTTPS_PORT_OPTION_VALUE = "httpsPort";
-    private static final String KEY_STORE_PATH_OPTION_VALUE = "keyStorePath";
-    private static final String KEY_STORE_PASSWORD_OPTION_VALUE = "keyStorePassword";
-    private static final String TRUST_STORE_PATH_OPTION_VALUE = "trustStorePath";
-    private static final String TRUST_STORE_PASSWORD_OPTION_VALUE = "trustStorePassword";
-    private static final String REQUIRE_CLIENT_CERT_OPTION_VALUE = "requireClientCert";
-    private static final int DEFAULT_SERVER_PORT = 8080;
-    private static final int DEFAULT_HTTPS_SERVER_PORT = 8443;
+    public static final String PORT_OPTION_VALUE = "port";
+    public static final String HTTPS_PORT_OPTION_VALUE = "httpsPort";
+    public static final String KEY_STORE_PATH_OPTION_VALUE = "keyStorePath";
+    public static final String KEY_STORE_PASSWORD_OPTION_VALUE = "keyStorePassword";
+    public static final String TRUST_STORE_PATH_OPTION_VALUE = "trustStorePath";
+    public static final String TRUST_STORE_PASSWORD_OPTION_VALUE = "trustStorePassword";
+    public static final String REQUIRE_CLIENT_CERT_OPTION_VALUE = "requireClientCert";
+    public static final String WEB_APP_DIR_OPTION_VALUE = "webAppDir";
+    public static final String CONTEXT_PATH_OPTION_VALUE = "contextPath";
+    public static final String SESSION_TIMEOUT_OPTION_VALUE = "sessionTimeout";
+    public static final int DEFAULT_SERVER_PORT = 8080;
+    public static final int DEFAULT_HTTPS_SERVER_PORT = 8443;
+    public static final String DEFAULT_CONTEXT_PATH = "/";
+    public static final int DEFAULT_SESSION_TIMEOUT = 30;
+
     private int httpPort;
     private int httpsPort;
     private String keyStorePath;
@@ -22,6 +28,9 @@ public abstract class WebServer extends CommandLineBase {
     private String trustStorePath;
     private String trustStorePassword;
     private boolean requireClientCert = false;
+    private String webAppDir;
+    private String contextPath;
+    private int sessionTimeout;
 
     public int getHttpPort() {
         return httpPort;
@@ -55,7 +64,21 @@ public abstract class WebServer extends CommandLineBase {
         }
     }
 
-    public boolean getRequireClientCert() { return requireClientCert; }
+    public boolean getRequireClientCert() {
+        return requireClientCert;
+    }
+
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    public String getWebAppDir() {
+        return webAppDir;
+    }
+
+    public int getSessionTimeout() {
+        return sessionTimeout;
+    }
 
     @Override
     protected Options getOptions() {
@@ -124,6 +147,31 @@ public abstract class WebServer extends CommandLineBase {
                         .create()
         );
 
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(WEB_APP_DIR_OPTION_VALUE)
+                        .withDescription("Path to the webapp directory")
+                        .isRequired()
+                        .hasArg(true)
+                        .create()
+        );
+
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(CONTEXT_PATH_OPTION_VALUE)
+                        .withDescription("Context path for the webapp")
+                        .hasArg(true)
+                        .create()
+        );
+
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(SESSION_TIMEOUT_OPTION_VALUE)
+                        .withDescription("number of minutes before idle sessions expire")
+                        .hasArg(true)
+                        .create()
+        );
+
         return options;
     }
 
@@ -150,5 +198,15 @@ public abstract class WebServer extends CommandLineBase {
         trustStorePassword = cmd.getOptionValue(TRUST_STORE_PASSWORD_OPTION_VALUE);
 
         requireClientCert = cmd.hasOption(REQUIRE_CLIENT_CERT_OPTION_VALUE);
+
+        webAppDir = cmd.getOptionValue(WEB_APP_DIR_OPTION_VALUE);
+        contextPath = cmd.getOptionValue(CONTEXT_PATH_OPTION_VALUE, DEFAULT_CONTEXT_PATH);
+
+        final String timeout = cmd.getOptionValue(SESSION_TIMEOUT_OPTION_VALUE);
+        if (timeout == null) {
+            sessionTimeout = DEFAULT_SESSION_TIMEOUT;
+        } else {
+            sessionTimeout = Integer.parseInt(timeout);
+        }
     }
 }

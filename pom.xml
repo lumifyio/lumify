@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lumify</artifactId>
     <groupId>io.lumify</groupId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.4.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Lumify</name>
 
@@ -33,10 +33,11 @@
         <module>core</module>
         <module>datasets</module>
         <module>examples</module>
-        <module>storm</module>
+        <module>graph-property-worker</module>
         <module>tools</module>
         <module>web</module>
         <module>dev</module>
+        <module>integration-test</module>
     </modules>
 
     <properties>
@@ -51,44 +52,45 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency Versions -->
-        <accumulo.version>1.5.0</accumulo.version>
-        <altamira.bigtable.version>0.4.0-SNAPSHOT</altamira.bigtable.version>
-        <miniweb.version>0.5.0</miniweb.version>
+        <accumulo.version>1.6.1</accumulo.version>
+        <altamira.bigtable.version>0.5.1-SNAPSHOT</altamira.bigtable.version>
+        <miniweb.version>0.5.1</miniweb.version>
         <ant.version>1.4.1</ant.version>
-        <atmosphere.version>2.1.1</atmosphere.version>
+        <atmosphere.version>2.2.3</atmosphere.version>
         <commons.beanutils.version>1.9.1</commons.beanutils.version>
         <commons.cli.version>1.2</commons.cli.version>
+        <jcommander.version>1.35</jcommander.version>
         <commons.codec.version>1.8</commons.codec.version>
-        <commons.compress.version>1.5</commons.compress.version>
+        <commons.compress.version>1.8.1</commons.compress.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>
-        <curator.version>1.0.1</curator.version>
-        <elasticsearch.version>1.1.0</elasticsearch.version>
+        <curator.version>2.7.0</curator.version>
+        <elasticsearch.version>1.4.1</elasticsearch.version>
         <evo.inflector.version>1.0.1</evo.inflector.version>
         <guice.version>3.0</guice.version>
-        <hadoop.version>2.0.0-mr1-cdh4.4.0</hadoop.version>
+        <hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+        <twill.version>0.4.0-incubating</twill.version>
+        <hadoop-test.version>2.5.0-mr1-cdh5.2.0</hadoop-test.version>
         <httpcomponents.httpclient.version>4.3.1</httpcomponents.httpclient.version>
         <inflector.version>0.7.0</inflector.version>
-        <jackson.version>2.3.1</jackson.version>
-        <jackson.annotations.version>2.3.0</jackson.annotations.version>
-        <jackson.guice.version>2.3.1</jackson.guice.version>
-        <jetty.version>8.1.14.v20131031</jetty.version>
+        <jackson.version>2.4.3</jackson.version>
+        <jetty.version>9.2.5.v20141112</jetty.version>
         <jetty.javaee.version>3.0.0.v201112011016</jetty.javaee.version>
-        <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
+        <javax.servlet.api.version>3.1.0</javax.servlet.api.version>
         <json.version>20130918</json.version>
         <kryo.version>2.17</kryo.version>
         <lesscss.version>1.3.3</lesscss.version>
         <log4j.version>1.2.17</log4j.version>
         <lucene.version>4.7.0</lucene.version>
         <metrics.version>3.0.1</metrics.version>
-        <securegraph.version>0.7.1-SNAPSHOT</securegraph.version>
+        <securegraph.version>0.9.0-SNAPSHOT</securegraph.version>
+        <groovy.version>2.3.7</groovy.version>
         <zip4j.version>1.3.1</zip4j.version>
-        <zookeeper.version>3.3.6</zookeeper.version>
-
-        <!-- These versions align with storm -->
-        <storm.version>0.9.0.1</storm.version>
-        <guava.version>13.0</guava.version>
+        <zookeeper.version>3.4.6</zookeeper.version>
+        <jersey.version>1.18.1</jersey.version>
+        <maven.plugin.version>3.1.6</maven.plugin.version>
         <slf4j.version>1.6.5</slf4j.version>
+        <guava.version>13.0</guava.version>
 
         <!-- update monthly -->
         <uadetector.resources.version>2014.06</uadetector.resources.version>
@@ -97,10 +99,10 @@
         <junit.version>4.11</junit.version>
         <mockito.version>1.9.5</mockito.version>
         <powermock.version>1.5.1</powermock.version>
+        <cobertura.version>2.0.3</cobertura.version>
 
         <!-- Maven Plugin Versions -->
         <plugin.buildnumber.version>1.2</plugin.buildnumber.version>
-        <plugin.checkstyle.version>2.11</plugin.checkstyle.version>
         <plugin.cobertura.version>2.6</plugin.cobertura.version>
         <plugin.doxia.markdown.version>1.5</plugin.doxia.markdown.version>
         <plugin.findbugs.version>2.5.3</plugin.findbugs.version>
@@ -110,6 +112,7 @@
         <plugin.maven.clean.version>2.5</plugin.maven.clean.version>
         <plugin.maven.compiler.version>3.1</plugin.maven.compiler.version>
         <plugin.maven.dependency.version>2.8</plugin.maven.dependency.version>
+        <plugin.maven.exec.version>1.3.2</plugin.maven.exec.version>
         <plugin.maven.jar.version>2.4</plugin.maven.jar.version>
         <plugin.maven.javadoc.version>2.9.1</plugin.maven.javadoc.version>
         <plugin.maven.jxr.version>2.3</plugin.maven.jxr.version>
@@ -150,7 +153,7 @@
         <repository>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>interval:60</updatePolicy>
             </snapshots>
             <id>lumify-snapshots</id>
             <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
@@ -162,7 +165,7 @@
         <repository>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>interval:60</updatePolicy>
             </snapshots>
             <id>sonatype-snapshots</id>
             <url>http://oss.sonatype.org/content/repositories/snapshots/</url>
@@ -245,7 +248,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.annotations.version}</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -260,7 +263,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-guice</artifactId>
-                <version>${jackson.guice.version}</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -273,9 +276,24 @@
                 <version>${guice.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-client</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey.contribs</groupId>
+                <artifactId>jersey-multipart</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-cli</groupId>
                 <artifactId>commons-cli</artifactId>
                 <version>${commons.cli.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+                <version>${jcommander.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
@@ -303,7 +321,7 @@
                 <version>${zookeeper.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.netflix.curator</groupId>
+                <groupId>org.apache.curator</groupId>
                 <artifactId>curator-framework</artifactId>
                 <version>${curator.version}</version>
                 <exclusions>
@@ -314,7 +332,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>com.netflix.curator</groupId>
+                <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
                 <exclusions>
@@ -384,6 +402,44 @@
                         <groupId>org.codehaus.jackson</groupId>
                         <artifactId>jackson-mapper-asl</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.curator</groupId>
+                        <artifactId>curator-client</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-hdfs</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-yarn-common</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-yarn-client</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.twill</groupId>
+                <artifactId>twill-yarn</artifactId>
+                <version>${twill.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-yarn-common</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-yarn-client</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -405,26 +461,6 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>storm</groupId>
-                <artifactId>storm</artifactId>
-                <version>${storm.version}</version>
-                <exclusions>
-                    <!-- This exclusion is required because this jetty is much older than the web jetty -->
-                    <exclusion>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ring</groupId>
-                        <artifactId>ring-jetty-adapter</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.securegraph</groupId>
@@ -482,6 +518,12 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-servlet</artifactId>
+                <version>${jetty.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-servlets</artifactId>
                 <version>${jetty.version}</version>
                 <scope>compile</scope>
@@ -494,7 +536,22 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-websocket</artifactId>
+                <artifactId>jetty-nosql</artifactId>
+                <version>${jetty.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-server</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mongodb</groupId>
+                        <artifactId>mongo-java-driver</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty.websocket</groupId>
+                <artifactId>websocket-server</artifactId>
                 <version>${jetty.version}</version>
                 <scope>compile</scope>
             </dependency>
@@ -546,7 +603,7 @@
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-test</artifactId>
-                <version>${hadoop.version}</version>
+                <version>${hadoop-test.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -565,6 +622,12 @@
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-module-junit4</artifactId>
                 <version>${powermock.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.sourceforge.cobertura</groupId>
+                <artifactId>cobertura</artifactId>
+                <version>${cobertura.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -594,6 +657,10 @@
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.cobertura</groupId>
+            <artifactId>cobertura</artifactId>
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -618,6 +685,39 @@
                 </pluginManagement>
             </build>
         </profile>
+        <profile>
+            <id>coverage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${plugin.maven.surefire.version}</version>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${plugin.maven.exec.version}</version>
+                        <inherited>false</inherited>
+                        <executions>
+                            <execution>
+                                <id>test-coverage</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bin/testCoverage.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <build>
@@ -627,6 +727,13 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${plugin.maven.surefire.version}</version>
+                    <configuration>
+                        <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
+                        <excludes>
+                            <exclude>**/*$*</exclude>
+                            <exclude>**/*IntegrationTest.java</exclude>
+                        </excludes>
+                    </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.plugins</groupId>

@@ -1,32 +1,31 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.GraphUtil;
-import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiElement;
 import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -68,22 +67,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
         final String metadataString = getOptionalParameter(request, "metadata");
         User user = getUser(request);
-
         String workspaceId = getActiveWorkspaceId(request);
-
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
-
-        if (propertyKey == null) {
-            propertyKey = this.graph.getIdGenerator().nextId().toString();
-        }
-
-        Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
-
         Authorizations authorizations = getAuthorizations(request, user);
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
@@ -93,18 +77,66 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
-        OntologyProperty property = ontologyRepository.getProperty(propertyName);
-        if (property == null) {
-            throw new RuntimeException("Could not find property: " + propertyName);
+        if (propertyName.equals(LumifyProperties.COMMENT.getPropertyName()) && request.getPathInfo().equals("/vertex/property")) {
+            throw new LumifyException("Use /vertex/comment to save comment properties");
+        } else if (request.getPathInfo().equals("/vertex/comment") && !propertyName.equals(LumifyProperties.COMMENT.getPropertyName())) {
+            throw new LumifyException("Use /vertex/property to save non-comment properties");
         }
 
+        respondWithClientApiObject(response, handle(
+                graphVertexId,
+                propertyName,
+                propertyKey,
+                valueStr,
+                justificationText,
+                sourceInfo,
+                metadataString,
+                visibilitySource,
+                user,
+                workspaceId,
+                authorizations));
+    }
+
+    private ClientApiElement handle(
+            String graphVertexId,
+            String propertyName,
+            String propertyKey,
+            String valueStr,
+            String justificationText,
+            String sourceInfo,
+            String metadataString,
+            String visibilitySource,
+            User user,
+            String workspaceId,
+            Authorizations authorizations) {
+        final JSONObject sourceJson;
+        if (sourceInfo != null) {
+            sourceJson = new JSONObject(sourceInfo);
+        } else {
+            sourceJson = new JSONObject();
+        }
+
+        if (propertyKey == null) {
+            propertyKey = this.graph.getIdGenerator().nextId();
+        }
+
+        Metadata metadata = GraphUtil.metadataStringToMap(metadataString, this.visibilityTranslator.getDefaultVisibility());
+
         Object value;
-        try {
-            value = property.convertString(valueStr);
-        } catch (Exception ex) {
-            LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
-            return;
+        if (propertyName == "http://lumify.io#comment") {
+            value = valueStr;
+        } else {
+            OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
+            if (property == null) {
+                throw new RuntimeException("Could not find property: " + propertyName);
+            }
+
+            try {
+                value = property.convertString(valueStr);
+            } catch (Exception ex) {
+                LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
+                throw new LumifyException(ex.getMessage(), ex);
+            }
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
@@ -128,12 +160,10 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, user);
 
-        // TODO: use property key from client when we implement multi-valued properties
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId, visibilitySource);
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, propertyKey, propertyName, workspaceId, visibilitySource);
 
-        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId, authorizations);
-        respondWithJson(response, result);
+        return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }
 }

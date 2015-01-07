@@ -1,6 +1,5 @@
 package io.lumify.web.devTools;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
@@ -8,6 +7,7 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
@@ -47,19 +47,27 @@ public class QueueVertices extends BaseRequestHandler {
             @Override
             public void run() {
                 LOGGER.info("requeue all vertices (property: %s)", finalPropertyName);
+                int count = 0;
+                int pushedCount = 0;
                 Iterable<Vertex> vertices = graph.getVertices(authorizations);
                 for (Vertex vertex : vertices) {
                     if (finalPropertyName == null) {
                         workQueueRepository.pushElement(vertex);
+                        pushedCount++;
                     } else {
                         Iterable<Property> properties = vertex.getProperties(finalPropertyName);
                         for (Property property : properties) {
                             workQueueRepository.pushGraphPropertyQueue(vertex, property);
+                            pushedCount++;
                         }
+                    }
+                    count++;
+                    if ((count % 10000) == 0) {
+                        LOGGER.debug("requeue status. vertices looked at %d. items pushed %d. last vertex id: %s", count, pushedCount, vertex.getId());
                     }
                 }
                 workQueueRepository.flush();
-                LOGGER.info("requeue all vertices complete");
+                LOGGER.info("requeue all vertices complete. vertices looked at %d. items pushed %d.", count, pushedCount);
             }
         });
         t.setName("requeue-vertices");

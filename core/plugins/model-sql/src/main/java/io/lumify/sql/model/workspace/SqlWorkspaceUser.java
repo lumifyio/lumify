@@ -1,6 +1,6 @@
 package io.lumify.sql.model.workspace;
 
-import io.lumify.core.model.workspace.WorkspaceAccess;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
 import io.lumify.sql.model.user.SqlUser;
 
 import javax.persistence.*;

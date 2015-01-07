@@ -9,7 +9,7 @@
 
 .content {
 
-  padding: 2.5em 0;
+  padding: 0;
 
   &.loading {
 
@@ -31,14 +31,46 @@
     }
   }
 
-  .type-content > .preview, .content > .preview {
+  .type-content > .nav-with-background > .preview, .content > .preview {
     height: 300px;
     cursor: pointer;
     background: black;
     margin-top: 1em;
   }
-  .type-content > .audio-preview {
+  .type-content > .nav-with-background > .audio-preview {
     margin-top: 1em;
+  }
+
+  .type-content {
+
+    &.custom-entity-image .entity-background {
+        height: 14em;
+        h1 {
+          bottom: 1.5em;
+          top: auto;
+        }
+        .subtitle {
+          top: auto;
+          bottom: 0.25em;
+        }        
+    }
+
+    &.custom-entity-image .entity-background .entity-glyphIcon {
+        width: 100%;   
+        height: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 0;
+        background-position: center center;
+    }
+
+    &.custom-entity-image .nav-with-background {
+        margin-top: 16.5em;
+    }
+
   }
 
   .entity_audit_events .audit-list {
@@ -170,23 +202,25 @@
     cursor: pointer;
   }
 
-  .fake-link {
-    color: #08c;
+  .entity-background {
 
-    &:hover {
-      color: #079;
-      text-decoration: underline;
-    }
-  }
-
-  .relationship-header {
-    padding: 0.5em;
+  
+  .relationship-header {    
     text-align: center;
     margin-bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0.5em 0;
+  }
   }
   .vertex-to-vertex-relationship {
     font-size: 90%;   
     line-height: 1.1em;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    padding: 0 1em;
+    .box-sizing(border-box);
     
     &:hover {          
       text-decoration: none;
@@ -201,30 +235,6 @@
   
   .underneath {
     @import "dropdown";
-  }
-
-  .detail-toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 0 1em;
-    margin: 0 20px 0 0;
-    white-space: nowrap;
-    z-index: 1;
-    .btn-toolbar {
-
-      .checked a {
-        background-image: url(../../img/glyphicons/glyphicons_206_ok_2@2x.png);
-        background-repeat: no-repeat;
-        background-position: 5px center;
-        background-size: 10px;
-      }
-
-      li.checked:hover a {
-        background-image: url(../../img/glyphicons/white/glyphicons_206_ok_2@2x.png);
-      }
-    }
   }
 
   section.collapsible {
@@ -418,6 +428,9 @@
           cursor: pointer;
           pointer-events: none;
         }
+        .on-bar-text.other, .off-bar-text.other {
+          font-style: italic;
+        }
         .on-bar-text, .on-number-bar-text {
           fill: white;
         }
@@ -476,70 +489,35 @@
     }
   }
 
+  .image-preview, .background-scrubber {
+    cursor: crosshair;
+
+    @import "./facebox";
+  }
+
   .image-preview {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     display: inline-block;
     max-width: 100%;
     position: relative;
-    cursor: crosshair;
     margin: 1em 0 -1.5em 0;
     width: 100%;
     overflow: hidden;
 
-    .facebox {
-      cursor: move;
-      position: absolute;
-      opacity: 1;
-      .box-shadow(~"@{blue-color} 0px 0px 0px 1px, rgba(255,255,255,0.4) 0 0 0 2px, @{blue-color} 0px 0px 8px 5px");
-
-      .ui-resizable-handle {
-        background: none;
-        border: none;
-        &:before, &:after {
-          background: none;
-          border: none;
-        }
-
-        &.ui-resizable-se {
-          width: 9px;
-          height: 9px;
-          right: -5px;
-          bottom: -5px;
-        }
-
-        &.ui-resizable-se,
-        &.ui-resizable-ne,
-        &.ui-resizable-sw,
-        &.ui-resizable-nw {
-          &:before {
-            //box-shadow: 0 0 9px white;
-            width: 5px;
-            height: 5px;
-            background: rgba(255,255,255,0.9);
-          }
-        }
-
-        &.ui-resizable-ne:before {
-          left: -1px;
-          top: 5px;
-          border-radius: 0 0 0 5px;
-        }
-        &.ui-resizable-nw:before {
-          left: 5px;
-          top: 5px;
-          border-radius: 0 0 5px 0;
-        }
-        &.ui-resizable-se:before {
-          left: -1px;
-          top: -1px;
-          border-radius: 5px 0 0 0;
-        }
-        &.ui-resizable-sw:before {
-          left: 5px;
-          top: -1px;
-          border-radius: 0 5px 0 0;
-        }
+    &.loading {
+      display: block;
+      width: 125px;
+      margin: 2em auto -1em;
+      cursor: default;
+      background-image: url(../img/loading-large.png);
+      background-size: auto 125px;
+      min-height: 125px;
+      background-position: center;
+      .spin(10s);
+      .animation-play-state(running);
+      .artifact-image {
+        display: none;
       }
     }
   }
@@ -551,6 +529,7 @@
   .image-preview {
     text-align: center;      
     .artifact-image {
+      max-width: 100%;
       position: relative;
       display: inline-block;
       .image {
@@ -577,7 +556,29 @@
     }
   }
 
+
   @import "properties";
+  @import "comments";
+  @import "toolbar";
+
+  .properties, .comments {
+    button.info {
+      background-color: transparent;
+      background-image: url(../img/glyphicons/glyphicons_195_circle_info@2x.png);
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      border: 0;
+      display: inline-block;
+      height: 16px;
+      margin-left: 0.5em;
+      vertical-align: middle;
+      width: 16px;
+      .opacity(30);
+      &:hover {
+        .opacity(100);
+      }
+    }
+  }
   
   .properties .buttons .underneath {
     margin: 1em 0;       
@@ -588,26 +589,15 @@
     margin: 0; 
     font-size: 130%;    
   }
-  .artifact-title, .entity-title {
-    .subtitle {
-      margin: 0;
-      padding: 0;
-      font-size: 90%;
-      line-height: 1.1em;
-      margin-top: 0em;
-      color: #999;
-      font-variant: small-caps;
-      text-transform: lowercase;
-    }
-  }
+  
   .artifact-header {    
-    margin: 1em 0 0 0;
+    margin: 0;
     padding: 0;
   }
 
   .nav-with-background {  
     overflow: auto;    
-    margin: 200px 0 0 0;
+    margin: 8em 0 0 0;
     padding: 0;
     position: absolute;
     top: 0;    
@@ -654,39 +644,39 @@
 
   .entity-background {
     position: absolute;
-    width: 100%;
-    height: 200px;
+    background: #444;   
+    width: 100%;    
+    height: 6em;
     top: 0;
     margin: 0;
-    padding: 0 1em;
-    border-bottom: 3px solid #0088cc;
+    padding: 0 1em;    
     z-index: 1;
     .box-sizing(border-box);
 
-    .detail-toolbar {
-      z-index: 4;
-      background: transparent;
-    }
-
-    .btn {
-      position: relative;
-      .opacity(40);
-      &:hover {
-        .opacity(100);
+    &.loading {
+      background: #444;
+      width: 100%;
+            
+      .entity-glyphIcon {
+        background-color: transparent;
+        background-image: url(../img/loading-large.png) !important;
+        background-size: auto 125px !important;
+        background-position: center;
+        .spin(10s);
+        .animation-play-state(running);
+        .opacity(10);
+        &:after, &:before, * {display: none; }
       }
-
-      &.open {
-        .opacity(100);
-      }
     }
-
+    
     h1 {
       white-space: nowrap;
-      bottom: 0;
+      display: inline-block; 
+      top: 0.5em;
       color: white;      
       font-size: 150%;
       left: 0;
-      right: 0;      
+      right: 0;          
       overflow: hidden;
       padding: 0 0.75em;
       position: absolute;
@@ -694,15 +684,19 @@
       text-shadow: 0 0px 20px rgba(0,0,0,0.2), 0 0px 2px rgba(0,0,0,1);
       z-index: 4;
       margin: 0;
-      .subtitle {
-        margin-bottom: 0.5em;
-        font-size: 80%;
-        color: fadeOut(white, 15%);
-      }
-    }
+    }    
 
-    .entity-background .dropdown-menu {
-      margin-top: 0px;
+    & > .subtitle {
+      font-size: 120%;
+      font-weight: bold;
+      position: absolute;
+      top: 2.2em;
+      padding-left: .2ex;
+      display: inline-block;
+      margin-bottom: 0.5em;      
+      color: fadeOut(white, 15%);     
+      font-variant: small-caps;
+      text-transform: lowercase;   
     }
   }
 
@@ -730,12 +724,12 @@
 
   .entity-glyphIcon {
     position: absolute;
-    margin: 0 -1em;
+    margin: 0 -1em;    
     width: 100%;
     height: 100%;
-    background-size: contain;
+    background-size: auto 65%;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: right 1em center;
     background-color: #444;
     
     &.shake {

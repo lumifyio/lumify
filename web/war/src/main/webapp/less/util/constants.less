@@ -7,7 +7,21 @@
 @pane-background: #f9f9f9;
 @pane-border: darken(@pane-background, 10%);
 @graph-zIndex: 50;
+@graph-views-zIndex: @graph-zIndex;
+@pane-resize-zIndex: 90;
 
 @pane-animation-distance: 600px;
 
+@regular-font: "HelveticaNeue", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 @light-font: "HelveticaNeue-Thin", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+
+@notification-info: @blue-color;
+@notification-warning: lighten(spin(@blue, 200), 20%);
+@notification-critical: spin(lighten(desaturate(@notification-info, 30%), 20%), 160);
+
+.light-font() {
+  font-family: @light-font;
+}
+.regular-font() {
+  font-family: @regular-font;
+}

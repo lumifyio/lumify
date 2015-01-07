@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class='no-js lt-ie9 lt-ie8 lt-ie7'> <![endif]-->
+<!--[if IE 7]>         <html class='no-js lt-ie9 lt-ie8'> <![endif]-->
+<!--[if IE 8]>         <html class='no-js lt-ie9'> <![endif]-->
+<!--[if gt IE 8]><!--> <html class='no-js'> <!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <title>{{title}}</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name="title" content="{{title}}" />
+    <meta name="description" content="{{description}}" />
+    <meta name="thumbnail" content="img/lumify-thumb.png" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="image_src" href="img/lumify-thumb.png" />
+
+    <link href='css/lumify.css' rel='stylesheet' media='screen'>
+    {{#each pluginCssResources}}
+    <link href='{{.}}' rel='stylesheet' media='screen'>
+    {{/each}}
+
+    <script src='jsc/require.config.js'></script>
+    <script>
+    (function() {
+      var buildNumber = '${buildNumber}',
+          buildTokenReplaced = buildNumber !== ('${' + 'buildNumber' + '}'),
+          versionParameter = buildTokenReplaced ? buildNumber : Date.now();
+
+      require.urlArgs = "v=" + versionParameter;
+
+      document.addEventListener('readyForPlugins', function() {
+        require([
+        {{#each pluginJsResources}}  '{{.}}'{{#unless @last}},{{/unless}}
+        {{/each}}]);
+      }, false);
+    })();
+  </script>
+    <script data-main="lumify" src='libs/requirejs/require.js'></script>
+</head>
+<body>
+<!-- Version: ${project.version} -->
+<!-- SCM URL: ${project.scm.url} -->
+<!-- Git SHA-1: ${buildNumber} -->
+<!-- Build Timestamp: ${build.timestamp.formatted} -->
+<div id='app'></div>
+<div id='login'></div>
+
+</body>
+</html>

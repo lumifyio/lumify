@@ -11,6 +11,7 @@ node_modules/
 *.swp
 allCountries.txt
 coverage-error.log
+cobertura.ser
 npm-debug.log
 /web/src/main/webapp/libs
 catalog-v001.xml

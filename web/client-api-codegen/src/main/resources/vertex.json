@@ -1,0 +1,777 @@
+{
+    "apiVersion": "0.4.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:8889",
+    "resourcePath": "/vertex",
+    "apis": [
+        {
+            "path": "/vertex/properties",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the vertex properties",
+                    "type": "ClientApiElement",
+                    "nickname": "getByVertexId",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "ID of the artifact vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Vertex not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/edges",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the edges of a vertex",
+                    "type": "ClientApiVertexEdges",
+                    "nickname": "getEdges",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "ID of the artifact vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "edgeLabel",
+                            "description": "edge label to find",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "offset",
+                            "description": "offset for paging",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "size",
+                            "description": "size for paging",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Vertex not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/new",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates a new vertex",
+                    "type": "ClientApiElement",
+                    "nickname": "create",
+                    "parameters": [
+                        {
+                            "name": "conceptType",
+                            "description": "concept type of vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "visibility source of new vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/property",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates a new vertex",
+                    "type": "ClientApiElement",
+                    "nickname": "setProperty",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "the property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "value",
+                            "description": "the property value",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "the visibility source of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "The justification text",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "source info",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "metadata",
+                            "description": "metadata",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/term-mentions",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "gets all the term mentions for a property",
+                    "type": "ClientApiTermMentionsResponse",
+                    "nickname": "getTermMentions",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "the property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/detected-objects",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "gets all the detected objects for a vertex",
+                    "type": "ClientApiDetectedObjects",
+                    "nickname": "getDetectedObjects",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "workspaceId",
+                            "description": "the workspace id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/visibility",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Sets the visibility of the vertex",
+                    "type": "ClientApiElement",
+                    "nickname": "setVisibility",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "ID of the artifact vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "The visibility source",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Vertex not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/highlighted-text",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Gets the artifact highlighted HTML",
+                    "type": "string",
+                    "nickname": "getHighlightedText",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "ID of the artifact vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "The property key of the text property to get the text of",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Artifact not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/import",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Import artifact",
+                    "nickname": "importFile",
+                    "type": "ClientApiArtifactImportResponse",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "visibilitySource",
+                            "description": "The visibility source",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "form"
+                        },
+                        {
+                            "name": "file",
+                            "description": "Artifact file",
+                            "required": true,
+                            "type": "File",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/resolve-term",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "resolves an entity",
+                    "type": "void",
+                    "nickname": "resolveTerm",
+                    "parameters": [
+                        {
+                            "name": "artifactId",
+                            "description": "ID of the artifact",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "key of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "mentionStart",
+                            "description": "start offset of mention",
+                            "required": true,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "mentionEnd",
+                            "description": "end offset of mention",
+                            "required": true,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sign",
+                            "description": "the title",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "conceptId",
+                            "description": "the concept type IRI",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "The visibility source",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "resolvedVertexId",
+                            "description": "the resolved vertex id",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "the justification text",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "source info",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/unresolve-term",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "unresolves an entity",
+                    "type": "void",
+                    "nickname": "unresolveTerm",
+                    "parameters": [
+                        {
+                            "name": "termMentionId",
+                            "description": "ID of the term mention",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/resolve-detected-object",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "resolves a detected object",
+                    "type": "void",
+                    "nickname": "resolveDetectedObject",
+                    "parameters": [
+                        {
+                            "name": "artifactId",
+                            "description": "ID of the artifact",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "title",
+                            "description": "The title",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "conceptId",
+                            "description": "the concept id of the detected object",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "visibilitySource",
+                            "description": "the visibility source of the detected object",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "graphVertexId",
+                            "description": "the graphVertexId of the existing detected object",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "justificationText",
+                            "description": "the justification",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "sourceInfo",
+                            "description": "the source info",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "originalPropertyKey",
+                            "description": "the original property key",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "x1",
+                            "description": "The top left X coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "x2",
+                            "description": "The bottom right X coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "y1",
+                            "description": "The top left Y coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "y2",
+                            "description": "The bottom right Y coordinate",
+                            "required": true,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/unresolve-detected-object",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "unresolves a detected object",
+                    "type": "void",
+                    "nickname": "unresolveDetectedObject",
+                    "parameters": [
+                        {
+                            "name": "vertexId",
+                            "description": "ID of the detected object vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "multiValueKey",
+                            "description": "the multi-value key of the property",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/search",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Searches the graph for vertices",
+                    "type": "ClientApiVertexSearchResponse",
+                    "nickname": "vertexSearch",
+                    "parameters": [
+                        {
+                            "name": "q",
+                            "description": "the phrase to search for",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "filter",
+                            "description": "filter to apply",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "offset",
+                            "description": "offset from start of search results",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "size",
+                            "description": "number of items to return",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "conceptType",
+                            "description": "conceptType IRI to search for",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "leafNodes",
+                            "description": "include child concept types",
+                            "required": false,
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "relatedToVertexId",
+                            "description": "returns vertices related to this vertex",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/geo-search",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Searches the graph for vertices around a geo-location",
+                    "type": "ClientApiVertexSearchResponse",
+                    "nickname": "vertexGeoSearch",
+                    "parameters": [
+                        {
+                            "name": "lat",
+                            "description": "latitude",
+                            "required": true,
+                            "type": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "lon",
+                            "description": "longitude",
+                            "required": true,
+                            "type": "double",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "radius",
+                            "description": "radius",
+                            "required": true,
+                            "type": "double",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/find-path",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Finds paths between two vertices",
+                    "type": "ClientApiLongRunningProcessSubmitResponse",
+                    "nickname": "findPath",
+                    "parameters": [
+                        {
+                            "name": "sourceGraphVertexId",
+                            "description": "Source vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "destGraphVertexId",
+                            "description": "Destination vertex",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "hops",
+                            "description": "number of hops to search",
+                            "required": true,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/find-related",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Finds related vertices",
+                    "type": "ClientApiVertexFindRelatedResponse",
+                    "nickname": "findRelated",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "vertex id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "limitParentConceptId",
+                            "description": "concept type iri to limit related",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "maxVerticesToReturn",
+                            "description": "max number of vertices to return",
+                            "required": false,
+                            "type": "integer",
+                            "format": "int32",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/multiple",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Finds multiple vertices",
+                    "type": "ClientApiVertexMultipleResponse",
+                    "nickname": "findMultiple",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "vertexIds[]",
+                            "description": "vertex ids",
+                            "required": true,
+                            "type": "List[string]",
+                            "paramType": "form"
+                        },
+                        {
+                            "name": "fallbackToPublic",
+                            "description": "true to fallback to public vertices if a private vertex can't be found",
+                            "required": true,
+                            "type": "boolean",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+
+    }
+}

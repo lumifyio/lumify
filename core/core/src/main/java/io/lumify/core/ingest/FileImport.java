@@ -7,10 +7,10 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -20,13 +20,16 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.securegraph.util.IterableUtils.toList;
 
 public class FileImport {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileImport.class);
-    private static final String MULTI_VALUE_KEY = FileImport.class.getName();
+    public static final String MULTI_VALUE_KEY = FileImport.class.getName();
     private final VisibilityTranslator visibilityTranslator;
     private List<FileImportSupportingFileHandler> fileImportSupportingFileHandlers;
     private Graph graph;
@@ -38,15 +41,13 @@ public class FileImport {
         this.visibilityTranslator = visibilityTranslator;
     }
 
-    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
+    public void importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
         ensureInitialized();
-
-        ArrayList<Vertex> results = new ArrayList<Vertex>();
 
         LOGGER.debug("Importing files from %s", dataDir);
         File[] files = dataDir.listFiles();
         if (files == null || files.length == 0) {
-            return results;
+            return;
         }
 
         int totalFileCount = files.length;
@@ -63,8 +64,7 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    Vertex vertex = importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
-                    results.add(vertex);
+                    importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
                     importedFileCount++;
                 } catch (Exception ex) {
                     LOGGER.error("Could not import %s", f.getAbsolutePath(), ex);
@@ -76,7 +76,6 @@ public class FileImport {
         }
 
         LOGGER.debug(String.format("Imported %d, skipped %d files from %s", importedFileCount, fileCount - importedFileCount, dataDir));
-        return results;
     }
 
     private boolean isSupportingFile(File f) {
@@ -119,12 +118,12 @@ public class FileImport {
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
             rawValue.searchIndex(false);
 
-            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
+            VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
-            Map<String, Object> propertyMetadata = new HashMap<String, Object>();
-            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1);
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
+            Metadata propertyMetadata = new Metadata();
+            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1, visibilityTranslator.getDefaultVisibility());
+            LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
             VertexBuilder vertexBuilder;
             if (predefinedId == null) {
@@ -132,7 +131,7 @@ public class FileImport {
             } else {
                 vertexBuilder = this.graph.prepareVertex(predefinedId, visibility);
             }
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, visibilityJson, visibility);
+            LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, visibility);
             LumifyProperties.RAW.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, rawValue, propertyMetadata, visibility);
             LumifyProperties.TITLE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
             LumifyProperties.CONTENT_HASH.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);
@@ -151,10 +150,10 @@ public class FileImport {
             graph.flush();
 
             if (workspace != null) {
-                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, null, user);
+                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, user);
             }
 
-            LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());
+            LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId());
             pushOnQueue(vertex, workspace, visibilitySource);
             return vertex;
         } finally {
@@ -163,6 +162,21 @@ public class FileImport {
                 addSupportingFilesResult.close();
             }
         }
+    }
+
+    public List<Vertex> importVertices(Workspace workspace, List<FileAndVisibility> files, User user, Authorizations authorizations) throws Exception {
+        ensureInitialized();
+
+        List<Vertex> vertices = new ArrayList<Vertex>();
+        for (FileAndVisibility file : files) {
+            if (isSupportingFile(file.getFile())) {
+                LOGGER.debug("Skipping file: %s (supporting file)", file.getFile().getAbsolutePath());
+                continue;
+            }
+            LOGGER.debug("Processing file: %s", file.getFile().getAbsolutePath());
+            vertices.add(importFile(file.getFile(), true, file.getVisibilitySource(), workspace, user, authorizations));
+        }
+        return vertices;
     }
 
     private JSONObject loadMetadataJson(File f) throws IOException {
@@ -189,7 +203,7 @@ public class FileImport {
     }
 
     private void pushOnQueue(Vertex vertex, Workspace workspace, String visibilitySource) {
-        LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
+        LOGGER.debug("pushing %s on to %s queue", vertex.getId(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
         this.workQueueRepository.pushElement(vertex);
         if (workspace != null) {
             this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY,
@@ -232,5 +246,26 @@ public class FileImport {
     @Inject
     public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
         this.workspaceRepository = workspaceRepository;
+    }
+
+    public static class FileAndVisibility {
+        private File file;
+        private String visibilitySource;
+
+        public File getFile() {
+            return file;
+        }
+
+        public void setFile(File file) {
+            this.file = file;
+        }
+
+        public String getVisibilitySource() {
+            return visibilitySource;
+        }
+
+        public void setVisibilitySource(String visibilitySource) {
+            this.visibilitySource = visibilitySource;
+        }
     }
 }

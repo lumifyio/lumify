@@ -1,10 +1,11 @@
 
 var require = {
     baseUrl: 'jsc',
+    waitSeconds: 0,
     paths: {
         'arbor': '../libs/cytoscape.js/lib/arbor',
         'async' : '../libs/requirejs-plugins/src/async',
-        'atmosphere': '../libs/atmosphere-jquery/jquery.atmosphere',
+        'atmosphere': '../libs/atmosphere/atmosphere',
         'bootstrap': '../libs/bootstrap/docs/assets/js/bootstrap',
         'bootstrap-datepicker': '../libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'bootstrap-timepicker': '../libs/bootstrap-timepicker/js/bootstrap-timepicker',
@@ -16,6 +17,7 @@ var require = {
         'ejs':  '../libs/ejs/ejs',
         'es5shim': '../libs/es5-shim/es5-shim',
         'es5sham': '../libs/es5-shim/es5-sham',
+        'promise-polyfill': '../libs/promise-polyfill/polyfills/output/promise-6.0.0',
         'flight': '../libs/flight',
         'goog': '../libs/requirejs-plugins/src/goog',
         'gremlins': '../libs/gremlins.js/gremlins.min',
@@ -25,18 +27,18 @@ var require = {
         'jstz': '../libs/jstz-detect/jstz.min',
         'jquery': '../libs/jquery/jquery',
         'jqueryui': '../libs/jquery-ui/ui/minified/jquery-ui.min',
+        'jscache': '../libs/jscache/cache',
         'less': 'util/requirejs/less',
         'lessc': '../libs/require-less/lessc',
         'normalize': '../libs/require-less/normalize',
         'openlayers': '../libs/openlayers/OpenLayers.debug',
         'pathfinding': '../libs/PathFinding.js/lib/pathfinding-browser',
-        'promise': '../libs/requirejs-promise/requirejs-promise',
         'propertyParser': '../libs/requirejs-plugins/src/propertyParser',
-        'rangy': '../libs/rangy-1.3/rangy-core',
-        'rangy-text': '../libs/rangy-1.3/rangy-textrange',
-        'rangy-highlighter': '../libs/rangy-1.3/rangy-highlighter',
-        'rangy-cssclassapplier': '../libs/rangy-1.3/rangy-cssclassapplier',
-        'rangy-serializer': '../libs/rangy-1.3/rangy-serializer',
+        'rangy-core': '../libs/rangy-official/rangy-core',
+        'rangy-text': '../libs/rangy-official/rangy-textrange',
+        'rangy-highlighter': '../libs/rangy-official/rangy-highlighter',
+        'rangy-cssclassapplier': '../libs/rangy-official/rangy-classapplier',
+        'rangy-serializer': '../libs/rangy-official/rangy-serializer',
         'scrollStop': '../libs/jquery-scrollstop/jquery.scrollstop',
         'sf': '../libs/sf/sf',
         'text': '../libs/requirejs-text/text',
@@ -47,6 +49,7 @@ var require = {
         'videojs': '../libs/video.js/dist/video-js/video',
     },
     shim: {
+        'arbor': { deps: ['jquery'] },
         'atmosphere': { init: function() { return $.atmosphere; }, deps:['jquery'] },
         'bootstrap': { exports:'window', deps:['jquery', 'jqueryui'] },
         'bootstrap-datepicker': { exports:'window', deps:['bootstrap'] },
@@ -64,10 +67,10 @@ var require = {
         'jstz': { exports:'jstz' },
         'openlayers': { exports: 'OpenLayers' },
         'pathfinding': { exports: 'PF' },
-        'rangy-text': { deps:['rangy']},
-        'rangy-highlighter': { deps:['rangy', 'rangy-cssclassapplier', 'rangy-serializer']},
-        'rangy-cssclassapplier': { deps:['rangy'] },
-        'rangy-serializer': { deps:['rangy'] },
+        'rangy-text': { deps:['rangy-core']},
+        'rangy-highlighter': { deps:['rangy-core', 'rangy-cssclassapplier', 'rangy-serializer']},
+        'rangy-cssclassapplier': { deps:['rangy-core'] },
+        'rangy-serializer': { deps:['rangy-core'] },
         'scrollStop': { exports: 'jQuery', deps:['jquery'] },
         'three': { exports: 'THREE' },
         'timezone-js': { deps:['jquery'] },
@@ -77,8 +80,10 @@ var require = {
 };
 
 
-if ('define' in window) {
-    define([], function() {
-        return require;
-    });
+if (typeof window !== 'undefined') {
+    if ('define' in window) {
+        define([], function() {
+            return require;
+        });
+    }
 }

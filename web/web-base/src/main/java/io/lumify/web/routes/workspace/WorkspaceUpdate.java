@@ -1,38 +1,57 @@
 package io.lumify.web.routes.workspace;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.notification.*;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
-import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.web.BaseRequestHandler;
 import io.lumify.miniweb.HandlerChain;
-import com.google.inject.Inject;
-import org.json.JSONArray;
+import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiWorkspace;
+import io.lumify.web.clientapi.model.ClientApiWorkspaceUpdateData;
+import io.lumify.web.clientapi.model.GraphPosition;
+import io.lumify.web.clientapi.model.WorkspaceAccess;
+import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.json.JSONObject;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.MessageFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class WorkspaceUpdate extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUpdate.class);
     private final WorkspaceRepository workspaceRepository;
+    private final WorkQueueRepository workQueueRepository;
+    private final UserNotificationRepository userNotificationRepository;
 
     @Inject
     public WorkspaceUpdate(
             final WorkspaceRepository workspaceRepository,
             final UserRepository userRepository,
+            final WorkQueueRepository workQueueRepository,
+            final UserNotificationRepository userNotificationRepository,
             final Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
         this.workspaceRepository = workspaceRepository;
+        this.workQueueRepository = workQueueRepository;
+        this.userNotificationRepository = userNotificationRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String workspaceId = getAttributeString(request, "workspaceId");
+        final String workspaceId = getActiveWorkspaceId(request);
         final String data = getRequiredParameter(request, "data");
 
         User authUser = getUser(request);
@@ -43,27 +62,31 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             return;
         }
 
-        JSONObject dataJson = new JSONObject(data);
+        ClientApiWorkspaceUpdateData updateData = ObjectMapperFactory.getInstance().readValue(data, ClientApiWorkspaceUpdateData.class);
 
-        if (dataJson.has("title")) {
-            setTitle(workspace, dataJson.getString("title"), authUser);
+        if (updateData.getTitle() != null) {
+            setTitle(workspace, updateData.getTitle(), authUser);
         }
 
-        JSONArray entityUpdates = dataJson.getJSONArray("entityUpdates");
-        updateEntities(workspace, entityUpdates, authUser);
+        updateEntities(workspace, updateData.getEntityUpdates(), authUser);
 
-        JSONArray entityDeletes = dataJson.getJSONArray("entityDeletes");
-        deleteEntities(workspace, entityDeletes, authUser);
+        deleteEntities(workspace, updateData.getEntityDeletes(), authUser);
 
-        JSONArray userUpdates = dataJson.getJSONArray("userUpdates");
-        updateUsers(workspace, userUpdates, authUser);
+        ResourceBundle resource = getBundle(request);
+        String title = resource.getString("workspaces.notification.shared.title");
+        String message = resource.getString("workspaces.notification.shared.subtitle");
+        updateUsers(workspace, updateData.getUserUpdates(), authUser, title, message);
 
-        JSONArray userDeletes = dataJson.getJSONArray("userDeletes");
-        deleteUsers(workspace, userDeletes, authUser);
+        workspace = workspaceRepository.findById(workspaceId, authUser);
+        ClientApiWorkspace clientApiWorkspaceAfterUpdateButBeforeDelete = workspaceRepository.toClientApi(workspace, authUser, true);
+        List<ClientApiWorkspace.User> previousUsers = clientApiWorkspaceAfterUpdateButBeforeDelete.getUsers();
+        deleteUsers(workspace, updateData.getUserDeletes(), authUser);
 
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("result", "OK");
-        respondWithJson(response, resultJson);
+        ClientApiWorkspace clientApiWorkspace = workspaceRepository.toClientApi(workspace, authUser, true);
+
+        respondWithSuccessJson(response);
+
+        workQueueRepository.pushWorkspaceChange(clientApiWorkspace, previousUsers, authUser.getUserId());
     }
 
     private void setTitle(Workspace workspace, String title, User authUser) {
@@ -71,45 +94,47 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         workspaceRepository.setTitle(workspace, title, authUser);
     }
 
-    private void deleteUsers(Workspace workspace, JSONArray userDeletes, User authUser) {
-        for (int i = 0; i < userDeletes.length(); i++) {
-            String userId = userDeletes.getString(i);
+    private void deleteUsers(Workspace workspace, List<String> userDeletes, User authUser) {
+        for (String userId : userDeletes) {
             LOGGER.debug("user delete (%s): %s", workspace.getWorkspaceId(), userId);
             workspaceRepository.deleteUserFromWorkspace(workspace, userId, authUser);
+            workQueueRepository.pushWorkspaceDelete(workspace.getWorkspaceId(), userId);
         }
     }
 
-    private void updateUsers(Workspace workspace, JSONArray userUpdates, User authUser) {
-        for (int i = 0; i < userUpdates.length(); i++) {
-            JSONObject update = userUpdates.getJSONObject(i);
+    private void updateUsers(Workspace workspace, List<ClientApiWorkspaceUpdateData.UserUpdate> userUpdates, User authUser, String title, String subtitle) {
+
+        for (ClientApiWorkspaceUpdateData.UserUpdate update : userUpdates) {
             LOGGER.debug("user update (%s): %s", workspace.getWorkspaceId(), update.toString());
-            String userId = update.getString("userId");
-            WorkspaceAccess workspaceAccess = WorkspaceAccess.valueOf(update.getString("access"));
+            String userId = update.getUserId();
+            WorkspaceAccess workspaceAccess = update.getAccess();
             workspaceRepository.updateUserOnWorkspace(workspace, userId, workspaceAccess, authUser);
+
+            String message = MessageFormat.format(subtitle, authUser.getDisplayName(), workspace.getDisplayTitle());
+            JSONObject payload = new JSONObject();
+            payload.put("workspaceId", workspace.getWorkspaceId());
+            userNotificationRepository.createNotification(userId, title, message, "switchWorkspace", payload, new ExpirationAge(7, ExpirationAgeUnit.DAY));
         }
     }
 
-    private void deleteEntities(Workspace workspace, JSONArray entityDeletes, User authUser) {
-        for (int i = 0; i < entityDeletes.length(); i++) {
-            String entityId = entityDeletes.getString(i);
+    private void deleteEntities(Workspace workspace, List<String> entityDeletes, User authUser) {
+        for (String entityId : entityDeletes) {
             LOGGER.debug("workspace delete (%s): %s", workspace.getWorkspaceId(), entityId);
             workspaceRepository.softDeleteEntityFromWorkspace(workspace, entityId, authUser);
         }
     }
 
-    private void updateEntities(Workspace workspace, JSONArray entityUpdates, User authUser) {
-        for (int i = 0; i < entityUpdates.length(); i++) {
-            JSONObject update = entityUpdates.getJSONObject(i);
-            LOGGER.debug("workspace update (%s): %s", workspace.getWorkspaceId(), update.toString());
-            String entityId = update.getString("vertexId");
-            JSONObject graphPosition = update.optJSONObject("graphPosition");
-            Integer graphPositionX = null;
-            Integer graphPositionY = null;
-            if (graphPosition != null)  {
-                graphPositionX = graphPosition.getInt("x");
-                graphPositionY = graphPosition.getInt("y");
+    private void updateEntities(Workspace workspace, List<ClientApiWorkspaceUpdateData.EntityUpdate> entityUpdates, User authUser) {
+        Iterable<WorkspaceRepository.Update> updates = Iterables.transform(entityUpdates, new Function<ClientApiWorkspaceUpdateData.EntityUpdate, WorkspaceRepository.Update>() {
+            @Nullable
+            @Override
+            public WorkspaceRepository.Update apply(ClientApiWorkspaceUpdateData.EntityUpdate u) {
+                String vertexId = u.getVertexId();
+                GraphPosition graphPosition = u.getGraphPosition();
+                String graphLayoutJson = u.getGraphLayoutJson();
+                return new WorkspaceRepository.Update(vertexId, true, graphPosition, graphLayoutJson);
             }
-            workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPositionX, graphPositionY, authUser);
-        }
+        });
+        workspaceRepository.updateEntitiesOnWorkspace(workspace, updates, authUser);
     }
 }

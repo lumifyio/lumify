@@ -3,21 +3,22 @@ package io.lumify.core;
 import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
-import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.textHighlighting.OffsetItem;
-import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
-import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.core.model.textHighlighting.VertexOffsetItem;
+import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.core.util.GraphUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.Authorizations;
+import org.securegraph.Vertex;
 
 import java.util.*;
 
 public class EntityHighlighter {
-    public String getHighlightedText(String text, Iterable<TermMentionModel> termMentions, String workspaceId) {
-        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, workspaceId);
+    public String getHighlightedText(String text, Iterable<Vertex> termMentions, String workspaceId, Authorizations authorizations) {
+        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, workspaceId, authorizations);
         return getHighlightedText(text, offsetItems);
     }
 
@@ -31,10 +32,10 @@ public class EntityHighlighter {
             OffsetItem offsetItem = offsetItems.get(i);
 
             boolean overlapsPreviousItem = false;
-            if (offsetItem instanceof TermMentionOffsetItem) {
+            if (offsetItem instanceof VertexOffsetItem) {
                 for (int j = 0; j < i; j++) {
                     OffsetItem compareItem = offsetItems.get(j);
-                    if (compareItem instanceof TermMentionOffsetItem
+                    if (compareItem instanceof VertexOffsetItem
                             && (OffsetItem.getOffset(compareItem.getEnd()) >= OffsetItem.getOffset(offsetItem.getEnd())
                             || OffsetItem.getOffset(compareItem.getEnd()) > OffsetItem.getOffset(offsetItem.getStart()))) {
                         overlapsPreviousItem = true;
@@ -88,11 +89,11 @@ public class EntityHighlighter {
         }
         result.append(StringEscapeUtils.escapeHtml(safeSubstring(text, lastStart)));
 
-        return result.toString();
+        return result.toString().replaceAll("&nbsp;", " ");
     }
 
-    public VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, Iterable<TermMentionModel> termMentions, String workspaceId) {
-        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, workspaceId);
+    public VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, Iterable<Vertex> termMentions, String workspaceId, Authorizations authorizations) {
+        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, workspaceId, authorizations);
         return getHighlightedVideoTranscript(videoTranscript, offsetItems);
     }
 
@@ -137,7 +138,7 @@ public class EntityHighlighter {
 
     private static int getVideoTranscriptEntryIndex(VideoTranscript videoTranscript, OffsetItem offsetItem) {
         Integer videoTranscriptEntryIndex = null;
-        VideoFrameInfo videoFrameInfo = VideoPropertyHelper.getVideoFrameInfo(offsetItem.getRowKey());
+        VideoFrameInfo videoFrameInfo = VideoPropertyHelper.getVideoFrameInfo(offsetItem.getId());
         if (videoFrameInfo != null) {
             videoTranscriptEntryIndex = videoTranscript.findEntryIndexFromStartTime(videoFrameInfo.getFrameStartTime());
         }
@@ -158,12 +159,12 @@ public class EntityHighlighter {
         return text.substring(beginIndex, endIndex);
     }
 
-    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, String workspaceId) {
+    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<Vertex> termMentions, String workspaceId, Authorizations authorizations) {
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
-        for (TermMentionModel termMention : termMentions) {
-            String visibility = termMention.getMetadata().getSignVisibility();
+        for (Vertex termMention : termMentions) {
+            String visibility = termMention.getVisibility().getVisibilityString();
             SandboxStatus sandboxStatus = GraphUtil.getSandboxStatusFromVisibilityString(visibility, workspaceId);
-            termMetadataOffsetItems.add(new TermMentionOffsetItem(termMention, sandboxStatus));
+            termMetadataOffsetItems.add(new VertexOffsetItem(termMention, sandboxStatus, authorizations));
         }
         return termMetadataOffsetItems;
     }

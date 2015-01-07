@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+        <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+        <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+        <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+        <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+        <!ENTITY test "http://lumify.io/test#">
+        ]>
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:lumify="http://lumify.io#"
+         xmlns:test="http://lumify.io/test#">
+
+
+    <rdf:Description rdf:about="&test;PERSON_Joe_Ferner">
+        <rdf:type rdf:resource="&test;person"/>
+        <test:firstName>Joe</test:firstName>
+        <test:lastName>Ferner</test:lastName>
+        <test:worksFor rdf:resource="&test;COMPANY_Altamira_Corporation"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="&test;PERSON_Dave_Singley">
+        <rdf:type rdf:resource="&test;person"/>
+        <test:firstName>Dave</test:firstName>
+        <test:lastName>Singley</test:lastName>
+        <test:worksFor rdf:resource="&test;COMPANY_Altamira_Corporation"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="&test;COMPANY_Altamira_Corporation">
+        <rdf:type rdf:resource="&test;company"/>
+        <lumify:title>Altamira Corporation</lumify:title>
+    </rdf:Description>
+
+</rdf:RDF>

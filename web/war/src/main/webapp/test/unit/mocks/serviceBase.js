@@ -3,7 +3,23 @@ define(['text!../../test/unit/mocks/ontology.json'], function(ontologyJson) {
     'use strict';
 
     var _ajaxRequests = {},
-        defaultDevOntology = JSON.parse(ontologyJson);
+        jsonTransformers = [
+            function removePersonColor(json) {
+                var person = _.findWhere(json.concepts, { title: 'http://lumify.io/dev#person' });
+                delete person.color;
+            },
+            function addVideoSub(json) {
+                json.concepts.push({
+                    id: 'http://lumify.io/dev#videoSub',
+                    title: 'http://lumify.io/dev#videoSub',
+                    color: 'rgb(149, 138, 218)',
+                    pluralDisplayName: 'Video Subs',
+                    parentConcept: 'http://lumify.io/dev#video',
+                    displayName: 'Video Sub'
+                });
+            }
+        ],
+        defaultDevOntology = transformForTesting(JSON.parse(ontologyJson));
 
     function ServiceBase(options) {
         options = options || {};
@@ -23,6 +39,13 @@ define(['text!../../test/unit/mocks/ontology.json'], function(ontologyJson) {
 
         this.options = $.extend({},defaults, options);
         return this;
+    }
+
+    function transformForTesting(json) {
+        _.reduce(jsonTransformers, function(ignored, transformer) {
+            return transformer(json);
+        }, json);
+        return json;
     }
 
     ServiceBase.prototype.memoizeFunctions = function()  { }

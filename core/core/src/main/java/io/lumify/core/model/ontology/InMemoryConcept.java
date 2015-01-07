@@ -2,10 +2,13 @@ package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
-import org.json.JSONArray;
+import io.lumify.core.util.JSONUtil;
 import org.securegraph.Authorizations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryConcept extends Concept {
     private String title;
@@ -16,10 +19,12 @@ public class InMemoryConcept extends Concept {
     private String subtitleFormula;
     private String timeFormula;
     private String conceptIRI;
-    private String addRelatedConceptWhiteList;
+    private List<String> addRelatedConceptWhiteList;
     private byte[] glyphIcon;
     private byte[] mapGlyphIcon;
-    private boolean userVisible;
+    private boolean userVisible = true;
+    private Boolean searchable;
+    private Map<String, String> metadata = new HashMap<String, String>();
 
     protected InMemoryConcept(String conceptIRI, String parentIRI) {
         super(parentIRI, new ArrayList<OntologyProperty>());
@@ -62,6 +67,11 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
+    public Boolean getSearchable() {
+        return searchable;
+    }
+
+    @Override
     public String getSubtitleFormula() {
         return this.subtitleFormula;
     }
@@ -77,7 +87,14 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
-    public String getAddRelatedConceptWhiteList() { return addRelatedConceptWhiteList; }
+    public Map<String, String> getMetadata() {
+        return this.metadata;
+    }
+
+    @Override
+    public List<String> getAddRelatedConceptWhiteList() {
+        return addRelatedConceptWhiteList;
+    }
 
     @Override
     public void setProperty(String name, Object value, Authorizations authorizations) {
@@ -102,9 +119,15 @@ public class InMemoryConcept extends Concept {
         } else if (LumifyProperties.DISPLAY_NAME.getPropertyName().equals(name)) {
             this.displayName = (String) value;
         } else if (LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName().equals(name)) {
-            this.addRelatedConceptWhiteList = (String) value;
-        } else{
-            throw new LumifyException("Set not implemented for property " + name);
+            this.addRelatedConceptWhiteList = JSONUtil.toStringList(JSONUtil.parseArray((String) value));
+        } else if (LumifyProperties.SEARCHABLE.getPropertyName().equals(name)) {
+            if (value instanceof Boolean) {
+                this.searchable = (Boolean) value;
+            } else {
+                this.searchable = Boolean.parseBoolean((String) value);
+            }
+        } else {
+            metadata.put(name, value.toString());
         }
     }
 

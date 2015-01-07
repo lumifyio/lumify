@@ -3,8 +3,9 @@ define([
     'flight/lib/component',
     'videojs',
     'tpl!./scrubber',
-    'tpl!./video'
-], function(defineComponent, videojs, template, videoTemplate) {
+    'tpl!./video',
+    'util/detectedObjects/withFacebox'
+], function(defineComponent, videojs, template, videoTemplate, withFacebox) {
     'use strict';
 
     // TODO: get this from the server
@@ -14,7 +15,7 @@ define([
 
     videojs.options.flash.swf = '/libs/video.js/dist/video-js/video-js.swf';
 
-    return defineComponent(VideoScrubber);
+    return defineComponent(VideoScrubber, withFacebox);
 
     function VideoScrubber() {
 
@@ -172,13 +173,17 @@ define([
                       .html(template({}));
 
             if (this.attr.videoPreviewImageUrl) {
-                this.select('backgroundScrubberSelector').css({
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundImage: 'url(' + this.attr.videoPreviewImageUrl + ')'
-                });
+                this.on('DetectedObjectEnter', this.onVideoDetectedObjectEnter);
+                this.on('DetectedObjectLeave', this.onVideoDetectedObjectLeave);
+                this.initializeFacebox(
+                    this.select('backgroundScrubberSelector').css({
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundImage: 'url(' + this.attr.videoPreviewImageUrl + ')'
+                    })
+                );
             }
 
             this.select('backgroundPosterSelector').css({
@@ -230,6 +235,13 @@ define([
             this.startVideo({
                 seek: data.seekTo / 1000
             });
+        };
+
+        this.onVideoDetectedObjectEnter = function(event, data) {
+        };
+
+        this.onVideoDetectedObjectLeave = function(event, data) {
+            this.showPoster();
         };
     }
 

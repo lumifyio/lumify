@@ -2,18 +2,16 @@ package io.lumify.core.bootstrap;
 
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.google.inject.*;
-import com.netflix.curator.RetryPolicy;
-import com.netflix.curator.framework.CuratorFramework;
-import com.netflix.curator.framework.CuratorFrameworkFactory;
-import com.netflix.curator.retry.ExponentialBackoffRetry;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.metrics.JmxMetricsManager;
 import io.lumify.core.metrics.MetricsManager;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
+import io.lumify.core.model.notification.SystemNotificationRepository;
+import io.lumify.core.model.notification.UserNotificationRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -25,9 +23,12 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.core.version.VersionService;
 import io.lumify.core.version.VersionServiceMXBean;
+import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.securegraph.Graph;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class LumifyBootstrap extends AbstractModule {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyBootstrap.class);
+    private static final String GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY = "lumify.graph.version";
+    private static final Integer GRAPH_METADATA_LUMIFY_GRAPH_VERSION = 1;
 
     private static LumifyBootstrap lumifyBootstrap;
 
@@ -119,6 +122,9 @@ public class LumifyBootstrap extends AbstractModule {
         bind(WorkQueueRepository.class)
                 .toProvider(this.<WorkQueueRepository>getConfigurableProvider(configuration, Configuration.WORK_QUEUE_REPOSITORY))
                 .in(Scopes.SINGLETON);
+        bind(LongRunningProcessRepository.class)
+                .toProvider(this.<LongRunningProcessRepository>getConfigurableProvider(configuration, Configuration.LONG_RUNNING_PROCESS_REPOSITORY))
+                .in(Scopes.SINGLETON);
         bind(VisibilityTranslator.class)
                 .toProvider(this.<VisibilityTranslator>getConfigurableProvider(configuration, Configuration.VISIBILITY_TRANSLATOR))
                 .in(Scopes.SINGLETON);
@@ -137,11 +143,14 @@ public class LumifyBootstrap extends AbstractModule {
         bind(AuditRepository.class)
                 .toProvider(this.<AuditRepository>getConfigurableProvider(configuration, Configuration.AUDIT_REPOSITORY))
                 .in(Scopes.SINGLETON);
-        bind(TermMentionRepository.class)
-                .toProvider(this.<TermMentionRepository>getConfigurableProvider(configuration, Configuration.TERM_MENTION_REPOSITORY))
-                .in(Scopes.SINGLETON);
         bind(ArtifactThumbnailRepository.class)
                 .toProvider(this.<ArtifactThumbnailRepository>getConfigurableProvider(configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))
+                .in(Scopes.SINGLETON);
+        bind(SystemNotificationRepository.class)
+                .toProvider(this.<SystemNotificationRepository>getConfigurableProvider(configuration, Configuration.SYSTEM_NOTIFICATION_REPOSITORY))
+                .in(Scopes.SINGLETON);
+        bind(UserNotificationRepository.class)
+                .toProvider(this.<UserNotificationRepository>getConfigurableProvider(configuration, Configuration.USER_NOTIFICATION_REPOSITORY))
                 .in(Scopes.SINGLETON);
 
         injectProviders();
@@ -149,7 +158,10 @@ public class LumifyBootstrap extends AbstractModule {
 
     private Provider<? extends Graph> getGraphProvider(Configuration configuration, String configurationPrefix) {
         // TODO change to use org.securegraph.GraphFactory
-        String graphClassName = configuration.get(configurationPrefix);
+        String graphClassName = configuration.get(configurationPrefix, null);
+        if (graphClassName == null) {
+            throw new LumifyException("Could not find graph configuration: " + configurationPrefix);
+        }
         final Map<String, String> configurationSubset = configuration.getSubset(configurationPrefix);
 
         final Class<?> graphClass;
@@ -170,14 +182,33 @@ public class LumifyBootstrap extends AbstractModule {
         return new Provider<Graph>() {
             @Override
             public Graph get() {
+                Graph g;
                 try {
                     LOGGER.debug("creating graph");
-                    return (Graph) createMethod.invoke(null, configurationSubset);
+                    g = (Graph) createMethod.invoke(null, configurationSubset);
                 } catch (Exception e) {
                     throw new RuntimeException("Could not create graph " + graphClass.getName(), e);
                 }
+
+                checkLumifyGraphVersion(g);
+
+                return g;
             }
         };
+    }
+
+    public void checkLumifyGraphVersion(Graph g) {
+        Object lumifyGraphVersionObj = g.getMetadata(GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY);
+        if (lumifyGraphVersionObj == null) {
+            g.setMetadata(GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY, GRAPH_METADATA_LUMIFY_GRAPH_VERSION);
+        } else if (lumifyGraphVersionObj instanceof Integer) {
+            Integer lumifyGraphVersion = (Integer) lumifyGraphVersionObj;
+            if (!GRAPH_METADATA_LUMIFY_GRAPH_VERSION.equals(lumifyGraphVersion)) {
+                throw new LumifyException("Invalid " + GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY + " expected " + GRAPH_METADATA_LUMIFY_GRAPH_VERSION + " found " + lumifyGraphVersion);
+            }
+        } else {
+            throw new LumifyException("Invalid " + GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY + " expected Integer found " + lumifyGraphVersionObj.getClass().getName());
+        }
     }
 
     private void injectProviders() {
@@ -190,24 +221,27 @@ public class LumifyBootstrap extends AbstractModule {
         }
     }
 
+    public static void shutdown() {
+        lumifyBootstrap = null;
+    }
+
     private static class CuratorFrameworkProvider implements Provider<CuratorFramework> {
         private String zookeeperConnectionString;
         private RetryPolicy retryPolicy;
 
         public CuratorFrameworkProvider(Configuration configuration) {
-            zookeeperConnectionString = configuration.get(Configuration.ZK_SERVERS);
+            zookeeperConnectionString = configuration.get(Configuration.ZK_SERVERS, null);
+            if (zookeeperConnectionString == null) {
+                throw new LumifyException("Could not find configuration item: " + Configuration.ZK_SERVERS);
+            }
             retryPolicy = new ExponentialBackoffRetry(1000, 3);
         }
 
         @Override
         public CuratorFramework get() {
-            try {
-                CuratorFramework client = CuratorFrameworkFactory.newClient(zookeeperConnectionString, retryPolicy);
-                client.start();
-                return client;
-            } catch (IOException ex) {
-                throw new LumifyException("Could not create curator: " + zookeeperConnectionString, ex);
-            }
+            CuratorFramework client = CuratorFrameworkFactory.newClient(zookeeperConnectionString, retryPolicy);
+            client.start();
+            return client;
         }
     }
 

@@ -4,7 +4,7 @@ describeMixin('data/withPendingChanges', function() {
         this.Component.prototype.onSaveWorkspaceInternal = function(){
             self.component.originalSaveCalled = true;
         };
-        setupComponent();
+        setupComponent(this);
     });
 
     describe('onAjaxSend', function() {

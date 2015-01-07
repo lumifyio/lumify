@@ -1,0 +1,19 @@
+<h1>{{ i18n 'useraccount.page.access.privileges' }}</h1>
+<p>
+{{#each privileges }}
+{{~.~}}
+{{#unless @last}}, {{/unless}}
+{{else}}
+<i>READ</i>
+{{/each}}
+</p>
+
+<h1>{{ i18n 'useraccount.page.access.authorizations' }}</h1>
+<p>
+{{#each authorizations }}
+{{~.~}}
+{{#unless @last}}, {{/unless}}
+{{else}}
+<i>none</i>
+{{/each}}
+</p>

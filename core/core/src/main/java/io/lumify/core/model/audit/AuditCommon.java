@@ -2,7 +2,7 @@ package io.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
-import io.lumify.core.model.user.UserType;
+import io.lumify.web.clientapi.model.UserType;
 import io.lumify.core.user.User;
 import org.securegraph.Visibility;
 import org.json.JSONException;

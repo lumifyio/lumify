@@ -1,6 +1,5 @@
 package io.lumify.web.routes.admin;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -9,8 +8,10 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.util.FilterIterable;
 import org.semanticweb.owlapi.model.IRI;
@@ -62,12 +63,13 @@ public class AdminUploadOntology extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+        LOGGER.info("adding ontology: %s", documentIRI.toString());
         ontologyRepository.writePackage(tempFile, documentIRI, authorizations);
         ontologyRepository.clearCache();
 
         tempFile.delete();
 
-        respondWithPlaintext(response, "OK");
+        respondWithSuccessJson(response);
     }
 
     private Iterable<Part> getFiles(HttpServletRequest request) throws IOException, ServletException {

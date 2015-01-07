@@ -1,9 +1,10 @@
 package io.lumify.core.model.lock;
 
 import com.google.inject.Inject;
-import com.netflix.curator.framework.CuratorFramework;
-import com.netflix.curator.framework.recipes.locks.InterProcessLock;
-import com.netflix.curator.framework.recipes.locks.InterProcessMutex;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.locks.InterProcessLock;
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 
@@ -13,15 +14,16 @@ import java.util.concurrent.Callable;
 
 public class LockRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LockRepository.class);
-    public static final String DEFAULT_PATH_PREFIX = "/lumify/locks/";
+    public static final String DEFAULT_PATH_PREFIX = "/lumify/locks";
     private final CuratorFramework curatorFramework;
     private final String pathPrefix;
     private final Map<String, Object> localLocks = new HashMap<String, Object>();
 
     @Inject
-    public LockRepository(final CuratorFramework curatorFramework) {
+    public LockRepository(final CuratorFramework curatorFramework,
+                          final Configuration configuration) {
         this.curatorFramework = curatorFramework;
-        this.pathPrefix = DEFAULT_PATH_PREFIX;
+        this.pathPrefix = configuration.get(Configuration.LOCK_REPOSITORY_PATH_PREFIX, DEFAULT_PATH_PREFIX);
     }
 
     public Lock createLock(String lockName) {
@@ -30,7 +32,7 @@ public class LockRepository {
     }
 
     private String getPath(String lockName) {
-        return this.pathPrefix + lockName;
+        return this.pathPrefix + "/" + lockName;
     }
 
     public void lock(String lockName, final Runnable runnable) {

@@ -1,7 +1,9 @@
 package io.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import io.lumify.core.model.user.UserType;
+import io.lumify.web.clientapi.model.Privilege;
+import io.lumify.web.clientapi.model.UserStatus;
+import io.lumify.web.clientapi.model.UserType;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -35,11 +37,15 @@ public interface User extends Serializable {
 
     public UserType getUserType();
 
-    public String getUserStatus();
+    public UserStatus getUserStatus();
 
     public String getCurrentWorkspaceId();
 
     public JSONObject getUiPreferences();
 
     public Set<Privilege> getPrivileges();
+
+    public String getPasswordResetToken();
+
+    public Date getPasswordResetTokenExpirationDate();
 }
