@@ -43,7 +43,6 @@ define([
             this.visibilitySource = { value: '', valid: true };
             this.on('visibilitychange', this.onVisibilityChange);
             this.on('justificationchange', this.onJustificationChange);
-            this.on('justificationanimationend', this.onJustificationAnimationEnd);
 
             this.updateRelationshipLabels();
         };
@@ -72,10 +71,10 @@ define([
                         'configuration/plugins/visibility/visibilityEditor',
                         'detail/dropdowns/propertyForm/justification',
                     ], function(Visibility, Justification) {
-                        Visibility.attachTo(self.$node.find('.visibility'), {
+                        Visibility.attachTo(self.popover.find('.visibility'), {
                             value: ''
                         });
-                        Justification.attachTo(self.$node.find('.justification'));
+                        Justification.attachTo(self.popover.find('.justification'));
                         self.positionDialog();
                         self.checkValid();
                     });
@@ -97,9 +96,6 @@ define([
         this.onJustificationChange = function(event, data) {
             this.justification = data;
             this.checkValid();
-        };
-
-        this.onJustificationAnimationEnd = function() {
         };
 
         this.checkValid = function() {
@@ -162,7 +158,7 @@ define([
                     predicateLabel: $target.siblings('select').val(),
                     visibilitySource: this.visibilitySource.value
                 },
-                inputs = this.$node.find('select, input')
+                inputs = this.popover.find('select, input')
                     .attr('disabled', true);
 
             if (this.attr.otherCyNode.id() !== this.attr.edge.data('source')) {
@@ -181,11 +177,7 @@ define([
 
             var p = this.dataRequest('edge', 'create', parameters)
                 .then(function(data) {
-                    self.on(document, 'edgesLoaded', function loaded() {
-                        self.trigger('finishedVertexConnection');
-                        self.off(document, 'edgesLoaded', loaded);
-                    });
-                    self.trigger('loadEdges');
+                    self.trigger('finishedVertexConnection');
                 })
                 .catch(function(error) {
                     $target.text(i18n('popovers.connection.button.connect'))

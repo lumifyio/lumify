@@ -69,35 +69,28 @@ define([
                 var vId = _.isString(v) ? v : v.id;
                 return F.className.to(vId);
             },
+            generateCompoundEdgeId = function(edge) {
+                return edge.sourceVertexId + edge.destVertexId + edge.label;
+            },
             cyEdgeFromEdge = function(e, sourceNode, destNode, ontologyRelationships) {
-                var source = e.sourceVertexId || (e.source && e.source.id),
-                    target = e.destVertexId || (e.target && e.target.id),
-                    ontology = ontologyRelationships.byTitle[e.relationshipType || e.label];
+                var source = e.sourceId || (e.source && e.source.id),
+                    target = e.targetId || (e.target && e.target.id),
+                    type = e.relationshipType || e.label || e.type,
+                    ontology = ontologyRelationships.byTitle[type];
 
                 return {
                     group: 'edges',
                     data: {
                         id: toCyId(e.id),
+                        type: type,
                         source: sourceNode.id(),
                         target: destNode.id(),
                         label: (ontology && ontology.displayName || '') + (
-                            (e.internalEdges && e.internalEdges.length > 1) ?
-                                (' (' + F.number.pretty(e.internalEdges.length) + ')') :
+                            (e.edges.length > 1) ?
+                                (' (' + F.number.pretty(e.edges.length) + ')') :
                                 ''
                         ),
-                        edge: {
-                            id: e.id,
-                            diffType: e.diffType,
-                            source: { id: source },
-                            target: { id: target },
-                            internalEdges: e.internalEdges,
-                            properties: {
-                                'http://lumify.io#conceptType': 'relationship',
-                                relationshipType: e.relationshipType || e.label,
-                                source: source,
-                                target: target
-                            }
-                        }
+                        edges: e.edges
                     }
                 }
             };
@@ -632,26 +625,23 @@ define([
 
                 if (relationshipData.edges) {
                     var relationshipEdges = [],
-                        generateId = function(e) {
-                            return e.sourceVertexId + e.destVertexId + e.label;
-                        },
                         collapsedEdges = _.chain(relationshipData.edges)
-                            .groupBy(generateId)
+                            .groupBy(generateCompoundEdgeId)
                             .values()
-                            .map(function(v) {
-                                return v.length > 1 ?
-                                    _.extend({
-                                        internalEdges: _.pluck(v, 'id')
-                                    }, v[0], {
-                                        id: generateId(v[0])
-                                    }) :
-                                    v[0]
+                            .map(function(e) {
+                                return {
+                                    id: generateCompoundEdgeId(e[0]),
+                                    type: e[0].label,
+                                    sourceId: e[0].sourceVertexId,
+                                    targetId: e[0].destVertexId,
+                                    edges: _.pluck(e, 'id')
+                                }
                             })
                             .value();
 
                     collapsedEdges.forEach(function(edge) {
-                        var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
-                            destNode = cy.getElementById(toCyId(edge.destVertexId));
+                        var sourceNode = cy.getElementById(toCyId(edge.sourceId)),
+                            destNode = cy.getElementById(toCyId(edge.targetId));
 
                         if (sourceNode.length && destNode.length) {
                             relationshipEdges.push(
@@ -676,15 +666,32 @@ define([
                 var self = this,
                     newEdges = _.compact(data.edges.map(function(edge) {
                         var cyEdge = cy.getElementById(toCyId(edge.sourceVertexId + edge.destVertexId + edge.label))
-                        if (!cyEdge.length) {
-                            cyEdge = cy.getElementById(toCyId(edge.id));
-                            if (cyEdge.length === 0) {
-                                var sourceNode = cy.getElementById(toCyId(edge.source.id)),
-                                    destNode = cy.getElementById(toCyId(edge.target.id));
+                        if (cyEdge.length) {
+                            var edges = cyEdge.data('edges'),
+                                ontology = self.ontologyRelationships.byTitle[cyEdge.data('type')];
 
-                                if (sourceNode.length && destNode.length) {
-                                    return cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships);
-                                }
+                            edges.push(edge.id);
+                            edges = _.unique(edges);
+                            cyEdge.data('edges', edges);
+                            cyEdge.data('label',
+                                (ontology && ontology.displayName || '') + (
+                                    (edges.length > 1) ?
+                                        (' (' + F.number.pretty(edges.length) + ')') :
+                                        ''
+                                )
+                            );
+                        } else {
+                            var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
+                                destNode = cy.getElementById(toCyId(edge.destVertexId));
+
+                            if (sourceNode.length && destNode.length) {
+                                return cyEdgeFromEdge({
+                                    id: generateCompoundEdgeId(edge),
+                                    type: edge.label,
+                                    sourceId: edge.sourceVertexId,
+                                    targetId: edge.destVertexId,
+                                    edges: [edge.id]
+                                }, sourceNode, destNode, self.ontologyRelationships);
                             }
                         }
                     }));
@@ -697,30 +704,25 @@ define([
 
         this.onEdgesDeleted = function(event, data) {
             this.cytoscapeReady(function(cy) {
-                var self = this,
-                    edge = cy.getElementById(this.toCyId(data.edgeId));
+                var self = this;
+                _.each(cy.edges(), function(cyEdge) {
+                    var edges = cyEdge.data('edges');
+                        ontology = self.ontologyRelationships.byTitle[cyEdge.data('type')];
 
-                if (edge.length) {
-                    edge.remove();
-                } else {
-                    _.each(cy.edges(), function(cyEdge) {
-                        var edges = cyEdge.data('edge').internalEdges;
-                        if (edges) {
-                            var ontology = self.ontologyRelationships
-                                .byTitle[cyEdge.data('edge').properties.relationshipType];
-
-                            edges = _.without(edges, data.edgeId);
-                            cyEdge.data('edge').internalEdges = edges;
-                            cyEdge.data('label',
-                                (ontology && ontology.displayName || '') + (
-                                    (edges && edges.length > 1) ?
-                                        (' (' + F.number.pretty(edges.length) + ')') :
-                                        ''
-                                )
-                           );
-                        }
-                    });
-                }
+                    if (edges.length < 2) {
+                        cyEdge.remove();
+                    } else {
+                        edges = _.without(edges, data.edgeId);
+                        cyEdge.data('edges', edges);
+                        cyEdge.data('label',
+                            (ontology && ontology.displayName || '') + (
+                                (edges.length > 1) ?
+                                    (' (' + F.number.pretty(edges.length) + ')') :
+                                    ''
+                            )
+                        );
+                    }
+                });
             });
         };
 
@@ -1168,13 +1170,7 @@ define([
 
             edges.each(function(index, cyEdge) {
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                    if (cyEdge.data('edge').internalEdges) {
-                        cyEdge.data('edge').internalEdges.forEach(function(e) {
-                            edgeIds.push(e);
-                        })
-                    } else {
-                        edgeIds.push(fromCyId(cyEdge.id()));
-                    }
+                    edgeIds = edgeIds.concat(cyEdge.data('edges'));
                 }
             });
 
