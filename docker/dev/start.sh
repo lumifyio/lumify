@@ -19,6 +19,7 @@ function start_hadoop {
   mkdir -p /var/log/hadoop
 
   if [ ! -d "/tmp/hadoop-root" ]; then
+    echo "**************** FORMATING NAMENODE ****************"
     /opt/hadoop/bin/hdfs namenode -format
   fi
   /opt/hadoop/sbin/start-dfs.sh
@@ -42,6 +43,7 @@ function start_accumulo {
   fi
 
   if /opt/accumulo/bin/accumulo info 2>&1 | grep --quiet "Accumulo not initialized"; then
+    echo "**************** INITIALIZING ACCUMULO ****************"
     /opt/accumulo/bin/accumulo init --instance-name lumify --password password --clear-instance-name
   fi
   /opt/accumulo/bin/start-all.sh
