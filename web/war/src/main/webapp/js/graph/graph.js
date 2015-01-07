@@ -614,9 +614,9 @@ define([
 
         this.onContextMenuDeleteEdge = function() {
             var menu = this.select('edgeContextMenuSelector'),
-                edge = menu.data('edge').edge;
+                edges = menu.data('edge').edges;
 
-            this.trigger('deleteEdges', { edges: [edge] });
+            this.trigger('deleteEdges', { edges: edges });
         };
 
         this.onEdgesLoaded = function(evt, relationshipData) {
@@ -634,7 +634,7 @@ define([
                                     type: e[0].label,
                                     sourceId: e[0].sourceVertexId,
                                     targetId: e[0].destVertexId,
-                                    edges: _.pluck(e, 'id')
+                                    edges: e
                                 }
                             })
                             .value();
@@ -670,8 +670,8 @@ define([
                             var edges = cyEdge.data('edges'),
                                 ontology = self.ontologyRelationships.byTitle[cyEdge.data('type')];
 
-                            edges.push(edge.id);
-                            edges = _.unique(edges);
+                            edges.push(edge);
+                            edges = _.unique(edges, false, _.property('id'));
                             cyEdge.data('edges', edges);
                             cyEdge.data('label',
                                 (ontology && ontology.displayName || '') + (
@@ -690,7 +690,7 @@ define([
                                     type: edge.label,
                                     sourceId: edge.sourceVertexId,
                                     targetId: edge.destVertexId,
-                                    edges: [edge.id]
+                                    edges: [edge]
                                 }, sourceNode, destNode, self.ontologyRelationships);
                             }
                         }
@@ -712,7 +712,9 @@ define([
                     if (edges.length < 2) {
                         cyEdge.remove();
                     } else {
-                        edges = _.without(edges, data.edgeId);
+                        edges = _.reject(edges, function(e) {
+                            return e.id === data.edgeId
+                        });
                         cyEdge.data('edges', edges);
                         cyEdge.data('label',
                             (ontology && ontology.displayName || '') + (
@@ -1030,8 +1032,12 @@ define([
 
                 if (Privileges.canEDIT) {
                     menu = this.select ('edgeContextMenuSelector');
-                    var edgeData = event.cyTarget.data();
-                    if (!(/^public$/i).test(edgeData.edge.diffType)) {
+                    var edgeData = event.cyTarget.data(),
+                        anyDeletable = _.any(edgeData.edges, function(e) {
+                            return !(/^public$/i.test(e.diffType));
+                        });
+
+                    if (anyDeletable) {
                         menu.data('edge', edgeData);
                         if (event.cy.nodes().filter(':selected').length > 1) {
                             return false;
@@ -1170,7 +1176,7 @@ define([
 
             edges.each(function(index, cyEdge) {
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                    edgeIds = edgeIds.concat(cyEdge.data('edges'));
+                    edgeIds = edgeIds.concat(_.pluck(cyEdge.data('edges'), 'id'));
                 }
             });
 
