@@ -1,17 +1,94 @@
-background: url(../img/lumify-logo.png) no-repeat center;
-background-size: contain;
-margin: 5em;
+@import (reference) '../util/positioning';
+@import (reference) '../util/constants';
+
+.logo-background {
+  .fullscreen;
+  margin: 5em;
+  background: url(../img/lumify-logo.png) no-repeat center;
+  background-size: contain;
+}
 
 .help {
   position: absolute;
-  margin-right: -5em;
-  margin-top: -5em;
-  right: 0;
-  top: 0;
+  margin-right: 1em;
+  top: 1em;
 
   .shortcut {
     color: #999;
     margin-left: 2em;
     float: right;
+  }
+}
+
+.notifications-container {
+  position: absolute;
+  left: 1em;
+  top: 0;
+  bottom: 4em;
+  overflow: auto;
+  overflow-x: hidden;
+
+  .collapsible-header {
+    background: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 15px;
+
+    &:before {
+      margin-top: -1px;
+    }
+    strong {
+      line-height: 3.2em;
+      padding-right: 2em;
+    }
+    .badge {
+      top: 1.2ex;
+    }
+  }
+
+  .notifications {
+    cursor: default;
+    z-index: 1;
+    position: static;
+    overflow: auto;
+    background: fadeout(white, 10%);
+
+    .notification {
+      background: none;
+      margin: 0.25em 0;
+      h1, h2 {
+        color: black;
+        text-shadow: none;
+      }
+      padding-left: 28px;
+
+      &.info {
+        h1 {
+          color: @notification-info;
+        }
+        &:before {
+          background: @notification-info;
+        }
+      }
+
+      &.warning {
+        h1 {
+          color: @notification-warning;
+        }
+        &:before {
+          background: @notification-warning;
+        }
+      }
+
+      &.critical {
+        h1 {
+          color: @notification-critical;
+        }
+        &:before {
+          border-bottom-color: @notification-critical;
+        }
+      }
+
+    }
   }
 }

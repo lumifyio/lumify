@@ -33,9 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
@@ -75,13 +73,16 @@ public class VertexUploadImage extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.conceptIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
+        this.conceptIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE, null);
+        if (conceptIri == null) {
+            throw new LumifyException("Configuration " + Configuration.ONTOLOGY_IRI_ENTITY_IMAGE + " is required");
+        }
         Concept concept = ontologyRepository.getConceptByIRI(conceptIri);
         if (concept == null) {
             LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIri, Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
         }
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }
@@ -116,8 +117,8 @@ public class VertexUploadImage extends BaseRequestHandler {
         VisibilityJson visibilityJson = getLumifyVisibility(entityVertex, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+        Metadata metadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
         String title = String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex));
         ElementBuilder<Vertex> artifactVertexBuilder = convertToArtifact(file, title, visibilityJson, metadata, lumifyVisibility, authorizations);
@@ -144,6 +145,7 @@ public class VertexUploadImage extends BaseRequestHandler {
 
         graph.flush();
         workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(), workspaceId, visibilityJson.getSource());
+        workQueueRepository.pushElementImageQueue(entityVertex, null, LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
 
         respondWithClientApiObject(response, ClientApiConverter.toClientApi(entityVertex, workspaceId, authorizations));
     }
@@ -160,7 +162,7 @@ public class VertexUploadImage extends BaseRequestHandler {
         return GraphUtil.updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
     }
 
-    private ElementBuilder<Vertex> convertToArtifact(final Part file, String title, VisibilityJson visibilityJson, Map<String, Object> metadata, LumifyVisibility lumifyVisibility, Authorizations authorizations) throws IOException {
+    private ElementBuilder<Vertex> convertToArtifact(final Part file, String title, VisibilityJson visibilityJson, Metadata metadata, LumifyVisibility lumifyVisibility, Authorizations authorizations) throws IOException {
         final InputStream fileInputStream = file.getInputStream();
         final byte[] rawContent = IOUtils.toByteArray(fileInputStream);
         LOGGER.debug("Uploaded file raw content byte length: %d", rawContent.length);

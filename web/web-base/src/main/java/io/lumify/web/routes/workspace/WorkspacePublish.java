@@ -5,6 +5,7 @@ import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -12,6 +13,7 @@ import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
@@ -29,9 +31,7 @@ import org.securegraph.mutation.ExistingElementMutation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.count;
@@ -43,6 +43,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
+    private final AuthorizationRepository authorizationRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final String entityHasImageIri;
@@ -56,7 +57,8 @@ public class WorkspacePublish extends BaseRequestHandler {
             final Graph graph,
             final VisibilityTranslator visibilityTranslator,
             final OntologyRepository ontologyRepository,
-            final WorkspaceRepository workspaceRepository) {
+            final WorkspaceRepository workspaceRepository,
+            final AuthorizationRepository authorizationRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
@@ -64,8 +66,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
+        this.authorizationRepository = authorizationRepository;
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }
@@ -270,10 +273,15 @@ public class WorkspacePublish extends BaseRequestHandler {
             return;
         }
 
+        // Need to elevate with videoFrame auth to be able to publish VideoFrame properties
+        Authorizations authWithVideoFrame = authorizationRepository.createAuthorizations(authorizations, VideoFrameInfo.VISIBILITY);
+        vertex = graph.getVertex(vertex.getId(), authWithVideoFrame);
+
         LOGGER.debug("publishing vertex %s(%s)", vertex.getId(), vertex.getVisibility().toString());
         Visibility originalVertexVisibility = vertex.getVisibility();
         Property visibilityJsonProperty = LumifyProperties.VISIBILITY_JSON.getProperty(vertex);
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
+
         if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
             throw new LumifyException(String.format("vertex with id '%s' is not local to workspace '%s'", vertex.getId(), workspaceId));
         }
@@ -292,10 +300,10 @@ public class WorkspacePublish extends BaseRequestHandler {
             }
         }
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
+        Metadata metadata = new Metadata();
         // we need to alter the visibility of the json property, otherwise we'll have two json properties, one with the old visibility and one with the new.
         LumifyProperties.VISIBILITY_JSON.alterVisibility(vertexElementMutation, visibilityJsonProperty.getKey(), lumifyVisibility.getVisibility());
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.VISIBILITY_JSON.addPropertyValue(vertexElementMutation, visibilityJsonProperty.getKey(), visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save(authorizations);
 
@@ -353,7 +361,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         elementMutation
                 .alterPropertyVisibility(property, lumifyVisibility.getVisibility())
-                .alterPropertyMetadata(property, LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson.toString());
+                .setPropertyMetadata(property, LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityJson.toString(), visibilityTranslator.getDefaultVisibility());
 
         auditRepository.auditEntityProperty(AuditAction.PUBLISH, elementMutation.getElement().getId(), property.getKey(),
                 property.getName(), property.getValue(), property.getValue(), "", "", property.getMetadata(), user, lumifyVisibility.getVisibility());
@@ -384,13 +392,17 @@ public class WorkspacePublish extends BaseRequestHandler {
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : edge.getProperties()) {
-            publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+            OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
+            checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName());
+            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
+                publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+            }
         }
 
         auditRepository.auditEdgeElementMutation(AuditAction.PUBLISH, edgeExistingElementMutation, edge, sourceVertex, destVertex, "", user, lumifyVisibility.getVisibility());
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+        Metadata metadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.VISIBILITY_JSON.setProperty(edgeExistingElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         edge = edgeExistingElementMutation.save(authorizations);
 

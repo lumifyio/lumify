@@ -1,6 +1,6 @@
 
 define([
-    'rangy',
+    'rangy-core',
     'rangy-text',
     'rangy-highlighter'
 ], function(rangy) {

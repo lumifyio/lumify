@@ -7,7 +7,7 @@ define([
     'configuration/plugins/activity/plugin',
     'util/formatters',
     'util/withCollapsibleSections',
-    'service/longRunningProcess'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
@@ -16,13 +16,12 @@ define([
     ActivityHandlers,
     F,
     withCollapsibleSections,
-    LongRunningProcessService) {
+    withDataRequest) {
     'use strict';
 
-    var AUTO_UPDATE_INTERVAL_SECONDS = 60,
-        longRunningProcessService = new LongRunningProcessService();
+    var AUTO_UPDATE_INTERVAL_SECONDS = 60;
 
-    return defineComponent(Activity, withCollapsibleSections);
+    return defineComponent(Activity, withCollapsibleSections, withDataRequest);
 
     function processIsIndeterminate(process) {
         var handler = ActivityHandlers.activityHandlersByType[process.type];
@@ -62,14 +61,14 @@ define([
             this.removedTasks = {};
             this.$node.html(template({}));
 
-            this.tasks = window.currentUser && window.currentUser.longRunningProcesses || [];
+            this.tasks = lumifyData.currentUser && lumifyData.currentUser.longRunningProcesses || [];
             this.tasksById = _.indexBy(this.tasks, 'id');
 
             this.throttledUpdate = _.debounce(this.update.bind(this), 100);
             this.updateEventWatchers();
 
             this.on(document, 'menubarToggleDisplay', this.onToggleDisplay);
-            this.on(document, 'socketMessage', this.onSocketMessage);
+            this.on(document, 'longRunningProcessChanged', this.onLongRunningProcessChanged);
             this.on(document, 'showActivityDisplay', this.onShowActivityDisplay);
             this.on(document, 'activityHandlersUpdated', this.onActivityHandlersUpdated);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
@@ -103,8 +102,8 @@ define([
 
             if (processId) {
                 $button.addClass('loading');
-                longRunningProcessService[name](processId)
-                    .always(function() {
+                this.dataRequest('longRunningProcess', name, processId)
+                    .finally(function() {
                         $button.removeClass('loading');
                     })
                     .done(function() {
@@ -117,13 +116,11 @@ define([
             }
         };
 
-        this.onSocketMessage = function(event, message) {
-            if (message && message.type === 'longRunningProcessChange') {
-                var task = message.data;
+        this.onLongRunningProcessChanged = function(event, data) {
+            var task = data.process;
 
-                this.addOrUpdateTask(task);
-                this.update();
-            }
+            this.addOrUpdateTask(task);
+            this.update();
         };
 
         this.onVerticesUpdated = function(event, data) {

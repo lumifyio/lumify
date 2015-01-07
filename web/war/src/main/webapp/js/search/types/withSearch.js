@@ -2,14 +2,14 @@ define([
     'flight/lib/registry',
     '../filters/filters',
     'hbs!./templates/type',
-    'util/withServiceRequest',
+    'util/withDataRequest',
     'util/formatters',
     'util/vertex/list'
 ], function(
     registry,
     Filters,
     template,
-    withServiceRequest,
+    withDataRequest,
     F,
     VertexList
 ) {
@@ -19,7 +19,7 @@ define([
 
     function withSearch() {
 
-        withServiceRequest.call(this);
+        withDataRequest.call(this);
 
         this.defaultAttrs({
             resultsSelector: '.search-results',

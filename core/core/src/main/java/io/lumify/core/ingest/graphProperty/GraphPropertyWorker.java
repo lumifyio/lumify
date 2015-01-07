@@ -8,6 +8,7 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
+import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
@@ -21,7 +22,6 @@ import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Map;
 
 public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
@@ -30,6 +30,7 @@ public abstract class GraphPropertyWorker {
     private WorkQueueRepository workQueueRepository;
     private OntologyRepository ontologyRepository;
     private AuditRepository auditRepository;
+    private AuthorizationRepository authorizationRepository;
     private GraphPropertyWorkerPrepareData workerPrepareData;
     private Configuration configuration;
     private WorkspaceRepository workspaceRepository;
@@ -40,17 +41,17 @@ public abstract class GraphPropertyWorker {
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         this.workerPrepareData = workerPrepareData;
 
-        this.locationIri = (String) workerPrepareData.getStormConf().get(Configuration.ONTOLOGY_IRI_LOCATION);
+        this.locationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_LOCATION);
         if (this.locationIri == null || this.locationIri.length() == 0) {
             throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_LOCATION);
         }
 
-        this.organizationIri = (String) workerPrepareData.getStormConf().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
+        this.organizationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
         if (this.organizationIri == null || this.organizationIri.length() == 0) {
             throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_ORGANIZATION);
         }
 
-        this.personIri = (String) workerPrepareData.getStormConf().get(Configuration.ONTOLOGY_IRI_PERSON);
+        this.personIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_PERSON);
         if (this.personIri == null || this.personIri.length() == 0) {
             throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
         }
@@ -146,6 +147,15 @@ public abstract class GraphPropertyWorker {
         this.visibilityTranslator = visibilityTranslator;
     }
 
+    @Inject
+    public final void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
+        this.authorizationRepository = authorizationRepository;
+    }
+
+    protected AuthorizationRepository getAuthorizationRepository() {
+        return authorizationRepository;
+    }
+
     /**
      * Determines if this is a property that should be analyzed by text processing tools.
      */
@@ -158,7 +168,7 @@ public abstract class GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 
@@ -176,8 +186,8 @@ public abstract class GraphPropertyWorker {
         return ontologyClassUri;
     }
 
-    protected void addVideoTranscriptAsTextPropertiesToMutation(ExistingElementMutation<Vertex> mutation, String propertyKey, VideoTranscript videoTranscript, Map<String, Object> metadata, Visibility visibility) {
-        metadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+    protected void addVideoTranscriptAsTextPropertiesToMutation(ExistingElementMutation<Vertex> mutation, String propertyKey, VideoTranscript videoTranscript, Metadata metadata, Visibility visibility) {
+        metadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", getVisibilityTranslator().getDefaultVisibility());
         for (VideoTranscript.TimedText entry : videoTranscript.getEntries()) {
             String textPropertyKey = getVideoTranscriptTimedTextPropertyKey(propertyKey, entry);
             StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(entry.getText().getBytes()), String.class);
@@ -203,6 +213,6 @@ public abstract class GraphPropertyWorker {
             return;
         }
         graph.flush();
-        getWorkspaceRepository().updateEntityOnWorkspace(data.getWorkspaceId(), vertex.getId(), null, null, getUser());
+        getWorkspaceRepository().updateEntityOnWorkspace(data.getWorkspaceId(), vertex.getId(), false, null, getUser());
     }
 }

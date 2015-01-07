@@ -8,16 +8,19 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
+import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRunner;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereInterceptor;
 import org.atmosphere.cpr.AtmosphereServlet;
+import org.atmosphere.cpr.SessionSupport;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
 import org.securegraph.Graph;
 
@@ -51,6 +54,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
             setupInjector(context, config);
             setupWebApp(context, config);
             setupLongRunningProcessRunner(context, config);
+            setupGraphPropertyWorkerRunner(context, config);
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
         }
@@ -93,7 +97,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
         // Store the injector in the context for a servlet to access later
         context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());
-        if (!config.get(Configuration.MODEL_PROVIDER).equals(Configuration.UNKNOWN_STRING)) {
+        if (config.get(Configuration.MODEL_PROVIDER, null) != null) {
             FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
         }
 
@@ -114,6 +118,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
     private void addAtmosphereServlet(ServletContext context, Configuration config) {
         ServletRegistration.Dynamic servlet = context.addServlet(ATMOSPHERE_SERVLET_NAME, AtmosphereServlet.class);
+        context.addListener(SessionSupport.class);
         servlet.addMapping("/messaging/*");
         servlet.setAsyncSupported(true);
         servlet.setLoadOnStartup(0);
@@ -167,12 +172,12 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private void setupLongRunningProcessRunner(ServletContext context, final Configuration config) {
-        boolean enabled = Boolean.parseBoolean(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
         if (!enabled) {
             return;
         }
 
-        int threadCount = Integer.parseInt(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, "4"));
+        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, "4"));
 
         final LongRunningProcessRunner longRunningProcessRunner = InjectHelper.getInstance(LongRunningProcessRunner.class);
         longRunningProcessRunner.prepare(config.toMap());
@@ -198,6 +203,34 @@ public final class ApplicationBootstrap implements ServletContextListener {
                 }
             });
             t.setName("long-running-process-runner-" + t.getId());
+            t.setDaemon(true);
+            t.start();
+        }
+    }
+
+    private void setupGraphPropertyWorkerRunner(ServletContext context, Configuration config) {
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED, "true"));
+        if (!enabled) {
+            return;
+        }
+
+        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT, "4"));
+        final User user = userRepository.getSystemUser();
+
+        for (int i = 0; i < threadCount; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
+                    graphPropertyRunner.prepare(user);
+                    try {
+                        graphPropertyRunner.run();
+                    } catch (Exception ex) {
+                        LOGGER.error("Failed running graph property runner", ex);
+                    }
+                }
+            });
+            t.setName("graph-property-worker-runner-" + t.getId());
             t.setDaemon(true);
             t.start();
         }

@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>lumify-tools-group</artifactId>
@@ -24,5 +24,8 @@
         <module>format</module>
         <module>rdf-import</module>
         <module>backup-restore</module>
+        <module>assign-image-mr</module>
+        <module>requeue</module>
+        <module>long-running-process-yarn</module>
     </modules>
 </project>

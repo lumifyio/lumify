@@ -36,7 +36,7 @@ define([
             }
         };
 
-    timezoneJS.timezone.zoneFileBasePath = '/tz';
+    timezoneJS.timezone.zoneFileBasePath = 'tz';
     timezoneJS.timezone.defaultZoneFile = ['northamerica'];
     timezoneJS.timezone.init({ async: false });
 
@@ -347,12 +347,18 @@ define([
                 if (_.isUndefined(millisStr)) return '';
                 return sf('{0:yyyy-MM-dd}', FORMATTERS.date.local(millisStr));
             },
-            dateTimeString: function(millisStr) {
+            dateTimeString: function(millisStr, overrideTzInfo) {
                 if (_.isUndefined(millisStr)) return '';
-                var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                var timezoneAbbreviation = overrideTzInfo;
+                if (!timezoneAbbreviation) {
+                    var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                    if (tzInfo) {
+                        timezoneAbbreviation = tzInfo.tzAbbr;
+                    }
+                }
                 return sf('{0:yyyy-MM-dd HH:mm}{1}',
                     FORMATTERS.date.local(millisStr),
-                    tzInfo ? (' ' + tzInfo.tzAbbr) : ''
+                    timezoneAbbreviation ? (' ' + timezoneAbbreviation) : ''
                 );
             },
             dateStringUtc: function(millisStr) {
@@ -361,7 +367,7 @@ define([
             },
             dateTimeStringUtc: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr));
+                return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr), 'UTC');
             },
             timeString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';

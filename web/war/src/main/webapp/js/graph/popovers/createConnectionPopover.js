@@ -2,33 +2,26 @@
 define([
     'flight/lib/component',
     './withVertexPopover',
-    'service/vertex',
-    'service/ontology',
-    'service/edge',
     'util/withFormFieldErrors',
-    'util/withTeardown'
+    'util/withTeardown',
+    'util/withDataRequest'
 ], function(
     defineComponent,
     withVertexPopover,
-    VertexService,
-    OntologyService,
-    EdgeService,
     withFormFieldErrors,
-    withTeardown) {
+    withTeardown,
+    withDataRequest) {
     'use strict';
 
     return defineComponent(
         CreateConnectionPopover,
         withVertexPopover,
         withFormFieldErrors,
-        withTeardown
+        withTeardown,
+        withDataRequest
     );
 
     function CreateConnectionPopover() {
-
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
-        this.edgeService = new EdgeService();
 
         this.defaultAttrs({
             connectButtonSelector: '.connect-dialog .btn-primary',
@@ -66,9 +59,7 @@ define([
             this.getRelationshipLabels(
                 this.attr.otherCyNode,
                 this.attr.cyNode
-            ).fail(function() {
-                select.html('<option>' + i18n('popovers.connection.error') + '</option>');
-            }).done(function(relationships) {
+            ).then(function(relationships) {
 
                 if (relationships.length) {
                     select.html(
@@ -93,7 +84,9 @@ define([
                 }
 
                 self.positionDialog();
-            });
+            }).catch(function() {
+                select.html('<option>' + i18n('popovers.connection.error') + '</option>');
+            })
         }
 
         this.onVisibilityChange = function(event, data) {
@@ -186,23 +179,24 @@ define([
                 parameters.justificationText = this.justification.justificationText;
             }
 
-            this.edgeService.create(parameters)
-                .always(function() {
-                    self.attr.teardownOnTap = true;
+            var p = this.dataRequest('edge', 'create', parameters)
+                .then(function(data) {
+                    self.on(document, 'edgesLoaded', function loaded() {
+                        self.trigger('finishedVertexConnection');
+                        self.off(document, 'edgesLoaded', loaded);
+                    });
+                    self.trigger('loadEdges');
                 })
-                .fail(function(req, reason, statusText) {
+                .catch(function(error) {
                     $target.text(i18n('popovers.connection.button.connect'))
                         .add(inputs)
                         .removeAttr('disabled');
-                    self.markFieldErrors(statusText);
+                    self.markFieldErrors(error);
+                    self.positionDialog();
                 })
-                .done(function(data) {
-                    self.on(document, 'relationshipsLoaded', function loaded() {
-                        self.trigger('finishedVertexConnection');
-                        self.off(document, 'relationshipsLoaded', loaded);
-                    });
-                    self.trigger('refreshRelationships');
-                });
+                .finally(function() {
+                    self.attr.teardownOnTap = true;
+                })
         };
 
         this.getRelationshipLabels = function(source, dest) {
@@ -210,11 +204,13 @@ define([
                 sourceConceptTypeId = source.data('conceptType'),
                 destConceptTypeId = dest.data('conceptType');
 
-            return $.when(
-                this.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId),
-                this.ontologyService.relationships()
-            ).then(function(relationships, ontologyRelationships) {
-                var relationshipsTpl = [];
+            return Promise.all([
+                this.dataRequest('ontology', 'relationshipsBetween', sourceConceptTypeId, destConceptTypeId),
+                this.dataRequest('ontology', 'relationships')
+            ]).then(function(results) {
+                var relationships = results[0],
+                    ontologyRelationships = results[1],
+                    relationshipsTpl = [];
 
                 relationships.forEach(function(relationship) {
                     var ontologyRelationship = ontologyRelationships.byTitle[relationship.title],

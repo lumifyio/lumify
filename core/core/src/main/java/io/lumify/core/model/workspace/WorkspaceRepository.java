@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class WorkspaceRepository {
     public static final String VISIBILITY_STRING = "workspace";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
-    public static final String WORKSPACE_CONCEPT_IRI = "http://lumify.io/workspace";
+    public static final String WORKSPACE_CONCEPT_IRI = "http://lumify.io/workspace#workspace";
     public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace/toEntity";
     public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace/toUser";
     public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
@@ -99,6 +99,8 @@ public abstract class WorkspaceRepository {
         }
         return null;
     }
+
+    public abstract boolean hasCommentPermissions(String workspaceId, User user);
 
     public abstract boolean hasWritePermissions(String workspaceId, User user);
 
@@ -183,6 +185,7 @@ public abstract class WorkspaceRepository {
                 workspaceClientApi.setSharedToUser(!creatorUserId.equals(user.getUserId()));
             }
             workspaceClientApi.setEditable(hasWritePermissions(workspace.getWorkspaceId(), user));
+            workspaceClientApi.setCommentable(hasCommentPermissions(workspace.getWorkspaceId(), user));
 
             for (WorkspaceUser u : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
                 String userId = u.getUserId();
@@ -206,10 +209,22 @@ public abstract class WorkspaceRepository {
                     if (graphPositionX != null && graphPositionY != null) {
                         GraphPosition graphPosition = new GraphPosition(graphPositionX, graphPositionY);
                         v.setGraphPosition(graphPosition);
+                        v.setGraphLayoutJson(null);
+                    } else {
+                        v.setGraphPosition(null);
+
+                        String graphLayoutJson = workspaceEntity.getGraphLayoutJson();
+                        if (graphLayoutJson != null) {
+                            v.setGraphLayoutJson(graphLayoutJson);
+                        } else {
+                            v.setGraphLayoutJson(null);
+                        }
                     }
 
                     workspaceClientApi.addVertex(v);
                 }
+            } else {
+                workspaceClientApi.removeVertices();
             }
 
             return workspaceClientApi;
@@ -243,11 +258,20 @@ public abstract class WorkspaceRepository {
         private final String vertexId;
         private final Boolean visible;
         private final GraphPosition graphPosition;
+        private final String graphLayoutJson;
 
-        public Update(String vertexId, boolean visible, GraphPosition graphPosition) {
+        public Update(String vertexId, Boolean visible, GraphPosition graphPosition) {
             this.vertexId = vertexId;
             this.visible = visible;
             this.graphPosition = graphPosition;
+            graphLayoutJson = null;
+        }
+
+        public Update(String vertexId, Boolean visible, GraphPosition graphPosition, String graphLayoutJson) {
+            this.vertexId = vertexId;
+            this.visible = visible;
+            this.graphPosition = graphPosition;
+            this.graphLayoutJson = graphLayoutJson;
         }
 
         public String getVertexId() {
@@ -260,6 +284,10 @@ public abstract class WorkspaceRepository {
 
         public GraphPosition getGraphPosition() {
             return graphPosition;
+        }
+
+        public String getGraphLayoutJson() {
+            return graphLayoutJson;
         }
     }
 }

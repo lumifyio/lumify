@@ -23,16 +23,11 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.VisibilityJson;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
+import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ResolveTermEntity extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveTermEntity.class);
@@ -64,7 +59,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
 
-        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
         if (this.artifactHasEntityIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
         }
@@ -104,8 +99,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+        Metadata metadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
         ElementMutation<Vertex> vertexMutation;
         Vertex vertex;
         if (resolvedVertexId != null) {
@@ -126,7 +121,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
             this.graph.flush();
 
-            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, user);
+            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, user);
         }
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?

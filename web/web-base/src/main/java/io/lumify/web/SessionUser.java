@@ -1,7 +1,9 @@
 package io.lumify.web;
 
+import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.user.UserSessionCounterRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -32,15 +34,23 @@ public class SessionUser implements HttpSessionBindingListener, Serializable {
 
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
-        UserStatus status = UserStatus.OFFLINE;
-        LOGGER.info("setting userId %s status to %s", userId, status);
+
         try {
-            UserRepository userRepository = InjectHelper.getInstance(UserRepository.class);
-            User user = userRepository.setStatus(userId, status);
+            UserSessionCounterRepository userSessionCounterRepository = InjectHelper.getInstance(UserSessionCounterRepository.class);
             WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
-            workQueueRepository.pushUserStatusChange(user, status);
+
+            int sessionCount = userSessionCounterRepository.decrementAndGet(userId);
+            if (sessionCount < 1) {
+                UserStatus status = UserStatus.OFFLINE;
+                LOGGER.info("setting userId %s status to %s", userId, status);
+                UserRepository userRepository = InjectHelper.getInstance(UserRepository.class);
+                User user = userRepository.setStatus(userId, status);
+                workQueueRepository.pushUserStatusChange(user, status);
+            } else {
+                workQueueRepository.pushSessionExpiration(userId, event.getSession().getId());
+            }
         } catch (Exception ex) {
-            LOGGER.error("exception while setting userId %s status to %s", userId, status, ex);
+            LOGGER.error("exception while unbinding user session for userId:%s", userId, ex);
         }
     }
 }

@@ -16,7 +16,7 @@ function _configure_splits {
   local prefix=$2
 
   local filename=$(_write_split_file ${prefix})
-  /usr/lib/accumulo/bin/accumulo shell -u root -p password -e "addsplits -t ${tablename} -sf ${filename}"
+  /opt/accumulo/bin/accumulo shell -u root -p password -e "addsplits -t ${tablename} -sf ${filename}"
   rm -f ${filename}
 }
 
@@ -24,4 +24,3 @@ function _configure_splits {
 _configure_splits lumify_securegraph_d DVWIKIPEDIA_
 _configure_splits lumify_securegraph_e EWIKIPEDIA_LINK_
 _configure_splits lumify_securegraph_v VWIKIPEDIA_
-_configure_splits lumify_termMention   WIKIPEDIA_

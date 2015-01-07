@@ -29,9 +29,9 @@ public class WebApp extends App {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WebApp.class);
     private final Injector injector;
     private final boolean devMode;
-    private final AppendableStaticResourceHandler pluginsJsResourceHandler = new AppendableStaticResourceHandler("application/javascript");
+    private final AppendableStaticResourceHandler pluginsJsResourceHandler = new No404AppendableStaticResourceHandler("application/javascript");
     private final List<String> pluginsJsResources = new ArrayList<String>();
-    private final AppendableStaticResourceHandler pluginsCssResourceHandler = new AppendableStaticResourceHandler("text/css");
+    private final AppendableStaticResourceHandler pluginsCssResourceHandler = new No404AppendableStaticResourceHandler("text/css");
     private final List<String> pluginsCssResources = new ArrayList<String>();
     private LumifyResourceBundleManager lumifyResourceBundleManager = new LumifyResourceBundleManager();
 
@@ -40,15 +40,15 @@ public class WebApp extends App {
         this.injector = injector;
 
         Configuration config = injector.getInstance(Configuration.class);
-        this.devMode = "true".equals(config.get(Configuration.DEV_MODE));
+        this.devMode = "true".equals(config.get(Configuration.DEV_MODE, "false"));
 
         if (!devMode) {
-            String pluginsJsRoute = "/plugins.js";
-            this.get(pluginsJsRoute, pluginsJsResourceHandler);
+            String pluginsJsRoute = "plugins.js";
+            this.get("/" + pluginsJsRoute, pluginsJsResourceHandler);
             pluginsJsResources.add(pluginsJsRoute);
 
-            String pluginsCssRoute = "/plugins.css";
-            this.get(pluginsCssRoute, pluginsCssResourceHandler);
+            String pluginsCssRoute = "plugins.css";
+            this.get("/" + pluginsCssRoute, pluginsCssResourceHandler);
             pluginsCssResources.add(pluginsCssRoute);
         }
     }
@@ -72,9 +72,9 @@ public class WebApp extends App {
     }
 
     public void registerJavaScript(String scriptResourceName) {
-        String resourcePath = "/js" + scriptResourceName;
+        String resourcePath = "js" + scriptResourceName;
         if (devMode) {
-            get(resourcePath, new StaticResourceHandler(this.getClass(), scriptResourceName, "application/javascript"));
+            get("/" + resourcePath, new StaticResourceHandler(this.getClass(), scriptResourceName, "application/javascript"));
             pluginsJsResources.add(resourcePath);
         } else {
             pluginsJsResourceHandler.appendResource(scriptResourceName);
@@ -82,9 +82,9 @@ public class WebApp extends App {
     }
 
     public void registerCss(String cssResourceName) {
-        String resourcePath = "/css" + cssResourceName;
+        String resourcePath = "css" + cssResourceName;
         if (devMode) {
-            get(resourcePath, new StaticResourceHandler(this.getClass(), cssResourceName, "text/css"));
+            get("/" + resourcePath, new StaticResourceHandler(this.getClass(), cssResourceName, "text/css"));
             pluginsCssResources.add(resourcePath);
         } else {
             pluginsCssResourceHandler.appendResource(cssResourceName);

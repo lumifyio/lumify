@@ -5,8 +5,10 @@ import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
+import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.WorkerSpout;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -62,11 +64,6 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public Object createSpout(Configuration configuration, String queueName) {
-        return new RabbitMQWorkQueueSpout(queueName);
-    }
-
-    @Override
     public void flush() {
     }
 
@@ -88,6 +85,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
         try {
             LOGGER.info("deleting queue: %s", GRAPH_PROPERTY_QUEUE_NAME);
             channel.queueDelete(GRAPH_PROPERTY_QUEUE_NAME);
+            channel.queueDelete(LONG_RUNNING_PROCESS_QUEUE_NAME);
         } catch (IOException e) {
             throw new LumifyException("Could not delete queues", e);
         }
@@ -150,6 +148,11 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
         } catch (Exception e) {
             throw new LumifyException("Could not read long running process queue", e);
         }
+    }
+
+    @Override
+    public WorkerSpout createWorkerSpout() {
+        return InjectHelper.inject(new RabbitMQWorkQueueSpout(GRAPH_PROPERTY_QUEUE_NAME));
     }
 
     private class RabbitMQLongRunningProcessMessage extends LongRunningProcessMessage {

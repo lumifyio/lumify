@@ -7,6 +7,7 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -21,14 +22,10 @@ import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiElement;
 import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -80,6 +77,12 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
+        if (propertyName.equals(LumifyProperties.COMMENT.getPropertyName()) && request.getPathInfo().equals("/vertex/property")) {
+            throw new LumifyException("Use /vertex/comment to save comment properties");
+        } else if (request.getPathInfo().equals("/vertex/comment") && !propertyName.equals(LumifyProperties.COMMENT.getPropertyName())) {
+            throw new LumifyException("Use /vertex/property to save non-comment properties");
+        }
+
         respondWithClientApiObject(response, handle(
                 graphVertexId,
                 propertyName,
@@ -117,19 +120,23 @@ public class VertexSetProperty extends BaseRequestHandler {
             propertyKey = this.graph.getIdGenerator().nextId();
         }
 
-        Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
-
-        OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
-        if (property == null) {
-            throw new RuntimeException("Could not find property: " + propertyName);
-        }
+        Metadata metadata = GraphUtil.metadataStringToMap(metadataString, this.visibilityTranslator.getDefaultVisibility());
 
         Object value;
-        try {
-            value = property.convertString(valueStr);
-        } catch (Exception ex) {
-            LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
-            throw new LumifyException(ex.getMessage(), ex);
+        if (propertyName == "http://lumify.io#comment") {
+            value = valueStr;
+        } else {
+            OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
+            if (property == null) {
+                throw new RuntimeException("Could not find property: " + propertyName);
+            }
+
+            try {
+                value = property.convertString(valueStr);
+            } catch (Exception ex) {
+                LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
+                throw new LumifyException(ex.getMessage(), ex);
+            }
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
@@ -155,8 +162,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, user);
 
-        // TODO: use property key from client when we implement multi-valued properties
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId, visibilitySource);
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, propertyKey, propertyName, workspaceId, visibilitySource);
 
         return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }

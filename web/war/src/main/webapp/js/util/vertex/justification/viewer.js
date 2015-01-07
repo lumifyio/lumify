@@ -1,11 +1,12 @@
 define([
     'flight/lib/component',
-    'data',
-    'hbs!./viewerTpl'
-], function(defineComponent, appData, template) {
+    'hbs!./viewerTpl',
+    'util/withDataRequest',
+    'util/vertex/formatters'
+], function(defineComponent, template, withDataRequest, F) {
     'use strict';
 
-    return defineComponent(JustificationViewer);
+    return defineComponent(JustificationViewer, withDataRequest);
 
     function JustificationViewer() {
 
@@ -25,9 +26,10 @@ define([
             });
 
             if (this.attr.sourceMetadata) {
-                appData.getVertexTitle(this.attr.sourceMetadata.vertexId)
-                    .done(function(title) {
-                        self.select('sourceInfoTitleSelector').text(title);
+                this.dataRequest('vertex', 'store', { vertexIds: this.attr.sourceMetadata.vertexId })
+                    .done(function(vertex) {
+                        self.select('sourceInfoTitleSelector').text(F.vertex.title(vertex));
+                        self.trigger('positionDialog');
                     });
             }
         });
@@ -41,7 +43,7 @@ define([
                 offsets = [metadata.startOffset, metadata.endOffset];
 
             this.trigger('selectObjects', {
-                vertices: [ { id: vertexId } ],
+                vertexIds: [vertexId],
                 focus: {
                     vertexId: vertexId,
                     textPropertyKey: textPropertyKey,

@@ -3,17 +3,20 @@ require([
     'configuration/admin/utils/fileUpload',
     'hbs!io/lumify/web/devTools/templates/ontology-upload',
     'util/formatters',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
     FileUpload,
     template,
     F,
+    withDataRequest,
     d3
     ) {
     'use strict';
 
     return defineLumifyAdminPlugin(OntologyUpload, {
+        mixins: [withDataRequest],
         section: 'Ontology',
         name: 'Upload',
         subtitle: 'Upload new ontology owl'
@@ -45,17 +48,17 @@ require([
 
         this.onUpload = function() {
             var self = this,
-                importButton = this.select('uploadSelector');
+                importButton = this.select('uploadSelector'),
+                request = this.dataRequest('admin', 'ontologyUpload', this.documentIri || '', this.ontologyFile);
 
-            this.handleSubmitButton(importButton,
-                this.adminService.ontologyUpload(this.documentIri || '', this.ontologyFile)
-                    .fail(this.showError.bind(this, 'Upload failed'))
-                    .done(this.showSuccess.bind(this, 'Upload successful'))
-                    .done(function() {
+            this.handleSubmitButton(importButton, request);
+
+            request.then(function() {
+                        self.showSuccess('Upload successful');
                         self.trigger(importButton, 'reset');
                         self.$node.find('.documentIri').val('');
                     })
-            );
+                    .catch(this.showError.bind(this, 'Upload failed'));
         };
 
         this.onFileChanged = function(event, data) {

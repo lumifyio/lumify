@@ -11,6 +11,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.web.clientapi.model.ClientApiUser;
+import io.lumify.web.clientapi.model.ClientApiUsers;
 import io.lumify.web.clientapi.model.Privilege;
 import io.lumify.web.clientapi.model.UserStatus;
 import org.apache.accumulo.core.security.Authorizations;
@@ -21,17 +22,14 @@ import org.json.JSONObject;
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.securegraph.util.IterableUtils.toList;
 
 public abstract class UserRepository {
     public static final String VISIBILITY_STRING = "user";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
-    public static final String USER_CONCEPT_IRI = "http://lumify.io/user";
+    public static final String USER_CONCEPT_IRI = "http://lumify.io/user#user";
     private final Set<Privilege> defaultPrivileges;
     private LongRunningProcessRepository longRunningProcessRepository; // can't inject this because of circular dependencies
 
@@ -163,16 +161,12 @@ public abstract class UserRepository {
         return username.trim().toLowerCase();
     }
 
-    public static JSONArray toJson(Iterable<User> users) throws JSONException {
-        return toJson(users, null);
-    }
-
-    public static JSONArray toJson(Iterable<User> users, Map<String, String> workspaceNames) {
-        JSONArray usersJson = new JSONArray();
+    public ClientApiUsers toClientApi(Iterable<User> users, Map<String, String> workspaceNames) {
+        ClientApiUsers clientApiUsers = new ClientApiUsers();
         for (User user : users) {
-            usersJson.put(UserRepository.toJson(user, workspaceNames));
+            clientApiUsers.getUsers().add(toClientApi(user, workspaceNames));
         }
-        return usersJson;
+        return clientApiUsers;
     }
 
     public static JSONObject toJson(User user) {
@@ -270,4 +264,10 @@ public abstract class UserRepository {
     public static String createRandomPassword() {
         return new BigInteger(120, new SecureRandom()).toString(32);
     }
+
+    public abstract User findByPasswordResetToken(String token);
+
+    public abstract void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate);
+
+    public abstract void clearPasswordResetTokenAndExpirationDate(User user);
 }

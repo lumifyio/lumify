@@ -47,16 +47,16 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Graph graph;
     private Authorizations authorizations;
     private Cache<String, List<Concept>> allConceptsWithPropertiesCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
     private Cache<String, List<OntologyProperty>> allPropertiesCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
     private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
     private Cache<String, ClientApiOntology> clientApiCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(15, TimeUnit.HOURS)
             .build();
 
     @Inject
@@ -78,6 +78,18 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         } else {
             LOGGER.info("Base ontology already defined.");
         }
+    }
+
+    @Override
+    protected void importOntologyAnnotationProperty(OWLOntology o, OWLAnnotationProperty annotationProperty, File inDir, Authorizations authorizations) {
+        super.importOntologyAnnotationProperty(o, annotationProperty, inDir, authorizations);
+
+        String about = annotationProperty.getIRI().toString();
+        LOGGER.debug("disabling index for annotation property: " + about);
+        DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(about);
+        definePropertyBuilder.dataType(PropertyType.getTypeClass(PropertyType.STRING));
+        definePropertyBuilder.textIndexHint(TextIndexHint.NONE);
+        definePropertyBuilder.define();
     }
 
     @Override
@@ -113,9 +125,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     public void storeOntologyFile(InputStream in, IRI documentIRI) {
         StreamingPropertyValue value = new StreamingPropertyValue(in, byte[].class);
         value.searchIndex(false);
-        Map<String, Object> metadata = new HashMap<String, Object>();
+        Metadata metadata = new Metadata();
         Vertex rootConceptVertex = ((SecureGraphConcept) getRootConcept()).getVertex();
-        metadata.put("index", toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME)).size());
+        metadata.add("index", toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME)).size(), VISIBILITY.getVisibility());
         rootConceptVertex.addPropertyValue(documentIRI.toString(), ONTOLOGY_FILE_PROPERTY_NAME, value, metadata, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
@@ -148,12 +160,17 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private Iterable<Property> getOntologyFiles() {
-        List<Property> ontologyFiles = toList(((SecureGraphConcept) getRootConcept()).getVertex().getProperties(ONTOLOGY_FILE_PROPERTY_NAME));
+        SecureGraphConcept rootConcept = (SecureGraphConcept) getRootConcept();
+        checkNotNull(rootConcept, "Could not get root concept");
+        Vertex rootConceptVertex = rootConcept.getVertex();
+        checkNotNull(rootConceptVertex, "Could not get root concept vertex");
+
+        List<Property> ontologyFiles = toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME));
         Collections.sort(ontologyFiles, new Comparator<Property>() {
             @Override
             public int compare(Property ontologyFile1, Property ontologyFile2) {
-                Integer index1 = (Integer) ontologyFile1.getMetadata().get("index");
-                Integer index2 = (Integer) ontologyFile2.getMetadata().get("index");
+                Integer index1 = (Integer) ontologyFile1.getMetadata().getValue("index");
+                Integer index2 = (Integer) ontologyFile2.getMetadata().getValue("index");
                 return index1.compareTo(index2);
             }
         });
@@ -264,27 +281,23 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return allConceptsWithPropertiesCache.get("", new TimingCallable<List<Concept>>("getConceptsWithProperties") {
                 @Override
                 public List<Concept> callWithTime() throws Exception {
-                    return toList(getConcepts());
+                    return toList(new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
+                            .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
+                            .limit(QUERY_LIMIT)
+                            .vertices()) {
+                        @Override
+                        protected Concept convert(Vertex vertex) {
+                            List<OntologyProperty> conceptProperties = getPropertiesByVertexNoRecursion(vertex);
+                            Vertex parentConceptVertex = getParentConceptVertex(vertex);
+                            String parentConceptIRI = ONTOLOGY_TITLE.getPropertyValue(parentConceptVertex);
+                            return new SecureGraphConcept(vertex, parentConceptIRI, conceptProperties);
+                        }
+                    });
                 }
             });
         } catch (ExecutionException e) {
             throw new LumifyException("could not get concepts with properties", e);
         }
-    }
-
-    private Iterable<Concept> getConcepts() {
-        return new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
-                .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
-                .limit(QUERY_LIMIT)
-                .vertices()) {
-            @Override
-            protected Concept convert(Vertex vertex) {
-                List<OntologyProperty> conceptProperties = getPropertiesByVertexNoRecursion(vertex);
-                Vertex parentConceptVertex = getParentConceptVertex(vertex);
-                String parentConceptIRI = ONTOLOGY_TITLE.getPropertyValue(parentConceptVertex);
-                return new SecureGraphConcept(vertex, parentConceptIRI, conceptProperties);
-            }
-        };
     }
 
     private Concept getRootConcept() {

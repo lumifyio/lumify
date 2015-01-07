@@ -1,8 +1,7 @@
 
 define([
-    'flight/lib/component',
-    'util/formatters'
-], function(defineComponent, F) {
+    'flight/lib/component'
+], function(defineComponent) {
     'use strict';
 
     return defineComponent(Keyboard);
@@ -59,14 +58,16 @@ define([
                 } else scopes = [data.scope];
             }
 
-            scopes.forEach(function(scope) {
-                Object.keys(data.shortcuts).forEach(function(key) {
-                    var shortcut = $.extend({}, data.shortcuts[key], F.object.shortcut(key));
+            require(['util/formatters'], function(F) {
+                scopes.forEach(function(scope) {
+                    Object.keys(data.shortcuts).forEach(function(key) {
+                        var shortcut = $.extend({}, data.shortcuts[key], F.object.shortcut(key));
 
-                    if (!shortcutsByScope[scope]) shortcutsByScope[scope] = {};
-                    shortcuts[shortcut.forEventLookup] = shortcutsByScope[scope][shortcut.normalized] = shortcut;
+                        if (!shortcutsByScope[scope]) shortcutsByScope[scope] = {};
+                        shortcuts[shortcut.forEventLookup] = shortcutsByScope[scope][shortcut.normalized] = shortcut;
+                    });
                 });
-            });
+            })
         };
 
         this.onFocus = function(e) {

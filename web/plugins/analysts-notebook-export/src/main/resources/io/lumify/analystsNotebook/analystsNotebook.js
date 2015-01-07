@@ -2,67 +2,72 @@ require([
     'configuration/plugins/exportWorkspace/plugin',
     'util/messages',
     'util/formatters',
-    'service/config'
-], function(p, i18n, F, ConfigService) {
-    var componentPath = 'io.lumify.analystsNotebook.AnalystsNotebook',
-        configService = new ConfigService();
+    'util/withDataRequest'
+], function (p, i18n, F, withDataRequest) {
+    var componentPath = 'io.lumify.analystsNotebook.AnalystsNotebook';
+    var versions = {};
 
-    configService.getProperties().done(function(config) {
-        var versions = {};
+    withDataRequest.dataRequest('config', 'properties')
+        .done(function (config) {
 
-        Object.getOwnPropertyNames(config).forEach(function(key) {
-            var labelMatch = key.match(/analystsNotebookExport\.menuOption\.(\w+)\.label/);
-            if (labelMatch && labelMatch.length == 2) {
-                var label = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.label'],
-                    value = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.value'];
-                if (label && value) {
-                    versions[label] = value;
+            Object.getOwnPropertyNames(config).forEach(function (key) {
+                var labelMatch = key.match(/analystsNotebookExport\.menuOption\.(\w+)\.label/);
+                if (labelMatch && labelMatch.length == 2) {
+                    var label = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.label'],
+                        value = config['analystsNotebookExport.menuOption.' + labelMatch[1] + '.value'];
+                    if (label && value) {
+                        versions[label] = value;
+                    }
                 }
-            }
-        });
+            });
 
-        Object.getOwnPropertyNames(versions).forEach(function(label) {
             p.registerWorkspaceExporter({
-                menuItem: i18n('analystsnotebook.menuitem.title', label),
+                menuItem: i18n('analystsnotebook.menuitem.title'),
                 componentPath: componentPath
             });
-        });
-    });
 
-    define(componentPath, ['flight/lib/component'], function(defineComponent) {
+            define(componentPath, ['flight/lib/component'], function (defineComponent) {
 
-        return defineComponent(AnalystsNotebook);
+                return defineComponent(AnalystsNotebook);
 
-        function AnalystsNotebook() {
+                function AnalystsNotebook() {
 
-            this.defaultAttrs({
-                buttonSelector: 'button'
-            });
+                    this.defaultAttrs({
+                        dropdownSelector: 'select',
+                        buttonSelector: 'button'
+                    });
 
-            this.after('initialize', function() {
+                    this.after('initialize', function () {
+                        var self = this;
+                        this.on('click', {
+                            buttonSelector: this.onExport
+                        });
 
-                this.on('click', {
-                    buttonSelector: this.onExport
-                });
+                        this.$node.html('<select class="analystsNotebook"></select>');
+                        Object.getOwnPropertyNames(versions).forEach(function (label) {
+                            self.$node.find('select').append(new Option('Version ' + label, versions[label]));
+                        });
 
-                this.$node.html(
-                    '<button class="btn btn-primary">' + i18n('analystsnotebook.menuitem.button') + '</button>'
-                );
-            });
+                        this.$node.append(
+                            '<button class="btn btn-primary">' + i18n('analystsnotebook.menuitem.button') + '</button>'
+                        );
+                    });
 
-            this.onExport = function() {
-                var timeZone = F.timezone.currentTimezone(),
-                    params = {
-                        workspaceId: this.attr.workspaceId
-                    };
+                    this.onExport = function () {
+                        var timeZone = F.timezone.currentTimezone(),
+                            params = {
+                                version: this.$node.find('.analystsNotebook').val(),
+                                workspaceId: this.attr.workspaceId
+                            };
 
-                if (timeZone && timeZone.name) {
-                    params.timeZone = timeZone.name;
+                        if (timeZone && timeZone.name) {
+                            params.timeZone = timeZone.name;
+                        }
+
+                        window.open('analysts-notebook/export?' + $.param(params));
+                        this.trigger('closePopover');
+                    }
                 }
-
-                window.open('analysts-notebook/export?' + $.param(params));
-                this.trigger('closePopover');
-            }
-        }
-    })
+            })
+        });
 });

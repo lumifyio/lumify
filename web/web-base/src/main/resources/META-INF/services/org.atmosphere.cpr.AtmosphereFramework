@@ -1,0 +1,7 @@
+INSTALL
+org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor
+org.atmosphere.interceptor.BroadcastOnPostAtmosphereInterceptor
+org.atmosphere.client.TrackMessageSizeInterceptor
+org.atmosphere.interceptor.HeartbeatInterceptor
+org.atmosphere.interceptor.JavaScriptProtocol
+EXCLUDE

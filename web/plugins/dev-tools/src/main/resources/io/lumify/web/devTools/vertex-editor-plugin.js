@@ -4,7 +4,7 @@ require([
     'util/messages',
     'util/formatters',
     'd3',
-    'service/vertex',
+    'util/withDataRequest',
     'less!io/lumify/web/devTools/less/vertex-editor'
 ], function(
     defineLumifyAdminPlugin,
@@ -12,14 +12,13 @@ require([
     i18n,
     F,
     d3,
-    VertexService,
+    withDataRequest,
     less) {
     'use strict';
 
-    var vertexService = new VertexService();
-
     defineLumifyAdminPlugin(VertexEditor, {
         less: less,
+        mixins: [withDataRequest],
         section: i18n('admin.vertex.editor.section'),
         name: i18n('admin.vertex.editor.name'),
         subtitle: i18n('admin.vertex.editor.subtitle')
@@ -54,12 +53,12 @@ require([
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
-            require(['data'], function(appData) {
-                self.$node.html(template({
-                    workspaceId: appData.workspaceId,
-                    vertexId: appData.selectedVertexIds[0] || ''
-                }));
-            });
+            this.$node.html(template({
+                workspaceId: lumifyData.currentWorkspaceId,
+                vertexId: ''
+            }));
+
+            this.onObjectsSelected(null, lumifyData.selectedObjects);
         });
 
         this.onEdit = function(event) {
@@ -74,18 +73,18 @@ require([
 
             this.handleSubmitButton(
                 button,
-                vertexService.deleteProperty(
+                this.dataRequest('vertex', 'deleteProperty',
                     this.$node.find('.vertexId').val(),
                     li.data('property'),
                     this.$node.find('.workspaceId').val()
                 )
-                    .fail(function() {
+                    .then(function() {
+                        li.removeClass('show-hover-items');
+                        self.onLoad();
+                    })
+                    .catch(function() {
                         self.showError();
                     })
-                    .done(function() {
-                        li.removeClass('show-hover-items');
-                    })
-                    .done(this.onLoad.bind(this))
             );
         };
 
@@ -97,26 +96,28 @@ require([
 
             this.handleSubmitButton(
                 button,
-                vertexService.setProperty(
+
+                this.dataRequest('vertex', 'setProperty',
                     this.$node.find('.vertexId').val(),
-                    li.find('input[name=key]').val(),
-                    property.name || li.find('input[name=name]').val(),
-                    li.find('input[name=value]').val(),
-                    li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
-                    'admin graph vertex editor',
-                    null,
-                    JSON.parse(li.find('textarea[name=metadata]').val()),
+                    {
+                        key: li.find('input[name=key]').val(),
+                        name: property.name || li.find('input[name=name]').val(),
+                        value: li.find('input[name=value]').val(),
+                        visibilitySource: li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
+                        justificationText: 'admin graph vertex editor',
+                        metadata: JSON.parse(li.find('textarea[name=metadata]').val())
+                    },
                     this.$node.find('.workspaceId').val()
                 )
-                    .fail(function() {
-                        self.showError();
-                    })
-                    .done(function() {
+                    .then(function() {
                         if (li.closest('.collapsible').next('.collapsible').length) {
                             li.removeClass('editing');
                         }
+                        this.onLoad();
                     })
-                    .done(this.onLoad.bind(this))
+                    .catch(function() {
+                        self.showError();
+                    })
             );
         };
 
@@ -171,10 +172,10 @@ require([
         this.onLoad = function() {
             var self = this;
 
-            vertexService.getVertexProperties(
-                this.select('vertexInputSelector').val(),
-                this.select('workspaceInputSelector').val()
-            ).done(function(vertex) {
+            this.dataRequest('vertex', 'store', {
+                workspaceId: this.select('workspaceInputSelector').val(),
+                vertexIds: this.select('vertexInputSelector').val()
+            }).done(function(vertex) {
                 self.update(vertex);
             });
         };
@@ -187,12 +188,13 @@ require([
 
             this.handleSubmitButton(
                 button,
-                this.adminService.vertexDelete(graphVertexId, workspaceId)
-                    .fail(function() {
-                        self.showError();
-                    }).done(function() {
+                this.dataRequest('admin', 'vertexDelete', graphVertexId, workspaceId)
+                    .then(function() {
                         self.$node.find('section').remove();
                         self.$node.find('.vertexId').val('');
+                    })
+                    .catch(function() {
+                        self.showError();
                     })
             );
         };
@@ -299,7 +301,12 @@ require([
                                     return _.chain(d)
                                         .clone()
                                         .tap(function(property) {
-                                            property.metadata = _.omit(property, notMetadata);
+                                            var vis = property.metadata &&
+                                                property.metadata['http://lumify.io#visibilityJson'];
+
+                                            property.metadata = _.omit(property.metadata, notMetadata);
+
+                                            property['http://lumify.io#visibilityJson'] = vis || { source:'' };
                                         })
                                         .pairs()
                                         .reject(function(pair) {

@@ -2,20 +2,19 @@ require([
     'configuration/admin/plugin',
     'hbs!io/lumify/opennlpDictionary/web/templates/add',
     'util/formatters',
-    'service/ontology',
+    'util/withDataRequest',
     'd3'
 ], function(
     defineLumifyAdminPlugin,
     template,
     F,
-    OntologyService,
+    withDataRequest,
     d3
     ) {
     'use strict';
 
-    var ontologyService = new OntologyService();
-
     return defineLumifyAdminPlugin(DictionaryAdd, {
+        mixins: [withDataRequest],
         section: 'Dictionary',
         name: 'Add',
         subtitle: 'Create new dictionary entries'
@@ -41,11 +40,8 @@ require([
 
             this.$node.html(template({}));
 
-            ontologyService.concepts()
-                .always(function() {
-                    self.$node.find('.badge').remove();
-                })
-                .done(function(concepts) {
+            this.dataRequest('ontology', 'concepts')
+                .then(function(concepts) {
                     self.$node.find('select')
                         .append(
                             _.chain(concepts.byTitle)
@@ -59,6 +55,9 @@ require([
                             })
                             .value()
                         );
+                })
+                .finally(function() {
+                    self.$node.find('.badge').remove();
                 })
         });
 
@@ -76,18 +75,18 @@ require([
 
             this.handleSubmitButton(
                 this.select('createSelector'),
-                this.adminService.dictionaryAdd(
+                this.dataRequest('admin', 'dictionaryAdd',
                     this.$node.find('select').val(),
                     this.$node.find('.token').val(),
                     this.$node.find('.resolved').val()
-                ).fail(this.showError.bind(this))
-                .done(function() {
-                    self.showSuccess();
-                })
-                .done(function() {
-                    self.$node.find('.token').val('');
-                    self.$node.find('.resolved').val('');
-                })
+                )
+                    .then(function() {
+                        self.showSuccess();
+                        self.$node.find('.token').val('');
+                        self.$node.find('.resolved').val('');
+                    })
+                    .catch(this.showError.bind(this))
+
             )
         };
 

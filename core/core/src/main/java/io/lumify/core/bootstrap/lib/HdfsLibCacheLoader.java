@@ -58,7 +58,7 @@ public class HdfsLibCacheLoader extends LibLoader {
     }
 
     private String getHdfsLibCacheUser(Configuration configuration) {
-        String hdfsLibCacheUser = configuration.get(Configuration.HDFS_LIB_CACHE_HDFS_USER);
+        String hdfsLibCacheUser = configuration.get(Configuration.HDFS_LIB_CACHE_HDFS_USER, null);
         if (hdfsLibCacheUser == null) {
             hdfsLibCacheUser = "hadoop";
             LOGGER.warn("Configuration parameter %s was not set; defaulting to HDFS user '%s'.", Configuration.HDFS_LIB_CACHE_HDFS_USER, hdfsLibCacheUser);
@@ -70,7 +70,10 @@ public class HdfsLibCacheLoader extends LibLoader {
 
     private FileSystem getFileSystem(Configuration configuration, String user) {
         try {
-            String hdfsRootDir = configuration.get(Configuration.HADOOP_URL);
+            String hdfsRootDir = configuration.get(Configuration.HADOOP_URL, null);
+            if (hdfsRootDir == null) {
+                throw new LumifyException("Could not find configuration: " + Configuration.HADOOP_URL);
+            }
             return FileSystem.get(new URI(hdfsRootDir), configuration.toHadoopConfiguration(), user);
         } catch (Exception ex) {
             throw new LumifyException("Could not open HDFS file system.", ex);

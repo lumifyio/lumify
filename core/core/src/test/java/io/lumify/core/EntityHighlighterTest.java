@@ -46,7 +46,7 @@ public class EntityHighlighterTest {
     @Before
     public void setUp() {
         visibility = new Visibility("");
-        graph = new InMemoryGraph();
+        graph = InMemoryGraph.create();
         authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
     }
 

@@ -29,8 +29,6 @@ import org.securegraph.mutation.ElementMutation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ResolveDetectedObject extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveDetectedObject.class);
@@ -61,7 +59,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
+        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY, null);
         if (this.artifactContainsImageOfEntityIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
         }
@@ -101,8 +99,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         ElementMutation<Vertex> resolvedVertexMutation;
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+        Metadata metadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {

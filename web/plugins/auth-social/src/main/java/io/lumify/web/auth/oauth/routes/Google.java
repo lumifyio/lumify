@@ -11,6 +11,7 @@ import io.lumify.http.HttpPostMethod;
 import io.lumify.http.URLBuilder;
 import io.lumify.miniweb.Handler;
 import io.lumify.miniweb.HandlerChain;
+import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.CurrentUser;
 import io.lumify.web.auth.oauth.OAuthConfiguration;
 import org.json.JSONObject;
@@ -124,7 +125,7 @@ public class Google implements Handler {
             String randomPassword = UserRepository.createRandomPassword();
             user = userRepository.addUser(username, displayName, email, randomPassword, new String[0]);
         }
-        userRepository.recordLogin(user, httpRequest.getRemoteAddr());
+        userRepository.recordLogin(user, AuthenticationHandler.getRemoteAddr(httpRequest));
 
         CurrentUser.set(httpRequest, user.getUserId(), user.getUsername());
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");

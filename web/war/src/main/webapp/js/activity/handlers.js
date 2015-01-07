@@ -14,16 +14,27 @@ define([], function() {
             type: 'findPath',
             kind: 'longRunningProcess',
             titleRenderer: function(el, process) {
-                require(['data', 'util/formatters'], function(appData, F) {
-                    $.when(
-                        appData.getVertexTitle(process.sourceVertexId, process.workspaceId),
-                        appData.getVertexTitle(process.destVertexId, process.workspaceId)
-                    ).done(function(source, dest) {
-                        el.textContent = source + ' → ' + dest;
-                        $('<div>')
-                            .css({ fontSize: '90%' })
-                            .text(i18n('popovers.find_path.hops.option', process.hops))
-                            .appendTo(el);
+                require([
+                    'util/withDataRequest',
+                    'util/vertex/formatters'
+                ], function(withDataRequest, F) {
+                    withDataRequest.dataRequest('vertex', 'store', {
+                        workspaceId: process.workspaceId,
+                        vertexIds: [
+                            process.sourceVertexId,
+                            process.destVertexId
+                        ]
+                    }).done(function(vertices) {
+                        if (vertices.length === 2) {
+                            var source = F.vertex.title(vertices[0]),
+                                dest = F.vertex.title(vertices[1]);
+
+                            el.textContent = source + ' → ' + dest;
+                            $('<div>')
+                                .css({ fontSize: '90%' })
+                                .text(i18n('popovers.find_path.hops.option', process.hops))
+                                .appendTo(el);
+                        }
                     });
                 });
             },

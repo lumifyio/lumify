@@ -24,6 +24,8 @@ public class InMemoryUser implements User {
     private Date previousLoginDate;
     private String previousLoginRemoteAddr;
     private int loginCount;
+    private String passwordResetToken;
+    private Date passwordResetTokenExpirationDate;
 
     public InMemoryUser(String userName, String displayName, String emailAddress, Set<Privilege> privileges, String[] authorizations, String currentWorkspaceId) {
         this.userId = UUID.randomUUID().toString();
@@ -127,5 +129,15 @@ public class InMemoryUser implements User {
 
     public void setPreferences(JSONObject preferences) {
         this.preferences = preferences;
+    }
+
+    @Override
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    @Override
+    public Date getPasswordResetTokenExpirationDate() {
+        return passwordResetTokenExpirationDate;
     }
 }

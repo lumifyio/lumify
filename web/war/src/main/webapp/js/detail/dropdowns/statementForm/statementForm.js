@@ -3,22 +3,18 @@ define([
     '../withDropdown',
     'tpl!./statementForm',
     'tpl!./relationship-options',
-    'service/edge',
-    'service/ontology'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     withDropdown,
     statementFormTemplate,
     relationshipTypeTemplate,
-    EdgeService,
-    OntologyService) {
+    withDataRequest) {
     'use strict';
 
-    return defineComponent(StatementForm, withDropdown);
+    return defineComponent(StatementForm, withDropdown, withDataRequest);
 
     function StatementForm() {
-        this.edgeService = new EdgeService();
-        this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             formSelector: '.form',
@@ -111,12 +107,13 @@ define([
                 }
             });
 
-            this.ontologyService.concepts().done(function(concepts) {
-                var concept = concepts.byId[el.data('info')['http://lumify.io#conceptType']];
-                if (concept) {
-                    applyToElement.addClass('concepticon-' + concept.className);
-                }
-            })
+            this.dataRequest('ontology', 'concepts')
+                .done(function(concepts) {
+                    var concept = concepts.byId[el.data('info')['http://lumify.io#conceptType']];
+                    if (concept) {
+                        applyToElement.addClass('concepticon-' + concept.className);
+                    }
+                });
         };
 
         this.onSelection = function(e) {
@@ -166,15 +163,16 @@ define([
 
             _.defer(this.buttonLoading.bind(this));
 
-            this.edgeService.create(parameters)
-                .fail(function(req, reason, status) {
-                    self.clearLoading();
-                    self.markFieldErrors(status);
-                })
-                .done(function(data) {
+            this.dataRequest('edge', 'create', parameters)
+                .then(function(data) {
                     _.defer(self.teardown.bind(self));
-                    self.trigger(document, 'refreshRelationships');
-                });
+                    self.trigger(document, 'loadEdges');
+                })
+                .catch(function(error) {
+                    self.clearLoading();
+                    // TODO: fix how errors are returned
+                    self.markFieldErrors(error || 'Server Error');
+                })
         };
 
         this.getRelationshipLabels = function() {
@@ -182,7 +180,7 @@ define([
                 sourceConceptTypeId = this.attr.sourceTerm.data('info')['http://lumify.io#conceptType'],
                 destConceptTypeId = this.attr.destTerm.data('info')['http://lumify.io#conceptType'];
 
-            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId)
+            this.dataRequest('ontology', 'relationshipsBetween', sourceConceptTypeId, destConceptTypeId)
                 .done(function(relationships) {
                     self.displayRelationships(relationships);
                 });
@@ -192,43 +190,45 @@ define([
             var self = this;
 
             this.visibilitySource = { source: '', valid: true };
-            self.ontologyService.relationships().done(function(ontologyRelationships) {
-                var relationshipsTpl = [];
+            this.dataRequest('ontology', 'relationships')
+                .done(function(ontologyRelationships) {
+                    var relationshipsTpl = [];
 
-                relationships.forEach(function(relationship) {
-                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title],
-                        displayName;
+                    relationships.forEach(function(relationship) {
+                        var ontologyRelationship = ontologyRelationships.byTitle[relationship.title],
+                            displayName;
 
-                    if (ontologyRelationship) {
-                        displayName = ontologyRelationship.displayName;
-                    } else {
-                        displayName = relationship.title;
-                    }
+                        if (ontologyRelationship) {
+                            displayName = ontologyRelationship.displayName;
+                        } else {
+                            displayName = relationship.title;
+                        }
 
-                    var data = {
-                        title: relationship.title,
-                        displayName: displayName
-                    };
+                        var data = {
+                            title: relationship.title,
+                            displayName: displayName
+                        };
 
-                    relationshipsTpl.push(data);
-                });
-
-                if (relationships.length) {
-                    require([
-                        'configuration/plugins/visibility/visibilityEditor',
-                        'detail/dropdowns/propertyForm/justification',
-                    ], function(Visibility, Justification) {
-
-                        Visibility.attachTo(self.$node.find('.visibility'), {
-                            value: ''
-                        });
-
-                        Justification.attachTo(self.$node.find('.justification'));
+                        relationshipsTpl.push(data);
                     });
-                } else self.$node.find('.visibility').teardownAllComponents().empty();
 
-                self.select('relationshipSelector').html(relationshipTypeTemplate({ relationships: relationshipsTpl }));
-            });
+                    if (relationships.length) {
+                        require([
+                            'configuration/plugins/visibility/visibilityEditor',
+                            'detail/dropdowns/propertyForm/justification',
+                        ], function(Visibility, Justification) {
+
+                            Visibility.attachTo(self.$node.find('.visibility'), {
+                                value: ''
+                            });
+
+                            Justification.attachTo(self.$node.find('.justification'));
+                        });
+                    } else self.$node.find('.visibility').teardownAllComponents().empty();
+
+                    self.select('relationshipSelector')
+                        .html(relationshipTypeTemplate({ relationships: relationshipsTpl }));
+                });
         };
     }
 

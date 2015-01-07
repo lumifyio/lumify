@@ -1,18 +1,14 @@
 package io.lumify.core.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.web.clientapi.model.*;
-import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.IterableUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -118,7 +114,7 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
             SandboxStatus sandboxStatus = sandboxStatuses[i];
             VideoFrameInfo videoFrameInfo;
             if ((videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property)) != null) {
-                String textDescription = (String) property.getMetadata().get(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                String textDescription = (String) property.getMetadata().getValue(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
                 addVideoFramePropertyToResults(clientApiProperties, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
             } else {
                 ClientApiProperty clientApiProperty = toClientApiProperty(property);
@@ -141,9 +137,8 @@ public class ClientApiConverter extends io.lumify.web.clientapi.model.util.Clien
             clientApiProperty.setValue(toClientApiValue(propertyValue));
         }
 
-        for (String key : property.getMetadata().keySet()) {
-            Object value = property.getMetadata().get(key);
-            clientApiProperty.getMetadata().put(key, toClientApiValue(value));
+        for (Metadata.Entry entry : property.getMetadata().entrySet()) {
+            clientApiProperty.getMetadata().put(entry.getKey(), toClientApiValue(entry.getValue()));
         }
 
         return clientApiProperty;

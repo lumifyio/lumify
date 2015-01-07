@@ -5,7 +5,6 @@ import io.lumify.analystsNotebook.AnalystsNotebookVersion;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import org.apache.commons.codec.binary.Base64;
 import org.securegraph.Vertex;
 
 import java.util.ArrayList;
@@ -14,8 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EntityType {
-    private static final String ONTOLOGY_CONCEPT_METADATA_ICON_FILE_KEY = "http://lumify.io/analystsNotebook#iconFile";
-    public static final String ICON_FILE_DEFAULT = "Default";
+    public static final String ONTOLOGY_CONCEPT_METADATA_KEY_SUFFIX = "#iconFile";
 
     @JacksonXmlProperty(isAttribute = true)
     private String name;
@@ -56,7 +54,7 @@ public class EntityType {
                 Concept concept = ontologyRepository.getConceptByIRI(conceptType);
                 String iconFile = getMetadataIconFile(concept, ontologyRepository, version);
                 if (iconFile == null) {
-                    iconFile = EntityType.ICON_FILE_DEFAULT;
+                    iconFile = version.getDefaultIconFile();
                 }
                 conceptTypeIconFileMap.put(conceptType, iconFile);
             }
@@ -71,7 +69,7 @@ public class EntityType {
 
     private static String getMetadataIconFile(Concept concept, OntologyRepository ontologyRepository, AnalystsNotebookVersion version) {
         Map<String, String> metadata = concept.getMetadata();
-        String ontologyConceptMetadataIconFileKey = version.getOntologyConceptMetadataIconFileKey();
+        String ontologyConceptMetadataIconFileKey = version.getOntologyConceptMetadataKeyPrefix() + ONTOLOGY_CONCEPT_METADATA_KEY_SUFFIX;
         if (metadata.containsKey(ontologyConceptMetadataIconFileKey)) {
             return metadata.get(ontologyConceptMetadataIconFileKey);
         } else {

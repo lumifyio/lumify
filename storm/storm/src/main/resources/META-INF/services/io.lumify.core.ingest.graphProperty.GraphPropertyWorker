@@ -1,7 +1,0 @@
-io.lumify.storm.audio.AudioMp4EncodingWorker
-io.lumify.storm.audio.AudioOggEncodingWorker
-io.lumify.storm.video.VideoMp4EncodingWorker
-io.lumify.storm.video.VideoWebMEncodingWorker
-io.lumify.storm.video.VideoAudioExtractWorker
-io.lumify.storm.video.VideoPosterFrameWorker
-io.lumify.storm.video.VideoFrameExtractGraphPropertyWorker

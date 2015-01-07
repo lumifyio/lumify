@@ -2,17 +2,15 @@ define([
     'flight/lib/component',
     'hbs!./userSelectTpl',
     'tpl!./user',
-    'service/user'
+    'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     userTemplate,
-    UserService) {
+    withDataRequest) {
     'use strict';
 
-    var userService = new UserService();
-
-    return defineComponent(UserSelect);
+    return defineComponent(UserSelect, withDataRequest);
 
     function UserSelect() {
 
@@ -24,7 +22,7 @@ define([
         this.after('initialize', function() {
             this.on('clearUser', this.onClearUser);
             this.on('updateFilterUserIds', this.onUpdateFilterUserIds);
-            this.on(document, 'socketMessage', this.onSocketMessage);
+            this.on(document, 'userStatusChange', this.onUserStatusChange);
 
             this.$node.html(template({
                 placeholder: this.attr.placeholder || i18n('user.selection.field.placeholder'),
@@ -33,18 +31,15 @@ define([
             this.setupTypeahead();
         });
 
-        this.onSocketMessage = function(event, message) {
-            if (message && ~'userStatusChange'.indexOf(message.type)) {
-                var user = message.data;
-                this.$node.find('.user-row').each(function() {
-                    var $this = $(this);
-                    if ($this.data('user').id === user.id) {
-                        $this.find('.user-status')
-                            .removeClass('active idle offline unknown')
-                            .addClass((user.status && user.status.toLowerCase()) || 'unknown');
-                    }
-                })
-            }
+        this.onUserStatusChange = function(event, user) {
+            this.$node.find('.user-row').each(function() {
+                var $this = $(this);
+                if ($this.data('user').id === user.id) {
+                    $this.find('.user-status')
+                        .removeClass('active idle offline unknown')
+                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                }
+            })
         };
 
         this.onUpdateFilterUserIds = function(event, data) {
@@ -65,17 +60,21 @@ define([
 
             this.select('inputSelector').typeahead({
                 source: function(query, callback) {
-                    userService.search(query)
-                        .done(function(response) {
-                            var users = response.users.filter(function(user) {
-                                    return self.attr.filterUserIds.indexOf(user.id) === -1;
-                                }),
-                                ids = _.pluck(users, 'id');
+                    if ($.trim(query).length) {
+                        self.dataRequest('user', 'search', { query: query })
+                            .done(function(users) {
+                                var otherUsers = users.filter(function(user) {
+                                        return self.attr.filterUserIds.indexOf(user.id) === -1;
+                                    }),
+                                    ids = _.pluck(otherUsers, 'id');
 
-                            userMap = _.indexBy(users, 'id');
+                                userMap = _.indexBy(otherUsers, 'id');
 
-                            callback(ids);
-                        });
+                                callback(ids);
+                            });
+                    } else {
+                        callback([]);
+                    }
                 },
                 matcher: function() {
                     return true;

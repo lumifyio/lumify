@@ -2,8 +2,9 @@ package io.lumify.test;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.WorkerSpout;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerTuple;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import org.json.JSONObject;
 import org.securegraph.Graph;
@@ -42,11 +43,6 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public Object createSpout(Configuration configuration, String queueName) {
-        throw new UnsupportedOperationException("Spout creation is not supported");
-    }
-
-    @Override
     public void flush() {
 
     }
@@ -77,6 +73,21 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
                 }
             }
         }
+    }
+
+    @Override
+    public WorkerSpout createWorkerSpout() {
+        final Queue<JSONObject> queue = getQueue(GRAPH_PROPERTY_QUEUE_NAME);
+        return new WorkerSpout() {
+            @Override
+            public GraphPropertyWorkerTuple nextTuple() throws Exception {
+                JSONObject entry = queue.poll();
+                if (entry == null) {
+                    return null;
+                }
+                return new GraphPropertyWorkerTuple("", entry);
+            }
+        };
     }
 
     private class InMemoryLongRunningProcessMessage extends LongRunningProcessMessage {

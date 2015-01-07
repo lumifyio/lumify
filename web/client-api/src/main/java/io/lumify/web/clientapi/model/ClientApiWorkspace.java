@@ -11,6 +11,7 @@ public class ClientApiWorkspace implements ClientApiObject {
     private String createdBy;
     private boolean isSharedToUser;
     private boolean isEditable;
+    private boolean isCommentable;
     private List<User> users = new ArrayList<User>();
     private List<Vertex> vertices = new ArrayList<Vertex>();
     private boolean active;
@@ -55,6 +56,14 @@ public class ClientApiWorkspace implements ClientApiObject {
         this.isEditable = isEditable;
     }
 
+    public boolean isCommentable() {
+        return isCommentable;
+    }
+
+    public void setCommentable(boolean isCommentable) {
+        this.isCommentable = isCommentable;
+    }
+
     public List<User> getUsers() {
         return users;
     }
@@ -69,6 +78,10 @@ public class ClientApiWorkspace implements ClientApiObject {
 
     public void addVertex(Vertex vertex) {
         this.vertices.add(vertex);
+    }
+
+    public void removeVertices() {
+        this.vertices = null;
     }
 
     @Override
@@ -96,6 +109,7 @@ public class ClientApiWorkspace implements ClientApiObject {
     public static class Vertex {
         private String vertexId;
         private GraphPosition graphPosition = new GraphPosition();
+        private String graphLayoutJson;
 
         public String getVertexId() {
             return vertexId;
@@ -111,6 +125,14 @@ public class ClientApiWorkspace implements ClientApiObject {
 
         public void setGraphPosition(GraphPosition graphPosition) {
             this.graphPosition = graphPosition;
+        }
+
+        public String getGraphLayoutJson() {
+            return graphLayoutJson;
+        }
+
+        public void setGraphLayoutJson(String graphLayoutJson) {
+            this.graphLayoutJson = graphLayoutJson;
         }
 
         @Override

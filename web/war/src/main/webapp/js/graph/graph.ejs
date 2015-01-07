@@ -14,7 +14,16 @@
 
   <li><a class="has-shortcut" data-func="fitToWindow" tabindex="-1" href="#"><%= i18n('graph.contextmenu.fit_to_window') %><span class="shortcut">alt+f</span></a></li>
 
-  <li class="dropdown-submenu">
+  <li class="dropdown-submenu selectors">
+    <a tabindex="-1" href="#"><%= i18n('graph.contextmenu.select') %></a>
+    <ul class="dropdown-menu">
+      <li><a class="has-shortcut" data-func="select" data-args='["all"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.select.all') %><span class="shortcut">meta+a</span></a></li>
+      <li><a class="has-shortcut" data-func="select" data-args='["none"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.select.none') %><span class="shortcut">esc</span></a></li>
+      <li><a data-func="select" data-args='["invert"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.select.invert') %></a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown-submenu layouts">
     <a tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout') %></a>
     <ul class="dropdown-menu">
       <li><a data-func="layout" data-args='["circle"]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.circle') %></a></li>
@@ -25,7 +34,7 @@
     </ul>
   </li>
 
-  <li class="dropdown-submenu layout-multi">
+  <li class="dropdown-submenu layouts-multi">
     <a tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.selection') %></a>
     <ul class="dropdown-menu">
       <li><a data-func="layout" data-args='["circle",{"onlySelected":true}]' tabindex="-1" href="#"><%= i18n('graph.contextmenu.layout.circle') %></a></li>
@@ -45,8 +54,6 @@
     </ul>
   </li>
 
-  <li class="divider"></li>
-
 </ul>
 </div>
 
@@ -58,3 +65,4 @@
 </div>
 
 <div class="controls"></div>
+<div class="graph-views"></div>

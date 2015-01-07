@@ -24,7 +24,6 @@ import org.securegraph.id.IdGenerator;
 import org.securegraph.util.MapUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
@@ -106,7 +105,7 @@ public class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Muta
         String userVertexId = ImportMR.getUserVertexId(userId);
         VertexBuilder userVertexBuilder = prepareVertex(userVertexId, visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(userVertexBuilder, FriendsterOntology.CONCEPT_TYPE_USER, visibility);
-        Map<String, Object> titleMetadata = new HashMap<String, Object>();
+        Metadata titleMetadata = new Metadata();
         LumifyProperties.TITLE.addPropertyValue(userVertexBuilder, ImportMR.MULTI_VALUE_KEY, "Friendster User " + userId, titleMetadata, visibility);
         LumifyProperties.SOURCE.addPropertyValue(userVertexBuilder, ImportMR.MULTI_VALUE_KEY, ImportMR.FRIENDSTER_SOURCE, visibility);
         return userVertexBuilder.save(authorizations);

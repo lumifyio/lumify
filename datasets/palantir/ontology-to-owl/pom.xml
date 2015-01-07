@@ -5,11 +5,11 @@
     <parent>
         <artifactId>lumify-datasets-palantir</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>palantir-ontology-to-owl</artifactId>
+    <artifactId>lumify-palantir-ontology-to-owl</artifactId>
     <name>Lumify: Datasets: Palantir: Ontology to OWL</name>
 
     <dependencies>

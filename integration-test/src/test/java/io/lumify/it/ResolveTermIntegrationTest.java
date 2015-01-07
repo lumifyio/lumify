@@ -60,7 +60,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         lumifyTestCluster.processGraphPropertyQueue();
 
         joeFernerVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "auth1");
-        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test", null, null);
+        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test");
 
         lumifyTestCluster.processGraphPropertyQueue();
 
@@ -105,7 +105,9 @@ public class ResolveTermIntegrationTest extends TestBase {
             }
         }
         for (ClientApiWorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
-            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem && ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId)) {
+            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem &&
+                    ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId) &&
+                    ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementType().equals("edge")) {
                 foundEdgeVisibilityJsonDiffItem = true;
             }
         }

@@ -7,10 +7,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.miniweb.Handler;
-import io.lumify.web.privilegeFilters.AdminPrivilegeFilter;
-import io.lumify.web.privilegeFilters.EditPrivilegeFilter;
-import io.lumify.web.privilegeFilters.PublishPrivilegeFilter;
-import io.lumify.web.privilegeFilters.ReadPrivilegeFilter;
+import io.lumify.web.privilegeFilters.*;
 import io.lumify.web.routes.Index;
 import io.lumify.web.routes.admin.AdminList;
 import io.lumify.web.routes.admin.AdminUploadOntology;
@@ -21,13 +18,16 @@ import io.lumify.web.routes.longRunningProcess.LongRunningProcessById;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessCancel;
 import io.lumify.web.routes.longRunningProcess.LongRunningProcessDelete;
 import io.lumify.web.routes.notification.Notifications;
-import io.lumify.web.routes.notification.SystemNotificationCreate;
+import io.lumify.web.routes.notification.SystemNotificationDelete;
+import io.lumify.web.routes.notification.SystemNotificationSave;
+import io.lumify.web.routes.notification.UserNotificationMarkRead;
 import io.lumify.web.routes.ontology.Ontology;
 import io.lumify.web.routes.resource.MapMarkerImage;
 import io.lumify.web.routes.resource.ResourceGet;
 import io.lumify.web.routes.user.*;
 import io.lumify.web.routes.vertex.*;
 import io.lumify.web.routes.workspace.*;
+import org.eclipse.jetty.server.Request;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -45,7 +45,8 @@ public class Router extends HttpServlet {
      * Copied from org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT.
      * TODO: Examine why this is necessary and how it can be abstracted to any servlet container.
      */
-    private static final String JETTY_MULTIPART_CONFIG_ELEMENT = "org.eclipse.multipartConfig";
+    private static final String JETTY_MULTIPART_CONFIG_ELEMENT8 = "org.eclipse.multipartConfig";
+    private static final String JETTY_MULTIPART_CONFIG_ELEMENT9 = "org.eclipse.jetty.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
 
@@ -67,7 +68,9 @@ public class Router extends HttpServlet {
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 
             app.get("/notification/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, Notifications.class);
-            app.post("/notification/system/create", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationCreate.class);
+            app.post("/notification/mark-read", authenticator, csrfProtector, ReadPrivilegeFilter.class, UserNotificationMarkRead.class);
+            app.post("/notification/system", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationSave.class);
+            app.delete("/notification/system", authenticator, csrfProtector, AdminPrivilegeFilter.class, SystemNotificationDelete.class);
 
             app.get("/resource", authenticator, csrfProtector, ReadPrivilegeFilter.class, ResourceGet.class);
             app.get("/map/marker/image", csrfProtector, MapMarkerImage.class);  // TODO combine with /resource
@@ -85,12 +88,12 @@ public class Router extends HttpServlet {
             app.get("/vertex/detected-objects", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetDetectedObjects.class);
             app.get("/vertex/property", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetPropertyValue.class);
             app.post("/vertex/property", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetProperty.class);
+            app.post("/vertex/comment", authenticator, csrfProtector, CommentPrivilegeFilter.class, VertexSetProperty.class);
             app.delete("/vertex/property", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexDeleteProperty.class);
             app.get("/vertex/term-mentions", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGetTermMentions.class);
             app.post("/vertex/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexSetVisibility.class);
             app.get("/vertex/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexProperties.class);
             app.get("/vertex/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexEdges.class);
-            app.delete("/vertex/edge", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRemoveEdge.class);
             app.post("/vertex/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
             app.post("/vertex/new", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
             app.get("/vertex/search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexSearch.class);
@@ -101,7 +104,10 @@ public class Router extends HttpServlet {
             app.get("/vertex/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexAudit.class);
 
             app.post("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, SetEdgeProperty.class);
+            app.post("/edge/comment", authenticator, csrfProtector, CommentPrivilegeFilter.class, SetEdgeProperty.class);
+            app.delete("/edge", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeDelete.class);
             app.delete("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteEdgeProperty.class);
+            app.post("/edge/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeMultiple.class);
             app.post("/edge/create", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeCreate.class);
             app.get("/edge/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeProperties.class);
             app.post("/edge/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeSetVisibility.class);
@@ -122,7 +128,7 @@ public class Router extends HttpServlet {
             app.get("/user/me", authenticator, csrfProtector, MeGet.class);
             app.post("/user/ui-preferences", authenticator, csrfProtector, UserSetUiPreferences.class);
             app.get("/user/all", authenticator, csrfProtector, UserList.class);
-            app.get("/user/info", authenticator, csrfProtector, UserInfo.class);
+            app.post("/user/all", authenticator, csrfProtector, UserList.class);
             app.get("/user", authenticator, csrfProtector, AdminPrivilegeFilter.class, UserGet.class);
 
             app.get("/long-running-process", authenticator, csrfProtector, LongRunningProcessById.class);
@@ -155,12 +161,15 @@ public class Router extends HttpServlet {
     public void service(ServletRequest req, ServletResponse resp) throws ServletException, IOException {
         try {
             if (req.getContentType() != null && req.getContentType().startsWith("multipart/form-data")) {
-                req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
+                req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT8, MULTI_PART_CONFIG);
+                req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT9, MULTI_PART_CONFIG);
             }
 
             HttpServletResponse httpResponse = (HttpServletResponse) resp;
             httpResponse.addHeader("Accept-Ranges", "bytes");
             app.handle((HttpServletRequest) req, httpResponse);
+        } catch (ConnectionClosedException cce) {
+            LOGGER.debug("Connection closed by client", cce);
         } catch (Exception e) {
             throw new ServletException(e);
         }

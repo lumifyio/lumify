@@ -216,6 +216,11 @@
   .vertex-to-vertex-relationship {
     font-size: 90%;   
     line-height: 1.1em;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    padding: 0 1em;
+    .box-sizing(border-box);
     
     &:hover {          
       text-decoration: none;
@@ -551,8 +556,29 @@
     }
   }
 
+
   @import "properties";
+  @import "comments";
   @import "toolbar";
+
+  .properties, .comments {
+    button.info {
+      background-color: transparent;
+      background-image: url(../img/glyphicons/glyphicons_195_circle_info@2x.png);
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      border: 0;
+      display: inline-block;
+      height: 16px;
+      margin-left: 0.5em;
+      vertical-align: middle;
+      width: 16px;
+      .opacity(30);
+      &:hover {
+        .opacity(100);
+      }
+    }
+  }
   
   .properties .buttons .underneath {
     margin: 1em 0;       
@@ -565,13 +591,13 @@
   }
   
   .artifact-header {    
-    margin: 1em 0 0 0;
+    margin: 0;
     padding: 0;
   }
 
   .nav-with-background {  
     overflow: auto;    
-    margin: 8.5em 0 0 0;
+    margin: 8em 0 0 0;
     padding: 0;
     position: absolute;
     top: 0;    

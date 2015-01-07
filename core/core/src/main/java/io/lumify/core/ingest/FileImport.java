@@ -20,7 +20,10 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.securegraph.util.IterableUtils.toList;
 
@@ -38,15 +41,13 @@ public class FileImport {
         this.visibilityTranslator = visibilityTranslator;
     }
 
-    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
+    public void importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
         ensureInitialized();
-
-        ArrayList<Vertex> results = new ArrayList<Vertex>();
 
         LOGGER.debug("Importing files from %s", dataDir);
         File[] files = dataDir.listFiles();
         if (files == null || files.length == 0) {
-            return results;
+            return;
         }
 
         int totalFileCount = files.length;
@@ -63,8 +64,7 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    Vertex vertex = importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
-                    results.add(vertex);
+                    importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
                     importedFileCount++;
                 } catch (Exception ex) {
                     LOGGER.error("Could not import %s", f.getAbsolutePath(), ex);
@@ -76,7 +76,6 @@ public class FileImport {
         }
 
         LOGGER.debug(String.format("Imported %d, skipped %d files from %s", importedFileCount, fileCount - importedFileCount, dataDir));
-        return results;
     }
 
     private boolean isSupportingFile(File f) {
@@ -122,9 +121,9 @@ public class FileImport {
             VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
-            Map<String, Object> propertyMetadata = new HashMap<String, Object>();
-            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1);
-            LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
+            Metadata propertyMetadata = new Metadata();
+            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1, visibilityTranslator.getDefaultVisibility());
+            LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
             VertexBuilder vertexBuilder;
             if (predefinedId == null) {

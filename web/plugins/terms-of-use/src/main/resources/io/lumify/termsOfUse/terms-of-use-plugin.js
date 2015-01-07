@@ -7,7 +7,7 @@ require([
     var template;
 
     $(document).on('applicationReady', function(event) {
-        $.get("terms")
+        $.get('terms')
             .done(function(json) {
                 var terms = json.terms;
                 if (terms.date) {

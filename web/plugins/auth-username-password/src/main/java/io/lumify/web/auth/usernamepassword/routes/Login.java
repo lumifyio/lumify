@@ -7,6 +7,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.CurrentUser;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ public class Login extends BaseRequestHandler {
 
         User user = getUserRepository().findByUsername(username);
         if (user != null && getUserRepository().isPasswordValid(user, password)) {
-            getUserRepository().recordLogin(user, request.getRemoteAddr());
+            getUserRepository().recordLogin(user, AuthenticationHandler.getRemoteAddr(request));
             CurrentUser.set(request, user.getUserId(), user.getUsername());
             JSONObject json = new JSONObject();
             json.put("status", "OK");
