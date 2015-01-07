@@ -9,9 +9,9 @@ import io.lumify.core.metrics.MetricsManager;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
+import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.notification.UserNotificationRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.notification.SystemNotificationRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -46,6 +46,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class LumifyBootstrap extends AbstractModule {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyBootstrap.class);
+    private static final String GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY = "lumify.graph.version";
+    private static final Integer GRAPH_METADATA_LUMIFY_GRAPH_VERSION = 1;
 
     private static LumifyBootstrap lumifyBootstrap;
 
@@ -180,14 +182,33 @@ public class LumifyBootstrap extends AbstractModule {
         return new Provider<Graph>() {
             @Override
             public Graph get() {
+                Graph g;
                 try {
                     LOGGER.debug("creating graph");
-                    return (Graph) createMethod.invoke(null, configurationSubset);
+                    g = (Graph) createMethod.invoke(null, configurationSubset);
                 } catch (Exception e) {
                     throw new RuntimeException("Could not create graph " + graphClass.getName(), e);
                 }
+
+                checkLumifyGraphVersion(g);
+
+                return g;
             }
         };
+    }
+
+    public void checkLumifyGraphVersion(Graph g) {
+        Object lumifyGraphVersionObj = g.getMetadata(GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY);
+        if (lumifyGraphVersionObj == null) {
+            g.setMetadata(GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY, GRAPH_METADATA_LUMIFY_GRAPH_VERSION);
+        } else if (lumifyGraphVersionObj instanceof Integer) {
+            Integer lumifyGraphVersion = (Integer) lumifyGraphVersionObj;
+            if (!GRAPH_METADATA_LUMIFY_GRAPH_VERSION.equals(lumifyGraphVersion)) {
+                throw new LumifyException("Invalid " + GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY + " expected " + GRAPH_METADATA_LUMIFY_GRAPH_VERSION + " found " + lumifyGraphVersion);
+            }
+        } else {
+            throw new LumifyException("Invalid " + GRAPH_METADATA_LUMIFY_GRAPH_VERSION_KEY + " expected Integer found " + lumifyGraphVersionObj.getClass().getName());
+        }
     }
 
     private void injectProviders() {
