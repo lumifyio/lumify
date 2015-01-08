@@ -22,8 +22,8 @@ mkdir -p ${FS_DIR}/var/log/elasticsearch
 mkdir -p ${FS_DIR}/tmp/zookeeper
 mkdir -p ${FS_DIR}/var/lib/hadoop-hdfs
 mkdir -p ${FS_DIR}/var/local/hadoop
-mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/data
-mkdir -p ${FS_DIR}/opt/rabbitmq_server-3.4.1/var
+mkdir -p ${FS_DIR}/opt/elasticsearch/data
+mkdir -p ${FS_DIR}/opt/rabbitmq/var
 mkdir -p ${FS_DIR}/opt/jetty/webapps
 
 if [ ! -e ${FS_DIR}/opt/lumify/config/lumify.properties ]; then
@@ -45,8 +45,8 @@ $sudo docker run \
   -v ${FS_DIR}/tmp:/tmp \
   -v ${FS_DIR}/var/lib/hadoop-hdfs:/var/lib/hadoop-hdfs \
   -v ${FS_DIR}/var/local/hadoop:/var/local/hadoop \
-  -v ${FS_DIR}/opt/elasticsearch-1.4.0/data:/opt/elasticsearch-1.4.0/data \
-  -v ${FS_DIR}/opt/rabbitmq_server-3.4.1/var:/opt/rabbitmq_server-3.4.1/var \
+  -v ${FS_DIR}/opt/elasticsearch/data:/opt/elasticsearch/data \
+  -v ${FS_DIR}/opt/rabbitmq/var:/opt/rabbitmq/var \
   -v ${FS_DIR}/opt/jetty/webapps:/opt/jetty/webapps \
   -p 2181:2181 `# ZooKeeper` \
   -p 5672:5672 `# RabbitMQ` \

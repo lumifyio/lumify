@@ -40,7 +40,7 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getConceptByIRI(UserRepository.USER_CONCEPT_IRI);
-        checkNotNull(userConcept);
+        checkNotNull(userConcept, "Could not find user concept: " + UserRepository.USER_CONCEPT_IRI);
 
         Concept longRunningProcessConcept = ontologyRepository.getOrCreateConcept(null, LONG_RUNNING_PROCESS_CONCEPT_IRI, "workspace", null);
         checkNotNull(longRunningProcessConcept);
