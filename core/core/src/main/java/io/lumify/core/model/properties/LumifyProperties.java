@@ -46,7 +46,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty ENTITY_IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
     public static final StringLumifyProperty MAP_GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#mapGlyphIconFileName");
     public static final StringLumifyProperty MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
-    public static final StringLumifyProperty CREATED_BY = new StringLumifyProperty("http://lumify.io#modifiedBy");
+    public static final StringLumifyProperty CREATED_BY = new StringLumifyProperty("http://lumify.io#createdBy");
     public static final StringLumifyProperty MODIFIED_BY = new StringLumifyProperty("http://lumify.io#modifiedBy");
     public static final StringLumifyProperty ONTOLOGY_TITLE = new StringLumifyProperty("http://lumify.io#ontologyTitle");
     public static final StringLumifyProperty PROCESS = new StringLumifyProperty("http://lumify.io#process");
