@@ -14,7 +14,15 @@ define([
 
     function EdgeList() {
 
+        this.defaultAttrs({
+            edgeItemSelector: '.edge'
+        });
+
         this.after('initialize', function() {
+            this.on('click', {
+                edgeItemSelector: this.onSelectEdge
+            });
+
             this.$list = $('<ul>')
                 .addClass('nav nav-list')
                 .appendTo(this.$node.addClass('vertex-list vertices-list'))
@@ -22,18 +30,34 @@ define([
             this.render();
         });
 
+        this.onSelectEdge = function(event) {
+            this.trigger('selectObjects', {
+                edgeIds: $(event.target).closest('li')
+                    .addClass('active')
+                    .siblings('.active')
+                        .removeClass('active')
+                        .end()
+                    .data('edgeId')
+            });
+        };
+
         this.render = function() {
             d3.select(this.$list)
                 .selectAll('li.edge')
                 .data(this.attr.edges)
                 .call(function() {
                     this.enter()
-                        .append('li').attr('class', 'edge vertex-item')
+                        .append('li')
+                            .attr('class', 'edge vertex-item')
                         .append('a')
                         .call(function() {
                             this.append('span');
                             this.append('div').attr('class', 'subtitle')
                         })
+
+                    this.attr('data-edge-id', function(d) {
+                        return d.id;
+                    });
 
                     this.select('span').each(function() {
                         var $this = $(this),

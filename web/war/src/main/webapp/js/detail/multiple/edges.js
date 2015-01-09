@@ -32,6 +32,8 @@ define([
 
             this.displayingIds = edgeIds;
 
+            this.on('selectObjects', this.onSelectObjects);
+
             Promise.all([
                 Promise.require('d3'),
                 this.dataRequest('edge', 'store', { edgeIds: edgeIds }),
@@ -64,6 +66,42 @@ define([
             event.stopPropagation();
             this.$node.find('.edges-list').hide();
             this.$node.find('.multiple').addClass('viewing-vertex');
+
+            var self = this,
+                detailsContainer = this.$node.find('.details-container'),
+                detailsContent = detailsContainer.find('.content').teardownAllComponents();
+
+            if (data && data.edgeIds && data.edgeIds.length) {
+                if (_.isArray(data.edgeIds)) {
+                    data.edgeIds = [data.edgeIds[0]];
+                } else {
+                    data.edgeIds = [data.edgeIds];
+                }
+                promise = this.dataRequest('edge', 'store', { edgeIds: data.edgeIds });
+            } else {
+                promise = Promise.resolve(data && data.edges || []);
+            }
+            promise.done(function(edges) {
+                if (edges.length === 0) {
+                    return;
+                }
+
+                var first = edges[0];
+                if (self._selectedEdgeId === first.id) {
+                    self.$node.find('.multiple').removeClass('viewing-vertex');
+                    self.$node.find('.edges-list').show().find('.active').removeClass('active');
+                    self._selectedEdgeId = null;
+                    return;
+                }
+
+                self._selectedEdgeId = first.id;
+                require(['detail/edge/edge'], function(Module) {
+                    Module.attachTo(detailsContent, {
+                        data: first
+                    });
+                    self.$node.find('.edges-list').show();
+                });
+            });
         };
 
     }

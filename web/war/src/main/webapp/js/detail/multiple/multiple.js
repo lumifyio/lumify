@@ -252,10 +252,10 @@ define([
                 }
 
                 var first = vertices[0];
-                if (this._selectedGraphId === first.id) {
-                    this.$node.find('.multiple').removeClass('viewing-vertex');
-                    this.$node.find('.vertices-list').show().find('.active').removeClass('active');
-                    this._selectedGraphId = null;
+                if (self._selectedGraphId === first.id) {
+                    self.$node.find('.multiple').removeClass('viewing-vertex');
+                    self.$node.find('.vertices-list').show().find('.active').removeClass('active');
+                    self._selectedGraphId = null;
                     return;
                 }
 
@@ -270,7 +270,7 @@ define([
                     ) || 'entity').toLowerCase();
                 }
 
-                this._selectedGraphId = first.id;
+                self._selectedGraphId = first.id;
                 require([
                     'detail/' + moduleName + '/' + moduleName,
                 ], function(Module) {

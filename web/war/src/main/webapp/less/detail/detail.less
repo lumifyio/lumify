@@ -495,6 +495,9 @@
       .comp-toolbar {
         height: 3px;
       }
+      &.viewing-vertex .comp-toolbar {
+        height: 2em;
+      }
       .spacer {
         height: 10em;
       }
@@ -518,8 +521,15 @@
             }
           }
           .subtitle {
-            color: #ccc;
+            color: #999;
             font-size: 90%;
+            text-shadow: 0 1px 0 white;
+          }
+        }
+        .active {
+          .subtitle {
+            color: #eee;
+            text-shadow: none;
           }
         }
       }
