@@ -24,7 +24,7 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
     public static void main(String[] args) {
         try {
             ClientOpts opts = new ClientOpts();
-            opts.setUri("https://localhost:8889");
+            opts.setUri("https://lumify-dev:8889");
             Map<String, String> properties = new HashMap<String, String>();
             properties.put("fileMap", System.getProperty("fileMap"));
             opts.setProperties(properties);

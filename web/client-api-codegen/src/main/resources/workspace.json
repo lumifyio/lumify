@@ -1,7 +1,7 @@
 {
     "apiVersion": "0.4.0",
     "swaggerVersion": "1.2",
-    "basePath": "http://localhost:8889",
+    "basePath": "http://lumify-dev:8889",
     "resourcePath": "/workspace",
     "apis": [
         {
