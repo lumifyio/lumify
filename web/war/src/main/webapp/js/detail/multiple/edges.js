@@ -64,7 +64,18 @@ define([
 
         this.onSelectObjects = function(event, data) {
             event.stopPropagation();
-            this.$node.find('.edges-list').hide();
+            var $edgesList = this.$node.find('.edges-list'),
+                height = _.reduce(
+                    $edgesList.find('li.edge').toArray(),
+                     function(sum, el) {
+                         return sum + $(el).height();
+                     }, 0
+                ),
+                calculatedHeight = Math.min(200, height + 4);
+
+            this.$node.find('.details-container').css('bottom', calculatedHeight + 'px');
+            $edgesList.hide().height(calculatedHeight + 'px');
+
             this.$node.find('.multiple').addClass('viewing-vertex');
 
             var self = this,

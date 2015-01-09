@@ -225,7 +225,21 @@ define([
 
         this.onSelectObjects = function(event, data) {
             event.stopPropagation();
-            this.$node.find('.vertices-list').hide();
+            var $verticesList = this.$node.find('.vertices-list'),
+                max = 200,
+                height = _.reduce(
+                    $verticesList.find('li.vertex-item').toArray(),
+                     function(sum, el) {
+                         if (sum > max) {
+                             return sum;
+                         }
+                         return sum + $(el).height();
+                     }, 0
+                ),
+                calculatedHeight = Math.min(max, height + 4);
+
+            this.$node.find('.details-container').css('bottom', calculatedHeight + 'px');
+            $verticesList.hide().height(calculatedHeight + 'px');
             this.$node.find('.multiple').addClass('viewing-vertex');
 
             var self = this,

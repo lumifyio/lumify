@@ -495,8 +495,13 @@
       .comp-toolbar {
         height: 3px;
       }
-      &.viewing-vertex .comp-toolbar {
-        height: 2em;
+      &.viewing-vertex {
+        .comp-toolbar {
+          height: 2em;
+        }
+        .edges-list .nav-list {
+          padding: 0;
+        }
       }
       .spacer {
         height: 10em;
