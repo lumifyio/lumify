@@ -288,7 +288,15 @@
         <rdfs:range rdf:resource="&xsd;dateTime"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
+    <!-- http://lumify.io#createdBy -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;createdBy">
+        <rdfs:label xml:lang="en">Create By</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
 
     <!-- http://lumify.io#dataType -->
