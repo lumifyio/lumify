@@ -18,7 +18,7 @@ import java.io.File;
 import java.util.*;
 
 public class WorkspaceApi {
-  protected String basePath = "http://localhost:8889";
+  protected String basePath = "http://lumify-dev:8889";
   protected ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public ApiInvoker getInvoker() {
