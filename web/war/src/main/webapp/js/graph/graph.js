@@ -1607,7 +1607,12 @@ define([
 
                     self.bindContextMenuClickEvent();
 
-                    Controls.attachTo(self.select('graphToolsSelector'));
+                    Controls.attachTo(self.select('graphToolsSelector'), {
+                        optionsComponentPath: 'graph/options/container',
+                        optionsAttributes: {
+                            cy: self.cytoscapeReady()
+                        }
+                    });
 
                     var $views = $();
                     self.updateGraphViewsPosition();
