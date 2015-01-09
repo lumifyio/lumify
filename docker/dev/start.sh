@@ -58,8 +58,8 @@ function start_elasticsearch {
 
 function start_rabbitmq {
   start_msg "RabbitMQ"
+  /opt/rabbitmq/sbin/rabbitmq-plugins --offline enable rabbitmq_management
   /opt/rabbitmq/sbin/rabbitmq-server > /dev/null &
-  /opt/rabbitmq/sbin/rabbitmq-plugins enable rabbitmq_management
 }
 
 function ensure_lumify_config {
