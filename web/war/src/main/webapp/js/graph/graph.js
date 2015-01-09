@@ -1625,9 +1625,16 @@ define([
                     self.select('graphViewsSelector').append($views);
 
                     self.ontologyRelationships = relationships;
-                    stylesheet(function(style) {
+                    stylesheet(null, function(style) {
                         self.initializeGraph(style);
                     });
+                    self.on(document, 'reapplyGraphStylesheet', function() {
+                        this.cytoscapeReady(function(cy) {
+                            stylesheet(cy.style().resetToDefault(), function(style) {
+                                style.update();
+                            });
+                        })
+                    })
                 });
         });
 

@@ -13,8 +13,8 @@ define([
 
     return load;
 
-    function defaultStyle() {
-        style
+    function defaultStyle(previousStyle) {
+        return (previousStyle || style)
             .selector('node')
             .css({
                 'background-image': 'data(imageSrc)',
@@ -149,8 +149,8 @@ define([
             });
     }
 
-    function load(styleReady) {
-        defaultStyle();
+    function load(previousStyle, styleReady) {
+        var style = defaultStyle(previousStyle);
         require(['configuration/plugins/graphStyle/plugin'], function(GraphStylePlugin) {
             GraphStylePlugin.stylers.forEach(function(styler) {
                 styler(style);
