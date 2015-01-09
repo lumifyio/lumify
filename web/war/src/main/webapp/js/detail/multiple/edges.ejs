@@ -1,12 +1,24 @@
-<div class="multiple">
+<div class="multiple edges">
 
   <div class="multiple-container">
-      <ul class="histograms nav nav-bar">
-        <li class="nav-header"><%= i18n('detail.multiple.selected', edges.length) %></li>
-      </ul>
+      <div class="entity-background relationship-background" style="height: 10em">
+        <h1 class="relationship-header">
+          <div 
+            class="vertex-to-vertex-relationship" 
+            data-vertex-id="<%= edges[0].source.id %>"
+          ><%= F.vertex.title(edges[0].source) %><div class="subtitle"><%= F.vertex.concept(edges[0].source).displayName %></div></div>
+          <div class="relation"><%= label %> <span class="badge"><%= F.number.pretty(edges.length) %></span></div>
+          <div
+            class="vertex-to-vertex-relationship" 
+            data-vertex-id="<%= edges[0].target.id %>"
+          ><%= F.vertex.title(edges[0].target) %><div class="subtitle"><%= F.vertex.concept(edges[0].target).displayName %></div></div>
+        </h1>
+        <div class="comp-toolbar"></div>
+      </div>
   </div>
 
   <div class="details-container"><div class="content"></div></div>
 
+  <div class="spacer"></div>
   <div class="edges-list"></div>
 </div>

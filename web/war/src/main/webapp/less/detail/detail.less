@@ -487,6 +487,91 @@
         padding: 0;
       }
     }
+
+    &.edges {
+      .multiple-container {
+        margin-bottom: 0em;
+      }
+      .comp-toolbar {
+        height: 3px;
+      }
+      .spacer {
+        height: 10em;
+      }
+      .edges-list {
+        margin-top: 3px;
+        a {
+          padding: 0.5em;
+          line-height: 1.7em;
+          height: auto;
+          span {
+            .selection {
+              background: fade(@blue-color, 10%);
+            }
+            white-space: normal;
+            .sourceInfoTitle {
+              padding: 0;
+              line-height: inherit;
+              font-size: 85%;
+              text-decoration: none;
+              border: 0;
+            }
+          }
+          .subtitle {
+            color: #ccc;
+            font-size: 90%;
+          }
+        }
+      }
+      .entity-background {
+        .relationship-header {
+          padding: 0;
+        }
+        .relation {
+          font-size: 85%;
+          color: white;
+          font-variant: small-caps;
+          text-transform: lowercase;
+          margin-bottom: 0.5em;
+          margin-top: 0.2em;
+          position: relative;
+
+          .badge {
+            .opacity(60);
+            float: none;
+            position: absolute;
+            top: 50%;
+            margin-top: -0.55em;
+            margin-right: 1em;
+            margin-left: 0.5em;
+          }
+          /*.relation::after {*/
+            /*content: '';*/
+            /*position: absolute;*/
+            /*width: 0;*/
+            /*height: 0;*/
+            /*left: 50%;*/
+            /*margin-left: -4px;*/
+            /*bottom: -15px;*/
+            /*border-width: 8px 4px;*/
+            /*border-color: #999 transparent transparent transparent;*/
+            /*border-style: solid;*/
+            /*z-index: -1;*/
+          /*}*/
+          /*.relation::before {*/
+            /*content: '';*/
+            /*position: absolute;*/
+            /*background: #999;*/
+            /*width: 2px;*/
+            /*height: 28px;*/
+            /*left: 50%;*/
+            /*margin-left: -1px;*/
+            /*top: 1px;*/
+            /*z-index: -1;*/
+        /*}*/
+        }
+      }
+    }
   }
 
   .image-preview, .background-scrubber {

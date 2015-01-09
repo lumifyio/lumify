@@ -4,6 +4,7 @@ define([
     'tpl!./edges',
     '../withTypeContent',
     'util/edge/list',
+    'util/vertex/formatters',
     'util/withDataRequest'
 ], function(
     defineComponent,
@@ -11,6 +12,7 @@ define([
     template,
     withTypeContent,
     EdgeList,
+    F,
     withDataRequest) {
     'use strict';
 
@@ -30,22 +32,26 @@ define([
 
             this.displayingIds = edgeIds;
 
-            this.$node.html(template({
-                edges: edges
-            }));
-
             Promise.all([
                 Promise.require('d3'),
                 this.dataRequest('edge', 'store', { edgeIds: edgeIds }),
-                this.dataRequest('ontology', 'concepts'),
-                this.dataRequest('ontology', 'properties')
+                this.dataRequest('ontology', 'ontology')
             ]).done(function(results) {
                 var _d3 = results.shift(),
                     edges = results.shift(),
-                    concepts = results.shift(),
-                    properties = results.shift();
+                    ontology = results.shift(),
+                    concepts = ontology.concepts,
+                    properties = ontology.properties,
+                    relationships = ontology.relationships;
+                    ontologyRelation = relationships.byTitle[edges[0].label];
 
                 d3 = _d3;
+
+                self.$node.html(template({
+                    F: F,
+                    label: ontologyRelation && ontologyRelation.displayName || '',
+                    edges: edges
+                }));
 
                 EdgeList.attachTo(self.select('edgeListSelector'), {
                     edges: edges
