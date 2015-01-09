@@ -28,6 +28,9 @@ define([], function() {
                 } else {
                     return this.findOrCreateWorkspace(user.id, dataRequestCompleted, request);
                 }
+            } else if (isUserPreferenceUpdate(request)) {
+                lumifyData.currentUser.uiPreferences = request.result.uiPreferences;
+                this.setPublicApi('currentUser', lumifyData.currentUser);
             }
 
             return dataRequestCompleted.call(this, request);
@@ -60,6 +63,12 @@ define([], function() {
                 })
         };
 
+    }
+
+    function isUserPreferenceUpdate(request) {
+        return request &&
+            request.result &&
+            request.result.uiPreferences;
     }
 
     function isUserMeRequest(request) {

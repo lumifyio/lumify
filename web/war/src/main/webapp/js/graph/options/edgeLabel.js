@@ -26,12 +26,8 @@ define([
             this.$node
                 .find('input').on('change', function() {
                     var checked = $(this).is(':checked');
-                    cy.style().selector('edge')
-                        .css({
-                            content: checked ? 'data(label)' : ''
-                        })
-                        .update();
-
+                    lumifyData.currentUser.uiPreferences[preferenceName] = '' + checked;
+                    self.trigger('reapplyGraphStylesheet');
                     self.dataRequest('user', 'preference', preferenceName, checked);
                 });
         });
