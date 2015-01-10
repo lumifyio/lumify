@@ -33,6 +33,8 @@ define([
             this.displayingIds = edgeIds;
 
             this.on('selectObjects', this.onSelectObjects);
+            this.on(document, 'edgesDeleted', this.onEdgesDeleted);
+            // TODO: edgesUpdated, verticesUpdated (for titles)
 
             Promise.all([
                 Promise.require('d3'),
@@ -61,6 +63,18 @@ define([
             });
 
         });
+
+        this.onEdgesDeleted = function(e, data) {
+            if (data.edgeId) {
+                this.attr.data.edges = _.reject(this.attr.data.edges, function(e) {
+                    return e.id === data.edgeId;
+                });
+
+                this.$node.find('.relation .badge').text(
+                    F.number.pretty(this.attr.data.edges.length)
+                );
+            }
+        };
 
         this.onSelectObjects = function(event, data) {
             event.stopPropagation();

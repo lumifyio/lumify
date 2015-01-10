@@ -19,6 +19,7 @@ define([
 
         'delete': function(edgeId) {
             return ajax('DELETE', '/edge', {
+                edgeId: edgeId
             });
         },
 
