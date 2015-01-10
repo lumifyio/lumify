@@ -728,6 +728,23 @@ define([
             });
         };
 
+        this.onPromptEdgeDelete = function(event, data) {
+            var self = this,
+                edges = data.edges;
+
+            this.cytoscapeReady(function(cy) {
+                var cyEdge = cy.$('#' + toCyId(generateCompoundEdgeId(edges[0])));
+                require(['util/popovers/deleteEdges/deleteEdges'], function(Popover) {
+                    Popover.attachTo(self.$node, {
+                        edges: edges,
+                        anchorTo: {
+                            vertexId: edges[0].sourceVertexId
+                        }
+                    });
+                })
+            })
+        };
+
         this.onContextMenuFitToWindow = function() {
             this.fit();
         };
@@ -1637,6 +1654,7 @@ define([
             this.on(document, 'edgesLoaded', this.onEdgesLoaded);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
             this.on(document, 'edgesUpdated', this.onEdgesUpdated);
+            this.on(document, 'promptEdgeDelete', this.onPromptEdgeDelete);
 
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
             this.on('unregisterForPositionChanges', this.onUnregisterForPositionChanges);

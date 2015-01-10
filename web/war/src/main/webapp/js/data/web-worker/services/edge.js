@@ -17,11 +17,8 @@ define([
             return ajax('POST', '/edge/create', options);
         },
 
-        'delete': function(edgeId, sourceId, targetId) {
+        'delete': function(edgeId) {
             return ajax('DELETE', '/edge', {
-                edgeId: edgeId,
-                sourceId: sourceId,
-                targetId: targetId
             });
         },
 

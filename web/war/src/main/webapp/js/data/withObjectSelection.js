@@ -93,7 +93,9 @@ define([
                         edge.destVertexId || (edge.target && edge.target.id)
                     );
                 });
-            } else console.error('Only can delete one edge at a time');
+            } else {
+                this.trigger('promptEdgeDelete', data);
+            }
         };
 
         this.onSelectObjects = function(event, data) {

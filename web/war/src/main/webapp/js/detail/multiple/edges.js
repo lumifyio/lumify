@@ -22,7 +22,7 @@ define([
         var d3;
 
         this.defaultAttrs({
-            edgeListSelector: '.edges-list'
+            edgeListSelector: '.edge-list'
         });
 
         this.after('initialize', function() {
@@ -64,14 +64,18 @@ define([
 
         this.onSelectObjects = function(event, data) {
             event.stopPropagation();
-            var $edgesList = this.$node.find('.edges-list'),
+            var $edgesList = this.$node.find('.edge-list'),
+                max = 200,
                 height = _.reduce(
                     $edgesList.find('li.edge').toArray(),
                      function(sum, el) {
+                         if (sum > max) {
+                             return sum;
+                         }
                          return sum + $(el).height();
                      }, 0
                 ),
-                calculatedHeight = Math.min(200, height + 4);
+                calculatedHeight = Math.min(max, height + 4);
 
             this.$node.find('.details-container').css('bottom', calculatedHeight + 'px');
             $edgesList.hide().height(calculatedHeight + 'px');
@@ -100,7 +104,7 @@ define([
                 var first = edges[0];
                 if (self._selectedEdgeId === first.id) {
                     self.$node.find('.multiple').removeClass('viewing-vertex');
-                    self.$node.find('.edges-list').show().find('.active').removeClass('active');
+                    self.$node.find('.edge-list').show().find('.active').removeClass('active');
                     self._selectedEdgeId = null;
                     return;
                 }
@@ -110,7 +114,7 @@ define([
                     Module.attachTo(detailsContent, {
                         data: first
                     });
-                    self.$node.find('.edges-list').show();
+                    self.$node.find('.edge-list').show();
                 });
             });
         };

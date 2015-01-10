@@ -22,22 +22,33 @@ define([
             this.on('click', {
                 edgeItemSelector: this.onSelectEdge
             });
+            this.on(document, 'edgesDeleted', this.onEdgesDeleted);
 
             this.$list = $('<ul>')
                 .addClass('nav nav-list')
-                .appendTo(this.$node.addClass('vertex-list vertices-list'))
+                .appendTo(this.$node.empty()) //.addClass('vertex-list vertices-list'))
                 .get(0);
             this.render();
         });
 
+        this.onEdgesDeleted = function(event, data) {
+            if (data.edgeId) {
+                this.attr.edges = _.reject(this.attr.edges, function(e) {
+                    return e.id === data.edgeId;
+                });
+                this.render();
+            }
+        };
+
         this.onSelectEdge = function(event) {
             this.trigger('selectObjects', {
-                edgeIds: $(event.target).closest('li')
+                edgeIds: [$(event.target).closest('li')
                     .addClass('active')
                     .siblings('.active')
                         .removeClass('active')
                         .end()
                     .data('edgeId')
+                ]
             });
         };
 
