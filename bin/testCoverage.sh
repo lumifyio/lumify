@@ -6,7 +6,7 @@
 # This must be run from the root project directory:
 #   bin/testCoverage.sh
 # If you want to use your local server so the integration tests run faster, define the ITEST_SERVER env variable:
-#   ITEST_SERVER=192.168.33.10 bin/testCoverage.sh
+#   ITEST_SERVER=lumify-dev bin/testCoverage.sh
 # Note that using ITEST_SERVER wipes all data from the test server.
 #
 
