@@ -54,7 +54,7 @@ define([
                 });
                 this.on(this.popover, 'conceptSelected', this.onConceptSelected);
 
-                window.focus();
+                this.popover.find('.concept input').focus();
             })
         });
 
