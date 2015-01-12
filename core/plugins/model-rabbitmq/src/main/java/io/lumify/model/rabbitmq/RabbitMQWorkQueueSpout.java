@@ -86,6 +86,8 @@ public class RabbitMQWorkQueueSpout extends WorkerSpout {
         }
     }
 
+    protected QueueingConsumer getConsumer () { return this.consumer; }
+
     @Inject
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
