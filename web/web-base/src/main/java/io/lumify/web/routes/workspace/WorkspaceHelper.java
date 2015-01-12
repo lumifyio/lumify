@@ -116,6 +116,9 @@ public class WorkspaceHelper {
                 termMentionRepository.markHidden(termMention, workspaceVisibility, authorizations);
                 workQueueRepository.pushTextUpdated(sourceVertex.getId());
             }
+
+            graph.flush();
+            this.workQueueRepository.pushEdgeDeletion(edge);
         } else {
             graph.removeEdge(edge, authorizations);
 
@@ -144,6 +147,8 @@ public class WorkspaceHelper {
             Visibility workspaceVisibility = new Visibility(workspaceId);
 
             graph.markVertexHidden(vertex, workspaceVisibility, authorizations);
+            graph.flush();
+            workQueueRepository.pushVertexDeletion(vertex);
         } else {
             JSONArray unresolved = new JSONArray();
             VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
