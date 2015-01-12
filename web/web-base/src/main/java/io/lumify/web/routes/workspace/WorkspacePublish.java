@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.video.VideoFrameInfo;
+import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -392,9 +393,15 @@ public class WorkspacePublish extends BaseRequestHandler {
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : edge.getProperties()) {
-            OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
-            checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName());
-            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
+            boolean userVisible;
+            if (PropertyJustificationMetadata.PROPERTY_JUSTIFICATION.equals(property.getName())) {
+                userVisible = false;
+            } else {
+                OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
+                checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName() + " on property " + property);
+                userVisible = ontologyProperty.getUserVisible();
+            }
+            if (!userVisible && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
                 publishProperty(edgeExistingElementMutation, property, workspaceId, user);
             }
         }

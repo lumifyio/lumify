@@ -19,7 +19,10 @@ To register an option:
             });
 
             // Register the component path,
-            GraphViewOption.registerGraphOption('myplugins/hello_world', 'hello-world-example');
+            GraphOptionsPlugin.registerGraphOption({
+                identifier: 'helloWorld',
+                optionComponentPath: 'myplugins/hello_world'
+            });
         });
 
 Graph options can access the `cy` (cytoscape) object using `this.attr.cy`
