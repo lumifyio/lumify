@@ -5,8 +5,6 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,7 +13,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UploadRdfIntegrationTest extends TestBase {
     private static final String FILE_CONTENTS = getResourceString("sample.rdf");
     private String artifactVertexId;
@@ -32,8 +29,8 @@ public class UploadRdfIntegrationTest extends TestBase {
 
     public void uploadAndProcessRdf() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth2");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth2");
 
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "sample.rdf", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         artifactVertexId = artifact.getVertexIds().get(0);
@@ -66,7 +63,7 @@ public class UploadRdfIntegrationTest extends TestBase {
 
     private void assertUser2CanSeeRdfVertices() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_2, "auth1");
 
         assertSearch(lumifyApi);
         assertGetEdges(lumifyApi);
@@ -84,7 +81,7 @@ public class UploadRdfIntegrationTest extends TestBase {
     }
 
     private void assertFindMultiple(LumifyApi lumifyApi) throws ApiException {
-        List<String> graphVertexIds = new ArrayList<String>();
+        List<String> graphVertexIds = new ArrayList<>();
         graphVertexIds.add(artifactVertexId);
         graphVertexIds.add(joeFernerVertexId);
         graphVertexIds.add(daveSingleyVertexId);
@@ -92,7 +89,7 @@ public class UploadRdfIntegrationTest extends TestBase {
         ClientApiVertexMultipleResponse vertices = lumifyApi.getVertexApi().findMultiple(graphVertexIds, true);
         LOGGER.info("vertices: %s", vertices.toString());
         assertEquals(4, vertices.getVertices().size());
-        assertTrue("isRequiredFallback", !vertices.isRequiredFallback());
+        assertFalse("isRequiredFallback", vertices.isRequiredFallback());
         boolean foundAltamiraCorporation = false;
         boolean foundArtifact = false;
         boolean foundDaveSingley = false;
@@ -206,7 +203,7 @@ public class UploadRdfIntegrationTest extends TestBase {
     }
 
     private void assertWorkspaceEdges(LumifyApi lumifyApi) throws ApiException {
-        List<String> additionalIds = new ArrayList<String>();
+        List<String> additionalIds = new ArrayList<>();
         additionalIds.add(artifactVertexId);
         ClientApiWorkspaceEdges edges = lumifyApi.getWorkspaceApi().getEdges(additionalIds);
         LOGGER.info("workspace edges: %s", edges.toString());
