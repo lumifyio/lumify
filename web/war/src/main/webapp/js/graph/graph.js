@@ -57,7 +57,8 @@ define([
 
     function Graph() {
 
-        var LAYOUT_OPTIONS = {
+        var edgeIdToGroupedCyEdgeId = {},
+            LAYOUT_OPTIONS = {
                 // Customize layout options
                 random: { padding: 10 },
                 arbor: { friction: 0.6, repulsion: 5000 * retina.devicePixelRatio, targetFps: 60, stiffness: 300 }
@@ -76,12 +77,17 @@ define([
                 var source = e.sourceId || (e.source && e.source.id),
                     target = e.targetId || (e.target && e.target.id),
                     type = e.relationshipType || e.label || e.type,
-                    ontology = ontologyRelationships.byTitle[type];
+                    ontology = ontologyRelationships.byTitle[type],
+                    cyEdgeId = toCyId(e.id);
+
+                e.edges.forEach(function(edge) {
+                    edgeIdToGroupedCyEdgeId[edge.id] = cyEdgeId;
+                });
 
                 return {
                     group: 'edges',
                     data: {
-                        id: toCyId(e.id),
+                        id: cyEdgeId,
                         type: type,
                         source: sourceNode.id(),
                         target: destNode.id(),
@@ -789,23 +795,37 @@ define([
             }
         };
 
-        this.verticesForGraphIds = function(cy, vertexIds, type) {
+        this.cyNodesForVertexIds = function(cy, vertexIds) {
             var selector = vertexIds.map(function(vId) {
                 return '#' + toCyId(vId);
             }).join(',');
 
-            return cy[type || 'nodes'](selector);
+            return cy.nodes(selector);
+        };
+
+        this.cyEdgesForEdgeIds = function(cy, edgeIds) {
+            var selector = _.compact(edgeIds.map(function(eId) {
+                var cyEdgeId = edgeIdToGroupedCyEdgeId[eId];
+                if (cyEdgeId) {
+                    return '#' + cyEdgeId;
+                }
+            }));
+
+            if (selector.length) {
+                return cy.edges(selector.join(','));
+            }
+
+            return cytoscape.Collection(cy, []);
         };
 
         this.onFocusVertices = function(e, data) {
             this.cytoscapeReady(function(cy) {
                 var vertexIds = data.vertexIds;
                 this.hoverDelay = _.delay(function() {
-                    // TODO: make work with collapsed edges
-                    var nodes = this.verticesForGraphIds(cy, vertexIds, 'nodes')
+                    var nodes = this.cyNodesForVertexIds(cy, vertexIds)
                             .css('borderWidth', 0)
                             .addClass('focus'),
-                        edges = this.verticesForGraphIds(cy, vertexIds, 'edges')
+                        edges = this.cyEdgesForEdgeIds(cy, vertexIds)
                             .css('width', 1.5 * retina.devicePixelRatio)
                             .addClass('focus');
 
