@@ -34,7 +34,7 @@ define([
 
             this.on('selectObjects', this.onSelectObjects);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
-            // TODO: edgesUpdated, verticesUpdated (for titles)
+            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
             Promise.all([
                 Promise.require('d3'),
@@ -74,6 +74,29 @@ define([
                     F.number.pretty(this.attr.data.edges.length)
                 );
             }
+        };
+
+        this.onVerticesUpdated = function(e, data) {
+            var self = this,
+                source = {
+                    vertex: this.attr.data.edges[0].source,
+                    className: '.sourceTitle'
+                },
+                target = {
+                    vertex: this.attr.data.edges[0].target,
+                    className: '.destTitle'
+                };
+
+            (data.vertices || []).forEach(function(updated) {
+                [source, target].forEach(function(current) {
+                    if (updated.id === current.vertex.id) {
+                        self.$node.find(current.className).text(
+                            F.vertex.title(updated)
+                        );
+                    }
+                });
+            });
+
         };
 
         this.onSelectObjects = function(event, data) {
