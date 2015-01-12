@@ -140,7 +140,6 @@
         </dependency>
     </dependencies>
 
-
     <profiles>
         <profile>
             <id>ITest</id>
@@ -156,6 +155,7 @@
                             <excludes>
                                 <exclude>**/*$*</exclude>
                             </excludes>
+                            <excludedGroups>io.lumify.it.BenchmarkCategory</excludedGroups>
                         </configuration>
                     </plugin>
                 </plugins>

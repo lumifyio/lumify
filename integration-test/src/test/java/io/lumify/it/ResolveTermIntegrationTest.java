@@ -6,15 +6,12 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ResolveTermIntegrationTest extends TestBase {
     private String artifactVertexId;
     private ClientApiElement joeFernerVertex;
@@ -30,7 +27,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         lumifyApi.logout();
 
         lumifyApi = login(USERNAME_TEST_USER_2);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_2, "auth1");
         assertHighlightedTextDoesNotContainResolvedEntityForOtherUser(lumifyApi);
         lumifyApi.logout();
 
@@ -50,7 +47,7 @@ public class ResolveTermIntegrationTest extends TestBase {
 
     public void setupData() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());

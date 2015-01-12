@@ -6,8 +6,6 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,7 +13,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class WorkspaceSandboxingIntegrationTest extends TestBase {
     private String susanFengVertexId;
     private String artifactVertexId;
@@ -31,9 +28,9 @@ public class WorkspaceSandboxingIntegrationTest extends TestBase {
 
     private void setupTest() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "A");
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "B");
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "C");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "A");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "B");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "C");
 
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("", "test.txt", new ByteArrayInputStream("Susan Feng knows Joe Ferner.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());

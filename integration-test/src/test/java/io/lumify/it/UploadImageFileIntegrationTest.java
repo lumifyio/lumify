@@ -9,8 +9,6 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,7 +19,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UploadImageFileIntegrationTest extends TestBase {
     private String artifactVertexId;
 
@@ -35,7 +32,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
 
     private void importImageAndPublishAsUser1() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         InputStream imageResourceStream = UploadImageFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/sampleImage.jpg");
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFiles(
@@ -90,7 +87,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
 
     private void resolveAndUnresolveDetectedObject() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         ClientApiDetectedObjects detectedObjects = lumifyApi.getVertexApi().getDetectedObjects(artifactVertexId, LumifyProperties.DETECTED_OBJECT.getPropertyName(), "");
         LOGGER.info("detectedObjects: %s", detectedObjects.toString());
