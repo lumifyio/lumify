@@ -166,21 +166,26 @@ define([
 
         this.classesForVertex = function(vertex) {
             var cls = [],
+                isEdge = F.vertex.isEdge(vertex),
                 props = vertex.properties || vertex,
-                concept = F.vertex.concept(vertex);
+                concept = !isEdge && F.vertex.concept(vertex);
 
-            if (concept.displayType === 'document' ||
+            if (concept &&
+                (concept.displayType === 'document' ||
                 concept.displayType === 'image' ||
-                concept.displayType === 'video') {
+                concept.displayType === 'video')) {
                 cls.push('artifact entity resolved');
                 if (props['http://lumify.io#conceptType']) cls.push(props['http://lumify.io#conceptType'].value);
-            } else {
+            } else if (!isEdge) {
                 cls.push('entity resolved');
                 if (props['http://lumify.io#conceptType']) {
                     cls.push('conceptType-' + props['http://lumify.io#conceptType'].value);
                 }
+            } else {
+                cls.push('edge');
             }
-            cls.push('gId-' + (vertex.id || props.graphNodeId));
+            // TODO:
+            // cls.push('gId-' + (vertex.id || props.graphNodeId));
 
             return cls.join(' ');
         };

@@ -1,0 +1,33 @@
+
+.edge-list {
+  li > a {
+    padding: 0.5em;
+    line-height: 1.7em;
+    height: auto;
+    border-bottom: 1px solid #eee;    
+    span {
+      .selection {
+        background: fade(@blue-color, 10%);
+      }
+      white-space: normal;
+      .sourceInfoTitle {
+        padding: 0;
+        line-height: inherit;
+        font-size: 85%;
+        text-decoration: none;
+        border: 0;
+      }
+    }
+    .subtitle {
+      color: #999;
+      font-size: 90%;
+      text-shadow: 0 1px 0 white;
+    }
+  }
+  .active {
+    .subtitle {
+      color: #eee;
+      text-shadow: none;
+    }
+  }
+}
