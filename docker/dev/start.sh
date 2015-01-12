@@ -81,4 +81,5 @@ start_accumulo
 start_elasticsearch
 start_rabbitmq
 ensure_lumify_config
+
 /bin/bash
