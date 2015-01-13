@@ -154,13 +154,14 @@ define([
                     .attr('disabled', true),
                 cancelButton = this.popover.find('.btn-default').show(),
                 collapsed = this.isVisibilityCollapsed(),
+                files = this.attr.files,
                 visibilityValue = collapsed ?
                     this.visibilitySource.value :
                     _.map(this.visibilitySources, _.property('value'));
 
             this.attr.teardownOnTap = false;
 
-            this.request = this.dataRequest('vertex', 'importFiles', this.attr.files, visibilityValue);
+            this.request = this.dataRequest('vertex', 'importFiles', files, visibilityValue);
 
             this.request
                 .progress(function(complete) {
