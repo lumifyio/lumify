@@ -195,7 +195,15 @@ define([
                                 outputItem.edgeLabel = self.ontologyRelationships.byTitle[outputItem.edge.label]
                                 .displayName;
                             } else {
-                                outputItem.edgeLabel = '';
+                                outputItem.edge = {
+                                    id: elementId,
+                                    properties: [],
+                                    source: verticesById[diffs[0].inVertexId],
+                                    target: verticesById[diffs[0].outVertexId],
+                                    'http://lumify.io#visibilityJson': diffs[0].visibilityJson
+                                };
+                                outputItem.edgeLabel = self.ontologyRelationships.byTitle[diffs[0].label]
+                                .displayName;
                             }
                         }
 
@@ -234,7 +242,7 @@ define([
                                     diff.className = F.className.to(diff.edgeId);
                                     diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
                                     self.diffsForElementId[diff.edgeId] = diff;
-                                    outputItem.action = actionTypes.CREATE;
+                                    outputItem.action = diff.deleted ? actionTypes.DELETE : actionTypes.CREATE;
                                     addDiffDependency(diff.inVertexId, diff);
                                     addDiffDependency(diff.outVertexId, diff);
                                     self.diffsById[diff.id] = diff;

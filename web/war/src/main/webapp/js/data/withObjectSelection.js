@@ -147,7 +147,7 @@ define([
                 Promise.all(promises)
                     .done(function(result) {
                         var vertices = _.compact(result[0] || []),
-                            edges = result[1] || [];
+                            edges = _.compact(result[1] || []);
 
                         if (!edges.length && !vertices.length && hasItems) {
                             return;

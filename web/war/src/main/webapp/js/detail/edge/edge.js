@@ -102,6 +102,10 @@ define([
                     edges = results.shift(),
                     edge = edges[0];
 
+                if (!edge) {
+                    return self.trigger('selectObjects');
+                }
+
                 self.ontologyRelationships = ontology.relationships;
                 self.edge = edge;
                 $.extend(edge.source, {
