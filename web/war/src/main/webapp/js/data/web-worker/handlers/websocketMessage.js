@@ -2,6 +2,9 @@ define(['require'], function(require) {
     'use strict';
 
     var NOOP = function() {},
+        storeTypeForData = function(data) {
+            return ('graphVertexId' in data) ? 'vertex' : ('graphEdgeId' in data) ? 'edge' : null;
+        },
         socketHandlers = {
             workspaceChange: function(data, json) {
                 if (!json || json.modifiedBy !== publicData.currentUser.id) {
@@ -45,11 +48,14 @@ define(['require'], function(require) {
                 }
             })(),
             userWorkspaceChange: NOOP,
+            publish: function(data) {
+                // Property undo already publishes propertyChange
+                if (data.objectType !== 'property' || data.publishType !== 'undo') {
+                    socketHandlers.propertyChange(data);
+                }
+            },
             propertyChange: function(data) {
-                var type =
-                        'graphVertexId' in data ? 'vertex' :
-                        'graphEdgeId' in data ? 'edge' :
-                        null,
+                var type = storeTypeForData(data),
                     objectId = type && (data.graphVertexId || data.graphEdgeId);
 
                 if (!type) {
