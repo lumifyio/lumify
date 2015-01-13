@@ -27,7 +27,6 @@ import io.lumify.web.routes.resource.ResourceGet;
 import io.lumify.web.routes.user.*;
 import io.lumify.web.routes.vertex.*;
 import io.lumify.web.routes.workspace.*;
-import org.eclipse.jetty.server.Request;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -78,6 +77,8 @@ public class Router extends HttpServlet {
             app.delete("/vertex", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexRemove.class);
             app.get("/vertex/highlighted-text", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexHighlightedText.class);
             app.get("/vertex/raw", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexRaw.class);
+            app.get("/vertex/exists", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexExists.class);
+            app.post("/vertex/exists", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexExists.class);
             app.get("/vertex/thumbnail", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexThumbnail.class);
             app.get("/vertex/poster-frame", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexPosterFrame.class);
             app.get("/vertex/video-preview", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexVideoPreviewImage.class);
@@ -108,6 +109,8 @@ public class Router extends HttpServlet {
             app.post("/edge/comment", authenticator, csrfProtector, CommentPrivilegeFilter.class, SetEdgeProperty.class);
             app.delete("/edge", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeDelete.class);
             app.delete("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, DeleteEdgeProperty.class);
+            app.get("/edge/exists", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeExists.class);
+            app.post("/edge/exists", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeExists.class);
             app.post("/edge/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeMultiple.class);
             app.post("/edge/create", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeCreate.class);
             app.get("/edge/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeProperties.class);

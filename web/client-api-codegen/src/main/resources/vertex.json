@@ -843,6 +843,29 @@
                     ]
                 }
             ]
+        },
+        {
+            "path": "/vertex/exists",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Finds the status of multiple vertices",
+                    "type": "ClientApiVerticesExistsResponse",
+                    "nickname": "doExist",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "vertexIds[]",
+                            "description": "vertex ids",
+                            "required": true,
+                            "type": "List[string]",
+                            "paramType": "form"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "models": {

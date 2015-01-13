@@ -6,6 +6,7 @@ import io.lumify.web.clientapi.ApiInvoker;
 import io.lumify.web.clientapi.model.ClientApiLongRunningProcessSubmitResponse;
 import io.lumify.web.clientapi.model.ClientApiDetectedObjects;
 import io.lumify.web.clientapi.model.ClientApiVertexFindRelatedResponse;
+import io.lumify.web.clientapi.model.ClientApiVerticesExistsResponse;
 import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
 import io.lumify.web.clientapi.model.ClientApiElement;
 import io.lumify.web.clientapi.model.ClientApiVertexEdges;
@@ -1127,6 +1128,53 @@ public class VertexApi {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (ClientApiVertexMultipleResponse) ApiInvoker.deserialize(response, "", ClientApiVertexMultipleResponse.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+      	return null;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+  public ClientApiVerticesExistsResponse doExist (List<String> vertexIds) throws ApiException {
+    Object postBody = null;
+    // verify required params are set
+    if(vertexIds == null ) {
+       throw new ApiException(400, "missing required params");
+    }
+    // create path and map variables
+    String path = "/vertex/exists".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    String[] contentTypes = {
+      "multipart/form-data"};
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if(contentType.startsWith("multipart/form-data")) {
+      boolean hasFields = false;
+      FormDataMultiPart mp = new FormDataMultiPart();
+      hasFields = true;
+      for(String vertexId:vertexIds) { mp.field("vertexIds[]", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+      throw new java.lang.RuntimeException("invalid content type");}
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (ClientApiVerticesExistsResponse) ApiInvoker.deserialize(response, "", ClientApiVerticesExistsResponse.class);
       }
       else {
         return null;
