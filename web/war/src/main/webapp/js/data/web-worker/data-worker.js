@@ -18,6 +18,8 @@ onmessage = function(event) {
 };
 
 function setupConsole() {
+    var noop = function() {};
+
     if (typeof console === 'undefined') {
         console = {
             log: log('log'),
@@ -25,9 +27,9 @@ function setupConsole() {
             debug: log('debug'),
             error: log('error'),
             warn: log('warn'),
-            group: _.identity,
-            groupCollapsed: _.identity,
-            groupEnd: _.identity
+            group: noop,
+            groupCollapsed: noop,
+            groupEnd: noop
         };
     }
     function log(type) {
