@@ -178,7 +178,16 @@ define([
                         if (isElementVertex) {
                             outputItem.vertexId = elementId;
                             outputItem.vertex = verticesById[elementId];
-                            outputItem.title = F.vertex.title(outputItem.vertex);
+                            if (outputItem.vertex) {
+                                outputItem.title = F.vertex.title(outputItem.vertex);
+                            } else if (diffs[0].title) {
+                                outputItem.vertex = {
+                                    id: elementId,
+                                    properties: [],
+                                    'http://lumify.io#visibilityJson': diffs[0]['http://lumify.io#visibilityJson']
+                                };
+                                outputItem.title = diffs[0].title;
+                            }
                         } else {
                             outputItem.edgeId = elementId;
                             outputItem.edge = edgesById[elementId];
@@ -597,8 +606,11 @@ define([
             switch (diff.type) {
 
                 case 'VertexDiffItem':
-                    if (!state || diff.deleted) {
-                        // Unpublish all dependents
+                    if (state && diff.deleted) {
+                        this.diffDependencies[diff.id].forEach(function(diffId) {
+                            self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
+                        });
+                    } else if (!state) {
                         this.diffDependencies[diff.id].forEach(function(diffId) {
                             self.trigger('markPublishDiffItem', { diffId: diffId, state: state });
                         });
@@ -610,7 +622,7 @@ define([
 
                     if (state) {
                         var vertexDiff = this.diffsForElementId[diff.elementId];
-                        if (vertexDiff && !diff.deleted) {
+                        if (vertexDiff && !vertexDiff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.elementId, state: true })
                         }
                     }

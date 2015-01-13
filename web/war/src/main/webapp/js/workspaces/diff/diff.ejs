@@ -39,7 +39,7 @@
                   <span class="label action-type"><%= diff.action.display %></span>
                   <% } %>
                 </th>
-                <% if (diff.action.type === 'create') { %>
+                <% if (diff.action.type !== 'update') { %>
                   <% include workspaces/diff/actions %>
                 <% } else { %>
                   <td>&nbsp;</td>
@@ -59,7 +59,7 @@
                   <span class="label action-type"><%= diff.action.display %></span>
                   <% } %>
                 </th>
-                <% if (diff.action.type === 'create') { %>
+                <% if (diff.action.type !== 'update') { %>
                   <% include workspaces/diff/actions %>
                 <% } else { %>
                   <td>&nbsp;</td>
