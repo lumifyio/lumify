@@ -9,6 +9,7 @@ stop_msg "RabbitMQ"
 
 stop_msg "Elasticsearch"
 curl -XPOST 'http://localhost:9200/_cluster/nodes/_local/_shutdown'
+echo ""
 
 stop_msg "Accumulo"
 /opt/accumulo/bin/stop-all.sh
@@ -22,3 +23,5 @@ stop_msg "ZooKeeper"
 
 stop_msg "SSHD"
 service sshd stop
+
+echo ""

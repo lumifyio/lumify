@@ -98,9 +98,12 @@ EXPOSE 8080 8443
 ADD docker-entrypoint.sh /opt/docker-entrypoint.sh
 ADD start.sh /opt/start.sh
 ADD stop.sh /opt/stop.sh
+ADD status.sh /opt/status.sh
 
 RUN \
   chmod +x /opt/start.sh \
+  && chmod +x /opt/stop.sh \
+  && chmod +x /opt/status.sh \
   && chmod +x /opt/docker-entrypoint.sh
 
 # Set working environment
