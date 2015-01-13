@@ -17,6 +17,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.LumifyVisibility;
@@ -47,6 +48,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
     private final AuthorizationRepository authorizationRepository;
+    private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final String entityHasImageIri;
@@ -61,7 +63,8 @@ public class WorkspacePublish extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final OntologyRepository ontologyRepository,
             final WorkspaceRepository workspaceRepository,
-            final AuthorizationRepository authorizationRepository) {
+            final AuthorizationRepository authorizationRepository,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
@@ -70,6 +73,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
         this.authorizationRepository = authorizationRepository;
+        this.workQueueRepository = workQueueRepository;
 
         this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
         if (this.entityHasImageIri == null) {
@@ -273,6 +277,8 @@ public class WorkspacePublish extends BaseRequestHandler {
     private void publishVertex(Vertex vertex, ClientApiPublishItem.Action action, Authorizations authorizations, String workspaceId, User user) throws IOException {
         if (action == ClientApiPublishItem.Action.delete || WorkspaceDiffHelper.isPublicDelete(vertex, authorizations)) {
             graph.removeVertex(vertex, authorizations);
+            graph.flush();
+            workQueueRepository.broadcastPublishVertexDelete(vertex);
             return;
         }
 
@@ -325,11 +331,14 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         graph.flush();
+        workQueueRepository.broadcastPublishVertex(vertex);
     }
 
     private void publishProperty(Element element, ClientApiPublishItem.Action action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
         if (action == ClientApiPublishItem.Action.delete) {
             element.removeProperty(key, name, authorizations);
+            graph.flush();
+            workQueueRepository.broadcastPublishPropertyDelete(element, key, name);
             return;
         }
         ExistingElementMutation elementMutation = element.prepareMutation();
@@ -341,10 +350,12 @@ public class WorkspacePublish extends BaseRequestHandler {
             if (WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
                 element.removeProperty(key, name, authorizations);
                 graph.flush();
+                workQueueRepository.broadcastPublishPropertyDelete(element, key, name);
                 return;
             } else if (publishNewProperty(elementMutation, property, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 graph.flush();
+                workQueueRepository.broadcastPublishProperty(element, key, name);
                 return;
             }
         }
@@ -378,6 +389,8 @@ public class WorkspacePublish extends BaseRequestHandler {
     private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, ClientApiPublishItem.Action action, String workspaceId, User user, Authorizations authorizations) {
         if (action == ClientApiPublishItem.Action.delete || WorkspaceDiffHelper.isPublicDelete(edge, authorizations)) {
             graph.removeEdge(edge, authorizations);
+            graph.flush();
+            workQueueRepository.broadcastPublishEdgeDelete(edge);
             return;
         }
 
@@ -430,6 +443,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex.getId(), authorizations)) {
             termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
+
+        graph.flush();
+        workQueueRepository.broadcastPublishEdge(edge);
     }
 
     private void publishGlyphIconProperty(Edge hasImageEdge, String workspaceId, User user, Authorizations authorizations) {
