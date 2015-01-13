@@ -23,8 +23,10 @@ public abstract class VertextTestBase extends TestBase {
         addUserAuths(setupLumifyApi, USERNAME_TEST_USER_1, "a", "b", "c", "x", "y", "z");
     }
 
-    protected List<String> createVertices(int numVertices, List<String> vertexVisibilities,
-                                        int numPropertiesPerVertex, List<String> propertyVisibilities)
+    protected List<String> createVertices(
+            int numVertices, List<String> vertexVisibilities,
+            int numPropertiesPerVertex, List<String> propertyVisibilities
+    )
             throws ApiException {
         LoopingIterator vertexVizIterator = new LoopingIterator(vertexVisibilities);
         LoopingIterator propertyVizIterator = new LoopingIterator(propertyVisibilities);
