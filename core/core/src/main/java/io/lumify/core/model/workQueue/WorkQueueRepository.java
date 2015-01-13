@@ -416,6 +416,14 @@ public abstract class WorkQueueRepository {
         broadcastPublish(vertex, PublishType.TO_PUBLIC);
     }
 
+    public void broadcastUndoVertexDelete(Vertex vertex) {
+        broadcastPublish(vertex, PublishType.UNDO_DELETE);
+    }
+
+    public void broadcastUndoVertex(Vertex vertex) {
+        broadcastPublish(vertex, PublishType.UNDO);
+    }
+
     public void broadcastPublishPropertyDelete(Element element, String key, String name) {
         broadcastPublish(element, key, name, PublishType.DELETE);
     }
@@ -424,12 +432,28 @@ public abstract class WorkQueueRepository {
         broadcastPublish(element, key, name, PublishType.TO_PUBLIC);
     }
 
+    public void broadcastUndoPropertyDelete(Element element, String key, String name) {
+        broadcastPublish(element, key, name, PublishType.UNDO_DELETE);
+    }
+
+    public void broadcastUndoProperty(Element element, String key, String name) {
+        broadcastPublish(element, key, name, PublishType.UNDO);
+    }
+
     public void broadcastPublishEdgeDelete(Edge edge) {
         broadcastPublish(edge, PublishType.DELETE);
     }
 
     public void broadcastPublishEdge(Edge edge) {
         broadcastPublish(edge, PublishType.TO_PUBLIC);
+    }
+
+    public void broadcastUndoEdgeDelete(Edge edge) {
+        broadcastPublish(edge, PublishType.UNDO_DELETE);
+    }
+
+    public void broadcastUndoEdge(Edge edge) {
+        broadcastPublish(edge, PublishType.UNDO);
     }
 
     private void broadcastPublish(Element element, PublishType publishType) {
@@ -510,7 +534,9 @@ public abstract class WorkQueueRepository {
 
     private enum PublishType {
         TO_PUBLIC("toPublic"),
-        DELETE("delete");
+        DELETE("delete"),
+        UNDO_DELETE("undoDelete"),
+        UNDO("undo");
 
         private final String jsonString;
 
