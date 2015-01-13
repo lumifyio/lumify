@@ -82,4 +82,6 @@ start_elasticsearch
 start_rabbitmq
 ensure_lumify_config
 
-/bin/bash
+if [ $PPID -eq 1 ]; then
+  /bin/bash
+fi
