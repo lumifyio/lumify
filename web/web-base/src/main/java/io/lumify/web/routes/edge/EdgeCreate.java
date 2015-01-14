@@ -66,7 +66,19 @@ public class EdgeCreate extends BaseRequestHandler {
             return;
         }
 
-        Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, justificationText, sourceInfo, visibilitySource, workspaceId, visibilityTranslator, authorizations);
+        Edge edge = GraphUtil.addEdge(
+                graph,
+                sourceVertex,
+                destVertex,
+                predicateLabel,
+                justificationText,
+                sourceInfo,
+                visibilitySource,
+                workspaceId,
+                visibilityTranslator,
+                user,
+                authorizations
+        );
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, edge, "", "",

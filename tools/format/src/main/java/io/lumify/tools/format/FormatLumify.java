@@ -15,6 +15,7 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.securegraph.GraphConfiguration;
 import org.securegraph.elasticsearch.ElasticSearchSearchIndexBase;
+import org.securegraph.elasticsearch.ElasticSearchSearchIndexConfiguration;
 
 import java.util.Map;
 
@@ -53,8 +54,8 @@ public class FormatLumify extends CommandLineBase {
 
     public static void deleteElasticSearchIndex(Map configuration) {
         // TODO refactor to pull graph. from some static reference
-        String indexName = (String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_INDEX_NAME);
-        String[] esLocations = ((String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexBase.CONFIG_ES_LOCATIONS)).split(",");
+        String indexName = (String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexConfiguration.CONFIG_INDEX_NAME);
+        String[] esLocations = ((String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexConfiguration.CONFIG_ES_LOCATIONS)).split(",");
         LOGGER.debug("BEGIN deleting elastic search index: " + indexName);
         TransportClient client = new TransportClient();
         for (String esLocation : esLocations) {

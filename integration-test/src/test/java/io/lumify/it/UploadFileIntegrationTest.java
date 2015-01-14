@@ -11,8 +11,6 @@ import io.lumify.web.clientapi.model.*;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.securegraph.type.GeoPoint;
 
 import java.io.ByteArrayInputStream;
@@ -20,7 +18,6 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UploadFileIntegrationTest extends TestBase {
     public static final String FILE_CONTENTS = "Joe Ferner knows David Singley.";
     private String user2Id;
@@ -67,8 +64,8 @@ public class UploadFileIntegrationTest extends TestBase {
 
     public void importArtifactAsUser1() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth2");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth2");
         workspaceId = lumifyApi.getCurrentWorkspaceId();
 
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
@@ -97,7 +94,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
     public void assertUser2DoesNotHaveAccessToUser1sWorkspace() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_2);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_2, "auth1");
         user2Id = lumifyApi.getCurrentUserId();
 
         lumifyApi.setWorkspaceId(workspaceId);
@@ -155,7 +152,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
     private void assertUser3HasAccessWithAuth1Visibility() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_3);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_3, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_3, "auth1");
         assertArtifactCorrect(lumifyApi, false, "auth1");
         lumifyApi.logout();
     }

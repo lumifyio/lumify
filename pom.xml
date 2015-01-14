@@ -45,8 +45,8 @@
         <classpath.filename>${project.build.directory}/.classpath.${user.name}</classpath.filename>
         <cluster.dependency.scope>compile</cluster.dependency.scope>
         <java.compiler.showWarnings>true</java.compiler.showWarnings>
-        <java.source.version>1.6</java.source.version>
-        <java.target.version>1.6</java.target.version>
+        <java.source.version>1.7</java.source.version>
+        <java.target.version>1.7</java.target.version>
         <maven.build.timestamp.format>EEE MMM dd HH:mm z yyyy</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -97,6 +97,7 @@
 
         <!-- Test Dependency Versions -->
         <junit.version>4.11</junit.version>
+        <hamcrest.version>1.3</hamcrest.version>
         <mockito.version>1.9.5</mockito.version>
         <powermock.version>1.5.1</powermock.version>
         <cobertura.version>2.0.3</cobertura.version>
@@ -595,6 +596,12 @@
 
             <!-- Test Dependencies -->
             <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version>${hamcrest.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
@@ -641,6 +648,10 @@
         </dependency>
 
         <!-- Common Test Dependencies -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -732,6 +743,7 @@
                         <excludes>
                             <exclude>**/*$*</exclude>
                             <exclude>**/*IntegrationTest.java</exclude>
+                            <exclude>**/*BenchmarkTest.java</exclude>
                         </excludes>
                     </configuration>
                     <dependencies>

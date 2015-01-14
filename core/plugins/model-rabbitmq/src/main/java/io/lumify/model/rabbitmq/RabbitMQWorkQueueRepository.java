@@ -85,6 +85,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
         try {
             LOGGER.info("deleting queue: %s", GRAPH_PROPERTY_QUEUE_NAME);
             channel.queueDelete(GRAPH_PROPERTY_QUEUE_NAME);
+            channel.queueDelete(LONG_RUNNING_PROCESS_QUEUE_NAME);
         } catch (IOException e) {
             throw new LumifyException("Could not delete queues", e);
         }

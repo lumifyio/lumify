@@ -11,8 +11,6 @@ import io.lumify.web.clientapi.model.ClientApiElement;
 import io.lumify.web.clientapi.model.ClientApiProperty;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,7 +19,6 @@ import java.io.InputStream;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UploadVideoFileIntegrationTest extends TestBase {
     private String artifactVertexId;
 
@@ -38,7 +35,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
     private void importVideoAndPublishAsUser1() throws ApiException, IOException {
         LOGGER.info("importVideoAndPublishAsUser1");
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         InputStream videoResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4");
         InputStream videoTranscriptResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4.srt");

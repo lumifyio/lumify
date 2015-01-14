@@ -374,7 +374,7 @@
         display:block; 
         .box-sizing(border-box);
       }
-      .vertices-list {      
+      .vertices-list,.edge-list {      
         position: absolute;
         height: 200px;
         bottom: 0;
@@ -465,7 +465,7 @@
       }
     }
 
-    .vertices-list {
+    .vertices-list, .edge-list {
        border-top: 1px solid #eee;
     }
     .multi-select {
@@ -485,6 +485,77 @@
       .property-section .nav-header {
         margin: 0;
         padding: 0;
+      }
+    }
+
+    &.edges {
+      .multiple-container {
+        margin-bottom: 0em;
+      }
+      .comp-toolbar {
+        height: 3px;
+      }
+      &.viewing-vertex {
+        .comp-toolbar {
+          height: 2em;
+        }
+        .edge-list .nav-list {
+          padding: 0;
+        }
+      }
+      .spacer {
+        height: 10em;
+      }
+      .edge-list {
+        margin-top: 3px;
+      }
+      .entity-background {
+        .relationship-header {
+          padding: 0;
+        }
+        .relation {
+          font-size: 85%;
+          color: white;
+          font-variant: small-caps;
+          text-transform: lowercase;
+          margin-bottom: 0.5em;
+          margin-top: 0.2em;
+          position: relative;
+
+          .badge {
+            .opacity(60);
+            float: none;
+            position: absolute;
+            top: 50%;
+            margin-top: -0.55em;
+            margin-right: 1em;
+            margin-left: 0.5em;
+          }
+          /*.relation::after {*/
+            /*content: '';*/
+            /*position: absolute;*/
+            /*width: 0;*/
+            /*height: 0;*/
+            /*left: 50%;*/
+            /*margin-left: -4px;*/
+            /*bottom: -15px;*/
+            /*border-width: 8px 4px;*/
+            /*border-color: #999 transparent transparent transparent;*/
+            /*border-style: solid;*/
+            /*z-index: -1;*/
+          /*}*/
+          /*.relation::before {*/
+            /*content: '';*/
+            /*position: absolute;*/
+            /*background: #999;*/
+            /*width: 2px;*/
+            /*height: 28px;*/
+            /*left: 50%;*/
+            /*margin-left: -1px;*/
+            /*top: 1px;*/
+            /*z-index: -1;*/
+        /*}*/
+        }
       }
     }
   }

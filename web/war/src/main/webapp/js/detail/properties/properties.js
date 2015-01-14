@@ -646,8 +646,8 @@ define([
                         self.append('h1')
                             .attr('class', 'collapsible-header')
                             .call(function() {
-                                this.append('strong');
                                 this.append('span').attr('class', 'badge');
+                                this.append('strong');
                             });
                             break;
                     case NAME: self.append('strong'); break;

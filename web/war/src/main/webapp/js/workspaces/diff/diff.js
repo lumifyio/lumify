@@ -182,8 +182,12 @@ define([
                         } else {
                             outputItem.edgeId = elementId;
                             outputItem.edge = edgesById[elementId];
-                            outputItem.edgeLabel = self.ontologyRelationships.byTitle[outputItem.edge.label]
+                            if (outputItem.edge) {
+                                outputItem.edgeLabel = self.ontologyRelationships.byTitle[outputItem.edge.label]
                                 .displayName;
+                            } else {
+                                outputItem.edgeLabel = '';
+                            }
                         }
 
                         diffs.forEach(function(diff) {

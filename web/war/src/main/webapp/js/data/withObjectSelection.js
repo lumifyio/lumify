@@ -37,9 +37,15 @@ define([
             this.on('deleteEdges', this.onDeleteEdges);
             this.on('edgesDeleted', function(event, data) {
                 if (selectedObjects && _.findWhere(selectedObjects.edges, { id: data.edgeId })) {
-                    this.trigger('selectObjects');
+                    if (selectedObjects.edges.length === 1) {
+                        this.trigger('selectObjects');
+                    } else {
+                        selectedObjects.edges = _.reject(selectedObjects.edges, function(e) {
+                            return data.edgeId === e.id
+                        })
+                    }
                 }
-            })
+            });
 
             this.on('searchTitle', this.onSearchTitle);
             this.on('searchRelated', this.onSearchRelated);
@@ -87,13 +93,11 @@ define([
 
             if (edge) {
                 this.dataRequestPromise.done(function(dataRequest) {
-                    dataRequest('edge', 'delete',
-                        edge.id,
-                        edge.source.id,
-                        edge.target.id
-                    );
+                    dataRequest('edge', 'delete', edge.id);
                 });
-            } else console.error('Only can delete one edge at a time');
+            } else {
+                this.trigger('promptEdgeDelete', data);
+            }
         };
 
         this.onSelectObjects = function(event, data) {
@@ -110,14 +114,18 @@ define([
                     );
                 } else if (data && data.vertices) {
                     promises.push(Promise.resolve(data.vertices));
+                } else {
+                    promises.push(Promise.resolve([]));
                 }
 
                 if (data && data.edgeIds && data.edgeIds.length) {
                     promises.push(
-                        dataRequest('edge', 'store', { edgeIds: data.edgeIds.slice(0, 1) })
+                        dataRequest('edge', 'store', { edgeIds: data.edgeIds })
                     );
                 } else if (data && data.edges) {
                     promises.push(Promise.resolve(data.edges));
+                } else {
+                    promises.push(Promise.resolve([]));
                 }
 
                 Promise.all(promises)

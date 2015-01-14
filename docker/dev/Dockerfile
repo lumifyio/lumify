@@ -68,14 +68,15 @@ EXPOSE 9997 9999 50091 50095
 ADD scripts/install-elasticsearch.sh /opt/lumify/scripts/install-elasticsearch.sh
 ENV PATH $PATH:/opt/elasticsearch/bin
 RUN /bin/bash /opt/lumify/scripts/install-elasticsearch.sh
+ADD elasticsearch/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml
 VOLUME ["/opt/elasticsearch-1.4.1/data/"]
 EXPOSE 9200 9300
 
 # Install RabbitMQ
 ADD scripts/install-rabbitmq.sh /opt/lumify/scripts/install-rabbitmq.sh
-ADD rabbitmq/etc/rabbitmq/rabbitmq.config /opt/rabbitmq_server-3.4.1/etc/rabbitmq/rabbitmq.config
 ENV PATH $PATH:/opt/rabbitmq/sbin
 RUN /bin/bash /opt/lumify/scripts/install-rabbitmq.sh
+ADD rabbitmq/etc/rabbitmq/rabbitmq.config /opt/rabbitmq_server-3.4.1/etc/rabbitmq/rabbitmq.config
 VOLUME ["/opt/rabbitmq_server-3.4.1/var"]
 EXPOSE 5672 5673 15672
 
@@ -97,9 +98,12 @@ EXPOSE 8080 8443
 ADD docker-entrypoint.sh /opt/docker-entrypoint.sh
 ADD start.sh /opt/start.sh
 ADD stop.sh /opt/stop.sh
+ADD status.sh /opt/status.sh
 
 RUN \
   chmod +x /opt/start.sh \
+  && chmod +x /opt/stop.sh \
+  && chmod +x /opt/status.sh \
   && chmod +x /opt/docker-entrypoint.sh
 
 # Set working environment

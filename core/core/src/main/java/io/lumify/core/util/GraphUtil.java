@@ -169,6 +169,9 @@ public class GraphUtil {
         if (LumifyProperties.CREATE_DATE.getMetadataValue(propertyMetadata, null) == null) {
             LumifyProperties.CREATE_DATE.setMetadata(propertyMetadata, now, visibilityTranslator.getDefaultVisibility());
         }
+        if (LumifyProperties.CREATED_BY.getMetadataValue(propertyMetadata, null) == null) {
+            LumifyProperties.CREATED_BY.setMetadata(propertyMetadata, user.getUserId(), visibilityTranslator.getDefaultVisibility());
+        }
         LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, now, visibilityTranslator.getDefaultVisibility());
         LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId(), visibilityTranslator.getDefaultVisibility());
@@ -218,12 +221,18 @@ public class GraphUtil {
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
+            User user,
             Authorizations authorizations) {
+        Date now = new Date();
         VisibilityJson visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementBuilder<Edge> edgeBuilder = graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility());
         LumifyProperties.VISIBILITY_JSON.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
         LumifyProperties.CONCEPT_TYPE.setProperty(edgeBuilder, OntologyRepository.TYPE_RELATIONSHIP, lumifyVisibility.getVisibility());
+        LumifyProperties.CREATE_DATE.setProperty(edgeBuilder, now, lumifyVisibility.getVisibility());
+        LumifyProperties.CREATED_BY.setProperty(edgeBuilder, user.getUserId(), lumifyVisibility.getVisibility());
+        LumifyProperties.MODIFIED_DATE.setProperty(edgeBuilder, now, lumifyVisibility.getVisibility());
+        LumifyProperties.MODIFIED_BY.setProperty(edgeBuilder, user.getUserId(), lumifyVisibility.getVisibility());
 
         addJustificationToMutation(edgeBuilder, justificationText, sourceInfo, lumifyVisibility);
 

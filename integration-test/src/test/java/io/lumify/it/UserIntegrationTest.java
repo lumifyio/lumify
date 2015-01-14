@@ -5,8 +5,6 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.ClientApiUser;
 import io.lumify.web.clientapi.model.ClientApiUsers;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UserIntegrationTest extends TestBase {
     private String user1Id;
     private String user2Id;
@@ -63,7 +60,7 @@ public class UserIntegrationTest extends TestBase {
     private void verifyGetByIds() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
-        List<String> ids = new ArrayList<String>();
+        List<String> ids = new ArrayList<>();
         ids.add(user1Id);
         ids.add(user2Id);
         ClientApiUsers users = lumifyApi.getUserApi().getManyByIds(ids);

@@ -13,10 +13,7 @@ import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,16 +43,12 @@ public class EdgeDelete extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String sourceId = getRequiredParameter(request, "sourceId");
-        final String targetId = getRequiredParameter(request, "targetId");
         final String edgeId = getRequiredParameter(request, "edgeId");
         String workspaceId = getActiveWorkspaceId(request);
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
 
-        Vertex sourceVertex = graph.getVertex(sourceId, authorizations);
-        Vertex destVertex = graph.getVertex(targetId, authorizations);
         Edge edge = graph.getEdge(edgeId, authorizations);
 
         SandboxStatus sandboxStatuses = GraphUtil.getSandboxStatus(edge, workspaceId);
@@ -66,7 +59,10 @@ public class EdgeDelete extends BaseRequestHandler {
             return;
         }
 
-        workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
+        workspaceHelper.deleteEdge(edge,
+                edge.getVertex(Direction.OUT, authorizations),
+                edge.getVertex(Direction.IN, authorizations),
+                entityHasImageIri, user, authorizations);
         respondWithSuccessJson(response);
     }
 }

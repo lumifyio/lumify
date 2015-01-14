@@ -1,4 +1,4 @@
-package io.lumify.rdf;
+package io.lumify.tools;
 
 import com.hp.hpl.jena.rdf.model.*;
 import io.lumify.core.config.Configuration;

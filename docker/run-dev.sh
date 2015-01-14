@@ -7,47 +7,56 @@ while [ -h "$SOURCE" ]; do
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-cd ${DIR}
 
-FS_DIR=$(pwd)/fs
+SRC_DIR=${DIR}/..
 
-mkdir -p ${FS_DIR}/opt/lumify
-mkdir -p ${FS_DIR}/opt/lumify/logs
-chmod a+w ${FS_DIR}/opt/lumify/logs
-mkdir -p ${FS_DIR}/opt/lumify/lib
-mkdir -p ${FS_DIR}/opt/lumify/config
-mkdir -p ${FS_DIR}/var/log/hadoop
-mkdir -p ${FS_DIR}/var/log/accumulo
-mkdir -p ${FS_DIR}/var/log/elasticsearch
-mkdir -p ${FS_DIR}/tmp/zookeeper
-mkdir -p ${FS_DIR}/var/lib/hadoop-hdfs
-mkdir -p ${FS_DIR}/var/local/hadoop
-mkdir -p ${FS_DIR}/opt/elasticsearch-1.4.0/data
-mkdir -p ${FS_DIR}/opt/rabbitmq_server-3.4.1/var
-mkdir -p ${FS_DIR}/opt/jetty/webapps
+function dir_list {
+  echo $1/opt/lumify/{config,lib,logs} \
+       $1/var/log/{hadoop,accumulo,elasticsearch} \
+       $1/tmp/zookeeper \
+       $1/var/lib/hadoop-hdfs \
+       $1/var/local/hadoop \
+       $1/opt/{elasticsearch/data,rabbitmq/var,jetty/webapps}
+}
 
-if [ ! -e ${FS_DIR}/opt/lumify/config/lumify.properties ]; then
-  cp ../config/lumify.properties ${FS_DIR}/opt/lumify/config/lumify.properties
-fi
-if [ ! -e ${FS_DIR}/opt/lumify/config/log4j.xml ]; then
-  cp ../config/log4j.xml ${FS_DIR}/opt/lumify/config/log4j.xml
-fi
+case $(uname) in
+  Linux)
+    SUDO=sudo
+    PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+    mkdir -p $(dir_list ${PERSISTENT_DIR})
+    cp ${DIR}/../config/lumify.properties ${PERSISTENT_DIR}/opt/lumify/config/lumify.properties
+    cp ${DIR}/../config/log4j.xml ${PERSISTENT_DIR}/opt/lumify/config/log4j.xml
+    ;;
+  Darwin)
+    SUDO=
+    dev=$(boot2docker ssh blkid -L boot2docker-data)
+    mnt=$(echo "$(boot2docker ssh mount)" | awk -v dev=${dev} '$1 == dev && !seen {print $3; seen = 1}')
+    uid=$(boot2docker ssh id -u)
+    gid=$(boot2docker ssh id -g)
+    PERSISTENT_DIR=${mnt}/lumify-dev-persistent
+    boot2docker ssh sudo mkdir -p ${PERSISTENT_DIR}
+    boot2docker ssh sudo chown -R ${uid}:${gid} ${PERSISTENT_DIR}
+    boot2docker ssh mkdir -p $(dir_list ${PERSISTENT_DIR})
+    cat ${DIR}/../config/lumify.properties | boot2docker ssh "cat > ${PERSISTENT_DIR}/opt/lumify/config/lumify.properties"
+    cat ${DIR}/../config/log4j.xml | boot2docker ssh "cat > ${PERSISTENT_DIR}/opt/lumify/config/log4j.xml"
+    ;;
+  *)
+    echo "unexpected uname: $(uname)"
+    exit -1
+    ;;
+esac
 
-sudo=
-if [[ `uname` == 'Linux' ]]; then
-   sudo=sudo
-fi
-
-$sudo docker run \
-  -v ${FS_DIR}/opt/lumify:/opt/lumify \
-  -v ${FS_DIR}/../../:/opt/lumify-source \
-  -v ${FS_DIR}/var/log:/var/log \
-  -v ${FS_DIR}/tmp:/tmp \
-  -v ${FS_DIR}/var/lib/hadoop-hdfs:/var/lib/hadoop-hdfs \
-  -v ${FS_DIR}/var/local/hadoop:/var/local/hadoop \
-  -v ${FS_DIR}/opt/elasticsearch-1.4.0/data:/opt/elasticsearch-1.4.0/data \
-  -v ${FS_DIR}/opt/rabbitmq_server-3.4.1/var:/opt/rabbitmq_server-3.4.1/var \
-  -v ${FS_DIR}/opt/jetty/webapps:/opt/jetty/webapps \
+(cd ${DIR} &&
+  ${SUDO} docker run \
+  -v ${SRC_DIR}:/opt/lumify-source \
+  -v ${PERSISTENT_DIR}/opt/lumify:/opt/lumify \
+  -v ${PERSISTENT_DIR}/var/log:/var/log \
+  -v ${PERSISTENT_DIR}/tmp:/tmp \
+  -v ${PERSISTENT_DIR}/var/lib/hadoop-hdfs:/var/lib/hadoop-hdfs \
+  -v ${PERSISTENT_DIR}/var/local/hadoop:/var/local/hadoop \
+  -v ${PERSISTENT_DIR}/opt/elasticsearch/data:/opt/elasticsearch/data \
+  -v ${PERSISTENT_DIR}/opt/rabbitmq/var:/opt/rabbitmq/var \
+  -v ${PERSISTENT_DIR}/opt/jetty/webapps:/opt/jetty/webapps \
   -p 2181:2181 `# ZooKeeper` \
   -p 5672:5672 `# RabbitMQ` \
   -p 5673:5673 `# RabbitMQ` \
@@ -75,4 +84,5 @@ $sudo docker run \
   -t \
   -h lumify-dev \
   lumifyio/dev \
-  $1
+  "$@"
+)

@@ -24,7 +24,7 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
     public static void main(String[] args) {
         try {
             ClientOpts opts = new ClientOpts();
-            opts.setUri("https://localhost:8889");
+            opts.setUri("https://lumify-dev:8889");
             Map<String, String> properties = new HashMap<String, String>();
             properties.put("fileMap", System.getProperty("fileMap"));
             opts.setProperties(properties);
@@ -64,6 +64,9 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
 
                 fileContents = fileContents.replaceAll("mp.field\\(\"vertexIds\\[\\]\", vertexIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String vertexId:vertexIds) { mp.field(\"vertexIds[]\", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
                 fileContents = fileContents.replaceAll("formParams\\.put\\(\"vertexIds\\[\\]\", vertexIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
+
+                fileContents = fileContents.replaceAll("mp.field\\(\"edgeIds\\[\\]\", edgeIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String edgeId:edgeIds) { mp.field(\"edgeIds[]\", edgeId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
+                fileContents = fileContents.replaceAll("formParams\\.put\\(\"edgeIds\\[\\]\", edgeIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
 
                 fileContents = fileContents.replaceAll("mp.field\\(\"userIds\\[\\]\", userIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String userId:userIds) { mp.field(\"userIds[]\", userId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
                 fileContents = fileContents.replaceAll("formParams\\.put\\(\"userIds\\[\\]\", userIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");

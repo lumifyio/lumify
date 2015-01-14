@@ -1,7 +1,7 @@
 {
     "apiVersion": "0.4.0",
     "swaggerVersion": "1.2",
-    "basePath": "http://localhost:8889",
+    "basePath": "http://lumify-dev:8889",
     "resourcePath": "/edge",
     "apis": [
         {
@@ -149,6 +149,49 @@
                             "required": false,
                             "type": "string",
                             "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/edge",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes an edge",
+                    "type": "void",
+                    "nickname": "deleteEdge",
+                    "parameters": [
+                        {
+                            "name": "edgeId",
+                            "description": "The edge id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/edge/exists",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Finds the status of multiple edges",
+                    "type": "ClientApiEdgesExistsResponse",
+                    "nickname": "doExist",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "edgeIds[]",
+                            "description": "edge ids",
+                            "required": true,
+                            "type": "List[string]",
+                            "paramType": "form"
                         }
                     ]
                 }
