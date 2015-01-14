@@ -2,6 +2,7 @@ package io.lumify.core.config;
 
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.ProcessUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +14,8 @@ public class FileConfigurationLoader extends ConfigurationLoader {
      * !!! DO NOT DEFINE A LOGGER here. This class get loaded very early in the process and we don't want to the logger to be initialized yet **
      */
     public static final String ENV_CONFIGURATION_LOCATION = "LUMIFY_CONFIGURATION_LOCATION";
-    public static final String DEFAULT_CONFIGURATION_LOCATION = "/opt/lumify/config/";
+    public static final String DEFAULT_UNIX_CONFIGURATION_LOCATION = "/opt/lumify/config/";
+    public static final String DEFAULT_WINDOWS_CONFIGURATION_LOCATION = "c:/opt/lumify/config/";
 
     public FileConfigurationLoader(Map initParameters) {
         super(initParameters);
@@ -27,7 +29,11 @@ public class FileConfigurationLoader extends ConfigurationLoader {
     private File getConfigurationDirectory() {
         String configDirectory = System.getenv(ENV_CONFIGURATION_LOCATION);
         if (configDirectory == null) {
-            configDirectory = DEFAULT_CONFIGURATION_LOCATION;
+            if (ProcessUtil.isWindows()) {
+                configDirectory = DEFAULT_WINDOWS_CONFIGURATION_LOCATION;
+            } else {
+                configDirectory = DEFAULT_UNIX_CONFIGURATION_LOCATION;
+            }
         }
 
         if (configDirectory.startsWith("file://")) {
