@@ -24,8 +24,7 @@ case $(uname) in
     SUDO=sudo
     PERSISTENT_DIR=${DIR}/lumify-dev-persistent
     mkdir -p $(dir_list ${PERSISTENT_DIR})
-    cp ${DIR}/../config/lumify.properties ${PERSISTENT_DIR}/opt/lumify/config/lumify.properties
-    cp ${DIR}/../config/log4j.xml ${PERSISTENT_DIR}/opt/lumify/config/log4j.xml
+    LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
     ;;
   Darwin)
     SUDO=
@@ -37,8 +36,10 @@ case $(uname) in
     boot2docker ssh sudo mkdir -p ${PERSISTENT_DIR}
     boot2docker ssh sudo chown -R ${uid}:${gid} ${PERSISTENT_DIR}
     boot2docker ssh mkdir -p $(dir_list ${PERSISTENT_DIR})
-    cat ${DIR}/../config/lumify.properties | boot2docker ssh "cat > ${PERSISTENT_DIR}/opt/lumify/config/lumify.properties"
-    cat ${DIR}/../config/log4j.xml | boot2docker ssh "cat > ${PERSISTENT_DIR}/opt/lumify/config/log4j.xml"
+    LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+    mkdir -p $(dir_list ${LOCAL_PERSISTENT_DIR})
+    touch ${LOCAL_PERSISTENT_DIR}/NOT_ALL_OF_YOUR_FILES_ARE_HERE
+    touch ${LOCAL_PERSISTENT_DIR}/OTHER_FILES_ARE_PERSISTED_INSIDE_THE_BOOT2DOCKER_VM
     ;;
   *)
     echo "unexpected uname: $(uname)"
@@ -46,17 +47,20 @@ case $(uname) in
     ;;
 esac
 
+cp ${DIR}/../config/lumify.properties ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/lumify.properties
+cp ${DIR}/../config/log4j.xml ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/log4j.xml
+
 (cd ${DIR} &&
   ${SUDO} docker run \
   -v ${SRC_DIR}:/opt/lumify-source \
-  -v ${PERSISTENT_DIR}/opt/lumify:/opt/lumify \
   -v ${PERSISTENT_DIR}/var/log:/var/log \
   -v ${PERSISTENT_DIR}/tmp:/tmp \
   -v ${PERSISTENT_DIR}/var/lib/hadoop-hdfs:/var/lib/hadoop-hdfs \
   -v ${PERSISTENT_DIR}/var/local/hadoop:/var/local/hadoop \
   -v ${PERSISTENT_DIR}/opt/elasticsearch/data:/opt/elasticsearch/data \
   -v ${PERSISTENT_DIR}/opt/rabbitmq/var:/opt/rabbitmq/var \
-  -v ${PERSISTENT_DIR}/opt/jetty/webapps:/opt/jetty/webapps \
+  -v ${LOCAL_PERSISTENT_DIR}/opt/lumify:/opt/lumify \
+  -v ${LOCAL_PERSISTENT_DIR}/opt/jetty/webapps:/opt/jetty/webapps \
   -p 2181:2181 `# ZooKeeper` \
   -p 5672:5672 `# RabbitMQ` \
   -p 5673:5673 `# RabbitMQ` \
