@@ -51,10 +51,16 @@ define([
                 { offset: 0 }
             )
                 .then(function(result) {
-                    var unknownTotal = false;
+                    var unknownTotal = false,
+                        verticesLength = result.vertices.length;
+
                     if (!('totalHits' in result)) {
                         unknownTotal = true;
-                        result.totalHits = result.vertices.length;
+                        result.totalHits = verticesLength;
+                    } else if (result.totalHits > verticesLength && verticesLength === 0) {
+                        // totalHits includes deleted items so show no results
+                        // if no vertices returned and hits > 0
+                        result.totalHits = 0;
                     }
 
                     self.trigger('searchRequestCompleted', {
