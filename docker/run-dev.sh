@@ -1,22 +1,22 @@
-#!/bin/bash
+#!/bin/sh
 
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+DIR=$(cd $(dirname "$0") && pwd)
 
 SRC_DIR=${DIR}/..
 
-function dir_list {
-  echo $1/opt/lumify/{config,lib,logs} \
-       $1/var/log/{hadoop,accumulo,elasticsearch} \
+dir_list() {
+  echo $1/opt/lumify/config \
+       $1/opt/lumify/lib \
+       $1/opt/lumify/logs \
+       $1/var/log/hadoop \
+       $1/var/log/accumulo \
+       $1/var/log/elasticsearch \
        $1/tmp/zookeeper \
        $1/var/lib/hadoop-hdfs \
        $1/var/local/hadoop \
-       $1/opt/{elasticsearch/data,rabbitmq/var,jetty/webapps}
+       $1/opt/elasticsearch/data \
+       $1/opt/rabbitmq/var \
+       $1/opt/jetty/webapps
 }
 
 case $(uname) in
