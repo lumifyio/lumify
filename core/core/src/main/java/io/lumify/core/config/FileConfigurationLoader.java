@@ -29,11 +29,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
     private File getConfigurationDirectory() {
         String configDirectory = System.getenv(ENV_CONFIGURATION_LOCATION);
         if (configDirectory == null) {
-            if (ProcessUtil.isWindows()) {
-                configDirectory = DEFAULT_WINDOWS_CONFIGURATION_LOCATION;
-            } else {
-                configDirectory = DEFAULT_UNIX_CONFIGURATION_LOCATION;
-            }
+            configDirectory = ProcessUtil.isWindows() ? DEFAULT_WINDOWS_CONFIGURATION_LOCATION : DEFAULT_UNIX_CONFIGURATION_LOCATION;
         }
 
         if (configDirectory.startsWith("file://")) {
