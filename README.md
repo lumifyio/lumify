@@ -31,7 +31,7 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
    ```mvn package -pl ./web/plugins/auth-username-only -am -DskipTests```
 1. Copy the auth plugin for use in the docker image:
 
-       cp \
+        cp \
          ./web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar \
          docker/fs/opt/lumify/lib/
  
