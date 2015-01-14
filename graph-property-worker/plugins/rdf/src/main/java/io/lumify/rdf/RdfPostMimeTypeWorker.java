@@ -1,4 +1,4 @@
-package io.lumify.tools;
+package io.lumify.rdf;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.PostMimeTypeWorker;
