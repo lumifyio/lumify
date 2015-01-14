@@ -157,7 +157,7 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
 
     public String[] getProfileFilesList() throws IOException {
         String filesListContents = IOUtils.toString(TranslateGraphPropertyWorker.class.getResourceAsStream("files.list"), "UTF-8");
-        return filesListContents.split("\n");
+        return filesListContents.split(System.lineSeparator());
     }
 
     @Inject
