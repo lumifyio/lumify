@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-rdf-import</artifactId>
+    <artifactId>lumify-tools-rdf-import</artifactId>
     <packaging>jar</packaging>
 
     <name>Lumify: Tools: RDF Import</name>

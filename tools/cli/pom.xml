@@ -22,6 +22,11 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
+            <artifactId>lumify-tools-rdf-import</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-tools-user-admin</artifactId>
             <version>${project.version}</version>
         </dependency>
