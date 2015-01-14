@@ -149,8 +149,8 @@ define([
                 this.dataRequest('edge', 'store', { edgeIds: _.unique(referencedEdges) })
             ])
                 .then(function(result) {
-                    var vertices = result.shift(),
-                        edges = result.shift(),
+                    var vertices = _.compact(result.shift()),
+                        edges = _.compact(result.shift()),
                         verticesById = _.indexBy(vertices, 'id'),
                         edgesById = _.indexBy(edges, 'id');
 
@@ -180,13 +180,13 @@ define([
                             outputItem.vertex = verticesById[elementId];
                             if (outputItem.vertex) {
                                 outputItem.title = F.vertex.title(outputItem.vertex);
-                            } else if (diffs[0].title) {
+                            } else {
                                 outputItem.vertex = {
                                     id: elementId,
                                     properties: [],
                                     'http://lumify.io#visibilityJson': diffs[0]['http://lumify.io#visibilityJson']
                                 };
-                                outputItem.title = diffs[0].title;
+                                outputItem.title = diffs[0].title || i18n('vertex.property.title.not_available');
                             }
                         } else {
                             outputItem.edgeId = elementId;
