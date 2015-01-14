@@ -27,6 +27,8 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 1. Inside the docker image run Jetty: ```/opt/jetty/bin/jetty.sh start```
 1. Open a browser and go to ```http://lumify-dev:8080/```
 
+See [docker/README.md](docker/README.md) for more information on the docker dev image.
+
 ## Developing / Contributing
 
 If you're a system administrator or developer looking to install your own instance of Lumify or do custom development,
