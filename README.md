@@ -49,7 +49,8 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 1. Copy the war file:
 
-        cp web/war/target/lumify-web-war*.war docker/lumify-dev-persistent/opt/jetty/webapps/root.war
+        cp web/war/target/lumify-web-war*.war \
+           docker/lumify-dev-persistent/opt/jetty/webapps/root.war
 
 1. Package an auth plugin:
 
@@ -57,9 +58,8 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 1. Copy the auth plugin for use in the docker image:
 
-        cp \
-         ./web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar \
-         docker/lumify-dev-persistent/opt/lumify/lib
+        cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-*[0-9T].jar \
+           docker/lumify-dev-persistent/opt/lumify/lib
  
 1. Inside the docker image run Jetty:
 
