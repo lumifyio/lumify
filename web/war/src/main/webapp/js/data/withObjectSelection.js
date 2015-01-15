@@ -194,7 +194,7 @@ define([
                         vertex = results.shift(),
                         title = F.vertex.title(vertex);
 
-                    self.trigger('searchByEntity', { query: title });
+                    self.trigger('searchForPhrase', { query: title });
                 })
             }
         };

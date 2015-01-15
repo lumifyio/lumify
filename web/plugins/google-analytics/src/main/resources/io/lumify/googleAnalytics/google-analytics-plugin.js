@@ -52,8 +52,8 @@ require([
                     .on('showVertexContextMenu', function(e, data) {
                         send('feature', 'showVertexContextMenu');
                     })
-                    .on('searchByEntity', function(e, data) {
-                        send('feature', 'searchByEntity');
+                    .on('searchForPhrase', function(e, data) {
+                        send('feature', 'searchForPhrase');
                     })
                     .on('searchByRelatedEntity', function(e, data) {
                         send('feature', 'searchByRelatedEntity');
