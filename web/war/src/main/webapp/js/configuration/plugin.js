@@ -15,7 +15,7 @@ define([
 
     function defineLumifyPlugin(Component, options) {
 
-        var FlightComponent = defineComponent(Component),
+        var FlightComponent = defineComponent.apply(null, [Component].concat(options && options.mixins || [])),
             attachTo = FlightComponent.attachTo,
             cls = NODE_CLS_FOR_LESS_CONTAINMENT + componentInc;
 
@@ -29,7 +29,7 @@ define([
             });
 
             return attachTo.apply(this, arguments);
-        }
+        };
 
         componentInc++;
 
