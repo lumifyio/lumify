@@ -307,8 +307,13 @@ define([
                         self.manualOpen();
                     });
                 } else if (propertyDetails) {
+                    var isCompoundField = propertyDetails.dependentPropertyIris &&
+                        propertyDetails.dependentPropertyIris.length;
+
                     require([
                         (
+                            isCompoundField ?
+                            'fields/compound/compound' :
                             propertyDetails.possibleValues ?
                                 'fields/restrictValues' :
                                 'fields/' + propertyDetails.dataType
@@ -317,22 +322,30 @@ define([
                         'configuration/plugins/visibility/visibilityEditor'
                     ], function(PropertyField, Justification, Visibility) {
 
-                        PropertyField.attachTo(config, {
-                            property: propertyDetails,
-                            vertexProperty: vertexProperty,
-                            value: previousValue,
-                            predicates: false,
-                            tooltip: {
-                                html: true,
-                                title:
-                                    '<strong>' +
-                                    i18n('justification.field.tooltip.title') +
-                                    '</strong><br>' +
-                                    i18n('justification.field.tooltip.subtitle'),
-                                placement: 'left',
-                                trigger: 'focus'
-                            }
-                        });
+                        if (isCompoundField) {
+                            PropertyField.attachTo(config, {
+                                property: propertyDetails,
+                                vertex: self.attr.data,
+                                predicates: false
+                            });
+                        } else {
+                            PropertyField.attachTo(config, {
+                                property: propertyDetails,
+                                vertexProperty: vertexProperty,
+                                value: previousValue,
+                                predicates: false,
+                                tooltip: {
+                                    html: true,
+                                    title:
+                                        '<strong>' +
+                                        i18n('justification.field.tooltip.title') +
+                                        '</strong><br>' +
+                                        i18n('justification.field.tooltip.subtitle'),
+                                    placement: 'left',
+                                    trigger: 'focus'
+                                }
+                            });
+                        }
 
                         Justification.attachTo(justification, vertexProperty);
 
