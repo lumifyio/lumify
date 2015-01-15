@@ -19,7 +19,7 @@
       <%= item.subtitle ? 'has-subtitle' : '' %>
     "
     tabindex="-1" 
-    href="#"><%= processLabel(item) %><%- hasSubmenu ? '&hellip;' : '' %>
+    href="#"><%- processLabel(item) %><%- hasSubmenu ? '&hellip;' : '' %>
       <% if (item.shortcut) { %><span class="shortcut"><%= item.shortcut %></span><% } %>
       <% if (item.subtitle) { %><span class="subtitle"><%= item.subtitle %></span><% } %>
     </a>
@@ -40,7 +40,7 @@
                 <%= item.subtitle ? 'has-subtitle' : '' %>
               "
               tabindex="-1" 
-              href="#"><%= processLabel(item) %>
+              href="#"><%- processLabel(item) %>
                 <% if (item.shortcut) { %><span class="shortcut"><%= item.shortcut %></span><% } %>
                 <% if (item.subtitle) { %><span class="subtitle"><%= item.subtitle %></span><% } %>
               </a>
