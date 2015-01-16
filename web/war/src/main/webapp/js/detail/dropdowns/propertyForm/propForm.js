@@ -318,7 +318,8 @@ define([
                             PropertyField.attachTo(config, {
                                 property: propertyDetails,
                                 vertex: self.attr.data,
-                                predicates: false
+                                predicates: false,
+                                focus: true
                             });
                         } else {
                             PropertyField.attachTo(config, {

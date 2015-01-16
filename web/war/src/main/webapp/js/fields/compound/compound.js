@@ -29,11 +29,9 @@ define([
             var self = this,
                 fields = $();
 
-            this.attr.property.dependentPropertyIris.forEach(function(propertyIri) {
+            this.attr.property.dependentPropertyIris.forEach(function(propertyIri, i) {
                 var property = self.ontologyProperties.byTitle[propertyIri],
-                    fieldContainer = $('<div>')
-                        .text(property.displayName)
-                        .addClass('compound-field');
+                    fieldContainer = $('<div>').addClass('compound-field');
 
                 require([
                     property.possibleValues ?
@@ -44,13 +42,14 @@ define([
                         property: property,
                         vertexProperty: null, //vertexProperty,
                         value: '', //previousValue,
-                        predicates: self.attr.predicates
+                        predicates: self.attr.predicates,
+                        focus: i === 0
                     });
                 })
                 fields = fields.add(fieldContainer);
             })
 
-            this.$node.append(fields);
+            this.$node.empty().append(fields);
         };
     }
 });

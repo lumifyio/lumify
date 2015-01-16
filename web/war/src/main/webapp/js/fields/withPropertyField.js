@@ -39,7 +39,7 @@ define(['util/withTeardown'], function(withTeardown) {
                     .data('tooltip').tip().addClass('field-tooltip');
             }
 
-            if (this.attr.preventFocus !== true) {
+            if (this.attr.focus !== false) {
                 inputs.eq(0).focus();
             }
         });
