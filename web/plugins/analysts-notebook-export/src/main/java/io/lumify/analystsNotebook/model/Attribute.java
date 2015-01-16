@@ -46,7 +46,7 @@ public class Attribute {
         List<Attribute> collection = new ArrayList<Attribute>();
         for (Property property : vertex.getProperties()) {
             OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
-            if (ontologyProperty.getUserVisible()) {
+            if (ontologyProperty != null && ontologyProperty.getUserVisible()) {
                 String name = ontologyProperty.getTitle();
                 Map<String, String> possibleValues = ontologyProperty.getPossibleValues();
                 String value = property.getValue().toString();
