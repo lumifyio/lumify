@@ -10,7 +10,9 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.tikaMimeType.LumifyMimeTypeDetector;
 import org.apache.commons.io.IOUtils;
+import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MimeTypes;
@@ -56,6 +58,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private static final String SRC_TYPE_KEYS_PROPERTY = "tika.extraction.srctypekeys";
     private static final String RETRIEVAL_TIMESTAMP_KEYS_PROPERTY = "tika.extraction.retrievaltimestampkeys";
     private static final String CUSTOM_FLICKR_METADATA_KEYS_PROPERTY = "tika.extraction.customflickrmetadatakeys";
+    private static final Detector mimeTypeDetector = new LumifyMimeTypeDetector();
 
     private List<String> dateKeys;
     private List<String> subjectKeys;
@@ -186,14 +189,32 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         return Normalizer.normalize(text, Normalizer.Form.NFC);
     }
 
-    private String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
+    public static void main(String[] args) throws IOException, TikaException, SAXException {
+        String inFile = args[0];
+        String mimeType = args[1];
+
+        Charset charset = Charset.forName("UTF-8");
+        Metadata metadata = new Metadata();
+        metadata.set(Metadata.CONTENT_TYPE, mimeType);
+
+        byte[] data = IOUtils.toByteArray(new FileInputStream(new File(inFile)));
+        String text = extractTextWithTika(data, metadata);
+        System.out.println(text);
+    }
+
+    private static String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
         AutoDetectParser parser = new AutoDetectParser(new MimeTypes());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
         ContentHandler handler = new BodyContentHandler(writer);
         ParseContext context = new ParseContext();
         context.set(PDFParserConfig.class, new LumifyParserConfig());
+        parser.setDetector(mimeTypeDetector);
         parser.parse(new ByteArrayInputStream(textBytes), handler, metadata, context);
+        LOGGER.debug("metadata");
+        for (String metadataName : metadata.names()) {
+            LOGGER.debug("  %s: %s", metadataName, metadata.get(metadataName));
+        }
         return IOUtils.toString(baos.toByteArray(), "UTF-8");
     }
 
