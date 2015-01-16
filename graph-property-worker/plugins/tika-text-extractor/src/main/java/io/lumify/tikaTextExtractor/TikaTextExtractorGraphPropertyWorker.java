@@ -189,19 +189,6 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         return Normalizer.normalize(text, Normalizer.Form.NFC);
     }
 
-    public static void main(String[] args) throws IOException, TikaException, SAXException {
-        String inFile = args[0];
-        String mimeType = args[1];
-
-        Charset charset = Charset.forName("UTF-8");
-        Metadata metadata = new Metadata();
-        metadata.set(Metadata.CONTENT_TYPE, mimeType);
-
-        byte[] data = IOUtils.toByteArray(new FileInputStream(new File(inFile)));
-        String text = extractTextWithTika(data, metadata);
-        System.out.println(text);
-    }
-
     private static String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
         AutoDetectParser parser = new AutoDetectParser(new MimeTypes());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
