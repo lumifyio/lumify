@@ -10,17 +10,18 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.tikaMimeType.LumifyMimeTypeDetector;
 import org.apache.commons.io.IOUtils;
-import org.apache.tika.detect.Detector;
+import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
+import org.apache.tika.io.TemporaryResources;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
-import org.apache.tika.mime.MimeTypes;
-import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.CompositeParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.LumifyParserConfig;
 import org.apache.tika.parser.pdf.PDFParserConfig;
 import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.SecureContentHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -58,7 +59,6 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private static final String SRC_TYPE_KEYS_PROPERTY = "tika.extraction.srctypekeys";
     private static final String RETRIEVAL_TIMESTAMP_KEYS_PROPERTY = "tika.extraction.retrievaltimestampkeys";
     private static final String CUSTOM_FLICKR_METADATA_KEYS_PROPERTY = "tika.extraction.customflickrmetadatakeys";
-    private static final Detector mimeTypeDetector = new LumifyMimeTypeDetector();
 
     private List<String> dateKeys;
     private List<String> subjectKeys;
@@ -175,6 +175,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         byte[] textBytes = out.toByteArray();
         String text;
 
+        metadata.set(Metadata.CONTENT_TYPE, mimeType);
         String bodyContent = extractTextWithTika(textBytes, metadata);
 
         if (isHtml(mimeType)) {
@@ -190,14 +191,32 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private static String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
-        AutoDetectParser parser = new AutoDetectParser(new MimeTypes());
+        TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
+        CompositeParser compositeParser = new CompositeParser(tikaConfig.getMediaTypeRegistry(), tikaConfig.getParser());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
         ContentHandler handler = new BodyContentHandler(writer);
         ParseContext context = new ParseContext();
         context.set(PDFParserConfig.class, new LumifyParserConfig());
-        parser.setDetector(mimeTypeDetector);
-        parser.parse(new ByteArrayInputStream(textBytes), handler, metadata, context);
+        ByteArrayInputStream stream = new ByteArrayInputStream(textBytes);
+
+        TemporaryResources tmp = new TemporaryResources();
+        try {
+            TikaInputStream tis = TikaInputStream.get(stream, tmp);
+
+            // TIKA-216: Zip bomb prevention
+            SecureContentHandler sch = new SecureContentHandler(handler, tis);
+            try {
+                compositeParser.parse(tis, sch, metadata, context);
+            } catch (SAXException e) {
+                // Convert zip bomb exceptions to TikaExceptions
+                sch.throwIfCauseOf(e);
+                throw e;
+            }
+        } finally {
+            tmp.dispose();
+        }
+
         LOGGER.debug("metadata");
         for (String metadataName : metadata.names()) {
             LOGGER.debug("  %s: %s", metadataName, metadata.get(metadataName));
