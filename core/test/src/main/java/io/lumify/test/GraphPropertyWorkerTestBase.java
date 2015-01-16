@@ -22,10 +22,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
-import org.securegraph.Authorizations;
-import org.securegraph.Element;
-import org.securegraph.Graph;
-import org.securegraph.Property;
+import org.securegraph.*;
 import org.securegraph.id.IdGenerator;
 import org.securegraph.id.QueueIdGenerator;
 import org.securegraph.inmemory.InMemoryAuthorizations;
@@ -113,7 +110,7 @@ public abstract class GraphPropertyWorkerTestBase {
         if (graph == null) {
             Map graphConfiguration = getConfigurationMap();
             InMemoryGraphConfiguration inMemoryGraphConfiguration = new InMemoryGraphConfiguration(graphConfiguration);
-            graph = InMemoryGraph.create(inMemoryGraphConfiguration, getGraphIdGenerator(), getGraphSearchIndex());
+            graph = InMemoryGraph.create(inMemoryGraphConfiguration, getGraphIdGenerator(), getGraphSearchIndex(inMemoryGraphConfiguration));
         }
         return graph;
     }
@@ -125,9 +122,9 @@ public abstract class GraphPropertyWorkerTestBase {
         return graphIdGenerator;
     }
 
-    protected SearchIndex getGraphSearchIndex() {
+    protected SearchIndex getGraphSearchIndex(GraphConfiguration inMemoryGraphConfiguration) {
         if (graphSearchIndex == null) {
-            graphSearchIndex = new DefaultSearchIndex(getConfigurationMap());
+            graphSearchIndex = new DefaultSearchIndex(inMemoryGraphConfiguration);
         }
         return graphSearchIndex;
     }

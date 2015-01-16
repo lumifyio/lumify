@@ -51,7 +51,7 @@ public class SecureGraphUserRepositoryTest {
         secureGraphUserRepository = new SecureGraphUserRepository(
                 lumifyConfiguration,
                 authorizationRepository,
-                InMemoryGraph.create(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())),
+                InMemoryGraph.create(config, new UUIDIdGenerator(config), new DefaultSearchIndex(config)),
                 ontologyRepository,
                 userListenerUtil);
     }
