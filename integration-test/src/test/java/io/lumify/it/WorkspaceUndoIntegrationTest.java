@@ -46,7 +46,7 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
         ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(susanFengVertex.getId(), null, null, null);
         assertEquals(1, edges.getRelationships().size());
         List<ClientApiProperty> edgeProperties = edges.getRelationships().get(0).getRelationship().getProperties();
-        assertEquals(3, edgeProperties.size());
+        assertEquals(7, edgeProperties.size());
         boolean foundFirstNameEdgeProperty = false;
         for (ClientApiProperty edgeProperty : edgeProperties) {
             if (edgeProperty.getKey().equals("key1") && edgeProperty.getName().equals("http://lumify.io/test#firstName")) {
