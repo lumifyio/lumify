@@ -67,12 +67,16 @@ define([
                                     .filter(function(p) {
                                         var visible = p.userVisible !== false;
 
-                                        if (self.attr.onlySearchable) {
-                                            return visible && p.searchable !== false;
-                                        }
-
                                         if (~HIDE_PROPERTIES.indexOf(p.title)) {
                                             return false;
+                                        }
+
+                                        if (~self.dependentPropertyIris.indexOf(p.title)) {
+                                            return false;
+                                        }
+
+                                        if (self.attr.onlySearchable) {
+                                            return visible && p.searchable !== false;
                                         }
 
                                         return visible;
@@ -160,6 +164,11 @@ define([
 
             this.groupedByDisplay = _.groupBy(properties, displayName);
             this.propertiesForSource = properties;
+            this.dependentPropertyIris = _.chain(properties)
+                .pluck('dependentPropertyIris')
+                .compact()
+                .flatten()
+                .value();
         }
     }
 
