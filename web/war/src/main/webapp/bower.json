@@ -2,7 +2,7 @@
   "name": "lumify",
   "version": "0.0.1",
   "dependencies": {
-    "PathFinding.js": "0.4.10",
+    "PathFinding.js": "git://github.com/qiao/PathFinding.js.git#0.4.10",
     "atmosphere": "~2.2.5",
     "bootstrap": "git://github.com/twbs/bootstrap.git#2.3.2",
     "bootstrap-datepicker": "~1.2.0",
