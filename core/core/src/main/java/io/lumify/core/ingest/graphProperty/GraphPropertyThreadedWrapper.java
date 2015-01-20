@@ -1,13 +1,14 @@
 package io.lumify.core.ingest.graphProperty;
 
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Timer;
+import com.google.inject.Inject;
 import io.lumify.core.metrics.JmxMetricsManager;
 import io.lumify.core.metrics.PausableTimerContext;
 import io.lumify.core.metrics.PausableTimerContextAware;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Timer;
-import com.google.inject.Inject;
+import org.securegraph.Element;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,8 +49,11 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                     work = workItems.remove();
                 }
                 InputStream in = work.getIn();
+                String workerClassName = this.worker.getClass().getName();
+                Element element = work.getData() == null ? null : work.getData().getElement();
+                String elementId = element == null ? null : element.getId();
                 try {
-                    LOGGER.debug("BEGIN doWork (%s)", getClass().getName());
+                    LOGGER.debug("BEGIN doWork (%s): %s", workerClassName, elementId);
                     PausableTimerContext timerContext = new PausableTimerContext(processingTimeTimer);
                     if (in instanceof PausableTimerContextAware) {
                         ((PausableTimerContextAware) in).setPausableTimerContext(timerContext);
@@ -58,7 +62,7 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                     try {
                         this.worker.execute(in, work.getData());
                     } finally {
-                        LOGGER.debug("END doWork (%s)", getClass().getName());
+                        LOGGER.debug("END doWork (%s): %s", workerClassName, elementId);
                         processingCounter.dec();
                         totalProcessedCounter.inc();
                         timerContext.stop();
@@ -68,7 +72,7 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                         workResults.notifyAll();
                     }
                 } catch (Throwable ex) {
-                    LOGGER.error("failed to complete work", ex);
+                    LOGGER.error("failed to complete work (%s): %s", workerClassName, elementId, ex);
                     totalErrorCounter.inc();
                     synchronized (workResults) {
                         workResults.add(new WorkResult(ex));

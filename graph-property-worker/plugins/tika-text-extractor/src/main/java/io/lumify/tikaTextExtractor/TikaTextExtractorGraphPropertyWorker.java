@@ -193,8 +193,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private static String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
         TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
         CompositeParser compositeParser = new CompositeParser(tikaConfig.getMediaTypeRegistry(), tikaConfig.getParser());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         ContentHandler handler = new BodyContentHandler(writer);
         ParseContext context = new ParseContext();
         context.set(PDFParserConfig.class, new LumifyParserConfig());
@@ -217,11 +217,14 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             tmp.dispose();
         }
 
-        LOGGER.debug("metadata");
-        for (String metadataName : metadata.names()) {
-            LOGGER.debug("  %s: %s", metadataName, metadata.get(metadataName));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("extracted %d bytes", output.size());
+            LOGGER.debug("metadata");
+            for (String metadataName : metadata.names()) {
+                LOGGER.debug("  %s: %s", metadataName, metadata.get(metadataName));
+            }
         }
-        return IOUtils.toString(baos.toByteArray(), "UTF-8");
+        return IOUtils.toString(output.toByteArray(), "UTF-8");
     }
 
     private String extractTextFromHtml(String text) throws BoilerpipeProcessingException {
