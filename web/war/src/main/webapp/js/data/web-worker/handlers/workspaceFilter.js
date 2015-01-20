@@ -115,9 +115,13 @@ define(['require', 'underscore'], function(require, _) {
         return _.every(filters, function(filter) {
             var predicate = filter.predicate,
                 property = propertiesByTitle[filter.propertyId],
+                isTextProperty = property.title === 'http://lumify.io#text',
                 vertexProperties = _.where(vertex.properties, { name: filter.propertyId });
 
-            if (vertexProperties.length === 0) {
+            if (isTextProperty) {
+                return filter.values[0] === 'true' ?
+                    vertexProperties.length : vertexProperties.length === 0;
+            } else if (vertexProperties.length === 0) {
                 return false;
             }
 
