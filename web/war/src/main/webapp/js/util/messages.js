@@ -3,13 +3,20 @@ define([
     'util/requirejs/promise!./service/messagesPromise'
 ], function(messages) {
 
-    return function(key/**, args **/) {
+    return function(ignoreWarning, key/**, args **/) {
+        var args = Array.prototype.slice.call(arguments);
+        if (ignoreWarning === true) {
+            args.shift();
+        } else {
+            ignoreWarning = false;
+        }
+
+        key = args[0];
         if (key in messages) {
-            if (arguments.length === 1) {
+            if (args.length === 1) {
                 return messages[key];
             }
 
-            var args = Array.prototype.slice.call(arguments);
             args.shift();
             return messages[key].replace(/\{(\d+)\}/g, function(m) {
                 var index = parseInt(m[1], 10);
@@ -17,7 +24,11 @@ define([
             });
         }
 
-        console.error('No message for key', key);
+        if (ignoreWarning) {
+            return;
+        } else {
+            console.error('No message for key', key);
+        }
         return key;
     };
 });

@@ -67,12 +67,20 @@ define([
                                     .filter(function(p) {
                                         var visible = p.userVisible !== false;
 
-                                        if (self.attr.onlySearchable) {
-                                            return visible && p.searchable !== false;
+                                        if (self.attr.unsupportedProperties &&
+                                            ~self.attr.unsupportedProperties.indexOf(p.title)) {
+                                            return false;
                                         }
 
                                         if (~HIDE_PROPERTIES.indexOf(p.title)) {
                                             return false;
+                                        }
+
+                                        if (self.attr.onlySearchable) {
+                                            if (p.title === 'http://lumify.io#text') {
+                                                return true;
+                                            }
+                                            return visible && p.searchable !== false;
                                         }
 
                                         return visible;
