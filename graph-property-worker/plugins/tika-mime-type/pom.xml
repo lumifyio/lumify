@@ -13,7 +13,7 @@
     <name>Lumify: GraphPropertyWorker: Plugin: Tika Mime Type Mapper</name>
 
     <properties>
-        <tika.version>1.6</tika.version>
+        <tika.version>1.7</tika.version>
     </properties>
 
     <dependencies>
