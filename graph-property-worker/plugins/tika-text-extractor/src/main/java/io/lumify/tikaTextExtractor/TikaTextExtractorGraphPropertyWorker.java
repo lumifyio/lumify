@@ -86,7 +86,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             LOGGER.error("Could not load config: %s", PROPS_FILE);
         }
 
-        dateKeys = Arrays.asList(tikaProperties.getProperty(DATE_KEYS_PROPERTY, "date,published,pubdate,publish_date,last-modified, atc:last-modified").split(","));
+        dateKeys = Arrays.asList(tikaProperties.getProperty(DATE_KEYS_PROPERTY, "date,published,pubdate,publish_date,last-modified,atc:last-modified").split(","));
         subjectKeys = Arrays.asList(tikaProperties.getProperty(SUBJECT_KEYS_PROPERTY, "title,subject").split(","));
         urlKeys = Arrays.asList(tikaProperties.getProperty(URL_KEYS_PROPERTY, "url,og:url").split(","));
         typeKeys = Arrays.asList(tikaProperties.getProperty(TYPE_KEYS_PROPERTY, "Content-Type").split(","));
@@ -150,7 +150,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             LumifyProperties.TEXT.addPropertyValue(m, MULTI_VALUE_KEY, textValue, textMetadata, data.getVisibility());
 
             LumifyProperties.CREATE_DATE.addPropertyValue(m, MULTI_VALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
-            String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ");
+            String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ").trim();
             if (title != null && title.length() > 0) {
                 org.securegraph.Metadata titleMetadata = data.createPropertyMetadata();
                 LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4, getVisibilityTranslator().getDefaultVisibility());
