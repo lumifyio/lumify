@@ -99,16 +99,8 @@ define([
             } else {
                 this.dataRequest('ontology', 'propertiesByConceptId', F.vertex.prop(vertex, 'conceptType'))
                     .done(function(properties) {
-                        var propertiesList = [];
-
-                        properties.list.forEach(function(property) {
-                            if (property.userVisible) {
-                                propertiesList.push(_.pick(property, 'displayName', 'title', 'userVisible'));
-                            }
-                        });
-
                         FieldSelection.attachTo(self.select('propertyListSelector'), {
-                            properties: propertiesList,
+                            properties: properties.list,
                             placeholder: i18n('property.form.field.selection.placeholder')
                         });
                     });
