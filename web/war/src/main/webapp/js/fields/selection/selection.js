@@ -34,7 +34,7 @@ define([
             } else {
                 this.queryPropertyMap = {};
 
-                this.select('findPropertySelection')
+                var typeahead = this.select('findPropertySelection')
                     .on('focus', function(e) {
                         var target = $(e.target);
                         target.attr('placeholder', PLACEHOLDER)
@@ -67,6 +67,11 @@ define([
                                     .filter(function(p) {
                                         var visible = p.userVisible !== false;
 
+                                        if (self.attr.unsupportedProperties &&
+                                            ~self.attr.unsupportedProperties.indexOf(p.title)) {
+                                            return false;
+                                        }
+
                                         if (~HIDE_PROPERTIES.indexOf(p.title)) {
                                             return false;
                                         }
@@ -76,6 +81,9 @@ define([
                                         }
 
                                         if (self.attr.onlySearchable) {
+                                            if (p.title === 'http://lumify.io#text') {
+                                                return true;
+                                            }
                                             return visible && p.searchable !== false;
                                         }
 
@@ -90,12 +98,18 @@ define([
                                         return JSON.stringify({
                                             displayName: name,
                                             title: p.title,
+                                            propertyGroup: p.propertyGroup,
                                             duplicates: duplicates
                                         });
                                     })
                                     .sortBy(function(itemJson) {
-                                        var item = JSON.parse(itemJson);
-                                        return item.displayName.toLowerCase();
+                                        var item = JSON.parse(itemJson),
+                                            lower = item.displayName.toLowerCase();
+
+                                        if (item.propertyGroup) {
+                                            return '1' + item.propertyGroup + lower;
+                                        }
+                                        return '0' + lower;
                                     })
                                     .value()
                         },
@@ -124,13 +138,22 @@ define([
                             var query = this.query;
 
                             return _.sortBy(items, function(json) {
-                                var item = JSON.parse(json);
+                                var item = JSON.parse(json),
+                                    displayName = item.displayName,
+                                    group = item.propertyGroup;
 
-                                if (item.displayName === query) {
-                                    return '0';
+                                if (query) {
+                                    if (displayName === query) {
+                                        return '0';
+                                    }
+
+                                    return '1' + displayName;
+                                } else {
+                                    if (group) {
+                                        return '1' + displayName;
+                                    }
+                                    return '0' + displayName;
                                 }
-
-                                return '1' + item.displayName;
                             });
                         },
                         updater: function(itemJson) {
@@ -139,7 +162,32 @@ define([
                             return item;
                         }
                     })
-                    .data('typeahead').lookup = allowEmptyLookup;
+                    .data('typeahead');
+
+                typeahead.lookup = allowEmptyLookup;
+                typeahead.render = function(items) {
+                    var self = this,
+                        $items = $(),
+                        lastGroup;
+
+                    items.forEach(function(item, i) {
+                        var itemJson = JSON.parse(item);
+                        if (itemJson.propertyGroup && lastGroup !== itemJson.propertyGroup) {
+                            lastGroup = itemJson.propertyGroup;
+                            $items = $items.add($('<li class="divider">'));
+                            $items = $items.add($('<li class="nav-header">').text(itemJson.propertyGroup)[0]);
+                        }
+
+                        var $item = $(self.options.item).attr('data-value', item)
+                            .toggleClass('active', i === 0)
+                            .find('a').html(self.highlighter(item))
+                            .end();
+                        $items = $items.add($item);
+                    })
+
+                    this.$menu.empty().append($items)
+                    return this;
+                };
             }
         });
 
