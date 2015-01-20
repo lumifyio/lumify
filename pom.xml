@@ -9,17 +9,17 @@
     <name>Lumify</name>
 
     <scm>
-        <url>https://github.com/altamiracorp/lumify</url>
-        <connection>scm:git:git://github.com:altamiracorp/lumify.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:altamiracorp/lumify.git</developerConnection>
+        <url>https://github.com/lumifyio/lumify</url>
+        <connection>scm:git:git://github.com:lumifyio/lumify.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:lumifyio/lumify.git</developerConnection>
     </scm>
 
     <inceptionYear>2013</inceptionYear>
     <organization>
-        <name>Altamira Corporation</name>
-        <url>http://www.altamiracorp.com</url>
+        <name>Lumify</name>
+        <url>http://lumify.io</url>
     </organization>
-    <url>https://github.com/altamiracorp/lumify</url>
+    <url>https://github.com/lumifyio/lumify</url>
     <licenses>
         <license>
             <name>The Apache Software License, Veresion 2.0</name>
