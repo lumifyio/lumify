@@ -13,7 +13,7 @@
     <name>Lumify: GraphPropertyWorker: Plugin: Tika Text Extractor</name>
 
     <properties>
-        <nekohtml.version>1.9.18</nekohtml.version>
+        <nekohtml.version>1.9.21</nekohtml.version>
         <natty.version>0.7</natty.version>
         <tika.version>1.7</tika.version>
     </properties>
@@ -34,11 +34,6 @@
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
             <version>${tika.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.joestelmach</groupId>
-            <artifactId>natty</artifactId>
-            <version>${natty.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
