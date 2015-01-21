@@ -35,10 +35,10 @@ define([
         this.onQuerySubmit = function(event, data) {
             var self = this,
                 entityFilters = data.filters.entityFilters,
-                relatedToVertexId = entityFilters && entityFilters.relatedToVertexId,
-                query = relatedToVertexId ?  {
+                relatedToVertexIds = entityFilters && entityFilters.relatedToVertexIds,
+                query = relatedToVertexIds ?  {
                         query: data.value,
-                        relatedToVertexId: relatedToVertexId
+                        relatedToVertexIds: relatedToVertexIds
                     } : data.value;
 
             this.currentQuery = data.value;
@@ -97,10 +97,10 @@ define([
         this.getQueryForSubmitting = function() {
             if (this.currentFilters &&
                 this.currentFilters.entityFilters &&
-                this.currentFilters.entityFilters.relatedToVertexId) {
+                this.currentFilters.entityFilters.relatedToVertexIds) {
                 return {
                     query: this.currentQuery,
-                    relatedToVertexId: this.currentFilters.entityFilters.relatedToVertexId
+                    relatedToVertexIds: this.currentFilters.entityFilters.relatedToVertexIds
                 };
             }
 

@@ -1,23 +1,27 @@
 package io.lumify.web.routes.vertex;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.web.clientapi.model.ClientApiVertex;
-import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
-import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
+import io.lumify.core.util.CompositeGraphQuery;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiVertex;
+import io.lumify.web.clientapi.model.ClientApiVertexSearchResponse;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchPhaseExecutionException;
 import org.json.JSONArray;
@@ -54,23 +58,26 @@ public class VertexSearch extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         long totalStartTime = System.nanoTime();
-        final String query;
+        final String queryString;
         final String filter = getRequiredParameter(request, "filter");
         final int offset = (int) getOptionalParameterLong(request, "offset", 0);
         final int size = (int) getOptionalParameterLong(request, "size", defaultSearchResultCount);
         final String conceptType = getOptionalParameter(request, "conceptType");
         final String getLeafNodes = getOptionalParameter(request, "leafNodes");
-        final String relatedToVertexId = getOptionalParameter(request, "relatedToVertexId");
-        if (relatedToVertexId == null) {
-            query = getRequiredParameter(request, "q");
+        final String[] relatedToVertexIdsParam = getOptionalParameterArray(request, "relatedToVertexIds[]");
+        final List<String> relatedToVertexIds;
+        if (relatedToVertexIdsParam == null) {
+            queryString = getRequiredParameter(request, "q");
+            relatedToVertexIds = ImmutableList.of();
         } else {
-            query = getOptionalParameter(request, "q");
+            queryString = getOptionalParameter(request, "q");
+            relatedToVertexIds = ImmutableList.copyOf(relatedToVertexIdsParam);
         }
 
         long startTime = System.nanoTime();
 
         User user = getUser(request);
-        Authorizations authorizations = getAuthorizations(request, user);
+        final Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
         JSONArray filterJson = new JSONArray(filter);
@@ -79,15 +86,20 @@ public class VertexSearch extends BaseRequestHandler {
 
         graph.flush();
 
-        LOGGER.debug("search %s\n%s", query, filterJson.toString(2));
+        LOGGER.debug("search %s\n%s", queryString, filterJson.toString(2));
 
         Query graphQuery;
-        if (relatedToVertexId == null) {
-            graphQuery = graph.query(query, authorizations);
-        } else if (query == null || StringUtils.isBlank(query)) {
-            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(authorizations);
+        if (relatedToVertexIds.isEmpty()) {
+            graphQuery = query(queryString, null, authorizations);
+        } else if (relatedToVertexIds.size() == 1) {
+            graphQuery = query(queryString, relatedToVertexIds.get(0), authorizations);
         } else {
-            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(query, authorizations);
+            graphQuery = new CompositeGraphQuery(Lists.transform(relatedToVertexIds, new Function<String, Query>() {
+                @Override
+                public Query apply(String relatedToVertexId) {
+                    return query(queryString, relatedToVertexId, authorizations);
+                }
+            }));
         }
 
         for (int i = 0; i < filterJson.length(); i++) {
@@ -125,9 +137,9 @@ public class VertexSearch extends BaseRequestHandler {
             return;
         }
 
-        Map<Object, Double> scores = null;
+        Map<String, Double> scores = null;
         if (searchResults instanceof IterableWithScores) {
-            scores = ((IterableWithScores) searchResults).getScores();
+            scores = ((IterableWithScores<?>) searchResults).getScores();
         }
 
         long retrievalStartTime = System.nanoTime();
@@ -166,9 +178,21 @@ public class VertexSearch extends BaseRequestHandler {
         }
 
         long endTime = System.nanoTime();
-        LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesList.size(), (endTime - startTime) / 1000 / 1000);
+        LOGGER.info("Search for \"%s\" found %d vertices in %dms", queryString, verticesList.size(), (endTime - startTime) / 1000 / 1000);
 
         respondWithClientApiObject(response, results);
+    }
+
+    private Query query(String query, String relatedToVertexId, Authorizations authorizations) {
+        Query graphQuery;
+        if (relatedToVertexId == null) {
+            graphQuery = graph.query(query, authorizations);
+        } else if (StringUtils.isBlank(query)) {
+            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(authorizations);
+        } else {
+            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(query, authorizations);
+        }
+        return graphQuery;
     }
 
     private void updateQueryWithFilter(Query graphQuery, JSONObject obj) throws ParseException {

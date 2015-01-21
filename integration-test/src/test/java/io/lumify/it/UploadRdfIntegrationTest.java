@@ -1,5 +1,6 @@
 package io.lumify.it;
 
+import com.google.common.collect.ImmutableList;
 import io.lumify.core.util.ClientApiConverter;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
@@ -115,7 +116,7 @@ public class UploadRdfIntegrationTest extends TestBase {
     }
 
     private void assertFindRelated(LumifyApi lumifyApi) throws ApiException {
-        ClientApiVertexFindRelatedResponse related = lumifyApi.getVertexApi().findRelated(joeFernerVertexId);
+        ClientApiVertexFindRelatedResponse related = lumifyApi.getVertexApi().findRelated(ImmutableList.of(joeFernerVertexId));
         assertEquals(2, related.getCount());
         assertEquals(2, related.getVertices().size());
 

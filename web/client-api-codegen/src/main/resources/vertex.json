@@ -576,10 +576,13 @@
             "path": "/vertex/search",
             "operations": [
                 {
-                    "method": "GET",
+                    "method": "POST",
                     "summary": "Searches the graph for vertices",
                     "type": "ClientApiVertexSearchResponse",
                     "nickname": "vertexSearch",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
                     "parameters": [
                         {
                             "name": "q",
@@ -626,11 +629,11 @@
                             "paramType": "query"
                         },
                         {
-                            "name": "relatedToVertexId",
-                            "description": "returns vertices related to this vertex",
+                            "name": "relatedToVertexIds[]",
+                            "description": "returns vertices related to these vertices",
                             "required": false,
-                            "type": "string",
-                            "paramType": "query"
+                            "type": "List[string]",
+                            "paramType": "form"
                         }
                     ]
                 }
@@ -709,17 +712,20 @@
             "path": "/vertex/find-related",
             "operations": [
                 {
-                    "method": "GET",
+                    "method": "POST",
                     "summary": "Finds related vertices",
                     "type": "ClientApiVertexFindRelatedResponse",
                     "nickname": "findRelated",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
                     "parameters": [
                         {
-                            "name": "graphVertexId",
-                            "description": "vertex id",
+                            "name": "graphVertexIds[]",
+                            "description": "vertex ids",
                             "required": true,
-                            "type": "string",
-                            "paramType": "query"
+                            "type": "List[string]",
+                            "paramType": "form"
                         },
                         {
                             "name": "limitParentConceptId",
