@@ -10,8 +10,18 @@
         </layout>
     </appender>
 
+    <logger name="io.lumify.backupRestore" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="console" />
+    </logger>
+
+    <!-- logger name="org.apache.hadoop.hdfs.DFSClient" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="console" />
+    </logger -->
+
     <root>
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="console"/>
     </root>
 </log4j:configuration>

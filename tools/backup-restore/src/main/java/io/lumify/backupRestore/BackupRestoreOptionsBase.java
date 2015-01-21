@@ -5,7 +5,9 @@ public abstract class BackupRestoreOptionsBase {
     private String accumuloUserName;
     private String accumuloInstanceName;
     private String zookeeperServers;
-    private String hdfsLocation;
+    private String hadoopFsDefaultFS;
+    private boolean hadoopDfsClientUseDatanodeHostname;
+    private String hadoopUsername;
 
     public String getAccumuloPassword() {
         return accumuloPassword;
@@ -43,15 +45,15 @@ public abstract class BackupRestoreOptionsBase {
         return this;
     }
 
-    public String getHdfsLocation() {
-        if (!hdfsLocation.startsWith("hdfs://")) {
-            return "hdfs://" + hdfsLocation;
+    public String getHadoopFsDefaultFS() {
+        if (!hadoopFsDefaultFS.startsWith("hdfs://")) {
+            return "hdfs://" + hadoopFsDefaultFS;
         }
-        return hdfsLocation;
+        return hadoopFsDefaultFS;
     }
 
-    public BackupRestoreOptionsBase setHdfsLocation(String hdfsLocation) {
-        this.hdfsLocation = hdfsLocation;
+    public BackupRestoreOptionsBase setHadoopFsDefaultFS(String hadoopFsDefaultFS) {
+        this.hadoopFsDefaultFS = hadoopFsDefaultFS;
         return this;
     }
 
@@ -60,8 +62,26 @@ public abstract class BackupRestoreOptionsBase {
             if (!dir.startsWith("/")) {
                 dir = "/" + dir;
             }
-            return getHdfsLocation() + dir;
+            return getHadoopFsDefaultFS() + dir;
         }
         return dir;
+    }
+
+    public boolean isHadoopDfsClientUseDatanodeHostname() {
+        return hadoopDfsClientUseDatanodeHostname;
+    }
+
+    public BackupRestoreOptionsBase setHadoopDfsClientUseDatanodeHostname(boolean hadoopDfsClientUseDatanodeHostname) {
+        this.hadoopDfsClientUseDatanodeHostname = hadoopDfsClientUseDatanodeHostname;
+        return this;
+    }
+
+    public String getHadoopUsername() {
+        return hadoopUsername;
+    }
+
+    public BackupRestoreOptionsBase setHadoopUsername(String hadoopUsername) {
+        this.hadoopUsername = hadoopUsername;
+        return this;
     }
 }

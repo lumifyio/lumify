@@ -1,27 +1,32 @@
+# Build
+
+        mvn package -pl tools/backup-restore -am -DskipTests
 
 # Backup
 
-```
-io.lumify.backupRestore.BackupRestore
-  --accumuloInstanceName=lumify
-  --accumuloUserName=root
-  --accumuloPassword=password
-  --zookeeperServers=192.168.33.10
-  --hdfsLocation=192.168.33.10:8020
-  backup
-```
+        java -jar tools/backup-restore/target/lumify-backup-restore-0.4.1-SNAPSHOT-with-dependencies.jar \
+          --accumuloInstanceName=lumify \
+          --accumuloUsername=root \
+          --accumuloPassword=password \
+          --zookeeperServers=lumify-dev \
+          --hadoopFsDefaultFS=lumify-dev:8020 \
+          --hadoopDfsClientUseDatanodeHostname \
+          --hadoopUsername=root \
+          backup
 
 # Restore
 
-*WARNING: Restore is a destructive process and will move the tablet files from the backup directories.
-  See org.apache.accumulo.core.client.admin.TableOperations.importTable*
+**WARNING:**
+Restore is a destructive process and will move the tablet files from the backup directories.
+See _org.apache.accumulo.core.client.admin.TableOperations.importTable_
 
-```
-io.lumify.backupRestore.BackupRestore
-  --accumuloInstanceName=lumify
-  --accumuloUserName=root
-  --accumuloPassword=password
-  --zookeeperServers=192.168.33.10
-  --hdfsLocation=192.168.33.10:8020
-  --hdfsRestoreDirectory=/backup/20141110T0947 restore
-```
+        java -jar tools/backup-restore/target/lumify-backup-restore-0.4.1-SNAPSHOT-with-dependencies.jar \
+          --accumuloInstanceName=lumify \
+          --accumuloUsername=root \
+          --accumuloPassword=password \
+          --zookeeperServers=lumify-dev \
+          --hadoopFsDefaultFS=lumify-dev:8020 \
+          --hadoopDfsClientUseDatanodeHostname \
+          --hadoopUsername=root \
+          --hdfsRestoreDirectory=/backup/20150121T1442 \
+          restore

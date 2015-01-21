@@ -11,20 +11,25 @@ public class BackupRestore {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackupRestore.class);
 
     private static final SimpleDateFormat backupDirectoryFormat = new SimpleDateFormat("yyyyMMdd'T'HHmm");
-    private static final String CMD_OPT_TABLE_NAME_PREFIX = "tableprefix";
-    private static final String DEFAULT_TABLE_NAME_PREFIX = "lumify";
+    private static final String CMD_OPT_TABLE_NAME_PREFIX = "tableNamePrefix";
+    private static final String DEFAULT_TABLE_NAME_PREFIX = "lumify_";
     private static final String CMD_OPT_ACCUMULO_INSTANCE_NAME = "accumuloInstanceName";
-    private static final String CMD_OPT_ACCUMULO_USER_NAME = "accumuloUserName";
+    private static final String CMD_OPT_ACCUMULO_USERNAME = "accumuloUsername";
     private static final String CMD_OPT_ACCUMULO_PASSWORD = "accumuloPassword";
     private static final String CMD_OPT_ZOOKEEPER_SERVERS = "zookeeperServers";
     private static final String CMD_OPT_HDFS_BACKUP_DIRECTORY = "hdfsBackupDirectory";
     private static final String CMD_OPT_HDFS_RESTORE_DIRECTORY = "hdfsRestoreDirectory";
-    private static final String CMD_OPT_HDFS_LOCATION = "hdfsLocation";
+    private static final String CMD_OPT_HADOOP_FS_DEFAULT_FS = "hadoopFsDefaultFS";
+    private static final String CMD_OPT_HADOOP_DFS_CLIENT_USE_DATANODE_HOSTNAME = "hadoopDfsClientUseDatanodeHostname";
+    private static final String CMD_OPT_HADOOP_USERNAME = "hadoopUsername";
+
     private String accumuloInstanceName;
-    private String accumuloUserName;
+    private String accumuloUsername;
     private String accumuloPassword;
     private String zookeeperServers;
-    private String hdfsLocation;
+    private String hadoopFsDefaultFs;
+    private boolean hadoopDfsClientUseDatanodeHostname;
+    private String hadoopUsername;
 
     public static void main(String[] args) {
         new BackupRestore().run(args);
@@ -37,38 +42,39 @@ public class BackupRestore {
             return;
         }
 
-        String tableNamePrefix = cmd.getOptionValue(CMD_OPT_TABLE_NAME_PREFIX);
-        if (tableNamePrefix == null) {
-            tableNamePrefix = DEFAULT_TABLE_NAME_PREFIX;
-        }
-
+        String tableNamePrefix = cmd.getOptionValue(CMD_OPT_TABLE_NAME_PREFIX, DEFAULT_TABLE_NAME_PREFIX);
         accumuloInstanceName = cmd.getOptionValue(CMD_OPT_ACCUMULO_INSTANCE_NAME);
-        accumuloUserName = cmd.getOptionValue(CMD_OPT_ACCUMULO_USER_NAME);
+        accumuloUsername = cmd.getOptionValue(CMD_OPT_ACCUMULO_USERNAME);
         accumuloPassword = cmd.getOptionValue(CMD_OPT_ACCUMULO_PASSWORD);
         zookeeperServers = cmd.getOptionValue(CMD_OPT_ZOOKEEPER_SERVERS);
-        hdfsLocation = cmd.getOptionValue(CMD_OPT_HDFS_LOCATION);
-        if (hdfsLocation == null) {
-            System.out.print(CMD_OPT_HDFS_LOCATION + " is required");
+        hadoopFsDefaultFs = cmd.getOptionValue(CMD_OPT_HADOOP_FS_DEFAULT_FS);
+        if (hadoopFsDefaultFs == null) {
+            System.out.println(CMD_OPT_HADOOP_FS_DEFAULT_FS + " is required");
             System.exit(-1);
             return;
         }
+        hadoopDfsClientUseDatanodeHostname = cmd.hasOption(CMD_OPT_HADOOP_DFS_CLIENT_USE_DATANODE_HOSTNAME);
+        hadoopUsername = cmd.getOptionValue(CMD_OPT_HADOOP_USERNAME);
 
         String[] restOfArgs = cmd.getArgs();
         if (restOfArgs.length != 1) {
-            System.out.print("Either backup or restore must be specified.");
+            System.out.println("Either backup or restore must be specified.");
             System.exit(-1);
             return;
         }
 
         Action action;
-        if (restOfArgs[0].equals("backup")) {
-            action = Action.BACKUP;
-        } else if (restOfArgs[0].equals("restore")) {
-            action = Action.RESTORE;
-        } else {
-            System.out.print("Either backup or restore must be specified.");
-            System.exit(-1);
-            return;
+        switch (restOfArgs[0]) {
+            case "backup":
+                action = Action.BACKUP;
+                break;
+            case "restore":
+                action = Action.RESTORE;
+                break;
+            default:
+                System.out.println("Either backup or restore must be specified.");
+                System.exit(-1);
+                return;
         }
 
         switch (action) {
@@ -117,10 +123,12 @@ public class BackupRestore {
     private void setCommonOptions(BackupRestoreOptionsBase options) {
         options
                 .setAccumuloInstanceName(accumuloInstanceName)
-                .setAccumuloUserName(accumuloUserName)
+                .setAccumuloUserName(accumuloUsername)
                 .setAccumuloPassword(accumuloPassword)
                 .setZookeeperServers(zookeeperServers)
-                .setHdfsLocation(hdfsLocation);
+                .setHadoopFsDefaultFS(hadoopFsDefaultFs)
+                .setHadoopDfsClientUseDatanodeHostname(hadoopDfsClientUseDatanodeHostname)
+                .setHadoopUsername(hadoopUsername);
     }
 
     private CommandLine parseOptions(String[] args) {
@@ -129,7 +137,7 @@ public class BackupRestore {
         options.addOption(
                 OptionBuilder
                         .withLongOpt("help")
-                        .withDescription("Print help")
+                        .withDescription("Print this help")
                         .create()
         );
 
@@ -151,9 +159,9 @@ public class BackupRestore {
 
         options.addOption(
                 OptionBuilder
-                        .withLongOpt(CMD_OPT_ACCUMULO_USER_NAME)
+                        .withLongOpt(CMD_OPT_ACCUMULO_USERNAME)
                         .hasArg()
-                        .withDescription("Accumulo user name")
+                        .withDescription("Accumulo username")
                         .create()
         );
 
@@ -169,7 +177,7 @@ public class BackupRestore {
                 OptionBuilder
                         .withLongOpt(CMD_OPT_ZOOKEEPER_SERVERS)
                         .hasArg()
-                        .withDescription("Zookeeper servers")
+                        .withDescription("Comma separated list of Zookeeper servers")
                         .create()
         );
 
@@ -177,7 +185,7 @@ public class BackupRestore {
                 OptionBuilder
                         .withLongOpt(CMD_OPT_HDFS_BACKUP_DIRECTORY)
                         .hasArg()
-                        .withDescription("Directory to store backups in HDFS")
+                        .withDescription("Path in HDFS to backup files to")
                         .create()
         );
 
@@ -185,16 +193,31 @@ public class BackupRestore {
                 OptionBuilder
                         .withLongOpt(CMD_OPT_HDFS_RESTORE_DIRECTORY)
                         .hasArg()
-                        .withDescription("Directory to restore backups from in HDFS")
+                        .withDescription("Path in HDFS to restore backups files from")
                         .create()
         );
 
         options.addOption(
                 OptionBuilder
-                        .withLongOpt(CMD_OPT_HDFS_LOCATION)
+                        .withLongOpt(CMD_OPT_HADOOP_FS_DEFAULT_FS)
                         .hasArg()
-                        .withDescription("Location of HDFS")
+                        .withDescription("fs.defaultFS, e.g. hdfs://namenode:8020")
                         .create()
+        );
+
+        options.addOption(
+                OptionBuilder
+                .withLongOpt(CMD_OPT_HADOOP_DFS_CLIENT_USE_DATANODE_HOSTNAME)
+                .withDescription("Equivalent to -Ddfs.client.use.datanode.hostname=true")
+                .create()
+        );
+
+        options.addOption(
+                OptionBuilder
+                .withLongOpt(CMD_OPT_HADOOP_USERNAME)
+                .hasArg()
+                .withDescription("Username to send when interacting with HDFS")
+                .create()
         );
 
         CommandLine cmd;

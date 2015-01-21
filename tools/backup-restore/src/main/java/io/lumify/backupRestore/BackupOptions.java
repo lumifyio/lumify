@@ -13,12 +13,12 @@ public class BackupOptions extends BackupRestoreOptionsBase {
         return tableNamePrefix;
     }
 
-    public String getHdfsBackupDirectory() {
-        return hdfsBackupDirectory;
-    }
-
     public BackupOptions setHdfsBackupDirectory(String hdfsBackupDirectory) {
         this.hdfsBackupDirectory = hdfsBackupDirectory;
         return this;
+    }
+
+    public String getHdfsBackupDirectory() {
+        return hdfsBackupDirectory;
     }
 }

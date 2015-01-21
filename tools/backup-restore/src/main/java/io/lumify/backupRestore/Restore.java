@@ -9,12 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class Restore extends BackupRestoreBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(Restore.class);
 
-    public void run(RestoreOptions restoreOptions) throws AccumuloSecurityException, AccumuloException, IOException, TableExistsException {
+    public void run(RestoreOptions restoreOptions) throws AccumuloSecurityException, AccumuloException, IOException, TableExistsException, URISyntaxException, InterruptedException {
         LOGGER.info("Begin restore");
 
         Connector conn = createAccumuloConnection(restoreOptions);

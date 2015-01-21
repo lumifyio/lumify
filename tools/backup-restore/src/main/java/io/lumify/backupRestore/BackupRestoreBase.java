@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public abstract class BackupRestoreBase {
@@ -25,16 +27,22 @@ public abstract class BackupRestoreBase {
         String zooServers = options.getZookeeperServers();
         Instance inst = new ZooKeeperInstance(instanceName, zooServers);
         ConfigurationCopy conf = new ConfigurationCopy(inst.getConfiguration());
-        conf.set(Property.INSTANCE_DFS_URI, options.getHdfsLocation());
+        conf.set(Property.INSTANCE_DFS_URI, options.getHadoopFsDefaultFS());
         inst.setConfiguration(conf);
 
         AuthenticationToken authenticationToken = new PasswordToken(options.getAccumuloPassword());
         return inst.getConnector(options.getAccumuloUserName(), authenticationToken);
     }
 
-    protected FileSystem getHdfsFileSystem(BackupRestoreOptionsBase options) throws IOException {
+    protected FileSystem getHdfsFileSystem(BackupRestoreOptionsBase options) throws IOException, URISyntaxException, InterruptedException {
         Configuration conf = new Configuration();
-        conf.set("fs.default.name", options.getHdfsLocation());
+        conf.set("fs.defaultFS", options.getHadoopFsDefaultFS());
+        if (options.isHadoopDfsClientUseDatanodeHostname()) {
+            conf.set("dfs.client.use.datanode.hostname", "true");
+        }
+        if (options.getHadoopUsername() != null) {
+            return FileSystem.get(new URI(options.getHadoopFsDefaultFS()), conf, options.getHadoopUsername());
+        }
         return FileSystem.get(conf);
     }
 
