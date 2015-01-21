@@ -1,10 +1,10 @@
 package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.lumify.analystsNotebook.AnalystsNotebookImageUtil;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import org.apache.commons.codec.binary.Base64;
 import org.securegraph.Vertex;
 
 import java.util.ArrayList;
@@ -28,7 +28,8 @@ public class CustomImage {
 
     public CustomImage(String id, byte[] data) {
         this.id = id;
-        this.data = Base64.encodeBase64URLSafeString(data);
+        data = AnalystsNotebookImageUtil.convertImageFormat(data);
+        this.data = AnalystsNotebookImageUtil.base64EncodedImageBytes(data);
         dataLength = data.length;
     }
 

@@ -188,8 +188,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             protected WorkspaceEntity convert(SqlWorkspaceVertex sqlWorkspaceVertex) {
                 String vertexId = sqlWorkspaceVertex.getVertexId();
 
-                int graphPositionX = sqlWorkspaceVertex.getGraphPositionX();
-                int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
+                Integer graphPositionX = sqlWorkspaceVertex.getGraphPositionX();
+                Integer graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
                 boolean visible = sqlWorkspaceVertex.isVisible();
 
                 // TODO implement graphLayoutJson in sql

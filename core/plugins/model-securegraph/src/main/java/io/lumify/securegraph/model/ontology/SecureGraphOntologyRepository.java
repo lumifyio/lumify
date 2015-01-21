@@ -170,7 +170,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             @Override
             public int compare(Property ontologyFile1, Property ontologyFile2) {
                 Integer index1 = (Integer) ontologyFile1.getMetadata().getValue("index");
+                checkNotNull(index1, "Could not find metadata (1) 'index' on " + ontologyFile1);
                 Integer index2 = (Integer) ontologyFile2.getMetadata().getValue("index");
+                checkNotNull(index2, "Could not find metadata (2) 'index' on " + ontologyFile2);
                 return index1.compareTo(index2);
             }
         });

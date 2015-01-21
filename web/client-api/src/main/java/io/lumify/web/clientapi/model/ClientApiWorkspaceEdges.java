@@ -6,48 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientApiWorkspaceEdges implements ClientApiObject {
-    private List<Edge> edges = new ArrayList<Edge>();
+    private List<ClientApiEdge> edges = new ArrayList<ClientApiEdge>();
 
-    public List<Edge> getEdges() {
+    public List<ClientApiEdge> getEdges() {
         return edges;
     }
 
-    public void setEdges(List<Edge> edges) {
+    public void setEdges(List<ClientApiEdge> edges) {
         this.edges = edges;
     }
 
     @Override
     public String toString() {
         return ClientApiConverter.clientApiToString(this);
-    }
-
-    public static class Edge extends ClientApiEdge {
-        private String id;
-        private SandboxStatus diffType;
-        private VisibilityJson visibilityJson;
-        
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public SandboxStatus getDiffType() {
-            return diffType;
-        }
-
-        public void setDiffType(SandboxStatus diffType) {
-            this.diffType = diffType;
-        }
-
-        public VisibilityJson getVisibilityJson() {
-            return visibilityJson;
-        }
-
-        public void setVisibilityJson(VisibilityJson visibilityJson) {
-            this.visibilityJson = visibilityJson;
-        }
     }
 }

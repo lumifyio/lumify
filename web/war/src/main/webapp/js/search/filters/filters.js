@@ -159,8 +159,13 @@ define([
             var self = this,
                 target = $(event.target),
                 li = target.closest('li').addClass('fId' + self.filterId),
-                property = data.property,
-                fieldComponent = property.possibleValues ?
+                property = data.property;
+
+            if (property.title === 'http://lumify.io#text') {
+                property.dataType = 'boolean';
+            }
+
+            var fieldComponent = property.possibleValues ?
                     'fields/restrictValues' :
                     'fields/' + property.dataType;
 
@@ -193,6 +198,9 @@ define([
         this.createFieldSelection = function() {
             FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
                 properties: this.properties,
+                unsupportedProperties: this.attr.supportsHistogram ?
+                    [] :
+                    ['http://lumify.io#text'],
                 onlySearchable: true,
                 placeholder: i18n('search.filters.add_filter.placeholder')
             });

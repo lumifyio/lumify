@@ -54,7 +54,7 @@ define([
             this.on('clearSearch', this.onClearSearch);
             this.on('searchRequestBegan', this.onSearchResultsBegan);
             this.on('searchRequestCompleted', this.onSearchResultsCompleted);
-            this.on(document, 'searchByEntity', this.onSearchByEntity);
+            this.on(document, 'searchForPhrase', this.onSearchForPhrase);
             this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
             this.on(document, 'searchPaneVisible', this.onSearchPaneVisible);
         });
@@ -87,7 +87,7 @@ define([
             return d;
         };
 
-        this.onSearchByEntity = function(event, data) {
+        this.onSearchForPhrase = function(event, data) {
             var self = this;
 
             this.openSearchType('Lumify')
@@ -95,7 +95,7 @@ define([
                     var node = self.getSearchTypeNode();
                     self.trigger(node, 'clearSearch');
 
-                    self.setQueryVal(data.query).select();
+                    self.setQueryVal('"' + data.query.replace(/"/g, '\\"') + '"').select();
                     self.triggerQuerySubmit();
                 })
         };

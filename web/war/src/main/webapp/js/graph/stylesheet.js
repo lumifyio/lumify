@@ -13,8 +13,8 @@ define([
 
     return load;
 
-    function defaultStyle() {
-        style
+    function defaultStyle(previousStyle) {
+        return (previousStyle || style)
             .selector('node')
             .css({
                 'background-image': 'data(imageSrc)',
@@ -106,7 +106,8 @@ define([
                 'font-size': 11 * retina.devicePixelRatio,
                 'target-arrow-shape': 'triangle',
                 color: '#aaa',
-                content: 'data(label)',
+                content: lumifyData.currentUser.uiPreferences.edgeLabels !== 'false' ?
+                    'data(label)' : '',
                 'text-outline-color': 'white',
                 'text-outline-width': 2,
                 width: 1.5 * retina.devicePixelRatio,
@@ -148,8 +149,8 @@ define([
             });
     }
 
-    function load(styleReady) {
-        defaultStyle();
+    function load(previousStyle, styleReady) {
+        var style = defaultStyle(previousStyle);
         require(['configuration/plugins/graphStyle/plugin'], function(GraphStylePlugin) {
             GraphStylePlugin.stylers.forEach(function(styler) {
                 styler(style);

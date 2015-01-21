@@ -1,18 +1,17 @@
-#!/bin/bash
+#!/bin/sh
 
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+DIR=$(cd $(dirname "$0") && pwd)
 cd ${DIR}
 
-unamestr=`uname`
-
-if [[ "$unamestr" == 'Linux' ]]; then
-   sudo docker build -t lumifyio/dev dev
-elif [[ "$unamestr" == 'Darwin' ]]; then
-   docker build -t lumifyio/dev dev
-fi
+case $(uname) in
+  Linux)
+    (cd ${DIR} && sudo docker build -t lumifyio/dev dev)
+    ;;
+  Darwin)
+    (cd ${DIR} && docker build -t lumifyio/dev dev)
+    ;;
+  *)
+    echo "unexpected uname: $(uname)"
+    exit -1
+    ;;
+esac

@@ -1,7 +1,7 @@
 package io.lumify.analystsNotebook.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import org.apache.commons.codec.binary.Base64;
+import io.lumify.analystsNotebook.AnalystsNotebookImageUtil;
 
 public class IconPicture {
     @JacksonXmlProperty(isAttribute = true)
@@ -18,7 +18,8 @@ public class IconPicture {
     }
 
     public IconPicture(byte[] data) {
-        this.data = Base64.encodeBase64URLSafeString(data);
+        data = AnalystsNotebookImageUtil.convertImageFormat(data);
+        this.data = AnalystsNotebookImageUtil.base64EncodedImageBytes(data);
         dataLength = data.length;
         visible = true;
     }

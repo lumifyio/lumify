@@ -1,7 +1,7 @@
 {
     "apiVersion": "0.4.0",
     "swaggerVersion": "1.2",
-    "basePath": "http://localhost:8889",
+    "basePath": "http://lumify-dev:8889",
     "resourcePath": "/vertex",
     "apis": [
         {
@@ -765,6 +765,29 @@
                             "required": true,
                             "type": "boolean",
                             "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/exists",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Finds the status of multiple vertices",
+                    "type": "ClientApiVerticesExistsResponse",
+                    "nickname": "doExist",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "vertexIds[]",
+                            "description": "vertex ids",
+                            "required": true,
+                            "type": "List[string]",
+                            "paramType": "form"
                         }
                     ]
                 }

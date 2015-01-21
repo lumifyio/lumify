@@ -25,7 +25,7 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class FlightRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FlightRepository.class);
-    public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
     private static final String MULTI_VALUE_PROPERTY_KEY = FlightRepository.class.getName();
     private static final String SOURCE_NAME = "FlightAware.com";
     private Graph graph;

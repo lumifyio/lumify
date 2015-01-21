@@ -7,8 +7,6 @@ import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
 import io.lumify.zipCodeResolver.ZipCodeResolverTermMentionFilter;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,7 +14,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class WorkspaceUndoIntegrationTest extends TestBase {
     public static final String FILE_CONTENTS = "Susan Feng knows Jeff Kunkle. They both worked in Reston, VA, 20191";
     private static final String CONCEPT_TEST_CITY = "http://lumify.io/test#city";
@@ -30,7 +27,7 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
 
     private void importArtifact() throws IOException, ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream(FILE_CONTENTS.getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
         String artifactVertexId = artifact.getVertexIds().get(0);
@@ -49,7 +46,7 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
         ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(susanFengVertex.getId(), null, null, null);
         assertEquals(1, edges.getRelationships().size());
         List<ClientApiProperty> edgeProperties = edges.getRelationships().get(0).getRelationship().getProperties();
-        assertEquals(3, edgeProperties.size());
+        assertEquals(7, edgeProperties.size());
         boolean foundFirstNameEdgeProperty = false;
         for (ClientApiProperty edgeProperty : edgeProperties) {
             if (edgeProperty.getKey().equals("key1") && edgeProperty.getName().equals("http://lumify.io/test#firstName")) {
