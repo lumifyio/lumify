@@ -59,14 +59,16 @@ public class GraphPropertyRunner {
                 this.user,
                 this.authorizations,
                 InjectHelper.getInjector());
-        Collection<GraphPropertyWorker> workers = InjectHelper.getInjectedServices(GraphPropertyWorker.class);
-        this.workerWrappers = new ArrayList<GraphPropertyThreadedWrapper>(workers.size());
+        Collection<GraphPropertyWorker> workers = InjectHelper.getInjectedServices(GraphPropertyWorker.class, configuration);
+        this.workerWrappers = new ArrayList<>(workers.size());
+        boolean failedToPrepareAtLeastOneGraphPropertyWorker = false;
         for (GraphPropertyWorker worker : workers) {
             try {
                 LOGGER.debug("preparing: %s", worker.getClass().getName());
                 worker.prepare(workerPrepareData);
             } catch (Exception ex) {
-                throw new LumifyException("Could not prepare graph property worker " + worker.getClass().getName(), ex);
+                LOGGER.error("Could not prepare graph property worker %s", worker.getClass().getName(), ex);
+                failedToPrepareAtLeastOneGraphPropertyWorker = true;
             }
 
             GraphPropertyThreadedWrapper wrapper = new GraphPropertyThreadedWrapper(worker);
@@ -76,6 +78,9 @@ public class GraphPropertyRunner {
             String workerName = worker.getClass().getName();
             thread.setName("graphPropertyWorker-" + workerName);
             thread.start();
+        }
+        if (failedToPrepareAtLeastOneGraphPropertyWorker) {
+            throw new LumifyException("Failed to initialize at least one graph property worker. See the log for more details.");
         }
     }
 
@@ -100,7 +105,7 @@ public class GraphPropertyRunner {
                 InjectHelper.getInjector()
         );
 
-        List<TermMentionFilter> termMentionFilters = toList(ServiceLoaderUtil.load(TermMentionFilter.class));
+        List<TermMentionFilter> termMentionFilters = toList(ServiceLoaderUtil.load(TermMentionFilter.class, configuration));
         for (TermMentionFilter termMentionFilter : termMentionFilters) {
             InjectHelper.inject(termMentionFilter);
             try {
@@ -229,12 +234,11 @@ public class GraphPropertyRunner {
         }
         File tempFile = File.createTempFile("graphPropertyBolt", fileExt);
         workData.setLocalFile(tempFile);
-        OutputStream tempFileOut = new FileOutputStream(tempFile);
-        try {
+        try (OutputStream tempFileOut = new FileOutputStream(tempFile)) {
             IOUtils.copy(in, tempFileOut);
         } finally {
             in.close();
-            tempFileOut.close();
+
         }
         return tempFile;
     }
@@ -252,7 +256,7 @@ public class GraphPropertyRunner {
         Set<String> graphPropertyWorkerWhiteList = IterableUtils.toSet(LumifyProperties.GRAPH_PROPERTY_WORKER_WHITE_LIST.getPropertyValues(element));
         Set<String> graphPropertyWorkerBlackList = IterableUtils.toSet(LumifyProperties.GRAPH_PROPERTY_WORKER_BLACK_LIST.getPropertyValues(element));
 
-        List<GraphPropertyThreadedWrapper> interestedWorkers = new ArrayList<GraphPropertyThreadedWrapper>();
+        List<GraphPropertyThreadedWrapper> interestedWorkers = new ArrayList<>();
         for (GraphPropertyThreadedWrapper wrapper : workerWrappers) {
             String graphPropertyWorkerName = wrapper.getWorker().getClass().getName();
             if (graphPropertyWorkerWhiteList.size() > 0 && !graphPropertyWorkerWhiteList.contains(graphPropertyWorkerName)) {

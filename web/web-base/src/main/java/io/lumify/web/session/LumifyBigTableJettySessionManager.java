@@ -14,6 +14,6 @@ public class LumifyBigTableJettySessionManager extends BigTableJettySessionManag
 
     private static ModelSession createModelSession() {
         Configuration configuration = ConfigurationLoader.load();
-        return InjectHelper.getInstance(ModelSession.class, LumifyBootstrap.bootstrapModuleMaker(configuration));
+        return InjectHelper.getInstance(ModelSession.class, LumifyBootstrap.bootstrapModuleMaker(configuration), configuration);
     }
 }

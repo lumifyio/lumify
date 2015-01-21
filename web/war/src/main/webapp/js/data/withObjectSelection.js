@@ -200,24 +200,23 @@ define([
         };
 
         this.onSearchRelated = function(event, data) {
-            var vertexId = data.vertexId || (
-                selectedObjects &&
-                selectedObjects.vertices.length === 1 &&
-                selectedObjects.vertices[0].id
-            );
+            var vertexIds;
 
-            if (vertexId) {
-                this.trigger('searchByRelatedEntity', { vertexId: vertexId });
+            if (selectedObjects && selectedObjects.vertices.length > 0) {
+                var vertices = selectedObjects && selectedObjects.vertices.length > 0 && selectedObjects.vertices;
+                vertexIds = _.pluck(vertices, 'id');
+            } else {
+                vertexIds = [data.vertexId];
             }
+
+            this.trigger('searchByRelatedEntity', { vertexIds: vertexIds });
         };
 
         this.onAddRelatedItems = function(event, data) {
-            var self = this;
-
-            if (!data || _.isUndefined(data.vertexId)) {
-                if (selectedObjects && selectedObjects.vertices.length === 1) {
+            if (!data || _.isUndefined(data.vertexIds)) {
+                if (selectedObjects && selectedObjects.vertices.length > 0) {
                     data = {
-                        vertexId: selectedObjects.vertices[0].id
+                        vertexIds: _.pluck(selectedObjects.vertices, 'id')
                     };
                 } else {
                     return;
@@ -228,7 +227,7 @@ define([
                 Promise.require('util/popovers/addRelated/addRelated'),
                 Promise.require('util/vertex/formatters'),
                 this.dataRequestPromise.then(function(dataRequest) {
-                    return dataRequest('vertex', 'store', { vertexIds: data.vertexId })
+                    return dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
                 })
             ]).done(function(results) {
                 var RP = results.shift(),
@@ -239,9 +238,9 @@ define([
 
                 RP.attachTo(event.target, {
                     vertex: vertex,
-                    relatedToVertexId: data.vertexId,
+                    relatedToVertexIds: data.vertexIds,
                     anchorTo: {
-                        vertexId: data.vertexId
+                        vertexId: data.vertexIds[0]
                     }
                 });
             });

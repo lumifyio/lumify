@@ -81,6 +81,10 @@ public final class Configuration {
         return config.containsKey(propertyKey) ? config.get(propertyKey) : defaultValue;
     }
 
+    public boolean getBoolean(String propertyKey, boolean defaultValue) {
+        return Boolean.parseBoolean(get(propertyKey, Boolean.toString(defaultValue)));
+    }
+
     public Integer getInt(String propertyKey, Integer defaultValue) {
         return Integer.parseInt(get(propertyKey, defaultValue == null ? null : defaultValue.toString()));
     }

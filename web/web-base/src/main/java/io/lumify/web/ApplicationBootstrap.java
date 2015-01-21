@@ -93,7 +93,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private void setupInjector(ServletContext context, Configuration config) {
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config));
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config), config);
 
         // Store the injector in the context for a servlet to access later
         context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());

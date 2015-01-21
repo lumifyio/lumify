@@ -23,7 +23,7 @@ public class LongRunningProcessYarnTask extends TaskBase {
         try {
             Configuration configuration = ConfigurationLoader.load();
             InjectHelper.ModuleMaker moduleMaker = LumifyBootstrap.bootstrapModuleMaker(configuration);
-            WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class, moduleMaker);
+            WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class, moduleMaker, configuration);
 
             LongRunningProcessRunner longRunningProcessRunner = InjectHelper.getInstance(LongRunningProcessRunner.class);
             longRunningProcessRunner.prepare(configuration.toMap());
