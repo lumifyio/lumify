@@ -2,6 +2,7 @@ package io.lumify.core.ingest;
 
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -31,14 +32,25 @@ public class FileImport {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileImport.class);
     public static final String MULTI_VALUE_KEY = FileImport.class.getName();
     private final VisibilityTranslator visibilityTranslator;
+    private final Graph graph;
+    private final WorkQueueRepository workQueueRepository;
+    private final WorkspaceRepository workspaceRepository;
+    private final Configuration configuration;
     private List<FileImportSupportingFileHandler> fileImportSupportingFileHandlers;
-    private Graph graph;
-    private WorkQueueRepository workQueueRepository;
-    private WorkspaceRepository workspaceRepository;
 
     @Inject
-    public FileImport(VisibilityTranslator visibilityTranslator) {
+    public FileImport(
+            VisibilityTranslator visibilityTranslator,
+            Graph graph,
+            WorkQueueRepository workQueueRepository,
+            WorkspaceRepository workspaceRepository,
+            Configuration configuration
+    ) {
         this.visibilityTranslator = visibilityTranslator;
+        this.graph = graph;
+        this.workQueueRepository = workQueueRepository;
+        this.workspaceRepository = workspaceRepository;
+        this.configuration = configuration;
     }
 
     public void importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
@@ -101,10 +113,9 @@ public class FileImport {
             return vertex;
         }
 
-        List<FileImportSupportingFileHandler.AddSupportingFilesResult> addSupportingFilesResults = new ArrayList<FileImportSupportingFileHandler.AddSupportingFilesResult>();
+        List<FileImportSupportingFileHandler.AddSupportingFilesResult> addSupportingFilesResults = new ArrayList<>();
 
-        FileInputStream fileInputStream = new FileInputStream(f);
-        try {
+        try (FileInputStream fileInputStream = new FileInputStream(f)) {
             JSONObject metadataJson = loadMetadataJson(f);
             String predefinedId = null;
             if (metadataJson != null) {
@@ -157,7 +168,6 @@ public class FileImport {
             pushOnQueue(vertex, workspace, visibilitySource);
             return vertex;
         } finally {
-            fileInputStream.close();
             for (FileImportSupportingFileHandler.AddSupportingFilesResult addSupportingFilesResult : addSupportingFilesResults) {
                 addSupportingFilesResult.close();
             }
@@ -167,7 +177,7 @@ public class FileImport {
     public List<Vertex> importVertices(Workspace workspace, List<FileAndVisibility> files, User user, Authorizations authorizations) throws Exception {
         ensureInitialized();
 
-        List<Vertex> vertices = new ArrayList<Vertex>();
+        List<Vertex> vertices = new ArrayList<>();
         for (FileAndVisibility file : files) {
             if (isSupportingFile(file.getFile())) {
                 LOGGER.debug("Skipping file: %s (supporting file)", file.getFile().getAbsolutePath());
@@ -182,12 +192,9 @@ public class FileImport {
     private JSONObject loadMetadataJson(File f) throws IOException {
         File metadataFile = MetadataFileImportSupportingFileHandler.getMetadataFile(f);
         if (metadataFile.exists()) {
-            FileInputStream in = new FileInputStream(metadataFile);
-            try {
+            try (FileInputStream in = new FileInputStream(metadataFile)) {
                 String fileContents = IOUtils.toString(in);
                 return new JSONObject(fileContents);
-            } finally {
-                in.close();
             }
         }
         return null;
@@ -195,7 +202,7 @@ public class FileImport {
 
     private void ensureInitialized() {
         if (fileImportSupportingFileHandlers == null) {
-            fileImportSupportingFileHandlers = toList(ServiceLoaderUtil.load(FileImportSupportingFileHandler.class));
+            fileImportSupportingFileHandlers = toList(ServiceLoaderUtil.load(FileImportSupportingFileHandler.class, this.configuration));
             for (FileImportSupportingFileHandler fileImportSupportingFileHandler : fileImportSupportingFileHandlers) {
                 InjectHelper.inject(fileImportSupportingFileHandler);
             }
@@ -225,27 +232,9 @@ public class FileImport {
     }
 
     private String calculateFileHash(File f) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(f);
-        try {
+        try (FileInputStream fileInputStream = new FileInputStream(f)) {
             return RowKeyHelper.buildSHA256KeyString(fileInputStream);
-        } finally {
-            fileInputStream.close();
         }
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
-    @Inject
-    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
-        this.workQueueRepository = workQueueRepository;
-    }
-
-    @Inject
-    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
-        this.workspaceRepository = workspaceRepository;
     }
 
     public static class FileAndVisibility {

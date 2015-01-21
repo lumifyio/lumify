@@ -1,6 +1,8 @@
 package io.lumify.opennlpDictionary;
 
 import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
@@ -44,10 +46,28 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
     private List<TokenNameFinder> finders;
     private DictionaryEntryRepository dictionaryEntryRepository;
     private Tokenizer tokenizer;
+    private String locationIri;
+    private String organizationIri;
+    private String personIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
+
+        this.locationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_LOCATION);
+        if (this.locationIri == null || this.locationIri.length() == 0) {
+            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_LOCATION);
+        }
+
+        this.organizationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
+        if (this.organizationIri == null || this.organizationIri.length() == 0) {
+            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_ORGANIZATION);
+        }
+
+        this.personIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_PERSON);
+        if (this.personIri == null || this.personIri.length() == 0) {
+            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
+        }
 
         dictionaryEntryRepository.initializeTable(workerPrepareData.getUser());
 
@@ -110,6 +130,20 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
                 .visibilityJson(visibilityJson)
                 .process(getClass().getName())
                 .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
+    }
+
+    protected String mapToOntologyIri(String type) {
+        String ontologyClassUri;
+        if ("location".equals(type)) {
+            ontologyClassUri = this.locationIri;
+        } else if ("organization".equals(type)) {
+            ontologyClassUri = this.organizationIri;
+        } else if ("person".equals(type)) {
+            ontologyClassUri = this.personIri;
+        } else {
+            ontologyClassUri = LumifyProperties.CONCEPT_TYPE_THING;
+        }
+        return ontologyClassUri;
     }
 
     @Override

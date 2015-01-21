@@ -61,13 +61,14 @@ define([
         this.onSearchByRelatedEntity = function(event, data) {
             event.stopPropagation();
             var self = this;
-            this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
-                .done(function(vertex) {
-                    var title = vertex && F.vertex.title(vertex) || vertex.id;
-
+            this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
+                .done(function(vertices) {
+                    var single = vertices[0],
+                        title = vertices.length > 1 ? i18n('search.filters.title_multiple', vertices.length)
+                                                    : single && F.vertex.title(single) || single.id;
                     self.onClearFilters();
 
-                    self.entityFilters.relatedToVertexId = vertex.id;
+                    self.entityFilters.relatedToVertexIds = _.pluck(vertices, 'id');
                     self.conceptFilter = data.conceptId || '';
                     self.trigger(self.select('conceptDropdownSelector'), 'selectConceptId', {
                         conceptId: data.conceptId || ''

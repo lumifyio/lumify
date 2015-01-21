@@ -1,11 +1,10 @@
 package io.lumify.core.util;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.net.URL;
@@ -21,19 +20,20 @@ import java.util.List;
 public class ServiceLoaderUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ServiceLoaderUtil.class);
     private static final String PREFIX = "META-INF/services/";
+    public static final String CONFIG_DISABLE_PREFIX = "disable.";
 
-    public static <T> Iterable<T> load(Class<T> clazz) {
-        List<T> services = new ArrayList<T>();
+    public static <T> Iterable<T> load(Class<T> clazz, Configuration configuration) {
+        List<T> services = new ArrayList<>();
         String fullName = PREFIX + clazz.getName();
         LOGGER.debug("loading services for class %s", fullName);
         try {
-            Enumeration<URL> configs = Thread.currentThread().getContextClassLoader().getResources(fullName);
-            if (!configs.hasMoreElements()) {
+            Enumeration<URL> serviceFiles = Thread.currentThread().getContextClassLoader().getResources(fullName);
+            if (!serviceFiles.hasMoreElements()) {
                 LOGGER.debug("Could not find any services for %s", fullName);
             } else {
-                while (configs.hasMoreElements()) {
-                    URL config = configs.nextElement();
-                    services.addAll(ServiceLoaderUtil.<T>loadFile(config));
+                while (serviceFiles.hasMoreElements()) {
+                    URL serviceFile = serviceFiles.nextElement();
+                    services.addAll(ServiceLoaderUtil.<T>loadFile(serviceFile, configuration));
                 }
             }
 
@@ -43,21 +43,23 @@ public class ServiceLoaderUtil {
         }
     }
 
-    public static <T> Collection<T> loadFile(URL config) throws IOException {
-        List<T> services = new ArrayList<T>();
-        LOGGER.debug("loadFile(%s)", config);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(config.openStream()));
+    public static <T> Collection<T> loadFile(URL serviceFile, Configuration configuration) throws IOException {
+        List<T> services = new ArrayList<>();
+        LOGGER.debug("loadFile(%s)", serviceFile);
 
-        try {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(serviceFile.openStream()))) {
             String className;
             while ((className = reader.readLine()) != null) {
-                if (className.trim().length() == 0) {
+                className = className.trim();
+                if (className.length() == 0) {
                     continue;
                 }
-                services.add(ServiceLoaderUtil.<T>loadClass(config, className.trim()));
+                if (configuration.getBoolean(CONFIG_DISABLE_PREFIX + className, false)) {
+                    LOGGER.info("ignoring class %s because it is disabled in configuration", className);
+                    continue;
+                }
+                services.add(ServiceLoaderUtil.<T>loadClass(serviceFile, className));
             }
-        } finally {
-            reader.close();
         }
 
         return services;

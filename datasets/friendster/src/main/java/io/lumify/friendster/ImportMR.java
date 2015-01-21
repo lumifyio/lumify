@@ -57,7 +57,7 @@ public class ImportMR extends Configured implements Tool {
         io.lumify.core.config.Configuration lumifyConfig = ConfigurationLoader.load();
         Configuration conf = getConfiguration(args, lumifyConfig);
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig), lumifyConfig);
 
         verifyFriendsterUserConcept(ontologyRepository);
         verifyFriendsterUserToUserRelationship(ontologyRepository);

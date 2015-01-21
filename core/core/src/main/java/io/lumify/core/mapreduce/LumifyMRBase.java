@@ -37,7 +37,7 @@ public abstract class LumifyMRBase extends Configured implements Tool {
         io.lumify.core.config.Configuration lumifyConfig = ConfigurationLoader.load();
         JobConf conf = getConfiguration(args, lumifyConfig);
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig), lumifyConfig);
 
         Job job = Job.getInstance(conf, getJobName());
 
