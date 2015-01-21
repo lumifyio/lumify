@@ -17,7 +17,7 @@
 # Restore
 
 **WARNING:**
-Restore is a destructive process and will move the tablet files from the backup directories.
+Restore is a destructive process and will move the tablet files from the restore directory (unless you use the `--hdfsRestoreTempDirectory=` option)
 See _org.apache.accumulo.core.client.admin.TableOperations.importTable_
 
         java -jar tools/backup-restore/target/lumify-backup-restore-0.4.1-SNAPSHOT-with-dependencies.jar \
@@ -28,5 +28,6 @@ See _org.apache.accumulo.core.client.admin.TableOperations.importTable_
           --hadoopFsDefaultFS=lumify-dev:8020 \
           --hadoopDfsClientUseDatanodeHostname \
           --hadoopUsername=root \
-          --hdfsRestoreDirectory=/backup/20150121T1442 \
+          --hdfsRestoreDirectory=/backup/20150121T1633 \
+          --hdfsRestoreTempDirectory=/tmp/restore-20150121T1633 \
           restore

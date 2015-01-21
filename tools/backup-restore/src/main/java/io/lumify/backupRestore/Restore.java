@@ -5,6 +5,8 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FileUtil;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +22,23 @@ public class Restore extends BackupRestoreBase {
 
         Connector conn = createAccumuloConnection(restoreOptions);
         FileSystem fileSystem = getHdfsFileSystem(restoreOptions);
-        List<String> tableNames = getTableList(fileSystem, restoreOptions.getHdfsRestoreDirectory());
-        restoreTables(conn, tableNames, restoreOptions.getHdfsRestoreDirectory());
+
+        if (restoreOptions.getHdfsRestoreTempDirectory() != null) {
+            LOGGER.info("Copying backup files from restore directory: " + restoreOptions.getHdfsRestoreDirectory() + " to temp directory: " + restoreOptions.getHdfsRestoreTempDirectory());
+            FileUtil.copy(fileSystem, new Path(restoreOptions.getHdfsRestoreDirectory()), fileSystem, new Path(restoreOptions.getHdfsRestoreTempDirectory()), false, fileSystem.getConf());
+
+            List<String> tableNames = getTableList(fileSystem, restoreOptions.getHdfsRestoreTempDirectory());
+            restoreTables(conn, tableNames, restoreOptions.getHdfsRestoreTempDirectory());
+
+            LOGGER.info("Deleting restored temp directory: " + restoreOptions.getHdfsRestoreTempDirectory());
+            fileSystem.delete(new Path(restoreOptions.getHdfsRestoreTempDirectory()), true);
+        } else {
+            List<String> tableNames = getTableList(fileSystem, restoreOptions.getHdfsRestoreDirectory());
+            restoreTables(conn, tableNames, restoreOptions.getHdfsRestoreDirectory());
+
+            LOGGER.warn("Deleting restored and consumed restore directory: " + restoreOptions.getHdfsRestoreDirectory());
+            fileSystem.delete(new Path(restoreOptions.getHdfsRestoreDirectory()), true);
+        }
 
         LOGGER.info("Restore complete");
     }

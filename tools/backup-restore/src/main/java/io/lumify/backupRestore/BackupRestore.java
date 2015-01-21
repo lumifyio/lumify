@@ -10,7 +10,7 @@ import java.util.Date;
 public class BackupRestore {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackupRestore.class);
 
-    private static final SimpleDateFormat backupDirectoryFormat = new SimpleDateFormat("yyyyMMdd'T'HHmm");
+    private static final SimpleDateFormat BACKUP_DIRECTORY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmm");
     private static final String CMD_OPT_TABLE_NAME_PREFIX = "tableNamePrefix";
     private static final String DEFAULT_TABLE_NAME_PREFIX = "lumify_";
     private static final String CMD_OPT_ACCUMULO_INSTANCE_NAME = "accumuloInstanceName";
@@ -18,7 +18,9 @@ public class BackupRestore {
     private static final String CMD_OPT_ACCUMULO_PASSWORD = "accumuloPassword";
     private static final String CMD_OPT_ZOOKEEPER_SERVERS = "zookeeperServers";
     private static final String CMD_OPT_HDFS_BACKUP_DIRECTORY = "hdfsBackupDirectory";
+    private static final String DEFAULT_HDFS_BACKUP_DIRECTORY = "/backup/" + BACKUP_DIRECTORY_DATE_FORMAT.format(new Date());
     private static final String CMD_OPT_HDFS_RESTORE_DIRECTORY = "hdfsRestoreDirectory";
+    private static final String CMD_OPT_HDFS_RESTORE_TEMP_DIRECTORY = "hdfsRestoreTempDirectory";
     private static final String CMD_OPT_HADOOP_FS_DEFAULT_FS = "hadoopFsDefaultFS";
     private static final String CMD_OPT_HADOOP_DFS_CLIENT_USE_DATANODE_HOSTNAME = "hadoopDfsClientUseDatanodeHostname";
     private static final String CMD_OPT_HADOOP_USERNAME = "hadoopUsername";
@@ -80,10 +82,7 @@ public class BackupRestore {
         switch (action) {
             case BACKUP:
                 try {
-                    String hdfsBackupDirectory = cmd.getOptionValue(CMD_OPT_HDFS_BACKUP_DIRECTORY);
-                    if (hdfsBackupDirectory == null) {
-                        hdfsBackupDirectory = "/backup/" + backupDirectoryFormat.format(new Date());
-                    }
+                    String hdfsBackupDirectory = cmd.getOptionValue(CMD_OPT_HDFS_BACKUP_DIRECTORY, DEFAULT_HDFS_BACKUP_DIRECTORY);
 
                     BackupOptions backupOptions = new BackupOptions()
                             .setHdfsBackupDirectory(hdfsBackupDirectory)
@@ -99,14 +98,16 @@ public class BackupRestore {
             case RESTORE:
                 try {
                     String hdfsRestoreDirectory = cmd.getOptionValue(CMD_OPT_HDFS_RESTORE_DIRECTORY);
-
                     if (hdfsRestoreDirectory == null) {
                         System.out.println(CMD_OPT_HDFS_RESTORE_DIRECTORY + " is required for restore");
                         System.exit(-1);
                         return;
                     }
+                    String hdfsRestoreTempDirectory = cmd.getOptionValue(CMD_OPT_HDFS_RESTORE_TEMP_DIRECTORY);
+
                     RestoreOptions restoreOptions = new RestoreOptions()
-                            .setHdfsRestoreDirectory(hdfsRestoreDirectory);
+                            .setHdfsRestoreDirectory(hdfsRestoreDirectory)
+                            .setHdfsRestoreTempDirectory(hdfsRestoreTempDirectory);
                     setCommonOptions(restoreOptions);
                     new Restore().run(restoreOptions);
                 } catch (Exception ex) {
@@ -145,7 +146,7 @@ public class BackupRestore {
                 OptionBuilder
                         .withLongOpt(CMD_OPT_TABLE_NAME_PREFIX)
                         .hasArg()
-                        .withDescription("Table name prefix of tables to backup")
+                        .withDescription("Prefix of tables to backup, default: " + DEFAULT_TABLE_NAME_PREFIX)
                         .create()
         );
 
@@ -185,7 +186,7 @@ public class BackupRestore {
                 OptionBuilder
                         .withLongOpt(CMD_OPT_HDFS_BACKUP_DIRECTORY)
                         .hasArg()
-                        .withDescription("Path in HDFS to backup files to")
+                        .withDescription("Path in HDFS to backup files to, default: " + DEFAULT_HDFS_BACKUP_DIRECTORY)
                         .create()
         );
 
@@ -194,6 +195,14 @@ public class BackupRestore {
                         .withLongOpt(CMD_OPT_HDFS_RESTORE_DIRECTORY)
                         .hasArg()
                         .withDescription("Path in HDFS to restore backups files from")
+                        .create()
+        );
+
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_HDFS_RESTORE_TEMP_DIRECTORY)
+                        .hasArg()
+                        .withDescription("Path in HDFS to duplicate backup files to before restoring so that the original backup can be restored again")
                         .create()
         );
 
