@@ -213,7 +213,7 @@ public class LumifyBootstrap extends AbstractModule {
 
     private void injectProviders() {
         LOGGER.info("Running %s", BootstrapBindingProvider.class.getName());
-        Iterable<BootstrapBindingProvider> bindingProviders = ServiceLoaderUtil.load(BootstrapBindingProvider.class);
+        Iterable<BootstrapBindingProvider> bindingProviders = ServiceLoaderUtil.load(BootstrapBindingProvider.class, configuration);
         Binder binder = binder();
         for (BootstrapBindingProvider provider : bindingProviders) {
             LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());

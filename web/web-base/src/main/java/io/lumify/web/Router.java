@@ -1,5 +1,6 @@
 package io.lumify.web;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
@@ -48,10 +49,12 @@ public class Router extends HttpServlet {
     private static final String JETTY_MULTIPART_CONFIG_ELEMENT9 = "org.eclipse.jetty.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
+    private io.lumify.core.config.Configuration configuration;
 
     public Router(ServletContext servletContext) {
         try {
             final Injector injector = (Injector) servletContext.getAttribute(Injector.class.getName());
+            injector.injectMembers(this);
 
             app = new WebApp(servletContext, injector);
 
@@ -142,7 +145,7 @@ public class Router extends HttpServlet {
             app.get("/admin/plugins", authenticator, csrfProtector, PluginList.class);
             app.post("/admin/upload-ontology", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 
-            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
+            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class, configuration));
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
                 LOGGER.info("Loading webapp plugin: %s", webAppPlugin.getClass().getName());
                 try {
@@ -176,5 +179,10 @@ public class Router extends HttpServlet {
         } catch (Exception e) {
             throw new ServletException(e);
         }
+    }
+
+    @Inject
+    public void setConfiguration(io.lumify.core.config.Configuration configuration) {
+        this.configuration = configuration;
     }
 }

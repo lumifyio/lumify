@@ -34,27 +34,9 @@ public abstract class GraphPropertyWorker {
     private GraphPropertyWorkerPrepareData workerPrepareData;
     private Configuration configuration;
     private WorkspaceRepository workspaceRepository;
-    private String locationIri;
-    private String organizationIri;
-    private String personIri;
 
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         this.workerPrepareData = workerPrepareData;
-
-        this.locationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_LOCATION);
-        if (this.locationIri == null || this.locationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_LOCATION);
-        }
-
-        this.organizationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        if (this.organizationIri == null || this.organizationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        }
-
-        this.personIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_PERSON);
-        if (this.personIri == null || this.personIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
-        }
     }
 
     protected void applyTermMentionFilters(Vertex sourceVertex, Iterable<Vertex> termMentions) {
@@ -170,20 +152,6 @@ public abstract class GraphPropertyWorker {
 
         String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
-    }
-
-    protected String mapToOntologyIri(String type) {
-        String ontologyClassUri;
-        if ("location".equals(type)) {
-            ontologyClassUri = this.locationIri;
-        } else if ("organization".equals(type)) {
-            ontologyClassUri = this.organizationIri;
-        } else if ("person".equals(type)) {
-            ontologyClassUri = this.personIri;
-        } else {
-            ontologyClassUri = LumifyProperties.CONCEPT_TYPE_THING;
-        }
-        return ontologyClassUri;
     }
 
     protected void addVideoTranscriptAsTextPropertiesToMutation(ExistingElementMutation<Vertex> mutation, String propertyKey, VideoTranscript videoTranscript, Metadata metadata, Visibility visibility) {
