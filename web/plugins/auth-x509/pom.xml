@@ -13,11 +13,6 @@
     <name>Lumify: Web: Plugin: X509 Authentication</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <!-- Dependency Versions -->
-        <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
