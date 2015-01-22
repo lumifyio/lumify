@@ -60,8 +60,9 @@ public class VertexSetProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
-        String propertyKey = getOptionalParameter(request, "propertyKey");
-        final String valueStr = getRequiredParameter(request, "value");
+        final String propertyKey = getOptionalParameter(request, "propertyKey");
+        final String valueStr = getOptionalParameter(request, "value");
+        final String[] valuesStr = getOptionalParameterArray(request, "value[]");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
@@ -88,6 +89,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                 propertyName,
                 propertyKey,
                 valueStr,
+                valuesStr,
                 justificationText,
                 sourceInfo,
                 metadataString,
@@ -102,6 +104,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             String propertyName,
             String propertyKey,
             String valueStr,
+            String[] valuesStr,
             String justificationText,
             String sourceInfo,
             String metadataString,
@@ -120,10 +123,18 @@ public class VertexSetProperty extends BaseRequestHandler {
             propertyKey = this.graph.getIdGenerator().nextId();
         }
 
+        if (valueStr == null && valuesStr != null && valuesStr.length == 1) {
+            valueStr = valuesStr[0];
+        }
+        if (valuesStr == null && valueStr != null) {
+            valuesStr = new String[1];
+            valuesStr[0] = valueStr;
+        }
+
         Metadata metadata = GraphUtil.metadataStringToMap(metadataString, this.visibilityTranslator.getDefaultVisibility());
 
         Object value;
-        if (propertyName == "http://lumify.io#comment") {
+        if (propertyName.equals("http://lumify.io#comment")) {
             value = valueStr;
         } else {
             OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
@@ -131,11 +142,45 @@ public class VertexSetProperty extends BaseRequestHandler {
                 throw new RuntimeException("Could not find property: " + propertyName);
             }
 
-            try {
-                value = property.convertString(valueStr);
-            } catch (Exception ex) {
-                LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
-                throw new LumifyException(ex.getMessage(), ex);
+            if (property.hasDependentPropertyIris()) {
+                if (valuesStr == null) {
+                    throw new LumifyException("properties with dependent properties must contain a value");
+                }
+                if (property.getDependentPropertyIris().size() != valuesStr.length) {
+                    throw new LumifyException("properties with dependent properties must contain the same number of values. expected " + property.getDependentPropertyIris().size() + " found " + valuesStr.length);
+                }
+
+                ClientApiElement clientApiElement = null;
+                for (String dependentPropertyIri : property.getDependentPropertyIris()) {
+                    clientApiElement = handle(
+                            graphVertexId,
+                            dependentPropertyIri,
+                            propertyKey,
+                            valueStr,
+                            null,
+                            justificationText,
+                            sourceInfo,
+                            metadataString,
+                            visibilitySource,
+                            user,
+                            workspaceId,
+                            authorizations
+                    );
+                }
+                return clientApiElement;
+            } else {
+                if (valuesStr != null && valuesStr.length > 1) {
+                    throw new LumifyException("properties without dependent properties must not contain more than one value.");
+                }
+                if (valueStr == null) {
+                    throw new LumifyException("properties without dependent properties must have a value");
+                }
+                try {
+                    value = property.convertString(valueStr);
+                } catch (Exception ex) {
+                    LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
+                    throw new LumifyException(ex.getMessage(), ex);
+                }
             }
         }
 

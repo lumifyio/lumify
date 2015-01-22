@@ -166,4 +166,8 @@ public abstract class OntologyProperty {
             throw new RuntimeException("Could not parse location: " + valueStr);
         }
     }
+
+    public boolean hasDependentPropertyIris() {
+        return getDependentPropertyIris() != null && getDependentPropertyIris().size() > 0;
+    }
 }
