@@ -896,7 +896,7 @@ public class VertexApi {
       }
     }
   }
-  public ClientApiVertexFindRelatedResponse findRelated (List<String> graphVertexIds, String limitParentConceptId, Integer maxVerticesToReturn) throws ApiException {
+  public ClientApiVertexFindRelatedResponse findRelated (List<String> graphVertexIds, String limitParentConceptId, String limitEdgeLabel, Integer maxVerticesToReturn) throws ApiException {
     Object postBody = null;
     // verify required params are set
     if(graphVertexIds == null ) {
@@ -912,6 +912,8 @@ public class VertexApi {
 
     if(!"null".equals(String.valueOf(limitParentConceptId)))
       queryParams.put("limitParentConceptId", String.valueOf(limitParentConceptId));
+    if(!"null".equals(String.valueOf(limitEdgeLabel)))
+      queryParams.put("limitEdgeLabel", String.valueOf(limitEdgeLabel));
     if(!"null".equals(String.valueOf(maxVerticesToReturn)))
       queryParams.put("maxVerticesToReturn", String.valueOf(maxVerticesToReturn));
     String[] contentTypes = {
@@ -1019,8 +1021,8 @@ public class VertexApi {
       boolean hasFields = false;
       FormDataMultiPart mp = new FormDataMultiPart();
       hasFields = true;
-      for(String vertexId:vertexIds) { mp.field("vertexIds[]", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }
-      if(hasFields)
+      if(vertexIds != null) { for(String vertexId:vertexIds) { mp.field("vertexIds[]", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); } }
+      if(hasFields && !mp.getFields().isEmpty())
         postBody = mp;
     }
     else {

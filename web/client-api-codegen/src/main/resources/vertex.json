@@ -735,6 +735,13 @@
                             "paramType": "query"
                         },
                         {
+                            "name": "limitEdgeLabel",
+                            "description": "the edge label to limit related",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
                             "name": "maxVerticesToReturn",
                             "description": "max number of vertices to return",
                             "required": false,
