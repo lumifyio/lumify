@@ -97,7 +97,8 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>${plugin.maven.war.version}</version>
                         <configuration>
-                            <warSourceExcludes>
+                          <containerConfigXML>src/main/webapp/META-INF/context.xml</containerConfigXML>
+                          <warSourceExcludes>
                                 index.html,
                                 test/**,
                                 Gruntfile.js,
