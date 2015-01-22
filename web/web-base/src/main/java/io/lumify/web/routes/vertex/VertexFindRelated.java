@@ -19,7 +19,6 @@ import org.securegraph.Vertex;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +44,7 @@ public class VertexFindRelated extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String[] graphVertexIds = getRequiredParameterArray(request, "graphVertexIds[]");
         String limitParentConceptId = getOptionalParameter(request, "limitParentConceptId");
+        String limitEdgeLabel = getOptionalParameter(request, "limitEdgeLabel");
         long maxVerticesToReturn = getOptionalParameterLong(request, "maxVerticesToReturn", 250);
 
         User user = getUser(request);
@@ -68,10 +68,10 @@ public class VertexFindRelated extends BaseRequestHandler {
         ClientApiVertexFindRelatedResponse result = new ClientApiVertexFindRelatedResponse();
         long count = visitedIds.size();
         for (String id : graphVertexIds) {
-            Iterable<Vertex> vertices = graph.getVertex(id, authorizations).getVertices(Direction.BOTH, authorizations);
+            Iterable<Vertex> vertices = graph.getVertex(id, authorizations).getVertices(Direction.BOTH, limitEdgeLabel, authorizations);
             for (Vertex vertex : vertices) {
                 if (!visitedIds.add(vertex.getId())) continue;
-                if (limitConceptIds.size() == 0 || !isLimited(limitConceptIds, vertex)) {
+                if (limitConceptIds.size() == 0 || !isLimited(vertex, limitConceptIds)) {
                     if (count < maxVerticesToReturn) {
                         result.getVertices().add(ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations));
                     }
@@ -85,7 +85,7 @@ public class VertexFindRelated extends BaseRequestHandler {
         respondWithClientApiObject(response, result);
     }
 
-    private boolean isLimited(Set<String> limitConceptIds, Vertex vertex) {
+    private boolean isLimited(Vertex vertex, Set<String> limitConceptIds) {
         String conceptId = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
         return !limitConceptIds.contains(conceptId);
     }

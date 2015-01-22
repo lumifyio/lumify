@@ -21,7 +21,8 @@ public abstract class VertextTestBase extends TestBase {
     protected static final String PROPERTY_NAME = "http://lumify.io/test#firstName";
     protected static final String PROPERTY_KEY_PREFIX = "key-firstName-";
     protected static final String PROPERTY_VALUE_PREFIX = "First Name ";
-    protected static final String EDGE_LABEL = "http://lumify.io/test#worksFor";
+    protected static final String EDGE_LABEL1 = "http://lumify.io/test#worksFor";
+    protected static final String EDGE_LABEL2 = "http://lumify.io/test#sibling";
 
     protected LumifyApi setupLumifyApi;
     protected VertexApi setupVertexApi;
@@ -63,8 +64,8 @@ public abstract class VertextTestBase extends TestBase {
         }
     }
 
-    protected void createEdge(String sourceVertexId, String destVertexId) throws ApiException {
-        setupEdgeApi.create(sourceVertexId, destVertexId, EDGE_LABEL, "", "ok", "{}");
+    protected void createEdge(String sourceVertexId, String destVertexId, String edgeLabel) throws ApiException {
+        setupEdgeApi.create(sourceVertexId, destVertexId, edgeLabel, "", "ok", "{}");
     }
 
     protected void assertVertexIds(Collection<String> expectedVertexIds, Collection<ClientApiVertex> actualVertices) {

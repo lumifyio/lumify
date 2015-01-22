@@ -167,7 +167,7 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
     }
 
     public ClientApiVertexFindRelatedResponse findRelated(List<String> vertexIds) throws ApiException {
-        return findRelated(vertexIds, null, null);
+        return findRelated(vertexIds, null, null, null);
     }
 
     public static class FileForImport {

@@ -150,7 +150,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             LumifyProperties.TEXT.addPropertyValue(m, MULTI_VALUE_KEY, textValue, textMetadata, data.getVisibility());
 
             LumifyProperties.CREATE_DATE.addPropertyValue(m, MULTI_VALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
-            String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ").trim();
+            String title = extractTextField(metadata, subjectKeys).trim();
             if (title != null && title.length() > 0) {
                 org.securegraph.Metadata titleMetadata = data.createPropertyMetadata();
                 LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4, getVisibilityTranslator().getDefaultVisibility());
