@@ -15,7 +15,7 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 1. Install Docker per their instructions: [https://docs.docker.com/installation](https://docs.docker.com/installation/#installation)
 
-1. Install Python per their instructions (Windows-only): [https://www.python.org/downloads/](https://www.python.org/downloads/)
+1. Install Python v2.x per their instructions (Windows-only): [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
 1. Install msysgit via the netinstall option (Windows-only): [https://github.com/msysgit/msysgit/releases](https://github.com/msysgit/msysgit/releases) - 
 **If running Windows, all commands from this point forward are assumed to be running from the msysgit shell**
