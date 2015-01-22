@@ -61,13 +61,14 @@ define([
         this.onSearchByRelatedEntity = function(event, data) {
             event.stopPropagation();
             var self = this;
-            this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
-                .done(function(vertex) {
-                    var title = vertex && F.vertex.title(vertex) || vertex.id;
-
+            this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
+                .done(function(vertices) {
+                    var single = vertices[0],
+                        title = vertices.length > 1 ? i18n('search.filters.title_multiple', vertices.length)
+                                                    : single && F.vertex.title(single) || single.id;
                     self.onClearFilters();
 
-                    self.entityFilters.relatedToVertexId = vertex.id;
+                    self.entityFilters.relatedToVertexIds = _.pluck(vertices, 'id');
                     self.conceptFilter = data.conceptId || '';
                     self.trigger(self.select('conceptDropdownSelector'), 'selectConceptId', {
                         conceptId: data.conceptId || ''
@@ -159,8 +160,13 @@ define([
             var self = this,
                 target = $(event.target),
                 li = target.closest('li').addClass('fId' + self.filterId),
-                property = data.property,
-                fieldComponent = property.possibleValues ?
+                property = data.property;
+
+            if (property.title === 'http://lumify.io#text') {
+                property.dataType = 'boolean';
+            }
+
+            var fieldComponent = property.possibleValues ?
                     'fields/restrictValues' :
                     'fields/' + property.dataType;
 
@@ -193,6 +199,9 @@ define([
         this.createFieldSelection = function() {
             FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
                 properties: this.properties,
+                unsupportedProperties: this.attr.supportsHistogram ?
+                    [] :
+                    ['http://lumify.io#text'],
                 onlySearchable: true,
                 placeholder: i18n('search.filters.add_filter.placeholder')
             });

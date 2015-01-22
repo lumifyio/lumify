@@ -23,12 +23,16 @@ define([
             addButtonSelector: '.add',
             searchButtonSelector: '.search',
             cancelButtonSelector: '.cancel',
-            promptAddButtonSelector: '.prompt-add',
+            promptAddButtonSelector: '.prompt-add'
         });
 
         this.before('initialize', function(node, config) {
             if (config.vertex) {
-                config.title = F.vertex.title(config.vertex);
+                if (config.vertex.length  > 1) {
+                    config.title = i18n('popovers.add_related.title_multiple', config.vertex.length);
+                } else {
+                    config.title = '"' + F.vertex.title(config.vertex[0]) + '"';
+                }
             } else {
                 console.warn('vertex attribute required');
                 config.title = i18n('popovers.add_related.title_unknown');
@@ -46,7 +50,7 @@ define([
                     cancelButtonSelector: this.onCancel,
                     searchButtonSelector: this.onSearch,
                     promptAddButtonSelector: this.onPromptAdd
-                })
+                });
 
                 ConceptSelector.attachTo(self.popover.find('.concept'), {
                     defaultText: i18n('popovers.add_related.concept.default_text'),
@@ -73,11 +77,11 @@ define([
             promptAdd.hide();
             cancelButton.hide();
             addButton.show();
-        }
+        };
 
         this.onSearch = function(event) {
             this.trigger(document, 'searchByRelatedEntity', {
-                vertexId: this.attr.relatedToVertexId,
+                vertexIds: this.attr.relatedToVertexIds,
                 conceptId: this.conceptId
             });
             this.teardown();
@@ -91,7 +95,7 @@ define([
                     return {
                         vertexId: vertex.id,
                         graphLayoutJson: {
-                            relatedToVertexId: self.attr.relatedToVertexId
+                            relatedToVertexId: self.attr.relatedToVertexIds[0]
                         }
                     };
                 })
@@ -103,7 +107,7 @@ define([
             if (this.relatedRequest) {
                 this.relatedRequest.abort();
             }
-        }
+        };
 
         this.onAdd = function(event) {
             var self = this,
@@ -115,7 +119,7 @@ define([
             Promise.all([
                 this.dataRequest('config', 'properties'),
                 (
-                    this.relatedRequest = this.dataRequest('vertex', 'related', this.attr.relatedToVertexId, {
+                    this.relatedRequest = this.dataRequest('vertex', 'related', this.attr.relatedToVertexIds, {
                         limitParentConceptId: this.conceptId
                     })
                 )
@@ -153,12 +157,12 @@ define([
                                     return {
                                         vertexId: vertex.id,
                                         graphLayoutJson: {
-                                            relatedToVertexId: self.attr.relatedToVertexId
+                                            relatedToVertexId: self.attr.relatedToVertexIds[0]
                                         }
                                     };
                                 })
                             });
-                        })
+                        });
                         self.teardown();
                     }
 

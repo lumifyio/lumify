@@ -1,5 +1,6 @@
 package io.lumify.web;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
@@ -48,10 +49,12 @@ public class Router extends HttpServlet {
     private static final String JETTY_MULTIPART_CONFIG_ELEMENT9 = "org.eclipse.jetty.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
+    private io.lumify.core.config.Configuration configuration;
 
     public Router(ServletContext servletContext) {
         try {
             final Injector injector = (Injector) servletContext.getAttribute(Injector.class.getName());
+            injector.injectMembers(this);
 
             app = new WebApp(servletContext, injector);
 
@@ -98,11 +101,11 @@ public class Router extends HttpServlet {
             app.get("/vertex/edges", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexEdges.class);
             app.post("/vertex/multiple", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
             app.post("/vertex/new", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexNew.class);
-            app.get("/vertex/search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexSearch.class);
+            app.post("/vertex/search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexSearch.class);
             app.get("/vertex/geo-search", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexGeoSearch.class);
             app.post("/vertex/upload-image", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexUploadImage.class);
             app.get("/vertex/find-path", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindPath.class);
-            app.get("/vertex/find-related", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindRelated.class);
+            app.post("/vertex/find-related", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexFindRelated.class);
             app.get("/vertex/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexAudit.class);
 
             app.post("/edge/property", authenticator, csrfProtector, EditPrivilegeFilter.class, SetEdgeProperty.class);
@@ -143,7 +146,7 @@ public class Router extends HttpServlet {
             app.get("/admin/plugins", authenticator, csrfProtector, PluginList.class);
             app.post("/admin/upload-ontology", authenticator, csrfProtector, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 
-            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
+            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class, configuration));
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
                 LOGGER.info("Loading webapp plugin: %s", webAppPlugin.getClass().getName());
                 try {
@@ -177,5 +180,10 @@ public class Router extends HttpServlet {
         } catch (Exception e) {
             throw new ServletException(e);
         }
+    }
+
+    @Inject
+    public void setConfiguration(io.lumify.core.config.Configuration configuration) {
+        this.configuration = configuration;
     }
 }

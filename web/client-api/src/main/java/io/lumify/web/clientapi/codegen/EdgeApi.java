@@ -264,8 +264,8 @@ public class EdgeApi {
       boolean hasFields = false;
       FormDataMultiPart mp = new FormDataMultiPart();
       hasFields = true;
-      for(String edgeId:edgeIds) { mp.field("edgeIds[]", edgeId, MediaType.MULTIPART_FORM_DATA_TYPE); }
-      if(hasFields)
+      if(edgeIds != null) { for(String edgeId:edgeIds) { mp.field("edgeIds[]", edgeId, MediaType.MULTIPART_FORM_DATA_TYPE); } }
+      if(hasFields && !mp.getFields().isEmpty())
         postBody = mp;
     }
     else {

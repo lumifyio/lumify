@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
+        <!-- Pattern: %d{yyyy-MM-dd HH:mm:ss.SSS/zzz} %-5p [%c{3}] %m%n -->
+        <!ENTITY pattern "&#37;d{yyyy-MM-dd HH:mm:ss.SSS/zzz} &#37;-5p [&#37;c{3}] &#37;m&#37;n">
+]>
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="&pattern;"/>
+        </layout>
+    </appender>
+
+    <logger name="io.lumify.backupRestore" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="console" />
+    </logger>
+
+    <!-- logger name="org.apache.hadoop.hdfs.DFSClient" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="console" />
+    </logger -->
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="console"/>
+    </root>
+</log4j:configuration>

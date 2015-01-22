@@ -2,6 +2,7 @@ package io.lumify.core.model.longRunningProcess;
 
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -20,7 +21,8 @@ public class LongRunningProcessRunner {
     private LongRunningProcessRepository longRunningProcessRepository;
     private WorkQueueRepository workQueueRepository;
     private User user;
-    private List<LongRunningProcessWorker> workers = new ArrayList<LongRunningProcessWorker>();
+    private Configuration configuration;
+    private List<LongRunningProcessWorker> workers = new ArrayList<>();
 
     public void prepare(Map map) {
         prepareUser(map);
@@ -39,7 +41,7 @@ public class LongRunningProcessRunner {
                 map,
                 this.user,
                 InjectHelper.getInjector());
-        for (LongRunningProcessWorker worker : InjectHelper.getInjectedServices(LongRunningProcessWorker.class)) {
+        for (LongRunningProcessWorker worker : InjectHelper.getInjectedServices(LongRunningProcessWorker.class, configuration)) {
             try {
                 worker.prepare(workerPrepareData);
             } catch (Exception ex) {
@@ -91,5 +93,10 @@ public class LongRunningProcessRunner {
     @Inject
     public void setLongRunningProcessRepository(LongRunningProcessRepository longRunningProcessRepository) {
         this.longRunningProcessRepository = longRunningProcessRepository;
+    }
+
+    @Inject
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 }

@@ -13,7 +13,6 @@
     <name>Lumify: Web: Plugin: Analyst's Notebook Export</name>
 
     <properties>
-        <jackson.version>2.3.0</jackson.version>
         <woodstox.version>4.1.4</woodstox.version>
     </properties>
 

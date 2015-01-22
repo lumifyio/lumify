@@ -28,7 +28,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
     private String zipCodeIri;
     private String geoLocationIri;
-    private Map<String, ZipCodeEntry> zipCodesByZipCode = new HashMap<String, ZipCodeEntry>();
+    private Map<String, ZipCodeEntry> zipCodesByZipCode = new HashMap<>();
     private String artifactHasEntityIri;
     private WorkspaceRepository workspaceRepository;
     private User user;

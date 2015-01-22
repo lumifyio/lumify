@@ -28,12 +28,13 @@ define([
             if (q) {
                 params.q = q;
             }
-            if (options.query && options.query.relatedToVertexId) {
-                params.relatedToVertexId = options.query.relatedToVertexId;
+
+            if (options.query && options.query.relatedToVertexIds) {
+                params.relatedToVertexIds = options.query.relatedToVertexIds;
             }
             params.filter = JSON.stringify(options.propertyFilters || []);
 
-            return ajax('GET', '/vertex/search', params);
+            return ajax('POST', '/vertex/search', params);
         },
 
         'geo-search': function(lat, lon, radius) {
@@ -92,9 +93,9 @@ define([
             });
         },
 
-        related: function(vertexId, options) {
-            return ajax('GET', '/vertex/find-related', {
-                graphVertexId: vertexId,
+        related: function(vertexIds, options) {
+            return ajax('POST', '/vertex/find-related', {
+                graphVertexIds: vertexIds,
                 limitParentConceptId: options.limitParentConceptId
             });
         },

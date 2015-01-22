@@ -83,6 +83,12 @@
     </owl:ObjectProperty>
     
 
+    <!-- http://lumify.io/test#sibling -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/test#sibling">
+        <rdfs:domain rdf:resource="http://lumify.io/test#person"/>
+        <rdfs:range rdf:resource="http://lumify.io/test#person"/>
+    </owl:ObjectProperty>
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////

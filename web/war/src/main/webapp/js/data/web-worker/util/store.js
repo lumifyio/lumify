@@ -255,7 +255,7 @@ define([
                             return cacheDecisions.shouldCacheVertexAtUrl(v, url);
                         })
                         if (cacheable.length) {
-                            console.debug(request.url, 'causing vertices to cache', json.vertices);
+                            console.debug(request.url, 'causing ' + json.vertices.length + ' vertices to cache');
                             cacheVertices(workspaceId, cacheable, cachePriorityForUrl(request.url));
                         }
                     }

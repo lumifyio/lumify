@@ -11,14 +11,17 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
+import org.apache.tika.io.TemporaryResources;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
-import org.apache.tika.mime.MimeTypes;
-import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.CompositeParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.LumifyParserConfig;
 import org.apache.tika.parser.pdf.PDFParserConfig;
 import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.SecureContentHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -83,7 +86,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             LOGGER.error("Could not load config: %s", PROPS_FILE);
         }
 
-        dateKeys = Arrays.asList(tikaProperties.getProperty(DATE_KEYS_PROPERTY, "date,published,pubdate,publish_date,last-modified, atc:last-modified").split(","));
+        dateKeys = Arrays.asList(tikaProperties.getProperty(DATE_KEYS_PROPERTY, "date,published,pubdate,publish_date,last-modified,atc:last-modified").split(","));
         subjectKeys = Arrays.asList(tikaProperties.getProperty(SUBJECT_KEYS_PROPERTY, "title,subject").split(","));
         urlKeys = Arrays.asList(tikaProperties.getProperty(URL_KEYS_PROPERTY, "url,og:url").split(","));
         typeKeys = Arrays.asList(tikaProperties.getProperty(TYPE_KEYS_PROPERTY, "Content-Type").split(","));
@@ -147,7 +150,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             LumifyProperties.TEXT.addPropertyValue(m, MULTI_VALUE_KEY, textValue, textMetadata, data.getVisibility());
 
             LumifyProperties.CREATE_DATE.addPropertyValue(m, MULTI_VALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
-            String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ");
+            String title = extractTextField(metadata, subjectKeys).trim();
             if (title != null && title.length() > 0) {
                 org.securegraph.Metadata titleMetadata = data.createPropertyMetadata();
                 LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4, getVisibilityTranslator().getDefaultVisibility());
@@ -172,6 +175,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         byte[] textBytes = out.toByteArray();
         String text;
 
+        metadata.set(Metadata.CONTENT_TYPE, mimeType);
         String bodyContent = extractTextWithTika(textBytes, metadata);
 
         if (isHtml(mimeType)) {
@@ -186,15 +190,41 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         return Normalizer.normalize(text, Normalizer.Form.NFC);
     }
 
-    private String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
-        AutoDetectParser parser = new AutoDetectParser(new MimeTypes());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
+    private static String extractTextWithTika(byte[] textBytes, Metadata metadata) throws TikaException, SAXException, IOException {
+        TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
+        CompositeParser compositeParser = new CompositeParser(tikaConfig.getMediaTypeRegistry(), tikaConfig.getParser());
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         ContentHandler handler = new BodyContentHandler(writer);
         ParseContext context = new ParseContext();
         context.set(PDFParserConfig.class, new LumifyParserConfig());
-        parser.parse(new ByteArrayInputStream(textBytes), handler, metadata, context);
-        return IOUtils.toString(baos.toByteArray(), "UTF-8");
+        ByteArrayInputStream stream = new ByteArrayInputStream(textBytes);
+
+        TemporaryResources tmp = new TemporaryResources();
+        try {
+            TikaInputStream tis = TikaInputStream.get(stream, tmp);
+
+            // TIKA-216: Zip bomb prevention
+            SecureContentHandler sch = new SecureContentHandler(handler, tis);
+            try {
+                compositeParser.parse(tis, sch, metadata, context);
+            } catch (SAXException e) {
+                // Convert zip bomb exceptions to TikaExceptions
+                sch.throwIfCauseOf(e);
+                throw e;
+            }
+        } finally {
+            tmp.dispose();
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("extracted %d bytes", output.size());
+            LOGGER.debug("metadata");
+            for (String metadataName : metadata.names()) {
+                LOGGER.debug("  %s: %s", metadataName, metadata.get(metadataName));
+            }
+        }
+        return IOUtils.toString(output.toByteArray(), "UTF-8");
     }
 
     private String extractTextFromHtml(String text) throws BoilerpipeProcessingException {

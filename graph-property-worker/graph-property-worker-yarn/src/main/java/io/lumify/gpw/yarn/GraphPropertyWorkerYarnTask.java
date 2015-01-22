@@ -22,7 +22,7 @@ public class GraphPropertyWorkerYarnTask extends TaskBase {
         try {
             Configuration configuration = ConfigurationLoader.load();
             InjectHelper.ModuleMaker moduleMaker = LumifyBootstrap.bootstrapModuleMaker(configuration);
-            UserRepository userRepository = InjectHelper.getInstance(UserRepository.class, moduleMaker);
+            UserRepository userRepository = InjectHelper.getInstance(UserRepository.class, moduleMaker, configuration);
 
             GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
             graphPropertyRunner.prepare(userRepository.getSystemUser());

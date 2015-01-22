@@ -23,7 +23,7 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        postMimeTypeWorkers = InjectHelper.getInjectedServices(PostMimeTypeWorker.class);
+        postMimeTypeWorkers = InjectHelper.getInjectedServices(PostMimeTypeWorker.class, getConfiguration());
         for (PostMimeTypeWorker postMimeTypeWorker : postMimeTypeWorkers) {
             try {
                 postMimeTypeWorker.prepare(workerPrepareData);

@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
@@ -162,8 +163,8 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
         return apiInvoker.getBinary(basePath, VERTEX_BASE_URL + "video-preview", queryParams, headerParams);
     }
 
-    public ClientApiVertexFindRelatedResponse findRelated(String vertexId) throws ApiException {
-        return findRelated(vertexId, null, null);
+    public ClientApiVertexFindRelatedResponse findRelated(List<String> vertexIds) throws ApiException {
+        return findRelated(vertexIds, null, null, null);
     }
 
     public static class FileForImport {
@@ -212,8 +213,8 @@ public class VertexApiExt extends io.lumify.web.clientapi.codegen.VertexApi {
         return vertexSearch(query, filters, null, null, null, null, null);
     }
 
-    public ClientApiVertexSearchResponse vertexSearch(String query, JSONArray filters, Integer offset, Integer size, String conceptType, Boolean leafNodes, String relatedToVertexId) throws ApiException {
-        return vertexSearch(query, filters.toString(), offset, size, conceptType, leafNodes, relatedToVertexId);
+    public ClientApiVertexSearchResponse vertexSearch(String query, JSONArray filters, Integer offset, Integer size, String conceptType, Boolean leafNodes, List<String> relatedToVertexIds) throws ApiException {
+        return vertexSearch(query, filters.toString(), offset, size, conceptType, leafNodes, relatedToVertexIds);
     }
 
     public ClientApiElement setProperty(String graphVertexId, String propertyKey, String propertyName, String value, String visibilitySource, String justificationText) throws ApiException {

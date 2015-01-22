@@ -13,19 +13,74 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 ## Quick Start
 
-1. [Install docker](https://docs.docker.com/installation/#installation)
-1. Install node and npm. Then run ```npm install -g inherits bower grunt grunt-cli```
-1. Update your ```/etc/hosts``` file.
-      - Linux: Add ```127.0.0.1   lumify-dev``` to your ```/etc/hosts``` file.
-      - OSX: Run ```boot2docker ip```. Add ```<boot to docker ip>   lumify-dev``` to your ```/etc/hosts``` file.
-1. Create the docker image ```./docker/build-dev.sh```
-1. Run the docker image ```./docker/run-dev.sh``` (This will start ZooKeeper, HDFS, YARN, ElasticSearch, and RabbitMQ).
-1. Create a war file ```mvn package -P web-war -pl web/war -am -DskipTests -Dsource.skip=true```
-1. Copy the war file ```cp web/war/target/lumify-web-war*.war docker/fs/opt/jetty/webapps/root.war```
-1. Package an auth plugin ```mvn package -pl ./web/plugins/auth-username-only -am -DskipTests```
-1. Copy the auth plugin for use in the docker image: ```cp ./web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar docker/fs/opt/lumify/lib/```
-1. Inside the docker image run Jetty: ```/opt/jetty/bin/jetty.sh start```
-1. Open a browser and go to ```http://lumify-dev:8080/```
+1. Install Docker per their instructions: [https://docs.docker.com/installation](https://docs.docker.com/installation/#installation)
+
+1. Install Python v2.x per their instructions (Windows-only): [https://www.python.org/downloads/](https://www.python.org/downloads/)
+
+1. Install msysgit via the netinstall option (Windows-only): [https://github.com/msysgit/msysgit/releases](https://github.com/msysgit/msysgit/releases) - 
+**If running Windows, all commands from this point forward are assumed to be running from the msysgit shell**
+
+1. Add python to $PATH in msysgit bash shell (Windows-only)
+
+        // Create or add to file "~/.profile"
+        export PATH=$PATH:/c/Python27
+
+1. Install Java per their instructions if not already installed (Windows-only): [http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+
+1. Install node and npm per their instructions: [http://nodejs.org/](http://nodejs.org/)
+
+1. Install the Lumify npm dependencies (from the web/war/src/main/webapp directory):
+
+        npm install -g inherits bower grunt
+        npm install grunt-cli
+
+1. Update your hosts file:
+    - Linux
+
+            echo '127.0.0.1 lumify-dev' >> /etc/hosts
+
+    - OS X
+
+            echo "$(boot2docker ip 2>/dev/null) lumify-dev" >> /etc/hosts
+
+    - Windows
+
+            boot2docker ip
+            edit %windir%\system32\drivers\etc\hosts adding a new line with the IP address from the previous command, space, "lumify-dev"
+
+1. Create the docker image:
+
+        docker/build-dev.sh
+
+1. Run the docker image: (This will start ZooKeeper, HDFS, YARN, ElasticSearch, and RabbitMQ)
+
+        docker/run-dev.sh
+
+1. Create a war file:
+
+        mvn package -P web-war -pl web/war -am -DskipTests -Dsource.skip=true
+
+1. Copy the war file:
+
+        cp web/war/target/lumify-web-war*.war \
+           docker/lumify-dev-persistent/opt/jetty/webapps/root.war
+
+1. Package an auth plugin:
+
+        mvn package -pl ./web/plugins/auth-username-only -am -DskipTests
+
+1. Copy the auth plugin for use in the docker image:
+
+        cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-*[0-9T].jar \
+           docker/lumify-dev-persistent/opt/lumify/lib
+ 
+1. Inside the docker image run Jetty:
+
+        /opt/jetty/bin/jetty.sh start
+
+1. Open a browser and go to: `http://lumify-dev:8080/`
+
+See [docker/README.md](docker/) for more information on the docker dev image.
 
 ## Developing / Contributing
 

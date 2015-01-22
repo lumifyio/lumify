@@ -39,17 +39,19 @@ public class VertexFindRelated extends BaseRequestHandler {
         this.graph = graph;
     }
 
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String graphVertexId = getAttributeString(request, "graphVertexId");
+        String[] graphVertexIds = getRequiredParameterArray(request, "graphVertexIds[]");
         String limitParentConceptId = getOptionalParameter(request, "limitParentConceptId");
+        String limitEdgeLabel = getOptionalParameter(request, "limitEdgeLabel");
         long maxVerticesToReturn = getOptionalParameterLong(request, "maxVerticesToReturn", 250);
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        Set<String> limitConceptIds = new HashSet<String>();
+        Set<String> limitConceptIds = new HashSet<>();
 
         if (limitParentConceptId != null) {
             List<Concept> limitConcepts = ontologyRepository.getConceptAndChildrenByIRI(limitParentConceptId);
@@ -61,25 +63,29 @@ public class VertexFindRelated extends BaseRequestHandler {
             }
         }
 
-        Iterable<Vertex> vertices = graph.getVertex(graphVertexId, authorizations)
-                .getVertices(Direction.BOTH, authorizations);
+        Set<String> visitedIds = new HashSet<>();
 
         ClientApiVertexFindRelatedResponse result = new ClientApiVertexFindRelatedResponse();
-        long count = 0;
-        for (Vertex vertex : vertices) {
-            if (limitConceptIds.size() == 0 || !isLimited(limitConceptIds, vertex)) {
-                if (count < maxVerticesToReturn) {
-                    result.getVertices().add(ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations));
+        long count = visitedIds.size();
+        for (String id : graphVertexIds) {
+            Iterable<Vertex> vertices = graph.getVertex(id, authorizations).getVertices(Direction.BOTH, limitEdgeLabel, authorizations);
+            for (Vertex vertex : vertices) {
+                if (!visitedIds.add(vertex.getId())) continue;
+                if (limitConceptIds.size() == 0 || !isLimited(vertex, limitConceptIds)) {
+                    if (count < maxVerticesToReturn) {
+                        result.getVertices().add(ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations));
+                    }
+                    count++;
                 }
-                count++;
             }
         }
+
         result.setCount(count);
 
         respondWithClientApiObject(response, result);
     }
 
-    private boolean isLimited(Set<String> limitConceptIds, Vertex vertex) {
+    private boolean isLimited(Vertex vertex, Set<String> limitConceptIds) {
         String conceptId = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
         return !limitConceptIds.contains(conceptId);
     }

@@ -64,7 +64,7 @@ public abstract class CommandLineBase {
         }
 
         if (initFramework) {
-            InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(getConfiguration()));
+            InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(getConfiguration()), getConfiguration());
             if (getConfiguration().get(Configuration.MODEL_PROVIDER, null) != null) {
                 FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
             }

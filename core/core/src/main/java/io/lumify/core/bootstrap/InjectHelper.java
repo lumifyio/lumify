@@ -19,8 +19,8 @@ public class InjectHelper {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(InjectHelper.class);
     private static Injector injector;
 
-    public static <T> T inject(T o, ModuleMaker moduleMaker) {
-        ensureInjectorCreated(moduleMaker);
+    public static <T> T inject(T o, ModuleMaker moduleMaker, Configuration configuration) {
+        ensureInjectorCreated(moduleMaker, configuration);
         inject(o);
         return o;
     }
@@ -37,8 +37,8 @@ public class InjectHelper {
         return injector;
     }
 
-    public static <T> T getInstance(Class<T> clazz, ModuleMaker moduleMaker) {
-        ensureInjectorCreated(moduleMaker);
+    public static <T> T getInstance(Class<T> clazz, ModuleMaker moduleMaker, Configuration configuration) {
+        ensureInjectorCreated(moduleMaker, configuration);
         return injector.getInstance(clazz);
     }
 
@@ -49,8 +49,8 @@ public class InjectHelper {
         return injector.getInstance(clazz);
     }
 
-    public static <T> Collection<T> getInjectedServices(Class<T> clazz) {
-        List<T> workers = toList(ServiceLoaderUtil.load(clazz));
+    public static <T> Collection<T> getInjectedServices(Class<T> clazz, Configuration configuration) {
+        List<T> workers = toList(ServiceLoaderUtil.load(clazz, configuration));
         for (T worker : workers) {
             inject(worker);
         }
@@ -71,10 +71,10 @@ public class InjectHelper {
         Configuration getConfiguration();
     }
 
-    private static void ensureInjectorCreated(ModuleMaker moduleMaker) {
+    private static void ensureInjectorCreated(ModuleMaker moduleMaker, Configuration configuration) {
         if (injector == null) {
             LOGGER.info("Loading libs...");
-            for (LibLoader libLoader : ServiceLoaderUtil.load(LibLoader.class)) {
+            for (LibLoader libLoader : ServiceLoaderUtil.load(LibLoader.class, configuration)) {
                 libLoader.loadLibs(moduleMaker.getConfiguration());
             }
             injector = Guice.createInjector(moduleMaker.createModule(), new ObjectMapperModule());

@@ -119,13 +119,9 @@ define([
 
         this.setupMenu = function(vertex) {
             var self = this,
-                title = F.vertex.title(vertex);
+                title = F.string.truncate(F.vertex.title(vertex), 3),
+                wrapper = $('.draggable-wrapper');
 
-            if (title.length > 15) {
-                title = title.substring(0, 15) + '...';
-            }
-
-            var wrapper = $('.draggable-wrapper');
             if (wrapper.length === 0) {
                 wrapper = $('<div class="draggable-wrapper"/>').appendTo(document.body);
             }

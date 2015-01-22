@@ -1,4 +1,6 @@
 
+## Running
+
 The dev docker image contains all the backend services needed for development. To get started run:
 
         ./build-dev.sh
@@ -16,3 +18,9 @@ There are helper scripts within the image `/opt/start.sh` and `/opt/stop.sh` to 
 It is also helpful to add the following to your `/etc/hosts` file:
 
         127.0.0.1       lumify-dev
+
+## Formatting
+
+To format your dev image, you can run the format script.
+
+        ./format-dev.sh

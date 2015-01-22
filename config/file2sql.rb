@@ -13,9 +13,18 @@ version            = ENV['VERSION']            || '1.0'
 key_prefix         = ENV['KEY_PREFIX']         || 'lumify'
 file_indicator     = ENV['FILE_INDICATOR']     || 'FILE'
 
-puts "-- delete from #{table} where #{environment_column} = '#{environment}'" +
-                              " and #{version_column} = '#{version}'" +
-                              " and #{key_column} like '#{key_prefix}.#{file_indicator}.%';"
+puts %{ create table if not exists #{table} (
+          id int(11) not null auto_increment,
+          #{environment_column} varchar(5) not null,
+          #{version_column} varchar(10) not null,
+          #{key_column} varchar(200) not null,
+          #{value_column} varchar(4000) not null,
+          primary key (id)
+        ) engine=InnoDB default charset=utf8; }.gsub(/\s+/, ' ').strip
+
+puts %{ -- delete from #{table} where #{environment_column} = '#{environment}'
+                                  and #{version_column} = '#{version}'
+                                  and #{key_column} like '#{key_prefix}.#{file_indicator}.%'; }.gsub(/\s+/, ' ').strip
 
 ARGV.each do |arg|
   if File.exist?(arg)

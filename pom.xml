@@ -9,17 +9,17 @@
     <name>Lumify</name>
 
     <scm>
-        <url>https://github.com/altamiracorp/lumify</url>
-        <connection>scm:git:git://github.com:altamiracorp/lumify.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:altamiracorp/lumify.git</developerConnection>
+        <url>https://github.com/lumifyio/lumify</url>
+        <connection>scm:git:git://github.com:lumifyio/lumify.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:lumifyio/lumify.git</developerConnection>
     </scm>
 
     <inceptionYear>2013</inceptionYear>
     <organization>
-        <name>Altamira Corporation</name>
-        <url>http://www.altamiracorp.com</url>
+        <name>Lumify</name>
+        <url>http://lumify.io</url>
     </organization>
-    <url>https://github.com/altamiracorp/lumify</url>
+    <url>https://github.com/lumifyio/lumify</url>
     <licenses>
         <license>
             <name>The Apache Software License, Veresion 2.0</name>
@@ -91,6 +91,8 @@
         <maven.plugin.version>3.1.6</maven.plugin.version>
         <slf4j.version>1.6.5</slf4j.version>
         <guava.version>13.0</guava.version>
+        <xerces.version>2.9.1</xerces.version>
+        <xalan.version>2.7.1</xalan.version>
 
         <!-- update monthly -->
         <uadetector.resources.version>2014.06</uadetector.resources.version>
@@ -509,6 +511,18 @@
                 <artifactId>uadetector-resources</artifactId>
                 <version>${uadetector.resources.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>${xerces.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>xalan</artifactId>
+                <version>${xalan.version}</version>
+            </dependency>
+
 
             <!-- Provided Dependencies -->
             <dependency>

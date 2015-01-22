@@ -55,6 +55,7 @@ define([
                 val = input.prop('checked');
 
             this.$node.find('.input-row .display').text(
+                i18n(true, 'field.boolean.' + val + '.' + this.attr.property.title) ||
                 F.boolean.pretty(val)
             );
 
