@@ -5,15 +5,21 @@ define([
 ], function(r, selectionUtils) {
 
     describe('expandRangeByWords', function() {
-        var node;
+        var node, outerNode;
+
+        before(function() {
+            $(document.body).empty();
+        })
 
         beforeEach(function() {
-            node = $('<div>').appendTo(document.body);
-        });
+            outerNode = $('<div><div></div></div>')
+                .appendTo(document.body);
+            node = outerNode.children('div');
+        })
 
         afterEach(function() {
-            node.remove();
-        });
+            outerNode.remove();
+        })
 
         it('should expand range by n words with only textnodes', function() {
 

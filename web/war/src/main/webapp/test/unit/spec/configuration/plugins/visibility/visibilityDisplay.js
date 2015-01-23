@@ -12,15 +12,15 @@ describeComponent('configuration/plugins/visibility/visibilityDisplay', function
     })
 
     it('Should be public if no value specified', function() {
-        setupComponent({ value: undefined })
-        expect($.trim(this.component.$node.html())).to.equal('<i>public</i>');
+        setupComponent(this, { value: undefined })
+        expect($.trim(this.component.$node.html())).to.equal('<i>visibility.blank</i>');
     })
 
     it('Should still display falsy value', function() {
-        setupComponent({ value: '0' })
+        setupComponent(this, { value: '0' })
         expect($.trim(this.component.$node.html())).to.equal('0');
 
-        setupComponent({ value: 0 })
+        setupComponent(this, { value: 0 })
         expect($.trim(this.component.$node.html())).to.equal('0');
     })
 

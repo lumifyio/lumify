@@ -4,6 +4,7 @@ describeComponent('search/types/typeWorkspace', function(TypeWorkspace) {
     describe('SearchTypeWorkspace', function() {
 
         beforeEach(function() {
+            this.component = null;
             setupComponent(this)
         })
 
@@ -30,7 +31,10 @@ describeComponent('search/types/typeWorkspace', function(TypeWorkspace) {
             c.on('searchRequestCompleted', function() {
                 done()
             })
-            c.trigger('workspaceFiltered')
+            c.trigger('workspaceFiltered', {
+                hits: 0,
+                total: 0
+            })
         })
     })
 })

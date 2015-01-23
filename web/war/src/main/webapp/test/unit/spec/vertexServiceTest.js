@@ -1,16 +1,15 @@
 
-define(['service/vertex'], function(Service) {
+define(['data/web-worker/services/vertex'], function(vertex) {
 
     describe('Service', function() {
 
         it('should exist', function() {
-            expect(Service).to.be.a('function');
+            expect(vertex).to.be.a('object');
         });
 
 		it('should have some functions', function() {
-			var service = new Service({});
-			expect(service.search).to.be.a('function');
-			expect(service.getVertexProperties).to.be.a('function');
+			expect(vertex.search).to.be.a('function');
+			expect(vertex.properties).to.be.a('function');
 		});
 
     });

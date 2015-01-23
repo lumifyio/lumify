@@ -299,22 +299,52 @@ define([
                         return ontologyProperty && ontologyProperty.userVisible;
                     })
                     .sort(function(a, b) {
-                        return V.displayProp(b).length - V.displayProp(a).length;
+                        return V.prop(vertex, b.name, b.key).length - V.prop(vertex, a.name, b.key).length;
                     });
                 if (properties.length > 0) {
-                    return V.displayProp(properties[0]);
+                    return V.prop(vertex, properties[0].name, properties[0].key);
                 } else {
                     return null;
                 }
             },
 
-            displayProp: function(vertexOrProperty, optionalName) {
-                var name = _.isUndefined(optionalName) ? vertexOrProperty.name : optionalName,
-                    value = V.prop(vertexOrProperty, name),
+            propFromAudit: function(vertex, propertyAudit) {
+                //propertyName, newValue, previousValue
+                throw new Error('not implemented')
+                // TODO: fixme
+            },
+
+            prop: function(vertex, name, optionalKey, optionalOpts) {
+                if (!vertex || !vertex.id || !_.isArray(vertex.properties)) {
+                    throw new Error('Vertex is invalid', vertex);
+                }
+                if (!name || !_.isString(name)) {
+                    throw new Error('Property name is invalid', name);
+                }
+                if (_.isObject(optionalKey)) {
+                    optionalOpts = optionalKey;
+                    optionalKey = null;
+                }
+
+                var value = V.propRaw(vertex, name, optionalKey),
                     ontologyProperty = propertiesByTitle[name];
 
                 if (!ontologyProperty) {
                     return value;
+                }
+
+                if (_.isArray(value)) {
+                    if (!optionalKey) {
+                        var firstMatchingProperty = _.find(vertex.properties, function(p) {
+                            return ~ontologyProperty.dependentPropertyIris.indexOf(p.name);
+                        });
+                        optionalKey = (firstMatchingProperty && firstMatchingProperty.key);
+                    }
+                    if (ontologyProperty.displayFormula) {
+                        return formula(ontologyProperty.displayFormula, vertex, V, optionalKey);
+                    } else {
+                        return value.join(' ');
+                    }
                 }
 
                 if (ontologyProperty.possibleValues) {
@@ -328,7 +358,8 @@ define([
 
                 if (ontologyProperty.displayType) {
                     switch (ontologyProperty.displayType) {
-                        case 'byte': return F.bytes.pretty(value)
+                        case 'byte': return F.bytes.pretty(value);
+                        case 'heading': return F.number.heading(value);
                     }
                 }
 
@@ -341,8 +372,6 @@ define([
                         }
                         return F.date.dateStringUtc(value);
                     }
-
-                    case 'heading': return F.number.heading(value);
 
                     case 'double':
                     case 'integer':
@@ -389,36 +418,71 @@ define([
                 return 0;
             },
 
-            // TODO: support looking for underscore properties like _source?
-            prop: function(vertexOrProperty, name, defaultValue, ignoreErrorIfTitle) {
-                if (ignoreErrorIfTitle !== true && name === 'title') {
+            propRaw: function(vertex, name, optionalKey, optionalOpts) {
+                if (!vertex || !vertex.id || !_.isArray(vertex.properties)) {
+                    throw new Error('Vertex is invalid', vertex);
+                }
+                if (!name || !_.isString(name)) {
+                    throw new Error('Property name is invalid', name);
+                }
+                if (_.isObject(optionalKey)) {
+                    optionalOpts = optionalKey;
+                    optionalKey = null;
+                }
+
+                var options = _.extend({
+                    defaultValue: undefined,
+                    ignoreErrorIfTitle: false
+                }, optionalOpts || {});
+
+                if (options.ignoreErrorIfTitle !== true && name === 'title') {
                     throw new Error('Use title function, not generic prop');
                 }
 
                 var autoExpandedName = V.propName(name),
-
                     ontologyProperty = propertiesByTitle[autoExpandedName],
+                    dependentIris = ontologyProperty && ontologyProperty.dependentPropertyIris || [];
 
-                    displayName = (ontologyProperty && ontologyProperty.displayName) ||
-                        autoExpandedName,
+                if (dependentIris.length) {
+                    if (options.throwErrorIfCompoundProperty) {
+                        throw new Error('Compound properties that depend on compound properties are not allowed');
+                    }
 
-                    foundProperties = vertexOrProperty.properties ?
-                        _.where(vertexOrProperty.properties, { name: autoExpandedName }) :
-                        [vertexOrProperty],
+                    if (!optionalKey) {
+                        var firstMatchingProperty = _.find(vertex.properties, function(p) {
+                            return ~dependentIris.indexOf(p.name);
+                        });
+                        optionalKey = (firstMatchingProperty && firstMatchingProperty.key);
+                    }
 
-                    hasValue = foundProperties &&
-                        foundProperties.length &&
-                        !_.isUndefined(foundProperties[0].value);
+                    options.throwErrorIfCompoundProperty = true;
 
-                if (!hasValue &&
-                    autoExpandedName !== 'http://lumify.io#title' &&
-                    _.isUndefined(defaultValue)) {
-                    return undefined;
+                    return _.map(dependentIris, _.partial(V.propRaw, vertex, _, optionalKey, options));
+                } else {
+                    var matcher = optionalKey ?
+                        { name: autoExpandedName, key: optionalKey } :
+                        { name: autoExpandedName },
+
+                        foundProperties = _.where(vertex.properties, matcher),
+
+                        hasValue = foundProperties &&
+                            foundProperties.length &&
+                            !_.isUndefined(foundProperties[0].value);
+
+                    if (!hasValue &&
+                        autoExpandedName !== 'http://lumify.io#title' &&
+                        _.isUndefined(options.defaultValue)) {
+                        return undefined;
+                    }
+
+                    return hasValue ? foundProperties[0].value :
+                        (
+                            options.defaultValue ||
+                            i18n('vertex.property.not_available',
+                                (ontologyProperty && ontologyProperty.displayName || '').toLowerCase() ||
+                                autoExpandedName)
+                        )
                 }
-
-                return hasValue ? foundProperties[0].value :
-                    (defaultValue ||
-                    i18n('vertex.property.not_available', displayName.toLowerCase()))
             },
 
             isEdge: function(vertex) {

@@ -13,7 +13,7 @@ describeComponent('configuration/plugins/visibility/visibilityEditor', function(
     })
 
     it('Should populate the input field with value attribue trimmed', function() {
-        setupComponent({ value: '\n      trimmed value    \n\n  ' })
+        setupComponent(this, { value: '\n      trimmed value    \n\n  ' })
         expect(this.$node.find('input').val()).to.equal('trimmed value');
     })
 
@@ -33,12 +33,12 @@ describeComponent('configuration/plugins/visibility/visibilityEditor', function(
     })
 
     it('Should accept falsy values', function() {
-        setupComponent({ value: 0 })
+        setupComponent(this, { value: 0 })
         expect(this.$node.find('input').val()).to.equal('0');
     })
 
     it('Should accept no value', function() {
-        setupComponent({})
+        setupComponent(this, {})
         expect(this.$node.find('input').val()).to.equal('');
     })
 
