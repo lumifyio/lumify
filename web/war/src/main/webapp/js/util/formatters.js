@@ -91,17 +91,22 @@ define([
 
         number: {
             pretty: function(number) {
-                if (_.isString) {
+                if (_.isString(number)) {
                     number = parseFloat(number);
                 }
-                if (_.isNumber) {
-                    return sf('{0:#,###,###,###.##}', number);
+                if (_.isNumber(number)) {
+                    return sf('{0:#.##}', number)
+                        .split('').reverse().join('')
+                        .replace(/(\d{3}(?=\d))/g, '$1,')
+                        .split('').reverse().join('');
                 }
 
                 return '';
             },
             prettyApproximate: function(number) {
-                if (number >= 1000000000) {
+                if (number >= 1000000000000) {
+                    return (decimalAdjust('round', number / 1000000000000, -1) + i18n('numbers.trillion_suffix'));
+                } else if (number >= 1000000000) {
                     return (decimalAdjust('round', number / 1000000000, -1) + i18n('numbers.billion_suffix'));
                 } else if (number >= 1000000) {
                     return (decimalAdjust('round', number / 1000000, -1) + i18n('numbers.million_suffix'));
