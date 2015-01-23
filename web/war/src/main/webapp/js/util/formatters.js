@@ -91,11 +91,14 @@ define([
 
         number: {
             pretty: function(number) {
-                if (_.isString) {
+                if (_.isString(number)) {
                     number = parseFloat(number);
                 }
-                if (_.isNumber) {
-                    return sf('{0:#,###,###,###.##}', number);
+                if (_.isNumber(number)) {
+                    return sf('{0:#.##}', number)
+                        .split('').reverse().join('')
+                        .replace(/(\d{3}(?=\d))/g, '$1,')
+                        .split('').reverse().join('');
                 }
 
                 return '';
