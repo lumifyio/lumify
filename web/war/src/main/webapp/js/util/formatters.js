@@ -104,7 +104,9 @@ define([
                 return '';
             },
             prettyApproximate: function(number) {
-                if (number >= 1000000000) {
+                if (number >= 1000000000000) {
+                    return (decimalAdjust('round', number / 1000000000000, -1) + i18n('numbers.trillion_suffix'));
+                } else if (number >= 1000000000) {
                     return (decimalAdjust('round', number / 1000000000, -1) + i18n('numbers.billion_suffix'));
                 } else if (number >= 1000000) {
                     return (decimalAdjust('round', number / 1000000, -1) + i18n('numbers.million_suffix'));
