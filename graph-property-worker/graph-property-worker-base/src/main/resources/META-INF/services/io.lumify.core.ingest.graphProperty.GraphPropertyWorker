@@ -1,7 +1,0 @@
-io.lumify.gpw.audio.AudioMp4EncodingWorker
-io.lumify.gpw.audio.AudioOggEncodingWorker
-io.lumify.gpw.video.VideoMp4EncodingWorker
-io.lumify.gpw.video.VideoWebMEncodingWorker
-io.lumify.gpw.video.VideoAudioExtractWorker
-io.lumify.gpw.video.VideoPosterFrameWorker
-io.lumify.gpw.video.VideoFrameExtractGraphPropertyWorker

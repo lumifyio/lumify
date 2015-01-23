@@ -39,5 +39,13 @@
         <module>mime-type-ontology-mapper</module>
         <module>csv</module>
         <module>rdf</module>
+        <module>video-mp4-encoder</module>
+        <module>video-webm-encoder</module>
+        <module>video-audio-extract</module>
+        <module>audio-mp4-encoder</module>
+        <module>audio-ogg-encoder</module>
+        <module>video-poster-frame</module>
+        <module>video-frame-extract</module>
+        <module>video-metadata</module>
     </modules>
 </project>
