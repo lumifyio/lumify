@@ -5,6 +5,8 @@ function start_msg {
 }
 
 function start_sshd {
+  # from https://github.com/docker/docker/issues/5663
+  sed -ri 's/^session\s+required\s+pam_loginuid.so$/session optional pam_loginuid.so/' /etc/pam.d/sshd
   service sshd start
 }
 
