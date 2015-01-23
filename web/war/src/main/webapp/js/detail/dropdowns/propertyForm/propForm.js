@@ -129,7 +129,8 @@ define([
         };
 
         this.onPreviousValuesButtons = function(event) {
-            var dropdown = this.select('previousValuesDropdownSelector'),
+            var self = this,
+                dropdown = this.select('previousValuesDropdownSelector'),
                 buttons = this.select('previousValuesSelector').find('.active').removeClass('active'),
                 action = $(event.target).closest('button').addClass('active').data('action');
 
@@ -153,7 +154,7 @@ define([
                                         '<div data-visibility="{visibilityJson}" class="visibility"/>' +
                                     '</a>' +
                                 '</li>')({
-                                value: F.vertex.displayProp(p),
+                                value: F.vertex.prop(self.attr.data, p.name, p.key),
                                 visibilityJson: JSON.stringify(visibility || {}),
                                 i: i
                             });
@@ -206,7 +207,7 @@ define([
             justification.teardownAllComponents();
 
             var vertexProperty = property.key || property.key === '' ?
-                    F.vertex.propForNameAndKey(this.attr.data, property.name, property.key) : undefined,
+                    F.vertex.props(this.attr.data, property.name, property.key) : undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,

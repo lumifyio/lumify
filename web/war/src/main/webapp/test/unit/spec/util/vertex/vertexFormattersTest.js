@@ -22,16 +22,30 @@ define(['util/vertex/formatters'], function(f) {
 
         keyIdent = 0,
         vertexIdent = 0,
-        propertyFactory = function(name, key, value) {
+        addMetadata = function(property, key, value) {
+            var newProp = _.extend({}, property);
+            if (!newProp.metadata) {
+                newProp.metadata = {};
+            }
+            newProp.metadata[key] = value;
+            return newProp;
+        },
+        created = function(property, date) {
+            return addMetadata(property, 'http://lumify.io#createDate', date.getTime());
+        },
+        confidence = function(property, confidence) {
+            return addMetadata(property, 'http://lumify.io#confidence', confidence);
+        },
+        propertyFactory = function(name, optionalKey, value) {
             if (arguments.length === 2) {
-                value = key;
-                key = null;
+                value = optionalKey;
+                optionalKey = null;
             }
             return {
                 name: name,
-                key: key || ('pKey' + keyIdent++),
+                key: optionalKey || ('pKey' + keyIdent++),
                 value: value
-            }
+            };
         },
         vertexFactory = function(id, properties) {
             if (_.isObject(id)) {
@@ -138,6 +152,105 @@ define(['util/vertex/formatters'], function(f) {
             })
         })
 
+        describe('props', function() {
+            it('should throw error if invalid property name', function() {
+                expect(V.props.bind(null, vertexFactory())).to.throw(PROPERTY_NAME_ERROR)
+            });
+            it('should throw error if invalid vertex', function() {
+                expect(V.props.bind(null, {})).to.throw(VERTEX_ERROR)
+                expect(V.props.bind(null, {id:1})).to.throw(VERTEX_ERROR)
+                expect(V.props.bind(null, {properties:[]})).to.throw(VERTEX_ERROR)
+                expect(V.props.bind(null, {id:1,properties:1})).to.throw(VERTEX_ERROR)
+            });
+            it('should return all props for vertex', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k2', 'jason2'),
+                    ]),
+                    value = V.props(vertex, PROPERTY_NAME_FIRST);
+
+                expect(value).to.be.an('array').and.have.property('length').that.equals(2);
+                expect(value[0].value).to.equal('jason')
+                expect(value[1].value).to.equal('jason2')
+            })
+            it('should return single property for vertex when key provided', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k2', 'jason2'),
+                    ]),
+                    property = V.props(vertex, PROPERTY_NAME_FIRST, 'k2');
+
+                expect(property.value).to.equal('jason2')
+            })
+            it('should return undefined for vertex when key provided and no match', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k2', 'jason2'),
+                    ]),
+                    property = V.props(vertex, PROPERTY_NAME_FIRST, 'k3');
+
+                expect(property).to.be.undefined
+            })
+            it('should throw error if key matches multiple', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason2')
+                    ]);
+
+                expect(function() {
+                    V.props(vertex, PROPERTY_NAME_FIRST, 'k1');
+                }).to.throw('multiple properties with same name')
+            })
+            it('should throw error if key is passed but is undefined', function() {
+                expect(function() {
+                    V.props(vertexFactory(), PROPERTY_NAME_FIRST, undefined);
+                }).to.throw('Undefined key')
+            })
+        })
+
+        describe('longestProp', function() {
+            if ('should return only userVisible properties', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_CONCEPT, 'http://lumify.io/dev#person')
+                    ]);
+
+                expect(V.longestProp(vertex)).to.be.undefined
+            })
+            it('should return longest userVisible property value if no params', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'a'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'aa'),
+                    ]);
+
+                expect(V.longestProp(vertex)).to.equal('aa')
+            })
+            it('should return longest userVisible property value restricted to name', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'a'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'aa'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'last longer'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'aaa'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'bbb'),
+                    ]);
+
+                expect(V.longestProp(vertex, PROPERTY_NAME_FIRST)).to.equal('aaa')
+            })
+            it('should return undefined if no properties', function() {
+                var vertex = vertexFactory([]);
+                expect(V.longestProp(vertex)).to.be.undefined
+            })
+            it('should return undefined if no properties matching name', function() {
+                var vertex = vertexFactory([
+                    propertyFactory(PROPERTY_NAME_FIRST, 'a')
+                ]);
+                expect(V.longestProp(vertex, PROPERTY_NAME_LAST)).to.be.undefined
+            })
+        })
+
         describe('title', function() {
             it('should get a title even if it refers to compound property', function() {
                 var vertex = vertexFactory([
@@ -157,6 +270,16 @@ define(['util/vertex/formatters'], function(f) {
         describe('propRaw', function() {
             it('should have propRaw function', function() {
                 expect(V).to.have.property('propRaw').that.is.a.function
+            })
+
+            it('should expand property name', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'jason'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'harwig'),
+                        propertyFactory(PROPERTY_NAME_CONCEPT, 'http://lumify.io/dev#person')
+                    ]);
+
+                expect(V.propRaw(vertex, 'conceptType')).to.equal('http://lumify.io/dev#person')
             })
 
             it('should get prop values', function() {
@@ -210,6 +333,56 @@ define(['util/vertex/formatters'], function(f) {
                 expect(_.partial(V.propRaw, vertex, '')).to.throw(PROPERTY_NAME_ERROR)
             })
 
+            it('should get property with most confidence', function() {
+                var vertex = vertexFactory([
+                    confidence(propertyFactory(PROPERTY_NAME_FIRST, 'first'), 0.5),
+                    confidence(propertyFactory(PROPERTY_NAME_FIRST, 'most confident'), 0.6),
+                    confidence(propertyFactory(PROPERTY_NAME_FIRST, 'middle'), 0.55)
+                ]);
+
+                //_justificationMetadata: 0.5
+                //http://lumify.io#createDate: 1421344394956
+                //http://lumify.io#createdBy: "USER_fd588514ce824ee7a35668046447512d"
+                //http://lumify.io#modifiedBy: "USER_fd588514ce824ee7a35668046447512d"
+                //http://lumify.io#modifiedDate: 1421344394956
+                //http://lumify.io#visibilityJson: Object
+
+                expect(V.propRaw(vertex, PROPERTY_NAME_FIRST)).to.equal('most confident')
+            })
+            it('should get property with most confidence above those with no confidence', function() {
+                var vertex = vertexFactory([
+                    propertyFactory(PROPERTY_NAME_FIRST, 'first'),
+                    confidence(propertyFactory(PROPERTY_NAME_FIRST, 'most confident'), 0.6),
+                    confidence(propertyFactory(PROPERTY_NAME_FIRST, 'middle'), 0.55)
+                ]);
+                expect(V.propRaw(vertex, PROPERTY_NAME_FIRST)).to.equal('most confident')
+            })
+            it('should get property with most confidence even if created earliest', function() {
+                var vertex = vertexFactory([
+                    created(propertyFactory(PROPERTY_NAME_FIRST, 'recent'), new Date(2015, 03, 01)),
+                    created(
+                        confidence(propertyFactory(PROPERTY_NAME_FIRST, 'most confident'), 0.6),
+                        new Date(2015, 01, 01)
+                    ),
+                    created(
+                        confidence(propertyFactory(PROPERTY_NAME_FIRST, 'middle'), 0.55),
+                        new Date(2015, 02, 01)
+                    )
+                ]);
+                expect(V.propRaw(vertex, PROPERTY_NAME_FIRST)).to.equal('most confident')
+            })
+            it('should get property most recently edited when confidence same', function() {
+                var vertex = vertexFactory([
+                    created(propertyFactory(PROPERTY_NAME_FIRST, 'recent'), new Date(2015, 03, 01)),
+                    created(
+                        confidence(propertyFactory(PROPERTY_NAME_FIRST, 'b confident'), 0.6),
+                        new Date(2015, 01, 01)
+                    ),
+                    created(confidence(propertyFactory(PROPERTY_NAME_FIRST, 'a'), 0.6), new Date(2015, 02, 01))
+                ]);
+                expect(V.propRaw(vertex, PROPERTY_NAME_FIRST)).to.equal('a')
+            })
+
             describe('Compound properties', function() {
 
                 it('should handle compound properties and return array of values', function() {
@@ -241,6 +414,23 @@ define(['util/vertex/formatters'], function(f) {
                     values = V.propRaw(vertex, COMPOUND_PROPERTY_NAME, 'k2');
                     expect(values[0]).to.equal('smith')
                     expect(values[1]).to.equal('john')
+                })
+
+                it('should handle getting highest confidence compound property', function() {
+                    var vertex = vertexFactory([
+                            propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                            confidence(propertyFactory(PROPERTY_NAME_LAST, 'k2', 'smith'), 0.5),
+                            confidence(propertyFactory(PROPERTY_NAME_FIRST, 'k2', 'john'), 0.5)
+                        ]),
+                        values = V.propRaw(vertex, COMPOUND_PROPERTY_NAME);
+
+                    expect(values).to.be.an('array').that.has.property('length').that.equals(2)
+                    expect(values[0]).to.equal('smith')
+                    expect(values[1]).to.equal('john')
+
+                    values = V.propRaw(vertex, COMPOUND_PROPERTY_NAME, 'k1');
+                    expect(values[0]).to.be.undefined
+                    expect(values[1]).to.equal('jason')
                 })
 
                 it('should throw errors for compound that depends on compound', function() {
