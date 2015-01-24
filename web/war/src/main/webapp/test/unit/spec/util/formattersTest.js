@@ -12,6 +12,8 @@ define(['util/formatters'], function(f) {
 
                 expect(f.number.pretty(1123456)).to.equal('1,123,456');
                 expect(f.number.pretty(1123456789)).to.equal('1,123,456,789');
+                expect(f.number.pretty(1111123456789)).to.equal('1,111,123,456,789');
+                expect(f.number.pretty(1111111123456789)).to.equal('1,111,111,123,456,789');
             })
 
             it('should have prettyApproximate function', function() {
