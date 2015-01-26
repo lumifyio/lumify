@@ -38,7 +38,7 @@ define([
 
     timezoneJS.timezone.zoneFileBasePath = 'tz';
     timezoneJS.timezone.defaultZoneFile = ['northamerica'];
-    timezoneJS.timezone.init({ async: false });
+    timezoneJS.timezone.init({ async: true });
 
     function checkIfMac() {
         return ~navigator.userAgent.indexOf('Mac OS X');
