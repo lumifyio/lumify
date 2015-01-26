@@ -1,10 +1,10 @@
 package io.lumify.zipCodeResolver;
 
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -24,20 +24,19 @@ import java.util.Set;
 
 public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     public static final String MULTI_VALUE_PROPERTY_KEY = ZipCodeResolverTermMentionFilter.class.getName();
-    private static final String CONFIG_ZIP_CODE_IRI = "ontology.iri.zipCode";
-    private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
     private String zipCodeIri;
     private String geoLocationIri;
     private Map<String, ZipCodeEntry> zipCodesByZipCode = new HashMap<>();
     private String artifactHasEntityIri;
     private WorkspaceRepository workspaceRepository;
+    private OntologyRepository ontologyRepository;
     private User user;
 
     @Override
     public void prepare(TermMentionFilterPrepareData termMentionFilterPrepareData) throws Exception {
         super.prepare(termMentionFilterPrepareData);
 
-        prepareIris(termMentionFilterPrepareData);
+        prepareIris();
         prepareZipCodeDatabase();
         user = termMentionFilterPrepareData.getUser();
     }
@@ -65,21 +64,10 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
         }
     }
 
-    public void prepareIris(TermMentionFilterPrepareData termMentionFilterPrepareData) {
-        zipCodeIri = (String) termMentionFilterPrepareData.getConfiguration().get(CONFIG_ZIP_CODE_IRI);
-        if (zipCodeIri == null || zipCodeIri.length() == 0) {
-            throw new LumifyException("Could not find config: " + CONFIG_ZIP_CODE_IRI);
-        }
-
-        geoLocationIri = (String) termMentionFilterPrepareData.getConfiguration().get(CONFIG_GEO_LOCATION_IRI);
-        if (geoLocationIri == null || geoLocationIri.length() == 0) {
-            throw new LumifyException("Could not find config: " + CONFIG_GEO_LOCATION_IRI);
-        }
-
-        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
-        if (this.artifactHasEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
-        }
+    public void prepareIris() {
+        zipCodeIri = ontologyRepository.getRequiredConceptIRIByIntent("zipCode");
+        geoLocationIri = ontologyRepository.getRequiredPropertyIRIByIntent("geoLocation");
+        this.artifactHasEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactHasEntity");
     }
 
     @Override
@@ -174,5 +162,10 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     @Inject
     public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
         this.workspaceRepository = workspaceRepository;
+    }
+
+    @Inject
+    public void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
     }
 }

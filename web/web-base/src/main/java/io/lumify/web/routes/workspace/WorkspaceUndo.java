@@ -6,6 +6,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -53,7 +54,8 @@ public class WorkspaceUndo extends BaseRequestHandler {
             final WorkspaceHelper workspaceHelper,
             final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository,
-            final AuditRepository auditRepository) {
+            final AuditRepository auditRepository,
+            final OntologyRepository ontologyRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
@@ -63,15 +65,8 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.workQueueRepository = workQueueRepository;
         this.auditRepository = auditRepository;
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
-        if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        }
-
-        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY, null);
-        if (this.artifactContainsImageOfEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
-        }
+        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
     }
 
     @Override

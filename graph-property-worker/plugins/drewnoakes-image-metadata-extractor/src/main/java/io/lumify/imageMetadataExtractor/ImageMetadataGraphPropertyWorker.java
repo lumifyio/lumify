@@ -9,7 +9,6 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.gpw.MediaPropertyConfiguration;
 import io.lumify.gpw.util.FileSizeUtil;
 import io.lumify.imageMetadataHelper.*;
 import org.securegraph.Element;
@@ -26,7 +25,15 @@ import java.util.List;
 public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ImageMetadataGraphPropertyWorker.class);
     private static final String MULTI_VALUE_KEY = ImageMetadataGraphPropertyWorker.class.getName();
-    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
+    private String fileSizeIri;
+    private String dateTakenIri;
+    private String deviceMakeIri;
+    private String deviceModelIri;
+    private String geoLocationIri;
+    private String headingIri;
+    private String metadataIri;
+    private String widthIri;
+    private String heightIri;
 
     @Override
     public boolean isLocalFileRequired() {
@@ -36,7 +43,15 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+        headingIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.imageHeading");
+        geoLocationIri = getOntologyRepository().getRequiredPropertyIRIByIntent("geoLocation");
+        dateTakenIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.dateTaken");
+        deviceMakeIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.deviceMake");
+        deviceModelIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.deviceModel");
+        widthIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.width");
+        heightIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.height");
+        metadataIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.metadata");
+        fileSizeIri = getOntologyRepository().getRequiredPropertyIRIByIntent("media.fileSize");
     }
 
     private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, org.securegraph.Metadata metadata, GraphPropertyWorkData data, List<String> properties) {
@@ -62,21 +77,21 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
             }
 
             if (imageMetadata != null) {
-                setProperty(config.dateTakenIri, DateExtractor.getDateDefault(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.deviceMakeIri, MakeExtractor.getMake(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.deviceModelIri, ModelExtractor.getModel(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.geoLocationIri, GeoPointExtractor.getGeoPoint(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.headingIri, HeadingExtractor.getImageHeading(imageMetadata), mutation, metadata, data, properties);
-                setProperty(config.metadataIri, LeftoverMetadataExtractor.getAsJSON(imageMetadata).toString(), mutation, metadata, data, properties);
+                setProperty(dateTakenIri, DateExtractor.getDateDefault(imageMetadata), mutation, metadata, data, properties);
+                setProperty(deviceMakeIri, MakeExtractor.getMake(imageMetadata), mutation, metadata, data, properties);
+                setProperty(deviceModelIri, ModelExtractor.getModel(imageMetadata), mutation, metadata, data, properties);
+                setProperty(geoLocationIri, GeoPointExtractor.getGeoPoint(imageMetadata), mutation, metadata, data, properties);
+                setProperty(headingIri, HeadingExtractor.getImageHeading(imageMetadata), mutation, metadata, data, properties);
+                setProperty(metadataIri, LeftoverMetadataExtractor.getAsJSON(imageMetadata).toString(), mutation, metadata, data, properties);
             }
 
             Integer width = imageMetadata != null ? DimensionsExtractor.getWidthViaMetadata(imageMetadata) : DimensionsExtractor.getWidthViaBufferedImage(imageFile);
-            setProperty(config.widthIri, width, mutation, metadata, data, properties);
+            setProperty(widthIri, width, mutation, metadata, data, properties);
 
             Integer height = imageMetadata != null ? DimensionsExtractor.getHeightViaMetadata(imageMetadata) : DimensionsExtractor.getHeightViaBufferedImage(imageFile);
-            setProperty(config.heightIri, height, mutation, metadata, data, properties);
+            setProperty(heightIri, height, mutation, metadata, data, properties);
 
-            setProperty(config.fileSizeIri, FileSizeUtil.getSize(imageFile), mutation, metadata, data, properties);
+            setProperty(fileSizeIri, FileSizeUtil.getSize(imageFile), mutation, metadata, data, properties);
         }
 
         mutation.save(getAuthorizations());

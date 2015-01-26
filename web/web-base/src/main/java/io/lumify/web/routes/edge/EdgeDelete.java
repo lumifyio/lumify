@@ -3,6 +3,7 @@ package io.lumify.web.routes.edge;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
@@ -13,7 +14,10 @@ import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
-import org.securegraph.*;
+import org.securegraph.Authorizations;
+import org.securegraph.Direction;
+import org.securegraph.Edge;
+import org.securegraph.Graph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,15 +34,13 @@ public class EdgeDelete extends BaseRequestHandler {
             final WorkspaceHelper workspaceHelper,
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,
+            final OntologyRepository ontologyRepository,
             final Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.workspaceHelper = workspaceHelper;
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
-        if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        }
+        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
     }
 
     @Override

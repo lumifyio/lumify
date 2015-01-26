@@ -1,7 +1,6 @@
 package io.lumify.rdf;
 
 import com.hp.hpl.jena.rdf.model.*;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -30,11 +29,10 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        hasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
-        checkNotNull(hasEntityIri, "configuration " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY + " is required");
+        hasEntityIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("artifactHasEntity");
 
         // rdfConceptTypeIri is not required because the concept type could have been set by some other means.
-        rdfConceptTypeIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_PREFIX + "rdf", null);
+        rdfConceptTypeIri = getOntologyRepository().getConceptIRIByIntent("rdf");
     }
 
     @Override
@@ -61,12 +59,9 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     public void importRdf(Graph graph, File inputFile, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) throws IOException {
-        InputStream in = new FileInputStream(inputFile);
-        try {
+        try (InputStream in = new FileInputStream(inputFile)) {
             File baseDir = inputFile.getParentFile();
             importRdf(graph, in, baseDir, data, visibility, authorizations);
-        } finally {
-            in.close();
         }
     }
 

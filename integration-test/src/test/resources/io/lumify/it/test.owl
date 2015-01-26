@@ -33,6 +33,7 @@
     <!-- http://lumify.io/test#artifactHasEntity -->
 
     <owl:ObjectProperty rdf:about="http://lumify.io/test#artifactHasEntity">
+        <lumify:intent>artifactHasEntity</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
@@ -41,6 +42,8 @@
     <!-- http://lumify.io/test#rawContainsImageOfEntity -->
 
     <owl:ObjectProperty rdf:about="http://lumify.io/test#rawContainsImageOfEntity">
+        <lumify:intent>artifactContainsImage</lumify:intent>
+        <lumify:intent>artifactContainsImageOfEntity</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/test#artifact"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
@@ -108,6 +111,7 @@
     <!-- http://lumify.io/dev#geolocation -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/test#geolocation">
+        <lumify:intent>geoLocation</lumify:intent>
         <rdfs:label xml:lang="en">Geolocation</rdfs:label>
         <rdfs:range rdf:resource="&lumify;geolocation"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
@@ -137,16 +141,21 @@
 
     <!-- http://lumify.io/test#location -->
 
-    <owl:Class rdf:about="http://lumify.io/test#location"/>
+    <owl:Class rdf:about="http://lumify.io/test#location">
+        <lumify:intent>location</lumify:intent>
+    </owl:Class>
 
     <!-- http://lumify.io/test#zipCode -->
 
-    <owl:Class rdf:about="http://lumify.io/test#zipCode"/>
+    <owl:Class rdf:about="http://lumify.io/test#zipCode">
+        <lumify:intent>zipCode</lumify:intent>
+    </owl:Class>
 
 
     <!-- http://lumify.io/test#audio -->
 
     <owl:Class rdf:about="http://lumify.io/test#audio">
+        <lumify:intent>audio</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
     </owl:Class>
 
@@ -154,6 +163,9 @@
     <!-- http://lumify.io/test#document -->
 
     <owl:Class rdf:about="http://lumify.io/test#document">
+        <lumify:intent>document</lumify:intent>
+        <lumify:intent>csv</lumify:intent>
+        <lumify:intent>rdf</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
         <lumify:displayType>document</lumify:displayType>
     </owl:Class>
@@ -162,6 +174,8 @@
     <!-- http://lumify.io/test#image -->
 
     <owl:Class rdf:about="http://lumify.io/test#image">
+        <lumify:intent>image</lumify:intent>
+        <lumify:intent>entityImage</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
     </owl:Class>
 
@@ -169,8 +183,11 @@
     <!-- http://lumify.io/test#person -->
 
     <owl:Class rdf:about="http://lumify.io/test#person">
+        <lumify:intent>person</lumify:intent>
+        <lumify:intent>face</lumify:intent>
         <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) + ' ' + prop(&apos;http://lumify.io/test#lastName&apos;)</lumify:titleFormula>
-        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) || &apos;&apos;</lumify:subtitleFormula>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/test#firstName&apos;) ||
+            &apos;&apos;</lumify:subtitleFormula>
         <lumify:timeFormula>prop(&apos;http://lumify.io/test#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
     </owl:Class>
 
@@ -183,6 +200,7 @@
     <!-- http://lumify.io/test#video -->
 
     <owl:Class rdf:about="http://lumify.io/test#video">
+        <lumify:intent>video</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/test#artifact"/>
     </owl:Class>
 </rdf:RDF>

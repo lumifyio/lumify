@@ -13,7 +13,6 @@ import java.io.File;
 
 public class OwlImport extends CommandLineBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OwlImport.class);
-    private OntologyRepository ontologyRepository;
     private String inFileName;
     private String documentIRIString;
 
@@ -62,20 +61,15 @@ public class OwlImport extends CommandLineBase {
         File inFile = new File(this.inFileName);
         IRI documentIRI;
         if (this.documentIRIString == null) {
-            String guessedIri = ontologyRepository.guessDocumentIRIFromPackage(inFile);
+            String guessedIri = getOntologyRepository().guessDocumentIRIFromPackage(inFile);
             documentIRI = IRI.create(guessedIri);
         } else {
             documentIRI = IRI.create(this.documentIRIString);
         }
-        ontologyRepository.importFile(inFile, documentIRI, getAuthorizations());
+        getOntologyRepository().importFile(inFile, documentIRI, getAuthorizations());
         getGraph().flush();
-        ontologyRepository.clearCache();
+        getOntologyRepository().clearCache();
         LOGGER.info("owl import complete");
         return 0;
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 }

@@ -73,19 +73,8 @@ public class VertexUploadImage extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.conceptIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE, null);
-        if (conceptIri == null) {
-            throw new LumifyException("Configuration " + Configuration.ONTOLOGY_IRI_ENTITY_IMAGE + " is required");
-        }
-        Concept concept = ontologyRepository.getConceptByIRI(conceptIri);
-        if (concept == null) {
-            LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIri, Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
-        }
-
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
-        if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        }
+        this.conceptIri = ontologyRepository.getRequiredConceptIRIByIntent("entityImage");
+        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
     }
 
     @Override

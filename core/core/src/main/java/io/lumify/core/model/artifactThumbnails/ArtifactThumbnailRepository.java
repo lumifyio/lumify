@@ -3,8 +3,9 @@ package io.lumify.core.model.artifactThumbnails;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.model.ontology.OntologyProperty;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -24,13 +25,14 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
     public static int FRAMES_PER_PREVIEW = 20;
     public static int PREVIEW_FRAME_WIDTH = 360;
     public static int PREVIEW_FRAME_HEIGHT = 240;
-    private final String yAxisFlippedIri;
-    private final String clockwiseRotationIri;
+    private final OntologyProperty yAxisFlippedIri;
+    private final OntologyProperty clockwiseRotationIri;
 
-    public ArtifactThumbnailRepository(ModelSession modelSession, final Configuration configuration) {
+    public ArtifactThumbnailRepository(ModelSession modelSession, final OntologyRepository ontologyRepository) {
         super(modelSession);
-        this.yAxisFlippedIri = configuration.get("ontology.iri.media.yAxisFlipped", null);
-        this.clockwiseRotationIri = configuration.get("ontology.iri.media.clockwiseRotation", null);
+
+        this.yAxisFlippedIri = ontologyRepository.getPropertyByIntent("media.yAxisFlipped");
+        this.clockwiseRotationIri = ontologyRepository.getPropertyByIntent("media.clockwiseRotation");
     }
 
     public abstract BigTableArtifactThumbnail fromRow(Row row);
@@ -87,22 +89,21 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
     public BufferedImage getTransformedImage(BufferedImage originalImage, Vertex artifactVertex) {
         int cwRotationNeeded = 0;
         if (clockwiseRotationIri != null) {
-            Integer nullable = (Integer) artifactVertex.getPropertyValue(clockwiseRotationIri);
+            Integer nullable = (Integer) artifactVertex.getPropertyValue(clockwiseRotationIri.getTitle());
             if (nullable != null) {
                 cwRotationNeeded = nullable;
             }
         }
         boolean yAxisFlipNeeded = false;
         if (yAxisFlippedIri != null) {
-            Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlippedIri);
+            Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlippedIri.getTitle());
             if (nullable != null) {
                 yAxisFlipNeeded = nullable;
             }
         }
 
         //Rotate and flip image.
-        BufferedImage transformedImage = ImageUtils.reOrientImage(originalImage, yAxisFlipNeeded, cwRotationNeeded);
-        return transformedImage;
+        return ImageUtils.reOrientImage(originalImage, yAxisFlipNeeded, cwRotationNeeded);
     }
 
     public int[] getScaledDimension(int[] imgSize, int[] boundary) {

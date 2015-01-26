@@ -1,7 +1,5 @@
 package io.lumify.knownEntity;
 
-import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
@@ -47,20 +45,10 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        this.locationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_LOCATION);
-        if (this.locationIri == null || this.locationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_LOCATION);
-        }
-
-        this.organizationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        if (this.organizationIri == null || this.organizationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        }
-
-        this.personIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_PERSON);
-        if (this.personIri == null || this.personIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
-        }
+        this.locationIri = getOntologyRepository().getRequiredConceptIRIByIntent("location");
+        this.organizationIri = getOntologyRepository().getRequiredConceptIRIByIntent("organization");
+        this.personIri = getOntologyRepository().getRequiredConceptIRIByIntent("person");
+        this.artifactHasEntityIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("artifactHasEntity");
 
         String pathPrefix = (String) workerPrepareData.getConfiguration().get(PATH_PREFIX_CONFIG);
         if (pathPrefix == null) {
@@ -68,11 +56,6 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
         }
         FileSystem fs = workerPrepareData.getHdfsFileSystem();
         this.tree = loadDictionaries(fs, pathPrefix);
-
-        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
-        if (this.artifactHasEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
-        }
     }
 
     @Override
@@ -188,11 +171,8 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             LOGGER.info("Loading known entity dictionary %s", hdfsPath.toString());
             String conceptName = FilenameUtils.getBaseName(hdfsPath.getName());
             conceptName = URLDecoder.decode(conceptName, "UTF-8");
-            InputStream dictionaryInputStream = fs.open(hdfsPath);
-            try {
+            try (InputStream dictionaryInputStream = fs.open(hdfsPath)) {
                 addDictionaryEntriesToTree(tree, conceptName, dictionaryInputStream);
-            } finally {
-                dictionaryInputStream.close();
             }
         }
         tree.prepare();

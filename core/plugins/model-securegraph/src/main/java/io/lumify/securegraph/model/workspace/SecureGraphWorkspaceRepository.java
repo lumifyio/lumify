@@ -81,7 +81,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         Concept rootConcept = ontologyRepository.getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
 
         Concept workspaceConcept = ontologyRepository.getOrCreateConcept(null, WORKSPACE_CONCEPT_IRI, "workspace", null);
-        workspaceConceptId = workspaceConcept.getTitle();
+        workspaceConceptId = workspaceConcept.getIRI();
 
         ArrayList<Concept> workspaceConceptList = new ArrayList<>();
         workspaceConceptList.add(workspaceConcept);

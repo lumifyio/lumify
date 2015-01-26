@@ -59,10 +59,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY, null);
-        if (this.artifactContainsImageOfEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
-        }
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
     }
 
     @Override
@@ -106,7 +103,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility());
 
-            LumifyProperties.CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getIRI(), metadata, lumifyVisibility.getVisibility());
             LumifyProperties.TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);

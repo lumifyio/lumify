@@ -56,7 +56,7 @@ public abstract class Concept {
     public ClientApiOntology.Concept toClientApi() {
         try {
             ClientApiOntology.Concept concept = new ClientApiOntology.Concept();
-            concept.setId(getTitle());
+            concept.setId(getIRI());
             concept.setTitle(getTitle());
             concept.setDisplayName(getDisplayName());
             if (getDisplayType() != null) {
@@ -84,7 +84,7 @@ public abstract class Concept {
                 concept.setUserVisible(getUserVisible());
             }
             if (hasGlyphIconResource()) {
-                concept.setGlyphIconHref("resource?id=" + URLEncoder.encode(getTitle(), "utf8"));
+                concept.setGlyphIconHref("resource?id=" + URLEncoder.encode(getIRI(), "utf8"));
             }
             if (getColor() != null) {
                 concept.setColor(getColor());
@@ -108,7 +108,7 @@ public abstract class Concept {
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", getDisplayName(), getTitle());
+        return String.format("%s (%s)", getDisplayName(), getIRI());
     }
 
     public static Collection<ClientApiOntology.Concept> toClientApiConcepts(Iterable<Concept> concepts) {

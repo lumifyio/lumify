@@ -420,7 +420,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (domainConcept == null) {
                 LOGGER.error("Could not find class with uri: %s", domainClassUri);
             } else {
-                LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
+                LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getIRI());
                 domainConcepts.add(domainConcept);
             }
         }
@@ -789,6 +789,28 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         throw new LumifyException("Found multiple concepts for intent: " + intent);
     }
 
+    public String getConceptIRIByIntent(String intent) {
+        Concept concept = getConceptByIntent(intent);
+        if (concept != null) {
+            return concept.getIRI();
+        }
+        return null;
+    }
+
+    @Override
+    public Concept getRequiredConceptByIntent(String intent) {
+        Concept concept = getConceptByIntent(intent);
+        if (concept == null) {
+            throw new LumifyException("Could not find concept by intent: " + intent);
+        }
+        return concept;
+    }
+
+    @Override
+    public String getRequiredConceptIRIByIntent(String intent) {
+        return getRequiredConceptByIntent(intent).getIRI();
+    }
+
     private List<Concept> findLoadedConceptsByIntent(String intent) {
         List<Concept> results = new ArrayList<>();
         for (Concept concept : getConceptsWithProperties()) {
@@ -821,6 +843,28 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         throw new LumifyException("Found multiple relationships for intent: " + intent);
     }
 
+    public String getRelationshipIRIByIntent(String intent) {
+        Relationship relationship = getRelationshipByIntent(intent);
+        if (relationship != null) {
+            return relationship.getIRI();
+        }
+        return null;
+    }
+
+    @Override
+    public Relationship getRequiredRelationshipByIntent(String intent) {
+        Relationship relationship = getRelationshipByIntent(intent);
+        if (relationship == null) {
+            throw new LumifyException("Could not find relationship by intent: " + intent);
+        }
+        return relationship;
+    }
+
+    @Override
+    public String getRequiredRelationshipIRIByIntent(String intent) {
+        return getRequiredRelationshipByIntent(intent).getIRI();
+    }
+
     private List<Relationship> findLoadedRelationshipsByIntent(String intent) {
         List<Relationship> results = new ArrayList<>();
         for (Relationship relationship : getRelationships()) {
@@ -851,6 +895,28 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             return properties.get(0);
         }
         throw new LumifyException("Found multiple properties for intent: " + intent);
+    }
+
+    public String getPropertyIRIByIntent(String intent) {
+        OntologyProperty prop = getPropertyByIntent(intent);
+        if (prop != null) {
+            return prop.getTitle();
+        }
+        return null;
+    }
+
+    @Override
+    public OntologyProperty getRequiredPropertyByIntent(String intent) {
+        OntologyProperty property = getPropertyByIntent(intent);
+        if (property == null) {
+            throw new LumifyException("Could not find property by intent: " + intent);
+        }
+        return property;
+    }
+
+    @Override
+    public String getRequiredPropertyIRIByIntent(String intent) {
+        return getRequiredPropertyByIntent(intent).getTitle();
     }
 
     private List<OntologyProperty> findLoadedPropertiesByIntent(String intent) {

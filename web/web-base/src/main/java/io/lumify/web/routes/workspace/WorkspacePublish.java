@@ -70,10 +70,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.ontologyRepository = ontologyRepository;
         this.authorizationRepository = authorizationRepository;
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
-        if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        }
+        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
     }
 
     @Override

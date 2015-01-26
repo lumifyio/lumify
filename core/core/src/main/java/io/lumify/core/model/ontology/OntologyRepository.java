@@ -66,7 +66,25 @@ public interface OntologyRepository {
 
     Concept getConceptByIntent(String intent);
 
+    String getConceptIRIByIntent(String intent);
+
+    Concept getRequiredConceptByIntent(String intent);
+
+    String getRequiredConceptIRIByIntent(String intent);
+
     Relationship getRelationshipByIntent(String intent);
 
+    String getRelationshipIRIByIntent(String intent);
+
+    Relationship getRequiredRelationshipByIntent(String intent);
+
+    String getRequiredRelationshipIRIByIntent(String intent);
+
     OntologyProperty getPropertyByIntent(String intent);
+
+    String getPropertyIRIByIntent(String intent);
+
+    OntologyProperty getRequiredPropertyByIntent(String intent);
+
+    String getRequiredPropertyIRIByIntent(String intent);
 }

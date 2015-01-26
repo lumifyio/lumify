@@ -27,7 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DictionaryImporter extends CommandLineBase {
     private ModelSession modelSession;
     private DictionaryEntryRepository dictionaryEntryRepository;
-    private OntologyRepository ontologyRepository;
     private String directory;
     private String extension;
 
@@ -82,7 +81,7 @@ public class DictionaryImporter extends CommandLineBase {
             LOGGER.info("Importing dictionary file: " + fileStatus.getPath().toString());
             String conceptName = FilenameUtils.getBaseName(fileStatus.getPath().toString());
             conceptName = URLDecoder.decode(conceptName, "UTF-8");
-            Concept concept = ontologyRepository.getConceptByIRI(conceptName);
+            Concept concept = getOntologyRepository().getConceptByIRI(conceptName);
             checkNotNull(concept, "Could not find concept with name " + conceptName);
             writeFile(fs.open(fileStatus.getPath()), conceptName, user);
         }
@@ -99,11 +98,6 @@ public class DictionaryImporter extends CommandLineBase {
         }
 
         in.close();
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 
     @Inject

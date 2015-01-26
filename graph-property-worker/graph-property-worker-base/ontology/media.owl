@@ -27,6 +27,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#yAxisFlipped">
         <rdfs:label xml:lang="en">Y Axis Flipped</rdfs:label>
+        <lumify:intent>media.yAxisFlipped</lumify:intent>
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:range rdf:resource="&xsd;boolean"/>
@@ -34,6 +35,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#clockwiseRotation">
         <rdfs:label xml:lang="en">Clockwise Rotation</rdfs:label>
+        <lumify:intent>media.clockwiseRotation</lumify:intent>
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
@@ -45,6 +47,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#imageHeading">
         <rdfs:label xml:lang="en">Image Heading</rdfs:label>
+        <lumify:intent>media.imageHeading</lumify:intent>
         <lumify:displayType xml:lang="en">heading</lumify:displayType>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:range rdf:resource="&xsd;double"/>
@@ -52,6 +55,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#dateTaken">
         <rdfs:label xml:lang="en">Date Taken</rdfs:label>
+        <lumify:intent>media.dateTaken</lumify:intent>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
@@ -59,6 +63,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceMake">
         <rdfs:label xml:lang="en">Device Make</rdfs:label>
+        <lumify:intent>media.deviceMake</lumify:intent>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -66,6 +71,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceModel">
         <rdfs:label xml:lang="en">Device Model</rdfs:label>
+        <lumify:intent>media.deviceModel</lumify:intent>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -73,6 +79,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#width">
         <rdfs:label xml:lang="en">Width</rdfs:label>
+        <lumify:intent>media.width</lumify:intent>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
@@ -80,6 +87,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#height">
         <rdfs:label xml:lang="en">Height</rdfs:label>
+        <lumify:intent>media.height</lumify:intent>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
@@ -87,6 +95,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#fileSize">
         <rdfs:label xml:lang="en">File Size</rdfs:label>
+        <lumify:intent>media.fileSize</lumify:intent>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&audioIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
@@ -96,6 +105,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/media#metadata">
         <rdfs:label xml:lang="en">Metadata</rdfs:label>
+        <lumify:intent>media.metadata</lumify:intent>
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:domain rdf:resource="&imageIri;"/>
         <rdfs:domain rdf:resource="&videoIri;"/>
