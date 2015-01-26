@@ -44,11 +44,11 @@ define([
                 formatLabel = function(name) {
                     return self.ontologyProperties.byTitle[name].displayName;
                 },
-                formatValue = function(name, change) {
-                    return F.vertex.displayProp({
-                        name: name,
-                        value: change.value
-                    });
+                formatValue = function(name, change, property) {
+                    return F.vertex.prop({
+                        id: property.id,
+                        properties: change ? [change] : []
+                    }, name, property.key)
                 };
 
             self.processDiffs(self.attr.diffs).done(function(processDiffs) {

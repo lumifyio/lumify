@@ -72,14 +72,14 @@
             <td class="property-label"><%= formatLabel(property.name) %></td>
             <td class="property-value"><%
               if (property.old && property.new) { %>
-              <%= formatValue(property.name, property.new) %>
+              <%= formatValue(property.name, property.new, property) %>
               <div class="visibility" data-visibility="<%= JSON.stringify(property.new['http://lumify.io#visibilityJson']) %>"></div>
 
-              <div style="text-decoration:line-through"><%= formatValue(property.name, property.old) %></div>
+              <div style="text-decoration:line-through"><%= formatValue(property.name, property.old, property) %></div>
               <div class="visibility" data-visibility="<%= JSON.stringify(property.old['http://lumify.io#visibilityJson']) %>"></div>
 
               <% } else if (property.new) { %>
-              <%= formatValue(property.name, property.new) %>
+              <%= formatValue(property.name, property.new, property) %>
               <div class="visibility" data-visibility="<%= JSON.stringify(property.new['http://lumify.io#visibilityJson']) %>"></div>
               <% } %>
 
