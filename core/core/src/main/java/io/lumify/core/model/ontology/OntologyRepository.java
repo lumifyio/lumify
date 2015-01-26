@@ -20,6 +20,9 @@ public interface OntologyRepository {
     public static final String TYPE_CONCEPT = "concept";
     public static final String TYPE_PROPERTY = "property";
     public static final String VISIBILITY_STRING = "ontology";
+    public static final String CONFIG_INTENT_CONCEPT_PREFIX = "ontology.iri.concept.";
+    public static final String CONFIG_INTENT_RELATIONSHIP_PREFIX = "ontology.iri.relationship.";
+    public static final String CONFIG_INTENT_PROPERTY_PREFIX = "ontology.iri.property.";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
 
     void clearCache();

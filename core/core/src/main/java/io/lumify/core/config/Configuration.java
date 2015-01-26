@@ -277,26 +277,29 @@ public final class Configuration {
 
     public JSONObject toJSON(ResourceBundle resourceBundle) {
         JSONObject properties = new JSONObject();
-        for (String key : getKeys()) {
-            if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
-                properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
-            }
-        }
 
         OntologyRepository ontologyRepository = InjectHelper.getInstance(OntologyRepository.class);
         for (Concept concept : ontologyRepository.getConceptsWithProperties()) {
             for (String intent : concept.getIntents()) {
-                properties.put("ontology.iri.concept." + intent, concept.getIRI());
+                properties.put(OntologyRepository.CONFIG_INTENT_CONCEPT_PREFIX + intent, concept.getIRI());
             }
         }
         for (OntologyProperty property : ontologyRepository.getProperties()) {
             for (String intent : property.getIntents()) {
-                properties.put("ontology.iri.property." + intent, property.getTitle());
+                properties.put(OntologyRepository.CONFIG_INTENT_PROPERTY_PREFIX + intent, property.getTitle());
             }
         }
         for (Relationship relationship : ontologyRepository.getRelationships()) {
             for (String intent : relationship.getIntents()) {
-                properties.put("ontology.iri.relationship." + intent, relationship.getIRI());
+                properties.put(OntologyRepository.CONFIG_INTENT_RELATIONSHIP_PREFIX + intent, relationship.getIRI());
+            }
+        }
+
+        for (String key : getKeys()) {
+            if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
+                properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
+            } else if (key.startsWith("ontology.iri")) {
+                properties.put(key, get(key, ""));
             }
         }
 

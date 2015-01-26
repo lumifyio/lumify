@@ -131,7 +131,7 @@ define([
 
             if (properties && displayType) {
                 var durationProperty = _.findWhere(properties, {
-                    name: config['ontology.iri.' + displayType + 'Duration']
+                    name: config['ontology.iri.property.' + displayType + 'Duration']
                 });
 
                 if (durationProperty) {

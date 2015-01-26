@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -25,6 +26,7 @@ import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.CloseableUtils;
+import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
@@ -40,9 +42,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
-    public static final String CONFIG_INTENT_CONCEPT_PREFIX = "ontology.iri.concept.";
-    public static final String CONFIG_INTENT_RELATIONSHIP_PREFIX = "ontology.iri.relationship.";
-    public static final String CONFIG_INTENT_PROPERTY_PREFIX = "ontology.iri.property.";
     private final Configuration configuration;
 
     protected OntologyRepositoryBase(Configuration configuration) {
@@ -786,7 +785,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         if (concepts.size() == 1) {
             return concepts.get(0);
         }
-        throw new LumifyException("Found multiple concepts for intent: " + intent);
+
+        String iris = Joiner.on(',').join(new ConvertingIterable<Concept, String>(concepts) {
+            @Override
+            protected String convert(Concept o) {
+                return o.getIRI();
+            }
+        });
+        throw new LumifyException("Found multiple concepts for intent: " + intent + " (" + iris + ")");
     }
 
     public String getConceptIRIByIntent(String intent) {
@@ -840,7 +846,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         if (relationships.size() == 1) {
             return relationships.get(0);
         }
-        throw new LumifyException("Found multiple relationships for intent: " + intent);
+
+        String iris = Joiner.on(',').join(new ConvertingIterable<Relationship, String>(relationships) {
+            @Override
+            protected String convert(Relationship o) {
+                return o.getIRI();
+            }
+        });
+        throw new LumifyException("Found multiple relationships for intent: " + intent + " (" + iris + ")");
     }
 
     public String getRelationshipIRIByIntent(String intent) {
@@ -894,7 +907,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         if (properties.size() == 1) {
             return properties.get(0);
         }
-        throw new LumifyException("Found multiple properties for intent: " + intent);
+
+        String iris = Joiner.on(',').join(new ConvertingIterable<OntologyProperty, String>(properties) {
+            @Override
+            protected String convert(OntologyProperty o) {
+                return o.getTitle();
+            }
+        });
+        throw new LumifyException("Found multiple properties for intent: " + intent + " (" + iris + ")");
     }
 
     public String getPropertyIRIByIntent(String intent) {
