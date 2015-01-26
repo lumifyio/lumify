@@ -151,12 +151,13 @@ public class VertexSetProperty extends BaseRequestHandler {
                 }
 
                 ClientApiElement clientApiElement = null;
+                int valuesIndex = 0;
                 for (String dependentPropertyIri : property.getDependentPropertyIris()) {
                     clientApiElement = handle(
                             graphVertexId,
                             dependentPropertyIri,
                             propertyKey,
-                            valueStr,
+                            valuesStr[valuesIndex++],
                             null,
                             justificationText,
                             sourceInfo,

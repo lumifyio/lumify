@@ -282,6 +282,7 @@ define([
 
             this.dataRequest('ontology', 'properties').done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
+                self.currentPropertyDetails = propertyDetails;
                 if (propertyName === 'http://lumify.io#visibilityJson') {
                     require([
                         'configuration/plugins/visibility/visibilityEditor'
@@ -425,17 +426,26 @@ define([
 
             event.stopPropagation();
 
-            if (data.values.length === 1) {
-                this.currentValue = data.values[0];
-            } else if (data.values.length === 2) {
-                // Must be geoLocation
-                this.currentValue = 'point(' + data.values.join(',') + ')';
-            } else if (data.values.length === 3) {
-                this.currentValue = JSON.stringify({
-                    description: data.values[0],
-                    latitude: data.values[1],
-                    longitude: data.values[2]
-                });
+            var isCompoundField = this.currentPropertyDetails.dependentPropertyIris,
+                transformValue = function(valueArray) {
+                    if (valueArray.length === 1) {
+                        return valueArray[0];
+                    } else if (valueArray.length === 2) {
+                        // Must be geoLocation
+                        return 'point(' + valueArray.join(',') + ')';
+                    } else if (valueArray.length === 3) {
+                        return JSON.stringify({
+                            description: valueArray[0],
+                            latitude: valueArray[1],
+                            longitude: valueArray[2]
+                        });
+                    }
+                }
+
+            if (isCompoundField) {
+                this.currentValue = _.map(data.values, transformValue);
+            } else {
+                this.currentValue = transformValue(data.values);
             }
 
             this.currentMetadata = data.metadata;
