@@ -5,6 +5,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -45,7 +47,11 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
     private Mapper.Context context;
 
     @Mock
+    private OntologyRepository ontologyRepository;
+
+    @Mock
     private User user;
+
     private String text = "This is a sentenc®, written by Bob Robértson, who curréntly makes 2 million "
             + "a year. If by 1:30, you don't know what you are doing, you should go watch CNN and see "
             + "what the latest is on the Benghazi nonsense. I'm 47% sure that this test will pass, but will it?";
@@ -62,9 +68,14 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         config.put("ontology.iri.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
+        when(ontologyRepository.getRequiredConceptIRIByIntent("location")).thenReturn("http://lumify.io/test#location");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("organization")).thenReturn("http://lumify.io/test#organization");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("person")).thenReturn("http://lumify.io/test#person");
+
         extractor = new OpenNLPMaximumEntropyExtractorGraphPropertyWorker();
         extractor.setConfiguration(configuration);
         extractor.setGraph(graph);
+        extractor.setOntologyRepository(ontologyRepository);
 
         Map<String, String> conf = new HashMap<>();
         conf.put("ontology.iri.concept.location", "http://lumify.io/test#location");

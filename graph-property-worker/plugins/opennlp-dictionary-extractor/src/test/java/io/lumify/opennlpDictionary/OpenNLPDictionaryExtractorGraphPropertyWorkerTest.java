@@ -5,6 +5,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -40,6 +41,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -56,6 +58,9 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
     @Mock
     private DictionaryEntryRepository dictionaryEntryRepository;
 
+    @Mock
+    private OntologyRepository ontologyRepository;
+
     private InMemoryGraph graph;
     private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
     private TermMentionRepository termMentionRepository;
@@ -71,6 +76,10 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         config.put("ontology.iri.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
+        when(ontologyRepository.getRequiredConceptIRIByIntent("location")).thenReturn("http://lumify.io/test#location");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("organization")).thenReturn("http://lumify.io/test#organization");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("person")).thenReturn("http://lumify.io/test#person");
+
         graph = InMemoryGraph.create();
 
         extractor = new OpenNLPDictionaryExtractorGraphPropertyWorker() {
@@ -83,6 +92,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         extractor.setDictionaryEntryRepository(dictionaryEntryRepository);
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setGraph(graph);
+        extractor.setOntologyRepository(ontologyRepository);
 
         AuthorizationRepository authorizationRepository = new InMemoryAuthorizationRepository();
         termMentionRepository = new TermMentionRepository(graph, authorizationRepository);

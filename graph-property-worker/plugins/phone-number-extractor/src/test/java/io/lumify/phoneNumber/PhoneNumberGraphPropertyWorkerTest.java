@@ -6,6 +6,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,6 +44,9 @@ public class PhoneNumberGraphPropertyWorkerTest {
 
     @Mock
     private User user;
+
+    @Mock
+    private OntologyRepository ontologyRepository;
 
     private PhoneNumberGraphPropertyWorker extractor;
     private InMemoryAuthorizations authorizations;
@@ -61,9 +66,12 @@ public class PhoneNumberGraphPropertyWorkerTest {
         config.put("ontology.iri.concept.phoneNumber", "http://lumify.io/test#phoneNumber");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
+        when(ontologyRepository.getRequiredConceptIRIByIntent("phoneNumber")).thenReturn("http://lumify.io/test#phoneNumber");
+
         extractor = new PhoneNumberGraphPropertyWorker();
         extractor.setConfiguration(configuration);
         extractor.setVisibilityTranslator(visibilityTranslator);
+        extractor.setOntologyRepository(ontologyRepository);
 
         FileSystem hdfsFileSystem = null;
         authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);

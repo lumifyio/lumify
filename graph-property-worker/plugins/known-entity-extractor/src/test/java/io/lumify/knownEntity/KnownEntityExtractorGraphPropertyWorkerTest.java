@@ -6,6 +6,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
@@ -31,6 +32,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,6 +44,9 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
 
     @Mock
     private AuditRepository auditRepostiory;
+
+    @Mock
+    private OntologyRepository ontologyRepository;
 
     String dictionaryPath;
     private InMemoryAuthorizations authorizations;
@@ -59,11 +64,17 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         config.put("ontology.iri.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
+        when(ontologyRepository.getRequiredConceptIRIByIntent("location")).thenReturn("http://lumify.io/test#location");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("organization")).thenReturn("http://lumify.io/test#organization");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("person")).thenReturn("http://lumify.io/test#person");
+        when(ontologyRepository.getRequiredRelationshipIRIByIntent("artifactHasEntity")).thenReturn("http://lumify.io/test#artifactHasEntity");
+
         dictionaryPath = getClass().getResource(".").getPath();
         extractor = new KnownEntityExtractorGraphPropertyWorker();
         extractor.setAuditRepository(auditRepostiory);
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setConfiguration(configuration);
+        extractor.setOntologyRepository(ontologyRepository);
 
         config.put(KnownEntityExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file://" + dictionaryPath);
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
