@@ -491,7 +491,7 @@ define([
 
             this.trigger('didToggleDisplay', {
                 name: data.name,
-                visible: isVisible
+                visible: !isVisible
             })
         };
 
