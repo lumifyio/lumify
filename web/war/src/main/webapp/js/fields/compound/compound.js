@@ -1,8 +1,9 @@
 define([
     'require',
     'flight/lib/component',
-    'util/withDataRequest'
-], function(require, defineComponent, withDataRequest) {
+    'util/withDataRequest',
+    'util/vertex/formatters'
+], function(require, defineComponent, withDataRequest, F) {
     'use strict';
 
     return defineComponent(CompoundField, withDataRequest);
@@ -70,9 +71,8 @@ define([
         this.isValid = function() {
             var values = this.getValues();
 
-            return _.every(values, function(v) {
-                return v && v.length && v[0].length
-            });
+            // TODO: should pass key?
+            return F.vertex.propValid(this.attr.vertex, values, this.attr.property.title);
         };
 
         this.render = function() {

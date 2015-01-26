@@ -263,6 +263,65 @@ define(['util/vertex/formatters'], function(f) {
             })
         })
 
+        describe('propValid', function() {
+            it('should validate property with existing values', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k2', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_CONCEPT, 'http://lumify.io/dev#person')
+                    ]);
+
+                expect(V.propValid(vertex, [], COMPOUND_PROPERTY_NAME, 'k1')).to.be.true
+                expect(V.propValid(vertex, [], COMPOUND_PROPERTY_NAME, 'k2')).to.be.false
+            })
+
+            it('should validate property with overriding values', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k2', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_CONCEPT, 'http://lumify.io/dev#person')
+                    ]);
+
+                expect(V.propValid(vertex, ['override last name', undefined], COMPOUND_PROPERTY_NAME, 'k1')).to.be.false
+                expect(V.propValid(vertex, ['last', 'first'], COMPOUND_PROPERTY_NAME, 'k2')).to.be.true
+            })
+
+            it('should accept compound values with nested arrays', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_CONCEPT, 'http://lumify.io/dev#person')
+                    ]);
+
+                expect(V.propValid(vertex, [['override last name'], [undefined]], COMPOUND_PROPERTY_NAME)).to.be.false
+                expect(V.propValid(vertex, [['override last name'], ['first']], COMPOUND_PROPERTY_NAME)).to.be.true
+            })
+
+            it('should not modify vertex', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_CONCEPT, 'http://lumify.io/dev#person')
+                    ]);
+
+                expect(V.propValid(vertex, ['harwig', 'j2'], COMPOUND_PROPERTY_NAME, 'k1')).to.be.true
+                expect(vertex.properties.length).to.equal(2)
+                expect(vertex.properties[0].value).to.equal('jason')
+            })
+
+            it('should validate property without key', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
+                        propertyFactory(PROPERTY_NAME_CONCEPT, 'http://lumify.io/dev#person')
+                    ]);
+
+                expect(V.propValid(vertex, [], COMPOUND_PROPERTY_NAME)).to.be.false
+                vertex.properties.push(propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'));
+                expect(V.propValid(vertex, [], COMPOUND_PROPERTY_NAME)).to.be.true
+                expect(V.propValid(vertex, ['override last name', undefined], COMPOUND_PROPERTY_NAME)).to.be.false
+                expect(V.propValid(vertex, ['l', 'f'], COMPOUND_PROPERTY_NAME)).to.be.true
+            })
+        })
+
         describe('propFromAudit', function() {
             it('should format values for audit')
         })

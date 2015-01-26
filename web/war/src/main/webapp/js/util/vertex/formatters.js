@@ -408,6 +408,51 @@ define([
                 return foundProperties;
             },
 
+            propValid: function(vertex, values, propertyName, propertyKey) {
+                checkVertexAndPropertyNameArguments(vertex, propertyName);
+                if (!_.isArray(values)) {
+                    throw new Error('Unable to validate without values array')
+                }
+
+                var ontologyProperty = ontology.properties.byTitle[propertyName],
+                    dependentIris = ontologyProperty.dependentPropertyIris,
+                    formulaString = ontologyProperty.validationFormula,
+                    result = true;
+
+                if (formulaString) {
+                    if (values.length) {
+                        var properties = [];
+                        if (dependentIris) {
+                            dependentIris.forEach(function(iri, i) {
+                                var property = _.findWhere(vertex.properties, {
+                                        name: iri,
+                                        key: propertyKey
+                                    }),
+                                    value = _.isArray(values[i]) && values[i].length === 1 ? values[i][0] : values[i]
+
+                                if (property) {
+                                    property = _.extend({}, property, { value: value });
+                                    if (_.isUndefined(values[i])) {
+                                        property.value = undefined;
+                                    }
+                                } else {
+                                    property = {
+                                        name: iri,
+                                        key: propertyKey,
+                                        value: value
+                                    };
+                                }
+                                properties.push(property);
+                            })
+                        }
+                        vertex = _.extend({}, vertex, { properties: properties });
+                    }
+                    result = formula(formulaString, vertex, V, propertyKey);
+                }
+
+                return Boolean(result);
+            },
+
             title: function(vertex) {
                 var title = formulaResultForVertex(vertex, 'titleFormula')
 
