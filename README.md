@@ -15,18 +15,6 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 1. Install Docker per their instructions: [https://docs.docker.com/installation](https://docs.docker.com/installation/#installation)
 
-1. Install Python v2.x per their instructions (Windows-only): [https://www.python.org/downloads/](https://www.python.org/downloads/)
-
-1. Install msysgit via the netinstall option (Windows-only): [https://github.com/msysgit/msysgit/releases](https://github.com/msysgit/msysgit/releases) - 
-**If running Windows, all commands from this point forward are assumed to be running from the msysgit shell**
-
-1. Add python to $PATH in msysgit bash shell (Windows-only)
-
-        // Create or add to file "~/.profile"
-        export PATH=$PATH:/c/Python27
-
-1. Install Java per their instructions if not already installed (Windows-only): [http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-
 1. Install node and npm per their instructions: [http://nodejs.org/](http://nodejs.org/)
 
 1. Install the Lumify npm dependencies (from the web/war/src/main/webapp directory):
@@ -42,11 +30,6 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
     - OS X
 
             echo "$(boot2docker ip 2>/dev/null) lumify-dev" >> /etc/hosts
-
-    - Windows
-
-            boot2docker ip
-            edit %windir%\system32\drivers\etc\hosts adding a new line with the IP address from the previous command, space, "lumify-dev"
 
 1. Create the docker image:
 

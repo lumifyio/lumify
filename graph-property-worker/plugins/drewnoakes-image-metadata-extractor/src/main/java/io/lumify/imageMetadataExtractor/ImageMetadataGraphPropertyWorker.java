@@ -6,6 +6,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.gpw.MediaPropertyConfiguration;
@@ -88,6 +89,10 @@ public class ImageMetadataGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public boolean isHandled(Element element, Property property) {
         if (property == null) {
+            return false;
+        }
+
+        if (property.getName().equals(MediaLumifyProperties.VIDEO_FRAME.getPropertyName())) {
             return false;
         }
 
