@@ -60,6 +60,9 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private static final String SRC_TYPE_KEYS_PROPERTY = "tika.extraction.srctypekeys";
     private static final String RETRIEVAL_TIMESTAMP_KEYS_PROPERTY = "tika.extraction.retrievaltimestampkeys";
     private static final String CUSTOM_FLICKR_METADATA_KEYS_PROPERTY = "tika.extraction.customflickrmetadatakeys";
+    private static final String NUMBER_OF_PAGES_PROPERTY = "tika.extraction.numberofpageskeys";
+
+    private static final double SYSTEM_ASSIGNED_CONFIDENCE = 0.4;
 
     private List<String> dateKeys;
     private List<String> subjectKeys;
@@ -70,6 +73,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private List<String> retrievalTimestampKeys;
     private List<String> customFlickrMetadataKeys;
     private List<String> authorKeys;
+    private List<String> numberOfPagesKeys;
+
     private OntologyProperty pageCountProperty;
 
     @Override
@@ -99,6 +104,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         retrievalTimestampKeys = Arrays.asList(tikaProperties.getProperty(RETRIEVAL_TIMESTAMP_KEYS_PROPERTY, "atc:retrieval-timestamp").split(","));
         customFlickrMetadataKeys = Arrays.asList(tikaProperties.getProperty(CUSTOM_FLICKR_METADATA_KEYS_PROPERTY, "Unknown tag (0x9286)").split(","));
         authorKeys = Arrays.asList(tikaProperties.getProperty(AUTHOR_PROPERTY, "author").split(","));
+        numberOfPagesKeys = Arrays.asList(tikaProperties.getProperty(NUMBER_OF_PAGES_PROPERTY, "xmpTPg:NPages").split(","));
     }
 
     @Override
@@ -144,7 +150,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
                 // TODO set("retrievalTime", Long.parseLong(customImageMetadataJson.get("atc:retrieval-timestamp").toString()));
 
                 org.securegraph.Metadata titleMetadata = data.createPropertyMetadata();
-                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4, getVisibilityTranslator().getDefaultVisibility());
+                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, SYSTEM_ASSIGNED_CONFIDENCE, getVisibilityTranslator().getDefaultVisibility());
                 LumifyProperties.TITLE.addPropertyValue(m, MULTI_VALUE_KEY, customImageMetadataJson.get("title").toString(), titleMetadata, data.getVisibility());
             } catch (JSONException e) {
                 LOGGER.warn("Image returned invalid custom metadata");
@@ -157,11 +163,20 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             String title = extractTextField(metadata, subjectKeys).trim();
             if (title != null && title.length() > 0) {
                 org.securegraph.Metadata titleMetadata = data.createPropertyMetadata();
-                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4, getVisibilityTranslator().getDefaultVisibility());
+                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, SYSTEM_ASSIGNED_CONFIDENCE, getVisibilityTranslator().getDefaultVisibility());
                 LumifyProperties.TITLE.addPropertyValue(m, MULTI_VALUE_KEY, title, titleMetadata, data.getVisibility());
             }
 
             // TODO set("retrievalTime", extractRetrievalTime(metadata));
+
+            if (pageCountProperty != null) {
+                String numberOfPages = extractTextField(metadata, numberOfPagesKeys);
+                if (numberOfPages != null) {
+                    org.securegraph.Metadata numberOfPagesMetadata = data.createPropertyMetadata();
+                    LumifyProperties.CONFIDENCE.setMetadata(numberOfPagesMetadata, SYSTEM_ASSIGNED_CONFIDENCE, getVisibilityTranslator().getDefaultVisibility());
+                    m.addPropertyValue(MULTI_VALUE_KEY, pageCountProperty.getTitle(), Long.valueOf(numberOfPages), numberOfPagesMetadata, data.getVisibility());
+                }
+            }
         }
 
         Vertex v = m.save(getAuthorizations());
