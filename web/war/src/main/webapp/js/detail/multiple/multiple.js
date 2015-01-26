@@ -70,7 +70,7 @@ define([
                 });
             }
         }
-        if (display === '') return '[ blank ]';
+        if (display === '') return i18n('detail.multiple.histogram.blank');
         return display;
     }
 
