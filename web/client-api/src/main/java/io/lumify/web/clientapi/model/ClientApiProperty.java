@@ -10,7 +10,7 @@ public class ClientApiProperty implements ClientApiObject {
     private String key;
     private String name;
     private boolean streamingPropertyValue;
-    private Map<String, Object> metadata = new HashMap<String, Object>();
+    private Map<String, Object> metadata = new HashMap<>();
     private Object value;
 
     public SandboxStatus getSandboxStatus() {

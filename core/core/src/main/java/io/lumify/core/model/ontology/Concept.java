@@ -7,10 +7,7 @@ import org.securegraph.Authorizations;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Concept {
     private final String parentConceptIRI;
@@ -92,6 +89,9 @@ public abstract class Concept {
             if (getAddRelatedConceptWhiteList() != null) {
                 concept.getAddRelatedConceptWhiteList().addAll(getAddRelatedConceptWhiteList());
             }
+            if (getIntents() != null) {
+                concept.getIntents().addAll(Arrays.asList(getIntents()));
+            }
             if (this.properties != null) {
                 for (OntologyProperty property : this.properties) {
                     concept.getProperties().add(property.getTitle());
@@ -112,7 +112,7 @@ public abstract class Concept {
     }
 
     public static Collection<ClientApiOntology.Concept> toClientApiConcepts(Iterable<Concept> concepts) {
-        Collection<ClientApiOntology.Concept> results = new ArrayList<ClientApiOntology.Concept>();
+        Collection<ClientApiOntology.Concept> results = new ArrayList<>();
         for (Concept concept : concepts) {
             results.add(concept.toClientApi());
         }

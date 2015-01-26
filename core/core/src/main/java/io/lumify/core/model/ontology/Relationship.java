@@ -4,6 +4,7 @@ import io.lumify.web.clientapi.model.ClientApiOntology;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,6 +40,9 @@ public abstract class Relationship {
             result.setDisplayName(getDisplayName());
             result.setDomainConceptIris(getDomainConceptIRIs());
             result.setRangeConceptIris(getRangeConceptIRIs());
+            if (getIntents() != null) {
+                result.getIntents().addAll(Arrays.asList(getIntents()));
+            }
 
             Iterable<String> inverseOfIRIs = getInverseOfIRIs();
             for (String inverseOfIRI : inverseOfIRIs) {
