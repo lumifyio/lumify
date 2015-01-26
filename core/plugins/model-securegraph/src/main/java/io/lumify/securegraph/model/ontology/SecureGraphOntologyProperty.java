@@ -6,8 +6,8 @@ import io.lumify.core.util.JSONUtil;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONObject;
 import org.securegraph.Vertex;
+import org.securegraph.util.IterableUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class SecureGraphOntologyProperty extends OntologyProperty {
@@ -27,6 +27,11 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
 
     public String getPropertyGroup() {
         return LumifyProperties.PROPERTY_GROUP.getPropertyValue(vertex);
+    }
+
+    @Override
+    public String[] getIntents() {
+        return IterableUtils.toArray(LumifyProperties.INTENT.getPropertyValues(vertex), String.class);
     }
 
     public boolean getUserVisible() {

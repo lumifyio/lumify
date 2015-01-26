@@ -47,6 +47,8 @@ public abstract class OntologyProperty {
 
     public abstract String getPropertyGroup();
 
+    public abstract String[] getIntents();
+
     public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
         Collection<ClientApiOntology.Property> results = new ArrayList<ClientApiOntology.Property>();
         for (OntologyProperty property : properties) {

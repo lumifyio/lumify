@@ -7,6 +7,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -69,6 +70,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private List<String> retrievalTimestampKeys;
     private List<String> customFlickrMetadataKeys;
     private List<String> authorKeys;
+    private OntologyProperty pageCountProperty;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -85,6 +87,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         } catch (IOException e) {
             LOGGER.error("Could not load config: %s", PROPS_FILE);
         }
+
+        pageCountProperty = getOntologyRepository().getPropertyByIntent("pageCount");
 
         dateKeys = Arrays.asList(tikaProperties.getProperty(DATE_KEYS_PROPERTY, "date,published,pubdate,publish_date,last-modified,atc:last-modified").split(","));
         subjectKeys = Arrays.asList(tikaProperties.getProperty(SUBJECT_KEYS_PROPERTY, "title,subject").split(","));

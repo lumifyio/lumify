@@ -2,6 +2,8 @@ package io.lumify.core.model.ontology;
 
 import io.lumify.web.clientapi.model.PropertyType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryOntologyProperty extends OntologyProperty {
@@ -14,6 +16,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private Map<String, String> possibleValues;
     private String displayType;
     private Double boost;
+    private List<String> intents = new ArrayList<>();
 
     @Override
     public String getTitle() {
@@ -55,6 +58,11 @@ public class InMemoryOntologyProperty extends OntologyProperty {
         return searchable;
     }
 
+    @Override
+    public String[] getIntents() {
+        return this.intents.toArray(new String[this.intents.size()]);
+    }
+
     public String getDisplayType() {
         return displayType;
     }
@@ -93,5 +101,9 @@ public class InMemoryOntologyProperty extends OntologyProperty {
 
     public void setPropertyGroup(String propertyGroup) {
         this.propertyGroup = propertyGroup;
+    }
+
+    public void addIntent(String intent) {
+        this.intents.add(intent);
     }
 }

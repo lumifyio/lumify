@@ -48,7 +48,7 @@ public interface OntologyRepository {
 
     Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir);
 
-    Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName);
+    Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName, String[] intents);
 
     OWLOntologyManager createOwlOntologyManager(OWLOntologyLoaderConfiguration config, IRI excludeDocumentIRI) throws Exception;
 
@@ -63,4 +63,10 @@ public interface OntologyRepository {
     ClientApiOntology getClientApiObject();
 
     String guessDocumentIRIFromPackage(File inFile) throws Exception;
+
+    Concept getConceptByIntent(String intent);
+
+    Relationship getRelationshipByIntent(String intent);
+
+    OntologyProperty getPropertyByIntent(String intent);
 }

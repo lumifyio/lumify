@@ -128,4 +128,8 @@ public abstract class Concept {
     public abstract byte[] getMapGlyphIcon();
 
     public abstract String getIRI();
+
+    public abstract String[] getIntents();
+
+    public abstract void addIntent(String intent, Authorizations authorizations);
 }

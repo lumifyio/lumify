@@ -30,6 +30,8 @@ public abstract class Relationship {
         return rangeConceptIRIs;
     }
 
+    public abstract String[] getIntents();
+
     public ClientApiOntology.Relationship toClientApi() {
         try {
             ClientApiOntology.Relationship result = new ClientApiOntology.Relationship();

@@ -83,16 +83,16 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         Concept workspaceConcept = ontologyRepository.getOrCreateConcept(null, WORKSPACE_CONCEPT_IRI, "workspace", null);
         workspaceConceptId = workspaceConcept.getTitle();
 
-        ArrayList<Concept> workspaceConceptList = new ArrayList<Concept>();
+        ArrayList<Concept> workspaceConceptList = new ArrayList<>();
         workspaceConceptList.add(workspaceConcept);
 
-        ArrayList<Concept> rootConceptList = new ArrayList<Concept>();
+        ArrayList<Concept> rootConceptList = new ArrayList<>();
         rootConceptList.add(rootConcept);
 
-        Relationship workspaceToEntityRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConceptList, rootConceptList, WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI, "workspace to entity");
+        Relationship workspaceToEntityRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConceptList, rootConceptList, WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI, "workspace to entity", new String[0]);
         workspaceToEntityRelationshipId = workspaceToEntityRelationship.getIRI();
 
-        Relationship workspaceToUserRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConceptList, rootConceptList, WORKSPACE_TO_USER_RELATIONSHIP_IRI, "workspace to user");
+        Relationship workspaceToUserRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConceptList, rootConceptList, WORKSPACE_TO_USER_RELATIONSHIP_IRI, "workspace to user", new String[0]);
         workspaceToUserRelationshipId = workspaceToUserRelationship.getIRI();
     }
 
@@ -405,8 +405,8 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspaceId, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId()) && (
-                userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE ||
-                userWithAccess.getWorkspaceAccess() == WorkspaceAccess.COMMENT
+                    userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE ||
+                            userWithAccess.getWorkspaceAccess() == WorkspaceAccess.COMMENT
             )) {
                 usersWithCommentAccessCache.put(cacheKey, true);
                 return true;
