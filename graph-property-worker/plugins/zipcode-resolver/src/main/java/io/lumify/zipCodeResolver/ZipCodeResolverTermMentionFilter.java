@@ -67,7 +67,7 @@ public class ZipCodeResolverTermMentionFilter extends TermMentionFilter {
     public void prepareIris() {
         zipCodeIri = ontologyRepository.getRequiredConceptIRIByIntent("zipCode");
         geoLocationIri = ontologyRepository.getRequiredPropertyIRIByIntent("geoLocation");
-        this.artifactHasEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactHasEntity");
+        artifactHasEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactHasEntity");
     }
 
     @Override

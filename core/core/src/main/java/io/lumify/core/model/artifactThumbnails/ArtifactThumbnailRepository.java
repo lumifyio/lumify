@@ -4,8 +4,9 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
-import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.types.BooleanLumifyProperty;
+import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -25,14 +26,21 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
     public static int FRAMES_PER_PREVIEW = 20;
     public static int PREVIEW_FRAME_WIDTH = 360;
     public static int PREVIEW_FRAME_HEIGHT = 240;
-    private final OntologyProperty yAxisFlippedIri;
-    private final OntologyProperty clockwiseRotationIri;
+    private BooleanLumifyProperty yAxisFlippedProperty;
+    private IntegerLumifyProperty clockwiseRotationProperty;
 
     public ArtifactThumbnailRepository(ModelSession modelSession, final OntologyRepository ontologyRepository) {
         super(modelSession);
 
-        this.yAxisFlippedIri = ontologyRepository.getPropertyByIntent("media.yAxisFlipped");
-        this.clockwiseRotationIri = ontologyRepository.getPropertyByIntent("media.clockwiseRotation");
+        String yAxisFlippedPropertyIri = ontologyRepository.getPropertyIRIByIntent("media.yAxisFlipped");
+        if (yAxisFlippedPropertyIri != null) {
+            this.yAxisFlippedProperty = new BooleanLumifyProperty(yAxisFlippedPropertyIri);
+        }
+
+        String clockwiseRotationPropertyIri = ontologyRepository.getPropertyIRIByIntent("media.clockwiseRotation");
+        if (clockwiseRotationPropertyIri != null) {
+            this.clockwiseRotationProperty = new IntegerLumifyProperty(clockwiseRotationPropertyIri);
+        }
     }
 
     public abstract BigTableArtifactThumbnail fromRow(Row row);
@@ -88,15 +96,15 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
 
     public BufferedImage getTransformedImage(BufferedImage originalImage, Vertex artifactVertex) {
         int cwRotationNeeded = 0;
-        if (clockwiseRotationIri != null) {
-            Integer nullable = (Integer) artifactVertex.getPropertyValue(clockwiseRotationIri.getTitle());
+        if (clockwiseRotationProperty != null) {
+            Integer nullable = clockwiseRotationProperty.getPropertyValue(artifactVertex);
             if (nullable != null) {
                 cwRotationNeeded = nullable;
             }
         }
         boolean yAxisFlipNeeded = false;
-        if (yAxisFlippedIri != null) {
-            Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlippedIri.getTitle());
+        if (yAxisFlippedProperty != null) {
+            Boolean nullable = yAxisFlippedProperty.getPropertyValue(artifactVertex);
             if (nullable != null) {
                 yAxisFlipNeeded = nullable;
             }

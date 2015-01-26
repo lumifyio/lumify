@@ -50,7 +50,7 @@ define([
         this.onDidToggleDisplay = function(event, data) {
             var $notifications = this.select('notificationsNodeSelector');
 
-            if (data.name === 'dashboard' && !data.visible) {
+            if (data.name === 'dashboard' && data.visible) {
                 require(['notifications/notifications'], function(Notifications) {
                     Notifications.attachTo($notifications, {
                         allowDismiss: false,
