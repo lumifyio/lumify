@@ -10,8 +10,6 @@ import java.util.List;
 
 public class LibDirectoryLoader extends LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LibDirectoryLoader.class);
-    public static final String DEFAULT_UNIX_LIB_DIRECTORY = "/opt/lumify/lib";
-    public static final String DEFAULT_WINDOWS_LIB_DIRECTORY = "c:/opt/lumify/lib";
 
     @Override
     public void loadLibs(Configuration configuration) {
