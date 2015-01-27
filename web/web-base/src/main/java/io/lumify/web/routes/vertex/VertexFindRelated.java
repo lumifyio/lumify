@@ -59,7 +59,7 @@ public class VertexFindRelated extends BaseRequestHandler {
                 throw new RuntimeException("Bad 'limitParentConceptId', no concept found for id: " + limitParentConceptId);
             }
             for (Concept con : limitConcepts) {
-                limitConceptIds.add(con.getTitle());
+                limitConceptIds.add(con.getIRI());
             }
         }
 

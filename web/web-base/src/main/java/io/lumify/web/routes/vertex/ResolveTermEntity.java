@@ -2,7 +2,6 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -38,7 +37,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
     private final WorkQueueRepository workQueueRepository;
-    private final String artifactHasEntityIri;
+    private String artifactHasEntityIri;
 
     @Inject
     public ResolveTermEntity(
@@ -58,15 +57,18 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
-
-        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
+        this.artifactHasEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactHasEntity");
         if (this.artifactHasEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+            LOGGER.warn("'artifactHasEntity' intent has not been defined. Please update your ontology.");
         }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.artifactHasEntityIri == null) {
+            this.artifactHasEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactHasEntity");
+        }
+
         final String artifactId = getRequiredParameter(request, "artifactId");
         final String propertyKey = getRequiredParameter(request, "propertyKey");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");

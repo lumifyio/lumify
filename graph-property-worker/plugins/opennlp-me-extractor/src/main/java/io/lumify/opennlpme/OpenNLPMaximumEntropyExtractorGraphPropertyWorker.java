@@ -1,6 +1,5 @@
 package io.lumify.opennlpme;
 
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -46,20 +45,9 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        this.locationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_LOCATION);
-        if (this.locationIri == null || this.locationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_LOCATION);
-        }
-
-        this.organizationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        if (this.organizationIri == null || this.organizationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        }
-
-        this.personIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_PERSON);
-        if (this.personIri == null || this.personIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
-        }
+        this.locationIri = getOntologyRepository().getRequiredConceptIRIByIntent("location");
+        this.organizationIri = getOntologyRepository().getRequiredConceptIRIByIntent("organization");
+        this.personIri = getOntologyRepository().getRequiredConceptIRIByIntent("person");
 
         String pathPrefix = (String) workerPrepareData.getConfiguration().get(PATH_PREFIX_CONFIG);
         if (pathPrefix == null) {
@@ -77,7 +65,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
 
         LOGGER.debug("Processing artifact content stream");
         Vertex sourceVertex = (Vertex) data.getElement();
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         while ((line = untokenizedLineStream.read()) != null) {
             termMentions.addAll(processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex)));
             getGraph().flush();
@@ -90,7 +78,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
     }
 
     private List<Vertex> processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, VisibilityJson visibilityJson) {
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         String tokenList[] = tokenizer.tokenize(line);
         Span[] tokenListPositions = tokenizer.tokenizePos(line);
         for (TokenNameFinder finder : finders) {
@@ -156,14 +144,11 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
                 new Path(pathPrefix + "/en-ner-location.bin"),
                 new Path(pathPrefix + "/en-ner-organization.bin"),
                 new Path(pathPrefix + "/en-ner-person.bin")};
-        List<TokenNameFinder> finders = new ArrayList<TokenNameFinder>();
+        List<TokenNameFinder> finders = new ArrayList<>();
         for (Path finderHdfsPath : finderHdfsPaths) {
-            InputStream finderModelInputStream = fs.open(finderHdfsPath);
-            TokenNameFinderModel model = null;
-            try {
+            TokenNameFinderModel model;
+            try (InputStream finderModelInputStream = fs.open(finderHdfsPath)) {
                 model = new TokenNameFinderModel(finderModelInputStream);
-            } finally {
-                finderModelInputStream.close();
             }
             NameFinderME finder = new NameFinderME(model);
             finders.add(finder);
@@ -175,12 +160,9 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
     protected Tokenizer loadTokenizer(String pathPrefix, FileSystem fs) throws IOException {
         Path tokenizerHdfsPath = new Path(pathPrefix + "/en-token.bin");
 
-        TokenizerModel tokenizerModel = null;
-        InputStream tokenizerModelInputStream = fs.open(tokenizerHdfsPath);
-        try {
+        TokenizerModel tokenizerModel;
+        try (InputStream tokenizerModelInputStream = fs.open(tokenizerHdfsPath)) {
             tokenizerModel = new TokenizerModel(tokenizerModelInputStream);
-        } finally {
-            tokenizerModelInputStream.close();
         }
 
         return new TokenizerME(tokenizerModel);

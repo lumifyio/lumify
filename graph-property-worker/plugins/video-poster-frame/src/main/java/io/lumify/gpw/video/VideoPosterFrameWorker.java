@@ -11,7 +11,6 @@ import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.gpw.MediaPropertyConfiguration;
 import io.lumify.gpw.util.FFprobeRotationUtil;
 import org.securegraph.Element;
 import org.securegraph.Metadata;
@@ -28,13 +27,15 @@ import java.util.ArrayList;
 public class VideoPosterFrameWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoPosterFrameWorker.class);
     private static final String PROPERTY_KEY = VideoPosterFrameWorker.class.getName();
-    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
     private ProcessRunner processRunner;
+    private DoubleLumifyProperty durationProperty;
+    private IntegerLumifyProperty videoRotationProperty;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+        durationProperty = new DoubleLumifyProperty(getOntologyRepository().getRequiredPropertyIRIByIntent("media.duration"));
+        videoRotationProperty = new IntegerLumifyProperty(getOntologyRepository().getRequiredPropertyIRIByIntent("media.clockwiseRotation"));
     }
 
     @Override
@@ -72,8 +73,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
     }
 
     private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File videoPosterFrameFile) {
-        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
-        DoubleLumifyProperty durationProperty = new DoubleLumifyProperty(config.durationIri);
+        ArrayList<String> ffmpegOptionsList = new ArrayList<>();
         Double duration = durationProperty.getPropertyValue(data.getElement(), 0);
 
         if (duration != null) {
@@ -91,7 +91,6 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-f");
         ffmpegOptionsList.add("rawvideo");
 
-        IntegerLumifyProperty videoRotationProperty = new IntegerLumifyProperty(config.clockwiseRotationIri);
         Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement());
         if (videoRotation != null) {
             //Scale.

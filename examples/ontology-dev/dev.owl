@@ -91,6 +91,7 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/dev#entityHasImageRaw">
         <rdfs:label xml:lang="en">Has Image</rdfs:label>
+        <lumify:intent>entityHasImage</lumify:intent>
         <rdfs:range rdf:resource="http://lumify.io/dev#image"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
@@ -413,6 +414,8 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/dev#rawContainsImageOfEntity">
         <rdfs:label xml:lang="en">Contains Image of</rdfs:label>
+        <lumify:intent>artifactContainsImage</lumify:intent>
+        <lumify:intent>artifactContainsImageOfEntity</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#raw"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
@@ -423,6 +426,7 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/dev#rawHasEntity">
         <rdfs:label xml:lang="en">Has Entity</rdfs:label>
+        <lumify:intent>artifactHasEntity</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#raw"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
@@ -539,6 +543,9 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#duration">
         <rdfs:label xml:lang="en">Duration</rdfs:label>
+        <lumify:intent>audioDuration</lumify:intent>
+        <lumify:intent>videoDuration</lumify:intent>
+        <lumify:intent>media.duration</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#audio"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#phoneCall"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
@@ -601,6 +608,8 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geolocation">
         <rdfs:label xml:lang="en">Geolocation</rdfs:label>
+        <lumify:intent>geoLocation</lumify:intent>
+        <lumify:intent>media.geoLocation</lumify:intent>
         <rdfs:range rdf:resource="&lumify;geolocation"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
@@ -701,6 +710,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#sentiment">
         <rdfs:label xml:lang="en">Sentiment</rdfs:label>
+        <lumify:intent>sentiment</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#document"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -790,6 +800,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#audio">
         <rdfs:label xml:lang="en">Audio</rdfs:label>
+        <lumify:intent>audio</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
         <lumify:displayType xml:lang="en">audio</lumify:displayType>
         <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
@@ -801,6 +812,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#city">
         <rdfs:label xml:lang="en">City</rdfs:label>
+        <lumify:intent>city</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">city.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(191, 13, 191)</lumify:color>
@@ -833,6 +845,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#country">
         <rdfs:label xml:lang="en">Country</rdfs:label>
+        <lumify:intent>country</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_266_flag@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(112, 0, 112)</lumify:color>
@@ -844,6 +857,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#document">
         <rdfs:label xml:lang="en">Document</rdfs:label>
+        <lumify:intent>document</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
         <analystsNotebook89:iconFile>Document</analystsNotebook89:iconFile>
         <analystsNotebook6:iconFile>Document</analystsNotebook6:iconFile>
@@ -860,6 +874,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#emailAddress">
         <rdfs:label xml:lang="en">Email Address</rdfs:label>
+        <lumify:intent>email</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#contactInformation"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_010_envelope@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(203, 130, 4)</lumify:color>
@@ -881,6 +896,8 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#image">
         <rdfs:label xml:lang="en">Image</rdfs:label>
+        <lumify:intent>image</lumify:intent>
+        <lumify:intent>entityImage</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
         <lumify:displayType xml:lang="en">image</lumify:displayType>
         <lumify:color xml:lang="en">rgb(176, 87, 53)</lumify:color>
@@ -892,6 +909,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#location">
         <rdfs:label xml:lang="en">Location</rdfs:label>
+        <lumify:intent>location</lumify:intent>
         <analystsNotebook6:iconFile>Place</analystsNotebook6:iconFile>
         <analystsNotebook7:iconFile>Place</analystsNotebook7:iconFile>
         <analystsNotebook89:iconFile>Place</analystsNotebook89:iconFile>
@@ -917,6 +935,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#organization">
         <rdfs:label xml:lang="en">Organization</rdfs:label>
+        <lumify:intent>organization</lumify:intent>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_043_group@2x.png</lumify:glyphIconFileName>
         <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#abbreviation&apos;) || &apos;&apos;</lumify:subtitleFormula>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#formationDate&apos;) || &apos;&apos;</lumify:timeFormula>
@@ -929,10 +948,12 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#person">
         <rdfs:label xml:lang="en">Person</rdfs:label>
-        <analystsNotebook89:iconFile>Person</analystsNotebook89:iconFile>
+        <lumify:intent>person</lumify:intent>
+        <lumify:intent>face</lumify:intent>
         <analystsNotebook6:iconFile>Person</analystsNotebook6:iconFile>
         <analystsNotebook7:iconFile>Person</analystsNotebook7:iconFile>
         <analystsNotebook851:iconFile>Person</analystsNotebook851:iconFile>
+        <analystsNotebook89:iconFile>Person</analystsNotebook89:iconFile>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
         <lumify:titleFormula xml:lang="en">(prop(&apos;http://lumify.io/dev#name&apos;) || &apos;&apos;)</lumify:titleFormula>
@@ -957,6 +978,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#phoneNumber">
         <rdfs:label xml:lang="en">Phone Number</rdfs:label>
+        <lumify:intent>phoneNumber</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#contactInformation"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_139_phone@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(225, 225, 24)</lumify:color>
@@ -978,6 +1000,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#state">
         <rdfs:label xml:lang="en">State</rdfs:label>
+        <lumify:intent>state</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:color xml:lang="en">rgb(153, 0, 153)</lumify:color>
         <lumify:glyphIconFileName xml:lang="en">state.png</lumify:glyphIconFileName>
@@ -1018,6 +1041,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#video">
         <rdfs:label xml:lang="en">Video</rdfs:label>
+        <lumify:intent>video</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
         <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
         <lumify:displayType xml:lang="en">video</lumify:displayType>
@@ -1029,6 +1053,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#zipCode">
         <rdfs:label xml:lang="en">Zip Code</rdfs:label>
+        <lumify:intent>zipCode</lumify:intent>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_020_home@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>

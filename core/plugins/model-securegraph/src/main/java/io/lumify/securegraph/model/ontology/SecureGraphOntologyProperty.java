@@ -7,6 +7,7 @@ import io.lumify.core.util.JSONUtil;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONObject;
 import org.securegraph.Vertex;
+import org.securegraph.util.IterableUtils;
 
 import java.util.Map;
 
@@ -43,6 +44,10 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
     public ImmutableList<String> getDependentPropertyIris() {
         Iterable<String> dependentPropertyIris = LumifyProperties.DEPENDENT_PROPERTY_IRI.getPropertyValues(vertex);
         return ImmutableList.copyOf(dependentPropertyIris);
+    }
+
+    public String[] getIntents() {
+        return IterableUtils.toArray(LumifyProperties.INTENT.getPropertyValues(vertex), String.class);
     }
 
     public boolean getUserVisible() {

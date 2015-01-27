@@ -1,10 +1,10 @@
 package io.lumify.imageMetadataExtractor;
 
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.PostMimeTypeWorker;
-import io.lumify.gpw.MediaPropertyConfiguration;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.imageMetadataHelper.ImageTransformExtractor;
 import org.securegraph.Authorizations;
 import org.securegraph.Metadata;
@@ -17,7 +17,16 @@ import java.util.List;
 
 public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
     private static final String MULTI_VALUE_PROPERTY_KEY = ImageOrientationPostMimeTypeWorker.class.getName();
-    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
+    private OntologyRepository ontologyRepository;
+    private String yAxisFlippedIri;
+    private String clockwiseRotationIri;
+
+    @Override
+    public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
+        super.prepare(workerPrepareData);
+        yAxisFlippedIri = ontologyRepository.getRequiredPropertyIRIByIntent("media.yAxisFlipped");
+        clockwiseRotationIri = ontologyRepository.getRequiredPropertyIRIByIntent("media.clockwiseRotation");
+    }
 
     private void setProperty(String iri, Object value, ExistingElementMutation<Vertex> mutation, Metadata metadata, GraphPropertyWorkData data, List<String> properties) {
         if (iri != null && value != null) {
@@ -39,8 +48,8 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
 
         ImageTransform imageTransform = ImageTransformExtractor.getImageTransform(localFile);
         if (imageTransform != null) {
-            setProperty(config.yAxisFlippedIri, imageTransform.isYAxisFlipNeeded(), mutation, metadata, data, properties);
-            setProperty(config.clockwiseRotationIri, imageTransform.getCWRotationNeeded(), mutation, metadata, data, properties);
+            setProperty(yAxisFlippedIri, imageTransform.isYAxisFlipNeeded(), mutation, metadata, data, properties);
+            setProperty(clockwiseRotationIri, imageTransform.getCWRotationNeeded(), mutation, metadata, data, properties);
 
             mutation.save(authorizations);
             getGraph().flush();
@@ -51,7 +60,7 @@ public class ImageOrientationPostMimeTypeWorker extends PostMimeTypeWorker {
     }
 
     @Inject
-    public void setConfiguration(Configuration configuration) {
-        configuration.setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+    public void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
     }
 }

@@ -15,9 +15,14 @@
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-graph-property-worker-base</artifactId>
+            <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-graph-property-worker-base</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

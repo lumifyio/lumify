@@ -25,6 +25,7 @@ public class InMemoryConcept extends Concept {
     private boolean userVisible = true;
     private Boolean searchable;
     private Map<String, String> metadata = new HashMap<String, String>();
+    private List<String> intents = new ArrayList<>();
 
     protected InMemoryConcept(String conceptIRI, String parentIRI) {
         super(parentIRI, new ArrayList<OntologyProperty>());
@@ -34,6 +35,16 @@ public class InMemoryConcept extends Concept {
     @Override
     public String getIRI() {
         return this.conceptIRI;
+    }
+
+    @Override
+    public String[] getIntents() {
+        return this.intents.toArray(new String[this.intents.size()]);
+    }
+
+    @Override
+    public void addIntent(String intent, Authorizations authorizations) {
+        this.intents.add(intent);
     }
 
     @Override

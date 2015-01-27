@@ -26,7 +26,6 @@ import static org.securegraph.util.IterableUtils.count;
 
 public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PhoneNumberGraphPropertyWorker.class);
-    public static final String CONFIG_PHONE_NUMBER_IRI = "ontology.iri.phoneNumber";
     public static final String DEFAULT_REGION_CODE = "phoneNumber.defaultRegionCode";
     public static final String DEFAULT_DEFAULT_REGION_CODE = "US";
 
@@ -43,10 +42,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
             defaultRegionCode = DEFAULT_DEFAULT_REGION_CODE;
         }
 
-        entityType = (String) workerPrepareData.getConfiguration().get(CONFIG_PHONE_NUMBER_IRI);
-        if (entityType == null || entityType.length() == 0) {
-            throw new LumifyException("Could not find config: " + CONFIG_PHONE_NUMBER_IRI);
-        }
+        entityType = getOntologyRepository().getRequiredConceptIRIByIntent("phoneNumber");
     }
 
     @Override

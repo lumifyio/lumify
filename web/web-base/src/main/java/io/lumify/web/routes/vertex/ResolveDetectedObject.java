@@ -2,7 +2,6 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -39,7 +38,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
-    private final String artifactContainsImageOfEntityIri;
+    private String artifactContainsImageOfEntityIri;
 
     @Inject
     public ResolveDetectedObject(
@@ -59,14 +58,18 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY, null);
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
         if (this.artifactContainsImageOfEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
+            LOGGER.warn("'artifactContainsImageOfEntity' intent has not been defined. Please update your ontology.");
         }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.artifactContainsImageOfEntityIri == null) {
+            this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        }
+
         final String artifactId = getRequiredParameter(request, "artifactId");
         final String title = getRequiredParameter(request, "title");
         final String conceptId = getRequiredParameter(request, "conceptId");
@@ -106,7 +109,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility());
 
-            LumifyProperties.CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getIRI(), metadata, lumifyVisibility.getVisibility());
             LumifyProperties.TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);

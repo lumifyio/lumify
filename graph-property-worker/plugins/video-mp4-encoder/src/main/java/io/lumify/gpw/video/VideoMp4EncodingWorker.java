@@ -10,7 +10,6 @@ import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.gpw.MediaPropertyConfiguration;
 import io.lumify.gpw.util.FFprobeRotationUtil;
 import org.securegraph.Element;
 import org.securegraph.Metadata;
@@ -27,13 +26,13 @@ import java.util.ArrayList;
 public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoMp4EncodingWorker.class);
     private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
-    private MediaPropertyConfiguration config = new MediaPropertyConfiguration();
     private ProcessRunner processRunner;
+    private IntegerLumifyProperty videoRotationProperty;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        getConfiguration().setConfigurables(config, MediaPropertyConfiguration.PROPERTY_NAME_PREFIX);
+        videoRotationProperty = new IntegerLumifyProperty(getOntologyRepository().getRequiredPropertyIRIByIntent("media.clockwiseRotation"));
     }
 
     @Override
@@ -80,7 +79,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     }
 
     public String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File mp4File) {
-        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ArrayList<String> ffmpegOptionsList = new ArrayList<>();
 
         ffmpegOptionsList.add("-y");
         ffmpegOptionsList.add("-i");
@@ -103,7 +102,6 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-vf");
         ffmpegOptionsList.add("scale=720:480");
 
-        IntegerLumifyProperty videoRotationProperty = new IntegerLumifyProperty(config.clockwiseRotationIri);
         Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement());
         if (videoRotation != null) {
             String[] ffmpegRotationOptions = FFprobeRotationUtil.createFFMPEGRotationOptions(videoRotation);

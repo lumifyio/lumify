@@ -1,7 +1,6 @@
 package io.lumify.opencvObjectDetector;
 
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
@@ -44,7 +43,7 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
     public static final String OPENCV_CLASSIFIER_PATH_SUFFIX = ".path";
     private static final String PROCESS = OpenCVObjectDetectorPropertyWorker.class.getName();
 
-    private List<CascadeClassifierHolder> objectClassifiers = new ArrayList<CascadeClassifierHolder>();
+    private List<CascadeClassifierHolder> objectClassifiers = new ArrayList<>();
     private ArtifactThumbnailRepository artifactThumbnailRepository;
 
     @Override
@@ -61,11 +60,7 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
 
             File localFile = createLocalFile(classifierFilePath, workerPrepareData.getHdfsFileSystem());
             CascadeClassifier objectClassifier = new CascadeClassifier(localFile.getPath());
-            String iriConfigurationKey = Configuration.ONTOLOGY_IRI_PREFIX + classifierConcept;
-            String conceptIRI = (String) workerPrepareData.getConfiguration().get(iriConfigurationKey);
-            if (conceptIRI == null) {
-                throw new LumifyException("Could not find concept IRI for " + iriConfigurationKey);
-            }
+            String conceptIRI = getOntologyRepository().getRequiredConceptIRIByIntent(classifierConcept);
             addObjectClassifier(classifierConcept, objectClassifier, conceptIRI);
             if (!localFile.delete()) {
                 LOGGER.warn("Could not delete file: %s", localFile.getAbsolutePath());
@@ -133,7 +128,7 @@ public class OpenCVObjectDetectorPropertyWorker extends GraphPropertyWorker {
     }
 
     public List<ArtifactDetectedObject> detectObjects(BufferedImage bImage) {
-        List<ArtifactDetectedObject> detectedObjectList = new ArrayList<ArtifactDetectedObject>();
+        List<ArtifactDetectedObject> detectedObjectList = new ArrayList<>();
         Mat image = OpenCVUtils.bufferedImageToMat(bImage);
         if (image != null) {
             MatOfRect faceDetections = new MatOfRect();
