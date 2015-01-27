@@ -472,10 +472,6 @@ define([
             }
 
             if (SLIDE_OUT.indexOf(data.name) >= 0) {
-                var self = this;
-
-                // TODO: NEED TO MOVE FURTHER LEFT TO COLLAPSE!!!!!
-
                 pane.one(TRANSITION_END, function() {
                     pane.off(TRANSITION_END);
                     if (!isVisible) {
