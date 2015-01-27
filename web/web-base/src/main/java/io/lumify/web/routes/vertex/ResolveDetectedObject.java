@@ -2,7 +2,6 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -39,7 +38,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
-    private final String artifactContainsImageOfEntityIri;
+    private String artifactContainsImageOfEntityIri;
 
     @Inject
     public ResolveDetectedObject(
@@ -59,11 +58,18 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        if (this.artifactContainsImageOfEntityIri == null) {
+            LOGGER.warn("'artifactContainsImageOfEntity' intent has not been defined. Please update your ontology.");
+        }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.artifactContainsImageOfEntityIri == null) {
+            this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        }
+
         final String artifactId = getRequiredParameter(request, "artifactId");
         final String title = getRequiredParameter(request, "title");
         final String conceptId = getRequiredParameter(request, "conceptId");

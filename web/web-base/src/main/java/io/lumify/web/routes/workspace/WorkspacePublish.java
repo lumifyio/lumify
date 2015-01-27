@@ -48,7 +48,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final AuthorizationRepository authorizationRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
-    private final String entityHasImageIri;
+    private String entityHasImageIri;
 
     @Inject
     public WorkspacePublish(
@@ -70,11 +70,18 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.ontologyRepository = ontologyRepository;
         this.authorizationRepository = authorizationRepository;
 
-        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
+        if (this.entityHasImageIri == null) {
+            LOGGER.warn("'entityHasImage' intent has not been defined. Please update your ontology.");
+        }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.entityHasImageIri == null) {
+            this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        }
+
         String publishDataString = getRequiredParameter(request, "publishData");
         ClientApiPublishItem[] publishData = getObjectMapper().readValue(publishDataString, ClientApiPublishItem[].class);
         User user = getUser(request);

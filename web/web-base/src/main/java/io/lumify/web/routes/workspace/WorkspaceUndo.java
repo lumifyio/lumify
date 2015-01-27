@@ -3,7 +3,6 @@ package io.lumify.web.routes.workspace;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -41,8 +40,9 @@ public class WorkspaceUndo extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final AuditRepository auditRepository;
     private final WorkspaceHelper workspaceHelper;
-    private final String entityHasImageIri;
-    private final String artifactContainsImageOfEntityIri;
+    private String entityHasImageIri;
+    private String artifactContainsImageOfEntityIri;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public WorkspaceUndo(
@@ -64,13 +64,28 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.userRepository = userRepository;
         this.workQueueRepository = workQueueRepository;
         this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
 
-        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
-        this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
+        if (this.entityHasImageIri == null) {
+            LOGGER.warn("'entityHasImage' intent has not been defined. Please update your ontology.");
+        }
+
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        if (this.artifactContainsImageOfEntityIri == null) {
+            LOGGER.warn("'artifactContainsImageOfEntity' intent has not been defined. Please update your ontology.");
+        }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.entityHasImageIri == null) {
+            this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        }
+        if (this.artifactContainsImageOfEntityIri == null) {
+            this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        }
+
         String undoDataString = getRequiredParameter(request, "undoData");
         ClientApiUndoItem[] undoData = getObjectMapper().readValue(undoDataString, ClientApiUndoItem[].class);
         User user = getUser(request);

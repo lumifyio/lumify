@@ -2,7 +2,6 @@ package io.lumify.web.routes.edge;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -26,7 +25,8 @@ public class EdgeDelete extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EdgeDelete.class);
     private final Graph graph;
     private final WorkspaceHelper workspaceHelper;
-    private final String entityHasImageIri;
+    private String entityHasImageIri;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public EdgeDelete(
@@ -39,12 +39,20 @@ public class EdgeDelete extends BaseRequestHandler {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.workspaceHelper = workspaceHelper;
+        this.ontologyRepository = ontologyRepository;
 
-        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
+        if (this.entityHasImageIri == null) {
+            LOGGER.warn("'entityHasImage' intent has not been defined. Please update your ontology.");
+        }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.entityHasImageIri == null) {
+            this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        }
+
         final String edgeId = getRequiredParameter(request, "edgeId");
         String workspaceId = getActiveWorkspaceId(request);
 

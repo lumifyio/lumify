@@ -3,7 +3,6 @@ package io.lumify.web.routes.vertex;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -52,8 +51,8 @@ public class VertexUploadImage extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
-    private final String conceptIri;
-    private final String entityHasImageIri;
+    private String conceptIri;
+    private String entityHasImageIri;
 
     @Inject
     public VertexUploadImage(
@@ -73,12 +72,26 @@ public class VertexUploadImage extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.conceptIri = ontologyRepository.getRequiredConceptIRIByIntent("entityImage");
-        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        this.conceptIri = ontologyRepository.getConceptIRIByIntent("entityImage");
+        if (this.conceptIri == null) {
+            LOGGER.warn("'entityImage' intent has not been defined. Please update your ontology.");
+        }
+
+        this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
+        if (this.entityHasImageIri == null) {
+            LOGGER.warn("'entityHasImage' intent has not been defined. Please update your ontology.");
+        }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.conceptIri == null) {
+            this.conceptIri = ontologyRepository.getRequiredConceptIRIByIntent("entityImage");
+        }
+        if (this.entityHasImageIri == null) {
+            this.entityHasImageIri = ontologyRepository.getRequiredConceptIRIByIntent("entityHasImage");
+        }
+
         final String graphVertexId = getAttributeString(request, ATTR_GRAPH_VERTEX_ID);
         final List<Part> files = Lists.newArrayList(request.getParts());
 
