@@ -26,7 +26,6 @@ public class FileConfigurationLoader extends ConfigurationLoader {
     public static final String ENV_CONFIGURATION_LOCATION = "LUMIFY_CONFIGURATION_LOCATION";
     public static final String DEFAULT_UNIX_LOCATION = "/opt/lumify/";
     public static final String DEFAULT_WINDOWS_LOCATION = "c:/opt/lumify/";
-    private ImmutableList<File> configDirectoriesFromLeastPriority;
 
     public FileConfigurationLoader(Map initParameters) {
         super(initParameters);
@@ -34,7 +33,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
 
     public Configuration createConfiguration() {
         final Map<String, String> properties = new HashMap<>();
-        List<File> configDirectories = getConfigDirectoriesFromLeastPriority();
+        List<File> configDirectories = getLumifyDirectoriesFromLeastPriority("config");
         for (File directory : configDirectories) {
             Map<String, String> directoryProperties = loadDirectory(directory);
             properties.putAll(directoryProperties);
@@ -42,44 +41,39 @@ public class FileConfigurationLoader extends ConfigurationLoader {
         return new Configuration(this, properties);
     }
 
-    public List<File> getConfigDirectoriesFromMostPriority() {
-        return Lists.reverse(getConfigDirectoriesFromLeastPriority());
+    public static List<File> getLumifyDirectoriesFromMostPriority(String subDirectory) {
+        return Lists.reverse(getLumifyDirectoriesFromLeastPriority(subDirectory));
     }
 
-    private List<File> getConfigDirectoriesFromLeastPriority() {
-        if (configDirectoriesFromLeastPriority != null) {
-            return configDirectoriesFromLeastPriority;
-        }
-
+    public static List<File> getLumifyDirectoriesFromLeastPriority(String subDirectory) {
         List<File> results = new ArrayList<>();
 
         if (ProcessUtil.isWindows()) {
-            addConfigDirectory(results, DEFAULT_WINDOWS_LOCATION);
+            addLumifySubDirectory(results, DEFAULT_WINDOWS_LOCATION, subDirectory);
         } else {
-            addConfigDirectory(results, DEFAULT_UNIX_LOCATION);
+            addLumifySubDirectory(results, DEFAULT_UNIX_LOCATION, subDirectory);
         }
 
         String appData = System.getProperty("appdata");
         if (appData != null && appData.length() > 0) {
-            addConfigDirectory(results, new File(new File(appData), "Lumify").getAbsolutePath());
+            addLumifySubDirectory(results, new File(new File(appData), "Lumify").getAbsolutePath(), subDirectory);
         }
 
         String userHome = System.getProperty("user.home");
         if (userHome != null && userHome.length() > 0) {
-            addConfigDirectory(results, new File(new File(userHome), ".lumify").getAbsolutePath());
+            addLumifySubDirectory(results, new File(new File(userHome), ".lumify").getAbsolutePath(), subDirectory);
         }
 
-        addConfigDirectory(results, System.getenv(ENV_CONFIGURATION_LOCATION));
+        addLumifySubDirectory(results, System.getenv(ENV_CONFIGURATION_LOCATION), subDirectory);
 
         if (results.size() == 0) {
             throw new LumifyException("Could not find any valid config directories.");
         }
 
-        configDirectoriesFromLeastPriority = ImmutableList.copyOf(results);
-        return results;
+        return ImmutableList.copyOf(results);
     }
 
-    private void addConfigDirectory(List<File> results, String location) {
+    private static void addLumifySubDirectory(List<File> results, String location, String subDirectory) {
         if (location == null || location.trim().length() == 0) {
             return;
         }
@@ -89,7 +83,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
             location = location.substring("file://".length());
         }
 
-        File dir = new File(new File(location), "config");
+        File dir = new File(new File(location), subDirectory);
         if (!dir.exists()) {
             return;
         }
@@ -154,7 +148,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
 
     @Override
     public File resolveFileName(String fileName) {
-        List<File> configDirectories = getConfigDirectoriesFromMostPriority();
+        List<File> configDirectories = getLumifyDirectoriesFromMostPriority("config");
         for (File directory : configDirectories) {
             File f = new File(directory, fileName);
             if (f.exists()) {
