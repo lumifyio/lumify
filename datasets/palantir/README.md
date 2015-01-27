@@ -1,7 +1,7 @@
 
 1. You need to configure the following or add lumify:intent property 'hasMedia' to your owl file:
 
-        ontology.iri.relationship.hasMedia=http://lumify.io/palantir-import#hasMedia
+        ontology.intent.relationship.hasMedia=http://lumify.io/palantir-import#hasMedia
 
 2. Setup Oracle JDBC jar in your classpath.
 

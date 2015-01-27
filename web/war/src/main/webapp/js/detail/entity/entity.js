@@ -253,7 +253,7 @@ define([
 
                 MAX_RELATIONS_TO_DISPLAY = parseInt(config['vertex.relationships.maxPerSection'], 10);
 
-                var hasEntityLabel = config['ontology.iri.relationship.artifactHasEntity'],
+                var hasEntityLabel = config['ontology.intent.relationship.artifactHasEntity'],
                     relations = _.map(self.attr.data.edgeLabels, function(label) {
                         var relation = {
                                 label: label,

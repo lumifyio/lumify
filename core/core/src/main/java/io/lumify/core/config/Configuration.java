@@ -298,7 +298,7 @@ public final class Configuration {
         for (String key : getKeys()) {
             if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
                 properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
-            } else if (key.startsWith("ontology.iri")) {
+            } else if (key.startsWith("ontology.intent")) {
                 properties.put(key, get(key, ""));
             }
         }

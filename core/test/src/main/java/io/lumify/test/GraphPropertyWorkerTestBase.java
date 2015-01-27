@@ -132,9 +132,9 @@ public abstract class GraphPropertyWorkerTestBase {
     protected Map getConfigurationMap() {
         if (configurationMap == null) {
             configurationMap = new HashMap();
-            configurationMap.put("ontology.iri.concept.location", "http://lumify.io/test#location");
-            configurationMap.put("ontology.iri.concept.organization", "http://lumify.io/test#organization");
-            configurationMap.put("ontology.iri.concept.person", "http://lumify.io/test#person");
+            configurationMap.put("ontology.intent.concept.location", "http://lumify.io/test#location");
+            configurationMap.put("ontology.intent.concept.organization", "http://lumify.io/test#organization");
+            configurationMap.put("ontology.intent.concept.person", "http://lumify.io/test#person");
         }
         return configurationMap;
     }

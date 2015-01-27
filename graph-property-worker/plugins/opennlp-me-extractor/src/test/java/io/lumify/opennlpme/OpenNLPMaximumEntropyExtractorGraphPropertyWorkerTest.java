@@ -65,7 +65,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         graph = InMemoryGraph.create();
 
         Map config = new HashMap();
-        config.put("ontology.iri.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
+        config.put("ontology.intent.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
         when(ontologyRepository.getRequiredConceptIRIByIntent("location")).thenReturn("http://lumify.io/test#location");
@@ -78,9 +78,9 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         extractor.setOntologyRepository(ontologyRepository);
 
         Map<String, String> conf = new HashMap<>();
-        conf.put("ontology.iri.concept.location", "http://lumify.io/test#location");
-        conf.put("ontology.iri.concept.organization", "http://lumify.io/test#organization");
-        conf.put("ontology.iri.concept.person", "http://lumify.io/test#person");
+        conf.put("ontology.intent.concept.location", "http://lumify.io/test#location");
+        conf.put("ontology.intent.concept.organization", "http://lumify.io/test#organization");
+        conf.put("ontology.intent.concept.person", "http://lumify.io/test#person");
         conf.put(OpenNLPMaximumEntropyExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
 
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());

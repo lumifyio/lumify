@@ -59,11 +59,11 @@ public class PhoneNumberGraphPropertyWorkerTest {
     public void setUp() throws Exception {
 
         Map config = new HashMap();
-        config.put("ontology.iri.concept.person", "http://lumify.io/test#person");
-        config.put("ontology.iri.concept.location", "http://lumify.io/test#location");
-        config.put("ontology.iri.concept.organization", "http://lumify.io/test#organization");
-        config.put("ontology.iri.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
-        config.put("ontology.iri.concept.phoneNumber", "http://lumify.io/test#phoneNumber");
+        config.put("ontology.intent.concept.person", "http://lumify.io/test#person");
+        config.put("ontology.intent.concept.location", "http://lumify.io/test#location");
+        config.put("ontology.intent.concept.organization", "http://lumify.io/test#organization");
+        config.put("ontology.intent.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
+        config.put("ontology.intent.concept.phoneNumber", "http://lumify.io/test#phoneNumber");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
         when(ontologyRepository.getRequiredConceptIRIByIntent("phoneNumber")).thenReturn("http://lumify.io/test#phoneNumber");
