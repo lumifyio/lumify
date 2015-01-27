@@ -44,11 +44,11 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
 
         Concept longRunningProcessConcept = ontologyRepository.getOrCreateConcept(null, LONG_RUNNING_PROCESS_CONCEPT_IRI, "workspace", null);
         checkNotNull(longRunningProcessConcept);
-        List<Concept> userConceptList = new ArrayList<Concept>();
+        List<Concept> userConceptList = new ArrayList<>();
         userConceptList.add(userConcept);
-        List<Concept> longRunningProcessConceptList = new ArrayList<Concept>();
+        List<Concept> longRunningProcessConceptList = new ArrayList<>();
         longRunningProcessConceptList.add(longRunningProcessConcept);
-        ontologyRepository.getOrCreateRelationshipType(userConceptList, longRunningProcessConceptList, LONG_RUNNING_PROCESS_TO_USER_EDGE_IRI, "longRunningProcess to user");
+        ontologyRepository.getOrCreateRelationshipType(userConceptList, longRunningProcessConceptList, LONG_RUNNING_PROCESS_TO_USER_EDGE_IRI, "longRunningProcess to user", new String[0]);
     }
 
     @Override

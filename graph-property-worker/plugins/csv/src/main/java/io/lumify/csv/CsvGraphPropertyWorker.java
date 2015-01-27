@@ -1,6 +1,5 @@
 package io.lumify.csv;
 
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -39,10 +38,8 @@ public class CsvGraphPropertyWorker extends GraphPropertyWorker {
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        hasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
-        checkNotNull(hasEntityIri, "configuration " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY + " is required");
-
-        csvConceptTypeIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_PREFIX + "csv", null);
+        hasEntityIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("artifactHasEntity");
+        csvConceptTypeIri = getOntologyRepository().getConceptIRIByIntent("csv");
     }
 
     @Override
@@ -54,11 +51,8 @@ public class CsvGraphPropertyWorker extends GraphPropertyWorker {
 
         Mapping mapping = CsvOntology.MAPPING_JSON.getPropertyValue(data.getProperty());
         StreamingPropertyValue raw = LumifyProperties.RAW.getPropertyValue(data.getElement());
-        InputStream rawIn = raw.getInputStream();
-        try {
+        try (InputStream rawIn = raw.getInputStream()) {
             processCsvStream(rawIn, mapping, data);
-        } finally {
-            rawIn.close();
         }
     }
 
@@ -79,7 +73,7 @@ public class CsvGraphPropertyWorker extends GraphPropertyWorker {
     private void processCsvLine(State state) {
         LOGGER.debug("line %d: %s", state.getRecord().getRecordNumber(), state.getRecord().toString());
 
-        List<Vertex> vertices = new ArrayList<Vertex>();
+        List<Vertex> vertices = new ArrayList<>();
         for (Mapping.Vertex mappingVertex : state.getMapping().getVertices()) {
             try {
                 String hash = getHash(state, mappingVertex);

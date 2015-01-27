@@ -113,10 +113,7 @@ public class DataImport extends CommandLineBase {
         Visibility visibility = new Visibility("");
         Authorizations authorizations = getAuthorizations();
 
-        String hasMediaConceptTypeIri = getConfiguration().get("ontology.iri.hasMedia", null);
-        if (hasMediaConceptTypeIri == null || hasMediaConceptTypeIri.length() == 0) {
-            throw new LumifyException("'ontology.iri.hasMedia' is required.");
-        }
+        String hasMediaConceptTypeIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("hasMedia");
 
         if (!owlPrefix.endsWith("#")) {
             owlPrefix = owlPrefix + "#";

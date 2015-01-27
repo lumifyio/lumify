@@ -4,6 +4,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
@@ -42,6 +43,9 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
     @Mock
     private AuditRepository auditRepository;
 
+    @Mock
+    private OntologyRepository ontologyRepository;
+
     @Before
     public void before() throws Exception {
         graph = InMemoryGraph.create();
@@ -51,10 +55,10 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         visibilityTranslator = new DirectVisibilityTranslator();
 
         Map config = new HashMap();
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PERSON, "http://lumify.io/test#person");
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_LOCATION, "http://lumify.io/test#location");
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
+        config.put("ontology.intent.concept.person", "http://lumify.io/test#person");
+        config.put("ontology.intent.concept.location", "http://lumify.io/test#location");
+        config.put("ontology.intent.concept.organization", "http://lumify.io/test#organization");
+        config.put("ontology.intent.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
         GraphPropertyWorkerPrepareData prepareData = new GraphPropertyWorkerPrepareData(config, null, null, null, null, null);
@@ -63,6 +67,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
         textExtractor.setWorkQueueRepository(workQueueRepository);
         textExtractor.setAuditRepository(auditRepository);
         textExtractor.setVisibilityTranslator(visibilityTranslator);
+        textExtractor.setOntologyRepository(ontologyRepository);
         textExtractor.prepare(prepareData);
     }
 

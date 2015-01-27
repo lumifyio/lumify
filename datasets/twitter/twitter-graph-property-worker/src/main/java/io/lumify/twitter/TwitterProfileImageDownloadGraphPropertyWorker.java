@@ -1,6 +1,5 @@
 package io.lumify.twitter;
 
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -27,10 +26,7 @@ public class TwitterProfileImageDownloadGraphPropertyWorker extends GraphPropert
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
-        if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        }
+        this.entityHasImageIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("entityHasImage");
     }
 
     @Override

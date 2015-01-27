@@ -21,7 +21,7 @@
     "grunt-karma": "~0.8.2",
     "grunt-mocha-selenium": "git://github.com/jharwig/grunt-mocha-selenium",
     "grunt-notify": "~0.2.20",
-    "grunt-plato": "~1.0.0",
+    "grunt-plato": "~1.2.0",
     "jshint": "~2.3.0",
     "karma": "~0.12.24",
     "karma-chrome-launcher": "~0.1.5",

@@ -47,9 +47,10 @@ public class ClientApiOntology implements ClientApiObject {
         private Boolean searchable;
         private String glyphIconHref;
         private String color;
-        private List<String> addRelatedConceptWhiteList = new ArrayList<String>();
-        private List<String> properties = new ArrayList<String>();
-        private Map<String, String> metadata = new HashMap<String, String>();
+        private List<String> intents = new ArrayList<>();
+        private List<String> addRelatedConceptWhiteList = new ArrayList<>();
+        private List<String> properties = new ArrayList<>();
+        private Map<String, String> metadata = new HashMap<>();
 
         public String getId() {
             return id;
@@ -168,6 +169,11 @@ public class ClientApiOntology implements ClientApiObject {
         public List<String> getProperties() {
             return properties;
         }
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public List<String> getIntents() {
+            return intents;
+        }
     }
 
     public static class Property {
@@ -178,7 +184,8 @@ public class ClientApiOntology implements ClientApiObject {
         private PropertyType dataType;
         private String displayType;
         private String propertyGroup;
-        private Map<String, String> possibleValues = new HashMap<String, String>();
+        private Map<String, String> possibleValues = new HashMap<>();
+        private List<String> intents = new ArrayList<>();
 
         public String getTitle() {
             return title;
@@ -240,14 +247,20 @@ public class ClientApiOntology implements ClientApiObject {
         public Map<String, String> getPossibleValues() {
             return possibleValues;
         }
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public List<String> getIntents() {
+            return intents;
+        }
     }
 
     public static class Relationship {
         private String title;
         private String displayName;
-        private List<String> domainConceptIris = new ArrayList<String>();
-        private List<String> rangeConceptIris = new ArrayList<String>();
-        private List<InverseOf> inverseOfs = new ArrayList<InverseOf>();
+        private List<String> domainConceptIris = new ArrayList<>();
+        private List<String> rangeConceptIris = new ArrayList<>();
+        private List<InverseOf> inverseOfs = new ArrayList<>();
+        private List<String> intents = new ArrayList<>();
 
         public String getTitle() {
             return title;
@@ -284,6 +297,11 @@ public class ClientApiOntology implements ClientApiObject {
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         public List<InverseOf> getInverseOfs() {
             return inverseOfs;
+        }
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public List<String> getIntents() {
+            return intents;
         }
 
         public static class InverseOf {

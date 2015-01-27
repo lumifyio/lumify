@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class exists to provide much deeper and extensive debugging and logging as
@@ -31,8 +28,13 @@ public class ServiceLoaderUtil {
             if (!serviceFiles.hasMoreElements()) {
                 LOGGER.debug("Could not find any services for %s", fullName);
             } else {
+                Set<URL> serviceFilesSet = new HashSet<>();
                 while (serviceFiles.hasMoreElements()) {
                     URL serviceFile = serviceFiles.nextElement();
+                    serviceFilesSet.add(serviceFile);
+                }
+
+                for (URL serviceFile : serviceFilesSet) {
                     services.addAll(ServiceLoaderUtil.<T>loadFile(serviceFile, configuration));
                 }
             }

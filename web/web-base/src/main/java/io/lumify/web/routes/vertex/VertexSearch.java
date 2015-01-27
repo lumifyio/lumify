@@ -116,7 +116,7 @@ public class VertexSearch extends BaseRequestHandler {
                     String[] conceptIds = new String[leafNodeList.size()];
                     int count = 0;
                     for (Concept c : leafNodeList) {
-                        conceptIds[count] = c.getTitle();
+                        conceptIds[count] = c.getIRI();
                         count++;
                     }
                     graphQuery.has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), Compare.IN, conceptIds);

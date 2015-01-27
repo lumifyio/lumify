@@ -1,6 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -26,18 +27,21 @@ import static org.securegraph.util.IterableUtils.toList;
 public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemoryOntologyRepository.class);
     private OWLOntologyLoaderConfiguration owlConfig = new OWLOntologyLoaderConfiguration();
-    private Map<String, InMemoryConcept> conceptsCache = new HashMap<String, InMemoryConcept>();
-    private Map<String, InMemoryOntologyProperty> propertiesCache = new HashMap<String, InMemoryOntologyProperty>();
-    private Map<String, InMemoryRelationship> relationshipsCache = new HashMap<String, InMemoryRelationship>();
-    private List<OwlData> fileCache = new ArrayList<OwlData>();
+    private Map<String, InMemoryConcept> conceptsCache = new HashMap<>();
+    private Map<String, InMemoryOntologyProperty> propertiesCache = new HashMap<>();
+    private Map<String, InMemoryRelationship> relationshipsCache = new HashMap<>();
+    private List<OwlData> fileCache = new ArrayList<>();
 
-    public void init(Configuration config) throws Exception {
+    @Inject
+    public ReadOnlyInMemoryOntologyRepository(Configuration configuration) throws Exception {
+        super(configuration);
+
         clearCache();
         Authorizations authorizations = new InMemoryAuthorizations(VISIBILITY_STRING);
         owlConfig.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology(config, authorizations);
+            defineOntology(getConfiguration(), authorizations);
         } else {
             LOGGER.info("Base ontology already defined.");
         }
@@ -60,11 +64,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 throw new RuntimeException("Could not find icon file: " + iconFile.toString());
             }
             try {
-                InputStream iconFileIn = new FileInputStream(iconFile);
-                try {
+                try (InputStream iconFileIn = new FileInputStream(iconFile)) {
                     concept.setProperty(propertyKey, IOUtils.toByteArray(iconFileIn), authorizations);
-                } finally {
-                    iconFileIn.close();
                 }
             } catch (IOException ex) {
                 throw new LumifyException("Failed to set glyph icon to " + iconFile, ex);
@@ -89,21 +90,18 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected List<OWLOntology> loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config, IRI excludedIRI) throws Exception {
-        List<OWLOntology> loadedOntologies = new ArrayList<OWLOntology>();
+        List<OWLOntology> loadedOntologies = new ArrayList<>();
         for (OwlData owlData : fileCache) {
             IRI lumifyBaseOntologyIRI = IRI.create(owlData.iri);
             if (excludedIRI != null && excludedIRI.equals(lumifyBaseOntologyIRI)) {
                 continue;
             }
-            InputStream lumifyBaseOntologyIn = new ByteArrayInputStream(owlData.data);
-            try {
+            try (InputStream lumifyBaseOntologyIn = new ByteArrayInputStream(owlData.data)) {
                 Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
                 LOGGER.info("Loading existing ontology: %s", owlData.iri);
                 OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
                 OWLOntology o = m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
                 loadedOntologies.add(o);
-            } finally {
-                lumifyBaseOntologyIn.close();
             }
         }
         return loadedOntologies;
@@ -121,9 +119,10 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean searchable,
             String displayType,
             String propertyGroup,
-            Double boost) {
+            Double boost,
+            String[] intents) {
         checkNotNull(concepts, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIri, dataType, displayName, possibleValues, userVisible, searchable, displayType, propertyGroup, boost);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIri, dataType, displayName, possibleValues, userVisible, searchable, displayType, propertyGroup, boost, intents);
         for (Concept concept : concepts) {
             concept.getProperties().add(property);
         }
@@ -149,7 +148,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             boolean searchable,
             String displayType,
             String propertyGroup,
-            Double boost) {
+            Double boost,
+            String[] intents) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getPropertyByIRI(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();
@@ -160,6 +160,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setBoost(boost);
             property.setDisplayType(displayType);
             property.setPropertyGroup(propertyGroup);
+            for (String intent : intents) {
+                property.addIntent(intent);
+            }
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }
@@ -243,13 +246,13 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public List<Concept> getConceptAndChildrenByIRI(String conceptIRI) {
-        List<Concept> concepts = new ArrayList<Concept>();
+        List<Concept> concepts = new ArrayList<>();
         concepts.add(conceptsCache.get(conceptIRI));
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         try {
             List<OWLOntology> owlOntologyList = loadOntologyFiles(m, owlConfig, null);
             OWLClass owlClass = m.getOWLDataFactory().getOWLClass(IRI.create(conceptIRI));
-            for (OWLClassExpression child : owlClass.getSubClasses(new HashSet<OWLOntology>(owlOntologyList))) {
+            for (OWLClassExpression child : owlClass.getSubClasses(new HashSet<>(owlOntologyList))) {
                 InMemoryConcept inMemoryConcept = conceptsCache.get(child.asOWLClass().getIRI().toString());
                 concepts.add(inMemoryConcept);
             }
@@ -269,7 +272,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         try {
             List<OWLOntology> owlOntologyList = loadOntologyFiles(m, owlConfig, null);
             OWLClass owlClass = m.getOWLDataFactory().getOWLClass(IRI.create(((InMemoryConcept) concept).getConceptIRI()));
-            for (OWLClassExpression child : owlClass.getSubClasses(new HashSet<OWLOntology>(owlOntologyList))) {
+            for (OWLClassExpression child : owlClass.getSubClasses(new HashSet<>(owlOntologyList))) {
                 InMemoryConcept inMemoryConcept = conceptsCache.get(child.asOWLClass().getIRI().toString());
                 concepts.add(inMemoryConcept);
             }
@@ -299,7 +302,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName) {
+    public Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName, String[] intents) {
         Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
             return relationship;
@@ -319,7 +322,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             }
         });
 
-        InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, domainConceptIris, rangeConceptIris);
+        InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, domainConceptIris, rangeConceptIris, intents);
         relationshipsCache.put(relationshipIRI, inMemRelationship);
         return inMemRelationship;
     }

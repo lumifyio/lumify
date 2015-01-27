@@ -1,6 +1,11 @@
 package io.lumify.core.config;
 
+import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.model.ontology.OntologyProperty;
+import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.ontology.Relationship;
 import io.lumify.core.util.ClassUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -43,14 +48,6 @@ public final class Configuration {
     public static final String WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT = "webAppEmbedded.graphPropertyWorkerRunner.threadCount";
     public static final String USER_NOTIFICATION_REPOSITORY = "repository.userNotification";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
-    public static final String ONTOLOGY_IRI_PREFIX = "ontology.iri.";
-    public static final String ONTOLOGY_IRI_ENTITY_IMAGE = ONTOLOGY_IRI_PREFIX + "entityImage";
-    public static final String ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY = ONTOLOGY_IRI_PREFIX + "artifactHasEntity";
-    public static final String ONTOLOGY_IRI_ENTITY_HAS_IMAGE = ONTOLOGY_IRI_PREFIX + "entityHasImage";
-    public static final String ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY = ONTOLOGY_IRI_PREFIX + "artifactContainsImageOfEntity";
-    public static final String ONTOLOGY_IRI_LOCATION = ONTOLOGY_IRI_PREFIX + "location";
-    public static final String ONTOLOGY_IRI_ORGANIZATION = ONTOLOGY_IRI_PREFIX + "organization";
-    public static final String ONTOLOGY_IRI_PERSON = ONTOLOGY_IRI_PREFIX + "person";
     public static final String GRAPH_PROVIDER = "graph";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
@@ -65,7 +62,7 @@ public final class Configuration {
     private final ConfigurationLoader configurationLoader;
     private final LumifyResourceBundleManager lumifyResourceBundleManager;
 
-    private Map<String, String> config = new HashMap<String, String>();
+    private Map<String, String> config = new HashMap<>();
 
     Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
@@ -107,7 +104,7 @@ public final class Configuration {
     }
 
     public Map<String, String> getSubset(String keyPrefix) {
-        Map<String, String> subset = new HashMap<String, String>();
+        Map<String, String> subset = new HashMap<>();
         for (Map.Entry<String, String> entry : this.config.entrySet()) {
             if (!entry.getKey().startsWith(keyPrefix + ".") && !entry.getKey().equals(keyPrefix)) {
                 continue;
@@ -128,7 +125,7 @@ public final class Configuration {
 
     public void setConfigurables(Object o, Map<String, String> config) {
         ConvertUtilsBean convertUtilsBean = new ConvertUtilsBean();
-        Map<Method, PostConfigurationValidator> validatorMap = new HashMap<Method, PostConfigurationValidator>();
+        Map<Method, PostConfigurationValidator> validatorMap = new HashMap<>();
 
         for (Method m : o.getClass().getMethods()) {
             Configurable configurableAnnotation = m.getAnnotation(Configurable.class);
@@ -209,7 +206,7 @@ public final class Configuration {
 
     public Iterable<String> getKeys(String keyPrefix) {
         getSubset(keyPrefix).keySet();
-        Set<String> keys = new TreeSet<String>();
+        Set<String> keys = new TreeSet<>();
         for (String key : getKeys()) {
             if (key.startsWith(keyPrefix)) {
                 keys.add(key);
@@ -229,7 +226,7 @@ public final class Configuration {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        SortedSet<String> keys = new TreeSet<String>(this.config.keySet());
+        SortedSet<String> keys = new TreeSet<>(this.config.keySet());
 
         boolean first = true;
         for (String key : keys) {
@@ -280,10 +277,28 @@ public final class Configuration {
 
     public JSONObject toJSON(ResourceBundle resourceBundle) {
         JSONObject properties = new JSONObject();
+
+        OntologyRepository ontologyRepository = InjectHelper.getInstance(OntologyRepository.class);
+        for (Concept concept : ontologyRepository.getConceptsWithProperties()) {
+            for (String intent : concept.getIntents()) {
+                properties.put(OntologyRepository.CONFIG_INTENT_CONCEPT_PREFIX + intent, concept.getIRI());
+            }
+        }
+        for (OntologyProperty property : ontologyRepository.getProperties()) {
+            for (String intent : property.getIntents()) {
+                properties.put(OntologyRepository.CONFIG_INTENT_PROPERTY_PREFIX + intent, property.getTitle());
+            }
+        }
+        for (Relationship relationship : ontologyRepository.getRelationships()) {
+            for (String intent : relationship.getIntents()) {
+                properties.put(OntologyRepository.CONFIG_INTENT_RELATIONSHIP_PREFIX + intent, relationship.getIRI());
+            }
+        }
+
         for (String key : getKeys()) {
             if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
                 properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
-            } else if (key.startsWith(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PREFIX)) {
+            } else if (key.startsWith("ontology.intent")) {
                 properties.put(key, get(key, ""));
             }
         }

@@ -119,7 +119,7 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
-                    escape: { fire: 'escape', desc: i18n('lumify.help.escape') },
+                    escape: { fire: 'escape', desc: i18n('lumify.help.escape') }
                 }
             });
 
@@ -186,7 +186,7 @@ define([
 
             this.$node.html(content);
 
-            $(document.body).toggleClass('animatelogin', !!this.attr.animateFromLogin)
+            $(document.body).toggleClass('animatelogin', !!this.attr.animateFromLogin);
 
             this.trigger(document, 'menubarToggleDisplay', { name: graphPane.data(DATA_MENUBAR_NAME) });
 
@@ -229,7 +229,7 @@ define([
                 require(['notifications/notifications'], function(Notifications) {
                     Notifications.attachTo(self.$node);
                 });
-            })
+            });
             this.trigger('loadCurrentWorkspace');
         };
 
@@ -491,14 +491,13 @@ define([
 
             this.trigger('didToggleDisplay', {
                 name: data.name,
-                visible: isVisible
+                visible: !isVisible
             })
         };
 
         this.onObjectsSelected = function(e, data) {
             var detailPane = this.select('detailPaneSelector'),
                 minWidth = 100,
-                width = 0,
                 vertices = data.vertices,
                 edges = data.edges,
                 makeVisible = vertices.length || edges.length;
@@ -508,7 +507,6 @@ define([
                     detailPane[0].style.width = null;
                 }
                 detailPane.removeClass('collapsed').addClass('visible');
-                width = detailPane.width();
             } else {
                 detailPane.removeClass('visible').addClass('collapsed');
             }
@@ -602,7 +600,7 @@ define([
                             var $pane = $(pane),
                                 paneWidth = $pane.width(),
                                 minWidth = $pane.resizable('option', 'minWidth'),
-                                newWidth = Math.max(minWidth, paneWidth - pixelsNeeded);
+                                newWidth = Math.max(minWidth, paneWidth - pixelsNeeded),
                                 pixelsCompressing = paneWidth - newWidth;
 
                             pixelsNeeded -= pixelsCompressing;

@@ -8,6 +8,7 @@ import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
@@ -32,6 +33,7 @@ public abstract class CommandLineBase {
     private CuratorFramework curatorFramework;
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
+    private OntologyRepository ontologyRepository;
 
     public int run(String[] args) throws Exception {
         final Thread mainThread = Thread.currentThread();
@@ -172,6 +174,11 @@ public abstract class CommandLineBase {
     }
 
     @Inject
+    public final void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
+    }
+
+    @Inject
     public final void setCuratorFramework(CuratorFramework curatorFramework) {
         this.curatorFramework = curatorFramework;
     }
@@ -186,5 +193,9 @@ public abstract class CommandLineBase {
 
     public UserRepository getUserRepository() {
         return userRepository;
+    }
+
+    public OntologyRepository getOntologyRepository() {
+        return ontologyRepository;
     }
 }

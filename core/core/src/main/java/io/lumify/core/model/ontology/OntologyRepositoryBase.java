@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -25,6 +26,7 @@ import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.CloseableUtils;
+import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
@@ -40,6 +42,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
+    private final Configuration configuration;
+
+    protected OntologyRepositoryBase(Configuration configuration) {
+        this.configuration = configuration;
+    }
 
     public void defineOntology(Configuration config, Authorizations authorizations) throws Exception {
         Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root", null);
@@ -145,8 +152,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     public String guessDocumentIRIFromFile(File owlFile) throws IOException {
-        FileInputStream owlFileIn = new FileInputStream(owlFile);
-        try {
+        try (FileInputStream owlFileIn = new FileInputStream(owlFile)) {
             String owlContents = IOUtils.toString(owlFileIn);
 
             Pattern iriRegex = Pattern.compile("<owl:Ontology rdf:about=\"(.*?)\">");
@@ -155,8 +161,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 return m.group(1);
             }
             return null;
-        } finally {
-            owlFileIn.close();
         }
     }
 
@@ -168,12 +172,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
         File inDir = inFile.getParentFile();
 
-        FileInputStream inFileIn = new FileInputStream(inFile);
-        try {
+        try (FileInputStream inFileIn = new FileInputStream(inFile)) {
             LOGGER.debug("importing %s", inFile.getAbsolutePath());
             importFile(inFileIn, documentIRI, inDir, authorizations);
-        } finally {
-            inFileIn.close();
         }
     }
 
@@ -331,7 +332,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             OWLLiteral valueLiteral = (OWLLiteral) annotation.getValue();
             String valueString = valueLiteral.getLiteral();
 
-            if (annotationIri.equals("http://lumify.io#searchable")) {
+            if (annotationIri.equals(LumifyProperties.INTENT.getPropertyName())) {
+                result.addIntent(valueString, authorizations);
+            } else if (annotationIri.equals(LumifyProperties.SEARCHABLE.getPropertyName())) {
                 boolean searchable = valueString == null || Boolean.parseBoolean(valueString);
                 result.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
             } else if (annotationIri.equals(LumifyProperties.USER_VISIBLE.getPropertyName())) {
@@ -362,14 +365,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (!iconFile.exists()) {
                 throw new RuntimeException("Could not find icon file: " + iconFile.toString());
             }
-            InputStream iconFileIn = new FileInputStream(iconFile);
-            try {
+            try (InputStream iconFileIn = new FileInputStream(iconFile)) {
                 StreamingPropertyValue value = new StreamingPropertyValue(iconFileIn, byte[].class);
                 value.searchIndex(false);
                 value.store(true);
                 concept.setProperty(propertyKey, value, authorizations);
-            } finally {
-                iconFileIn.close();
             }
         }
     }
@@ -406,11 +406,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         String displayType = getDisplayType(o, dataTypeProperty);
         String propertyGroup = getPropertyGroup(o, dataTypeProperty);
         Double boost = getBoost(o, dataTypeProperty);
+        String[] intents = getIntents(o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
 
-        List<Concept> domainConcepts = new ArrayList<Concept>();
+        List<Concept> domainConcepts = new ArrayList<>();
         for (OWLClassExpression domainClassExpr : dataTypeProperty.getDomains(o)) {
             OWLClass domainClass = domainClassExpr.asOWLClass();
             String domainClassUri = domainClass.getIRI().toString();
@@ -418,14 +419,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (domainConcept == null) {
                 LOGGER.error("Could not find class with uri: %s", domainClassUri);
             } else {
-                LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
+                LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getIRI());
                 domainConcepts.add(domainConcept);
             }
         }
 
         Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
         Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-        addPropertyTo(domainConcepts, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost);
+        addPropertyTo(domainConcepts, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost, intents);
     }
 
     protected abstract OntologyProperty addPropertyTo(
@@ -439,15 +440,17 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             boolean searchable,
             String displayType,
             String propertyGroup,
-            Double boost);
+            Double boost,
+            String[] intents);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String iri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
+        String[] intents = getIntents(o, objectProperty);
         checkNotNull(label, "label cannot be null or empty for " + iri);
         LOGGER.info("Importing ontology object property " + iri + " (label: " + label + ")");
 
-        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label);
+        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label, intents);
     }
 
     protected void importInverseOf(OWLOntology o, OWLObjectProperty objectProperty) {
@@ -472,7 +475,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     protected abstract void getOrCreateInverseOfRelationship(Relationship fromRelationship, Relationship inverseOfRelationship);
 
     private Iterable<Concept> getRangesConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
-        List<Concept> ranges = new ArrayList<Concept>();
+        List<Concept> ranges = new ArrayList<>();
         for (OWLClassExpression rangeClassExpr : objectProperty.getRanges(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
@@ -487,7 +490,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     private Iterable<Concept> getDomainsConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
-        List<Concept> domains = new ArrayList<Concept>();
+        List<Concept> domains = new ArrayList<>();
         for (OWLClassExpression domainClassExpr : objectProperty.getDomains(o)) {
             OWLClass rangeClass = domainClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
@@ -616,6 +619,10 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return Double.parseDouble(val);
     }
 
+    protected String[] getIntents(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValuesByUri(o, owlEntity, LumifyProperties.INTENT.getPropertyName());
+    }
+
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.USER_VISIBLE.getPropertyName());
         return val == null || Boolean.parseBoolean(val);
@@ -662,6 +669,17 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
         }
         return null;
+    }
+
+    protected String[] getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
+        List<String> results = new ArrayList<>();
+        for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
+            if (annotation.getProperty().getIRI().toString().equals(uri)) {
+                OWLLiteral value = (OWLLiteral) annotation.getValue();
+                results.add(value.getLiteral());
+            }
+        }
+        return results.toArray(new String[results.size()]);
     }
 
     @Override
@@ -749,6 +767,189 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return null;
     }
 
+    public Concept getConceptByIntent(String intent) {
+        String configurationKey = CONFIG_INTENT_CONCEPT_PREFIX + intent;
+        String conceptIri = getConfiguration().get(configurationKey, null);
+        if (conceptIri != null) {
+            Concept concept = getConceptByIRI(conceptIri);
+            if (concept == null) {
+                throw new LumifyException("Could not find concept by configuration key: " + configurationKey);
+            }
+            return concept;
+        }
+
+        List<Concept> concepts = findLoadedConceptsByIntent(intent);
+        if (concepts.size() == 0) {
+            return null;
+        }
+        if (concepts.size() == 1) {
+            return concepts.get(0);
+        }
+
+        String iris = Joiner.on(',').join(new ConvertingIterable<Concept, String>(concepts) {
+            @Override
+            protected String convert(Concept o) {
+                return o.getIRI();
+            }
+        });
+        throw new LumifyException("Found multiple concepts for intent: " + intent + " (" + iris + ")");
+    }
+
+    public String getConceptIRIByIntent(String intent) {
+        Concept concept = getConceptByIntent(intent);
+        if (concept != null) {
+            return concept.getIRI();
+        }
+        return null;
+    }
+
+    @Override
+    public Concept getRequiredConceptByIntent(String intent) {
+        Concept concept = getConceptByIntent(intent);
+        if (concept == null) {
+            throw new LumifyException("Could not find concept by intent: " + intent);
+        }
+        return concept;
+    }
+
+    @Override
+    public String getRequiredConceptIRIByIntent(String intent) {
+        return getRequiredConceptByIntent(intent).getIRI();
+    }
+
+    private List<Concept> findLoadedConceptsByIntent(String intent) {
+        List<Concept> results = new ArrayList<>();
+        for (Concept concept : getConceptsWithProperties()) {
+            String[] conceptIntents = concept.getIntents();
+            if (Arrays.asList(conceptIntents).contains(intent)) {
+                results.add(concept);
+            }
+        }
+        return results;
+    }
+
+    public Relationship getRelationshipByIntent(String intent) {
+        String configurationKey = CONFIG_INTENT_RELATIONSHIP_PREFIX + intent;
+        String relationshipIri = getConfiguration().get(configurationKey, null);
+        if (relationshipIri != null) {
+            Relationship relationship = getRelationshipByIRI(relationshipIri);
+            if (relationship == null) {
+                throw new LumifyException("Could not find relationship by configuration key: " + configurationKey);
+            }
+            return relationship;
+        }
+
+        List<Relationship> relationships = findLoadedRelationshipsByIntent(intent);
+        if (relationships.size() == 0) {
+            return null;
+        }
+        if (relationships.size() == 1) {
+            return relationships.get(0);
+        }
+
+        String iris = Joiner.on(',').join(new ConvertingIterable<Relationship, String>(relationships) {
+            @Override
+            protected String convert(Relationship o) {
+                return o.getIRI();
+            }
+        });
+        throw new LumifyException("Found multiple relationships for intent: " + intent + " (" + iris + ")");
+    }
+
+    public String getRelationshipIRIByIntent(String intent) {
+        Relationship relationship = getRelationshipByIntent(intent);
+        if (relationship != null) {
+            return relationship.getIRI();
+        }
+        return null;
+    }
+
+    @Override
+    public Relationship getRequiredRelationshipByIntent(String intent) {
+        Relationship relationship = getRelationshipByIntent(intent);
+        if (relationship == null) {
+            throw new LumifyException("Could not find relationship by intent: " + intent);
+        }
+        return relationship;
+    }
+
+    @Override
+    public String getRequiredRelationshipIRIByIntent(String intent) {
+        return getRequiredRelationshipByIntent(intent).getIRI();
+    }
+
+    private List<Relationship> findLoadedRelationshipsByIntent(String intent) {
+        List<Relationship> results = new ArrayList<>();
+        for (Relationship relationship : getRelationships()) {
+            String[] relationshipIntents = relationship.getIntents();
+            if (Arrays.asList(relationshipIntents).contains(intent)) {
+                results.add(relationship);
+            }
+        }
+        return results;
+    }
+
+    public OntologyProperty getPropertyByIntent(String intent) {
+        String configurationKey = CONFIG_INTENT_PROPERTY_PREFIX + intent;
+        String propertyIri = getConfiguration().get(configurationKey, null);
+        if (propertyIri != null) {
+            OntologyProperty property = getPropertyByIRI(propertyIri);
+            if (property == null) {
+                throw new LumifyException("Could not find property by configuration key: " + configurationKey);
+            }
+            return property;
+        }
+
+        List<OntologyProperty> properties = findLoadedPropertiesByIntent(intent);
+        if (properties.size() == 0) {
+            return null;
+        }
+        if (properties.size() == 1) {
+            return properties.get(0);
+        }
+
+        String iris = Joiner.on(',').join(new ConvertingIterable<OntologyProperty, String>(properties) {
+            @Override
+            protected String convert(OntologyProperty o) {
+                return o.getTitle();
+            }
+        });
+        throw new LumifyException("Found multiple properties for intent: " + intent + " (" + iris + ")");
+    }
+
+    public String getPropertyIRIByIntent(String intent) {
+        OntologyProperty prop = getPropertyByIntent(intent);
+        if (prop != null) {
+            return prop.getTitle();
+        }
+        return null;
+    }
+
+    @Override
+    public OntologyProperty getRequiredPropertyByIntent(String intent) {
+        OntologyProperty property = getPropertyByIntent(intent);
+        if (property == null) {
+            throw new LumifyException("Could not find property by intent: " + intent);
+        }
+        return property;
+    }
+
+    @Override
+    public String getRequiredPropertyIRIByIntent(String intent) {
+        return getRequiredPropertyByIntent(intent).getTitle();
+    }
+
+    private List<OntologyProperty> findLoadedPropertiesByIntent(String intent) {
+        List<OntologyProperty> results = new ArrayList<>();
+        for (OntologyProperty property : getProperties()) {
+            String[] propertyIntents = property.getIntents();
+            if (Arrays.asList(propertyIntents).contains(intent)) {
+                results.add(property);
+            }
+        }
+        return results;
+    }
+
     @Override
     public ClientApiOntology getClientApiObject() {
         Object[] results = ExecutorServiceUtil.runAllAndWait(
@@ -781,5 +982,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         ontology.addAllRelationships((Collection<ClientApiOntology.Relationship>) results[2]);
 
         return ontology;
+    }
+
+    public final Configuration getConfiguration() {
+        return configuration;
     }
 }

@@ -78,10 +78,6 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
      */
     public static final boolean DEFAULT_FUZZY_MATCHING = false;
 
-    private static final String CONFIG_STATE_IRI = "ontology.iri.state";
-    private static final String CONFIG_COUNTRY_IRI = "ontology.iri.country";
-    private static final String CONFIG_CITY_IRI = "ontology.iri.city";
-    private static final String CONFIG_GEO_LOCATION_IRI = "ontology.iri.geoLocation";
     private static final String CONFIG_EXCLUDED_IRI_PREFIX = "clavin.excludeIri";
 
     private LuceneLocationResolver resolver;
@@ -115,7 +111,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
         Set<String> conceptsWithGeoLocationProperty = new HashSet<String>();
         for (Concept concept : ontologyRepository.getConceptsWithProperties()) {
             for (OntologyProperty property : concept.getProperties()) {
-                String iri = concept.getTitle();
+                String iri = concept.getIRI();
                 if (property.getDataType() == PropertyType.GEO_LOCATION && !excludedIris.contains(iri)) {
                     conceptsWithGeoLocationProperty.add(iri);
                     break;
@@ -173,30 +169,11 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     public void prepareIris(TermMentionFilterPrepareData termMentionFilterPrepareData) {
-        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
-        if (this.artifactHasEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
-        }
-
-        stateIri = (String) termMentionFilterPrepareData.getConfiguration().get(CONFIG_STATE_IRI);
-        if (stateIri == null || stateIri.length() == 0) {
-            throw new LumifyException("Could not find config: " + CONFIG_STATE_IRI);
-        }
-
-        countryIri = (String) termMentionFilterPrepareData.getConfiguration().get(CONFIG_COUNTRY_IRI);
-        if (countryIri == null || countryIri.length() == 0) {
-            throw new LumifyException("Could not find config: " + CONFIG_COUNTRY_IRI);
-        }
-
-        cityIri = (String) termMentionFilterPrepareData.getConfiguration().get(CONFIG_CITY_IRI);
-        if (cityIri == null || cityIri.length() == 0) {
-            throw new LumifyException("Could not find config: " + CONFIG_CITY_IRI);
-        }
-
-        geoLocationIri = (String) termMentionFilterPrepareData.getConfiguration().get(CONFIG_GEO_LOCATION_IRI);
-        if (geoLocationIri == null || geoLocationIri.length() == 0) {
-            throw new LumifyException("Could not find config: " + CONFIG_GEO_LOCATION_IRI);
-        }
+        artifactHasEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactHasEntity");
+        stateIri = ontologyRepository.getRequiredConceptIRIByIntent("state");
+        countryIri = ontologyRepository.getRequiredConceptIRIByIntent("country");
+        cityIri = ontologyRepository.getRequiredConceptIRIByIntent("city");
+        geoLocationIri = ontologyRepository.getRequiredPropertyIRIByIntent("geoLocation");
     }
 
     @Override

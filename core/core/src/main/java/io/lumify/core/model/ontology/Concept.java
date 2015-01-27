@@ -7,10 +7,7 @@ import org.securegraph.Authorizations;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Concept {
     private final String parentConceptIRI;
@@ -56,7 +53,7 @@ public abstract class Concept {
     public ClientApiOntology.Concept toClientApi() {
         try {
             ClientApiOntology.Concept concept = new ClientApiOntology.Concept();
-            concept.setId(getTitle());
+            concept.setId(getIRI());
             concept.setTitle(getTitle());
             concept.setDisplayName(getDisplayName());
             if (getDisplayType() != null) {
@@ -84,13 +81,16 @@ public abstract class Concept {
                 concept.setUserVisible(getUserVisible());
             }
             if (hasGlyphIconResource()) {
-                concept.setGlyphIconHref("resource?id=" + URLEncoder.encode(getTitle(), "utf8"));
+                concept.setGlyphIconHref("resource?id=" + URLEncoder.encode(getIRI(), "utf8"));
             }
             if (getColor() != null) {
                 concept.setColor(getColor());
             }
             if (getAddRelatedConceptWhiteList() != null) {
                 concept.getAddRelatedConceptWhiteList().addAll(getAddRelatedConceptWhiteList());
+            }
+            if (getIntents() != null) {
+                concept.getIntents().addAll(Arrays.asList(getIntents()));
             }
             if (this.properties != null) {
                 for (OntologyProperty property : this.properties) {
@@ -108,11 +108,11 @@ public abstract class Concept {
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", getDisplayName(), getTitle());
+        return String.format("%s (%s)", getDisplayName(), getIRI());
     }
 
     public static Collection<ClientApiOntology.Concept> toClientApiConcepts(Iterable<Concept> concepts) {
-        Collection<ClientApiOntology.Concept> results = new ArrayList<ClientApiOntology.Concept>();
+        Collection<ClientApiOntology.Concept> results = new ArrayList<>();
         for (Concept concept : concepts) {
             results.add(concept.toClientApi());
         }
@@ -128,4 +128,8 @@ public abstract class Concept {
     public abstract byte[] getMapGlyphIcon();
 
     public abstract String getIRI();
+
+    public abstract String[] getIntents();
+
+    public abstract void addIntent(String intent, Authorizations authorizations);
 }

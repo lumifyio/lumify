@@ -1,7 +1,9 @@
 package io.lumify.rdf;
 
+import com.hp.hpl.jena.datatypes.RDFDatatype;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 import com.hp.hpl.jena.rdf.model.*;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -30,11 +32,10 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        hasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, null);
-        checkNotNull(hasEntityIri, "configuration " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY + " is required");
+        hasEntityIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("artifactHasEntity");
 
         // rdfConceptTypeIri is not required because the concept type could have been set by some other means.
-        rdfConceptTypeIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_PREFIX + "rdf", null);
+        rdfConceptTypeIri = getOntologyRepository().getConceptIRIByIntent("rdf");
     }
 
     @Override
@@ -61,12 +62,9 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     public void importRdf(Graph graph, File inputFile, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) throws IOException {
-        InputStream in = new FileInputStream(inputFile);
-        try {
+        try (InputStream in = new FileInputStream(inputFile)) {
             File baseDir = inputFile.getParentFile();
             importRdf(graph, in, baseDir, data, visibility, authorizations);
-        } finally {
-            in.close();
         }
     }
 
@@ -148,12 +146,21 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
 
     private void importLiteral(VertexBuilder v, Statement statement, File baseDir, GraphPropertyWorkData data, Visibility visibility) {
         String propertyName = statement.getPredicate().toString();
-        String valueString = statement.getLiteral().toString();
-        Object value = valueString;
-        String propertyKey = RdfGraphPropertyWorker.class.getName() + "_" + hashValue(valueString);
 
-        if (valueString.startsWith("streamingValue:")) {
-            value = convertStreamingValueJsonToValueObject(baseDir, valueString);
+        RDFDatatype datatype = statement.getLiteral().getDatatype();
+        Object literalValue = statement.getLiteral().getValue();
+        Object value = literalValue;
+        String propertyKey = RdfGraphPropertyWorker.class.getName() + "_" + hashValue(value.toString());
+        if (datatype == null || XSDDatatype.XSDstring.equals(datatype)) {
+            String valueString = statement.getLiteral().toString();
+            if (valueString.startsWith("streamingValue:")) {
+                value = convertStreamingValueJsonToValueObject(baseDir, valueString);
+            }
+        } else if (literalValue instanceof XSDDateTime) {
+            XSDDateTime xsdDateTime = (XSDDateTime) literalValue;
+            value = xsdDateTime.asCalendar().getTime();
+        } else {
+            throw new LumifyException("unsupported XSDDatatype: " + datatype.getURI());
         }
 
         Metadata metadata = null;

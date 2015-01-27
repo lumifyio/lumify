@@ -27,7 +27,7 @@
           buildTokenReplaced = buildNumber !== ('${' + 'buildNumber' + '}'),
           versionParameter = buildTokenReplaced ? buildNumber : Date.now();
 
-      require.urlArgs = "v=" + versionParameter;
+      require.urlArgs = "_lumifyV=" + versionParameter;
 
       document.addEventListener('readyForPlugins', function() {
         require([

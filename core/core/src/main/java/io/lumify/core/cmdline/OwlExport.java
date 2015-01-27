@@ -14,7 +14,6 @@ import java.io.OutputStream;
 
 public class OwlExport extends CommandLineBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OwlExport.class);
-    private OntologyRepository ontologyRepository;
     private String outFileName;
     private IRI documentIRI;
 
@@ -67,16 +66,11 @@ public class OwlExport extends CommandLineBase {
             out = System.out;
         }
         try {
-            ontologyRepository.exportOntology(out, this.documentIRI);
+            getOntologyRepository().exportOntology(out, this.documentIRI);
             LOGGER.info("owl export complete");
             return 0;
         } finally {
             out.close();
         }
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 }

@@ -35,7 +35,6 @@ public class ImportXml extends CommandLineBase {
     private XPathExpression countryXPath;
     private XPathExpression fieldsXPath;
     private Visibility visibility = new Visibility("");
-    private OntologyRepository ontologyRepository;
     private VisibilityTranslator visibilityTranslator;
     private FileImport fileImport;
     private String visibilitySource = "";
@@ -91,15 +90,7 @@ public class ImportXml extends CommandLineBase {
             return 1;
         }
 
-        entityHasImageIri = getConfiguration().get("ontology.iri.entityHasImage", null);
-        if (entityHasImageIri == null) {
-            System.err.println("ontology.iri.entityHasImage is required.");
-            return 1;
-        }
-        if (!ontologyRepository.hasRelationshipByIRI(entityHasImageIri)) {
-            System.err.println("could not find relationship: " + entityHasImageIri + ".");
-            return 1;
-        }
+        entityHasImageIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("entityHasImage");
 
         importXml(inFile, indirFile);
 
@@ -193,11 +184,6 @@ public class ImportXml extends CommandLineBase {
     @Inject
     public void setFileImport(FileImport fileImport) {
         this.fileImport = fileImport;
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 
     @Inject

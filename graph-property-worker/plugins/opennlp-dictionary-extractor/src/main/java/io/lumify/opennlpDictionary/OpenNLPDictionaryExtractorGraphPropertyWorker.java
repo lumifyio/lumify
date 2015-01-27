@@ -1,7 +1,6 @@
 package io.lumify.opennlpDictionary;
 
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -54,20 +53,9 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        this.locationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_LOCATION);
-        if (this.locationIri == null || this.locationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_LOCATION);
-        }
-
-        this.organizationIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        if (this.organizationIri == null || this.organizationIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_ORGANIZATION);
-        }
-
-        this.personIri = (String) workerPrepareData.getConfiguration().get(Configuration.ONTOLOGY_IRI_PERSON);
-        if (this.personIri == null || this.personIri.length() == 0) {
-            throw new LumifyException("Could not find configuration: " + Configuration.ONTOLOGY_IRI_PERSON);
-        }
+        this.locationIri = getOntologyRepository().getRequiredConceptIRIByIntent("location");
+        this.organizationIri = getOntologyRepository().getRequiredConceptIRIByIntent("organization");
+        this.personIri = getOntologyRepository().getRequiredConceptIRIByIntent("person");
 
         dictionaryEntryRepository.initializeTable(workerPrepareData.getUser());
 
@@ -87,7 +75,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
 
         LOGGER.debug("Processing artifact content stream");
         Vertex sourceVertex = (Vertex) data.getElement();
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         while ((line = untokenizedLineStream.read()) != null) {
             termMentions.addAll(processLine(sourceVertex, data.getProperty().getKey(), line, charOffset, LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex)));
             getGraph().flush();
@@ -100,7 +88,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
     }
 
     private List<Vertex> processLine(Vertex sourceVertex, String propertyKey, String line, int charOffset, VisibilityJson visibilityJson) {
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         String tokenList[] = tokenizer.tokenize(line);
         Span[] tokenListPositions = tokenizer.tokenizePos(line);
         for (TokenNameFinder finder : finders) {
@@ -161,7 +149,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
     }
 
     protected List<TokenNameFinder> loadFinders() throws IOException {
-        List<TokenNameFinder> finders = new ArrayList<TokenNameFinder>();
+        List<TokenNameFinder> finders = new ArrayList<>();
         for (Map.Entry<String, Dictionary> dictionaryEntry : getDictionaries().entrySet()) {
             finders.add(new DictionaryNameFinder(dictionaryEntry.getValue(), dictionaryEntry.getKey()));
         }
@@ -171,19 +159,16 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorker extends GraphProperty
     protected Tokenizer loadTokenizer(String pathPrefix, FileSystem fs) throws IOException {
         Path tokenizerHdfsPath = new Path(pathPrefix + "/en-token.bin");
 
-        TokenizerModel tokenizerModel = null;
-        InputStream tokenizerModelInputStream = fs.open(tokenizerHdfsPath);
-        try {
+        TokenizerModel tokenizerModel;
+        try (InputStream tokenizerModelInputStream = fs.open(tokenizerHdfsPath)) {
             tokenizerModel = new TokenizerModel(tokenizerModelInputStream);
-        } finally {
-            tokenizerModelInputStream.close();
         }
 
         return new TokenizerME(tokenizerModel);
     }
 
     private Map<String, Dictionary> getDictionaries() {
-        Map<String, Dictionary> dictionaries = new HashMap<String, Dictionary>();
+        Map<String, Dictionary> dictionaries = new HashMap<>();
         Iterable<DictionaryEntry> entries = dictionaryEntryRepository.findAll(getUser().getModelUserContext());
         for (DictionaryEntry entry : entries) {
 

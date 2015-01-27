@@ -12,12 +12,13 @@ import org.securegraph.Authorizations;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
+import org.securegraph.util.IterableUtils;
 
 import java.io.IOException;
 import java.util.*;
 
 public class SecureGraphConcept extends Concept {
-    private static Set<String> PROPERTIES_NOT_IN_METADATA = new HashSet<String>();
+    private static Set<String> PROPERTIES_NOT_IN_METADATA = new HashSet<>();
     private final Vertex vertex;
 
     static {
@@ -102,8 +103,18 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
+    public String[] getIntents() {
+        return IterableUtils.toArray(LumifyProperties.INTENT.getPropertyValues(vertex), String.class);
+    }
+
+    @Override
+    public void addIntent(String intent, Authorizations authorizations) {
+        LumifyProperties.INTENT.addPropertyValue(vertex, intent, intent, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+    }
+
+    @Override
     public Map<String, String> getMetadata() {
-        Map<String, String> metadata = new HashMap<String, String>();
+        Map<String, String> metadata = new HashMap<>();
         for (Property p : vertex.getProperties()) {
             if (PROPERTIES_NOT_IN_METADATA.contains(p.getName())) {
                 continue;

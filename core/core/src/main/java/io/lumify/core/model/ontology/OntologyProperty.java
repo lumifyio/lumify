@@ -11,10 +11,7 @@ import org.securegraph.type.GeoPoint;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +44,8 @@ public abstract class OntologyProperty {
 
     public abstract String getPropertyGroup();
 
+    public abstract String[] getIntents();
+
     public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
         Collection<ClientApiOntology.Property> results = new ArrayList<ClientApiOntology.Property>();
         for (OntologyProperty property : properties) {
@@ -67,6 +66,9 @@ public abstract class OntologyProperty {
             result.setPropertyGroup(getPropertyGroup());
             if (getPossibleValues() != null) {
                 result.getPossibleValues().putAll(getPossibleValues());
+            }
+            if (getIntents() != null) {
+                result.getIntents().addAll(Arrays.asList(getIntents()));
             }
             return result;
         } catch (JSONException e) {

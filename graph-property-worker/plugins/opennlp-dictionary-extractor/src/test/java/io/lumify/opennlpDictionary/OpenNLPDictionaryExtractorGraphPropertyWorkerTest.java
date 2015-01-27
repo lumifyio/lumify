@@ -5,6 +5,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -40,6 +41,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -51,13 +53,13 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
     @Mock
     private User user;
 
-    private String text = "This is a sentence that is going to tell you about a guy named "
-            + "Bob Robertson who lives in Boston, MA and works for a company called Altamira Corporation";
-
     private InMemoryAuthorizations authorizations;
 
     @Mock
     private DictionaryEntryRepository dictionaryEntryRepository;
+
+    @Mock
+    private OntologyRepository ontologyRepository;
 
     private InMemoryGraph graph;
     private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
@@ -68,11 +70,15 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         final List<TokenNameFinder> finders = loadFinders();
 
         Map config = new HashMap();
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PERSON, "http://lumify.io/test#person");
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_LOCATION, "http://lumify.io/test#location");
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ORGANIZATION, "http://lumify.io/test#organization");
-        config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
+        config.put("ontology.intent.concept.person", "http://lumify.io/test#person");
+        config.put("ontology.intent.concept.location", "http://lumify.io/test#location");
+        config.put("ontology.intent.concept.organization", "http://lumify.io/test#organization");
+        config.put("ontology.intent.relationship.artifactHasEntity", "http://lumify.io/test#artifactHasEntity");
         io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
+
+        when(ontologyRepository.getRequiredConceptIRIByIntent("location")).thenReturn("http://lumify.io/test#location");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("organization")).thenReturn("http://lumify.io/test#organization");
+        when(ontologyRepository.getRequiredConceptIRIByIntent("person")).thenReturn("http://lumify.io/test#person");
 
         graph = InMemoryGraph.create();
 
@@ -86,6 +92,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         extractor.setDictionaryEntryRepository(dictionaryEntryRepository);
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setGraph(graph);
+        extractor.setOntologyRepository(ontologyRepository);
 
         AuthorizationRepository authorizationRepository = new InMemoryAuthorizationRepository();
         termMentionRepository = new TermMentionRepository(graph, authorizationRepository);
@@ -94,7 +101,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
         authorizations = new InMemoryAuthorizations();
         Injector injector = null;
-        List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
+        List<TermMentionFilter> termMentionFilters = new ArrayList<>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);
         extractor.prepare(workerPrepareData);
     }
@@ -110,6 +117,8 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         graph.flush();
 
         GraphPropertyWorkData workData = new GraphPropertyWorkData(visibilityTranslator, vertex, vertex.getProperty("text"), null, "");
+        String text = "This is a sentence that is going to tell you about a guy named "
+                + "Bob Robertson who lives in Boston, MA and works for a company called Altamira Corporation";
         extractor.execute(new ByteArrayInputStream(text.getBytes()), workData);
 
         List<Vertex> termMentions = toList(termMentionRepository.findBySourceGraphVertex(vertex.getId(), authorizations));
@@ -128,7 +137,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         }
         assertTrue("Expected name not found!", found);
 
-        ArrayList<String> signs = new ArrayList<String>();
+        ArrayList<String> signs = new ArrayList<>();
         for (Vertex term : termMentions) {
             String title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(term);
             signs.add(title);
@@ -140,7 +149,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
     }
 
     private List<TokenNameFinder> loadFinders() {
-        List<TokenNameFinder> finders = new ArrayList<TokenNameFinder>();
+        List<TokenNameFinder> finders = new ArrayList<>();
         Dictionary people = new Dictionary();
         people.put(new StringList("Bob Robertson".split(" ")));
         finders.add(new DictionaryNameFinder(people, "person"));

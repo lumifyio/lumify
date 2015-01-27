@@ -1,7 +1,9 @@
 package io.lumify.securegraph.model.ontology;
 
 import io.lumify.core.model.ontology.Relationship;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.Vertex;
+import org.securegraph.util.IterableUtils;
 
 import java.util.List;
 
@@ -16,6 +18,11 @@ public class SecureGraphRelationship extends Relationship {
         super(domainConceptIRIs, rangeConceptIRIs);
         this.vertex = vertex;
         this.inverseOfIRIs = inverseOfIRIs;
+    }
+
+    @Override
+    public String[] getIntents() {
+        return IterableUtils.toArray(LumifyProperties.INTENT.getPropertyValues(vertex), String.class);
     }
 
     public String getIRI() {

@@ -6,7 +6,7 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
 import com.beust.jcommander.internal.Nullable;
 import com.google.inject.Inject;
-import io.lumify.core.config.Configuration;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.user.User;
 import org.securegraph.Vertex;
 
@@ -16,8 +16,8 @@ import java.util.Collection;
 
 public class BigTableArtifactThumbnailRepository extends ArtifactThumbnailRepository {
     @Inject
-    public BigTableArtifactThumbnailRepository(@Nullable final ModelSession modelSession, final Configuration configuration) {
-        super(modelSession, configuration);
+    public BigTableArtifactThumbnailRepository(@Nullable final ModelSession modelSession, final OntologyRepository ontologyRepository) {
+        super(modelSession, ontologyRepository);
     }
 
     @Override

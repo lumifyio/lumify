@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -29,13 +30,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class WorkspaceUndo extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUndo.class);
-    private final TermMentionRepository termMentionRepository;
     private final Graph graph;
-    private final VisibilityTranslator visibilityTranslator;
-    private final UserRepository userRepository;
     private final WorkQueueRepository workQueueRepository;
-    private final AuditRepository auditRepository;
     private final WorkspaceHelper workspaceHelper;
+    private String entityHasImageIri;
+    private String artifactContainsImageOfEntityIri;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public WorkspaceUndo(
@@ -47,19 +47,34 @@ public class WorkspaceUndo extends BaseRequestHandler {
             final WorkspaceHelper workspaceHelper,
             final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository,
-            final AuditRepository auditRepository) {
+            final AuditRepository auditRepository,
+            final OntologyRepository ontologyRepository) {
         super(userRepository, workspaceRepository, configuration);
-        this.termMentionRepository = termMentionRepository;
         this.graph = graph;
-        this.visibilityTranslator = visibilityTranslator;
         this.workspaceHelper = workspaceHelper;
-        this.userRepository = userRepository;
         this.workQueueRepository = workQueueRepository;
-        this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
+
+        this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
+        if (this.entityHasImageIri == null) {
+            LOGGER.warn("'entityHasImage' intent has not been defined. Please update your ontology.");
+        }
+
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        if (this.artifactContainsImageOfEntityIri == null) {
+            LOGGER.warn("'artifactContainsImageOfEntity' intent has not been defined. Please update your ontology.");
+        }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.entityHasImageIri == null) {
+            this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        }
+        if (this.artifactContainsImageOfEntityIri == null) {
+            this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        }
+
         String undoDataString = getRequiredParameter(request, "undoData");
         ClientApiUndoItem[] undoData = getObjectMapper().readValue(undoDataString, ClientApiUndoItem[].class);
         User user = getUser(request);

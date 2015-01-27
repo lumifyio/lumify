@@ -3,9 +3,9 @@ package io.lumify.web.routes.workspace;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -46,7 +46,9 @@ public class WorkspaceHelper {
             final UserRepository userRepository,
             final WorkQueueRepository workQueueRepository,
             final Graph graph,
-            final VisibilityTranslator visibilityTranslator) {
+            final VisibilityTranslator visibilityTranslator,
+            final OntologyRepository ontologyRepository
+    ) {
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
@@ -54,15 +56,8 @@ public class WorkspaceHelper {
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
 
-        this.entityHasImageIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE, null);
-        if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
-        }
-
-        this.artifactContainsImageOfEntityIri = configuration.get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY, null);
-        if (this.artifactContainsImageOfEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
-        }
+        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
     }
 
     public void unresolveTerm(Vertex resolvedVertex, Vertex termMention, LumifyVisibility visibility, User user, Authorizations authorizations) {
