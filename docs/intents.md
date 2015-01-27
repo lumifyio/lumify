@@ -17,8 +17,8 @@ Intents can be defined in the ontology and overridden in the configuration. To a
 To override an intent you can add the following to your configuration.
 
     ontology.intent.concept.phoneNumber=http://lumify.io/dev#phoneNumber
-    ontology.intent.relationship.phoneNumber=http://lumify.io/dev#phoneNumber
-    ontology.intent.property.phoneNumber=http://lumify.io/dev#phoneNumber
+    ontology.intent.relationship.hasMedia=http://lumify.io/dev#hasMedia
+    ontology.intent.property.pageCount=http://lumify.io/dev#pageCount
 
 ## Concepts
 
