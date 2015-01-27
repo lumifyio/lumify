@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import io.lumify.core.exception.LumifyException;
 import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONArray;
@@ -155,7 +156,7 @@ public abstract class OntologyProperty {
                 double longitude = Double.parseDouble(match.group(2).trim());
                 return new GeoPoint(latitude, longitude);
             }
-            throw new RuntimeException("Could not parse location: " + valueStr);
+            throw new LumifyException("Could not parse location: " + valueStr);
         }
     }
 }

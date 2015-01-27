@@ -34,7 +34,7 @@ which dependencies you need to install for the features you want.
 Lumify uses Maven as the build system. There are a number of build options depending on what you want to run. This
 section will help you understand the options.
 
-## Section 5: Create an [ontology](ontology.md)
+## Section 5: Create an [Ontology](ontology.md)
 
 Lumify uses OWL files to define what type of entities you can create, what properties they can have and what they
 can connect to.

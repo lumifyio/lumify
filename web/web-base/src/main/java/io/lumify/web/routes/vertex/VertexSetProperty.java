@@ -123,7 +123,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         Metadata metadata = GraphUtil.metadataStringToMap(metadataString, this.visibilityTranslator.getDefaultVisibility());
 
         Object value;
-        if (propertyName == "http://lumify.io#comment") {
+        if (propertyName.equals("http://lumify.io#comment")) {
             value = valueStr;
         } else {
             OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
