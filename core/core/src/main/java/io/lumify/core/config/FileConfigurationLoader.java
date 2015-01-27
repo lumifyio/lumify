@@ -17,15 +17,15 @@ import java.util.*;
  * - ${ENV_CONFIGURATION_LOCATION}
  * - ${user.home}/.lumify
  * - ${appdata}/Lumify
- * - DEFAULT_UNIX_CONFIGURATION_LOCATION or DEFAULT_WINDOWS_CONFIGURATION_LOCATION
+ * - DEFAULT_UNIX_LOCATION or DEFAULT_WINDOWS_LOCATION
  */
 public class FileConfigurationLoader extends ConfigurationLoader {
     /**
      * !!! DO NOT DEFINE A LOGGER here. This class get loaded very early in the process and we don't want to the logger to be initialized yet **
      */
     public static final String ENV_CONFIGURATION_LOCATION = "LUMIFY_CONFIGURATION_LOCATION";
-    public static final String DEFAULT_UNIX_CONFIGURATION_LOCATION = "/opt/lumify/config/";
-    public static final String DEFAULT_WINDOWS_CONFIGURATION_LOCATION = "c:/opt/lumify/config/";
+    public static final String DEFAULT_UNIX_LOCATION = "/opt/lumify/";
+    public static final String DEFAULT_WINDOWS_LOCATION = "c:/opt/lumify/";
     private ImmutableList<File> configDirectoriesFromLeastPriority;
 
     public FileConfigurationLoader(Map initParameters) {
@@ -54,9 +54,9 @@ public class FileConfigurationLoader extends ConfigurationLoader {
         List<File> results = new ArrayList<>();
 
         if (ProcessUtil.isWindows()) {
-            addConfigDirectory(results, DEFAULT_WINDOWS_CONFIGURATION_LOCATION);
+            addConfigDirectory(results, DEFAULT_WINDOWS_LOCATION);
         } else {
-            addConfigDirectory(results, DEFAULT_UNIX_CONFIGURATION_LOCATION);
+            addConfigDirectory(results, DEFAULT_UNIX_LOCATION);
         }
 
         String appData = System.getProperty("appdata");
@@ -89,7 +89,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
             location = location.substring("file://".length());
         }
 
-        File dir = new File(location);
+        File dir = new File(new File(location), "config");
         if (!dir.exists()) {
             return;
         }
