@@ -60,6 +60,60 @@ define(['util/vertex/formatters'], function(f) {
 
     describe('vertex formatters', function() {
 
+        describe('sandboxStatus', function() {
+            it('should return undefined for published items', function() {
+                var p = propertyFactory(PROPERTY_NAME_BOOLEAN, 'k1', true);
+
+                delete p.sandboxStatus
+                expect(V.sandboxStatus(p)).to.be.undefined
+                p.sandboxStatus = 'PUBLIC'
+                expect(V.sandboxStatus(p)).to.be.undefined
+            })
+            it('should return unpublished if sandboxed', function() {
+                var p = propertyFactory(PROPERTY_NAME_BOOLEAN, 'k1', true);
+                p.sandboxStatus = 'PRIVATE'
+                expect(V.sandboxStatus(p)).to.equal('vertex.status.unpublished')
+                p.sandboxStatus = 'PUBLIC_CHANGED'
+                expect(V.sandboxStatus(p)).to.equal('vertex.status.unpublished')
+            })
+            it('should return unpublished if sandboxed', function() {
+                var p = propertyFactory(PROPERTY_NAME_BOOLEAN, 'k1', true);
+                p.sandboxStatus = 'PRIVATE'
+                expect(V.sandboxStatus(p)).to.equal('vertex.status.unpublished')
+                p.sandboxStatus = 'PUBLIC_CHANGED'
+                expect(V.sandboxStatus(p)).to.equal('vertex.status.unpublished')
+            })
+            it('should check sandboxStatus of compound property', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'j'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'h')
+                    ]);
+
+                vertex.sandboxStatus = 'PUBLIC'
+                vertex.properties[0].sandboxStatus = 'PRIVATE'
+                vertex.properties[1].sandboxStatus = 'PRIVATE'
+
+                expect(V.sandboxStatus(vertex, COMPOUND_PROPERTY_NAME, 'k1')).to.equal('vertex.status.unpublished')
+            })
+            it('should check sandboxStatus of compound property with no matching properties', function() {
+                var vertex = vertexFactory([]);
+
+                vertex.sandboxStatus = 'PRIVATE'
+                expect(V.sandboxStatus(vertex, COMPOUND_PROPERTY_NAME, 'k1')).to.be.undefined
+            })
+            it('should check sandboxStatus of compound property with different sandboxStatus', function() {
+                var vertex = vertexFactory([
+                    propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'j'),
+                    propertyFactory(PROPERTY_NAME_LAST, 'k1', 'h')
+                ]);
+
+                vertex.sandboxStatus = 'PUBLIC'
+                vertex.properties[0].sandboxStatus = 'PRIVATE'
+                vertex.properties[1].sandboxStatus = 'PUBLIC'
+                expect(V.sandboxStatus(vertex, COMPOUND_PROPERTY_NAME, 'k1')).to.be.undefined
+            })
+        })
+
         describe('prop', function() {
             it('should have prop function', function() {
                 expect(V).to.have.property('prop').that.is.a.function
@@ -182,7 +236,7 @@ define(['util/vertex/formatters'], function(f) {
                     ]),
                     property = V.props(vertex, PROPERTY_NAME_FIRST, 'k2');
 
-                expect(property.value).to.equal('jason2')
+                expect(property[0].value).to.equal('jason2')
             })
             it('should return undefined for vertex when key provided and no match', function() {
                 var vertex = vertexFactory([
@@ -192,23 +246,23 @@ define(['util/vertex/formatters'], function(f) {
                     ]),
                     property = V.props(vertex, PROPERTY_NAME_FIRST, 'k3');
 
-                expect(property).to.be.undefined
-            })
-            it('should throw error if key matches multiple', function() {
-                var vertex = vertexFactory([
-                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason'),
-                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'harwig'),
-                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'jason2')
-                    ]);
-
-                expect(function() {
-                    V.props(vertex, PROPERTY_NAME_FIRST, 'k1');
-                }).to.throw('multiple properties with same name')
+                expect(property).to.be.an('array').that.has.property('length').that.equals(0)
             })
             it('should throw error if key is passed but is undefined', function() {
                 expect(function() {
                     V.props(vertexFactory(), PROPERTY_NAME_FIRST, undefined);
                 }).to.throw('Undefined key')
+            })
+            it('should return all props for a compound property', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', '1'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', '2')
+                    ]),
+                    props = V.props(vertex, COMPOUND_PROPERTY_NAME, 'k1');
+
+                expect(props).to.be.an('array').that.has.property('length').that.equals(2)
+                expect(props[0].value).to.equal('1')
+                expect(props[1].value).to.equal('2')
             })
         })
 

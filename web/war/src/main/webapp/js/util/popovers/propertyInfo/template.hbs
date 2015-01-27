@@ -1,11 +1,28 @@
 <div class="propertyInfoPopover popover top">
   <div class="arrow"></div>
   <div class="popover-content">
-    <table class="table">
-    </table>
+    <table class="table"></table>
 
-    <button class="btn btn-danger btn-small requires-EDIT">{{ i18n 'popovers.property_info.button.delete' }}</button>
-    <button class="editadd btn btn-small requires-EDIT">{{ i18n 'popovers.property_info.button.edit' }}</button>
-    <button class="reply btn btn-small requires-COMMENT">{{ i18n 'popovers.property_info.button.reply' }}</button>
+    {{#unless isComment}}
+      {{#if canDelete}}
+      <button class="btn btn-danger btn-small requires-EDIT">{{ i18n 'popovers.property_info.button.delete' }}</button>
+      {{/if}}
+      {{#if canEdit}}
+      <button class="{{#unless canDelete}}nodelete{{/unless}} btn-edit btn btn-small requires-EDIT">{{ i18n 'popovers.property_info.button.edit' }}</button>
+      {{/if}}
+      {{#unless canEdit}}
+      <button class="{{#unless canDelete}}nodelete{{/unless}} btn-add btn btn-small requires-EDIT">{{ i18n 'popovers.property_info.button.add' }}</button>
+      {{/unless}}
+    {{/unless}}
+
+    {{#if isComment}}
+      {{#if canDelete}}
+      <button class="btn btn-danger btn-small requires-COMMENT">{{ i18n 'popovers.property_info.button.delete' }}</button>
+      {{/if}}
+      {{#if isCommentCreator}}
+      <button class="editadd btn btn-small requires-EDIT btn-edit">{{ i18n 'popovers.property_info.button.edit' }}</button>
+      {{/if}}
+      <button class="reply btn btn-small requires-COMMENT">{{ i18n 'popovers.property_info.button.reply' }}</button>
+    {{/if}}
   </div>
 </div>

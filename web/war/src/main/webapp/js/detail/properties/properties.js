@@ -564,7 +564,7 @@ define([
             this.reload();
         } else if ($target.is('.info')) {
             var datum = d3.select($target.closest('.property-value').get(0)).datum();
-            this.showPropertyInfo($target, this.attr.data.id, datum.property);
+            this.showPropertyInfo($target, this.attr.data, datum.property);
         } else {
             processed = false;
         }

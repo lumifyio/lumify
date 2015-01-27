@@ -27,6 +27,22 @@ define([
 
         this.before('initialize', function(node, config) {
             config.template = 'propertyInfo/template';
+            if (config.property) {
+                config.isComment = config.property.name === 'http://lumify.io/comment#entry';
+                config.isCommentCreator = config.isComment &&
+                    config.property.metadata &&
+                    config.property.metadata['http://lumify.io#modifiedBy'] === lumifyData.currentUser.id;
+                config.canEdit = config.isComment ?
+                    config.isCommentCreator :
+                    config.property.compoundProperty ?
+                    F.vertex.sandboxStatus(config.data, config.property.name, config.property.key) :
+                    (
+                        F.vertex.sandboxStatus(config.property) ||
+                        config.property.name === 'http://lumify.io#visibilityJson'
+                    );
+                config.canDelete = config.canEdit && config.property.name !== 'http://lumify.io#visibilityJson';
+            }
+            config.hideDialog = true;
         });
 
         this.after('initialize', function() {
@@ -61,28 +77,20 @@ define([
 
                         self.contentRoot = d3.select(self.popover.get(0))
                             .select('.popover-content');
-                        self.update(self.attr.property);
+                        self.update();
 
                         self.on(document, 'verticesUpdated', self.onVerticesUpdated);
                     });
             });
         });
 
-        this.update = function(property) {
-            var vertexId = this.attr.vertexId,
+        this.update = function() {
+            var vertexId = this.attr.data.id,
+                property = _.first(F.vertex.props(this.attr.data, this.attr.property.name, this.attr.property.key)),
                 positionDialog = this.positionDialog.bind(this),
                 displayNames = this.metadataPropertiesDisplayMap,
                 displayTypes = this.metadataPropertiesTypeMap,
                 isComment = property.name === 'http://lumify.io/comment#entry',
-                isCommentCreator = isComment &&
-                    property.metadata['http://lumify.io#modifiedBy'] === lumifyData.currentUser.id,
-                canEdit = isComment ?
-                    isCommentCreator :
-                    (
-                        F.vertex.sandboxStatus(property) ||
-                        property.name === 'http://lumify.io#visibilityJson'
-                    ),
-                canDelete = canEdit && property.name !== 'http://lumify.io#visibilityJson',
                 metadata = _.chain(this.metadataProperties || [])
                     .map(function(name) {
                         if ('metadata' in property) {
@@ -114,29 +122,6 @@ define([
                             });
                     });
 
-            this.contentRoot.select('.btn-danger')
-                .style('display', canDelete ? 'inline' : 'none')
-                .classed('requires-EDIT', !isComment)
-                .classed('requires-COMMENT', isComment)
-            this.contentRoot.select('.editadd')
-                .style('display', isComment && !isCommentCreator ? 'none' : 'inline')
-                .classed('btn-edit', canEdit)
-                .classed('btn-add', !canEdit)
-                .classed('requires-EDIT', !isComment)
-                .classed('requires-COMMENT', isComment)
-                .classed('nodelete', !canDelete)
-                .text(canEdit ?
-                  i18n('popovers.property_info.button.edit') :
-                  i18n('popovers.property_info.button.add')
-                );
-            this.contentRoot.select('.reply').each(function() {
-                var $this = $(this);
-                if (isComment) {
-                    $this.show();
-                } else {
-                    $this.hide();
-                }
-            })
             this.contentRoot.selectAll('tr')
                 .call(function() {
                     var self = this;
@@ -216,12 +201,13 @@ define([
 
             row.exit().remove();
 
+            this.dialog.show();
             positionDialog();
         };
 
         this.onVerticesUpdated = function(event, data) {
             var vertex = _.findWhere(data.vertices, {
-                    id: this.attr.vertexId
+                    id: this.attr.data.id
                 }),
                 property = vertex && _.findWhere(vertex.properties, {
                     name: this.attr.property.name,
@@ -230,8 +216,8 @@ define([
             if (vertex && !property) {
                 this.teardown();
             } else if (property) {
-                this.attr.property = property;
-                this.update(property);
+                this.attr.data = vertex;
+                this.update();
             }
         };
 

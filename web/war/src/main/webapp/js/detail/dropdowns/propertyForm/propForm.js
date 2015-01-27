@@ -206,8 +206,11 @@ define([
             visibility.teardownAllComponents();
             justification.teardownAllComponents();
 
-            var vertexProperty = property.key || property.key === '' ?
-                    F.vertex.props(this.attr.data, property.name, property.key) : undefined,
+            var vertexProperty = property.title === 'http://lumify.io#visibilityJson' ?
+                    _.first(F.vertex.props(this.attr.data, property.title)) :
+                    property.key ?
+                    _.first(F.vertex.props(this.attr.data, property.title, property.key)) :
+                    undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
@@ -262,10 +265,6 @@ define([
             this.select('saveButtonSelector').show();
 
             this.select('deleteButtonSelector')
-                .text(
-                    sandboxStatus === 'PRIVATE' ?  i18n('property.form.button.delete') :
-                    sandboxStatus === 'PUBLIC_CHANGED' ?  i18n('property.form.button.undo') : ''
-                )
                 .toggle(
                     (!!isExistingProperty) &&
                     sandboxStatus !== 'PUBLIC' &&
@@ -321,7 +320,10 @@ define([
                                 property: propertyDetails,
                                 vertex: self.attr.data,
                                 predicates: false,
-                                focus: true
+                                focus: true,
+                                values: property.key ?
+                                    F.vertex.props(self.attr.data, propertyDetails.title, property.key) :
+                                    F.vertex.props(self.attr.data, propertyDetails.title)
                             });
                         } else {
                             PropertyField.attachTo(config, {

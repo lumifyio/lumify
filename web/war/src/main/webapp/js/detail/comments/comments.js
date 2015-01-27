@@ -248,7 +248,7 @@ define([
                     if (property[0].redacted) {
                         return;
                     }
-                    self.showPropertyInfo(this, self.attr.data.id, property[0]);
+                    self.showPropertyInfo(this, self.attr.data, property[0]);
                 });
             selection.exit()
                 .call(function() {

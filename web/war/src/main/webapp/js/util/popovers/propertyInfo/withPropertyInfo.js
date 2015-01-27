@@ -5,7 +5,7 @@ define([], function() {
 
     function withPropertyInfo() {
 
-        this.showPropertyInfo = function(button, vertexId, property) {
+        this.showPropertyInfo = function(button, data, property) {
             var $target = $(button),
                 shouldOpen = $target.lookupAllComponents().length === 0;
 
@@ -13,8 +13,8 @@ define([], function() {
                 if (shouldOpen) {
                     PropertyInfo.teardownAll();
                     PropertyInfo.attachTo($target, {
-                        property: property,
-                        vertexId: vertexId
+                        data: data,
+                        property: property
                     });
                 } else {
                     $target.teardownComponent(PropertyInfo);

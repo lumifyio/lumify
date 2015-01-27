@@ -15,11 +15,21 @@ define([
         V = {
 
             isPublished: function(vertex) {
-                return V.sandboxStatus(vertex) === undefined;
+                return V.sandboxStatus.apply(null, arguments) === undefined;
             },
 
-            sandboxStatus: function(vertex) {
-                return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ?
+            sandboxStatus: function(vertexOrProperty) {
+                if (arguments.length === 3) {
+                    var props = V.props.apply(null, arguments);
+                    if (props.length) {
+                        return _.any(props, function(p) {
+                            return V.sandboxStatus(p) === undefined;
+                        }) ? undefined : i18n('vertex.status.unpublished');
+                    }
+                    return;
+                }
+
+                return (/^(private|public_changed)$/i).test(vertexOrProperty.sandboxStatus) ?
                         i18n('vertex.status.unpublished') :
                         undefined;
             },
@@ -391,19 +401,19 @@ define([
 
                 name = V.propName(name);
 
-                var matcher = optionalKey ?
-                        { name: name, key: optionalKey } :
-                        { name: name },
-                    foundProperties = _.where(vertex.properties, matcher);
+                var ontologyProperty = ontology.properties.byTitle[name],
+                    dependentIris = ontologyProperty && ontologyProperty.dependentPropertyIris,
+                    foundProperties = _.filter(vertex.properties, function(p) {
+                        if (dependentIris) {
+                            return ~dependentIris.indexOf(p.name) && (
+                                optionalKey ? optionalKey === p.key : true
+                            );
+                        }
 
-                if (optionalKey) {
-                    if (foundProperties.length > 1) {
-                        throw new Error('Vertex has multiple properties with same name and key');
-                    }
-                    return foundProperties.length ?
-                        foundProperties[0] :
-                        undefined;
-                }
+                        return name === p.name && (
+                            optionalKey ? optionalKey === p.key : true
+                        );
+                    });
 
                 return foundProperties;
             },

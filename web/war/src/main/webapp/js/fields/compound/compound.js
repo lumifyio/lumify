@@ -77,21 +77,25 @@ define([
 
         this.render = function() {
             var self = this,
-                fields = $();
+                fields = $(),
+                values = _.indexBy(this.attr.values, 'name');
 
             this.attr.property.dependentPropertyIris.forEach(function(propertyIri, i) {
-                var property = self.ontologyProperties.byTitle[propertyIri],
-                    fieldContainer = $('<div>').addClass('compound-field');
+                var ontologyProperty = self.ontologyProperties.byTitle[propertyIri],
+                    fieldContainer = $('<div>').addClass('compound-field'),
+                    property = values[propertyIri],
+                    previousValue = property ? property.value : '';
 
+                console.log(self.attr.values)
                 require([
-                    property.possibleValues ?
+                    ontologyProperty.possibleValues ?
                         '../restrictValues' :
-                        '../' + property.dataType
+                        '../' + ontologyProperty.dataType
                 ], function(PropertyField) {
                     PropertyField.attachTo(fieldContainer, {
-                        property: property,
-                        vertexProperty: null, //vertexProperty,
-                        value: '', //previousValue,
+                        property: ontologyProperty,
+                        vertexProperty: property,
+                        value: previousValue,
                         predicates: self.attr.predicates,
                         focus: i === 0
                     });
