@@ -23,7 +23,6 @@
             <groupId>io.lumify</groupId>
             <artifactId>lumify-graph-property-worker-base</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.drewnoakes</groupId>
