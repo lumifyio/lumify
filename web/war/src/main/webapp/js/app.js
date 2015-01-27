@@ -441,7 +441,8 @@ define([
         };
 
         this.toggleDisplay = function(e, data) {
-            var SLIDE_OUT = 'search workspaces admin',
+            var self = this,
+                SLIDE_OUT = 'search workspaces admin',
                 pane = this.select(data.name + 'Selector');
 
             if (data.action) {
@@ -452,7 +453,9 @@ define([
                         .appendTo(this.$node);
                 }
                 require([data.action.componentPath], function(Component) {
-                    Component.attachTo(pane);
+                    Component.attachTo(pane, {
+                        graphPadding: self.currentGraphPadding
+                    });
                 });
             } else if (pane.length === 0) {
                 pane = this.$node.find('.' + data.name + '-pane');
@@ -612,6 +615,7 @@ define([
                 }
             }
 
+            this.currentGraphPadding = padding;
             this.trigger(document, 'graphPaddingUpdated', { padding: padding });
         };
 
