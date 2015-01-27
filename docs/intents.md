@@ -22,6 +22,8 @@ To override an intent you can add the following to your configuration.
 
 ## Concepts
 
+| Name         | Description                               |
+|--------------|-------------------------------------------|
 | audio        | Audio file                                |
 | city         | Geographic city                           |
 | country      | Geographic country                        |
@@ -41,6 +43,8 @@ To override an intent you can add the following to your configuration.
 
 ## Relationships
 
+| Name                          | Description                          |
+|-------------------------------|--------------------------------------|
 | artifactContainsImageOfEntity | Artifact has image of entity         |
 | artifactHasEntity             | Artifact has entity                  |
 | entityHasImage                | Entity has image                     |
@@ -48,6 +52,8 @@ To override an intent you can add the following to your configuration.
 
 ## Properties
 
+| Name                    | Type        | Description                                 |
+|-------------------------|-------------|---------------------------------------------|
 | geoLocation             | geoLocation | Geo-location                                |
 | media.clockwiseRotation | integer     | Image clockwise rotation                    |
 | media.dateTaken         | date        | Date/time image was taken                   |
