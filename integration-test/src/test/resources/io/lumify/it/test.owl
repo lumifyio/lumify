@@ -78,6 +78,15 @@
     
 
 
+    <!-- http://lumify.io/test#entityHasImageRaw -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/test#entityHasImageRaw">
+        <rdfs:label xml:lang="en">Has Image</rdfs:label>
+        <lumify:intent>entityHasImage</lumify:intent>
+        <rdfs:range rdf:resource="http://lumify.io/test#image"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+
     <!-- http://lumify.io/test#worksFor -->
 
     <owl:ObjectProperty rdf:about="http://lumify.io/test#worksFor">
@@ -181,6 +190,7 @@
     </owl:DatatypeProperty>
     
 
+    <!-- http://lumify.io/test#geolocation -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/test#geolocation">
         <lumify:intent>geoLocation</lumify:intent>
@@ -275,6 +285,66 @@
     </owl:Class>
     
 
+    <!-- http://lumify.io/test#city -->
+
+    <owl:Class rdf:about="http://lumify.io/test#city">
+        <rdfs:label xml:lang="en">City</rdfs:label>
+        <lumify:intent>city</lumify:intent>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/test#location"/>
+    </owl:Class>
+
+    <!-- http://lumify.io/test#state -->
+
+    <owl:Class rdf:about="http://lumify.io/test#state">
+        <rdfs:label xml:lang="en">State</rdfs:label>
+        <lumify:intent>state</lumify:intent>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/test#location"/>
+    </owl:Class>
+
+    <!-- http://lumify.io/test#country -->
+
+    <owl:Class rdf:about="http://lumify.io/test#country">
+        <rdfs:label xml:lang="en">Country</rdfs:label>
+        <lumify:intent>country</lumify:intent>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/test#location"/>
+    </owl:Class>
+
+    <!-- http://lumify.io/test#contactInformation -->
+
+    <owl:Class rdf:about="http://lumify.io/test#contactInformation">
+        <rdfs:label xml:lang="en">Contact Information</rdfs:label>
+    </owl:Class>
+
+    <!-- http://lumify.io/test#emailAddress -->
+
+    <owl:Class rdf:about="http://lumify.io/test#emailAddress">
+        <rdfs:label xml:lang="en">Email Address</rdfs:label>
+        <lumify:intent>email</lumify:intent>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/test#contactInformation"/>
+    </owl:Class>
+
+    <!-- http://lumify.io/test#phoneNumber -->
+
+    <owl:Class rdf:about="http://lumify.io/test#phoneNumber">
+        <rdfs:label xml:lang="en">Phone Number</rdfs:label>
+        <lumify:intent>phoneNumber</lumify:intent>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/test#contactInformation"/>
+    </owl:Class>
+
+    <!-- http://lumify.io/test#organization -->
+
+    <owl:Class rdf:about="http://lumify.io/test#organization">
+        <rdfs:label xml:lang="en">Organization</rdfs:label>
+        <lumify:intent>organization</lumify:intent>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/test#abbreviation&apos;) || &apos;&apos;</lumify:subtitleFormula>
+        <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/test#formationDate&apos;) || &apos;&apos;</lumify:timeFormula>
+    </owl:Class>
+
+    <!-- http://lumify.io/test#company -->
+
+    <owl:Class rdf:about="http://lumify.io/test#company">
+        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/test#name&apos;)</lumify:titleFormula>
+    </owl:Class>
 
     <!-- http://lumify.io/test#video -->
 
