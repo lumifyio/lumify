@@ -43,42 +43,61 @@ define([
 
             this.currentQuery = data.value;
             this.currentFilters = data.filters;
-            this.trigger('searchRequestBegan');
-            this.triggerRequest(
-                query,
-                this.currentFilters.propertyFilters,
-                this.currentFilters.conceptFilter,
-                { offset: 0 }
-            )
-                .then(function(result) {
-                    var unknownTotal = false,
-                        verticesLength = result.vertices.length;
 
-                    if (!('totalHits' in result)) {
-                        unknownTotal = true;
-                        result.totalHits = verticesLength;
-                    } else if (result.totalHits > verticesLength && verticesLength === 0) {
-                        // totalHits includes deleted items so show no results
-                        // if no vertices returned and hits > 0
-                        result.totalHits = 0;
-                    }
+            var propertyFilters = this.currentFilters.propertyFilters,
+                promise = propertyFilters && propertyFilters.length ?
+                    this.dataRequest('ontology', 'properties') :
+                    Promise.resolve();
 
-                    self.trigger('searchRequestCompleted', {
-                        success: true,
-                        result: result,
-                        message: i18n('search.types.lumify.hits.' +
-                            (
-                                unknownTotal && result.totalHits >= (result.nextOffset - 1) ? 'unknown' :
-                                result.totalHits === 0 ? 'none' :
-                                result.totalHits === 1 ? 'one' :
-                                'many'
-                            ),
-                            F.number.prettyApproximate(result.totalHits))
-                    });
-                }, function() {
-                    self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
-                })
-                .done()
+            promise.done(function(ontologyProperties) {
+                if (ontologyProperties) {
+                    // Coerce currency properties to strings
+                    propertyFilters.forEach(function(f) {
+                        var ontologyProperty = ontologyProperties.byTitle[f.propertyId];
+                        if (ontologyProperty && ontologyProperty.dataType === 'currency') {
+                            f.values = f.values.map(function(v) {
+                                return String(v);
+                            });
+                        }
+                    })
+                }
+                self.trigger('searchRequestBegan');
+                self.triggerRequest(
+                    query,
+                    propertyFilters,
+                    self.currentFilters.conceptFilter,
+                    { offset: 0 }
+                )
+                    .then(function(result) {
+                        var unknownTotal = false,
+                            verticesLength = result.vertices.length;
+
+                        if (!('totalHits' in result)) {
+                            unknownTotal = true;
+                            result.totalHits = verticesLength;
+                        } else if (result.totalHits > verticesLength && verticesLength === 0) {
+                            // totalHits includes deleted items so show no results
+                            // if no vertices returned and hits > 0
+                            result.totalHits = 0;
+                        }
+
+                        self.trigger('searchRequestCompleted', {
+                            success: true,
+                            result: result,
+                            message: i18n('search.types.lumify.hits.' +
+                                (
+                                    unknownTotal && result.totalHits >= (result.nextOffset - 1) ? 'unknown' :
+                                    result.totalHits === 0 ? 'none' :
+                                    result.totalHits === 1 ? 'one' :
+                                    'many'
+                                ),
+                                F.number.prettyApproximate(result.totalHits))
+                        });
+                    }, function() {
+                        self.trigger('searchRequestCompleted', { success: false, error: i18n('search.query.invalid') });
+                    })
+                    .done()
+            });
         };
 
         this.triggerRequest = function(query, propertyFilters, conceptFilter, paging) {
