@@ -7,11 +7,9 @@ define(['require'], function(require) {
         },
         socketHandlers = {
             workspaceChange: function(data, json) {
-                if (!json || json.modifiedBy !== publicData.currentUser.id) {
-                    require(['../util/store'], function(store) {
-                        store.workspaceWasChangedRemotely(data);
-                    })
-                }
+                require(['../util/store'], function(store) {
+                    store.workspaceWasChangedRemotely(data);
+                })
             },
             workspaceDelete: function(data) {
                 require([

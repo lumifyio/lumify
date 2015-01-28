@@ -67,7 +67,7 @@ public class Audit extends Row<AuditRowKey> {
             }
             String[] rowKey = RowKeyHelper.splitOnMinorFieldSeperator(getRowKey().toString());
             json.put("graphVertexID", rowKey[0]);
-            json.put("dateTime", AuditRowKey.dateFormat.parse(rowKey[1]).getTime());
+            json.put("dateTime", AuditRowKey.getDateFormat().parse(rowKey[1]).getTime());
             return json;
         } catch (Exception e) {
             throw new RuntimeException(e);
