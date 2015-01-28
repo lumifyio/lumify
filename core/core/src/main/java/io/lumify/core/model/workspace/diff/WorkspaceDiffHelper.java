@@ -116,9 +116,11 @@ public class WorkspaceDiffHelper {
 
     private ClientApiWorkspaceDiff.VertexItem createWorkspaceDiffVertexItem(Vertex vertex, SandboxStatus sandboxStatus, boolean visible, boolean deleted) {
         String title = LumifyProperties.TITLE.getPropertyValue(vertex);
+        String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
         return new ClientApiWorkspaceDiff.VertexItem(
                 vertex.getId(),
                 title,
+                conceptType,
                 JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_JSON.getProperty(vertex))),
                 sandboxStatus,
                 deleted,
