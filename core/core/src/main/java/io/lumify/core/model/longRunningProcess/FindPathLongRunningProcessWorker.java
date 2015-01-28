@@ -57,6 +57,8 @@ public class FindPathLongRunningProcessWorker extends LongRunningProcessWorker {
         JSONObject resultsJson = new JSONObject(resultsString);
         longRunningProcessQueueItem.put("results", resultsJson);
         longRunningProcessQueueItem.put("resultsCount", results.getPaths().size());
+        // TODO: localize string
+        longRunningProcessRepository.reportProgress(longRunningProcessQueueItem, 1.0D, "Complete");
     }
 
     private Authorizations getAuthorizations(String[] authorizations) {
