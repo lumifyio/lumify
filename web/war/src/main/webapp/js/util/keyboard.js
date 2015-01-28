@@ -16,6 +16,9 @@ define([
             this.shortcuts = {};
             this.focusElementStack = [];
 
+            window.lastMousePositionX = this.mousePageX = $(window).width() / 2;
+            window.lastMousePositionY = this.mousePageY = $(window).height() / 2;
+
             this.fireEventMetas = this.fireEvent;
 
             this.fireEventUp = _.debounce(this.fireEvent.bind(this), 100);
