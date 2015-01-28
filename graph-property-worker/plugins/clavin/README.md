@@ -17,7 +17,7 @@ geospatial analytics on unstructured data.
 
 # Prerequisites
 
-The Lumify CLAVIN plugin will resolve already identified [term mentions](../../docs/glassary.md#term-mention).
+The Lumify CLAVIN plugin will resolve already identified [term mentions](../../../docs/glossary.md#term-mention).
 To get term mentions you will need to install a graph property worker plugin that identifies term mentions, such as
 the opennlp-me-extractor plugin.
 
