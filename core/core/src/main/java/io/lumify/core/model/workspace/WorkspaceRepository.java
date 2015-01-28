@@ -26,6 +26,7 @@ public abstract class WorkspaceRepository {
     public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace/toEntity";
     public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace/toUser";
     public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
+    public static final String OWL_IRI = "http://lumify.io/workspace";
     private final Graph graph;
 
     protected WorkspaceRepository(Graph graph) {
