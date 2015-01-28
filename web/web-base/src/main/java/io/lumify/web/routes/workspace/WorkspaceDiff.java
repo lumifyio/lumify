@@ -12,6 +12,7 @@ import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 public class WorkspaceDiff extends BaseRequestHandler {
     private final WorkspaceRepository workspaceRepository;
@@ -29,16 +30,18 @@ public class WorkspaceDiff extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
-        ClientApiWorkspaceDiff diff = handle(workspaceId, user);
+        Locale locale = getLocale(request);
+        String timeZone = getTimeZone(request);
+        ClientApiWorkspaceDiff diff = handle(workspaceId, user, locale, timeZone);
         respondWithClientApiObject(response, diff);
     }
 
-    public ClientApiWorkspaceDiff handle(String workspaceId, User user) {
+    public ClientApiWorkspaceDiff handle(String workspaceId, User user, Locale locale, String timeZone) {
         Workspace workspace = workspaceRepository.findById(workspaceId, true, user);
         if (workspace == null) {
             return null;
         }
 
-        return this.workspaceRepository.getDiff(workspace, user);
+        return this.workspaceRepository.getDiff(workspace, user, locale, timeZone);
     }
 }

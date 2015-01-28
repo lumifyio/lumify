@@ -15,6 +15,7 @@ import org.securegraph.util.ConvertingIterable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -93,7 +94,7 @@ public abstract class WorkspaceRepository {
 
     public abstract void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
-    public abstract ClientApiWorkspaceDiff getDiff(Workspace workspace, User user);
+    public abstract ClientApiWorkspaceDiff getDiff(Workspace workspace, User user, Locale locale, String timeZone);
 
     public String getCreatorUserId(Workspace workspace, User user) {
         for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {

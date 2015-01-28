@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientApiWorkspaceDiff implements ClientApiObject {
-    private List<Item> diffs = new ArrayList<Item>();
+    private List<Item> diffs = new ArrayList<>();
 
     public void addAll(List<Item> diffs) {
         this.diffs.addAll(diffs);
@@ -105,11 +105,11 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
     }
 
     public static class VertexItem extends Item {
-        private String conceptType;
         private String vertexId;
         private JsonNode visibilityJson;
         private boolean visible;
         private String title;
+        private String conceptType;
 
         public VertexItem() {
             super("VertexDiffItem", SandboxStatus.PRIVATE, false);
