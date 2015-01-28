@@ -28,31 +28,33 @@ import static org.junit.Assert.assertTrue;
 public class FormulaEvaluatorTest {
 
     private static FormulaEvaluator evaluator;
+    private static FormulaEvaluator.UserContext userContext;
 
     @Mock
     private static OntologyRepository ontologyRepository;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        Locale locale = Locale.getDefault();
-        String timeZone = TimeZone.getDefault().getDisplayName();
-
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         ConfigurationLoader configurationLoader = new HashMapConfigurationLoader(map);
         Configuration configuration = configurationLoader.createConfiguration();
+
+        Locale locale = Locale.getDefault();
+        String timeZone = TimeZone.getDefault().getDisplayName();
+        userContext = new FormulaEvaluator.UserContext(locale, timeZone, null);
 
         final String ontologyJson = IOUtils.toString(FormulaEvaluatorTest.class.getResourceAsStream("ontology.json"), "utf-8");
         final String configurationJson = IOUtils.toString(FormulaEvaluatorTest.class.getResourceAsStream("configuration.json"), "utf-8");
         final String vertexJson = IOUtils.toString(FormulaEvaluatorTest.class.getResourceAsStream("vertex.json"), "utf-8");
 
-        evaluator = new FormulaEvaluator(configuration, ontologyRepository, locale, timeZone) {
+        evaluator = new FormulaEvaluator(configuration, ontologyRepository) {
             @Override
             protected String getOntologyJson() {
                 return ontologyJson;
             }
 
             @Override
-            protected String getConfigurationJson() {
+            protected String getConfigurationJson(Locale locale) {
                 return configurationJson;
             }
 
@@ -71,22 +73,22 @@ public class FormulaEvaluatorTest {
     @Test
     public void testEvaluatorJson() throws Exception {
         assertTrue(evaluator.getOntologyJson().length() > 0);
-        assertTrue(evaluator.getConfigurationJson().length() > 0);
+        assertTrue(evaluator.getConfigurationJson(Locale.getDefault()).length() > 0);
     }
 
     @Test
     public void testEvaluateTitleFormula() {
-        assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, null, null));
+        assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, userContext, null));
     }
 
     @Test
     public void testEvaluateSubtitleFormula() {
-        assertEquals("Prop C Value", evaluator.evaluateSubtitleFormula(null, null, null));
+        assertEquals("Prop C Value", evaluator.evaluateSubtitleFormula(null, userContext, null));
     }
 
     @Test
     public void testEvaluateTimeFormula() {
-        assertEquals("2014-11-20", evaluator.evaluateTimeFormula(null, null, null));
+        assertEquals("2014-11-20", evaluator.evaluateTimeFormula(null, userContext, null));
     }
 
     @Test
@@ -97,7 +99,7 @@ public class FormulaEvaluatorTest {
         block.acquire(threads.length);
 
         // prime the main thread for evaluation
-        assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, null, null));
+        assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, userContext, null));
 
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(new Runnable() {
@@ -105,12 +107,12 @@ public class FormulaEvaluatorTest {
                 public void run() {
                     try {
                         // prime this thread for evaluation
-                        evaluator.evaluateTitleFormula(null, null, null);
+                        evaluator.evaluateTitleFormula(null, userContext, null);
                         threadsReadyCount.incrementAndGet();
                         block.acquire(); // wait to run the look
                         for (int i = 0; i < 20; i++) {
                             System.out.println(Thread.currentThread().getName() + " - " + i);
-                            assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, null, null));
+                            assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, userContext, null));
                         }
                         System.out.println(Thread.currentThread().getName() + " - closing evaluator");
                         evaluator.close();
@@ -141,7 +143,7 @@ public class FormulaEvaluatorTest {
         }
 
         // make sure the main threads evaluator isn't broken.
-        assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, null, null));
+        assertEquals("Prop A Value, Prop B Value", evaluator.evaluateTitleFormula(null, userContext, null));
         evaluator.close();
     }
 }

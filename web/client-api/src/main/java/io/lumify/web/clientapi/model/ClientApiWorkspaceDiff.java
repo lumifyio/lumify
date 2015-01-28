@@ -103,17 +103,19 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
         private JsonNode visibilityJson;
         private boolean visible;
         private String title;
+        private String conceptType;
 
         public VertexItem() {
             super("VertexDiffItem", SandboxStatus.PRIVATE);
         }
 
-        public VertexItem(String vertexId, String title, JsonNode visibilityJson, SandboxStatus sandboxStatus, boolean visible) {
+        public VertexItem(String vertexId, String title, String conceptType, JsonNode visibilityJson, SandboxStatus sandboxStatus, boolean visible) {
             super("VertexDiffItem", sandboxStatus);
             this.vertexId = vertexId;
             this.visibilityJson = visibilityJson;
             this.visible = visible;
             this.title = title;
+            this.conceptType = conceptType;
         }
 
         public String getVertexId() {
@@ -130,6 +132,10 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
 
         public String getTitle() {
             return title;
+        }
+
+        public String getConceptType() {
+            return conceptType;
         }
     }
 
@@ -184,6 +190,8 @@ public class ClientApiWorkspaceDiff implements ClientApiObject {
             return newData;
         }
 
-        public String getVisibilityString () { return visibilityString; }
+        public String getVisibilityString() {
+            return visibilityString;
+        }
     }
 }

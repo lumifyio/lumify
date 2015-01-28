@@ -21,22 +21,22 @@ import org.securegraph.Vertex;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FormulaEvaluator {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FormulaEvaluator.class);
     private Configuration configuration;
     private OntologyRepository ontologyRepository;
-    private Locale locale;
-    private String timeZone;
-    private static final ThreadLocal<ScriptableObject> threadLocalScope = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, ScriptableObject>> threadLocalScope = new ThreadLocal<>();
 
     @Inject
-    public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository, Locale locale, String timeZone) {
+    public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository) {
         this.configuration = configuration;
         this.ontologyRepository = ontologyRepository;
-        this.locale = locale == null ? Locale.getDefault() : locale;
-        this.timeZone = timeZone;
     }
 
     @Override
@@ -56,36 +56,43 @@ public class FormulaEvaluator {
         }
     }
 
-    public String evaluateTitleFormula(Vertex vertex, String workspaceId, Authorizations authorizations) {
-        return evaluateFormula("Title", vertex, workspaceId, authorizations);
+    public String evaluateTitleFormula(Vertex vertex, UserContext userContext, Authorizations authorizations) {
+        return evaluateFormula("Title", vertex, userContext, authorizations);
     }
 
-    public String evaluateTimeFormula(Vertex vertex, String workspaceId, Authorizations authorizations) {
-        return evaluateFormula("Time", vertex, workspaceId, authorizations);
+    public String evaluateTimeFormula(Vertex vertex, UserContext userContext, Authorizations authorizations) {
+        return evaluateFormula("Time", vertex, userContext, authorizations);
     }
 
-    public String evaluateSubtitleFormula(Vertex vertex, String workspaceId, Authorizations authorizations) {
-        return evaluateFormula("Subtitle", vertex, workspaceId, authorizations);
+    public String evaluateSubtitleFormula(Vertex vertex, UserContext userContext, Authorizations authorizations) {
+        return evaluateFormula("Subtitle", vertex, userContext, authorizations);
     }
 
-    private String evaluateFormula(String type, Vertex vertex, String workspaceId, Authorizations authorizations) {
-        if (Context.getCurrentContext() == null || threadLocalScope.get() == null) {
-            initializeEnvironment();
-        }
+    private String evaluateFormula(String type, Vertex vertex, UserContext userContext, Authorizations authorizations) {
+        checkNotNull(userContext, "userContext cannot be null");
+        Scriptable scope = getScriptable(userContext.getLocale(), userContext.getTimeZone());
 
-        Scriptable scope = threadLocalScope.get();
-
-        String json = toJson(vertex, workspaceId, authorizations);
+        String json = toJson(vertex, userContext.getWorkspaceId(), authorizations);
         Function function = (Function) scope.get("evaluate" + type + "FormulaJson", scope);
         Object result = function.call(Context.getCurrentContext(), scope, scope, new Object[]{json});
 
         return (String) Context.jsToJava(result, String.class);
     }
 
-    protected void initializeEnvironment() {
+    protected Scriptable getScriptable(Locale locale, String timeZone) {
         synchronized (threadLocalScope) {
-            ScriptableObject scope = setupContext(getOntologyJson(), getConfigurationJson(), timeZone);
-            threadLocalScope.set(scope);
+            Map<String, ScriptableObject> map = threadLocalScope.get();
+            if (map == null) {
+                map = new HashMap<>();
+                threadLocalScope.set(map);
+            }
+            String mapKey = locale.toString() + timeZone;
+            ScriptableObject scope = map.get(mapKey);
+            if (scope == null) {
+                scope = setupContext(getOntologyJson(), getConfigurationJson(locale), timeZone);
+                map.put(mapKey, scope);
+            }
+            return scope;
         }
     }
 
@@ -137,8 +144,8 @@ public class FormulaEvaluator {
         }
     }
 
-    protected String getConfigurationJson() {
-        return configuration.toJSON(this.locale).toString();
+    protected String getConfigurationJson(Locale locale) {
+        return configuration.toJSON(locale).toString();
     }
 
     private static Object evaluateFile(ScriptableObject scope, String filename) {
@@ -156,5 +163,29 @@ public class FormulaEvaluator {
     protected String toJson(Vertex vertex, String workspaceId, Authorizations authorizations) {
         ClientApiVertex v = ClientApiConverter.toClientApiVertex(vertex, workspaceId, authorizations);
         return v.toString();
+    }
+
+    public static class UserContext {
+        private final Locale locale;
+        private final String timeZone;
+        private final String workspaceId;
+
+        public UserContext(Locale locale, String timeZone, String workspaceId) {
+            this.locale = locale == null ? Locale.getDefault() : locale;
+            this.timeZone = timeZone;
+            this.workspaceId = workspaceId;
+        }
+
+        public Locale getLocale() {
+            return locale;
+        }
+
+        public String getTimeZone() {
+            return timeZone;
+        }
+
+        public String getWorkspaceId() {
+            return workspaceId;
+        }
     }
 }

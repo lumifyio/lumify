@@ -27,6 +27,7 @@ import org.securegraph.util.ConvertingIterable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
@@ -320,7 +321,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public ClientApiWorkspaceDiff getDiff(Workspace workspace, User user) {
+    public ClientApiWorkspaceDiff getDiff(Workspace workspace, User user, Locale locale, String timeZone) {
         return new ClientApiWorkspaceDiff();
     }
 
@@ -329,9 +330,9 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         List<SqlWorkspaceUser> sqlWorkspaceUsers = getSqlWorkspaceUserLists(workspaceId);
         for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
             if (workspaceUser.getUser().getUserId().equals(user.getUserId()) && (
-                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.COMMENT.toString()) ||
-                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.WRITE.toString()
-            ))) {
+                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.COMMENT.toString())
+                            || workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.WRITE.toString()))
+                    ) {
                 return true;
             }
         }

@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.formula.FormulaEvaluator;
 import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -34,6 +35,7 @@ import org.securegraph.util.VerticesToEdgeIdsIterable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -506,7 +508,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public ClientApiWorkspaceDiff getDiff(final Workspace workspace, final User user) {
+    public ClientApiWorkspaceDiff getDiff(final Workspace workspace, final User user, final Locale locale, final String timeZone) {
         if (!hasReadPermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
@@ -517,7 +519,8 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 List<WorkspaceEntity> workspaceEntities = findEntitiesNoLock(workspace, user);
                 List<Edge> workspaceEdges = toList(findEdges(workspace, workspaceEntities, user));
 
-                return workspaceDiff.diff(workspace, workspaceEntities, workspaceEdges, user);
+                FormulaEvaluator.UserContext userContext = new FormulaEvaluator.UserContext(locale, timeZone, workspace.getWorkspaceId());
+                return workspaceDiff.diff(workspace, workspaceEntities, workspaceEdges, userContext, user);
             }
         });
     }

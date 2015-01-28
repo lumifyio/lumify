@@ -167,6 +167,7 @@ public class JsonSerializer {
     }
 
     public static JSONObject toJsonProperty(Property property) {
+        checkNotNull(property, "property cannot be null");
         JSONObject result = new JSONObject();
         result.put("key", property.getKey());
         result.put("name", property.getName());
