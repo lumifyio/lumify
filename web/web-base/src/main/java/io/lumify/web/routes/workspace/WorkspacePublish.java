@@ -35,11 +35,9 @@ import org.securegraph.mutation.ExistingElementMutation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.count;
-import static org.securegraph.util.IterableUtils.toList;
 
 public class WorkspacePublish extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspacePublish.class);
@@ -193,40 +191,10 @@ public class WorkspacePublish extends BaseRequestHandler {
 
                 String propertyKey = propertyPublishItem.getKey();
                 String propertyName = propertyPublishItem.getName();
-                String propertyVisibilityString = propertyPublishItem.getVisibilityString();
-
+                
                 OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(propertyName);
                 checkNotNull(ontologyProperty, "Could not find ontology property: " + propertyName);
                 if (!ontologyProperty.getUserVisible() || propertyName.equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
-                    continue;
-                }
-
-                List<Property> properties = toList(element.getProperties(propertyKey, propertyName));
-                SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
-                boolean propertyFailed = false;
-                for (int propertyIndex = 0; propertyIndex < properties.size(); propertyIndex++) {
-                    Property property = properties.get(propertyIndex);
-                    if (propertyVisibilityString != null &&
-                            !property.getVisibility().getVisibilityString().equals(propertyVisibilityString)) {
-                        continue;
-                    }
-                    SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
-
-                    if (propertySandboxStatus == SandboxStatus.PUBLIC && !WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
-                        String error_msg;
-                        if (data.getAction() == ClientApiPublishItem.Action.delete) {
-                            error_msg = "Cannot delete a public property";
-                        } else {
-                            error_msg = "Property is already public";
-                        }
-                        LOGGER.warn(error_msg);
-                        data.setErrorMessage(error_msg);
-                        workspacePublishResponse.addFailure(data);
-                        propertyFailed = true;
-                    }
-                }
-
-                if (propertyFailed) {
                     continue;
                 }
 
