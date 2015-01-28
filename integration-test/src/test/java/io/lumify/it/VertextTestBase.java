@@ -43,7 +43,7 @@ public abstract class VertextTestBase extends TestBase {
         LoopingIterator propertyVizIterator = new LoopingIterator(propertyVisibilities);
         List<String> vertexIds = new ArrayList<>();
         for (int i = 0; i < numVertices; i++) {
-            ClientApiElement vertex = setupVertexApi.create(CONCEPT_TEST_PERSON, (String) vertexVizIterator.next());
+            ClientApiElement vertex = setupVertexApi.create(TestOntology.CONCEPT_PERSON, (String) vertexVizIterator.next());
             String vertexId = vertex.getId();
             setVertexProperties(numPropertiesPerVertex, propertyVizIterator, vertexId);
             vertexIds.add(vertexId);

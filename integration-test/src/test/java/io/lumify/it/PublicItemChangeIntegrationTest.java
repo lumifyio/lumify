@@ -32,17 +32,17 @@ public class PublicItemChangeIntegrationTest extends TestBase {
 
     private void createUsers() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
         lumifyApi.logout();
 
         lumifyApi = login(USERNAME_TEST_USER_2);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_2, "auth1");
         lumifyApi.logout();
     }
 
     private void createTestGraph() throws ApiException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         v1 = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "auth1");
         lumifyApi.getVertexApi().setProperty(v1.getId(), "key1", TestOntology.PROPERTY_NAME, "Joe", "auth1", "test");
