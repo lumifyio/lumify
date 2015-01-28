@@ -8,9 +8,10 @@ import java.util.List;
 
 public abstract class LongRunningProcessRepository {
     public static final String VISIBILITY_STRING = "longRunningProcess";
-    public static final String LONG_RUNNING_PROCESS_CONCEPT_IRI = "http://lumify.io/longRunningProcess";
-    public static final String LONG_RUNNING_PROCESS_TO_USER_EDGE_IRI = "http://lumify.io/longRunningProcess/toUser";
+    public static final String LONG_RUNNING_PROCESS_CONCEPT_IRI = "http://lumify.io/longRunningProcess#longRunningProcess";
+    public static final String LONG_RUNNING_PROCESS_TO_USER_EDGE_IRI = "http://lumify.io/longRunningProcess#hasLongRunningProcess";
     public static final String LONG_RUNNING_PROCESS_ID_PREFIX = "LONG_RUNNING_PROCESS_";
+    public static final String OWL_IRI = "http://lumify.io/longRunningProcess";
 
     public abstract String enqueue(JSONObject longRunningProcessQueueItem, User user, Authorizations authorizations);
 

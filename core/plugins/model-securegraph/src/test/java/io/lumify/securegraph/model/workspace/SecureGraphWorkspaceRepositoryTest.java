@@ -75,7 +75,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         user2 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
-        ontologyRepository = new ReadOnlyInMemoryOntologyRepository(lumifyConfiguration);
+        ontologyRepository = new ReadOnlyInMemoryOntologyRepository(graph, lumifyConfiguration);
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 
