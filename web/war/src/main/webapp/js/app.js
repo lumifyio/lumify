@@ -45,6 +45,13 @@ define([
 
     return defineComponent(App, withFileDrop, withDataRequest);
 
+    function preventPinchToZoom(e) {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
     function App() {
         var Graph3D,
             MAX_RESIZE_TRIGGER_INTERVAL = 250,
@@ -89,6 +96,7 @@ define([
             }
 
             this.$node.empty();
+            document.removeEventListener('mousewheel', preventPinchToZoom);
         });
 
         this.after('initialize', function() {
@@ -96,6 +104,7 @@ define([
 
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
 
+            document.addEventListener('mousewheel', preventPinchToZoom, true);
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
 
             this.on(document, 'error', this.onError);
