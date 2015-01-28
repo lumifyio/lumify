@@ -44,7 +44,9 @@ define([
 
                 this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
 
-                ConceptSelect.attachTo(this.popover.find('.concept'));
+                ConceptSelect.attachTo(this.popover.find('.concept'), {
+                    focus: true
+                });
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
                 this.positionDialog();
 
@@ -53,8 +55,6 @@ define([
                     cancelSelector: this.onCancel
                 });
                 this.on(this.popover, 'conceptSelected', this.onConceptSelected);
-
-                this.popover.find('.concept input').focus();
             })
         });
 

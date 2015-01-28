@@ -35,7 +35,6 @@ define([
             this.on('enableConcept', this.onEnableConcept);
 
             this.setupTypeahead();
-
         });
 
         this.onSelectConceptId = function(event, data) {
@@ -75,50 +74,57 @@ define([
                 .done(function(concepts) {
                     concepts.splice(0, 0, self.attr.defaultText);
 
-                    self.select('fieldSelector')
-                        .attr('placeholder', self.attr.defaultText)
-                        .typeahead({
-                            minLength: 0,
-                            items: Number.MAX_VALUE,
-                            source: concepts,
-                            matcher: function(concept) {
-                                if ($.trim(this.query) === '') {
-                                    return true;
-                                }
-                                if (concept === self.attr.defaultText) {
-                                    return false;
-                                }
+                    var field = self.select('fieldSelector').attr('placeholder', self.attr.defaultText)
 
-                                return Object.getPrototypeOf(this).matcher.call(this, concept.flattenedDisplayName);
-                            },
-                            sorter: _.identity,
-                            updater: function(conceptId) {
-                                var $element = this.$element,
-                                    concept = self.conceptsById[conceptId];
-
-                                self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
-                                _.defer(function() {
-                                    $element.blur();
-                                });
-                                return concept && concept.displayName || '';
-                            },
-                            highlighter: function(concept) {
-                                return conceptTemplate(concept === self.attr.defaultText ?
-                                {
-                                    concept: {
-                                        displayName: concept,
-                                        rawConcept: { }
-                                    },
-                                    path: null,
-                                    marginLeft: 0
-                                } : {
-                                    concept: concept,
-                                    path: concept.flattenedDisplayName.replace(/\/?[^\/]+$/, ''),
-                                    marginLeft: concept.depth
-                                });
+                    field.typeahead({
+                        minLength: 0,
+                        items: Number.MAX_VALUE,
+                        source: concepts,
+                        matcher: function(concept) {
+                            if ($.trim(this.query) === '') {
+                                return true;
                             }
+                            if (concept === self.attr.defaultText) {
+                                return false;
+                            }
+
+                            return Object.getPrototypeOf(this).matcher.call(this, concept.flattenedDisplayName);
+                        },
+                        sorter: _.identity,
+                        updater: function(conceptId) {
+                            var $element = this.$element,
+                                concept = self.conceptsById[conceptId];
+
+                            self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
+                            _.defer(function() {
+                                $element.blur();
+                            });
+                            return concept && concept.displayName || '';
+                        },
+                        highlighter: function(concept) {
+                            return conceptTemplate(concept === self.attr.defaultText ?
+                            {
+                                concept: {
+                                    displayName: concept,
+                                    rawConcept: { }
+                                },
+                                path: null,
+                                marginLeft: 0
+                            } : {
+                                concept: concept,
+                                path: concept.flattenedDisplayName.replace(/\/?[^\/]+$/, ''),
+                                marginLeft: concept.depth
+                            });
+                        }
+                    })
+
+                    if (self.attr.focus) {
+                        _.defer(function() {
+                            field.focus();
                         })
-                        .data('typeahead').lookup = allowEmptyLookup;
+                    }
+
+                    field.data('typeahead').lookup = allowEmptyLookup;
                 });
         }
 
