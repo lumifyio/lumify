@@ -2,12 +2,10 @@
 
 DIR=$(cd $(dirname "$0") && pwd)
 
-SRC_DIR=${DIR}/..
-
 case $(uname) in
   Linux)
     PERSISTENT_DIR=${DIR}/lumify-dev-persistent
-    sudo rm -rf ${PERSISTENT_DIR}
+    rm -rf ${PERSISTENT_DIR}
     ;;
   Darwin)
     dev=$(boot2docker ssh blkid -L boot2docker-data)
@@ -16,6 +14,8 @@ case $(uname) in
     gid=$(boot2docker ssh id -g)
     PERSISTENT_DIR=${mnt}/lumify-dev-persistent
     boot2docker ssh sudo rm -rf ${PERSISTENT_DIR}
+    LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+    rm -rf ${LOCAL_PERSISTENT_DIR}
     ;;
   *)
     echo "unexpected uname: $(uname)"
