@@ -1,5 +1,6 @@
 package io.lumify.core.formula;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -22,18 +23,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
-/**
- * Not Thread Safe, Do not share instance across threads
- */
 public class FormulaEvaluator {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FormulaEvaluator.class);
     private Configuration configuration;
     private OntologyRepository ontologyRepository;
-    private Context context;
-    private ScriptableObject scope;
     private Locale locale;
     private String timeZone;
-    private boolean skipCloseWarning;
+    private static final ThreadLocal<ScriptableObject> threadLocalScope = new ThreadLocal<>();
 
     @Inject
     public FormulaEvaluator(Configuration configuration, OntologyRepository ontologyRepository, Locale locale, String timeZone) {
@@ -41,23 +37,23 @@ public class FormulaEvaluator {
         this.ontologyRepository = ontologyRepository;
         this.locale = locale == null ? Locale.getDefault() : locale;
         this.timeZone = timeZone;
-        this.skipCloseWarning = false;
     }
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        if (!skipCloseWarning) {
+        if (Context.getCurrentContext() != null) {
             LOGGER.warn("close() method not called to clean up JavaScript Context");
-            this.close();
         }
     }
 
     public void close() {
-        if (context != null) {
-            context.exit();
+        synchronized (threadLocalScope) {
+            if (Context.getCurrentContext() != null) {
+                Context.exit();
+                threadLocalScope.remove();
+            }
         }
-        this.skipCloseWarning = true;
     }
 
     public String evaluateTitleFormula(Vertex vertex, String workspaceId, Authorizations authorizations) {
@@ -73,69 +69,83 @@ public class FormulaEvaluator {
     }
 
     private String evaluateFormula(String type, Vertex vertex, String workspaceId, Authorizations authorizations) {
-        if (context == null) {
+        if (Context.getCurrentContext() == null || threadLocalScope.get() == null) {
             initializeEnvironment();
         }
 
+        Scriptable scope = threadLocalScope.get();
+
         String json = toJson(vertex, workspaceId, authorizations);
         Function function = (Function) scope.get("evaluate" + type + "FormulaJson", scope);
-        Object result = function.call(context, scope, scope, new Object[]{json});
+        Object result = function.call(Context.getCurrentContext(), scope, scope, new Object[]{json});
 
         return (String) Context.jsToJava(result, String.class);
     }
 
     protected void initializeEnvironment() {
-        setupContext();
-        loadJavaScript();
+        synchronized (threadLocalScope) {
+            ScriptableObject scope = setupContext(getOntologyJson(), getConfigurationJson(), timeZone);
+            threadLocalScope.set(scope);
+        }
     }
 
-    protected void setupContext() {
-        if (this.context != null) {
+    protected static ScriptableObject setupContext(String ontologyJson, String configurationJson, String timeZone) {
+        if (Context.getCurrentContext() != null) {
             Context.exit();
+            threadLocalScope.remove();
         }
-        this.context = Context.enter();
+        Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_1_6);
 
         final RequireJsSupport browserSupport = new RequireJsSupport();
 
-        this.scope = (ScriptableObject) context.initStandardObjects(browserSupport);
+        ScriptableObject scope = context.initStandardObjects(browserSupport, true);
 
         try {
-            scope.put("ONTOLOGY_JSON", scope, Context.toObject(getOntologyJson(), scope));
-            scope.put("CONFIG_JSON", scope, Context.toObject(getConfigurationJson(), scope));
+            scope.put("ONTOLOGY_JSON", scope, Context.toObject(ontologyJson, scope));
+            scope.put("CONFIG_JSON", scope, Context.toObject(configurationJson, scope));
             scope.put("USERS_TIMEZONE", scope, Context.toObject(timeZone, scope));
         } catch (Exception e) {
             throw new LumifyException("Json resource not available", e);
         }
 
-        String[] names = new String[] { "print", "load", "consoleWarn", "consoleError", "readFile" };
+        String[] names = new String[]{"print", "load", "consoleWarn", "consoleError", "readFile"};
         browserSupport.defineFunctionProperties(names, scope.getClass(), ScriptableObject.DONTENUM);
 
         Scriptable argsObj = context.newArray(scope, new Object[]{});
         scope.defineProperty("arguments", argsObj, ScriptableObject.DONTENUM);
+
+        loadJavaScript(scope);
+
+        scope.sealObject();
+        return scope;
     }
 
-    private void loadJavaScript() {
-        evaluateFile("libs/underscore.js");
-        evaluateFile("libs/r.js");
-        evaluateFile("libs/windowTimers.js");
-        evaluateFile("loader.js");
+    private static void loadJavaScript(ScriptableObject scope) {
+        evaluateFile(scope, "libs/underscore.js");
+        evaluateFile(scope, "libs/r.js");
+        evaluateFile(scope, "libs/windowTimers.js");
+        evaluateFile(scope, "loader.js");
     }
 
-    protected String getOntologyJson() throws Exception {
+    protected String getOntologyJson() {
         ClientApiOntology result = ontologyRepository.getClientApiObject();
-        return ObjectMapperFactory.getInstance().writeValueAsString(result);
+        try {
+            return ObjectMapperFactory.getInstance().writeValueAsString(result);
+        } catch (JsonProcessingException ex) {
+            throw new LumifyException("Could not evaluate JSON: " + result, ex);
+        }
     }
 
-    protected String getConfigurationJson() throws Exception {
+    protected String getConfigurationJson() {
         return configuration.toJSON(this.locale).toString();
     }
 
-    private Object evaluateFile(String filename) {
+    private static Object evaluateFile(ScriptableObject scope, String filename) {
         InputStream is = FormulaEvaluator.class.getResourceAsStream(filename);
         if (is != null) {
             try {
-                return context.evaluateString(scope, IOUtils.toString(is), filename, 0, null);
+                return Context.getCurrentContext().evaluateString(scope, IOUtils.toString(is), filename, 0, null);
             } catch (IOException e) {
                 LOGGER.error("File not readable %s", filename);
             }
