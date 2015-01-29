@@ -18,6 +18,8 @@ import org.securegraph.Property;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -68,25 +70,45 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
         }
     }
 
-    public void importRdf(Graph graph, InputStream in, File baseDir, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
+    private void importRdf(Graph graph, InputStream in, File baseDir, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
         if (rdfConceptTypeIri != null && data != null) {
             LumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), rdfConceptTypeIri, data.createPropertyMetadata(), visibility, getAuthorizations());
         }
 
         Model model = ModelFactory.createDefaultModel();
         model.read(in, null);
-        importRdfModel(graph, model, baseDir, data, visibility, authorizations);
-    }
 
-    public void importRdfModel(Graph graph, Model model, File baseDir, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
-        ResIterator subjects = model.listSubjects();
-        while (subjects.hasNext()) {
-            Resource subject = subjects.next();
-            importSubject(graph, subject, baseDir, data, visibility, authorizations);
+        Results results = new Results();
+        importRdfModel(results, graph, model, baseDir, data, visibility, authorizations);
+
+        graph.flush();
+
+        LOGGER.debug("pushing vertices from RDF import on to work queue");
+        for (Vertex vertex : results.getVertices()) {
+            getWorkQueueRepository().pushElement(vertex);
+            for (Property prop : vertex.getProperties()) {
+                getWorkQueueRepository().pushGraphPropertyQueue(vertex, prop);
+            }
+        }
+
+        LOGGER.debug("pushing edges from RDF import on to work queue");
+        for (Edge edge : results.getEdges()) {
+            getWorkQueueRepository().pushElement(edge);
+            for (Property prop : edge.getProperties()) {
+                getWorkQueueRepository().pushGraphPropertyQueue(edge, prop);
+            }
         }
     }
 
-    public void importSubject(Graph graph, Resource subject, File baseDir, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
+    private void importRdfModel(Results results, Graph graph, Model model, File baseDir, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
+        ResIterator subjects = model.listSubjects();
+        while (subjects.hasNext()) {
+            Resource subject = subjects.next();
+            importSubject(results, graph, subject, baseDir, data, visibility, authorizations);
+        }
+    }
+
+    private void importSubject(Results results, Graph graph, Resource subject, File baseDir, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
         LOGGER.info("importSubject: %s", subject.toString());
         String graphVertexId = getGraphVertexId(subject);
         VertexBuilder vertexBuilder = graph.prepareVertex(graphVertexId, visibility);
@@ -116,12 +138,13 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         Vertex v = vertexBuilder.save(authorizations);
+        results.addVertex(v);
 
         if (data != null) {
             String edgeId = data.getElement().getId() + "_hasEntity_" + v.getId();
             EdgeBuilder e = graph.prepareEdge(edgeId, (Vertex) data.getElement(), v, hasEntityIri, visibility);
             data.setVisibilityJsonOnElement(e);
-            e.save(authorizations);
+            results.addEdge(e.save(authorizations));
 
             addVertexToWorkspaceIfNeeded(data, v);
         }
@@ -134,7 +157,7 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
                 if (isConceptTypeResource(statement)) {
                     continue;
                 }
-                importResource(graph, v, statement, data, visibility, authorizations);
+                importResource(results, graph, v, statement, data, visibility, authorizations);
             }
         }
     }
@@ -197,7 +220,7 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
         return spv;
     }
 
-    private void importResource(Graph graph, Vertex outVertex, Statement statement, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
+    private void importResource(Results results, Graph graph, Vertex outVertex, Statement statement, GraphPropertyWorkData data, Visibility visibility, Authorizations authorizations) {
         String label = statement.getPredicate().toString();
         String vertexId = getGraphVertexId(statement.getResource());
         VertexBuilder inVertexBuilder = graph.prepareVertex(vertexId, visibility);
@@ -205,6 +228,7 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
             data.setVisibilityJsonOnElement(inVertexBuilder);
         }
         Vertex inVertex = inVertexBuilder.save(authorizations);
+        results.addVertex(inVertex);
         if (data != null) {
             addVertexToWorkspaceIfNeeded(data, inVertex);
         }
@@ -214,7 +238,7 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
         if (data != null) {
             data.setVisibilityJsonOnElement(e);
         }
-        e.save(authorizations);
+        results.addEdge(e.save(authorizations));
         LOGGER.info("importResource: %s = %s", label, vertexId);
     }
 
@@ -224,5 +248,26 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
         int lastPound = subjectUri.lastIndexOf('#');
         checkArgument(lastPound >= 1, "Could not find '#' in subject uri: " + subjectUri);
         return subjectUri.substring(lastPound + 1);
+    }
+
+    private static class Results {
+        private final List<Vertex> vertices = new ArrayList<>();
+        private final List<Edge> edges = new ArrayList<>();
+
+        public void addEdge(Edge edge) {
+            this.edges.add(edge);
+        }
+
+        public void addVertex(Vertex vertex) {
+            this.vertices.add(vertex);
+        }
+
+        public Iterable<Edge> getEdges() {
+            return edges;
+        }
+
+        public Iterable<Vertex> getVertices() {
+            return vertices;
+        }
     }
 }
