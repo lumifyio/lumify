@@ -67,7 +67,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         super(config);
         this.graph = graph;
 
-        authorizationRepository.addAuthorizationToGraph(SecureGraphOntologyRepository.VISIBILITY_STRING);
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
         Set<String> authorizationsSet = new HashSet<>();
         authorizationsSet.add(VISIBILITY_STRING);

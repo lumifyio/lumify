@@ -14,9 +14,11 @@ public class InMemoryAuthorizationRepository implements AuthorizationRepository 
     private List<String> authorizations = new ArrayList<String>();
 
     @Override
-    public void addAuthorizationToGraph(String auth) {
-        LOGGER.info("Adding authorization to graph user %s", auth);
-        authorizations.add(auth);
+    public void addAuthorizationToGraph(String... auths) {
+        for (String auth : auths) {
+            LOGGER.info("Adding authorization to graph user %s", auth);
+            authorizations.add(auth);
+        }
     }
 
     @Override

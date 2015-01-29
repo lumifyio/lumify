@@ -163,7 +163,7 @@ public class TermMentionBuilder {
         checkArgument(end >= 0, "start must be greater than or equal to 0");
 
         String vertexId = createVertexId();
-        Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilityJson).getVisibility(), TermMentionRepository.VISIBILITY);
+        Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilityJson).getVisibility(), TermMentionRepository.VISIBILITY_STRING);
         VertexBuilder vertexBuilder = graph.prepareVertex(vertexId, visibility);
         LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(vertexBuilder, this.visibilityJson, visibility);
         LumifyProperties.TERM_MENTION_CONCEPT_TYPE.setProperty(vertexBuilder, this.conceptIri, visibility);

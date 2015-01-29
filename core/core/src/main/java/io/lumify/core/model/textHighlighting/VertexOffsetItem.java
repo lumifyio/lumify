@@ -29,11 +29,11 @@ public class VertexOffsetItem extends OffsetItem {
         String[] authArray = this.authorizations.getAuthorizations();
         boolean hasTermMentionAuth = false;
         for (String auth : authArray) {
-            if (TermMentionRepository.VISIBILITY.equals(auth)) {
+            if (TermMentionRepository.VISIBILITY_STRING.equals(auth)) {
                 hasTermMentionAuth = true;
             }
         }
-        checkArgument(hasTermMentionAuth, TermMentionRepository.VISIBILITY + " is a required auth");
+        checkArgument(hasTermMentionAuth, TermMentionRepository.VISIBILITY_STRING + " is a required auth");
     }
 
     @Override

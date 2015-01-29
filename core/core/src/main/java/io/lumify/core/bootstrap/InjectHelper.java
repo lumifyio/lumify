@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.lumify.core.bootstrap.lib.LibLoader;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
@@ -27,7 +28,7 @@ public class InjectHelper {
 
     public static <T> T inject(T o) {
         if (injector == null) {
-            throw new RuntimeException("Could not find injector");
+            throw new LumifyException("Could not find injector");
         }
         injector.injectMembers(o);
         return o;
@@ -44,7 +45,7 @@ public class InjectHelper {
 
     public static <T> T getInstance(Class<? extends T> clazz) {
         if (injector == null) {
-            throw new RuntimeException("Could not find injector");
+            throw new LumifyException("Could not find injector");
         }
         return injector.getInstance(clazz);
     }

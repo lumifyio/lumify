@@ -79,7 +79,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         config.put(KnownEntityExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file://" + dictionaryPath);
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
         authorizations = new InMemoryAuthorizations();
-        termMentionAuthorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
+        termMentionAuthorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY_STRING);
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);

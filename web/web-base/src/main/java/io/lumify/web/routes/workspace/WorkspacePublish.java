@@ -255,7 +255,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         // Need to elevate with videoFrame auth to be able to publish VideoFrame properties
-        Authorizations authWithVideoFrame = authorizationRepository.createAuthorizations(authorizations, VideoFrameInfo.VISIBILITY);
+        Authorizations authWithVideoFrame = authorizationRepository.createAuthorizations(authorizations, VideoFrameInfo.VISIBILITY_STRING);
         vertex = graph.getVertex(vertex.getId(), authWithVideoFrame);
 
         LOGGER.debug("publishing vertex %s(%s)", vertex.getId(), vertex.getVisibility().toString());

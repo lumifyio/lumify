@@ -1,7 +1,7 @@
 package io.lumify.core.ingest.video;
 
 public class VideoFrameInfo {
-    public static final String VISIBILITY = "videoFrame";
+    public static final String VISIBILITY_STRING = "videoFrame";
     private final String propertyKey;
     private final long frameStartTime;
     private final Long frameEndTime;
