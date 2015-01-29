@@ -72,6 +72,12 @@ define([
             return ajax('GET', '/vertex/edges', parameters);
         },
 
+        'delete': function(vertexId) {
+            return ajax('DELETE', '/vertex', {
+                graphVertexId: vertexId
+            })
+        },
+
         deleteProperty: function(vertexId, property) {
             return ajax('DELETE', '/vertex/property', {
                 graphVertexId: vertexId,

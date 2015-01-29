@@ -1,6 +1,8 @@
 package io.lumify.core.model.user;
 
+import com.google.common.base.Joiner;
 import com.google.inject.Inject;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -20,32 +22,35 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     private Graph graph;
     private LockRepository lockRepository;
 
-    public void addAuthorizationToGraph(final String auth) {
-        LOGGER.info("adding authorization [%s] for secure graph user", auth);
+    public void addAuthorizationToGraph(final String... auths) {
+        LOGGER.info("adding authorizations [%s] for secure graph user", Joiner.on(", ").join(auths));
         lockRepository.lock(LOCK_NAME, new Runnable() {
             @Override
             public void run() {
-                LOGGER.debug("got lock to add authorization [%s] for secure graph user", auth);
+                LOGGER.debug("got lock to add authorizations [%s] for secure graph user", Joiner.on(", ").join(auths));
                 if (graph instanceof AccumuloGraph) {
-                    try {
-                        AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
-                        String principal = accumuloGraph.getConnector().whoami();
-                        Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
-                        if (currentAuthorizations.contains(auth)) {
-                            return;
+                    for(String auth : auths) {
+                        LOGGER.debug("adding authorization [%s] for secure graph user", auth);
+                        try {
+                            AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
+                            String principal = accumuloGraph.getConnector().whoami();
+                            Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
+                            if (currentAuthorizations.contains(auth)) {
+                                return;
+                            }
+                            List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
+                            for (byte[] currentAuth : currentAuthorizations) {
+                                newAuthorizationsArray.add(currentAuth);
+                            }
+                            newAuthorizationsArray.add(auth.getBytes(Constants.UTF8));
+                            Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
+                            accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
+                        } catch (Exception ex) {
+                            throw new LumifyException("Could not update authorizations in accumulo", ex);
                         }
-                        List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
-                        for (byte[] currentAuth : currentAuthorizations) {
-                            newAuthorizationsArray.add(currentAuth);
-                        }
-                        newAuthorizationsArray.add(auth.getBytes(Constants.UTF8));
-                        Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
-                        accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
-                    } catch (Exception ex) {
-                        throw new RuntimeException("Could not update authorizations in accumulo", ex);
                     }
                 } else {
-                    throw new RuntimeException("graph type not supported to add authorizations.");
+                    throw new LumifyException("graph type not supported to add authorizations.");
                 }
             }
         });

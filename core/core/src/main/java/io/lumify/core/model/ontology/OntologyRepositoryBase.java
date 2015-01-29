@@ -6,6 +6,7 @@ import com.google.common.io.Files;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -24,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
+import org.securegraph.DefinePropertyBuilder;
+import org.securegraph.Graph;
 import org.securegraph.TextIndexHint;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.CloseableUtils;
@@ -81,9 +84,10 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected void importBaseOwlFile(Authorizations authorizations) {
         importResourceOwl("base.owl", "http://lumify.io", authorizations);
-        importResourceOwl("user.owl", UserRepository.USER_CONCEPT_IRI, authorizations);
-        importResourceOwl("workspace.owl", WorkspaceRepository.WORKSPACE_CONCEPT_IRI, authorizations);
+        importResourceOwl("user.owl", UserRepository.OWL_IRI, authorizations);
+        importResourceOwl("workspace.owl", WorkspaceRepository.OWL_IRI, authorizations);
         importResourceOwl("comment.owl", "http://lumify.io/comment", authorizations);
+        importResourceOwl("longRunningProcess.owl", LongRunningProcessRepository.OWL_IRI, authorizations);
     }
 
     private void importResourceOwl(String fileName, String iri, Authorizations authorizations) {
@@ -1035,5 +1039,21 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     public final Configuration getConfiguration() {
         return configuration;
+    }
+
+    protected void definePropertyOnGraph(Graph graph, String propertyIri, PropertyType dataType, Collection<TextIndexHint> textIndexHints, Double boost) {
+        DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyIri);
+        definePropertyBuilder.dataType(PropertyType.getTypeClass(dataType));
+        if (dataType == PropertyType.STRING) {
+            definePropertyBuilder.textIndexHint(textIndexHints);
+        }
+        if (boost != null) {
+            if (graph.isFieldBoostSupported()) {
+                definePropertyBuilder.boost(boost);
+            } else {
+                LOGGER.warn("Field boosting is not support by the graph");
+            }
+        }
+        definePropertyBuilder.define();
     }
 }

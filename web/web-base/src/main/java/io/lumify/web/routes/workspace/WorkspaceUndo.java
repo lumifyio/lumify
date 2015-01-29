@@ -3,15 +3,13 @@ package io.lumify.web.routes.workspace;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -21,7 +19,6 @@ import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.*;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.util.IterableUtils;
 
@@ -33,12 +30,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class WorkspaceUndo extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUndo.class);
-    private final TermMentionRepository termMentionRepository;
     private final Graph graph;
-    private final VisibilityTranslator visibilityTranslator;
-    private final UserRepository userRepository;
     private final WorkQueueRepository workQueueRepository;
-    private final AuditRepository auditRepository;
     private final WorkspaceHelper workspaceHelper;
     private String entityHasImageIri;
     private String artifactContainsImageOfEntityIri;
@@ -57,13 +50,9 @@ public class WorkspaceUndo extends BaseRequestHandler {
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository) {
         super(userRepository, workspaceRepository, configuration);
-        this.termMentionRepository = termMentionRepository;
         this.graph = graph;
-        this.visibilityTranslator = visibilityTranslator;
         this.workspaceHelper = workspaceHelper;
-        this.userRepository = userRepository;
         this.workQueueRepository = workQueueRepository;
-        this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
 
         this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
@@ -112,17 +101,25 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 ClientApiVertexUndoItem vertexUndoItem = (ClientApiVertexUndoItem) data;
                 String vertexId = vertexUndoItem.getVertexId();
                 checkNotNull(vertexId);
-                Vertex vertex = graph.getVertex(vertexId, authorizations);
+                Vertex vertex = graph.getVertex(vertexId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 checkNotNull(vertex);
-                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
+                if (WorkspaceDiffHelper.isPublicDelete(vertex, authorizations)) {
+                    LOGGER.debug("un-hiding vertex: %s (workspaceId: %s)", vertex.getId(), workspaceId);
+                    // TODO see WorkspaceHelper.deleteVertex for all the other things we need to bring back
+                    graph.markVertexVisible(vertex, new Visibility(workspaceId), authorizations);
+                    graph.flush();
+                    workQueueRepository.broadcastUndoVertexDelete(vertex);
+                } else if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
                     String msg = "Cannot undo a public vertex";
                     LOGGER.warn(msg);
                     data.setErrorMessage(msg);
                     workspaceUndoResponse.addFailure(data);
-                    continue;
+                } else {
+                    workspaceHelper.deleteVertex(vertex, workspaceId, false, authorizations, user);
+                    verticesDeleted.put(vertexId);
+                    graph.flush();
+                    workQueueRepository.broadcastUndoVertex(vertex);
                 }
-                undoVertex(vertex, workspaceId, authorizations, user);
-                verticesDeleted.put(vertexId);
             } catch (Exception ex) {
                 LOGGER.error("Error undoing %s", data.toString(), ex);
                 data.setErrorMessage(ex.getMessage());
@@ -145,7 +142,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
 
                 ClientApiRelationshipUndoItem relationshipUndoItem = (ClientApiRelationshipUndoItem) data;
-                Edge edge = graph.getEdge(relationshipUndoItem.getEdgeId(), authorizations);
+                Edge edge = graph.getEdge(relationshipUndoItem.getEdgeId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 if (edge == null) {
                     continue;
                 }
@@ -156,14 +153,23 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
 
                 checkNotNull(edge);
-                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
+
+                if (WorkspaceDiffHelper.isPublicDelete(edge, authorizations)) {
+                    LOGGER.debug("un-hiding edge: %s (workspaceId: %s)", edge.getId(), workspaceId);
+                    // TODO see workspaceHelper.deleteEdge for all the other things we need to bring back
+                    graph.markEdgeVisible(edge, new Visibility(workspaceId), authorizations);
+                    graph.flush();
+                    workQueueRepository.broadcastUndoEdgeDelete(edge);
+                } else if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
                     String error_msg = "Cannot undo a public edge";
                     LOGGER.warn(error_msg);
                     data.setErrorMessage(error_msg);
                     workspaceUndoResponse.addFailure(data);
-                    continue;
+                } else {
+                    workspaceHelper.deleteEdge(workspaceId, edge, sourceVertex, destVertex, false, user, authorizations);
+                    graph.flush();
+                    workQueueRepository.broadcastUndoEdge(edge);
                 }
-                workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);
                 data.setErrorMessage(ex.getMessage());
@@ -182,7 +188,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 ClientApiPropertyUndoItem propertyUndoItem = (ClientApiPropertyUndoItem) data;
-                Vertex vertex = graph.getVertex(propertyUndoItem.getVertexId(), authorizations);
+                Vertex vertex = graph.getVertex(propertyUndoItem.getVertexId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 if (vertex == null) {
                     continue;
                 }
@@ -199,14 +205,21 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     }
                     SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
 
-                    if (propertySandboxStatus == SandboxStatus.PUBLIC) {
+                    if (WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
+                        LOGGER.debug("un-hiding property: %s (workspaceId: %s)", property, workspaceId);
+                        vertex.markPropertyVisible(property, new Visibility(workspaceId), authorizations);
+                        graph.flush();
+                        workQueueRepository.broadcastUndoPropertyDelete(vertex, propertyKey, propertyName);
+                    } else if (propertySandboxStatus == SandboxStatus.PUBLIC) {
                         String error_msg = "Cannot undo a public property";
                         LOGGER.warn(error_msg);
                         data.setErrorMessage(error_msg);
                         workspaceUndoResponse.addFailure(data);
-                        continue;
+                    } else {
+                        workspaceHelper.deleteProperty(vertex, property, false, workspaceId, user, authorizations);
+                        graph.flush();
+                        workQueueRepository.broadcastUndoProperty(vertex, propertyKey, propertyName);
                     }
-                    workspaceHelper.deleteProperty(vertex, property, workspaceId, user, authorizations);
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(), ex);
@@ -218,52 +231,4 @@ public class WorkspaceUndo extends BaseRequestHandler {
         graph.flush();
     }
 
-    private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
-        JSONArray unresolved = new JSONArray();
-        VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(vertex);
-        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
-        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-
-        for (Edge edge : vertex.getEdges(Direction.BOTH, entityHasImageIri, authorizations)) {
-            if (edge.getVertexId(Direction.IN).equals(vertex.getId())) {
-                Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
-                Property entityHasImage = outVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
-                outVertex.removeProperty(entityHasImage.getName(), authorizations);
-                this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage);
-            }
-        }
-
-        for (Edge edge : vertex.getEdges(Direction.BOTH, artifactContainsImageOfEntityIri, authorizations)) {
-            for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
-                String multiValueKey = rowKeyProperty.getValue().toString();
-                if (edge.getVertexId(Direction.IN).equals(vertex.getId())) {
-                    Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
-                    // remove property
-                    LumifyProperties.DETECTED_OBJECT.removeProperty(outVertex, multiValueKey, authorizations);
-                    graph.removeEdge(edge, authorizations);
-                    auditRepository.auditRelationship(AuditAction.DELETE, outVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
-                    this.workQueueRepository.pushEdgeDeletion(edge);
-                    this.workQueueRepository.pushGraphPropertyQueue(outVertex, multiValueKey,
-                            LumifyProperties.DETECTED_OBJECT.getPropertyName(), workspaceId, visibilityJson.getSource());
-                }
-            }
-        }
-
-        for (Vertex termMention : termMentionRepository.findResolvedTo(vertex.getId(), authorizations)) {
-            workspaceHelper.unresolveTerm(vertex, termMention, lumifyVisibility, user, authorizations);
-            JSONObject result = new JSONObject();
-            result.put("success", true);
-            unresolved.put(result);
-        }
-
-        Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
-        Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
-        for (Edge edge : workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization)) {
-            graph.removeEdge(edge, systemAuthorization);
-        }
-
-        graph.removeVertex(vertex, authorizations);
-        graph.flush();
-        return unresolved;
-    }
 }

@@ -152,8 +152,8 @@ define([
         this.onVerticesDeleted = function(event, data) {
             var self = this;
 
-            data.vertices.forEach(function(v) {
-                self.graph.removeNode(v.id);
+            data.vertexIds.forEach(function(v) {
+                self.graph.removeNode(v);
             });
 
             self.graph.needsUpdate = true;

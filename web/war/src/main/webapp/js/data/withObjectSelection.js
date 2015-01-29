@@ -23,7 +23,22 @@ define([
     function withObjectSelection() {
 
         var selectedObjects,
-            previousSelectedObjects;
+            previousSelectedObjects,
+            getVertexIdsFromEventOrSelection = function(data) {
+                if (data && data.vertexId) {
+                    return [data.vertexId];
+                }
+
+                if (data && data.vertexIds) {
+                    return data.vertexIds;
+                }
+
+                if (selectedObjects && selectedObjects.vertices.length > 0) {
+                    return _.pluck(selectedObjects.vertices, 'id');
+                }
+
+                return [];
+            };
 
         this.after('initialize', function() {
             ClipboardManager.attachTo(this.$node);
@@ -46,6 +61,17 @@ define([
                     }
                 }
             });
+            this.on('verticesDeleted', function(event, data) {
+                if (selectedObjects) {
+                    if (selectedObjects.vertices.length) {
+                        this.trigger('selectObjects', {
+                            vertices: _.reject(selectedObjects.vertices, function(v) {
+                                return ~data.vertexIds.indexOf(v.id)
+                            })
+                        });
+                    }
+                }
+            })
 
             this.on('searchTitle', this.onSearchTitle);
             this.on('searchRelated', this.onSearchRelated);
@@ -102,6 +128,11 @@ define([
 
         this.onSelectObjects = function(event, data) {
             var self = this,
+                hasItems = data &&
+                    (
+                        (data.vertexIds || data.vertices || []).length > 0 ||
+                        (data.edgeIds || data.edges || []).length > 0
+                    ),
                 promises = [];
 
             this.dataRequestPromise.done(function(dataRequest) {
@@ -130,8 +161,12 @@ define([
 
                 Promise.all(promises)
                     .done(function(result) {
-                        var vertices = result[0] || [],
-                            edges = result[1] || [];
+                        var vertices = _.compact(result[0] || []),
+                            edges = _.compact(result[1] || []);
+
+                        if (!edges.length && !vertices.length && hasItems) {
+                            return;
+                        }
 
                         selectedObjects = {
                             vertices: vertices,
@@ -200,50 +235,37 @@ define([
         };
 
         this.onSearchRelated = function(event, data) {
-            var vertexIds;
-
-            if (selectedObjects && selectedObjects.vertices.length > 0) {
-                var vertices = selectedObjects && selectedObjects.vertices.length > 0 && selectedObjects.vertices;
-                vertexIds = _.pluck(vertices, 'id');
-            } else {
-                vertexIds = [data.vertexId];
+            var vertexIds = getVertexIdsFromEventOrSelection(data);
+            if (vertexIds.length) {
+                this.trigger('searchByRelatedEntity', { vertexIds: vertexIds });
             }
-
-            this.trigger('searchByRelatedEntity', { vertexIds: vertexIds });
         };
 
         this.onAddRelatedItems = function(event, data) {
-            if (!data || _.isUndefined(data.vertexIds)) {
-                if (selectedObjects && selectedObjects.vertices.length > 0) {
-                    data = {
-                        vertexIds: _.pluck(selectedObjects.vertices, 'id')
-                    };
-                } else {
-                    return;
-                }
-            }
+            var vertexIds = getVertexIdsFromEventOrSelection(data);
+            if (vertexIds.length) {
+                Promise.all([
+                    Promise.require('util/popovers/addRelated/addRelated'),
+                    Promise.require('util/vertex/formatters'),
+                    this.dataRequestPromise.then(function(dataRequest) {
+                        return dataRequest('vertex', 'store', { vertexIds: vertexIds })
+                    })
+                ]).done(function(results) {
+                    var RP = results.shift(),
+                        F = results.shift(),
+                        vertex = results.shift();
 
-            Promise.all([
-                Promise.require('util/popovers/addRelated/addRelated'),
-                Promise.require('util/vertex/formatters'),
-                this.dataRequestPromise.then(function(dataRequest) {
-                    return dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
-                })
-            ]).done(function(results) {
-                var RP = results.shift(),
-                    F = results.shift(),
-                    vertex = results.shift();
+                    RP.teardownAll();
 
-                RP.teardownAll();
-
-                RP.attachTo(event.target, {
-                    vertex: vertex,
-                    relatedToVertexIds: data.vertexIds,
-                    anchorTo: {
-                        vertexId: data.vertexIds[0]
-                    }
+                    RP.attachTo(event.target, {
+                        vertex: vertex,
+                        relatedToVertexIds: vertexIds,
+                        anchorTo: {
+                            vertexId: vertexIds[0]
+                        }
+                    });
                 });
-            });
+            }
         };
     }
 });

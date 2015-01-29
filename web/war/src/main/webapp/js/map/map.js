@@ -202,7 +202,7 @@ define([
             this.mapReady(function(map) {
                 var featuresLayer = map.featuresLayer,
                     toRemove = [],
-                    ids = _.pluck(data.vertices, 'id');
+                    ids = data.vertexIds;
 
                 featuresLayer.features.forEach(function removeIfDeleted(feature) {
                     if (~ids.indexOf(feature.id)) {

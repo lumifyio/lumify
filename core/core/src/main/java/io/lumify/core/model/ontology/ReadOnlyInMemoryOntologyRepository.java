@@ -11,6 +11,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
+import org.securegraph.Graph;
 import org.securegraph.TextIndexHint;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 import org.securegraph.util.ConvertingIterable;
@@ -27,15 +28,20 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemoryOntologyRepository.class);
-    private OWLOntologyLoaderConfiguration owlConfig = new OWLOntologyLoaderConfiguration();
-    private Map<String, InMemoryConcept> conceptsCache = new HashMap<>();
-    private Map<String, InMemoryOntologyProperty> propertiesCache = new HashMap<>();
-    private Map<String, InMemoryRelationship> relationshipsCache = new HashMap<>();
-    private List<OwlData> fileCache = new ArrayList<>();
+    private final Graph graph;
+    private final OWLOntologyLoaderConfiguration owlConfig = new OWLOntologyLoaderConfiguration();
+    private final Map<String, InMemoryConcept> conceptsCache = new HashMap<>();
+    private final Map<String, InMemoryOntologyProperty> propertiesCache = new HashMap<>();
+    private final Map<String, InMemoryRelationship> relationshipsCache = new HashMap<>();
+    private final List<OwlData> fileCache = new ArrayList<>();
 
     @Inject
-    public ReadOnlyInMemoryOntologyRepository(Configuration configuration) throws Exception {
+    public ReadOnlyInMemoryOntologyRepository(
+            final Graph graph,
+            final Configuration configuration
+    ) throws Exception {
         super(configuration);
+        this.graph = graph;
 
         clearCache();
         Authorizations authorizations = new InMemoryAuthorizations(VISIBILITY_STRING);
@@ -132,6 +138,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 dataType,
                 displayName,
                 possibleValues,
+                textIndexHints,
                 userVisible,
                 searchable,
                 displayType,
@@ -159,10 +166,11 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     private InMemoryOntologyProperty getOrCreatePropertyType(
-            final String propertyName,
+            final String propertyIri,
             final PropertyType dataType,
             final String displayName,
             Map<String, String> possibleValues,
+            Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
             String displayType,
@@ -173,13 +181,15 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             ImmutableList<String> dependentPropertyIris,
             String[] intents
     ) {
-        InMemoryOntologyProperty property = (InMemoryOntologyProperty) getPropertyByIRI(propertyName);
+        InMemoryOntologyProperty property = (InMemoryOntologyProperty) getPropertyByIRI(propertyIri);
         if (property == null) {
+            definePropertyOnGraph(graph, propertyIri, dataType, textIndexHints, boost);
+
             property = new InMemoryOntologyProperty();
             property.setDataType(dataType);
             property.setUserVisible(userVisible);
             property.setSearchable(searchable);
-            property.setTitle(propertyName);
+            property.setTitle(propertyIri);
             property.setBoost(boost);
             property.setDisplayType(displayType);
             property.setPropertyGroup(propertyGroup);
@@ -193,7 +203,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 property.setDisplayName(displayName);
             }
             property.setPossibleValues(possibleValues);
-            propertiesCache.put(propertyName, property);
+            propertiesCache.put(propertyIri, property);
         }
         return property;
     }

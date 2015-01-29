@@ -74,7 +74,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         extractor.setOntologyRepository(ontologyRepository);
 
         FileSystem hdfsFileSystem = null;
-        authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
+        authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY_STRING);
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(config, termMentionFilters, hdfsFileSystem, user, authorizations, injector);

@@ -101,7 +101,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         lumifyApi.getVertexApi().resolveDetectedObject(
                 artifactVertexId,
                 "Susan",
-                CONCEPT_TEST_PERSON,
+                TestOntology.CONCEPT_PERSON,
                 "auth1",
                 null,
                 null,
@@ -134,7 +134,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         lumifyApi.getVertexApi().resolveDetectedObject(
                 artifactVertexId,
                 "Joe",
-                CONCEPT_TEST_PERSON,
+                TestOntology.CONCEPT_PERSON,
                 "auth1",
                 null,
                 null,
@@ -154,7 +154,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         lumifyApi.getVertexApi().resolveDetectedObject(
                 artifactVertexId,
                 "Jeff",
-                CONCEPT_TEST_PERSON,
+                TestOntology.CONCEPT_PERSON,
                 "auth1",
                 ClientApiDetectedObject.fromProperty(joeDetectedObject).getResolvedVertexId(),
                 null,

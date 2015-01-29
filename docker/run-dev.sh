@@ -19,33 +19,30 @@ dir_list() {
        $1/opt/jetty/webapps
 }
 
-case $(uname) in
-  Linux)
-    SUDO=sudo
-    PERSISTENT_DIR=${DIR}/lumify-dev-persistent
-    mkdir -p $(dir_list ${PERSISTENT_DIR})
-    LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
-    ;;
-  Darwin)
-    SUDO=
-    dev=$(boot2docker ssh blkid -L boot2docker-data)
-    mnt=$(echo "$(boot2docker ssh mount)" | awk -v dev=${dev} '$1 == dev && !seen {print $3; seen = 1}')
-    uid=$(boot2docker ssh id -u)
-    gid=$(boot2docker ssh id -g)
-    PERSISTENT_DIR=${mnt}/lumify-dev-persistent
-    boot2docker ssh sudo mkdir -p ${PERSISTENT_DIR}
-    boot2docker ssh sudo chown -R ${uid}:${gid} ${PERSISTENT_DIR}
-    boot2docker ssh mkdir -p $(dir_list ${PERSISTENT_DIR})
-    LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
-    mkdir -p $(dir_list ${LOCAL_PERSISTENT_DIR})
-    touch ${LOCAL_PERSISTENT_DIR}/NOT_ALL_OF_YOUR_FILES_ARE_HERE
-    touch ${LOCAL_PERSISTENT_DIR}/OTHER_FILES_ARE_PERSISTED_INSIDE_THE_BOOT2DOCKER_VM
-    ;;
-  *)
-    echo "unexpected uname: $(uname)"
-    exit -1
-    ;;
-esac
+if [ $(uname) = 'Linux' ]; then
+  SUDO=sudo
+else
+  SUDO=
+fi
+
+if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
+  dev=$(boot2docker ssh blkid -L boot2docker-data)
+  mnt=$(echo "$(boot2docker ssh mount)" | awk -v dev=${dev} '$1 == dev && !seen {print $3; seen = 1}')
+  uid=$(boot2docker ssh id -u)
+  gid=$(boot2docker ssh id -g)
+  PERSISTENT_DIR=${mnt}/lumify-dev-persistent
+  boot2docker ssh sudo mkdir -p ${PERSISTENT_DIR}
+  boot2docker ssh sudo chown -R ${uid}:${gid} ${PERSISTENT_DIR}
+  boot2docker ssh mkdir -p $(dir_list ${PERSISTENT_DIR})
+  LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+  mkdir -p $(dir_list ${LOCAL_PERSISTENT_DIR})
+  touch ${LOCAL_PERSISTENT_DIR}/NOT_ALL_OF_YOUR_FILES_ARE_HERE
+  touch ${LOCAL_PERSISTENT_DIR}/OTHER_FILES_ARE_PERSISTED_INSIDE_THE_BOOT2DOCKER_VM
+else
+  PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+  mkdir -p $(dir_list ${PERSISTENT_DIR})
+  LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+fi
 
 cp ${DIR}/../config/lumify.properties ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/lumify.properties
 cp ${DIR}/../config/log4j.xml ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/log4j.xml

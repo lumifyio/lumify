@@ -114,16 +114,17 @@ public class ChartItem {
         this.attributeCollection = attributeCollection;
     }
 
-    public static ChartItem createEntity(AnalystsNotebookVersion version,
-                                         String conceptType,
-                                         String vertexId,
-                                         String title,
-                                         int x,
-                                         int y,
-                                         IconPicture iconPicture,
-                                         List<Attribute> attributeCollection,
-                                         String baseUrl,
-                                         String workspaceId) {
+    public static ChartItem createEntity(
+            AnalystsNotebookVersion version,
+            String conceptType,
+            String vertexId,
+            String title,
+            int x,
+            int y,
+            IconPicture iconPicture,
+            List<Attribute> attributeCollection,
+            String baseUrl,
+            String workspaceId) {
         IconStyle iconStyle = new IconStyle();
         iconStyle.setType(conceptType);
         if (iconPicture != null) {
@@ -160,20 +161,23 @@ public class ChartItem {
         return chartItem;
     }
 
-    public static ChartItem createFromVertexAndWorkspaceEntity(AnalystsNotebookVersion version,
-                                                               Vertex vertex,
-                                                               WorkspaceEntity workspaceEntity,
-                                                               OntologyRepository ontologyRepository,
-                                                               ArtifactThumbnailRepository artifactThumbnailRepository,
-                                                               FormulaEvaluator formulaEvaluator,
-                                                               String workspaceId,
-                                                               Authorizations authorizations,
-                                                               User user,
-                                                               String baseUrl,
-                                                               AnalystsNotebookExportConfiguration analystsNotebookExportConfiguration) {
+    public static ChartItem createFromVertexAndWorkspaceEntity(
+            AnalystsNotebookVersion version,
+            Vertex vertex,
+            WorkspaceEntity workspaceEntity,
+            OntologyRepository ontologyRepository,
+            ArtifactThumbnailRepository artifactThumbnailRepository,
+            FormulaEvaluator formulaEvaluator,
+            FormulaEvaluator.UserContext userContext,
+            String workspaceId,
+            Authorizations authorizations,
+            User user,
+            String baseUrl,
+            AnalystsNotebookExportConfiguration analystsNotebookExportConfiguration
+    ) {
         String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
         String vertexId = vertex.getId();
-        String title = formulaEvaluator.evaluateTitleFormula(vertex, workspaceId, authorizations);
+        String title = formulaEvaluator.evaluateTitleFormula(vertex, userContext, authorizations);
         int x = workspaceEntity.getGraphPositionX();
         int y = workspaceEntity.getGraphPositionY();
 
@@ -193,14 +197,14 @@ public class ChartItem {
             }
         }
         if (analystsNotebookExportConfiguration.includeSubtitle()) {
-            String subtitle = formulaEvaluator.evaluateSubtitleFormula(vertex, workspaceId, authorizations);
+            String subtitle = formulaEvaluator.evaluateSubtitleFormula(vertex, userContext, authorizations);
             if (subtitle != null && subtitle.trim().length() > 0) {
                 Attribute subtitleAttribute = new Attribute(AttributeClass.NAME_SUBTITLE, subtitle);
                 attributeCollection.add(subtitleAttribute);
             }
         }
         if (analystsNotebookExportConfiguration.includeTime()) {
-            String time = formulaEvaluator.evaluateTimeFormula(vertex, workspaceId, authorizations);
+            String time = formulaEvaluator.evaluateTimeFormula(vertex, userContext, authorizations);
             if (time != null && time.trim().length() > 0) {
                 Attribute timeAttribute = new Attribute(AttributeClass.NAME_TIME, time);
                 attributeCollection.add(timeAttribute);

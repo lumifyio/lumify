@@ -1,8 +1,9 @@
 
 define([
     'util/vertex/formatters',
-    'util/withDataRequest'
-], function(F, withDataRequest) {
+    'util/withDataRequest',
+    'require'
+], function(F, withDataRequest, require) {
     'use strict';
 
     return withTypeContent;
@@ -14,7 +15,8 @@ define([
         this._promisesToCancel = [];
 
         this.defaultAttrs({
-            auditSelector: '.audits'
+            auditSelector: '.audits',
+            deleteFormSelector: '.delete-form'
         });
 
         this.after('teardown', function() {
@@ -51,9 +53,11 @@ define([
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
             this.on('addNewProperty', this.onAddNewProperty);
             this.on('addNewComment', this.onAddNewComment);
+            this.on('deleteItem', this.onDeleteItem);
             this.on('openFullscreen', this.onOpenFullscreen);
             this.on('toggleAudit', this.onAuditToggle);
             this.on('openSourceUrl', this.onOpenSourceUrl);
+            this.on('maskWithOverlay', this.onMaskWithOverlay);
 
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
@@ -80,12 +84,44 @@ define([
             this.trigger(this.select('commentsSelector'), 'editComment');
         };
 
+        this.onDeleteItem = function(event) {
+            var self = this,
+                $container = this.select('deleteFormSelector');
+
+            if ($container.length === 0) {
+                $container = $('<div class="delete-form"></div>').insertBefore(
+                    this.select('propertiesSelector')
+                );
+            }
+
+            require(['./dropdowns/deleteForm/deleteForm'], function(DeleteForm) {
+                var node = $('<div class="underneath"></div>').appendTo($container);
+                DeleteForm.attachTo(node, {
+                    data: self.attr.data
+                });
+            });
+        };
+
         this.onOpenFullscreen = function(event) {
             var url = F.vertexUrl.url(
                 _.isArray(this.attr.data) ? this.attr.data : [this.attr.data.id],
                 lumifyData.currentWorkspaceId
             );
             window.open(url);
+        };
+
+        this.onMaskWithOverlay = function(event, data) {
+            event.stopPropagation();
+
+            if (data.done) {
+                this.$node.find('.detail-overlay').remove();
+            } else {
+                $('<div>')
+                    .addClass('detail-overlay')
+                    .toggleClass('detail-overlay-loading', data.loading)
+                    .append($('<h1>').text(data.text))
+                    .appendTo(this.$node);
+            }
         };
 
         this.debouncedConceptTypeChange = function(vertex) {

@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LibLoader.class);
-    private static List<File> loadedLibFiles = new ArrayList<File>();
+    private static List<File> loadedLibFiles = new ArrayList<>();
 
     public abstract void loadLibs(Configuration configuration);
 
@@ -51,6 +51,14 @@ public abstract class LibLoader {
         if (!f.isFile()) {
             throw new LumifyException(String.format("Could not add lib %s. Not a file.", f.getAbsolutePath()));
         }
+
+        for (File loadedLibFile : loadedLibFiles) {
+            if (loadedLibFile.getName().equals(f.getName())) {
+                LOGGER.info("Skipping %s. File with same name already loaded from %s", f.getAbsolutePath(), loadedLibFile.getAbsolutePath());
+                return;
+            }
+        }
+
         LOGGER.info("adding lib: %s", f.getAbsolutePath());
         loadedLibFiles.add(f);
 

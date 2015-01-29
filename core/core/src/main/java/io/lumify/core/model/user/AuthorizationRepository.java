@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface AuthorizationRepository {
 
-    void addAuthorizationToGraph(final String auth);
+    void addAuthorizationToGraph(final String... auths);
 
     void removeAuthorizationFromGraph(final String auth);
 

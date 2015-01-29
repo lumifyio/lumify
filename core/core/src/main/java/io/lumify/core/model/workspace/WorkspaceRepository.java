@@ -15,6 +15,7 @@ import org.securegraph.util.ConvertingIterable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -25,6 +26,7 @@ public abstract class WorkspaceRepository {
     public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace/toEntity";
     public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace/toUser";
     public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
+    public static final String OWL_IRI = "http://lumify.io/workspace";
     private final Graph graph;
 
     protected WorkspaceRepository(Graph graph) {
@@ -33,7 +35,11 @@ public abstract class WorkspaceRepository {
 
     public abstract void delete(Workspace workspace, User user);
 
-    public abstract Workspace findById(String workspaceId, User user);
+    public Workspace findById(String workspaceId, User user) {
+        return findById(workspaceId, false, user);
+    }
+
+    public abstract Workspace findById(String workspaceId, boolean includeHidden, User user);
 
     public Iterable<Workspace> findByIds(final Iterable<String> workspaceIds, final User user) {
         return new ConvertingIterable<String, Workspace>(workspaceIds) {
@@ -89,7 +95,7 @@ public abstract class WorkspaceRepository {
 
     public abstract void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
-    public abstract ClientApiWorkspaceDiff getDiff(Workspace workspace, User user);
+    public abstract ClientApiWorkspaceDiff getDiff(Workspace workspace, User user, Locale locale, String timeZone);
 
     public String getCreatorUserId(Workspace workspace, User user) {
         for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {

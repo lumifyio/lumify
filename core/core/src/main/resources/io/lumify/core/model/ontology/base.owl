@@ -582,6 +582,7 @@
     <owl:DatatypeProperty rdf:about="&lumify;text">
         <rdfs:label xml:lang="en">Text</rdfs:label>
         <userVisible>false</userVisible>
+        <textIndexHints>FULL_TEXT</textIndexHints>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>

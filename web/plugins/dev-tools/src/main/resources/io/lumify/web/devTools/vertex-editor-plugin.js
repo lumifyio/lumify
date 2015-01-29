@@ -200,6 +200,12 @@ require([
         };
 
         this.update = function(vertex) {
+            if (!vertex) {
+                this.showError('Vertex does not exist');
+                this.$node.find('section').remove();
+                return;
+            }
+
             var newVertex = vertex.id !== this.currentVertexId,
                 addNewText = i18n('admin.vertex.editor.addNewProperty.label');
 

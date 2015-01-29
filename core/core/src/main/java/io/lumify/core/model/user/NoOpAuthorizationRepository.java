@@ -9,7 +9,7 @@ import static org.securegraph.util.IterableUtils.toArray;
 
 public class NoOpAuthorizationRepository implements AuthorizationRepository {
     @Override
-    public void addAuthorizationToGraph(String auth) {
+    public void addAuthorizationToGraph(String... auths) {
         // do nothing
     }
 

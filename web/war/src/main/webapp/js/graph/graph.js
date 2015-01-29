@@ -484,11 +484,12 @@ define([
         this.onVerticesDeleted = function(event, data) {
             this.cytoscapeReady(function(cy) {
 
-                if (data.vertices.length) {
+                if (data.vertexIds.length) {
                     cy.$(
-                        data.vertices.map(function(v) {
-                        return '#' + toCyId(v);
-                    }).join(',')).remove();
+                        data.vertexIds.map(function(v) {
+                            return '#' + toCyId(v);
+                        }).join(',')
+                    ).remove();
 
                     this.setWorkspaceDirty();
                     this.updateVertexSelections(cy);

@@ -27,26 +27,28 @@ import static org.securegraph.util.IterableUtils.toList;
 @Singleton
 public class AnalystsNotebookExporter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AnalystsNotebookExporter.class);
-
-    private Graph graph;
-    private WorkspaceRepository workspaceRepository;
-    private OntologyRepository ontologyRepository;
-    private ArtifactThumbnailRepository artifactThumbnailRepository;
-    private Configuration configuration;
-    private AnalystsNotebookExportConfiguration analystsNotebookExportConfiguration;
-    private AggregateClassificationClient aggregateClassificationClient;
+    private final FormulaEvaluator formulaEvaluator;
+    private final Graph graph;
+    private final WorkspaceRepository workspaceRepository;
+    private final OntologyRepository ontologyRepository;
+    private final ArtifactThumbnailRepository artifactThumbnailRepository;
+    private final AnalystsNotebookExportConfiguration analystsNotebookExportConfiguration;
+    private final AggregateClassificationClient aggregateClassificationClient;
 
     @Inject
-    public AnalystsNotebookExporter(Graph graph,
-                                    WorkspaceRepository workspaceRepository,
-                                    OntologyRepository ontologyRepository,
-                                    ArtifactThumbnailRepository artifactThumbnailRepository,
-                                    Configuration configuration) {
+    public AnalystsNotebookExporter(
+            Graph graph,
+            WorkspaceRepository workspaceRepository,
+            OntologyRepository ontologyRepository,
+            ArtifactThumbnailRepository artifactThumbnailRepository,
+            Configuration configuration,
+            FormulaEvaluator formulaEvaluator
+    ) {
         this.graph = graph;
         this.workspaceRepository = workspaceRepository;
         this.ontologyRepository = ontologyRepository;
         this.artifactThumbnailRepository = artifactThumbnailRepository;
-        this.configuration = configuration;
+        this.formulaEvaluator = formulaEvaluator;
         analystsNotebookExportConfiguration = new AnalystsNotebookExportConfiguration();
         configuration.setConfigurables(analystsNotebookExportConfiguration, AnalystsNotebookExportConfiguration.CONFIGURATION_PREFIX);
         aggregateClassificationClient = new AggregateClassificationClient(configuration);
@@ -78,14 +80,27 @@ public class AnalystsNotebookExporter {
             chart.setPrintSettings(getPrintSettings());
         }
 
-        List<ChartItem> chartItems = new ArrayList<ChartItem>();
+        List<ChartItem> chartItems = new ArrayList<>();
 
         LOGGER.debug("adding %d vertices", vertexWorkspaceEntityMap.size());
-        FormulaEvaluator formulaEvaluator = new FormulaEvaluator(configuration, ontologyRepository, locale, timeZone);
+        FormulaEvaluator.UserContext userContext = new FormulaEvaluator.UserContext(locale, timeZone, workspace.getWorkspaceId());
         for (Map.Entry<Vertex, WorkspaceEntity> entry : vertexWorkspaceEntityMap.entrySet()) {
-            chartItems.add(ChartItem.createFromVertexAndWorkspaceEntity(version, entry.getKey(), entry.getValue(), ontologyRepository, artifactThumbnailRepository, formulaEvaluator, workspace.getWorkspaceId(), authorizations, user, baseUrl, analystsNotebookExportConfiguration));
+            ChartItem fromVertexAndWorkspaceEntity = ChartItem.createFromVertexAndWorkspaceEntity(
+                    version,
+                    entry.getKey(),
+                    entry.getValue(),
+                    ontologyRepository,
+                    artifactThumbnailRepository,
+                    formulaEvaluator,
+                    userContext,
+                    workspace.getWorkspaceId(),
+                    authorizations,
+                    user,
+                    baseUrl,
+                    analystsNotebookExportConfiguration
+            );
+            chartItems.add(fromVertexAndWorkspaceEntity);
         }
-        formulaEvaluator.close();
 
         LOGGER.debug("adding %d edges", edges.size());
         for (Edge edge : edges) {
@@ -107,7 +122,7 @@ public class AnalystsNotebookExporter {
     }
 
     private List<AttributeClass> createAttributeClassCollection(Iterable<Vertex> vertices) {
-        List<AttributeClass> attributeClasses = new ArrayList<AttributeClass>();
+        List<AttributeClass> attributeClasses = new ArrayList<>();
 
         if (analystsNotebookExportConfiguration.includeProperties()) {
             attributeClasses.addAll(AttributeClass.createForVertices(vertices, ontologyRepository));
@@ -130,7 +145,7 @@ public class AnalystsNotebookExporter {
     }
 
     private static Map<Vertex, WorkspaceEntity> createVertexWorkspaceEntityMap(Iterable<Vertex> vertices, List<WorkspaceEntity> workspaceEntities) {
-        Map<Vertex, WorkspaceEntity> map = new HashMap<Vertex, WorkspaceEntity>();
+        Map<Vertex, WorkspaceEntity> map = new HashMap<>();
         for (Vertex vertex : vertices) {
             WorkspaceEntity correspondingWorkspaceEntity = null;
             for (WorkspaceEntity workspaceEntity : workspaceEntities) {
@@ -151,16 +166,20 @@ public class AnalystsNotebookExporter {
         for (WorkspaceEntity workspaceEntity : workspaceEntities) {
             int x = workspaceEntity.getGraphPositionX();
             int y = workspaceEntity.getGraphPositionY();
-            /* min x */ minXYmaxXY[0] = x < minXYmaxXY[0] ? x : minXYmaxXY[0];
-            /* min y */ minXYmaxXY[1] = y < minXYmaxXY[1] ? y : minXYmaxXY[1];
-            /* max x */ minXYmaxXY[2] = x > minXYmaxXY[2] ? x : minXYmaxXY[2];
-            /* max y */ minXYmaxXY[3] = y > minXYmaxXY[3] ? y : minXYmaxXY[3];
+            /* min x */
+            minXYmaxXY[0] = x < minXYmaxXY[0] ? x : minXYmaxXY[0];
+            /* min y */
+            minXYmaxXY[1] = y < minXYmaxXY[1] ? y : minXYmaxXY[1];
+            /* max x */
+            minXYmaxXY[2] = x > minXYmaxXY[2] ? x : minXYmaxXY[2];
+            /* max y */
+            minXYmaxXY[3] = y > minXYmaxXY[3] ? y : minXYmaxXY[3];
         }
         return minXYmaxXY;
     }
 
     private static List<LinkType> getLinkTypes() {
-        List<LinkType> linkTypes = new ArrayList<LinkType>();
+        List<LinkType> linkTypes = new ArrayList<>();
         LinkType linkType = new LinkType();
         linkType.setColour("65280");
         linkType.setName(LinkType.NAME_LINK);
@@ -170,14 +189,14 @@ public class AnalystsNotebookExporter {
 
     private static PrintSettings getPrintSettings() {
         PrintSettings printSettings = new PrintSettings();
-        List<Header> headers = new ArrayList<Header>();
+        List<Header> headers = new ArrayList<>();
         Header header = new Header();
         header.setPosition(Header.POSITION_HEADER_FOOTER_POSITION_CENTER);
         header.setProperty("classification");
         header.setVisible(true);
         headers.add(header);
         printSettings.setHeaderCollection(headers);
-        List<Footer> footers = new ArrayList<Footer>();
+        List<Footer> footers = new ArrayList<>();
         Footer footer = new Footer();
         footer.setPosition(Footer.POSITION_HEADER_FOOTER_POSITION_CENTER);
         footer.setProperty("classification");
@@ -189,7 +208,7 @@ public class AnalystsNotebookExporter {
 
     private static Summary getSummary(String classificationBanner) {
         Summary summary = new Summary();
-        List<CustomProperty> customProperties = new ArrayList<CustomProperty>();
+        List<CustomProperty> customProperties = new ArrayList<>();
         CustomProperty customProperty = new CustomProperty();
         customProperty.setName("classification");
         customProperty.setType(CustomProperty.TYPE_STRING);

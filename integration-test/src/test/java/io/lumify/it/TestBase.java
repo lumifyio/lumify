@@ -45,7 +45,6 @@ public class TestBase {
     protected static final String USERNAME_TEST_USER_2 = "testUser2";
     protected static final String USERNAME_TEST_USER_3 = "testUser3";
     public static final String TEST_MULTI_VALUE_KEY = TestBase.class.getName();
-    public static final String CONCEPT_TEST_PERSON = "http://lumify.io/test#person";
 
     @Before
     public void before() throws ApiException, IOException, NoSuchAlgorithmException, KeyManagementException, InterruptedException {

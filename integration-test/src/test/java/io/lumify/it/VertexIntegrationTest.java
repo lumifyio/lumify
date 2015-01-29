@@ -110,15 +110,16 @@ public class VertexIntegrationTest extends VertextTestBase {
         RelatedVerticesHelper() throws ApiException {
             // Vertex relationships:
             //   0 -> 1, 2
-            //   3 -> 0, 1, 4, 5
-            //   4 -> 5
-            vertexIds = createPublicVertices(6, 1);
+            //   3 -> 0, 1, 4
+            //   4 -> 5, 6
+            vertexIds = createPublicVertices(7, 1);
             createEdge(vertexIds.get(0), vertexIds.get(1), EDGE_LABEL1);
             createEdge(vertexIds.get(0), vertexIds.get(2), EDGE_LABEL2);
             createEdge(vertexIds.get(3), vertexIds.get(0), EDGE_LABEL1);
             createEdge(vertexIds.get(3), vertexIds.get(1), EDGE_LABEL1);
             createEdge(vertexIds.get(3), vertexIds.get(4), EDGE_LABEL1);
             createEdge(vertexIds.get(4), vertexIds.get(5), EDGE_LABEL1);
+            createEdge(vertexIds.get(4), vertexIds.get(6), EDGE_LABEL1);
 
             vertexApi = authenticateApiUser().getVertexApi();
         }
@@ -138,7 +139,7 @@ public class VertexIntegrationTest extends VertextTestBase {
         }
 
         void assertRelatedVerticesForMultiple(List<ClientApiVertex> actualVertices) {
-            // These expected vertices are dependent on the edges set up in createPublicVerticesWithEdges()
+            // These expected vertices are dependent on the edges set up in the constructor.
             assertVertexIds(
                     ImmutableList.of(
                             vertexIds.get(0), vertexIds.get(1), vertexIds.get(2),

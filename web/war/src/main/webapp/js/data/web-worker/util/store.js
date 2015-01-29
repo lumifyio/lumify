@@ -82,6 +82,13 @@ define([
                 return workspace;
             },
 
+            removeWorkspaceVertexIds: function(workspaceId, vertexIds) {
+                if (vertexIds.length) {
+                    var workspace = api.getObject(workspaceId, 'workspace');
+                    workspace.vertices = _.omit(workspace.vertices, vertexIds);
+                }
+            },
+
             updateWorkspace: function(workspaceId, changes) {
                 var workspace = JSON.parse(JSON.stringify(api.getObject(workspaceId, 'workspace')));
                 changes.entityUpdates.forEach(function(entityUpdate) {

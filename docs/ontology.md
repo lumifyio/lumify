@@ -33,6 +33,8 @@ the ontology into Lumify.
 
 * **intent** - See the [Intents](#intent) section
 * **textIndexHints** - Specifies how text is indexed in the full text search. By default text will not be indexed.
+  **NOTE: The default behavior for strings is to not index them. If you would like them indexed be sure to set one
+  of these values**
   The following options can be included (comma separated):
   * NONE - Do not index this property (default).
   * ALL - Combination of FULL_TEXT and EXACT_MATCH.

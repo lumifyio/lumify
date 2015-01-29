@@ -1,6 +1,8 @@
 package io.lumify.it;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.EdgeApi;
@@ -10,10 +12,11 @@ import io.lumify.web.clientapi.model.ClientApiVertex;
 import org.apache.commons.collections.iterators.LoopingIterator;
 import org.junit.Before;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public abstract class VertextTestBase extends TestBase {
     protected static final int NUM_DEFAULT_PROPERTIES = 2;
@@ -43,7 +46,7 @@ public abstract class VertextTestBase extends TestBase {
         LoopingIterator propertyVizIterator = new LoopingIterator(propertyVisibilities);
         List<String> vertexIds = new ArrayList<>();
         for (int i = 0; i < numVertices; i++) {
-            ClientApiElement vertex = setupVertexApi.create(CONCEPT_TEST_PERSON, (String) vertexVizIterator.next());
+            ClientApiElement vertex = setupVertexApi.create(TestOntology.CONCEPT_PERSON, (String) vertexVizIterator.next());
             String vertexId = vertex.getId();
             setVertexProperties(numPropertiesPerVertex, propertyVizIterator, vertexId);
             vertexIds.add(vertexId);
@@ -68,11 +71,16 @@ public abstract class VertextTestBase extends TestBase {
         setupEdgeApi.create(sourceVertexId, destVertexId, edgeLabel, "", "ok", "{}");
     }
 
-    protected void assertVertexIds(Collection<String> expectedVertexIds, Collection<ClientApiVertex> actualVertices) {
-        assertEquals(expectedVertexIds.size(), actualVertices.size());
-        Set<String> expectedIds = new HashSet<>(expectedVertexIds);
-        for (ClientApiVertex vertex : actualVertices) {
-            assertTrue(expectedIds.contains(vertex.getId()));
-        }
+    protected void assertVertexIds(List<String> expectedVertexIds, List<ClientApiVertex> actualVertices) {
+        List<String> expectedIds = new ArrayList<>(expectedVertexIds);
+        List<String> actualIds = new ArrayList<>(Lists.transform(actualVertices, new Function<ClientApiVertex, String>() {
+            public String apply(ClientApiVertex vertex) {
+                return vertex.getId();
+            }
+        }));
+        Collections.sort(expectedIds);
+        Collections.sort(actualIds);
+
+        assertEquals(expectedIds, actualIds);
     }
 }

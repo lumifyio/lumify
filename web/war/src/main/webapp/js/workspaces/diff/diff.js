@@ -17,6 +17,21 @@ define([
 
     return defineComponent(Diff, withDataRequest);
 
+    function titleForEdgesVertices(vertex, vertexId, diffsGroupedByElement) {
+        if (vertex) {
+            return F.vertex.title(vertex);
+        }
+
+        var matchingDiffs = diffsGroupedByElement[vertexId],
+            diff = matchingDiffs && matchingDiffs.length && matchingDiffs[0];
+
+        if (diff && diff.title) {
+            return diff.title;
+        }
+
+        return i18n('vertex.property.title.not_available');
+    }
+
     function Diff() {
 
         this.defaultAttrs({
@@ -29,12 +44,10 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            Promise.all([
-                this.dataRequest('ontology', 'properties'),
-                this.dataRequest('ontology', 'relationships')
-            ]).done(function(results) {
-                self.ontologyProperties = results[0];
-                self.ontologyRelationships = results[1];
+            this.dataRequest('ontology', 'ontology').done(function(ontology) {
+                self.ontologyConcepts = ontology.concepts;
+                self.ontologyProperties = ontology.properties;
+                self.ontologyRelationships = ontology.relationships;
                 self.setup();
             })
         });
@@ -149,8 +162,8 @@ define([
                 this.dataRequest('edge', 'store', { edgeIds: _.unique(referencedEdges) })
             ])
                 .then(function(result) {
-                    var vertices = result.shift(),
-                        edges = result.shift(),
+                    var vertices = _.compact(result.shift()),
+                        edges = _.compact(result.shift()),
                         verticesById = _.indexBy(vertices, 'id'),
                         edgesById = _.indexBy(edges, 'id');
 
@@ -178,7 +191,22 @@ define([
                         if (isElementVertex) {
                             outputItem.vertexId = elementId;
                             outputItem.vertex = verticesById[elementId];
-                            outputItem.title = F.vertex.title(outputItem.vertex);
+                            if (outputItem.vertex) {
+                                outputItem.title = F.vertex.title(outputItem.vertex);
+                            } else {
+                                outputItem.vertex = {
+                                    id: elementId,
+                                    properties: [],
+                                    'http://lumify.io#visibilityJson': diffs[0]['http://lumify.io#visibilityJson']
+                                };
+                                outputItem.title = diffs[0].title || i18n('vertex.property.title.not_available');
+                            }
+                            if (diffs[0].conceptType) {
+                                var concept = self.ontologyConcepts.byId[diffs[0].conceptType];
+                                if (concept) {
+                                    outputItem.conceptImage = concept.glyphIconHref;
+                                }
+                            }
                         } else {
                             outputItem.edgeId = elementId;
                             outputItem.edge = edgesById[elementId];
@@ -186,17 +214,31 @@ define([
                                 outputItem.edgeLabel = self.ontologyRelationships.byTitle[outputItem.edge.label]
                                 .displayName;
                             } else {
-                                outputItem.edgeLabel = '';
+                                outputItem.edge = {
+                                    id: elementId,
+                                    properties: [],
+                                    'http://lumify.io#visibilityJson': diffs[0].visibilityJson
+                                };
+                                outputItem.edgeLabel = self.ontologyRelationships.byTitle[diffs[0].label].displayName;
                             }
+
+                            var sourceId = diffs[0].outVertexId,
+                                targetId = diffs[0].inVertexId,
+                                source = verticesById[sourceId],
+                                target = verticesById[targetId];
+                            outputItem.sourceTitle = titleForEdgesVertices(source, sourceId, groupedByElement);
+                            outputItem.targetTitle = titleForEdgesVertices(target, targetId, groupedByElement);
                         }
 
                         diffs.forEach(function(diff) {
+
                             switch (diff.type) {
                                 case 'VertexDiffItem':
                                     diff.id = elementId;
-                                    outputItem.action = actionTypes.CREATE;
+                                    outputItem.action = diff.deleted ? actionTypes.DELETE : actionTypes.CREATE;
                                     self.diffsForElementId[elementId] = diff;
                                     self.diffsById[elementId] = diff;
+                                    addDiffDependency(diff.id);
                                     break;
 
                                 case 'PropertyDiffItem':
@@ -223,7 +265,7 @@ define([
                                     diff.className = F.className.to(diff.edgeId);
                                     diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
                                     self.diffsForElementId[diff.edgeId] = diff;
-                                    outputItem.action = actionTypes.CREATE;
+                                    outputItem.action = diff.deleted ? actionTypes.DELETE : actionTypes.CREATE;
                                     addDiffDependency(diff.inVertexId, diff);
                                     addDiffDependency(diff.outVertexId, diff);
                                     self.diffsById[diff.id] = diff;
@@ -366,7 +408,7 @@ define([
                             type: 'property',
                             key: diff.key,
                             name: diff.name,
-                            action: 'update',
+                            action: diff.deleted ? 'delete' : 'update',
                             status: diff.sandboxStatus
                         }, function(obj) {
                             obj[diff.elementType + 'Id'] = diff.elementId;
@@ -375,7 +417,7 @@ define([
                         case 'VertexDiffItem': return {
                             type: 'vertex',
                             vertexId: diff.vertexId,
-                            action: 'create', // TODO: ever delete?
+                            action: diff.deleted ? 'delete' : 'create',
                             status: diff.sandboxStatus
                         };
 
@@ -384,7 +426,7 @@ define([
                             edgeId: diff.edgeId,
                             sourceId: diff.outVertexId,
                             destId: diff.inVertexId,
-                            action: 'create',
+                            action: diff.deleted ? 'delete' : 'create',
                             status: diff.sandboxStatus
                         };
                     }
@@ -527,9 +569,11 @@ define([
                 case 'VertexDiffItem':
 
                     if (state) {
-                        deps.forEach(function(diffId) {
-                            self.trigger('markUndoDiffItem', { diffId: diffId, state: true });
-                        })
+                        if (!diff.deleted) {
+                            deps.forEach(function(diffId) {
+                                self.trigger('markUndoDiffItem', { diffId: diffId, state: true });
+                            })
+                        }
                     }
 
                     break;
@@ -547,14 +591,23 @@ define([
 
                 case 'EdgeDiffItem':
 
-                    if (state) {
-                        deps.forEach(function(diffId) {
-                            self.trigger('markUndoDiffItem', { diffId: diffId, state: true });
-                        })
-                    } else {
-                        var inVertex = self.diffsForElementId[diff.inVertexId],
-                            outVertex = self.diffsForElementId[diff.outVertexId];
+                    var inVertex = self.diffsForElementId[diff.inVertexId],
+                        outVertex = self.diffsForElementId[diff.outVertexId];
 
+                    if (state) {
+                        if (diff.deleted) {
+                            if (inVertex && inVertex.deleted) {
+                                self.trigger('markUndoDiffItem', { diffId: inVertex.id, state: true });
+                            }
+                            if (outVertex && outVertex.deleted) {
+                                self.trigger('markUndoDiffItem', { diffId: outVertex.id, state: true });
+                            }
+                        } else {
+                            deps.forEach(function(diffId) {
+                                self.trigger('markUndoDiffItem', { diffId: diffId, state: true });
+                            })
+                        }
+                    } else {
                         if (inVertex) {
                             self.trigger('markUndoDiffItem', { diffId: inVertex.id, state: false });
                         }
@@ -595,9 +648,16 @@ define([
             switch (diff.type) {
 
                 case 'VertexDiffItem':
-
-                    if (!state) {
-                        // Unpublish all dependents
+                    if (state && diff.deleted) {
+                        this.diffDependencies[diff.id].forEach(function(diffId) {
+                            var diff = self.diffsById[diffId];
+                            if (diff && diff.type === 'EdgeDiffItem' && diff.deleted) {
+                                self.trigger('markPublishDiffItem', { diffId: diffId, state: true });
+                            } else {
+                                self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
+                            }
+                        });
+                    } else if (!state) {
                         this.diffDependencies[diff.id].forEach(function(diffId) {
                             self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
                         });
@@ -609,7 +669,7 @@ define([
 
                     if (state) {
                         var vertexDiff = this.diffsForElementId[diff.elementId];
-                        if (vertexDiff) {
+                        if (vertexDiff && !vertexDiff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.elementId, state: true })
                         }
                     }
@@ -627,10 +687,10 @@ define([
                         var inVertexDiff = this.diffsForElementId[diff.inVertexId],
                             outVertexDiff = this.diffsForElementId[diff.outVertexId];
 
-                        if (inVertexDiff) {
+                        if (inVertexDiff && !diff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.inVertexId, state: true });
                         }
-                        if (outVertexDiff) {
+                        if (outVertexDiff && !diff.deleted) {
                             this.trigger('markPublishDiffItem', { diffId: diff.outVertexId, state: true });
                         }
                     }

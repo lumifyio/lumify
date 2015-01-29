@@ -9,10 +9,16 @@ import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
+import io.lumify.core.ingest.video.VideoFrameInfo;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRunner;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -52,6 +58,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
             LOGGER.info("Running application with configuration:\n%s", config);
 
             setupInjector(context, config);
+            setupGraphAuthorizations();
             setupWebApp(context, config);
             setupLongRunningProcessRunner(context, config);
             setupGraphPropertyWorkerRunner(context, config);
@@ -101,7 +108,20 @@ public final class ApplicationBootstrap implements ServletContextListener {
             FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
         }
 
-        InjectHelper.getInjector().getInstance(OntologyRepository.class);
+        InjectHelper.getInstance(OntologyRepository.class); // verify we are up
+    }
+
+    private void setupGraphAuthorizations() {
+        AuthorizationRepository authorizationRepository = InjectHelper.getInstance(AuthorizationRepository.class);
+        authorizationRepository.addAuthorizationToGraph(
+                LumifyVisibility.SUPER_USER_VISIBILITY_STRING,
+                UserRepository.VISIBILITY_STRING,
+                TermMentionRepository.VISIBILITY_STRING,
+                LongRunningProcessRepository.VISIBILITY_STRING,
+                OntologyRepository.VISIBILITY_STRING,
+                WorkspaceRepository.VISIBILITY_STRING,
+                VideoFrameInfo.VISIBILITY_STRING
+        );
     }
 
     private void setupWebApp(ServletContext context, Configuration config) {

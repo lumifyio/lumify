@@ -56,8 +56,8 @@ public class ResolveTermIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        joeFernerVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "auth1");
-        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test");
+        joeFernerVertex = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "auth1");
+        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test", null, null);
 
         lumifyTestCluster.processGraphPropertyQueue();
 
@@ -74,7 +74,7 @@ public class ResolveTermIntegrationTest extends TestBase {
                 TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
                 entityStartOffset, entityEndOffset,
                 "Joe Ferner",
-                CONCEPT_TEST_PERSON,
+                TestOntology.CONCEPT_PERSON,
                 "auth1",
                 joeFernerVertex.getId(),
                 "test",
@@ -133,7 +133,7 @@ public class ResolveTermIntegrationTest extends TestBase {
                 TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
                 entityStartOffset, entityEndOffset,
                 sign,
-                CONCEPT_TEST_PERSON,
+                TestOntology.CONCEPT_PERSON,
                 "auth1",
                 joeFernerVertex.getId(),
                 "test",

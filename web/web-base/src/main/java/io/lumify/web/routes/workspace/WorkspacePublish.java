@@ -17,7 +17,9 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -33,11 +35,9 @@ import org.securegraph.mutation.ExistingElementMutation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.count;
-import static org.securegraph.util.IterableUtils.toList;
 
 public class WorkspacePublish extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspacePublish.class);
@@ -46,6 +46,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
     private final AuthorizationRepository authorizationRepository;
+    private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private String entityHasImageIri;
@@ -60,7 +61,8 @@ public class WorkspacePublish extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final OntologyRepository ontologyRepository,
             final WorkspaceRepository workspaceRepository,
-            final AuthorizationRepository authorizationRepository) {
+            final AuthorizationRepository authorizationRepository,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
@@ -69,6 +71,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
         this.authorizationRepository = authorizationRepository;
+        this.workQueueRepository = workQueueRepository;
 
         this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
         if (this.entityHasImageIri == null) {
@@ -108,9 +111,9 @@ public class WorkspacePublish extends BaseRequestHandler {
                 ClientApiVertexPublishItem vertexPublishItem = (ClientApiVertexPublishItem) data;
                 String vertexId = vertexPublishItem.getVertexId();
                 checkNotNull(vertexId);
-                Vertex vertex = graph.getVertex(vertexId, authorizations);
+                Vertex vertex = graph.getVertex(vertexId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 checkNotNull(vertex);
-                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC) {
+                if (GraphUtil.getSandboxStatus(vertex, workspaceId) == SandboxStatus.PUBLIC && !WorkspaceDiffHelper.isPublicDelete(vertex, authorizations)) {
                     String msg;
                     if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         msg = "Cannot delete public vertex " + vertexId;
@@ -141,10 +144,10 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 ClientApiRelationshipPublishItem relationshipPublishItem = (ClientApiRelationshipPublishItem) data;
-                Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), authorizations);
+                Edge edge = graph.getEdge(relationshipPublishItem.getEdgeId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
                 Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
                 Vertex destVertex = edge.getVertex(Direction.IN, authorizations);
-                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC) {
+                if (GraphUtil.getSandboxStatus(edge, workspaceId) == SandboxStatus.PUBLIC && !WorkspaceDiffHelper.isPublicDelete(edge, authorizations)) {
                     String error_msg;
                     if (data.getAction() == ClientApiPublishItem.Action.delete) {
                         error_msg = "Cannot delete a public edge";
@@ -184,44 +187,14 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 ClientApiPropertyPublishItem propertyPublishItem = (ClientApiPropertyPublishItem) data;
-                Element element = getPropertyElement(authorizations, propertyPublishItem);
+                Element element = getPropertyElement(propertyPublishItem, authorizations);
 
                 String propertyKey = propertyPublishItem.getKey();
                 String propertyName = propertyPublishItem.getName();
-                String propertyVisibilityString = propertyPublishItem.getVisibilityString();
 
                 OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(propertyName);
                 checkNotNull(ontologyProperty, "Could not find ontology property: " + propertyName);
                 if (!ontologyProperty.getUserVisible() || propertyName.equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
-                    continue;
-                }
-
-                List<Property> properties = toList(element.getProperties(propertyKey, propertyName));
-                SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
-                boolean propertyFailed = false;
-                for (int propertyIndex = 0; propertyIndex < properties.size(); propertyIndex++) {
-                    Property property = properties.get(propertyIndex);
-                    if (propertyVisibilityString != null &&
-                            !property.getVisibility().getVisibilityString().equals(propertyVisibilityString)) {
-                        continue;
-                    }
-                    SandboxStatus propertySandboxStatus = sandboxStatuses[propertyIndex];
-
-                    if (propertySandboxStatus == SandboxStatus.PUBLIC) {
-                        String error_msg;
-                        if (data.getAction() == ClientApiPublishItem.Action.delete) {
-                            error_msg = "Cannot delete a public property";
-                        } else {
-                            error_msg = "Property is already public";
-                        }
-                        LOGGER.warn(error_msg);
-                        data.setErrorMessage(error_msg);
-                        workspacePublishResponse.addFailure(data);
-                        propertyFailed = true;
-                    }
-                }
-
-                if (propertyFailed) {
                     continue;
                 }
 
@@ -245,27 +218,27 @@ public class WorkspacePublish extends BaseRequestHandler {
         graph.flush();
     }
 
-    private Element getPropertyElement(Authorizations authorizations, ClientApiPropertyPublishItem data) {
+    private Element getPropertyElement(ClientApiPropertyPublishItem data, Authorizations authorizations) {
         Element element = null;
 
         String elementId = data.getEdgeId();
         if (elementId != null) {
-            element = graph.getEdge(elementId, authorizations);
+            element = graph.getEdge(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
         }
 
         if (element == null) {
             elementId = data.getVertexId();
             if (elementId != null) {
-                element = graph.getVertex(elementId, authorizations);
+                element = graph.getVertex(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
             }
         }
 
         if (element == null) {
             elementId = data.getElementId();
             checkNotNull(elementId, "elementId, vertexId, or edgeId is required to publish a property");
-            element = graph.getVertex(elementId, authorizations);
+            element = graph.getVertex(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
             if (element == null) {
-                element = graph.getEdge(elementId, authorizations);
+                element = graph.getEdge(elementId, FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
             }
         }
 
@@ -274,13 +247,15 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishVertex(Vertex vertex, ClientApiPublishItem.Action action, Authorizations authorizations, String workspaceId, User user) throws IOException {
-        if (action == ClientApiPublishItem.Action.delete) {
+        if (action == ClientApiPublishItem.Action.delete || WorkspaceDiffHelper.isPublicDelete(vertex, authorizations)) {
             graph.removeVertex(vertex, authorizations);
+            graph.flush();
+            workQueueRepository.broadcastPublishVertexDelete(vertex);
             return;
         }
 
         // Need to elevate with videoFrame auth to be able to publish VideoFrame properties
-        Authorizations authWithVideoFrame = authorizationRepository.createAuthorizations(authorizations, VideoFrameInfo.VISIBILITY);
+        Authorizations authWithVideoFrame = authorizationRepository.createAuthorizations(authorizations, VideoFrameInfo.VISIBILITY_STRING);
         vertex = graph.getVertex(vertex.getId(), authWithVideoFrame);
 
         LOGGER.debug("publishing vertex %s(%s)", vertex.getId(), vertex.getVisibility().toString());
@@ -302,7 +277,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
             checkNotNull(ontologyProperty, "Could not find ontology property " + property.getName());
             if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
-                publishProperty(vertexElementMutation, property, workspaceId, user);
+                publishNewProperty(vertexElementMutation, property, workspaceId, user);
             }
         }
 
@@ -328,11 +303,14 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         graph.flush();
+        workQueueRepository.broadcastPublishVertex(vertex);
     }
 
     private void publishProperty(Element element, ClientApiPublishItem.Action action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
         if (action == ClientApiPublishItem.Action.delete) {
             element.removeProperty(key, name, authorizations);
+            graph.flush();
+            workQueueRepository.broadcastPublishPropertyDelete(element, key, name);
             return;
         }
         ExistingElementMutation elementMutation = element.prepareMutation();
@@ -341,23 +319,29 @@ public class WorkspacePublish extends BaseRequestHandler {
             if (!property.getKey().equals(key)) {
                 continue;
             }
-            if (publishProperty(elementMutation, property, workspaceId, user)) {
+            if (WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
+                element.removeProperty(key, name, authorizations);
+                graph.flush();
+                workQueueRepository.broadcastPublishPropertyDelete(element, key, name);
+                return;
+            } else if (publishNewProperty(elementMutation, property, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 graph.flush();
+                workQueueRepository.broadcastPublishProperty(element, key, name);
                 return;
             }
         }
         throw new LumifyException(String.format("no property with key '%s' and name '%s' found on workspace '%s'", key, name, workspaceId));
     }
 
-    private boolean publishProperty(ExistingElementMutation elementMutation, Property property, String workspaceId, User user) {
+    private boolean publishNewProperty(ExistingElementMutation elementMutation, Property property, String workspaceId, User user) {
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getMetadataValue(property.getMetadata());
         if (visibilityJson == null) {
             LOGGER.debug("skipping property %s. no visibility json property", property.toString());
             return false;
         }
         if (!visibilityJson.getWorkspaces().contains(workspaceId)) {
-            LOGGER.debug("skipping property %s. doesn't have workspace in json.", property.toString());
+            LOGGER.debug("skipping property %s. doesn't have workspace in json or is not hidden from this workspace.", property.toString());
             return false;
         }
 
@@ -375,8 +359,10 @@ public class WorkspacePublish extends BaseRequestHandler {
     }
 
     private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, ClientApiPublishItem.Action action, String workspaceId, User user, Authorizations authorizations) {
-        if (action == ClientApiPublishItem.Action.delete) {
+        if (action == ClientApiPublishItem.Action.delete || WorkspaceDiffHelper.isPublicDelete(edge, authorizations)) {
             graph.removeEdge(edge, authorizations);
+            graph.flush();
+            workQueueRepository.broadcastPublishEdgeDelete(edge);
             return;
         }
 
@@ -408,7 +394,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 userVisible = ontologyProperty.getUserVisible();
             }
             if (!userVisible && !property.getName().equals(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName())) {
-                publishProperty(edgeExistingElementMutation, property, workspaceId, user);
+                publishNewProperty(edgeExistingElementMutation, property, workspaceId, user);
             }
         }
 
@@ -429,6 +415,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex.getId(), authorizations)) {
             termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
+
+        graph.flush();
+        workQueueRepository.broadcastPublishEdge(edge);
     }
 
     private void publishGlyphIconProperty(Edge hasImageEdge, String workspaceId, User user, Authorizations authorizations) {
@@ -437,7 +426,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         ExistingElementMutation elementMutation = entityVertex.prepareMutation();
         Iterable<Property> glyphIconProperties = entityVertex.getProperties(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
         for (Property glyphIconProperty : glyphIconProperties) {
-            if (publishProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
+            if (publishNewProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 return;
             }

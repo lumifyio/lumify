@@ -167,6 +167,7 @@
           @color: darken(#efefef, 35%);
           color: @color;
           text-shadow: 0 1px 0 white;
+          font-size: 95%;
 
           &:after {
               content: '';
@@ -266,6 +267,10 @@
       }
       .property-value, .edge-value {
         word-break: break-word;
+
+        &.deleted {
+          text-decoration: line-through;
+        }
       }
 
       button {

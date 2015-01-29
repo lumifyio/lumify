@@ -2,13 +2,14 @@ define(['require'], function(require) {
     'use strict';
 
     var NOOP = function() {},
+        storeTypeForData = function(data) {
+            return ('graphVertexId' in data) ? 'vertex' : ('graphEdgeId' in data) ? 'edge' : null;
+        },
         socketHandlers = {
             workspaceChange: function(data, json) {
-                if (!json || json.modifiedBy !== publicData.currentUser.id) {
-                    require(['../util/store'], function(store) {
-                        store.workspaceWasChangedRemotely(data);
-                    })
-                }
+                require(['../util/store'], function(store) {
+                    store.workspaceWasChangedRemotely(data);
+                })
             },
             workspaceDelete: function(data) {
                 require([
@@ -45,11 +46,14 @@ define(['require'], function(require) {
                 }
             })(),
             userWorkspaceChange: NOOP,
+            publish: function(data) {
+                // Property undo already publishes propertyChange
+                if (data.objectType !== 'property' || data.publishType !== 'undo') {
+                    socketHandlers.propertyChange(data);
+                }
+            },
             propertyChange: function(data) {
-                var type =
-                        'graphVertexId' in data ? 'vertex' :
-                        'graphEdgeId' in data ? 'edge' :
-                        null,
+                var type = storeTypeForData(data),
                     objectId = type && (data.graphVertexId || data.graphEdgeId);
 
                 if (!type) {
@@ -69,6 +73,39 @@ define(['require'], function(require) {
                                         throw error;
                                     }
                                 }).done();
+                        });
+                    }
+                });
+            },
+            verticesDeleted: function(data) {
+                require(['../util/store'], function(store) {
+                    var storeObjects = _.compact(
+                            store.getObjects(publicData.currentWorkspaceId, 'vertex', data.vertexIds)
+                        );
+                    if (storeObjects.length) {
+                        require(['../services/vertex'], function(vertex) {
+                            vertex.multiple({ vertexIds: _.pluck(storeObjects, 'id') })
+                                .then(function(vertices) {
+                                    var deleted = _.without(data.vertexIds, _.pluck(vertices, 'id'));
+                                    if (deleted.length) {
+                                        store.removeWorkspaceVertexIds(publicData.currentWorkspaceId, deleted);
+                                        dispatchMain('rebroadcastEvent', {
+                                            eventName: 'verticesDeleted',
+                                            data: {
+                                                vertexIds: data.vertexIds
+                                            }
+                                        });
+                                    }
+                                })
+                                .catch(function() {
+                                    store.removeWorkspaceVertexIds(publicData.currentWorkspaceId, data.vertexIds);
+                                    dispatchMain('rebroadcastEvent', {
+                                        eventName: 'verticesDeleted',
+                                        data: {
+                                            vertexIds: data.vertexIds
+                                        }
+                                    });
+                                });
                         });
                     }
                 });

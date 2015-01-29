@@ -11,7 +11,7 @@ import org.securegraph.util.FilterIterable;
 import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public class TermMentionRepository {
-    public static final String VISIBILITY = "termMention";
+    public static final String VISIBILITY_STRING = "termMention";
     private final Graph graph;
     private final AuthorizationRepository authorizationRepository;
 
@@ -19,7 +19,7 @@ public class TermMentionRepository {
     public TermMentionRepository(Graph graph, AuthorizationRepository authorizationRepository) {
         this.graph = graph;
         this.authorizationRepository = authorizationRepository;
-        authorizationRepository.addAuthorizationToGraph(VISIBILITY);
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
     }
 
     public Iterable<Vertex> findBySourceGraphVertexAndPropertyKey(String sourceVertexId, final String propertyKey, Authorizations authorizations) {
@@ -46,7 +46,7 @@ public class TermMentionRepository {
 
     public void updateVisibility(Vertex termMention, Visibility newVisibility, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
-        newVisibility = new LumifyVisibility().and(newVisibility, TermMentionRepository.VISIBILITY);
+        newVisibility = new LumifyVisibility().and(newVisibility, TermMentionRepository.VISIBILITY_STRING);
         ExistingElementMutation<Vertex> m = termMention.prepareMutation();
         m.alterElementVisibility(newVisibility);
         for (Property property : termMention.getProperties()) {
@@ -74,6 +74,11 @@ public class TermMentionRepository {
         graph.removeVertex(termMention, authorizationsWithTermMention);
     }
 
+    public void markHidden(Vertex termMention, Visibility hiddenVisibility, Authorizations authorizations) {
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
+        graph.markVertexHidden(termMention, hiddenVisibility, authorizationsWithTermMention);
+    }
+
     public Iterable<Vertex> findByEdgeId(String sourceVertexId, final String edgeId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         Vertex sourceVertex = graph.getVertex(sourceVertexId, authorizationsWithTermMention);
@@ -92,6 +97,6 @@ public class TermMentionRepository {
     }
 
     public Authorizations getAuthorizations(Authorizations authorizations) {
-        return authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY);
+        return authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY_STRING);
     }
 }

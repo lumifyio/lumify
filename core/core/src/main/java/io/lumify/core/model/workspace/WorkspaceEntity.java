@@ -1,6 +1,7 @@
 package io.lumify.core.model.workspace;
 
 import org.securegraph.Authorizations;
+import org.securegraph.FetchHint;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.util.ConvertingIterable;
@@ -40,9 +41,9 @@ public class WorkspaceEntity {
         return visible;
     }
 
-    public static Iterable<Vertex> toVertices(Graph graph, Iterable<WorkspaceEntity> workspaceEntities, Authorizations authorizations) {
+    public static Iterable<Vertex> toVertices(Graph graph, Iterable<WorkspaceEntity> workspaceEntities, boolean includeHidden, Authorizations authorizations) {
         Iterable<String> vertexIds = toVertexIds(workspaceEntities);
-        return graph.getVertices(vertexIds, authorizations);
+        return graph.getVertices(vertexIds, includeHidden ? FetchHint.ALL_INCLUDING_HIDDEN : FetchHint.ALL, authorizations);
     }
 
     public static Iterable<String> toVertexIds(Iterable<WorkspaceEntity> workspaceEntities) {
@@ -52,5 +53,12 @@ public class WorkspaceEntity {
                 return o.getEntityVertexId();
             }
         };
+    }
+
+    @Override
+    public String toString() {
+        return "WorkspaceEntity{" +
+                "entityVertexId='" + entityVertexId + '\'' +
+                '}';
     }
 }

@@ -111,7 +111,7 @@
             "operations": [
                 {
                     "method": "POST",
-                    "summary": "Creates a new vertex",
+                    "summary": "Creates a property on a vertex",
                     "type": "ClientApiElement",
                     "nickname": "setProperty",
                     "parameters": [
@@ -168,6 +168,80 @@
                             "name": "metadata",
                             "description": "metadata",
                             "required": false,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/property",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes a property on a vertex",
+                    "type": "void",
+                    "nickname": "deleteProperty",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "graph vertex id to set property on",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyKey",
+                            "description": "the property key",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "propertyName",
+                            "description": "the property name",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex/edge",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes an edge",
+                    "type": "void",
+                    "nickname": "deleteEdge",
+                    "parameters": [
+                        {
+                            "name": "edgeId",
+                            "description": "The edge id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vertex",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes a vertex",
+                    "type": "void",
+                    "nickname": "deleteVertex",
+                    "parameters": [
+                        {
+                            "name": "graphVertexId",
+                            "description": "The vertex id",
+                            "required": true,
                             "type": "string",
                             "paramType": "query"
                         }

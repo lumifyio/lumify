@@ -68,7 +68,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         super(config);
         this.graph = graph;
 
-        authorizationRepository.addAuthorizationToGraph(SecureGraphOntologyRepository.VISIBILITY_STRING);
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
         Set<String> authorizationsSet = new HashSet<>();
         authorizationsSet.add(VISIBILITY_STRING);
@@ -537,19 +537,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     ) {
         OntologyProperty typeProperty = getPropertyByIRI(propertyIri);
         if (typeProperty == null) {
-            DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyIri);
-            definePropertyBuilder.dataType(PropertyType.getTypeClass(dataType));
-            if (dataType == PropertyType.STRING) {
-                definePropertyBuilder.textIndexHint(textIndexHints);
-            }
-            if (boost != null) {
-                if (graph.isFieldBoostSupported()) {
-                    definePropertyBuilder.boost(boost);
-                } else {
-                    LOGGER.warn("Field boosting is not support by the graph");
-                }
-            }
-            definePropertyBuilder.define();
+            definePropertyOnGraph(graph, propertyIri, dataType, textIndexHints, boost);
 
             VertexBuilder builder = graph.prepareVertex(ID_PREFIX_PROPERTY + propertyIri, VISIBILITY.getVisibility());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
