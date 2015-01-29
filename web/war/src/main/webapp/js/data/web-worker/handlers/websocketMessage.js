@@ -80,14 +80,15 @@ define(['require'], function(require) {
             verticesDeleted: function(data) {
                 require(['../util/store'], function(store) {
                     var storeObjects = _.compact(
-                        store.getObjects(publicData.currentWorkspaceId, 'vertex', data.vertexIds)
-                    );
+                            store.getObjects(publicData.currentWorkspaceId, 'vertex', data.vertexIds)
+                        );
                     if (storeObjects.length) {
-                        require(['../services/vertex'], function(service) {
-                            service.multiple({ vertexIds: _.pluck(storeObjects, 'id') })
+                        require(['../services/vertex'], function(vertex) {
+                            vertex.multiple({ vertexIds: _.pluck(storeObjects, 'id') })
                                 .then(function(vertices) {
                                     var deleted = _.without(data.vertexIds, _.pluck(vertices, 'id'));
                                     if (deleted.length) {
+                                        store.removeWorkspaceVertexIds(publicData.currentWorkspaceId, deleted);
                                         dispatchMain('rebroadcastEvent', {
                                             eventName: 'verticesDeleted',
                                             data: {
@@ -97,6 +98,7 @@ define(['require'], function(require) {
                                     }
                                 })
                                 .catch(function() {
+                                    store.removeWorkspaceVertexIds(publicData.currentWorkspaceId, data.vertexIds);
                                     dispatchMain('rebroadcastEvent', {
                                         eventName: 'verticesDeleted',
                                         data: {
