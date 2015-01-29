@@ -44,12 +44,10 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            Promise.all([
-                this.dataRequest('ontology', 'properties'),
-                this.dataRequest('ontology', 'relationships')
-            ]).done(function(results) {
-                self.ontologyProperties = results[0];
-                self.ontologyRelationships = results[1];
+            this.dataRequest('ontology', 'ontology').done(function(ontology) {
+                self.ontologyConcepts = ontology.concepts;
+                self.ontologyProperties = ontology.properties;
+                self.ontologyRelationships = ontology.relationships;
                 self.setup();
             })
         });
@@ -202,6 +200,12 @@ define([
                                     'http://lumify.io#visibilityJson': diffs[0]['http://lumify.io#visibilityJson']
                                 };
                                 outputItem.title = diffs[0].title || i18n('vertex.property.title.not_available');
+                            }
+                            if (diffs[0].conceptType) {
+                                var concept = self.ontologyConcepts.byId[diffs[0].conceptType];
+                                if (concept) {
+                                    outputItem.conceptImage = concept.glyphIconHref;
+                                }
                             }
                         } else {
                             outputItem.edgeId = elementId;
