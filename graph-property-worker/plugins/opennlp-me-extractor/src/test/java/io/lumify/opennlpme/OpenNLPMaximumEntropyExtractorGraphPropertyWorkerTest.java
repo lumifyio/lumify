@@ -84,7 +84,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         conf.put(OpenNLPMaximumEntropyExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file:///" + getClass().getResource(RESOURCE_CONFIG_DIR).getFile());
 
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
-        authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY);
+        authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY_STRING);
         Injector injector = null;
         List<TermMentionFilter> termMentionFilters = new ArrayList<TermMentionFilter>();
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(conf, termMentionFilters, hdfsFileSystem, user, authorizations, injector);

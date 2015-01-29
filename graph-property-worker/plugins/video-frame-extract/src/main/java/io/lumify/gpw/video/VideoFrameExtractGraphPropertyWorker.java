@@ -42,14 +42,14 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        getAuthorizationRepository().addAuthorizationToGraph(VideoFrameInfo.VISIBILITY);
+        getAuthorizationRepository().addAuthorizationToGraph(VideoFrameInfo.VISIBILITY_STRING);
         videoRotationProperty = new IntegerLumifyProperty(getOntologyRepository().getRequiredPropertyIRIByIntent("media.clockwiseRotation"));
     }
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         Integer videoRotation = videoRotationProperty.getPropertyValue(data.getElement(), 0);
-        Visibility newVisibility = new LumifyVisibility(LumifyVisibility.and(getVisibilityTranslator().toVisibilityNoSuperUser(data.getVisibilityJson()), VideoFrameInfo.VISIBILITY)).getVisibility();
+        Visibility newVisibility = new LumifyVisibility(LumifyVisibility.and(getVisibilityTranslator().toVisibilityNoSuperUser(data.getVisibilityJson()), VideoFrameInfo.VISIBILITY_STRING)).getVisibility();
 
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
