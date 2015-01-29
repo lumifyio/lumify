@@ -1,5 +1,6 @@
 package io.lumify.tools;
 
+import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
@@ -110,7 +111,7 @@ public class RdfImport extends CommandLineBase {
 
     private void importFile(File inputFile) throws IOException {
         LOGGER.info("Importing file: %s", inputFile.getAbsolutePath());
-        RdfGraphPropertyWorker rdfGraphPropertyWorker = new RdfGraphPropertyWorker();
+        RdfGraphPropertyWorker rdfGraphPropertyWorker = InjectHelper.getInstance(RdfGraphPropertyWorker.class);
         Visibility visibility = new Visibility("");
         rdfGraphPropertyWorker.importRdf(getGraph(), inputFile, null, visibility, getAuthorizations());
         getGraph().flush();
