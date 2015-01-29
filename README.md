@@ -39,8 +39,8 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
         docker/run-dev.sh
 
-1. Create a war file:
-      _NOTE: Run from the host machine in the root of your clone._
+1. Create a war file:<br/>
+      _NOTE: Run from the host machine in the root of your clone._<br/>
       _NOTE: Requires Oracle JDK._
 
         mvn package -P web-war -pl web/war -am -DskipTests -Dsource.skip=true
