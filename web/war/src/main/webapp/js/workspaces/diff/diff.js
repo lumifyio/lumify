@@ -17,6 +17,21 @@ define([
 
     return defineComponent(Diff, withDataRequest);
 
+    function titleForEdgesVertices(vertex, vertexId, diffsGroupedByElement) {
+        if (vertex) {
+            return F.vertex.title(vertex);
+        }
+
+        var matchingDiffs = diffsGroupedByElement[vertexId],
+            diff = matchingDiffs && matchingDiffs.length && matchingDiffs[0];
+
+        if (diff && diff.title) {
+            return diff.title;
+        }
+
+        return i18n('vertex.property.title.not_available');
+    }
+
     function Diff() {
 
         this.defaultAttrs({
@@ -195,11 +210,16 @@ define([
                                 outputItem.edgeLabel = self.ontologyRelationships.byTitle[outputItem.edge.label]
                                 .displayName;
                             } else {
+                                var sourceId = diffs[0].outVertexId,
+                                    targetId = diffs[0].inVertexId,
+                                    source = verticesById[sourceId],
+                                    target = verticesById[targetId];
+
                                 outputItem.edge = {
                                     id: elementId,
+                                    sourceTitle: titleForEdgesVertices(source, sourceId, groupedByElement),
+                                    targetTitle: titleForEdgesVertices(target, targetId, groupedByElement),
                                     properties: [],
-                                    source: verticesById[diffs[0].inVertexId],
-                                    target: verticesById[diffs[0].outVertexId],
                                     'http://lumify.io#visibilityJson': diffs[0].visibilityJson
                                 };
                                 outputItem.edgeLabel = self.ontologyRelationships.byTitle[diffs[0].label]
