@@ -487,9 +487,12 @@ define([
             lookupTimezone: function(name, withOffsetForDate) {
                 var list = FORMATTERS.timezone.list(),
                     tz = list[name],
-                    region = timezoneJS.timezone.getRegionForTimezone(name);
+                    regions = timezoneJS.timezone.getRegionForTimezone(name);
 
-                timezoneJS.timezone.loadZoneFile(region, { async: false });
+                if (!_.isArray(regions)) {
+                    regions = [regions];
+                }
+                timezoneJS.timezone.loadZoneFiles(regions, { async: false });
 
                 if (withOffsetForDate && withOffsetForDate.getTime) {
                     withOffsetForDate = withOffsetForDate.getTime();
