@@ -12,6 +12,8 @@ To load an ontology you will need a zip file containing the OWL file and all of 
 ontology you would zip all the files in the ontology-dev directory and call it dev.owl. Then you will need to upload
 the ontology into Lumify.
 
+* [Install](build.md#web-plugin) the dev-tools web plugin.
+
 * Click the "Admin" tool button.
 
   ![Admin Tool](img/admin.jpg)
