@@ -42,7 +42,7 @@ The previous command will create a WAR file in the `web/war/target` directory.
 ## Web Application Plugin Build Instructions
 
 The Lumify web application can be extended with dynamically loaded plugins. You can find some example plugins in
-`web/plugins`. To build a web plugin, simply run `mvn package` from the root directory of the plugin you want to build.
+`web/plugins`. To build a web plugin, run `mvn package -pl ./web/plugins/<plugin-name>/ -am -DskipTests`.
 
 Once the plugin JAR file is created, copy it to the `/lumify/libcache` directory in HDFS
 `hadoop fs -put <path_to_plugin_jar> /lumify/libcache`. Or, copy it to the web server's lib directory
