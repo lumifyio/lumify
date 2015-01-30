@@ -316,4 +316,56 @@ public final class Configuration {
 
         return configuration;
     }
+
+    public Map<String, Map<String, String>> getMultiValue(String prefix) {
+        return getMultiValue(this.config.entrySet(), prefix);
+    }
+
+    /**
+     * Processing configuration items that looks like this:
+     *
+     * repository.ontology.owl.dev.iri=http://lumify.io/dev
+     * repository.ontology.owl.dev.dir=examples/ontology-dev/
+     *
+     * repository.ontology.owl.csv.iri=http://lumify.io/csv
+     * repository.ontology.owl.csv.dir=storm/plugins/csv/ontology/
+     *
+     * Into a hash like this:
+     *
+     * - dev
+     *   - iri: http://lumify.io/dev
+     *   - dir: examples/ontology-dev/
+     * - csv
+     *   - iri: http://lumify.io/csv
+     *   - dir: storm/plugins/csv/ontology/
+     */
+    public static Map<String, Map<String, String>> getMultiValue(Iterable<Map.Entry<String, String>> config, String prefix) {
+        if (!prefix.endsWith(".")) {
+            prefix = prefix + ".";
+        }
+
+        Map<String, Map<String, String>> results = new HashMap<>();
+        for (Map.Entry<String, String> item : config) {
+            if (item.getKey().startsWith(prefix)) {
+                String rest = item.getKey().substring(prefix.length());
+                int ch = rest.indexOf('.');
+                String key;
+                String subkey;
+                if (ch > 0) {
+                    key = rest.substring(0, ch);
+                    subkey = rest.substring(ch + 1);
+                } else {
+                    key = rest;
+                    subkey = "";
+                }
+                Map<String, String> values = results.get(key);
+                if (values == null) {
+                    values = new HashMap<>();
+                    results.put(key, values);
+                }
+                values.put(subkey, item.getValue());
+            }
+        }
+        return results;
+    }
 }

@@ -58,25 +58,29 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         addEntityGlyphIcon(entityConcept);
         importBaseOwlFile(authorizations);
 
-        for (String key : config.getKeys(Configuration.ONTOLOGY_REPOSITORY_OWL)) {
-            if (key.endsWith(".iri")) {
-                String iri = config.get(key, null);
-                String dir = config.get(key.replace(".iri", ".dir"), null);
-                String file = config.get(key.replace(".iri", ".file"), null);
+        for (Map.Entry<String, Map<String, String>> owlGroup : config.getMultiValue(Configuration.ONTOLOGY_REPOSITORY_OWL).entrySet()) {
+            String iri = owlGroup.getValue().get("iri");
+            String dir = owlGroup.getValue().get("dir");
+            String file = owlGroup.getValue().get("file");
 
-                if (iri != null) {
-                    if (dir != null) {
-                        File owlFile = findOwlFile(new File(dir));
-                        if (owlFile == null) {
-                            throw new LumifyResourceNotFoundException("could not find owl file in directory " + new File(dir).getAbsolutePath());
-                        }
-                        importFile(owlFile, IRI.create(iri), authorizations);
-                    } else if (file != null) {
-                        writePackage(new File(file), IRI.create(iri), authorizations);
-                    } else {
-                        throw new LumifyResourceNotFoundException("iri " + iri + " without matching dir or file");
-                    }
+            if (iri == null) {
+                throw new LumifyException("iri is required for group " + Configuration.ONTOLOGY_REPOSITORY_OWL + "." + owlGroup.getKey());
+            }
+            if (dir == null && file == null) {
+                throw new LumifyException("dir or file is required for " + Configuration.ONTOLOGY_REPOSITORY_OWL + "." + owlGroup.getKey());
+            }
+            if (dir != null && file != null) {
+                throw new LumifyException("you cannot specify both dir and file for " + Configuration.ONTOLOGY_REPOSITORY_OWL + "." + owlGroup.getKey());
+            }
+
+            if (dir != null) {
+                File owlFile = findOwlFile(new File(dir));
+                if (owlFile == null) {
+                    throw new LumifyResourceNotFoundException("could not find owl file in directory " + new File(dir).getAbsolutePath());
                 }
+                importFile(owlFile, IRI.create(iri), authorizations);
+            } else {
+                writePackage(new File(file), IRI.create(iri), authorizations);
             }
         }
     }
