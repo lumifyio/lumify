@@ -60,7 +60,7 @@ define([
                 formatValue = function(name, change, property) {
                     return F.vertex.prop({
                         id: property.id,
-                        properties: change ? [change] : []
+                        properties: change ? _.isArray(change) ? change : [change] : []
                     }, name, property.key)
                 };
 
@@ -243,15 +243,39 @@ define([
 
                                 case 'PropertyDiffItem':
 
-                                    var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
+                                    var ontologyProperty = self.ontologyProperties.byTitle[diff.name],
+                                        compoundProperty = self.ontologyProperties.byDependentToCompound[diff.name];
+
                                     if (ontologyProperty && ontologyProperty.userVisible) {
                                         diff.id = elementId + diff.name + diff.key;
                                         addDiffDependency(diff.elementId, diff);
 
-                                        if (diff.name === 'title' && self.diffsForElementId[diff.elementId]) {
-                                            outputItem.title = diff['new'].value;
+                                        diff.className = F.className.to(diff.id);
+                                        if (compoundProperty) {
+                                            diff.dependentName = diff.name;
+                                            diff.name = compoundProperty;
+                                            var previousPropertyWithKey = _.findWhere(outputItem.properties, {
+                                                key: diff.key
+                                            })
+                                            if (previousPropertyWithKey) {
+                                                if (previousPropertyWithKey.old) {
+                                                    previousPropertyWithKey.old.push(diff.old);
+                                                }
+                                                if (previousPropertyWithKey.new) {
+                                                    previousPropertyWithKey.new.push(diff.new);
+                                                }
+                                                previousPropertyWithKey.diffs.push(diff)
+                                            } else {
+                                                if (diff.old) {
+                                                    diff.old = [diff.old];
+                                                }
+                                                if (diff.new) {
+                                                    diff.new = [diff.new];
+                                                }
+                                                diff.diffs = [diff];
+                                                outputItem.properties.push(diff)
+                                            }
                                         } else {
-                                            diff.className = F.className.to(diff.id);
                                             outputItem.properties.push(diff)
                                         }
                                         self.diffsById[diff.id] = diff;
@@ -399,8 +423,18 @@ define([
                 bothButtons = button.add(otherButton),
                 header = this.$node.find('.header'),
                 type = button.hasClass('publish-all') ? 'publish' : 'undo',
-                diffsToSend = this.$node.find('.mark-' + type).map(function() {
-                    var diff = self.diffsById[$(this).data('diffId')];
+                diffsToSend = this.$node.find('.mark-' + type).map(function mapper(iOrDiff) {
+                    var isDiff = _.isObject(iOrDiff),
+                        diff = isDiff ? iOrDiff : self.diffsById[$(this).data('diffId')];
+
+                    if (!isDiff && diff.diffs) {
+                        return diff.diffs.map(function(d) {
+                            if (d.dependentName) {
+                                d.name = d.dependentName;
+                            }
+                            return mapper(d);
+                        });
+                    }
 
                     switch (diff.type) {
 
