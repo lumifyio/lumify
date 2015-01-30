@@ -6,11 +6,25 @@ works.
 
 For an example see the [dev ontology](../examples/ontology-dev/).
 
-## Loading an ontology
+## Loading an ontology via configuration
+
+Add the following to your [configuration](configuration.md):
+
+```
+repository.ontology.owl.dev.iri=http://lumify.io/dev
+repository.ontology.owl.dev.dir=/<path-to-lumify-source>/examples/ontology-dev/
+
+#repository.ontology.owl.wikipedia.iri=http://lumify.io/wikipedia
+#repository.ontology.owl.wikipedia.dir=/<path-to-lumify-source>/datasets/wikipedia/data/ontology
+```
+
+## Loading an ontology via web plugin
 
 To load an ontology you will need a zip file containing the OWL file and all of it's dependencies. For the dev
 ontology you would zip all the files in the ontology-dev directory and call it dev.owl. Then you will need to upload
 the ontology into Lumify.
+
+* [Install](build.md#web-plugin) the dev-tools web plugin.
 
 * Click the "Admin" tool button.
 

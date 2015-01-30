@@ -67,6 +67,8 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 See [docker/README.md](docker/) for more information on the docker dev image.
 
+See [docs/developer.md](docs/developer.md) for more information on developing for Lumify.
+
 ## Developing / Contributing
 
 If you're a system administrator or developer looking to install your own instance of Lumify or do custom development,

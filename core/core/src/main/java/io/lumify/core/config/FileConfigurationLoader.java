@@ -14,7 +14,7 @@ import java.util.*;
 
 /**
  * Searches for lumify configuration directories in this order:
- * - ${ENV_CONFIGURATION_LOCATION}
+ * - ${ENV_LUMIFY_DIR}
  * - ${user.home}/.lumify
  * - ${appdata}/Lumify
  * - DEFAULT_UNIX_LOCATION or DEFAULT_WINDOWS_LOCATION
@@ -23,7 +23,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
     /**
      * !!! DO NOT DEFINE A LOGGER here. This class get loaded very early in the process and we don't want to the logger to be initialized yet **
      */
-    public static final String ENV_CONFIGURATION_LOCATION = "LUMIFY_CONFIGURATION_LOCATION";
+    public static final String ENV_LUMIFY_DIR = "LUMIFY_DIR";
     public static final String DEFAULT_UNIX_LOCATION = "/opt/lumify/";
     public static final String DEFAULT_WINDOWS_LOCATION = "c:/opt/lumify/";
 
@@ -64,7 +64,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
             addLumifySubDirectory(results, new File(new File(userHome), ".lumify").getAbsolutePath(), subDirectory);
         }
 
-        addLumifySubDirectory(results, System.getenv(ENV_CONFIGURATION_LOCATION), subDirectory);
+        addLumifySubDirectory(results, System.getenv(ENV_LUMIFY_DIR), subDirectory);
 
         if (results.size() == 0) {
             throw new LumifyException("Could not find any valid config directories.");
