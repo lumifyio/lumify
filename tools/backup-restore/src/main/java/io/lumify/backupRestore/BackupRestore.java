@@ -17,11 +17,13 @@ public class BackupRestore {
     private static final String CMD_OPT_ACCUMULO_USERNAME = "accumuloUsername";
     private static final String CMD_OPT_ACCUMULO_PASSWORD = "accumuloPassword";
     private static final String CMD_OPT_ZOOKEEPER_SERVERS = "zookeeperServers";
+    private static final String CMD_OPT_HADOOP_FS_DEFAULT_FS = "hadoopFsDefaultFS";
+    private static final String CMD_OPT_SECUREGRAPH_HDFS_OVERFLOW_DIRECTORY = "securegraphHdfsOverflowDirectory";
+    private static final String DEFAULT_SECUREGRAPH_HDFS_OVERFLOW_DIRECTORY = "/lumify/secureGraph";
     private static final String CMD_OPT_HDFS_BACKUP_DIRECTORY = "hdfsBackupDirectory";
     private static final String DEFAULT_HDFS_BACKUP_DIRECTORY = "/backup/" + BACKUP_DIRECTORY_DATE_FORMAT.format(new Date());
     private static final String CMD_OPT_HDFS_RESTORE_DIRECTORY = "hdfsRestoreDirectory";
     private static final String CMD_OPT_HDFS_RESTORE_TEMP_DIRECTORY = "hdfsRestoreTempDirectory";
-    private static final String CMD_OPT_HADOOP_FS_DEFAULT_FS = "hadoopFsDefaultFS";
     private static final String CMD_OPT_HADOOP_DFS_CLIENT_USE_DATANODE_HOSTNAME = "hadoopDfsClientUseDatanodeHostname";
     private static final String CMD_OPT_HADOOP_USERNAME = "hadoopUsername";
 
@@ -29,6 +31,7 @@ public class BackupRestore {
     private String accumuloUsername;
     private String accumuloPassword;
     private String zookeeperServers;
+    private String securegraphHdfsOverflowDirectory;
     private String hadoopFsDefaultFs;
     private boolean hadoopDfsClientUseDatanodeHostname;
     private String hadoopUsername;
@@ -55,6 +58,7 @@ public class BackupRestore {
             System.exit(-1);
             return;
         }
+        securegraphHdfsOverflowDirectory = cmd.getOptionValue(CMD_OPT_SECUREGRAPH_HDFS_OVERFLOW_DIRECTORY, DEFAULT_SECUREGRAPH_HDFS_OVERFLOW_DIRECTORY);
         hadoopDfsClientUseDatanodeHostname = cmd.hasOption(CMD_OPT_HADOOP_DFS_CLIENT_USE_DATANODE_HOSTNAME);
         hadoopUsername = cmd.getOptionValue(CMD_OPT_HADOOP_USERNAME);
 
@@ -128,6 +132,7 @@ public class BackupRestore {
                 .setAccumuloPassword(accumuloPassword)
                 .setZookeeperServers(zookeeperServers)
                 .setHadoopFsDefaultFS(hadoopFsDefaultFs)
+                .setSecuregraphHdfsOverflowDirectory(securegraphHdfsOverflowDirectory)
                 .setHadoopDfsClientUseDatanodeHostname(hadoopDfsClientUseDatanodeHostname)
                 .setHadoopUsername(hadoopUsername);
     }

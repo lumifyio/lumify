@@ -35,6 +35,7 @@ public class RabbitMQWorkQueueSpout extends WorkerSpout {
             this.channel.queueDeclare(queueName, true, false, false, null);
             this.consumer = new QueueingConsumer(channel);
             this.channel.basicConsume(this.queueName, false, consumer);
+            this.channel.basicQos(configuration.getInt(Configuration.RABBITMQ_PREFETCH_COUNT, 0));
         } catch (IOException ex) {
             throw new LumifyException("Could not startup RabbitMQ", ex);
         }

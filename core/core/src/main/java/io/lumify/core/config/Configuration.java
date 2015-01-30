@@ -59,6 +59,7 @@ public final class Configuration {
     public static final String LOCK_REPOSITORY_PATH_PREFIX = "lockRepository.pathPrefix";
     public static final String USER_SESSION_COUNTER_PATH_PREFIX = "userSessionCounter.pathPrefix";
     public static final String DEFAULT_TIME_ZONE = "default.timeZone";
+    public static final String RABBITMQ_PREFETCH_COUNT ="rabbitmq.prefetch.count";
     private final ConfigurationLoader configurationLoader;
     private final LumifyResourceBundleManager lumifyResourceBundleManager;
 

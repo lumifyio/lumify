@@ -100,6 +100,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private void setupInjector(ServletContext context, Configuration config) {
+        LOGGER.debug("setupInjector");
         InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config), config);
 
         // Store the injector in the context for a servlet to access later
@@ -112,6 +113,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private void setupGraphAuthorizations() {
+        LOGGER.debug("setupGraphAuthorizations");
         AuthorizationRepository authorizationRepository = InjectHelper.getInstance(AuthorizationRepository.class);
         authorizationRepository.addAuthorizationToGraph(
                 LumifyVisibility.SUPER_USER_VISIBILITY_STRING,
@@ -125,6 +127,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private void setupWebApp(ServletContext context, Configuration config) {
+        LOGGER.debug("setupWebApp");
         Router router = new Router(context);
         ServletRegistration.Dynamic servlet = context.addServlet(LUMIFY_SERVLET_NAME, router);
         servlet.addMapping("/*");
@@ -192,8 +195,11 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private void setupLongRunningProcessRunner(ServletContext context, final Configuration config) {
+        LOGGER.debug("setupLongRunningProcessRunner");
+
         boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
         if (!enabled) {
+            LOGGER.debug("skipping embedded long running process runners");
             return;
         }
 
@@ -203,6 +209,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
         longRunningProcessRunner.prepare(config.toMap());
         final WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
 
+        LOGGER.debug("long running process runners: %d", threadCount);
         for (int i = 0; i < threadCount; i++) {
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -224,19 +231,24 @@ public final class ApplicationBootstrap implements ServletContextListener {
             });
             t.setName("long-running-process-runner-" + t.getId());
             t.setDaemon(true);
+            LOGGER.debug("starting long running process runner thread: %s", t.getName());
             t.start();
         }
     }
 
     private void setupGraphPropertyWorkerRunner(ServletContext context, Configuration config) {
+        LOGGER.debug("setupGraphPropertyWorkerRunner");
+
         boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED, "true"));
         if (!enabled) {
+            LOGGER.debug("skipping embedded graph property worker");
             return;
         }
 
         int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT, "4"));
         final User user = userRepository.getSystemUser();
 
+        LOGGER.debug("starting graph property worker runners: %d", threadCount);
         for (int i = 0; i < threadCount; i++) {
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -252,6 +264,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
             });
             t.setName("graph-property-worker-runner-" + t.getId());
             t.setDaemon(true);
+            LOGGER.debug("starting graph property worker runner thread: %s", t.getName());
             t.start();
         }
     }

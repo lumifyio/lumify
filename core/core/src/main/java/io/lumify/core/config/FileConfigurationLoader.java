@@ -34,6 +34,9 @@ public class FileConfigurationLoader extends ConfigurationLoader {
     public Configuration createConfiguration() {
         final Map<String, String> properties = new HashMap<>();
         List<File> configDirectories = getLumifyDirectoriesFromLeastPriority("config");
+        if (configDirectories.size() == 0) {
+            throw new LumifyException("Could not find any valid config directories.");
+        }
         for (File directory : configDirectories) {
             Map<String, String> directoryProperties = loadDirectory(directory);
             properties.putAll(directoryProperties);
@@ -65,10 +68,6 @@ public class FileConfigurationLoader extends ConfigurationLoader {
         }
 
         addLumifySubDirectory(results, System.getenv(ENV_LUMIFY_DIR), subDirectory);
-
-        if (results.size() == 0) {
-            throw new LumifyException("Could not find any valid config directories.");
-        }
 
         return ImmutableList.copyOf(results);
     }
@@ -149,6 +148,9 @@ public class FileConfigurationLoader extends ConfigurationLoader {
     @Override
     public File resolveFileName(String fileName) {
         List<File> configDirectories = getLumifyDirectoriesFromMostPriority("config");
+        if (configDirectories.size() == 0) {
+            throw new LumifyException("Could not find any valid config directories.");
+        }
         for (File directory : configDirectories) {
             File f = new File(directory, fileName);
             if (f.exists()) {
