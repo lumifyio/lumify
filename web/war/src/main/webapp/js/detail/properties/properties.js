@@ -841,6 +841,8 @@ define([
                                 $(valueSpan).teardownAllComponents();
                                 JustificationViewer.attachTo(valueSpan, property.justificationData);
                             });
+                        } else if (isSandboxStatus(property)) {
+                            valueSpan.textContent = property.value;
                         } else {
                             valueSpan.textContent = F.vertex.prop(vertex, property.name, property.key);
                         }
