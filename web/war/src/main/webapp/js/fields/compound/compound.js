@@ -86,7 +86,6 @@ define([
                     property = values[propertyIri],
                     previousValue = property ? property.value : '';
 
-                console.log(self.attr.values)
                 require([
                     ontologyProperty.possibleValues ?
                         '../restrictValues' :
