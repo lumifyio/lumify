@@ -22,6 +22,7 @@ define([
     var component = defineComponent(Properties, withDataRequest, withPropertyInfo),
         HIDE_PROPERTIES = ['http://lumify.io/comment#entry'],
         VISIBILITY_NAME = 'http://lumify.io#visibilityJson',
+        SANDBOX_STATUS_NAME = 'http://lumify.io#sandboxStatus',
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
@@ -38,6 +39,10 @@ define([
 
     function isVisibility(property) {
         return property.name === VISIBILITY_NAME;
+    }
+
+    function isSandboxStatus(property) {
+        return property.name === SANDBOX_STATUS_NAME;
     }
 
     function isJustification(property) {
@@ -118,11 +123,22 @@ define([
                             });
                         }
 
+                        var sandboxStatus = F.vertex.sandboxStatus(self.attr.data);
+                        if (sandboxStatus) {
+                            properties.push({
+                                name: SANDBOX_STATUS_NAME,
+                                displayName: i18n('detail.entity.sandboxStatus'),
+                                value: sandboxStatus,
+                                hideInfo: true,
+                                hideVisibility: true,
+                            });
+                        }
+
                         if (isEdge && model.label) {
                             var ontologyRelationship = self.ontologyRelationships.byTitle[model.label];
                             properties.push({
                                 name: 'relationshipLabel',
-                                displayName: 'Type',
+                                displayName: i18n('detail.edge.type'),
                                 hideInfo: true,
                                 hideVisibility: true,
                                 value: ontologyRelationship ?
@@ -136,21 +152,25 @@ define([
                             return '0';
                         }
 
+                        if (isSandboxStatus(property)) {
+                            return '1';
+                        }
+
                         if (isEdge) {
                             return property.name === 'relationshipLabel' ?
-                                '1' :
+                                '2' :
                                 isJustification(property) ?
-                                '2' : '3';
+                                '3' : '4';
                         }
 
                         var ontologyProperty = self.ontologyProperties.byTitle[property.name];
                         if (ontologyProperty && ontologyProperty.propertyGroup) {
-                            return '3' + ontologyProperty.propertyGroup.toLowerCase() + ontologyProperty.displayName;
+                            return '4' + ontologyProperty.propertyGroup.toLowerCase() + ontologyProperty.displayName;
                         }
                         if (ontologyProperty && ontologyProperty.displayName) {
-                            return '1' + ontologyProperty.displayName.toLowerCase();
+                            return '2' + ontologyProperty.displayName.toLowerCase();
                         }
-                        return '2' + property.name.toLowerCase();
+                        return '3' + property.name.toLowerCase();
                     })
                     .groupBy('name')
                     .pairs()
@@ -396,7 +416,7 @@ define([
         this.onEdgesUpdated = function(event, data) {
             var edge = _.findWhere(data.edges, { id: this.attr.data.id });
             if (edge) {
-                this.attr.data.properties = edge.properties;
+                this.attr.data = edge;
                 this.update(edge.properties);
             }
         };
@@ -404,7 +424,7 @@ define([
         this.onVerticesUpdated = function(event, data) {
             var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
             if (vertex) {
-                this.attr.data.properties = vertex.properties;
+                this.attr.data = vertex;
                 this.update(vertex.properties)
             }
         };
