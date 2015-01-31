@@ -34,12 +34,7 @@ define([
                     config.property.metadata['http://lumify.io#modifiedBy'] === lumifyData.currentUser.id;
                 config.canEdit = config.isComment ?
                     config.isCommentCreator :
-                    config.property.compoundProperty ?
-                    F.vertex.sandboxStatus(config.data, config.property.name, config.property.key) :
-                    (
-                        F.vertex.sandboxStatus(config.property) ||
-                        config.property.name === 'http://lumify.io#visibilityJson'
-                    );
+                    true;
                 config.canDelete = config.canEdit && config.property.name !== 'http://lumify.io#visibilityJson';
             }
             config.hideDialog = true;
