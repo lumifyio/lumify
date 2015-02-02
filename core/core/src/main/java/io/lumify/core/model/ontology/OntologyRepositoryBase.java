@@ -45,18 +45,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
+    public static final String BASE_OWL_IRI = "http://lumify.io";
+    public static final String COMMENT_OWL_IRI = "http://lumify.io/comment";
     private final Configuration configuration;
 
     protected OntologyRepositoryBase(Configuration configuration) {
         this.configuration = configuration;
     }
 
-    public void defineOntology(Configuration config, Authorizations authorizations) throws Exception {
+    public void loadOntologies(Configuration config, Authorizations authorizations) throws Exception {
         Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root", null);
         Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing", null);
         clearCache();
         addEntityGlyphIcon(entityConcept);
-        importBaseOwlFile(authorizations);
+
+        importResourceOwl("base.owl", BASE_OWL_IRI, authorizations);
+        importResourceOwl("user.owl", UserRepository.OWL_IRI, authorizations);
+        importResourceOwl("workspace.owl", WorkspaceRepository.OWL_IRI, authorizations);
+        importResourceOwl("comment.owl", COMMENT_OWL_IRI, authorizations);
+        importResourceOwl("longRunningProcess.owl", LongRunningProcessRepository.OWL_IRI, authorizations);
 
         for (Map.Entry<String, Map<String, String>> owlGroup : config.getMultiValue(Configuration.ONTOLOGY_REPOSITORY_OWL).entrySet()) {
             String iri = owlGroup.getValue().get("iri");
@@ -73,6 +80,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 throw new LumifyException("you cannot specify both dir and file for " + Configuration.ONTOLOGY_REPOSITORY_OWL + "." + owlGroup.getKey());
             }
 
+            if (isOntologyDefined(iri)) {
+                LOGGER.debug("Ontology %s (iri: %s) is already defined", dir != null ? dir : file, iri);
+                continue;
+            }
+
             if (dir != null) {
                 File owlFile = findOwlFile(new File(dir));
                 if (owlFile == null) {
@@ -85,15 +97,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
     }
 
-    protected void importBaseOwlFile(Authorizations authorizations) {
-        importResourceOwl("base.owl", "http://lumify.io", authorizations);
-        importResourceOwl("user.owl", UserRepository.OWL_IRI, authorizations);
-        importResourceOwl("workspace.owl", WorkspaceRepository.OWL_IRI, authorizations);
-        importResourceOwl("comment.owl", "http://lumify.io/comment", authorizations);
-        importResourceOwl("longRunningProcess.owl", LongRunningProcessRepository.OWL_IRI, authorizations);
-    }
-
     private void importResourceOwl(String fileName, String iri, Authorizations authorizations) {
+        if (isOntologyDefined(iri)) {
+            LOGGER.debug("Ontology %s (iri: %s) is already defined", fileName, iri);
+            return;
+        }
+
         LOGGER.debug("importResourceOwl %s (iri: %s)", fileName, iri);
         InputStream baseOwlFile = OntologyRepositoryBase.class.getResourceAsStream(fileName);
         checkNotNull(baseOwlFile, "Could not load resource " + OntologyRepositoryBase.class.getResource(fileName));
@@ -106,6 +115,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             CloseableUtils.closeQuietly(baseOwlFile);
         }
     }
+
+    protected abstract boolean isOntologyDefined(String iri);
 
     private void addEntityGlyphIcon(Concept entityConcept) {
         InputStream entityGlyphIconInputStream = OntologyRepositoryBase.class.getResourceAsStream("entity.png");
@@ -124,18 +135,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     protected abstract void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg);
-
-    public boolean isOntologyDefined() {
-        try {
-            Concept concept = getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
-            return concept != null; // todo should check for more
-        } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().contains(LumifyProperties.ONTOLOGY_TITLE.getPropertyName())) {
-                return false;
-            }
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public String guessDocumentIRIFromPackage(File file) throws IOException, ZipException {
@@ -197,8 +196,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         OWLOntologyDocumentSource documentSource = new ReaderDocumentSource(inFileReader, documentIRI);
         OWLOntology o = m.loadOntologyFromOntologyDocument(documentSource, config);
 
-        storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
-
         long totalStartTime = System.currentTimeMillis();
 
         long startTime = System.currentTimeMillis();
@@ -236,6 +233,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         LOGGER.debug("import object properties time: %dms", importObjectPropertiesTime);
         LOGGER.debug("import inverse of object properties time: %dms", importInverseOfObjectPropertiesTime);
         LOGGER.debug("import total time: %dms", totalEndTime - totalStartTime);
+
+        // do this last after everything was successful so that isOntologyDefined can be used
+        storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
 
         clearCache();
     }

@@ -45,12 +45,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         clearCache();
         Authorizations authorizations = new InMemoryAuthorizations(VISIBILITY_STRING);
         owlConfig.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
-        if (!isOntologyDefined()) {
-            LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology(getConfiguration(), authorizations);
-        } else {
-            LOGGER.info("Base ontology already defined.");
-        }
+
+        loadOntologies(getConfiguration(), authorizations);
     }
 
     @Override
@@ -92,6 +88,16 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    protected boolean isOntologyDefined(String iri) {
+        for (OwlData owlData : fileCache) {
+            if (owlData.iri.equals(iri)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
