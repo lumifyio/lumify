@@ -64,7 +64,7 @@ public abstract class WorkspaceRepository {
         return add(workspaceId, title, user);
     }
 
-    public abstract Iterable<Workspace> findAll(User user);
+    public abstract Iterable<Workspace> findAllForUser(User user);
 
     public abstract void setTitle(Workspace workspace, String title, User user);
 
@@ -97,8 +97,8 @@ public abstract class WorkspaceRepository {
 
     public abstract ClientApiWorkspaceDiff getDiff(Workspace workspace, User user, Locale locale, String timeZone);
 
-    public String getCreatorUserId(Workspace workspace, User user) {
-        for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getWorkspaceId(), user)) {
+    public String getCreatorUserId(String workspaceId, User user) {
+        for (WorkspaceUser workspaceUser : findUsersWithAccess(workspaceId, user)) {
             if (workspaceUser.isCreator()) {
                 return workspaceUser.getUserId();
             }
@@ -129,7 +129,7 @@ public abstract class WorkspaceRepository {
             workspaceJson.put("workspaceId", workspace.getWorkspaceId());
             workspaceJson.put("title", workspace.getDisplayTitle());
 
-            String creatorUserId = getCreatorUserId(workspace, user);
+            String creatorUserId = getCreatorUserId(workspace.getWorkspaceId(), user);
             if (creatorUserId != null) {
                 workspaceJson.put("createdBy", creatorUserId);
                 workspaceJson.put("sharedToUser", !creatorUserId.equals(user.getUserId()));
@@ -185,7 +185,7 @@ public abstract class WorkspaceRepository {
             workspaceClientApi.setWorkspaceId(workspace.getWorkspaceId());
             workspaceClientApi.setTitle(workspace.getDisplayTitle());
 
-            String creatorUserId = getCreatorUserId(workspace, user);
+            String creatorUserId = getCreatorUserId(workspace.getWorkspaceId(), user);
             if (creatorUserId != null) {
                 workspaceClientApi.setCreatedBy(creatorUserId);
                 workspaceClientApi.setSharedToUser(!creatorUserId.equals(user.getUserId()));

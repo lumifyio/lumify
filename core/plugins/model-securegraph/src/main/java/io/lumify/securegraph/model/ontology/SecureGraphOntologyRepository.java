@@ -74,12 +74,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         authorizationsSet.add(VISIBILITY_STRING);
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
 
-        if (!isOntologyDefined()) {
-            LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology(config, authorizations);
-        } else {
-            LOGGER.info("Base ontology already defined.");
-        }
+        loadOntologies(config, authorizations);
     }
 
     @Override
@@ -132,6 +127,16 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         metadata.add("index", toList(rootConceptVertex.getProperties(ONTOLOGY_FILE_PROPERTY_NAME)).size(), VISIBILITY.getVisibility());
         rootConceptVertex.addPropertyValue(documentIRI.toString(), ONTOLOGY_FILE_PROPERTY_NAME, value, metadata, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
+    }
+
+    @Override
+    protected boolean isOntologyDefined(String iri) {
+        Vertex rootConceptVertex = ((SecureGraphConcept) getRootConcept()).getVertex();
+        Property prop = rootConceptVertex.getProperty(iri, ONTOLOGY_FILE_PROPERTY_NAME);
+        if (prop == null) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -22,7 +22,7 @@ public class PtGraphImporter extends PtRowImporterBase<PtGraph> {
         super.beforeProcessRows();
 
         for (User user : getDataImporter().getUsers().values()) {
-            for (Workspace workspace : workspaceRepository.findAll(user)) {
+            for (Workspace workspace : workspaceRepository.findAllForUser(user)) {
                 if (workspace.getWorkspaceId().startsWith(PALANTIR_WORKSPACE_ID_PREFIX)) {
                     Long key = Long.parseLong(workspace.getWorkspaceId().substring(PALANTIR_WORKSPACE_ID_PREFIX.length()));
                     getDataImporter().getWorkspacesByGraphId().put(key, workspace);

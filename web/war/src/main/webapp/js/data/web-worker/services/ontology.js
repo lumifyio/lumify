@@ -135,7 +135,8 @@ define([
                                     } else if (
                                         [
                                             'http://lumify.io/user#user',
-                                            'http://lumify.io/workspace#workspace'
+                                            'http://lumify.io/workspace#workspace',
+                                            'http://lumify.io/longRunningProcess#longRunningProcess'
                                         ].indexOf(child.id) === -1
                                     ) {
                                         console.warn(
