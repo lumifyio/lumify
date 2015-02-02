@@ -6,7 +6,6 @@
 
 # IntelliJ
 
-<a name="web-server-intellij"/>
 ## Development Jetty Web Server
 
 * Module: `lumify-dev-jetty-server`

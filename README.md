@@ -41,7 +41,7 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 1. Run the web server. Choose one of the following:
    * [Run in the docker image](docker/README.md#docker-web-server)
-   * [Run locally in an IDE](docs/ide.md#web-server-intellij)
+   * [Run locally in an IDE](docs/ide.md#development-jetty-web-server)
 
 See [docker/README.md](docker/) for more information on the docker dev image.
 

@@ -25,7 +25,6 @@ To format your dev image, you can run the format script.
 
         ./format-dev.sh
 
-<a name="docker-web-server"/>
 ## Docker Web Server
 
 1. Create a war file:<br/>
