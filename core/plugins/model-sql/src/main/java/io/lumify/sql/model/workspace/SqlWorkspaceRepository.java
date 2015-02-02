@@ -122,7 +122,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public Iterable<Workspace> findAll(User user) {
+    public Iterable<Workspace> findAllForUser(User user) {
         Session session = sessionManager.getSession();
         List workspaces = session.createCriteria(SqlWorkspaceUser.class)
                 .add(Restrictions.eq("sqlWorkspaceUser.user.userId", user.getUserId()))

@@ -132,7 +132,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
         assertEquals(startingEdgeCount + 3, graph.getAllEdges().size()); // +3 = the edges between workspaces and users
 
-        List<Workspace> user1Workspaces = toList(workspaceRepository.findAll(user1));
+        List<Workspace> user1Workspaces = toList(workspaceRepository.findAllForUser(user1));
         assertEquals(2, user1Workspaces.size());
         boolean foundWorkspace1 = false;
         boolean foundWorkspace2 = false;
@@ -146,7 +146,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertTrue("foundWorkspace1", foundWorkspace1);
         assertTrue("foundWorkspace2", foundWorkspace2);
 
-        List<Workspace> user2Workspaces = toList(workspaceRepository.findAll(user2));
+        List<Workspace> user2Workspaces = toList(workspaceRepository.findAllForUser(user2));
         assertEquals(1, user2Workspaces.size());
         assertEquals(workspace3Title, user2Workspaces.get(0).getDisplayTitle());
 

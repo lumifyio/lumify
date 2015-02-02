@@ -34,7 +34,7 @@ public class UserGet extends BaseRequestHandler {
 
         ClientApiUser clientApiUser = getUserRepository().toClientApiPrivate(user);
 
-        Iterable<Workspace> workspaces = getWorkspaceRepository().findAll(user);
+        Iterable<Workspace> workspaces = getWorkspaceRepository().findAllForUser(user);
         for (Workspace workspace : workspaces) {
             clientApiUser.getWorkspaces().add(getWorkspaceRepository().toClientApi(workspace, user, false));
         }

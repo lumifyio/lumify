@@ -64,7 +64,7 @@ public abstract class WorkspaceRepository {
         return add(workspaceId, title, user);
     }
 
-    public abstract Iterable<Workspace> findAll(User user);
+    public abstract Iterable<Workspace> findAllForUser(User user);
 
     public abstract void setTitle(Workspace workspace, String title, User user);
 
