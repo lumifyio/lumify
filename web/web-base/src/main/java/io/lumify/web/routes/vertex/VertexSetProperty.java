@@ -71,6 +71,10 @@ public class VertexSetProperty extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
         Authorizations authorizations = getAuthorizations(request, user);
 
+        if (valueStr == null && valuesStr == null) {
+            throw new LumifyException("Parameter: 'value' or 'value[]' is required in the request");
+        }
+
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
             respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
