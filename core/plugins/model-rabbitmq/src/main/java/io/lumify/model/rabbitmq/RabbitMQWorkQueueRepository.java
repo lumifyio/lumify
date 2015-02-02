@@ -29,7 +29,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
 
     @Inject
     public RabbitMQWorkQueueRepository(Graph graph, Configuration configuration) throws IOException {
-        super(graph);
+        super(graph, configuration);
         this.connection = RabbitMQUtils.openConnection(configuration);
         this.channel = RabbitMQUtils.openChannel(this.connection);
         this.channel.exchangeDeclare(BROADCAST_EXCHANGE_NAME, "fanout");

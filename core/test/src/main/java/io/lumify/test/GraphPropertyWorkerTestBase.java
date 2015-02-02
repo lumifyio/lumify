@@ -190,7 +190,7 @@ public abstract class GraphPropertyWorkerTestBase {
 
     protected WorkQueueRepository getWorkQueueRepository() {
         if (workQueueRepository == null) {
-            workQueueRepository = new InMemoryWorkQueueRepository(getGraph());
+            workQueueRepository = new InMemoryWorkQueueRepository(getGraph(), getConfiguration());
         }
         return workQueueRepository;
     }

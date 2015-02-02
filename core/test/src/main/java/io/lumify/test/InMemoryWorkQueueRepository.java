@@ -2,6 +2,7 @@ package io.lumify.test;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.WorkerSpout;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerTuple;
@@ -17,8 +18,8 @@ public class InMemoryWorkQueueRepository extends WorkQueueRepository {
     private List<BroadcastConsumer> broadcastConsumers = new ArrayList<BroadcastConsumer>();
 
     @Inject
-    public InMemoryWorkQueueRepository(Graph graph) {
-        super(graph);
+    public InMemoryWorkQueueRepository(Graph graph, Configuration configuration) {
+        super(graph, configuration);
     }
 
     @Override
