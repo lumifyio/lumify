@@ -48,9 +48,9 @@ public class VertexRemove extends BaseRequestHandler {
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(vertex, workspaceId);
 
-        boolean isPublicEdge = sandboxStatus == SandboxStatus.PUBLIC;
+        boolean isPublicVertex = sandboxStatus == SandboxStatus.PUBLIC;
 
-        workspaceHelper.deleteVertex(vertex, workspaceId, isPublicEdge, authorizations, user);
+        workspaceHelper.deleteVertex(vertex, workspaceId, isPublicVertex, authorizations, user);
         respondWithSuccessJson(response);
     }
 }

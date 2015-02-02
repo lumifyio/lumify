@@ -157,10 +157,10 @@ public class WorkspaceHelper {
         }
     }
 
-    public void deleteVertex(Vertex vertex, String workspaceId, boolean isPublicEdge, Authorizations authorizations, User user) {
+    public void deleteVertex(Vertex vertex, String workspaceId, boolean isPublicVertex, Authorizations authorizations, User user) {
         ensureOntologyIrisInitialized();
 
-        if (isPublicEdge) {
+        if (isPublicVertex) {
             Visibility workspaceVisibility = new Visibility(workspaceId);
 
             graph.markVertexHidden(vertex, workspaceVisibility, authorizations);
