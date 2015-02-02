@@ -35,8 +35,9 @@ public class WorkspaceHelper {
     private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
-    private final String entityHasImageIri;
-    private final String artifactContainsImageOfEntityIri;
+    private String entityHasImageIri;
+    private String artifactContainsImageOfEntityIri;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public WorkspaceHelper(
@@ -55,9 +56,17 @@ public class WorkspaceHelper {
         this.workQueueRepository = workQueueRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
+        this.ontologyRepository = ontologyRepository;
 
-        this.entityHasImageIri = ontologyRepository.getRequiredRelationshipIRIByIntent("entityHasImage");
-        this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
+        if (this.entityHasImageIri == null) {
+            LOGGER.warn("'entityHasImage' intent has not been defined. Please update your ontology.");
+        }
+
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        if (this.artifactContainsImageOfEntityIri == null) {
+            LOGGER.warn("'artifactContainsImageOfEntity' intent has not been defined. Please update your ontology.");
+        }
     }
 
     public void unresolveTerm(Vertex resolvedVertex, Vertex termMention, LumifyVisibility visibility, User user, Authorizations authorizations) {
@@ -96,6 +105,8 @@ public class WorkspaceHelper {
     }
 
     public void deleteEdge(String workspaceId, Edge edge, Vertex sourceVertex, Vertex destVertex, boolean isPublicEdge, User user, Authorizations authorizations) {
+        ensureOntologyIrisInitialized();
+
         if (isPublicEdge) {
             Visibility workspaceVisibility = new Visibility(workspaceId);
 
@@ -137,7 +148,18 @@ public class WorkspaceHelper {
         graph.flush();
     }
 
+    private void ensureOntologyIrisInitialized() {
+        if (this.entityHasImageIri == null) {
+            this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
+        }
+        if (this.artifactContainsImageOfEntityIri == null) {
+            this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        }
+    }
+
     public void deleteVertex(Vertex vertex, String workspaceId, boolean isPublicEdge, Authorizations authorizations, User user) {
+        ensureOntologyIrisInitialized();
+
         if (isPublicEdge) {
             Visibility workspaceVisibility = new Visibility(workspaceId);
 
