@@ -6,6 +6,7 @@ import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class Backup extends BackupRestoreBase {
             takeTablesOffline(conn, tablesToBackup);
             backupTables(conn, fileSystem, tablesToBackup, backupOptions.getHdfsBackupDirectory());
             saveTablesList(tablesToBackup, fileSystem, backupOptions.getHdfsBackupDirectory());
+            backupSecuregraphHdfsOverflowDirectory(fileSystem, backupOptions.getSecuregraphHdfsOverflowDirectory(), backupOptions.getHdfsBackupDirectory());
         } finally {
             takeTableOnline(conn, tablesToBackup);
         }
@@ -87,5 +89,17 @@ public class Backup extends BackupRestoreBase {
             }
         }
         return results;
+    }
+
+    private void backupSecuregraphHdfsOverflowDirectory(FileSystem fileSystem, String securegraphHdfsOverflowDirectory, String hdfsBackupDirectory) throws IOException {
+        Path srcPath = new Path(securegraphHdfsOverflowDirectory);
+        Path destPath = new Path(hdfsBackupDirectory);
+
+        if (fileSystem.isDirectory(srcPath)) {
+            LOGGER.info("backing up securegraph overflow directory from: " + srcPath.toUri() + " to: " + destPath.toUri());
+            FileUtil.copy(fileSystem, srcPath, fileSystem, destPath, false, fileSystem.getConf());
+        } else {
+            LOGGER.warn("securegraph overflow directory: " + srcPath.toUri() + " not found");
+        }
     }
 }

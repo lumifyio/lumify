@@ -6,6 +6,7 @@ public abstract class BackupRestoreOptionsBase {
     private String accumuloInstanceName;
     private String zookeeperServers;
     private String hadoopFsDefaultFS;
+    private String securegraphHdfsOverflowDirectory;
     private boolean hadoopDfsClientUseDatanodeHostname;
     private String hadoopUsername;
 
@@ -65,6 +66,15 @@ public abstract class BackupRestoreOptionsBase {
             return getHadoopFsDefaultFS() + dir;
         }
         return dir;
+    }
+
+    public String getSecuregraphHdfsOverflowDirectory() {
+        return securegraphHdfsOverflowDirectory;
+    }
+
+    public BackupRestoreOptionsBase setSecuregraphHdfsOverflowDirectory(String securegraphHdfsOverflowDirectory) {
+        this.securegraphHdfsOverflowDirectory = securegraphHdfsOverflowDirectory;
+        return this;
     }
 
     public boolean isHadoopDfsClientUseDatanodeHostname() {
