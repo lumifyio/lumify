@@ -59,6 +59,17 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     private Cache<String, List<WorkspaceUser>> usersWithAccessCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
+    private Cache<String, Vertex> userWorkspaceVertexCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(15, TimeUnit.SECONDS)
+            .build();
+
+    public void clearCache() {
+        usersWithReadAccessCache.invalidateAll();
+        usersWithCommentAccessCache.invalidateAll();
+        usersWithWriteAccessCache.invalidateAll();
+        usersWithAccessCache.invalidateAll();
+        userWorkspaceVertexCache.invalidateAll();
+    }
 
     @Inject
     public SecureGraphWorkspaceRepository(
@@ -106,8 +117,20 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     public Vertex getVertex(String workspaceId, User user) {
+        String cacheKey = getUserWorkspaceVertexCacheKey(workspaceId, user);
+        Vertex workspaceVertex = userWorkspaceVertexCache.getIfPresent(cacheKey);
+        if (workspaceVertex != null) {
+            return workspaceVertex;
+        }
+
         Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, LumifyVisibility.SUPER_USER_VISIBILITY_STRING, workspaceId);
-        return getGraph().getVertex(workspaceId, authorizations);
+        workspaceVertex = getGraph().getVertex(workspaceId, authorizations);
+        userWorkspaceVertexCache.put(cacheKey, workspaceVertex);
+        return workspaceVertex;
+    }
+
+    public String getUserWorkspaceVertexCacheKey(String workspaceId, User user) {
+        return workspaceId + user.getUserId();
     }
 
     private Vertex getVertexFromWorkspace(Workspace workspace, boolean includeHidden, Authorizations authorizations) {
@@ -158,13 +181,19 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public Iterable<Workspace> findAllForUser(User user) {
+    public Iterable<Workspace> findAllForUser(final User user) {
         checkNotNull(user, "User is required");
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, UserRepository.VISIBILITY_STRING);
         Vertex userVertex = getGraph().getVertex(user.getUserId(), authorizations);
         checkNotNull(userVertex, "Could not find user vertex with id " + user.getUserId());
-        Iterable<Vertex> vertices = userVertex.getVertices(Direction.IN, WORKSPACE_TO_USER_RELATIONSHIP_IRI, authorizations);
-        return toWorkspaceIterable(vertices, user);
+        return toList(new ConvertingIterable<Vertex, Workspace>(userVertex.getVertices(Direction.IN, WORKSPACE_TO_USER_RELATIONSHIP_IRI, authorizations)) {
+            @Override
+            protected Workspace convert(Vertex workspaceVertex) {
+                String cacheKey = getUserWorkspaceVertexCacheKey(workspaceVertex.getId(), user);
+                userWorkspaceVertexCache.put(cacheKey, workspaceVertex);
+                return new SecureGraphWorkspace(workspaceVertex);
+            }
+        });
     }
 
     @Override
@@ -491,13 +520,6 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         });
     }
 
-    public void clearCache() {
-        usersWithReadAccessCache.invalidateAll();
-        usersWithCommentAccessCache.invalidateAll();
-        usersWithWriteAccessCache.invalidateAll();
-        usersWithAccessCache.invalidateAll();
-    }
-
     @Override
     public ClientApiWorkspaceDiff getDiff(final Workspace workspace, final User user, final Locale locale, final String timeZone) {
         if (!hasReadPermissions(workspace.getWorkspaceId(), user)) {
@@ -514,14 +536,5 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 return workspaceDiff.diff(workspace, workspaceEntities, workspaceEdges, userContext, user);
             }
         });
-    }
-
-    private Iterable<Workspace> toWorkspaceIterable(Iterable<Vertex> vertices, final User user) {
-        return new ConvertingIterable<Vertex, Workspace>(vertices) {
-            @Override
-            protected Workspace convert(Vertex workspaceVertex) {
-                return new SecureGraphWorkspace(workspaceVertex);
-            }
-        };
     }
 }
