@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>lumify-tools-group</artifactId>
+        <artifactId>lumify</artifactId>
         <groupId>io.lumify</groupId>
         <version>0.4.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-assign-image-mr</artifactId>
-    <name>Lumify: Tools: Assign Image MapReduce</name>
+    <artifactId>lumify-migrations</artifactId>
+    <name>Lumify: Migrations</name>
 
     <dependencies>
         <dependency>
@@ -20,18 +20,22 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-model-securegraph</artifactId>
+            <artifactId>lumify-model-rabbitmq</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-model-rabbitmq</artifactId>
+            <artifactId>lumify-model-securegraph</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-model-bigtable</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
         </dependency>
 
         <!-- Required for MR job -->
@@ -46,7 +50,6 @@
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
         </dependency>
     </dependencies>
 
@@ -81,11 +84,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptor>src/main/assembly/descriptor.xml</descriptor>
-                    <archive>
-                        <manifest>
-                            <mainClass>io.lumify.assignimagemr.AssignImageMR</mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
                 <executions>
                     <execution>

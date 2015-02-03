@@ -1,5 +1,6 @@
 package io.lumify.core.util;
 
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -19,7 +20,38 @@ import java.util.List;
 import java.util.Set;
 
 public class GraphUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphUtil.class);
+    public static final String LUMIFY_VERSION_KEY = "lumify.version";
+    public static final int LUMIFY_VERSION = 2;
     public static final double SET_PROPERTY_CONFIDENCE = 0.5;
+
+    public static void verifyVersion(Graph graph) {
+        verifyVersion(graph, LUMIFY_VERSION);
+    }
+
+    public static void verifyVersion(Graph graph, int requiredVersion) {
+        Object version = graph.getMetadata(LUMIFY_VERSION_KEY);
+        if (version == null) {
+            return;
+        }
+        if (!(version instanceof Integer)) {
+            throw new LumifyException("Invalid " + LUMIFY_VERSION_KEY + " found. Expected Integer, found " + version.getClass().getName());
+        }
+        Integer versionInt = (Integer) version;
+        if (versionInt != requiredVersion) {
+            throw new LumifyException("Invalid " + LUMIFY_VERSION_KEY + " found. Expected " + requiredVersion + ", found " + versionInt);
+        }
+        LOGGER.info("Lumify graph version verified: %d", versionInt);
+    }
+
+    public static void writeVersion(Graph graph) {
+        writeVersion(graph, LUMIFY_VERSION);
+    }
+
+    public static void writeVersion(Graph graph, int version) {
+        graph.setMetadata(LUMIFY_VERSION_KEY, version);
+        LOGGER.info("Wrote %s: %d", LUMIFY_VERSION_KEY, version);
+    }
 
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);

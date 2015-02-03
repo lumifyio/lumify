@@ -20,6 +20,7 @@ import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
+import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.atmosphere.cache.UUIDBroadcasterCache;
@@ -58,6 +59,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
             LOGGER.info("Running application with configuration:\n%s", config);
 
             setupInjector(context, config);
+            verifyGraphVersion();
             setupGraphAuthorizations();
             setupWebApp(context, config);
             setupLongRunningProcessRunner(context, config);
@@ -65,6 +67,11 @@ public final class ApplicationBootstrap implements ServletContextListener {
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
         }
+    }
+
+    private void verifyGraphVersion() {
+        Graph graph = InjectHelper.getInstance(Graph.class);
+        GraphUtil.verifyVersion(graph);
     }
 
     @Override
