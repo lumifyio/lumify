@@ -27,8 +27,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class WorkQueueRepository {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
-    public static String GRAPH_PROPERTY_QUEUE_NAME;
-    public static String LONG_RUNNING_PROCESS_QUEUE_NAME;
+    public static String GRAPH_PROPERTY_QUEUE_NAME = "graphProperty";
+    public static String LONG_RUNNING_PROCESS_QUEUE_NAME = "longRunningProcess";
     private final Graph graph;
 
     @Inject
