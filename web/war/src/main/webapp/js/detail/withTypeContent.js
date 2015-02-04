@@ -103,8 +103,12 @@ define([
         };
 
         this.onOpenFullscreen = function(event) {
+            var data = this.attr.data;
+                vertices = _.isObject(data) && data.vertices ?
+                    data.vertices : [this.attr.data];
+
             var url = F.vertexUrl.url(
-                _.isArray(this.attr.data) ? this.attr.data : [this.attr.data.id],
+                vertices,
                 lumifyData.currentWorkspaceId
             );
             window.open(url);
