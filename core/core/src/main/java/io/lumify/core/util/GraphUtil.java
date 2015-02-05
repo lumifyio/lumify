@@ -32,6 +32,7 @@ public class GraphUtil {
     public static void verifyVersion(Graph graph, int requiredVersion) {
         Object version = graph.getMetadata(LUMIFY_VERSION_KEY);
         if (version == null) {
+            writeVersion(graph);
             return;
         }
         if (!(version instanceof Integer)) {
