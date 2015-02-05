@@ -47,6 +47,8 @@ See [docker/README.md](docker/) for more information on the docker dev image.
 
 See [docs/developer.md](docs/developer.md) for more information on developing for Lumify.
 
+See [datasets](datasets) for sample datasets to get started.
+
 ## Developing / Contributing
 
 If you're a system administrator or developer looking to install your own instance of Lumify or do custom development,
