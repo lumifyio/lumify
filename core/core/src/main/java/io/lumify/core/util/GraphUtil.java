@@ -22,7 +22,7 @@ import java.util.Set;
 public class GraphUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphUtil.class);
     public static final String LUMIFY_VERSION_KEY = "lumify.version";
-    public static final int LUMIFY_VERSION = 2;
+    public static final int LUMIFY_VERSION = 3;
     public static final double SET_PROPERTY_CONFIDENCE = 0.5;
 
     public static void verifyVersion(Graph graph) {

@@ -19,7 +19,7 @@ public class M001NormalizeUserIris extends OntologyMigrationBase {
 
     @Override
     protected Class<? extends OntologyMigrationMapper> getMigrationMapperClass() {
-        return M001NormalizeUrisMapper.class;
+        return M001NormalizeUserIrisMapper.class;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class M001NormalizeUserIris extends OntologyMigrationBase {
         return 1;
     }
 
-    public static class M001NormalizeUrisMapper extends OntologyMigrationMapper {
-        protected M001NormalizeUrisMapper() {
+    public static class M001NormalizeUserIrisMapper extends OntologyMigrationMapper {
+        protected M001NormalizeUserIrisMapper() {
             super(getOntologyMigrations());
         }
 

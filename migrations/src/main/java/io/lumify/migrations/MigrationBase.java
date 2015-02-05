@@ -168,7 +168,11 @@ public abstract class MigrationBase extends Configured implements Tool {
     }
 
     protected void writeNewVersion() {
-        GraphUtil.writeVersion(getGraph(), getToVersion());
+        if (dryRun) {
+            LOGGER.debug("dry-run: writing version: %d", getToVersion());
+        } else {
+            GraphUtil.writeVersion(getGraph(), getToVersion());
+        }
     }
 
     protected void verifyVersion(boolean forceMigration) {
