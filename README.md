@@ -17,6 +17,11 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 1. Install node and npm per their instructions: [http://nodejs.org/](http://nodejs.org/)
 
+1. Clone the Lumify repo:
+
+        git clone https://github.com/lumifyio/lumify.git
+        cd lumify
+
 1. Install the Lumify npm dependencies (from the web/war/src/main/webapp directory):
 
         npm install -g inherits bower grunt
