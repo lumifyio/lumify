@@ -22,8 +22,9 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
         git clone https://github.com/lumifyio/lumify.git
         cd lumify
 
-1. Install the Lumify npm dependencies (from the web/war/src/main/webapp directory):
+1. Install the Lumify npm dependencies:
 
+        cd web/war/src/main/webapp
         npm install -g inherits bower grunt
         npm install grunt-cli
 
