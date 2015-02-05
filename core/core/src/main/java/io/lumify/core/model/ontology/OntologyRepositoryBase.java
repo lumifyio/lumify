@@ -108,9 +108,16 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         checkNotNull(baseOwlFile, "Could not load resource " + OntologyRepositoryBase.class.getResource(fileName));
 
         try {
-            importFile(baseOwlFile, IRI.create(iri), null, authorizations);
-        } catch (Exception e) {
-            throw new LumifyException("Could not import ontology file: " + fileName + " (iri: " + iri + ")", e);
+            IRI documentIRI = IRI.create(iri);
+            byte[] inFileData = IOUtils.toByteArray(baseOwlFile);
+            try {
+                importFile(inFileData, documentIRI, null, authorizations);
+            } catch (OWLOntologyAlreadyExistsException ex) {
+                LOGGER.warn("Ontology was already defined but not stored: " + fileName + " (iri: " + iri + ")", ex);
+                storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
+            }
+        } catch (Exception ex) {
+            throw new LumifyException("Could not import ontology file: " + fileName + " (iri: " + iri + ")", ex);
         } finally {
             CloseableUtils.closeQuietly(baseOwlFile);
         }
@@ -181,13 +188,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         try (FileInputStream inFileIn = new FileInputStream(inFile)) {
             LOGGER.debug("importing %s", inFile.getAbsolutePath());
-            importFile(inFileIn, documentIRI, inDir, authorizations);
+            byte[] inFileData = IOUtils.toByteArray(inFileIn);
+            importFile(inFileData, documentIRI, inDir, authorizations);
         }
     }
 
-    private void importFile(InputStream in, IRI documentIRI, File inDir, Authorizations authorizations) throws Exception {
-        byte[] inFileData = IOUtils.toByteArray(in);
-
+    private void importFile(byte[] inFileData, IRI documentIRI, File inDir, Authorizations authorizations) throws Exception {
         Reader inFileReader = new InputStreamReader(new ByteArrayInputStream(inFileData));
 
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
