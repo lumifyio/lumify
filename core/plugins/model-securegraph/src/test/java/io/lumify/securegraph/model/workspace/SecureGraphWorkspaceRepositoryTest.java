@@ -5,7 +5,7 @@ import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.lock.LocalLockRepository;
 import io.lumify.core.model.lock.LockRepository;
-import io.lumify.core.model.ontology.ReadOnlyInMemoryOntologyRepository;
+import io.lumify.core.model.ontology.InMemoryOntologyRepository;
 import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
@@ -39,7 +39,7 @@ import static org.securegraph.util.IterableUtils.toList;
 public class SecureGraphWorkspaceRepositoryTest {
     private InMemoryGraph graph;
 
-    private ReadOnlyInMemoryOntologyRepository ontologyRepository;
+    private InMemoryOntologyRepository ontologyRepository;
 
     @Mock
     private WorkspaceDiffHelper workspaceDiff;
@@ -75,7 +75,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         user2 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
-        ontologyRepository = new ReadOnlyInMemoryOntologyRepository(graph, lumifyConfiguration);
+        ontologyRepository = new InMemoryOntologyRepository(graph, lumifyConfiguration);
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 
