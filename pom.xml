@@ -38,6 +38,7 @@
         <module>web</module>
         <module>dev</module>
         <module>integration-test</module>
+        <module>migrations</module>
     </modules>
 
     <properties>
@@ -64,6 +65,7 @@
         <commons.compress.version>1.8.1</commons.compress.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>
+        <commons.httpclient.version>3.1</commons.httpclient.version>
         <curator.version>2.7.0</curator.version>
         <elasticsearch.version>1.4.1</elasticsearch.version>
         <evo.inflector.version>1.0.1</evo.inflector.version>
@@ -74,6 +76,7 @@
         <httpcomponents.httpclient.version>4.3.1</httpcomponents.httpclient.version>
         <inflector.version>0.7.0</inflector.version>
         <jackson.version>2.4.3</jackson.version>
+        <jackson-mapper-asl.version>1.9.2</jackson-mapper-asl.version>
         <jetty.version>9.2.5.v20141112</jetty.version>
         <jetty.javaee.version>3.0.0.v201112011016</jetty.javaee.version>
         <javax.servlet.api.version>3.1.0</javax.servlet.api.version>
@@ -267,6 +270,16 @@
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-guice</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${jackson-mapper-asl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons.httpclient.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
