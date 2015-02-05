@@ -342,26 +342,44 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             if (annotationIri.equals(LumifyProperties.INTENT.getPropertyName())) {
                 result.addIntent(valueString, authorizations);
-            } else if (annotationIri.equals(LumifyProperties.SEARCHABLE.getPropertyName())) {
+                continue;
+            }
+
+            if (annotationIri.equals(LumifyProperties.SEARCHABLE.getPropertyName())) {
                 boolean searchable = valueString == null || Boolean.parseBoolean(valueString);
                 result.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
-            } else if (annotationIri.equals(LumifyProperties.USER_VISIBLE.getPropertyName())) {
+                continue;
+            }
+
+            if (annotationIri.equals(LumifyProperties.USER_VISIBLE.getPropertyName())) {
                 boolean userVisible = valueString == null || Boolean.parseBoolean(valueString);
                 result.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
-            } else if (annotationIri.equals(LumifyProperties.GLYPH_ICON_FILE_NAME.getPropertyName())) {
+                continue;
+            }
+
+            if (annotationIri.equals(LumifyProperties.GLYPH_ICON_FILE_NAME.getPropertyName())) {
                 setIconProperty(result, inDir, valueString, LumifyProperties.GLYPH_ICON.getPropertyName(), authorizations);
-            } else if (annotationIri.equals(LumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName())) {
+                continue;
+            }
+
+            if (annotationIri.equals(LumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName())) {
                 setIconProperty(result, inDir, valueString, LumifyProperties.MAP_GLYPH_ICON.getPropertyName(), authorizations);
-            } else if (annotationIri.equals(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName())) {
+                continue;
+            }
+
+            if (annotationIri.equals(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName())) {
                 if (valueString == null || valueString.trim().length() == 0) {
                     continue;
                 }
                 result.setProperty(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName(), valueString.trim(), authorizations);
-            } else if (annotationIri.equals("http://www.w3.org/2000/01/rdf-schema#label")) {
                 continue;
-            } else {
-                result.setProperty(annotationIri, valueString, authorizations);
             }
+
+            if (annotationIri.equals("http://www.w3.org/2000/01/rdf-schema#label")) {
+                continue;
+            }
+
+            result.setProperty(annotationIri, valueString, authorizations);
         }
 
         return result;
@@ -607,18 +625,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return getAnnotationValueByUri(o, owlEntity, LumifyProperties.PROPERTY_GROUP.getPropertyName());
     }
 
-    protected String getTitleFormula(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.TITLE_FORMULA.getPropertyName());
-    }
-
-    protected String getSubtitleFormula(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.SUBTITLE_FORMULA.getPropertyName());
-    }
-
-    protected String getTimeFormula(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.TIME_FORMULA.getPropertyName());
-    }
-
     protected Double getBoost(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.BOOST.getPropertyName());
         if (val == null) {
@@ -641,28 +647,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return val == null || Boolean.parseBoolean(val);
     }
 
-    protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.GLYPH_ICON_FILE_NAME.getPropertyName());
-    }
-
-    protected String getMapGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName());
-    }
-
     protected Map<String, String> getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.POSSIBLE_VALUES.getPropertyName());
         if (val == null || val.trim().length() == 0) {
             return null;
         }
         return JSONUtil.toMap(new JSONObject(val));
-    }
-
-    protected String getAddRelatedConceptWhiteList(OWLOntology o, OWLEntity owlEntity) {
-        String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName());
-        if (val == null || val.trim().length() == 0) {
-            return null;
-        }
-        return val;
     }
 
     protected Collection<TextIndexHint> getTextIndexHints(OWLOntology o, OWLDataProperty owlEntity) {
@@ -959,6 +949,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public ClientApiOntology getClientApiObject() {
         Object[] results = ExecutorServiceUtil.runAllAndWait(
                 new Callable<Object>() {
