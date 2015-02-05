@@ -32,7 +32,7 @@ public class GraphUtil {
     public static void verifyVersion(Graph graph, int requiredVersion) {
         Object version = graph.getMetadata(LUMIFY_VERSION_KEY);
         if (version == null) {
-            throw new LumifyException("Could not find lumify version in metadata: " + LUMIFY_VERSION_KEY);
+            return;
         }
         if (!(version instanceof Integer)) {
             throw new LumifyException("Invalid " + LUMIFY_VERSION_KEY + " found. Expected Integer, found " + version.getClass().getName());
