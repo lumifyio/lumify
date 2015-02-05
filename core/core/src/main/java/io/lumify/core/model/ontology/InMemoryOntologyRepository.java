@@ -351,4 +351,8 @@ public class InMemoryOntologyRepository extends OntologyRepositoryBase {
             this.data = data;
         }
     }
+
+    protected Graph getGraph() {
+        return graph;
+    }
 }
