@@ -62,7 +62,11 @@ public abstract class MigrationBase extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         new JCommander(this, args);
-        verifyVersion(forceMigration);
+        try {
+            verifyVersion(forceMigration);
+        } catch (LumifyException ex) {
+            throw new LumifyException("Could not verify version. Run with -force option to force the migraion.", ex);
+        }
 
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(getConfiguration().toHadoopConfiguration(), "graph.");
         Job migrateVerticesJob = migrateVertices(accumuloGraphConfiguration);
