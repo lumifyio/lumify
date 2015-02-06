@@ -111,18 +111,20 @@ define(['require'], function(require) {
                 });
             },
             edgeDeletion: function(data) {
-                if (!data.workspaceId || data.workspaceId === publicData.currentWorkspaceId) {
-                    dispatchMain('rebroadcastEvent', {
-                        eventName: 'edgesDeleted',
-                        data: {
-                            edgeId: data.edgeId,
-                            sourceVertexId: data.inVertexId,
-                            destVertexId: data.outVertexId
-                        }
-                    });
-                }
-                require(['../util/store'], function(store) {
-                    store.removeObject(data.workspaceId, 'edge', data.edgeId);
+                require([
+                    '../util/store',
+                    '../services/edge'
+                ], function(store, edge) {
+                    edge.exists([data.edgeId])
+                        .then(function(r) {
+                            if (!r.exists[data.edgeId]) {
+                                store.removeObject(publicData.currentWorkspaceId, 'edge', data.edgeId);
+                                dispatchMain('rebroadcastEvent', {
+                                    eventName: 'edgesDeleted',
+                                    data: data
+                                });
+                            }
+                        })
                 });
             },
             textUpdated: function(data) {

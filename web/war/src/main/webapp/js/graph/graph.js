@@ -713,15 +713,12 @@ define([
             this.cytoscapeReady(function(cy) {
                 var self = this;
                 _.each(cy.edges(), function(cyEdge) {
-                    var edges = cyEdge.data('edges');
+                    var edges = _.reject(cyEdge.data('edges'), function(e) {
+                            return e.id === data.edgeId
+                        }),
                         ontology = self.ontologyRelationships.byTitle[cyEdge.data('type')];
 
-                    if (edges.length < 2) {
-                        cyEdge.remove();
-                    } else {
-                        edges = _.reject(edges, function(e) {
-                            return e.id === data.edgeId
-                        });
+                    if (edges.length) {
                         cyEdge.data('edges', edges);
                         cyEdge.data('label',
                             (ontology && ontology.displayName || '') + (
@@ -730,6 +727,8 @@ define([
                                     ''
                             )
                         );
+                    } else {
+                        cyEdge.remove();
                     }
                 });
             });

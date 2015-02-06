@@ -139,6 +139,7 @@ public class WorkspaceHelper {
                 workQueueRepository.pushTextUpdated(sourceVertex.getId());
             }
 
+            graph.flush();
             this.workQueueRepository.pushEdgeDeletion(edge);
 
             // TODO: replace "" when we implement commenting on ui
