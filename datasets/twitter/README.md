@@ -2,73 +2,54 @@
 
 Lumify-Twitter is an open source ingest example for the Lumify project. See the [Lumify website](http://lumify.io) for more information about Lumify.
 
-## Build Requirements
+## Prerequisites
 
-* Please ensure that [Lumify] (https://github.com/altamiracorp/lumify/blob/master/README.md) has been installed before building.
+* Please ensure that [Lumify] (../../README.md) has been installed before building.
 
-## Integrating with [Lumify](https://lumify.io)
+## Configuration and Building
 
-1. Generate Twitter API Keys. 
-   * For instructions, please visit the [Twitter Developers site](https://dev.twitter.com/) or [Generating Twitter API Keys](#generating-twitter-api-keys) below. 
-2. Add the following properties names and corresponding Twitter API keys to your ```/opt/lumify/config/configuration.properties:```
+1. Generate Twitter API Keys, see the [Twitter Developers site](https://dev.twitter.com/) or [Generating Twitter API Keys](#generating-twitter-api-keys)
 
-```
-twitter.consumerKey= 
-twitter.consumerSecret=
-twitter.token=
-twitter.tokenSecret=
-twitter.inputMethod=twitter4j
-twitter.query= # Keywords to search Twitter for, e.g. twitter
-# When searching for multiple phrases it must be a semi-colon separated list, e.g. twitter; face book; instagram
-```
-	
-3. Clone the repository from github using either of the links from the [main page](https://github.com/altamiracorp/lumify-twitter)
-4. cd into your ```lumify-twitter``` directory
-5. <a name="step-5"/>```mvn clean package```
-6. ```cd target```
-7. Copy the jar file to location of where you are running your Graph Property Workers.
+1. Add the following properties to `/opt/lumify/config/configuration.properties`:
 
-Proceed if you are not using the Pre-built VM provided by [Lumify](https://lumify.io)
+        twitter.consumerKey= 
+        twitter.consumerSecret=
+        twitter.token=
+        twitter.tokenSecret=
+        twitter.inputMethod=twitter4j
+        twitter.query= # Keywords to search Twitter for, e.g. twitter
+        # When searching for multiple phrases it must be a semi-colon separated list, e.g. twitter; face book; instagram
 
-1. Deploy lumify Graph Property Worker YARN Application.
-3. Deploy web war file.
+1. Package the Twitter Graph Property Worker
+
+        mvn package -pl datasets/twitter/twitter-graph-property-worker -am
+
+1. Copy `datasets/twitter/twitter-graph-property-worker/target/lumify-twitter-graph-property-worker-*-jar-with-dependencies.jar` to `/opt/lumify/lib` or `hdfs://lumify/libcache`
+
+## Ontology Customization
+
+1. Edit `datasets/twitter/ontology/twitter.owl` to customize different concepts (e.g. person, phone number), properties for each concept, relationships between concepts, and/or glyphIcons associated with concepts
+
+1. Import the ontology:
+
+        datasets/twitter/bin/importOntology.sh
 
 ## Generating Twitter API Keys
 
-1. Sign In to [Twitter Developers site](https://dev.twitter.com/user/login?destination=home) using your Twitter credentials.
-<br/>
-<br/>
+1. Sign In to [Twitter Developers site](https://dev.twitter.com/user/login?destination=home) using your Twitter credentials
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_sign_in.png)
-<br/>
-<br/>
-2. In the top right corner hover over your Twitter Handler’s picture and select **My Applications** from the drop-down menu.
-<br/>
-<br/>
+
+1. In the top right corner hover over your Twitter Handler’s picture and select **My Applications** from the drop-down menu
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_my_app.png)
-<br/>
-<br/>
-3. Select **Create a new application** and fill out the form.
-<br/>
-<br/>
+
+1. Select **Create a new application** and fill out the form
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_create_new_app.png)
-<br/>
-<br/>
-4. Once completed, click on the **API Keys** tab. Scroll down and select **Create my access token**.
-<br/>
-<br/>
+
+1. Once completed, click on the **API Keys** tab. Scroll down and select **Create my access token**
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_access_token.png)
-<br/>
-<br/>
-5. Refresh the page until you see Access Token, Access Token Secret, and Access Level under **Your Access Token**.
 
-
-## Documentation
-
-### Customizing Ontology
-
-From the lumify-twitter directory: 
-
-1. ```cd data/ontology```.
-2. Modify ```twitter.owl```, to customize different concepts (e.g. person, phone number), properties for each concept, relationships between concepts, and/or glyphIcons associated with concepts.
-   * After modifications, ```cd lumify-twitter/bin/importOntology.sh```.
-3. Proceed from step 5 in [Integrating with Lumify](#step-5)
+1. Refresh the page until you see Access Token, Access Token Secret, and Access Level under **Your Access Token**
