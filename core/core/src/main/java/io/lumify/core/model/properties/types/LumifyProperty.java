@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
+import org.securegraph.mutation.ExistingEdgeMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Collections;
@@ -218,6 +219,14 @@ public abstract class LumifyProperty<TRaw, TGraph> {
 
     public void removeProperty(Element element, Authorizations authorizations) {
         element.removeProperty(getPropertyName(), authorizations);
+    }
+
+    public void removeProperty(ExistingEdgeMutation m, final Visibility visibility) {
+        m.removeProperty(getPropertyName(), visibility);
+    }
+
+    public void removeProperty(ExistingEdgeMutation m, String key, final Visibility visibility) {
+        m.removeProperty(key, getPropertyName(), visibility);
     }
 
     public void alterVisibility(ExistingElementMutation<?> elementMutation, Visibility newVisibility) {

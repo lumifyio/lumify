@@ -48,7 +48,7 @@ public abstract class UserRepository {
      */
     public Iterable<User> findByStatus(int skip, int limit, UserStatus status) {
         List<User> allUsers = toList(find(skip, limit));
-        List<User> matchingUsers = new ArrayList<User>();
+        List<User> matchingUsers = new ArrayList<>();
         for (User user : allUsers) {
             if (user.getUserStatus() == status) {
                 matchingUsers.add(user);
@@ -195,7 +195,7 @@ public abstract class UserRepository {
     }
 
     public ModelUserContext getModelUserContext(org.securegraph.Authorizations authorizations, String... additionalAuthorizations) {
-        ArrayList<String> auths = new ArrayList<String>();
+        ArrayList<String> auths = new ArrayList<>();
 
         if (authorizations.getAuthorizations() != null) {
             for (String a : authorizations.getAuthorizations()) {
@@ -246,7 +246,7 @@ public abstract class UserRepository {
 
         int skip = 0;
         int limit = 100;
-        List<User> foundUsers = new ArrayList<User>();
+        List<User> foundUsers = new ArrayList<>();
         while (true) {
             List<User> users = toList(find(skip, limit));
             if (users.size() == 0) {

@@ -302,7 +302,7 @@ public class SecureGraphUserRepository extends UserRepository {
     public org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         Set<String> userAuthorizations;
         if (user instanceof SystemUser) {
-            userAuthorizations = new HashSet<String>();
+            userAuthorizations = new HashSet<>();
             userAuthorizations.add(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         } else {
             userAuthorizations = userAuthorizationCache.getIfPresent(user.getUserId());
@@ -313,7 +313,7 @@ public class SecureGraphUserRepository extends UserRepository {
             userAuthorizationCache.put(user.getUserId(), userAuthorizations);
         }
 
-        Set<String> authorizationsSet = new HashSet<String>(userAuthorizations);
+        Set<String> authorizationsSet = new HashSet<>(userAuthorizations);
         Collections.addAll(authorizationsSet, additionalAuthorizations);
         return authorizationRepository.createAuthorizations(authorizationsSet);
     }
@@ -321,13 +321,13 @@ public class SecureGraphUserRepository extends UserRepository {
     public static Set<String> getAuthorizations(Vertex userVertex) {
         String authorizationsString = UserLumifyProperties.AUTHORIZATIONS.getPropertyValue(userVertex);
         if (authorizationsString == null) {
-            return new HashSet<String>();
+            return new HashSet<>();
         }
         String[] authorizationsArray = authorizationsString.split(",");
         if (authorizationsArray.length == 1 && authorizationsArray[0].length() == 0) {
             authorizationsArray = new String[0];
         }
-        HashSet<String> authorizations = new HashSet<String>();
+        HashSet<String> authorizations = new HashSet<>();
         for (String s : authorizationsArray) {
             // Accumulo doesn't like zero length strings. they shouldn't be in the auth string to begin with but this just protects from that happening.
             if (s.trim().length() == 0) {

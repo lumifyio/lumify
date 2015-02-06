@@ -1,5 +1,6 @@
 package io.lumify.securegraph.model.workspace;
 
+import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
@@ -39,8 +40,6 @@ import static org.securegraph.util.IterableUtils.toList;
 public class SecureGraphWorkspaceRepositoryTest {
     private InMemoryGraph graph;
 
-    private InMemoryOntologyRepository ontologyRepository;
-
     @Mock
     private WorkspaceDiffHelper workspaceDiff;
 
@@ -75,7 +74,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         user2 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
-        ontologyRepository = new InMemoryOntologyRepository(graph, lumifyConfiguration);
+        InMemoryOntologyRepository ontologyRepository = new InMemoryOntologyRepository(graph, lumifyConfiguration);
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 
@@ -253,14 +252,14 @@ public class SecureGraphWorkspaceRepositoryTest {
         }
 
         try {
-            workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user2);
+            workspaceRepository.softDeleteEntitiesFromWorkspace(workspace, Lists.newArrayList(entity1Vertex.getId()), user2);
             fail("user2 should not have write access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
             assertEquals(workspace.getWorkspaceId(), ex.getResourceId());
         }
 
-        workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);
+        workspaceRepository.softDeleteEntitiesFromWorkspace(workspace, Lists.newArrayList(entity1Vertex.getId()), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         Map<String, InMemoryEdge> edgesAfterDelete = graph.getAllEdges();
         assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users

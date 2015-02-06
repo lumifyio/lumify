@@ -28,7 +28,9 @@ import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.collect.Maps;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
+import org.securegraph.mutation.ExistingEdgeMutation;
 import org.securegraph.util.ConvertingIterable;
+import org.securegraph.util.FilterIterable;
 import org.securegraph.util.VerticesToEdgeIdsIterable;
 
 import java.util.List;
@@ -287,23 +289,32 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user) {
+    public void softDeleteEntitiesFromWorkspace(Workspace workspace, List<String> entityIdsToDelete, User user) {
         if (!hasWritePermissions(workspace.getWorkspaceId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getWorkspaceId(), user, workspace.getWorkspaceId());
         }
-
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getWorkspaceId());
-        Vertex otherVertex = getGraph().getVertex(vertexId, authorizations);
-        if (otherVertex == null) {
-            throw new LumifyResourceNotFoundException("Could not find vertex: " + vertexId, vertexId);
-        }
-        Vertex workspaceVertex = getVertexFromWorkspace(workspace, true, authorizations);
-        List<Edge> edges = toList(workspaceVertex.getEdges(otherVertex, Direction.BOTH, authorizations));
-        for (Edge edge : edges) {
-            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edge, false, VISIBILITY.getVisibility(), authorizations);
-            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.removeProperty(edge, authorizations);
-            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.removeProperty(edge, authorizations);
-            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.removeProperty(edge, authorizations);
+        final Vertex workspaceVertex = getVertexFromWorkspace(workspace, true, authorizations);
+        List<Edge> allEdges = toList(workspaceVertex.getEdges(Direction.BOTH, authorizations));
+
+        for (final String vertexId : entityIdsToDelete) {
+            LOGGER.debug("workspace delete (%s): %s", workspace.getWorkspaceId(), vertexId);
+
+            Iterable<Edge> edges = new FilterIterable<Edge>(allEdges) {
+                @Override
+                protected boolean isIncluded(Edge o) {
+                    String entityVertexId = o.getOtherVertexId(workspaceVertex.getId());
+                    return entityVertexId.equalsIgnoreCase(vertexId);
+                }
+            };
+            for (Edge edge : edges) {
+                ExistingEdgeMutation m = edge.prepareMutation();
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(m, false, VISIBILITY.getVisibility());
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_LAYOUT_JSON.removeProperty(m, VISIBILITY.getVisibility());
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.removeProperty(m, VISIBILITY.getVisibility());
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.removeProperty(m, VISIBILITY.getVisibility());
+                m.save(authorizations);
+            }
         }
         getGraph().flush();
     }

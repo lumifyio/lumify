@@ -202,15 +202,21 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user) {
+    public void softDeleteEntitiesFromWorkspace(Workspace workspace, List<String> entityIdsToDelete, User authUser) {
         Session session = sessionManager.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            List<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
-            for (SqlWorkspaceVertex sqlWorkspaceVertex : sqlWorkspaceVertices) {
-                sqlWorkspaceVertex.setVisible(false);
-                session.update(sqlWorkspaceVertex);
+            for (final String vertexId : entityIdsToDelete) {
+                LOGGER.debug("workspace delete (%s): %s", workspace.getWorkspaceId(), vertexId);
+
+                List<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
+                for (SqlWorkspaceVertex sqlWorkspaceVertex : sqlWorkspaceVertices) {
+                    if (entityIdsToDelete.contains(sqlWorkspaceVertex.getVertexId())) {
+                        sqlWorkspaceVertex.setVisible(false);
+                        session.update(sqlWorkspaceVertex);
+                    }
+                }
             }
             transaction.commit();
         } catch (HibernateException e) {
