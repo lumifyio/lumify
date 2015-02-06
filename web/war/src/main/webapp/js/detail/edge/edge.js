@@ -109,15 +109,11 @@ define([
                 self.ontologyRelationships = ontology.relationships;
                 self.edge = edge;
                 $.extend(edge.source, {
-                    concept: ontology.concepts.byId[
-                        _.findWhere(edge.source.properties, predicate).value
-                    ]
+                    concept: F.vertex.concept(edge.source)
                 });
 
                 $.extend(edge.target, {
-                    concept: ontology.concepts.byId[
-                        _.findWhere(edge.target.properties, predicate).value
-                    ]
+                    concept: F.vertex.concept(edge.target)
                 });
                 self.$node.html(template({}));
                 self.update();
