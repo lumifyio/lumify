@@ -1184,7 +1184,7 @@ define([
 
         this.graphSelect = throttle('selection', SELECTION_THROTTLE, function(event) {
             if (this.ignoreCySelectionEvents) return;
-            this.updateVertexSelections(event.cy);
+            this.updateVertexSelections(event.cy, event.cyTarget);
         });
 
         this.graphUnselect = throttle('selection', SELECTION_THROTTLE, function(event) {
@@ -1198,12 +1198,24 @@ define([
             }
         });
 
-        this.updateVertexSelections = function(cy) {
+        this.updateVertexSelections = function(cy, cyTarget) {
             var self = this,
                 nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
                 edgeIds = [],
                 vertexIds = [];
+
+            if (lumifyKeyboard.shiftKey) {
+                nodes = nodes.add(self.previousSelectionNodes)
+                if (cyTarget !== cy && cyTarget.length && self.previousSelectionNodes &&
+                   self.previousSelectionNodes.anySame(cyTarget)) {
+
+                    nodes = nodes.not(cyTarget)
+                }
+            }
+
+            self.previousSelectionNodes = nodes;
+            self.previousSelectionEdges = edges;
 
             nodes.each(function(index, cyNode) {
                 if (!cyNode.hasClass('temp') && !cyNode.hasClass('path-edge')) {
