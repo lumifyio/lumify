@@ -96,6 +96,7 @@ define([
         };
 
         this.enableButton = function(enable, loading) {
+            if (this.disabled) return;
             var button = this.select('loginButtonSelector');
 
             if (enable) {
