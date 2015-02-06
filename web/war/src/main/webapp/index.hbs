@@ -23,11 +23,16 @@
     <script src='jsc/require.config.js'></script>
     <script>
     (function() {
-      var buildNumber = '${buildNumber}',
+      var MAX_BUILD_LENGTH = 5,
+          buildNumber = '${buildNumber}',
           buildTokenReplaced = buildNumber !== ('${' + 'buildNumber' + '}'),
           versionParameter = buildTokenReplaced ? buildNumber : Date.now();
 
-      require.urlArgs = "_lumifyV=" + versionParameter;
+      if (versionParameter.length > MAX_BUILD_LENGTH && buildTokenReplaced) {
+        versionParameter = versionParameter.substring(0, MAX_BUILD_LENGTH)
+      }
+
+      require.urlArgs = "lmfy_v=" + versionParameter;
 
       document.addEventListener('readyForPlugins', function() {
         require([

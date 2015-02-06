@@ -158,11 +158,14 @@ define([
             event.target.blur();
 
             this.enableButton(false, true);
+            this.submitting = true;
             $error.empty();
 
             $.post('login', {
                 username: $username.val(),
                 password: $password.val()
+            }).always(function() {
+                self.submitting = false;
             }).fail(function(xhr, status, error) {
                 if (xhr.status === 403) {
                     error = 'Invalid Username / Password';
@@ -176,6 +179,7 @@ define([
         };
 
         this.enableButton = function(enable, loading) {
+            if (this.submitting) return;
             var button = this.select('loginButtonSelector');
 
             if (enable) {
