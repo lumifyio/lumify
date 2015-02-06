@@ -28,7 +28,7 @@ public class SqlWorkspaceVertex {
         return graphPositionX;
     }
 
-    public void setGraphPositionX(int graphPositionX) {
+    public void setGraphPositionX(Integer graphPositionX) {
         this.graphPositionX = graphPositionX;
     }
 
@@ -37,7 +37,7 @@ public class SqlWorkspaceVertex {
         return graphPositionY;
     }
 
-    public void setGraphPositionY(int graphPositionY) {
+    public void setGraphPositionY(Integer graphPositionY) {
         this.graphPositionY = graphPositionY;
     }
 

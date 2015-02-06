@@ -174,14 +174,12 @@ define([
 
                         // Sort section because title might be renamed
                         var lis = self.getWorkspaceListItemsInSection(data.sharedToUser),
-                            titleGetter = function() {
-                                return $(this).data('title');
+                            dataGetter = function(li) {
+                                return $(this).data();
                             },
-                            lowerCase = function(s) {
-                                return s.toLowerCase();
-                            },
-                            titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
-                            insertIndex = _.indexOf(titles, data.title),
+                            insertIndex = _.sortedIndex(lis.map(dataGetter).toArray(), data, function(w) {
+                                return [w.title.toLowerCase(), w.createdBy, w.workspaceId].join('\u0000')
+                            }),
                             currentIndex = lis.index(content);
 
                         if (currentIndex < insertIndex) {
@@ -259,6 +257,8 @@ define([
                                 .value()
                             ).done(function() {
                                 var rows = _.chain(arguments)
+                                        .sortBy('workspaceId')
+                                        .sortBy('createdBy')
                                         .sortBy(function(w) {
                                             return w.title.toLowerCase()
                                         })
