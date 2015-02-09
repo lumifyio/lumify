@@ -3,6 +3,7 @@ package io.lumify.web.routes.vertex;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.ArtifactDetectedObject;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -76,7 +77,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
-        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String sourceInfoString = getOptionalParameter(request, "sourceInfo");
         String originalPropertyKey = getOptionalParameter(request, "originalPropertyKey");
         double x1 = Double.parseDouble(getRequiredParameter(request, "x1"));
         double x2 = Double.parseDouble(getRequiredParameter(request, "x2"));
@@ -114,6 +115,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
+            SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
             GraphUtil.addJustification(graph, resolvedVertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);

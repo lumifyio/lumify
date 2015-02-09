@@ -3,6 +3,7 @@ package io.lumify.web.routes.vertex;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
@@ -21,7 +22,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiElement;
-import org.json.JSONObject;
 import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -103,19 +103,12 @@ public class VertexSetProperty extends BaseRequestHandler {
             String propertyKey,
             String valueStr,
             String justificationText,
-            String sourceInfo,
+            String sourceInfoString,
             String metadataString,
             String visibilitySource,
             User user,
             String workspaceId,
             Authorizations authorizations) {
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
-
         if (propertyKey == null) {
             propertyKey = this.graph.getIdGenerator().nextId();
         }
@@ -151,7 +144,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                 workspaceId,
                 this.visibilityTranslator,
                 justificationText,
-                sourceJson,
+                SourceInfo.fromString(sourceInfoString),
                 user,
                 authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());

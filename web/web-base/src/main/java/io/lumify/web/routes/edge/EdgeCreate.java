@@ -2,7 +2,7 @@ package io.lumify.web.routes.edge;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.PropertySourceMetadata;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -14,7 +14,6 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.*;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
 import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +51,7 @@ public class EdgeCreate extends BaseRequestHandler {
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
-        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String sourceInfoString = getOptionalParameter(request, "sourceInfo");
 
         String workspaceId = getActiveWorkspaceId(request);
 
@@ -74,7 +73,7 @@ public class EdgeCreate extends BaseRequestHandler {
                 destVertex,
                 predicateLabel,
                 justificationText,
-                sourceInfo,
+                SourceInfo.fromString(sourceInfoString),
                 visibilitySource,
                 workspaceId,
                 visibilityTranslator,

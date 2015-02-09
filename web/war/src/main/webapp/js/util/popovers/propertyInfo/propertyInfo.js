@@ -173,7 +173,7 @@ define([
             // Justification
             var justification = [];
             if (property.metadata &&
-                (property.metadata._justificationMetadata || property.metadata._sourceMetadata)) {
+                (property.metadata['http://lumify.io#justification'] || property.metadata._sourceMetadata)) {
                 justification.push(true);
             }
 
@@ -201,7 +201,7 @@ define([
                         require(['util/vertex/justification/viewer'], function(JustificationViewer) {
                             $(node).teardownAllComponents();
                             JustificationViewer.attachTo(node, {
-                                justificationMetadata: property.metadata._justificationMetadata,
+                                justificationMetadata: property.metadata['http://lumify.io#justification'],
                                 sourceMetadata: property.metadata._sourceMetadata
                             });
                             positionDialog();

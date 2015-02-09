@@ -2,6 +2,7 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -78,7 +79,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String resolvedVertexId = getOptionalParameter(request, "resolvedVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
-        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String sourceInfoString = getOptionalParameter(request, "sourceInfo");
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
@@ -114,6 +115,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
             LumifyProperties.TITLE.addPropertyValue(vertexMutation, MULTI_VALUE_KEY, title, metadata, lumifyVisibility.getVisibility());
             vertex = vertexMutation.save(authorizations);
 
+            SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
             GraphUtil.addJustification(graph, vertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());

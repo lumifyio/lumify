@@ -1,8 +1,6 @@
 package io.lumify.core.model.properties.types;
 
-import io.lumify.core.ingest.ArtifactDetectedObject;
 import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
 import org.json.JSONObject;
 
 public class PropertyJustificationMetadataLumifyProperty extends LumifyProperty<PropertyJustificationMetadata, String> {

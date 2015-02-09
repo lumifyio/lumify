@@ -47,7 +47,7 @@ define([
 
     function isJustification(property) {
         return (
-            property.name === '_justificationMetadata' ||
+            property.name === 'http://lumify.io#justification' ||
             property.name === '_sourceMetadata'
         );
     }
@@ -94,7 +94,7 @@ define([
                                 hideVisibility: true,
                                 displayName: i18n('justification.field.label'),
                                 justificationData: {
-                                    justificationMetadata: property.name === '_justificationMetadata' ?
+                                    justificationMetadata: property.name === 'http://lumify.io#justification' ?
                                         property.value : null,
                                     sourceMetadata: property.name === '_sourceMetadata' ?
                                         property.value : null

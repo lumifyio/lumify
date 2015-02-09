@@ -154,7 +154,7 @@ public abstract class MigrationBase extends Configured implements Tool {
                 OntologyRepository.VISIBILITY_STRING,
                 UserRepository.VISIBILITY_STRING,
                 WorkspaceRepository.VISIBILITY_STRING,
-                GraphUtil.SOURCE_VISIBILITY_STRING
+                GraphUtil.SOURCE_INFO_VISIBILITY_STRING
         };
     }
 

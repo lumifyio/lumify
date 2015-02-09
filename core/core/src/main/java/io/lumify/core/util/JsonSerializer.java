@@ -4,7 +4,6 @@ import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.web.clientapi.model.SandboxStatus;
@@ -203,8 +202,6 @@ public class JsonSerializer {
             return ((Date) value).getTime();
         } else if (value instanceof PropertyJustificationMetadata) {
             return ((PropertyJustificationMetadata) value).toJson();
-        } else if (value instanceof PropertySourceMetadata) {
-            return ((PropertySourceMetadata) value).toJson();
         } else if (value instanceof String) {
             try {
                 String valueString = (String) value;

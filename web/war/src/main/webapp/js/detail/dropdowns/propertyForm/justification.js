@@ -33,7 +33,7 @@ define([
             if (this.attr._sourceMetadata) {
                 this.setValue(this.attr._sourceMetadata)
             } else {
-                this.setValue(this.attr._justificationMetadata && this.attr._justificationMetadata.justificationText);
+                this.setValue(this.attr['http://lumify.io#justification'] && this.attr['http://lumify.io#justification'].justificationText);
             }
 
             this.on('valuepasted', this.onValuePasted);

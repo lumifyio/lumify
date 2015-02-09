@@ -3,6 +3,7 @@ package io.lumify.web.routes.edge;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
@@ -18,7 +19,6 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
 import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,17 +59,10 @@ public class SetEdgeProperty extends BaseRequestHandler {
         final String valueStr = getRequiredParameter(request, "value");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationString");
-        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String sourceInfoString = getOptionalParameter(request, "sourceInfo");
         final String metadataString = getOptionalParameter(request, "metadata");
 
         String workspaceId = getActiveWorkspaceId(request);
-
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
 
         if (propertyKey == null) {
             propertyKey = this.graph.getIdGenerator().nextId();
@@ -119,7 +112,7 @@ public class SetEdgeProperty extends BaseRequestHandler {
                 workspaceId,
                 this.visibilityTranslator,
                 justificationText,
-                sourceJson,
+                SourceInfo.fromString(sourceInfoString),
                 user,
                 authorizations);
         setPropertyResult.elementMutation.save(authorizations);

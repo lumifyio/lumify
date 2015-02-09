@@ -10,14 +10,14 @@
 ]>
 
 
-<rdf:RDF xmlns="http://lumify.io/sourceMetadata#"
-     xml:base="http://lumify.io/sourceMetadata"
+<rdf:RDF xmlns="http://lumify.io/sourceInfo#"
+     xml:base="http://lumify.io/sourceInfo"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:lumify="http://lumify.io#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <owl:Ontology rdf:about="http://lumify.io/sourceMetadata">
+    <owl:Ontology rdf:about="http://lumify.io/sourceInfo">
         <owl:imports rdf:resource="http://lumify.io"/>
     </owl:Ontology>
     
@@ -34,9 +34,9 @@
     
 
 
-    <!-- http://lumify.io/sourceMetadata#forElementId -->
+    <!-- http://lumify.io/sourceInfo#forElementId -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#forElementId">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#forElementId">
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -44,18 +44,18 @@
     
 
 
-    <!-- http://lumify.io/sourceMetadata#endOffset -->
+    <!-- http://lumify.io/sourceInfo#endOffset -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#endOffset">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#endOffset">
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://lumify.io/sourceMetadata#propertyKey -->
+    <!-- http://lumify.io/sourceInfo#propertyKey -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#propertyKey">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#propertyKey">
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -63,9 +63,9 @@
     
 
 
-    <!-- http://lumify.io/sourceMetadata#propertyName -->
+    <!-- http://lumify.io/sourceInfo#propertyName -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#propertyName">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#propertyName">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -73,9 +73,9 @@
     
 
 
-    <!-- http://lumify.io/sourceMetadata#propertyVisibility -->
+    <!-- http://lumify.io/sourceInfo#propertyVisibility -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#propertyVisibility">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#propertyVisibility">
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -83,9 +83,9 @@
     
 
 
-    <!-- http://lumify.io/sourceMetadata#snippet -->
+    <!-- http://lumify.io/sourceInfo#snippet -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#snippet">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#snippet">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -93,18 +93,18 @@
     
 
 
-    <!-- http://lumify.io/sourceMetadata#startOffset -->
+    <!-- http://lumify.io/sourceInfo#startOffset -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#startOffset">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#startOffset">
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://lumify.io/sourceMetadata#textPropertyKey -->
+    <!-- http://lumify.io/sourceInfo#textPropertyKey -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceMetadata#textPropertyKey">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/sourceInfo#textPropertyKey">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <rdfs:range rdf:resource="&xsd;string"/>

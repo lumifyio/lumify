@@ -85,6 +85,8 @@ public class Router extends HttpServlet {
             app.get("/vertex/thumbnail", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexThumbnail.class);
             app.get("/vertex/poster-frame", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexPosterFrame.class);
             app.get("/vertex/video-preview", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexVideoPreviewImage.class);
+            app.get("/vertex/source-info", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexSourceInfo.class);
+            app.get("/vertex/property/source-info", authenticator, csrfProtector, ReadPrivilegeFilter.class, VertexPropertySourceInfo.class);
             app.post("/vertex/import", authenticator, csrfProtector, EditPrivilegeFilter.class, VertexImport.class);
             app.post("/vertex/resolve-term", authenticator, csrfProtector, EditPrivilegeFilter.class, ResolveTermEntity.class);
             app.post("/vertex/unresolve-term", authenticator, csrfProtector, EditPrivilegeFilter.class, UnresolveTermEntity.class);
@@ -119,6 +121,8 @@ public class Router extends HttpServlet {
             app.get("/edge/properties", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeProperties.class);
             app.post("/edge/visibility", authenticator, csrfProtector, EditPrivilegeFilter.class, EdgeSetVisibility.class);
             app.get("/edge/audit", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeAudit.class);
+            app.get("/edge/property/source-info", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgePropertySourceInfo.class);
+            app.get("/edge/source-info", authenticator, csrfProtector, ReadPrivilegeFilter.class, EdgeSourceInfo.class);
 
             app.get("/workspace/all", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceList.class);
             app.post("/workspace/create", authenticator, csrfProtector, ReadPrivilegeFilter.class, WorkspaceCreate.class);

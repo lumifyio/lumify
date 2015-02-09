@@ -38,7 +38,7 @@ public class ReindexMR extends LumifyMRBase {
                 OntologyRepository.VISIBILITY_STRING,
                 UserRepository.VISIBILITY_STRING,
                 WorkspaceRepository.VISIBILITY_STRING,
-                GraphUtil.SOURCE_VISIBILITY_STRING
+                GraphUtil.SOURCE_INFO_VISIBILITY_STRING
         };
 
         job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);
