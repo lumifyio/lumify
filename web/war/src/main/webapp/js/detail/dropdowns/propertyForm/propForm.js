@@ -43,9 +43,7 @@ define([
         });
 
         this.before('initialize', function(n, c) {
-            if (c.property) {
-                c.manualOpen = true;
-            }
+            c.manualOpen = true;
         })
 
         this.after('initialize', function() {
@@ -103,6 +101,7 @@ define([
                             properties: properties.list,
                             placeholder: i18n('property.form.field.selection.placeholder')
                         });
+                        self.manualOpen();
                     });
             }
         });
