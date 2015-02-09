@@ -57,6 +57,10 @@ define([
                 formatLabel = function(name) {
                     return self.ontologyProperties.byTitle[name].displayName;
                 },
+                formatVisibility = function(propertyOrProperties) {
+                    var property = _.isArray(propertyOrProperties) ? propertyOrProperties[0] : propertyOrProperties;
+                    return JSON.stringify(property['http://lumify.io#visibilityJson']);
+                },
                 formatValue = function(name, change, property) {
                     return F.vertex.prop({
                         id: property.id,
@@ -68,6 +72,7 @@ define([
                 self.$node.html(template({
                     diffs: processDiffs,
                     formatValue: formatValue,
+                    formatVisibility: formatVisibility,
                     formatLabel: formatLabel,
                     F: F,
                     Privileges: Privileges

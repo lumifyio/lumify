@@ -154,13 +154,21 @@ define([
                         // Add compound properties (multi-value if there
                         // dependent properties have multiple keys
                         _.each(compoundPropertiesByNameToKeys, function(compoundInfo, compoundKey) {
-                            _.each(compoundInfo.keys, function(_, key) {
-                                properties.push({
-                                    compoundProperty: true,
-                                    name: compoundInfo.property.title,
-                                    key: key,
-                                    value: key
-                                });
+                            _.each(compoundInfo.keys, function(value, key) {
+                                var matching = F.vertex.props(self.attr.data, compoundInfo.property.title, key),
+                                    first = matching && _.first(matching),
+                                    property = {
+                                        compoundProperty: true,
+                                        name: compoundInfo.property.title,
+                                        key: key,
+                                        value: key
+                                    };
+
+                                if (first) {
+                                    property.metadata = first.metadata;
+                                }
+
+                                properties.push(property);
                             });
                         });
 

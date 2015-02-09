@@ -212,7 +212,9 @@ define([
                     _.first(F.vertex.props(this.attr.data, property.title, property.key)) :
                     undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
-                visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
+                visibilityValue = vertexProperty &&
+                    vertexProperty.metadata &&
+                    vertexProperty.metadata['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
                 isExistingProperty = typeof vertexProperty !== 'undefined',
                 previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName);
