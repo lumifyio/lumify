@@ -341,7 +341,13 @@ public class GraphUtil {
         String edgeId = vertex.getId() + "hasSource" + sourceVertex.getId();
         EdgeBuilder m = graph.prepareEdge(edgeId, vertex, sourceVertex, LumifyProperties.EDGE_LABEL_HAS_SOURCE, edgeVisibility);
         LumifyProperties.SOURCE_INFO_FOR_ELEMENT_ID.setProperty(m, forElementId, visibility);
+        if (propertyKey == null) {
+            propertyKey = "";
+        }
         LumifyProperties.SOURCE_INFO_PROPERTY_KEY.setProperty(m, propertyKey, edgeVisibility);
+        if (propertyName == null) {
+            propertyName = "";
+        }
         LumifyProperties.SOURCE_INFO_PROPERTY_NAME.setProperty(m, propertyName, edgeVisibility);
         LumifyProperties.SOURCE_INFO_PROPERTY_VISIBILITY.setProperty(m, visibility.getVisibilityString(), edgeVisibility);
         LumifyProperties.SOURCE_INFO_SNIPPET.setProperty(m, snippet, edgeVisibility);
