@@ -34,6 +34,10 @@ define([
 
             values[data.propertyId] = data.values;
 
+            this.triggerIfValid();
+        };
+
+        this.triggerIfValid = function() {
             if (this.isValid()) {
                 this.trigger('propertychange', {
                     id: this.attr.id,
@@ -46,7 +50,7 @@ define([
                     propertyId: this.attr.property.title
                 });
             }
-        };
+        }
 
         this.onDependentPropertyInvalid = function(event, data) {
             if ($(event.target).is(this.$node)) {
@@ -54,10 +58,8 @@ define([
             }
 
             event.stopPropagation();
-            this.trigger('propertyinvalid', {
-                id: this.attr.id,
-                propertyId: this.attr.property.title
-            });
+            values[data.propertyId] = data.values;
+            this.triggerIfValid();
         };
 
         this.getValues = function() {
@@ -71,8 +73,14 @@ define([
         this.isValid = function() {
             var values = this.getValues();
 
-            // TODO: should pass key?
-            return F.vertex.propValid(this.attr.vertex, values, this.attr.property.title);
+            if (this.attr.vertex) {
+                // TODO: should pass key?
+                return F.vertex.propValid(this.attr.vertex, values, this.attr.property.title);
+            }
+
+            return _.any(values, function(v) {
+                return v && v.length;
+            })
         };
 
         this.render = function() {

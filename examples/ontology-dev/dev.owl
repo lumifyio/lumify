@@ -569,6 +569,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#firstName">
         <rdfs:label xml:lang="en">First Name</rdfs:label>
+        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -645,6 +646,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#lastName">
         <rdfs:label xml:lang="en">Last Name</rdfs:label>
+        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
