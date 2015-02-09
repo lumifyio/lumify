@@ -129,10 +129,10 @@ public class GraphUtil {
     }
 
     public static class VisibilityAndElementMutation<T extends Element> {
-        public final ElementMutation<T> elementMutation;
+        public final ExistingElementMutation<T> elementMutation;
         public final LumifyVisibility visibility;
 
-        public VisibilityAndElementMutation(LumifyVisibility visibility, ElementMutation<T> elementMutation) {
+        public VisibilityAndElementMutation(LumifyVisibility visibility, ExistingElementMutation<T> elementMutation) {
             this.visibility = visibility;
             this.elementMutation = elementMutation;
         }
@@ -144,13 +144,14 @@ public class GraphUtil {
             SandboxStatus sandboxStatus,
             String visibilitySource,
             String workspaceId,
-            Authorizations authorizations) {
+            Authorizations authorizations
+    ) {
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(element);
         visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJson, visibilitySource);
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        ExistingElementMutation m = element.prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
+        ExistingElementMutation<T> m = element.<T>prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
         if (LumifyProperties.VISIBILITY_JSON.getPropertyValue(element) != null) {
             Property visibilityJsonProperty = LumifyProperties.VISIBILITY_JSON.getProperty(element);
             m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyProperties.VISIBILITY_JSON.getPropertyName(), visibilityTranslator.getDefaultVisibility());
@@ -160,7 +161,7 @@ public class GraphUtil {
 
         LumifyProperties.VISIBILITY_JSON.setProperty(m, visibilityJson, metadata, visibilityTranslator.getDefaultVisibility());
         m.save(authorizations);
-        return new VisibilityAndElementMutation<T>(lumifyVisibility, m);
+        return new VisibilityAndElementMutation<>(lumifyVisibility, m);
     }
 
     public static <T extends Element> VisibilityAndElementMutation<T> setProperty(
@@ -223,7 +224,7 @@ public class GraphUtil {
         }
 
         elementMutation.addPropertyValue(propertyKey, propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
-        return new VisibilityAndElementMutation<T>(lumifyVisibility, elementMutation);
+        return new VisibilityAndElementMutation<>(lumifyVisibility, elementMutation);
     }
 
     private static void mergeMetadata(Metadata metadata, Metadata additionalMetadata) {
