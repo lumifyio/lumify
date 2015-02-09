@@ -57,6 +57,8 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
             longRunningProcess.setCanceled(false);
             longRunningProcess.setLongRunningProcessId(longRunningProcessId);
             longRunningProcessQueueItem.put("id", longRunningProcessId);
+            longRunningProcessQueueItem.put("enqueueTime", System.currentTimeMillis());
+            longRunningProcessQueueItem.put("userId", user.getUserId());
             longRunningProcess.setJson(longRunningProcessQueueItem.toString());
             if (user instanceof ProxyUser) {
                 user = userRepository.findById(user.getUserId());
@@ -67,6 +69,8 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
             session.save(longRunningProcess);
             session.update(user);
             transaction.commit();
+
+            this.workQueueRepository.pushLongRunningProcessQueue(longRunningProcessQueueItem);
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();

@@ -48,6 +48,8 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
 
         VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, LONG_RUNNING_PROCESS_CONCEPT_IRI, visibility);
+        longRunningProcessQueueItem.put("enqueueTime", System.currentTimeMillis());
+        longRunningProcessQueueItem.put("userId", user.getUserId());
         QUEUE_ITEM_JSON_PROPERTY.setProperty(vertexBuilder, longRunningProcessQueueItem, visibility);
         Vertex longRunningProcessVertex = vertexBuilder.save(authorizations);
 
@@ -56,7 +58,7 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         this.graph.flush();
 
         longRunningProcessQueueItem.put("id", longRunningProcessVertex.getId());
-        this.workQueueRepository.pushLongRunningProcessQueue(longRunningProcessQueueItem, user.getUserId());
+        this.workQueueRepository.pushLongRunningProcessQueue(longRunningProcessQueueItem);
 
         return longRunningProcessVertex.getId();
     }
