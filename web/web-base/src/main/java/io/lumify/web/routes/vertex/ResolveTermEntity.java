@@ -110,12 +110,11 @@ public class ResolveTermEntity extends BaseRequestHandler {
             vertexMutation = vertex.prepareMutation();
         } else {
             vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility());
-            GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
-
             LumifyProperties.CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
             LumifyProperties.TITLE.addPropertyValue(vertexMutation, MULTI_VALUE_KEY, title, metadata, lumifyVisibility.getVisibility());
-
             vertex = vertexMutation.save(authorizations);
+
+            GraphUtil.addJustification(graph, vertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
 

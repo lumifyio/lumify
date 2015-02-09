@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 public class PropertySourceMetadata implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String PROPERTY_SOURCE_METADATA = "_sourceMetadata";
     private final int startOffset;
     private final int endOffset;
     private final String vertexId;
@@ -19,6 +18,14 @@ public class PropertySourceMetadata implements Serializable {
         this.startOffset = startOffset;
         this.endOffset = endOffset;
         this.snippet = snippet;
+    }
+
+    public PropertySourceMetadata(JSONObject sourceObject) {
+        this.vertexId = sourceObject.getString("vertexId");
+        this.textPropertyKey = sourceObject.getString("textPropertyKey");
+        this.startOffset = sourceObject.getInt("startOffset");
+        this.endOffset = sourceObject.getInt("endOffset");
+        this.snippet = sourceObject.getString("snippet");
     }
 
     public int getStartOffset() {

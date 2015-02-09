@@ -12,7 +12,6 @@ import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.json.JSONObject;
 import org.securegraph.*;
-import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Date;
@@ -24,6 +23,7 @@ public class GraphUtil {
     public static final String LUMIFY_VERSION_KEY = "lumify.version";
     public static final int LUMIFY_VERSION = 3;
     public static final double SET_PROPERTY_CONFIDENCE = 0.5;
+    public static final String SOURCE_VISIBILITY_STRING = "source";
 
     public static void verifyVersion(Graph graph) {
         verifyVersion(graph, LUMIFY_VERSION);
@@ -215,16 +215,216 @@ public class GraphUtil {
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            propertyMetadata.remove(PropertySourceMetadata.PROPERTY_SOURCE_METADATA);
-            propertyMetadata.add(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata, lumifyVisibility.getVisibility());
-        } else if (sourceObject.length() > 0) {
-            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceObject);
-            propertyMetadata.remove(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION);
-            propertyMetadata.add(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata, lumifyVisibility.getVisibility());
+            removeSourceMetadataEdge(graph, element, propertyKey, propertyName, lumifyVisibility, authorizations);
+            LumifyProperties.JUSTIFICATION.setMetadata(propertyMetadata, propertyJustificationMetadata, lumifyVisibility.getVisibility());
+        } else if (sourceObject != null && sourceObject.length() > 0) {
+            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(sourceObject);
+            Vertex sourceVertex = graph.getVertex(sourceMetadata.getVertexId(), authorizations);
+            LumifyProperties.JUSTIFICATION.removeMetadata(propertyMetadata);
+            addSourceMetadataEdge(
+                    graph,
+                    element,
+                    propertyKey,
+                    propertyName,
+                    sourceMetadata.getSnippet(),
+                    sourceMetadata.getTextPropertyKey(),
+                    sourceMetadata.getStartOffset(),
+                    sourceMetadata.getEndOffset(),
+                    sourceVertex,
+                    lumifyVisibility,
+                    authorizations
+            );
         }
 
         elementMutation.addPropertyValue(propertyKey, propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         return new VisibilityAndElementMutation<>(lumifyVisibility, elementMutation);
+    }
+
+    public static void addJustification(Graph graph, Vertex vertex, String justificationText, String sourceObject, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        if (justificationText != null) {
+            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            removeSourceMetadataEdgeFromVertex(graph, vertex, vertex.getId(), null, null, lumifyVisibility, authorizations);
+            LumifyProperties.JUSTIFICATION.setProperty(vertex, propertyJustificationMetadata, lumifyVisibility.getVisibility(), authorizations);
+        } else if (sourceObject != null && sourceObject.length() > 0) {
+            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(new JSONObject(sourceObject));
+            Vertex sourceVertex = graph.getVertex(sourceMetadata.getVertexId(), authorizations);
+            LumifyProperties.JUSTIFICATION.removeProperty(vertex, authorizations);
+            addSourceMetadataEdgeToVertex(
+                    graph,
+                    vertex,
+                    null,
+                    null,
+                    sourceMetadata.getSnippet(),
+                    sourceMetadata.getTextPropertyKey(),
+                    sourceMetadata.getStartOffset(),
+                    sourceMetadata.getEndOffset(),
+                    sourceVertex,
+                    lumifyVisibility,
+                    authorizations
+            );
+        }
+    }
+
+    private static <T extends Element> void addSourceMetadataEdge(
+            Graph graph,
+            T element,
+            String propertyKey,
+            String propertyName,
+            String snippet,
+            String textPropertyKey,
+            int startOffset,
+            int endOffset,
+            Vertex sourceVertex,
+            LumifyVisibility lumifyVisibility,
+            Authorizations authorizations
+    ) {
+        if (element instanceof Vertex) {
+            addSourceMetadataEdgeToVertex(
+                    graph,
+                    (Vertex) element,
+                    propertyKey,
+                    propertyName,
+                    snippet,
+                    textPropertyKey,
+                    startOffset,
+                    endOffset,
+                    sourceVertex,
+                    lumifyVisibility,
+                    authorizations
+            );
+        } else {
+            addSourceMetadataEdgeToEdge(
+                    graph,
+                    (Edge) element,
+                    propertyKey,
+                    propertyName,
+                    snippet,
+                    textPropertyKey,
+                    startOffset,
+                    endOffset,
+                    sourceVertex,
+                    lumifyVisibility,
+                    authorizations
+            );
+        }
+    }
+
+    private static void addSourceMetadataEdgeToVertex(
+            Graph graph,
+            Vertex vertex,
+            String propertyKey,
+            String propertyName,
+            String snippet,
+            String textPropertyKey,
+            int startOffset,
+            int endOffset,
+            Vertex sourceVertex,
+            LumifyVisibility lumifyVisibility,
+            Authorizations authorizations
+    ) {
+        Visibility visibility = lumifyVisibility.getVisibility();
+        Visibility edgeVisibility = LumifyVisibility.and(visibility, SOURCE_VISIBILITY_STRING);
+        String edgeId = vertex.getId() + "hasSource" + sourceVertex.getId();
+        EdgeBuilder m = graph.prepareEdge(edgeId, vertex, sourceVertex, LumifyProperties.EDGE_LABEL_HAS_SOURCE, edgeVisibility);
+        LumifyProperties.SOURCE_METADATA_PROPERTY_KEY.setProperty(m, propertyKey, edgeVisibility);
+        LumifyProperties.SOURCE_METADATA_PROPERTY_NAME.setProperty(m, propertyName, edgeVisibility);
+        LumifyProperties.SOURCE_METADATA_PROPERTY_VISIBILITY.setProperty(m, visibility.getVisibilityString(), edgeVisibility);
+        LumifyProperties.SOURCE_METADATA_SNIPPET.setProperty(m, snippet, edgeVisibility);
+        LumifyProperties.SOURCE_METADATA_TEXT_PROPERTY_KEY.setProperty(m, textPropertyKey, edgeVisibility);
+        LumifyProperties.SOURCE_METADATA_START_OFFSET.setProperty(m, startOffset, edgeVisibility);
+        LumifyProperties.SOURCE_METADATA_END_OFFSET.setProperty(m, endOffset, edgeVisibility);
+        m.save(authorizations);
+    }
+
+    private static void addSourceMetadataEdgeToEdge(
+            Graph graph,
+            Edge edge,
+            String propertyKey,
+            String propertyName,
+            String snippet,
+            String textPropertyKey,
+            int startOffset,
+            int endOffset,
+            Vertex sourceVertex,
+            LumifyVisibility lumifyVisibility,
+            Authorizations authorizations
+    ) {
+        Vertex inVertex = edge.getVertex(Direction.IN, authorizations);
+        Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
+        addSourceMetadataEdgeToVertex(
+                graph,
+                inVertex,
+                propertyKey,
+                propertyName,
+                snippet,
+                textPropertyKey,
+                startOffset,
+                endOffset,
+                sourceVertex,
+                lumifyVisibility,
+                authorizations
+        );
+        addSourceMetadataEdgeToVertex(
+                graph,
+                outVertex,
+                propertyKey,
+                propertyName,
+                snippet,
+                textPropertyKey,
+                startOffset,
+                endOffset,
+                sourceVertex,
+                lumifyVisibility,
+                authorizations
+        );
+    }
+
+    private static void removeSourceMetadataEdge(Graph graph, Element element, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        if (element instanceof Vertex) {
+            removeSourceMetadataEdgeFromVertex(graph, (Vertex) element, element.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
+        } else {
+            removeSourceMetadataEdgeFromEdge(graph, (Edge) element, propertyKey, propertyName, lumifyVisibility, authorizations);
+        }
+    }
+
+    private static void removeSourceMetadataEdgeFromVertex(Graph graph, Vertex vertex, String sourceMetadataElementId, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        Edge sourceMetadataEdge = findSourceMetadataEdge(vertex, sourceMetadataElementId, propertyKey, propertyName, lumifyVisibility, authorizations);
+        if (sourceMetadataEdge != null) {
+            graph.removeEdge(sourceMetadataEdge, authorizations);
+        }
+    }
+
+    private static void removeSourceMetadataEdgeFromEdge(Graph graph, Edge edge, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        Vertex inVertex = edge.getVertex(Direction.IN, authorizations);
+        Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
+        removeSourceMetadataEdgeFromVertex(graph, inVertex, edge.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
+        removeSourceMetadataEdgeFromVertex(graph, outVertex, edge.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
+    }
+
+    private static Edge findSourceMetadataEdge(Vertex vertex, String forElementId, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        if (propertyKey == null) {
+            propertyKey = "";
+        }
+        if (propertyName == null) {
+            propertyName = "";
+        }
+        Iterable<Edge> hasSourceEdges = vertex.getEdges(Direction.OUT, LumifyProperties.EDGE_LABEL_HAS_SOURCE, authorizations);
+        for (Edge hasSourceEdge : hasSourceEdges) {
+            if (!forElementId.equals(LumifyProperties.SOURCE_METADATA_FOR_ELEMENT_ID.getPropertyValue(hasSourceEdge))) {
+                continue;
+            }
+            if (!propertyKey.equals(LumifyProperties.SOURCE_METADATA_PROPERTY_KEY.getPropertyValue(hasSourceEdge))) {
+                continue;
+            }
+            if (!propertyName.equals(LumifyProperties.SOURCE_METADATA_PROPERTY_NAME.getPropertyValue(hasSourceEdge))) {
+                continue;
+            }
+            if (!lumifyVisibility.toString().equals(LumifyProperties.SOURCE_METADATA_PROPERTY_VISIBILITY.getPropertyValue(hasSourceEdge))) {
+                continue;
+            }
+            return hasSourceEdge;
+        }
+        return null;
     }
 
     private static void mergeMetadata(Metadata metadata, Metadata additionalMetadata) {
@@ -236,22 +436,13 @@ public class GraphUtil {
         }
     }
 
-    private static PropertySourceMetadata createPropertySourceMetadata(JSONObject sourceObject) {
-        int startOffset = sourceObject.getInt("startOffset");
-        int endOffset = sourceObject.getInt("endOffset");
-        String vertexId = sourceObject.getString("vertexId");
-        String snippet = sourceObject.getString("snippet");
-        String textPropertyKey = sourceObject.getString("textPropertyKey");
-        return new PropertySourceMetadata(vertexId, textPropertyKey, startOffset, endOffset, snippet);
-    }
-
     public static Edge addEdge(
             Graph graph,
             Vertex sourceVertex,
             Vertex destVertex,
             String predicateLabel,
             String justificationText,
-            String sourceInfo,
+            String sourceObject,
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
@@ -268,26 +459,36 @@ public class GraphUtil {
         LumifyProperties.MODIFIED_DATE.setProperty(edgeBuilder, now, lumifyVisibility.getVisibility());
         LumifyProperties.MODIFIED_BY.setProperty(edgeBuilder, user.getUserId(), lumifyVisibility.getVisibility());
 
-        addJustificationToMutation(edgeBuilder, justificationText, sourceInfo, lumifyVisibility);
-
-        return edgeBuilder.save(authorizations);
-    }
-
-    public static <T extends Element> void addJustificationToMutation(ElementMutation<T> mutation, String justificationText, String sourceInfo, LumifyVisibility lumifyVisibility) {
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
-
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            mutation.setProperty(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata.toJson().toString(), lumifyVisibility.getVisibility());
-        } else if (sourceJson.length() > 0) {
-            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceJson);
-            mutation.setProperty(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata.toJson().toString(), lumifyVisibility.getVisibility());
+            LumifyProperties.JUSTIFICATION.setProperty(edgeBuilder, propertyJustificationMetadata, lumifyVisibility.getVisibility());
+        } else if (sourceObject.length() > 0) {
+            LumifyProperties.JUSTIFICATION.removeProperty(edgeBuilder, lumifyVisibility.getVisibility());
         }
+
+        Edge edge = edgeBuilder.save(authorizations);
+
+        if (justificationText != null) {
+            removeSourceMetadataEdgeFromEdge(graph, edge, null, null, lumifyVisibility, authorizations);
+        } else if (sourceObject.length() > 0) {
+            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(new JSONObject(sourceObject));
+            Vertex sourceDataVertex = graph.getVertex(sourceMetadata.getVertexId(), authorizations);
+            addSourceMetadataEdgeToEdge(
+                    graph,
+                    edge,
+                    null,
+                    null,
+                    sourceMetadata.getSnippet(),
+                    sourceMetadata.getTextPropertyKey(),
+                    sourceMetadata.getStartOffset(),
+                    sourceMetadata.getEndOffset(),
+                    sourceDataVertex,
+                    lumifyVisibility,
+                    authorizations
+            );
+        }
+
+        return edge;
     }
 
     // TODO remove me?

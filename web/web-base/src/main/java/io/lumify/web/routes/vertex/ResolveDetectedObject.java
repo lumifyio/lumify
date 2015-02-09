@@ -114,7 +114,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-            GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
+            GraphUtil.addJustification(graph, resolvedVertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);
 

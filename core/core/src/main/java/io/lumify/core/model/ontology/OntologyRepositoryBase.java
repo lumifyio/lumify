@@ -7,6 +7,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.util.ExecutorServiceUtil;
@@ -47,6 +48,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
     public static final String BASE_OWL_IRI = "http://lumify.io";
     public static final String COMMENT_OWL_IRI = "http://lumify.io/comment";
+    public static final String SOURCE_METADATA_OWL_IRI = "http://lumify.io/sourceMetadata";
     private final Configuration configuration;
 
     protected OntologyRepositoryBase(Configuration configuration) {
@@ -61,6 +63,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         importResourceOwl("base.owl", BASE_OWL_IRI, authorizations);
         importResourceOwl("user.owl", UserRepository.OWL_IRI, authorizations);
+        importResourceOwl("termMention.owl", TermMentionRepository.OWL_IRI, authorizations);
+        importResourceOwl("sourceMetadata.owl", SOURCE_METADATA_OWL_IRI, authorizations);
         importResourceOwl("workspace.owl", WorkspaceRepository.OWL_IRI, authorizations);
         importResourceOwl("comment.owl", COMMENT_OWL_IRI, authorizations);
         importResourceOwl("longRunningProcess.owl", LongRunningProcessRepository.OWL_IRI, authorizations);
@@ -617,10 +621,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
         }
         return bestLabel;
-    }
-
-    protected String getColor(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.COLOR.getPropertyName());
     }
 
     protected String getDisplayType(OWLOntology o, OWLEntity owlEntity) {

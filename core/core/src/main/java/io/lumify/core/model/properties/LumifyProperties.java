@@ -4,9 +4,11 @@ import io.lumify.core.model.properties.types.*;
 
 public class LumifyProperties {
     public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
-    public static final String META_DATA_LANGUAGE = "http://lumify.io#language";
-    public static final String META_DATA_TEXT_DESCRIPTION = "http://lumify.io#textDescription";
-    public static final String META_DATA_MIME_TYPE = "http://lumify.io#mimeType";
+    public static final String EDGE_LABEL_HAS_SOURCE = "http://lumify.io#hasSource";
+
+    public static final StringLumifyProperty META_DATA_LANGUAGE = new StringLumifyProperty("http://lumify.io#language");
+    public static final StringLumifyProperty META_DATA_TEXT_DESCRIPTION = new StringLumifyProperty("http://lumify.io#textDescription");
+    public static final StringLumifyProperty META_DATA_MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
 
     public static final BooleanLumifyProperty SEARCHABLE = new BooleanLumifyProperty("http://lumify.io#searchable");
     public static final BooleanLumifyProperty USER_VISIBLE = new BooleanLumifyProperty("http://lumify.io#userVisible");
@@ -49,6 +51,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
     public static final StringLumifyProperty CREATED_BY = new StringLumifyProperty("http://lumify.io#createdBy");
     public static final StringLumifyProperty MODIFIED_BY = new StringLumifyProperty("http://lumify.io#modifiedBy");
+    public static final PropertyJustificationMetadataLumifyProperty JUSTIFICATION = new PropertyJustificationMetadataLumifyProperty("http://lumify.io#justification");
     public static final StringLumifyProperty ONTOLOGY_TITLE = new StringLumifyProperty("http://lumify.io#ontologyTitle");
     public static final StringLumifyProperty PROCESS = new StringLumifyProperty("http://lumify.io#process");
     public static final StringLumifyProperty ROW_KEY = new StringLumifyProperty("http://lumify.io#rowKey");
@@ -73,6 +76,15 @@ public class LumifyProperties {
     public static final VisibilityJsonLumifyProperty TERM_MENTION_VISIBILITY_JSON = new VisibilityJsonLumifyProperty("http://lumify.io/termMention#visibilityJson");
     public static final String TERM_MENTION_LABEL_HAS_TERM_MENTION = "http://lumify.io/termMention#hasTermMention";
     public static final String TERM_MENTION_LABEL_RESOLVED_TO = "http://lumify.io/termMention#resolvedTo";
+
+    public static final StringLumifyProperty SOURCE_METADATA_FOR_ELEMENT_ID = new StringLumifyProperty("http://lumify.io/sourceMetadata#forElementId");
+    public static final StringLumifyProperty SOURCE_METADATA_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/sourceMetadata#propertyKey");
+    public static final StringLumifyProperty SOURCE_METADATA_PROPERTY_NAME = new StringLumifyProperty("http://lumify.io/sourceMetadata#propertyName");
+    public static final StringLumifyProperty SOURCE_METADATA_PROPERTY_VISIBILITY = new StringLumifyProperty("http://lumify.io/sourceMetadata#propertyVisibility");
+    public static final StringLumifyProperty SOURCE_METADATA_SNIPPET = new StringLumifyProperty("http://lumify.io/sourceMetadata#snippet");
+    public static final StringLumifyProperty SOURCE_METADATA_TEXT_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/sourceMetadata#textPropertyKey");
+    public static final IntegerLumifyProperty SOURCE_METADATA_START_OFFSET = new IntegerLumifyProperty("http://lumify.io/sourceMetadata#startOffset");
+    public static final IntegerLumifyProperty SOURCE_METADATA_END_OFFSET = new IntegerLumifyProperty("http://lumify.io/sourceMetadata#endOffset");
 
     private LumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");

@@ -6,8 +6,6 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.video.VideoFrameInfo;
-import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -385,8 +383,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         for (Property property : edge.getProperties()) {
             boolean userVisible;
-            if (PropertyJustificationMetadata.PROPERTY_JUSTIFICATION.equals(property.getName())
-                    || PropertySourceMetadata.PROPERTY_SOURCE_METADATA.equals(property.getName())) {
+            if (LumifyProperties.JUSTIFICATION.getPropertyName().equals(property.getName())) {
                 userVisible = false;
             } else {
                 OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());

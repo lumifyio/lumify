@@ -25,7 +25,7 @@ public class SubRipTranscriptGraphPropertyWorker extends GraphPropertyWorker {
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         Metadata metadata = data.createPropertyMetadata();
-        metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Sub-rip Transcript", getVisibilityTranslator().getDefaultVisibility());
+        LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(metadata, "Sub-rip Transcript", getVisibilityTranslator().getDefaultVisibility());
         addVideoTranscriptAsTextPropertiesToMutation(m, PROPERTY_KEY, videoTranscript, metadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, PROPERTY_KEY, getUser(), data.getVisibility());

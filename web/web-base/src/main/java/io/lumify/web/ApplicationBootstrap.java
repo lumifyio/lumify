@@ -129,7 +129,8 @@ public final class ApplicationBootstrap implements ServletContextListener {
                 LongRunningProcessRepository.VISIBILITY_STRING,
                 OntologyRepository.VISIBILITY_STRING,
                 WorkspaceRepository.VISIBILITY_STRING,
-                VideoFrameInfo.VISIBILITY_STRING
+                VideoFrameInfo.VISIBILITY_STRING,
+                GraphUtil.SOURCE_VISIBILITY_STRING
         );
     }
 

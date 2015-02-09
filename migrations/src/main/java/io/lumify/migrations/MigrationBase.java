@@ -153,7 +153,8 @@ public abstract class MigrationBase extends Configured implements Tool {
                 LumifyVisibility.SUPER_USER_VISIBILITY_STRING,
                 OntologyRepository.VISIBILITY_STRING,
                 UserRepository.VISIBILITY_STRING,
-                WorkspaceRepository.VISIBILITY_STRING
+                WorkspaceRepository.VISIBILITY_STRING,
+                GraphUtil.SOURCE_VISIBILITY_STRING
         };
     }
 

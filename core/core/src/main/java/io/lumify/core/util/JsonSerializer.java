@@ -105,7 +105,7 @@ public class JsonSerializer {
             String sandboxStatus = sandboxStatuses[i].toString();
             VideoFrameInfo videoFrameInfo;
             if ((videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property)) != null) {
-                String textDescription = (String) property.getMetadata().getValue(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                String textDescription = LumifyProperties.META_DATA_TEXT_DESCRIPTION.getMetadataValueOrDefault(property.getMetadata(), null);
                 addVideoFramePropertyToResults(resultsJson, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
             } else {
                 JSONObject propertyJson = toJsonProperty(property);
@@ -149,7 +149,7 @@ public class JsonSerializer {
             json.put("key", propertyKey);
             json.put("name", MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName());
             json.put("sandboxStatus", sandboxStatus);
-            json.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, textDescription);
+            json.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION.getPropertyName(), textDescription);
             json.put("streamingPropertyValue", true);
             resultsJson.put(json);
         }

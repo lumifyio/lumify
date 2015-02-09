@@ -27,14 +27,13 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
     private static final SimpleDateFormat DATE_YEAR_FORMAT = new SimpleDateFormat("yyyy");
     private Visibility visibility;
     private AccumuloAuthorizations authorizations;
-    private VisibilityTranslator visibilityTranslator;
     private Visibility defaultVisibility;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        this.visibilityTranslator = new DirectVisibilityTranslator();
-        this.visibility = this.visibilityTranslator.getDefaultVisibility();
+        VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
+        this.visibility = visibilityTranslator.getDefaultVisibility();
         this.defaultVisibility = visibilityTranslator.getDefaultVisibility();
         this.authorizations = new AccumuloAuthorizations();
     }
@@ -89,8 +88,8 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
         String biography = personJson.optString("biography");
         if (biography != null) {
             Metadata metadata = new Metadata();
-            metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Biography", defaultVisibility);
-            metadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", defaultVisibility);
+            LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(metadata, "Biography", defaultVisibility);
+            LumifyProperties.META_DATA_MIME_TYPE.setMetadata(metadata, "text/plain", defaultVisibility);
             StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(biography.getBytes()), String.class);
             LumifyProperties.TEXT.addPropertyValue(m, MULTI_VALUE_KEY, value, metadata, visibility);
         }
@@ -194,8 +193,8 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
         String overview = movieJson.optString("overview");
         if (overview != null && overview.length() > 0) {
             Metadata metadata = new Metadata();
-            metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Overview", defaultVisibility);
-            metadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", defaultVisibility);
+            LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(metadata, "Overview", defaultVisibility);
+            LumifyProperties.META_DATA_MIME_TYPE.setMetadata(metadata, "text/plain", defaultVisibility);
             StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(overview.getBytes()), String.class);
             LumifyProperties.TEXT.addPropertyValue(m, MULTI_VALUE_KEY, value, metadata, visibility);
         }

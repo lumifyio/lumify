@@ -7,6 +7,7 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -36,7 +37,8 @@ public class ReindexMR extends LumifyMRBase {
                 LumifyVisibility.SUPER_USER_VISIBILITY_STRING,
                 OntologyRepository.VISIBILITY_STRING,
                 UserRepository.VISIBILITY_STRING,
-                WorkspaceRepository.VISIBILITY_STRING
+                WorkspaceRepository.VISIBILITY_STRING,
+                GraphUtil.SOURCE_VISIBILITY_STRING
         };
 
         job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);

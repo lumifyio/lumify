@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
-import org.securegraph.mutation.ExistingEdgeMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Collections;
@@ -190,6 +189,14 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         return unwrap(metadata.getValue(propertyName));
     }
 
+    public TRaw getMetadataValueOrDefault(Metadata metadata, TRaw defaultValue) {
+        Object value = metadata.getValue(propertyName);
+        if (value == null) {
+            return defaultValue;
+        }
+        return unwrap(value);
+    }
+
     public TRaw getMetadataValue(Map<String, Object> metadata) {
         return unwrap(metadata.get(propertyName));
     }
@@ -203,6 +210,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
 
     public void setMetadata(Metadata metadata, TRaw value, Visibility visibility) {
         metadata.add(propertyName, wrap(value), visibility);
+    }
+
+    public void setMetadata(ExistingElementMutation m, Property property, TRaw value, Visibility visibility) {
+        m.setPropertyMetadata(property, propertyName, wrap(value), visibility);
     }
 
     public Property getProperty(Element element) {
@@ -221,12 +232,20 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         element.removeProperty(getPropertyName(), authorizations);
     }
 
-    public void removeProperty(ExistingEdgeMutation m, final Visibility visibility) {
+    public void removeProperty(ElementMutation m, final Visibility visibility) {
         m.removeProperty(getPropertyName(), visibility);
     }
 
-    public void removeProperty(ExistingEdgeMutation m, String key, final Visibility visibility) {
+    public void removeProperty(ElementMutation m, String key, final Visibility visibility) {
         m.removeProperty(key, getPropertyName(), visibility);
+    }
+
+    public void removeMetadata(Metadata metadata) {
+        metadata.remove(getPropertyName());
+    }
+
+    public void removeMetadata(Metadata metadata, final Visibility visibility) {
+        metadata.remove(getPropertyName(), visibility);
     }
 
     public void alterVisibility(ExistingElementMutation<?> elementMutation, Visibility newVisibility) {
