@@ -146,14 +146,14 @@ define([
 
                 dropdown.html(
                         this.previousValues.map(function(p, i) {
-                            var visibility = p['http://lumify.io#visibilityJson'];
+                            var visibility = p.metadata && p.metadata['http://lumify.io#visibilityJson'];
                             return _.template(
                                 '<li data-index="{i}">' +
                                     '<a href="#">{value}' +
                                         '<div data-visibility="{visibilityJson}" class="visibility"/>' +
                                     '</a>' +
                                 '</li>')({
-                                value: F.vertex.prop(self.attr.data, p.name, p.key),
+                                value: F.vertex.prop(self.attr.data, self.previousValuesPropertyName, p.key),
                                 visibilityJson: JSON.stringify(visibility || {}),
                                 i: i
                             });
@@ -216,7 +216,8 @@ define([
                     vertexProperty.metadata['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
                 isExistingProperty = typeof vertexProperty !== 'undefined',
-                previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName);
+                previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName),
+                previousValuesUniquedByKey = previousValues && _.unique(previousValues, _.property('key'));
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
@@ -232,18 +233,20 @@ define([
                 vertexProperty = property;
                 isExistingProperty = true;
                 previousValues = null;
+                previousValuesUniquedByKey = null;
             }
 
             if (data.fromPreviousValuePrompt !== true) {
-                if (previousValues && previousValues.length) {
-                    this.previousValues = previousValues;
+                if (previousValuesUniquedByKey && previousValuesUniquedByKey.length) {
+                    this.previousValues = previousValuesUniquedByKey;
+                    this.previousValuesPropertyName = propertyName;
                     this.select('previousValuesSelector')
                         .show()
                         .find('.active').removeClass('active')
                         .addBack()
-                        .find('.edit-previous span').text(previousValues.length)
+                        .find('.edit-previous span').text(previousValuesUniquedByKey.length)
                         .addBack()
-                        .find('.edit-previous small').toggle(previousValues.length > 1);
+                        .find('.edit-previous small').toggle(previousValuesUniquedByKey.length > 1);
 
                     this.select('justificationSelector').hide();
                     this.select('visibilitySelector').hide();
@@ -319,7 +322,7 @@ define([
                                 focus: true,
                                 values: property.key ?
                                     F.vertex.props(self.attr.data, propertyDetails.title, property.key) :
-                                    F.vertex.props(self.attr.data, propertyDetails.title)
+                                    null
                             });
                         } else {
                             PropertyField.attachTo(config, {
