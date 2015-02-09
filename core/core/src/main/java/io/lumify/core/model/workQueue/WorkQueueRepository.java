@@ -101,6 +101,7 @@ public abstract class WorkQueueRepository {
     }
 
     public void pushLongRunningProcessQueue(JSONObject queueItem) {
+        broadcastLongRunningProcessChange(queueItem);
         pushOnQueue(LONG_RUNNING_PROCESS_QUEUE_NAME, FlushFlag.DEFAULT, queueItem);
     }
 

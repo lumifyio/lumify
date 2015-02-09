@@ -19,7 +19,7 @@ define([
     withDataRequest) {
     'use strict';
 
-    var AUTO_UPDATE_INTERVAL_SECONDS = 60;
+    var AUTO_UPDATE_INTERVAL_SECONDS = 60; // For updating relative times
 
     return defineComponent(Activity, withCollapsibleSections, withDataRequest);
 
