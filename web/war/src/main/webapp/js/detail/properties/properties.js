@@ -23,6 +23,7 @@ define([
         HIDE_PROPERTIES = ['http://lumify.io/comment#entry'],
         VISIBILITY_NAME = 'http://lumify.io#visibilityJson',
         SANDBOX_STATUS_NAME = 'http://lumify.io#sandboxStatus',
+        RELATIONSHIP_LABEL = 'http://lumify.io#relationshipLabel',
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
@@ -43,6 +44,10 @@ define([
 
     function isSandboxStatus(property) {
         return property.name === SANDBOX_STATUS_NAME;
+    }
+
+    function isRelationshipLabel(property) {
+        return property.name === RELATIONSHIP_LABEL;
     }
 
     function isJustification(property) {
@@ -175,7 +180,7 @@ define([
                         if (isEdge && model.label) {
                             var ontologyRelationship = self.ontologyRelationships.byTitle[model.label];
                             properties.push({
-                                name: 'relationshipLabel',
+                                name: RELATIONSHIP_LABEL,
                                 displayName: i18n('detail.edge.type'),
                                 hideInfo: true,
                                 hideVisibility: true,
@@ -195,7 +200,7 @@ define([
                         }
 
                         if (isEdge) {
-                            return property.name === 'relationshipLabel' ?
+                            return property.name === RELATIONSHIP_LABEL ?
                                 '2' :
                                 isJustification(property) ?
                                 '3' : '4';
@@ -849,7 +854,7 @@ define([
                                 $(valueSpan).teardownAllComponents();
                                 JustificationViewer.attachTo(valueSpan, property.justificationData);
                             });
-                        } else if (isSandboxStatus(property)) {
+                        } else if (isSandboxStatus(property) || isRelationshipLabel(property)) {
                             valueSpan.textContent = property.value;
                         } else {
                             valueSpan.textContent = F.vertex.prop(vertex, property.name, property.key);
