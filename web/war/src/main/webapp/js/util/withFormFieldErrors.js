@@ -31,6 +31,12 @@ define(['tpl!./alert'], function(alertTemplate) {
             if (_.isObject(error)) {
                 _.keys(error).forEach(function(fieldName) {
                     switch (fieldName) {
+                        case 'status': break;
+
+                        case 'statusText':
+                            messages.push(error[fieldName]);
+                            break;
+
                         case 'invalidValues': break;
 
                         case 'visibilitySource':
