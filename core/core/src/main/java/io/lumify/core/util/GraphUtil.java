@@ -503,6 +503,57 @@ public class GraphUtil {
         }
     }
 
+    public static Vertex addVertex(
+            Graph graph,
+            String conceptType,
+            String visibilitySource,
+            String workspaceId,
+            String justificationText,
+            SourceInfo sourceInfo,
+            VisibilityTranslator visibilityTranslator,
+            Authorizations authorizations
+    ) {
+        VisibilityJson visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+
+        VertexBuilder vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
+        Metadata propertyMetadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
+        LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptType, propertyMetadata, lumifyVisibility.getVisibility());
+
+        if (justificationText != null) {
+            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            LumifyProperties.JUSTIFICATION.setProperty(vertexBuilder, propertyJustificationMetadata, lumifyVisibility.getVisibility());
+        } else if (sourceInfo != null) {
+            LumifyProperties.JUSTIFICATION.removeProperty(vertexBuilder, lumifyVisibility.getVisibility());
+        }
+
+        Vertex vertex = vertexBuilder.save(authorizations);
+
+        if (justificationText != null) {
+            removeSourceInfoEdgeFromVertex(graph, vertex.getId(), vertex.getId(), null, null, lumifyVisibility, authorizations);
+        } else if (sourceInfo != null) {
+            Vertex sourceDataVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
+            addSourceInfoEdgeToVertex(
+                    graph,
+                    vertex,
+                    vertex.getId(),
+                    null,
+                    null,
+                    sourceInfo.getSnippet(),
+                    sourceInfo.getTextPropertyKey(),
+                    sourceInfo.getStartOffset(),
+                    sourceInfo.getEndOffset(),
+                    sourceDataVertex,
+                    lumifyVisibility,
+                    authorizations
+            );
+        }
+
+        return vertex;
+    }
+
     public static Edge addEdge(
             Graph graph,
             Vertex sourceVertex,
