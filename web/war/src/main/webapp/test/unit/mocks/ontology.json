@@ -25,9 +25,16 @@
       "parentConcept": "http://lumify.io/dev#raw",
       "pluralDisplayName": "Audios",
       "color": "rgb(149, 138, 218)",
+      "intents": [
+        "audio"
+      ],
       "properties": [
-        "http://lumify.io/dev#duration"
-      ]
+        "http://lumify.io/dev#duration",
+        "http://lumify.io/media#fileSize"
+      ],
+      "metadata": {
+        "http://lumify.io#intent": "audio"
+      }
     },
     {
       "id": "http://lumify.io/dev#city",
@@ -37,7 +44,13 @@
       "pluralDisplayName": "Cities",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23city",
       "color": "rgb(191, 13, 191)",
-      "properties": []
+      "intents": [
+        "city"
+      ],
+      "properties": [],
+      "metadata": {
+        "http://lumify.io#intent": "city"
+      }
     },
     {
       "id": "http://lumify.io/dev#company",
@@ -69,7 +82,13 @@
       "pluralDisplayName": "Countries",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23country",
       "color": "rgb(112, 0, 112)",
-      "properties": []
+      "intents": [
+        "country"
+      ],
+      "properties": [],
+      "metadata": {
+        "http://lumify.io#intent": "country"
+      }
     },
     {
       "id": "http://lumify.io/dev#document",
@@ -80,12 +99,16 @@
       "parentConcept": "http://lumify.io/dev#raw",
       "pluralDisplayName": "Documents",
       "color": "rgb(28, 137, 28)",
+      "intents": [
+        "document"
+      ],
       "properties": [
         "http://lumify.io/dev#sentiment"
       ],
       "metadata": {
         "http://lumify.io/analystsNotebook/v8.5.1#iconFile": "Document",
         "http://lumify.io/analystsNotebook/v6#iconFile": "Document",
+        "http://lumify.io#intent": "document",
         "http://lumify.io/analystsNotebook/v7#iconFile": "Document",
         "http://lumify.io/analystsNotebook/v8.9#iconFile": "Document"
       }
@@ -98,7 +121,13 @@
       "pluralDisplayName": "Email Addresses",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23emailAddress",
       "color": "rgb(203, 130, 4)",
-      "properties": []
+      "intents": [
+        "email"
+      ],
+      "properties": [],
+      "metadata": {
+        "http://lumify.io#intent": "email"
+      }
     },
     {
       "id": "http://lumify.io/dev#event",
@@ -121,9 +150,27 @@
       "parentConcept": "http://lumify.io/dev#raw",
       "pluralDisplayName": "Images",
       "color": "rgb(176, 87, 53)",
+      "intents": [
+        "entityImage",
+        "image"
+      ],
       "properties": [
-        "http://lumify.io/dev#lastModifyDate"
-      ]
+        "http://lumify.io/dev#geolocation",
+        "http://lumify.io/dev#lastModifyDate",
+        "http://lumify.io/media#clockwiseRotation",
+        "http://lumify.io/media#dateTaken",
+        "http://lumify.io/media#deviceMake",
+        "http://lumify.io/media#deviceModel",
+        "http://lumify.io/media#fileSize",
+        "http://lumify.io/media#height",
+        "http://lumify.io/media#imageHeading",
+        "http://lumify.io/media#metadata",
+        "http://lumify.io/media#width",
+        "http://lumify.io/media#yAxisFlipped"
+      ],
+      "metadata": {
+        "http://lumify.io#intent": "image"
+      }
     },
     {
       "id": "http://lumify.io/dev#location",
@@ -133,16 +180,19 @@
       "pluralDisplayName": "Locations",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23location",
       "color": "rgb(160, 7, 206)",
+      "intents": [
+        "location"
+      ],
       "properties": [
         "http://lumify.io/dev#geolocation"
       ],
       "metadata": {
         "http://lumify.io/analystsNotebook/v8.5.1#iconFile": "Place",
         "http://lumify.io/analystsNotebook/v6#iconFile": "Place",
+        "http://lumify.io#intent": "location",
         "http://lumify.io/analystsNotebook/v7#iconFile": "Place",
         "http://lumify.io/analystsNotebook/v8.9#iconFile": "Place"
       }
-<<<<<<< HEAD
     },
     {
       "id": "http://lumify.io/dev#nonprofit",
@@ -164,10 +214,16 @@
       "pluralDisplayName": "Organizations",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23organization",
       "color": "rgb(137, 39, 26)",
+      "intents": [
+        "organization"
+      ],
       "properties": [
         "http://lumify.io/dev#abbreviation",
         "http://lumify.io/dev#formationDate"
-      ]
+      ],
+      "metadata": {
+        "http://lumify.io#intent": "organization"
+      }
     },
     {
       "id": "http://lumify.io/dev#person",
@@ -179,6 +235,10 @@
       "pluralDisplayName": "Persons",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23person",
       "color": "rgb(28, 137, 28)",
+      "intents": [
+        "face",
+        "person"
+      ],
       "properties": [
         "http://lumify.io/dev#alias",
         "http://lumify.io/dev#birthDate",
@@ -193,414 +253,9 @@
       "metadata": {
         "http://lumify.io/analystsNotebook/v8.5.1#iconFile": "Person",
         "http://lumify.io/analystsNotebook/v6#iconFile": "Person",
+        "http://lumify.io#intent": "person",
         "http://lumify.io/analystsNotebook/v7#iconFile": "Person",
         "http://lumify.io/analystsNotebook/v8.9#iconFile": "Person"
-=======
-   ],
-   "relationships":[
-      {
-         "title":"http://lumify.io/dev#callConnectedPhone",
-         "displayName":"Call Connected",
-         "domainConceptIris":[
-            "http://lumify.io/dev#phoneNumber"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#phoneCall"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#entityHasImageRaw",
-         "displayName":"Has Image",
-         "domainConceptIris":[
-            "http://www.w3.org/2002/07/owl#Thing"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#image"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#eventHappenedInLocation",
-         "displayName":"Happened In",
-         "domainConceptIris":[
-            "http://lumify.io/dev#event"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#eventPlannedByOrganization",
-         "displayName":"Planned By",
-         "domainConceptIris":[
-            "http://lumify.io/dev#event"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#organization"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#hasEmailAddress",
-         "displayName":"Has Email Address",
-         "domainConceptIris":[
-            "http://lumify.io/dev#organization",
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#emailAddress"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#locationHasLeaderPerson",
-         "displayName":"Has Leader",
-         "domainConceptIris":[
-            "http://lumify.io/dev#location"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#locationIsCaptialOfLocation",
-         "displayName":"Is Capital Of",
-         "domainConceptIris":[
-            "http://lumify.io/dev#location"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#locationIsInLocation",
-         "displayName":"Is In",
-         "domainConceptIris":[
-            "http://lumify.io/dev#location"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#organizationHasKeyLeader",
-         "displayName":"Has Key Leader",
-         "domainConceptIris":[
-            "http://lumify.io/dev#organization"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#organizationHasOfficeAtLocation",
-         "displayName":"Has Office At",
-         "domainConceptIris":[
-            "http://lumify.io/dev#organization"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#organizationHasPhoneNumber",
-         "displayName":"Has Phone Number",
-         "domainConceptIris":[
-            "http://lumify.io/dev#organization"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#phoneNumber"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#organizationHeadquarteredAtLocation",
-         "displayName":"Headquartered At",
-         "domainConceptIris":[
-            "http://lumify.io/dev#organization"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasChildPerson",
-         "displayName":"Has Child",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "inverseOfs":[
-            {
-               "iri":"http://lumify.io/dev#personHasParentPerson",
-               "primaryIri":"http://lumify.io/dev#personHasChildPerson"
-            }
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasCitizenshipInCountry",
-         "displayName":"Has Citizenship In",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#country"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasCoworkerPerson",
-         "displayName":"Has Coworker",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasFriendPerson",
-         "displayName":"Has Friend",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasHomeAddressLocation",
-         "displayName":"Has Home Address",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasLivedLocation",
-         "displayName":"Has Lived In",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasParentPerson",
-         "displayName":"Has Parent",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "inverseOfs":[
-            {
-               "iri":"http://lumify.io/dev#personHasChildPerson",
-               "primaryIri":"http://lumify.io/dev#personHasChildPerson"
-            }
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasPhoneNumber",
-         "displayName":"Has Phone Number",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#phoneNumber"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasSiblingPerson",
-         "displayName":"Has Sibling",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personHasVisitedLocation",
-         "displayName":"Has Visited",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personIsEmployedByOrganizaton",
-         "displayName":"Is Employed By",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#organization"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personIsFromLocation",
-         "displayName":"Is From",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personIsMemberOfOrganization",
-         "displayName":"Is Member Of",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#organization"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personKnowsPerson",
-         "displayName":"Knows",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personLivesAtLocation",
-         "displayName":"Lives At",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personLivesWithPerson",
-         "displayName":"Lives With",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personOwnsLocation",
-         "displayName":"Owns",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#location"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personSupportsOrganization",
-         "displayName":"Supports",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#organization"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#personWorksAtCompany",
-         "displayName":"Works At",
-         "domainConceptIris":[
-            "http://lumify.io/dev#person"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#organization"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#phoneCallContainsAudio",
-         "displayName":"Contains Audio",
-         "domainConceptIris":[
-            "http://lumify.io/dev#phoneCall"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#audio"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#phoneMadeCall",
-         "displayName":"Made Call",
-         "domainConceptIris":[
-            "http://lumify.io/dev#phoneNumber"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#phoneCall"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#rawContainsImageOfEntity",
-         "displayName":"Contains Image of",
-         "domainConceptIris":[
-            "http://lumify.io/dev#raw"
-         ],
-         "rangeConceptIris":[
-            "http://www.w3.org/2002/07/owl#Thing"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#rawHasEntity",
-         "displayName":"Has Entity",
-         "domainConceptIris":[
-            "http://lumify.io/dev#raw"
-         ],
-         "rangeConceptIris":[
-            "http://www.w3.org/2002/07/owl#Thing"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#rawHasSourceOrganization",
-         "displayName":"Has Author",
-         "domainConceptIris":[
-            "http://lumify.io/dev#raw"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/dev#rawHasSourcePerson",
-         "displayName":"Has Author",
-         "domainConceptIris":[
-            "http://lumify.io/dev#raw"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io/dev#person"
-         ]
-      },
-      {
-         "title":"http://lumify.io/workspace#toEntity",
-         "displayName":"workspace to entity",
-         "domainConceptIris":[
-            "http://lumify.io/workspace"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io#root"
-         ]
-      },
-      {
-         "title":"http://lumify.io/workspace#toUser",
-         "displayName":"workspace to user",
-         "domainConceptIris":[
-            "http://lumify.io/workspace"
-         ],
-         "rangeConceptIris":[
-            "http://lumify.io#root"
-         ]
->>>>>>> master
       }
     },
     {
@@ -624,7 +279,13 @@
       "pluralDisplayName": "Phone Numbers",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23phoneNumber",
       "color": "rgb(225, 225, 24)",
-      "properties": []
+      "intents": [
+        "phoneNumber"
+      ],
+      "properties": [],
+      "metadata": {
+        "http://lumify.io#intent": "phoneNumber"
+      }
     },
     {
       "id": "http://lumify.io/dev#raw",
@@ -646,7 +307,13 @@
       "pluralDisplayName": "States",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23state",
       "color": "rgb(153, 0, 153)",
-      "properties": []
+      "intents": [
+        "state"
+      ],
+      "properties": [],
+      "metadata": {
+        "http://lumify.io#intent": "state"
+      }
     },
     {
       "id": "http://lumify.io/dev#titleFormulaEntity",
@@ -692,10 +359,23 @@
       "parentConcept": "http://lumify.io/dev#raw",
       "pluralDisplayName": "Videos",
       "color": "rgb(149, 138, 218)",
+      "intents": [
+        "video"
+      ],
       "properties": [
         "http://lumify.io/dev#duration",
-        "http://lumify.io/dev#lastModifyDate"
-      ]
+        "http://lumify.io/dev#lastModifyDate",
+        "http://lumify.io/media#dateTaken",
+        "http://lumify.io/media#deviceMake",
+        "http://lumify.io/media#deviceModel",
+        "http://lumify.io/media#fileSize",
+        "http://lumify.io/media#height",
+        "http://lumify.io/media#metadata",
+        "http://lumify.io/media#width"
+      ],
+      "metadata": {
+        "http://lumify.io#intent": "video"
+      }
     },
     {
       "id": "http://lumify.io/dev#zipCode",
@@ -705,14 +385,24 @@
       "pluralDisplayName": "Zip Codes",
       "glyphIconHref": "resource?id=http%3A%2F%2Flumify.io%2Fdev%23zipCode",
       "color": "rgb(219, 63, 219)",
-      "properties": []
+      "intents": [
+        "zipCode"
+      ],
+      "properties": [],
+      "metadata": {
+        "http://lumify.io#intent": "zipCode"
+      }
     },
     {
-      "id": "http://lumify.io/longRunningProcess",
-      "title": "http://lumify.io/longRunningProcess",
-      "displayName": "workspace",
-      "pluralDisplayName": "workspaces",
-      "properties": []
+      "id": "http://lumify.io/longRunningProcess#longRunningProcess",
+      "title": "http://lumify.io/longRunningProcess#longRunningProcess",
+      "displayName": "Long Running Process",
+      "parentConcept": "http://www.w3.org/2002/07/owl#Thing",
+      "pluralDisplayName": "Long Running Processes",
+      "userVisible": false,
+      "properties": [
+        "http://lumify.io/longRunningProcess#queueItemJson"
+      ]
     },
     {
       "id": "http://lumify.io/user#user",
@@ -1177,7 +867,12 @@
       "displayName": "Duration",
       "userVisible": true,
       "searchable": true,
-      "dataType": "double"
+      "dataType": "double",
+      "intents": [
+        "audioDuration",
+        "media.duration",
+        "videoDuration"
+      ]
     },
     {
       "title": "http://lumify.io/dev#eyecolor",
@@ -1219,7 +914,11 @@
       "displayName": "Geolocation",
       "userVisible": true,
       "searchable": true,
-      "dataType": "geoLocation"
+      "dataType": "geoLocation",
+      "intents": [
+        "geoLocation",
+        "media.geoLocation"
+      ]
     },
     {
       "title": "http://lumify.io/dev#haircolor",
@@ -1292,7 +991,10 @@
       "displayName": "Sentiment",
       "userVisible": true,
       "searchable": true,
-      "dataType": "string"
+      "dataType": "string",
+      "intents": [
+        "sentiment"
+      ]
     },
     {
       "title": "http://lumify.io/dev#textarea",
@@ -1330,6 +1032,115 @@
       "searchable": true,
       "dataType": "date",
       "displayType": "dateOnly"
+    },
+    {
+      "title": "http://lumify.io/longRunningProcess#queueItemJson",
+      "displayName": "Queue Item JSON",
+      "userVisible": false,
+      "searchable": false,
+      "dataType": "string"
+    },
+    {
+      "title": "http://lumify.io/media#clockwiseRotation",
+      "displayName": "Clockwise Rotation",
+      "userVisible": false,
+      "searchable": true,
+      "dataType": "integer",
+      "intents": [
+        "media.clockwiseRotation"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#dateTaken",
+      "displayName": "Date Taken",
+      "userVisible": true,
+      "searchable": true,
+      "dataType": "date",
+      "intents": [
+        "media.dateTaken"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#deviceMake",
+      "displayName": "Device Make",
+      "userVisible": true,
+      "searchable": true,
+      "dataType": "string",
+      "intents": [
+        "media.deviceMake"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#deviceModel",
+      "displayName": "Device Model",
+      "userVisible": true,
+      "searchable": true,
+      "dataType": "string",
+      "intents": [
+        "media.deviceModel"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#fileSize",
+      "displayName": "File Size",
+      "userVisible": true,
+      "searchable": true,
+      "dataType": "integer",
+      "displayType": "byte",
+      "intents": [
+        "media.fileSize"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#height",
+      "displayName": "Height",
+      "userVisible": true,
+      "searchable": true,
+      "dataType": "integer",
+      "intents": [
+        "media.height"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#imageHeading",
+      "displayName": "Image Heading",
+      "userVisible": true,
+      "searchable": true,
+      "dataType": "double",
+      "displayType": "heading",
+      "intents": [
+        "media.imageHeading"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#metadata",
+      "displayName": "Metadata",
+      "userVisible": false,
+      "searchable": true,
+      "dataType": "string",
+      "intents": [
+        "media.metadata"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#width",
+      "displayName": "Width",
+      "userVisible": true,
+      "searchable": true,
+      "dataType": "integer",
+      "intents": [
+        "media.width"
+      ]
+    },
+    {
+      "title": "http://lumify.io/media#yAxisFlipped",
+      "displayName": "Y Axis Flipped",
+      "userVisible": false,
+      "searchable": true,
+      "dataType": "boolean",
+      "intents": [
+        "media.yAxisFlipped"
+      ]
     },
     {
       "title": "http://lumify.io/user#authorizations",
@@ -1519,6 +1330,9 @@
       ],
       "rangeConceptIris": [
         "http://lumify.io/dev#image"
+      ],
+      "intents": [
+        "entityHasImage"
       ]
     },
     {
@@ -1852,6 +1666,10 @@
       ],
       "rangeConceptIris": [
         "http://www.w3.org/2002/07/owl#Thing"
+      ],
+      "intents": [
+        "artifactContainsImage",
+        "artifactContainsImageOfEntity"
       ]
     },
     {
@@ -1862,6 +1680,9 @@
       ],
       "rangeConceptIris": [
         "http://www.w3.org/2002/07/owl#Thing"
+      ],
+      "intents": [
+        "artifactHasEntity"
       ]
     },
     {
@@ -1885,34 +1706,26 @@
       ]
     },
     {
-      "title": "http://lumify.io/longRunningProcess/toUser",
-      "displayName": "longRunningProcess to user",
+      "title": "http://lumify.io/longRunningProcess#hasLongRunningProcess",
+      "displayName": "http://lumify.io/longRunningProcess#hasLongRunningProcess",
       "domainConceptIris": [
         "http://lumify.io/user#user"
       ],
       "rangeConceptIris": [
-        "http://lumify.io/longRunningProcess"
+        "http://lumify.io/longRunningProcess#longRunningProcess"
       ]
     },
     {
-      "title": "http://lumify.io/workspace/toEntity",
-      "displayName": "workspace to entity",
-      "domainConceptIris": [
-        "http://lumify.io/workspace#workspace"
-      ],
-      "rangeConceptIris": [
-        "http://lumify.io#root"
-      ]
+      "title": "http://lumify.io/workspace#toEntity",
+      "displayName": "To Entity",
+      "domainConceptIris": [],
+      "rangeConceptIris": []
     },
     {
-      "title": "http://lumify.io/workspace/toUser",
-      "displayName": "workspace to user",
-      "domainConceptIris": [
-        "http://lumify.io/workspace#workspace"
-      ],
-      "rangeConceptIris": [
-        "http://lumify.io#root"
-      ]
+      "title": "http://lumify.io/workspace#toUser",
+      "displayName": "To User",
+      "domainConceptIris": [],
+      "rangeConceptIris": []
     }
   ]
 }
