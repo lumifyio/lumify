@@ -325,35 +325,12 @@ define([
                 // TODO: fixme
             },
 
-            prop: function(vertex, name, optionalKey, optionalOpts) {
-                checkVertexAndPropertyNameArguments(vertex, name);
-
-                if (_.isObject(optionalKey)) {
-                    optionalOpts = optionalKey;
-                    optionalKey = null;
-                }
-
+            propDisplay: function(name, value) {
                 name = V.propName(name);
-
-                var value = V.propRaw(vertex, name, optionalKey, optionalOpts),
-                    ontologyProperty = propertiesByTitle[name];
+                var ontologyProperty = propertiesByTitle[name];
 
                 if (!ontologyProperty) {
                     return value;
-                }
-
-                if (_.isArray(value)) {
-                    if (!optionalKey) {
-                        var firstMatchingProperty = _.find(vertex.properties, function(p) {
-                            return ~ontologyProperty.dependentPropertyIris.indexOf(p.name);
-                        });
-                        optionalKey = (firstMatchingProperty && firstMatchingProperty.key);
-                    }
-                    if (ontologyProperty.displayFormula) {
-                        return formula(ontologyProperty.displayFormula, vertex, V, optionalKey);
-                    } else {
-                        return value.join(' ');
-                    }
                 }
 
                 if (ontologyProperty.possibleValues) {
@@ -390,6 +367,40 @@ define([
 
                     default: return value;
                 }
+            },
+
+            prop: function(vertex, name, optionalKey, optionalOpts) {
+                checkVertexAndPropertyNameArguments(vertex, name);
+
+                if (_.isObject(optionalKey)) {
+                    optionalOpts = optionalKey;
+                    optionalKey = null;
+                }
+
+                name = V.propName(name);
+
+                var value = V.propRaw(vertex, name, optionalKey, optionalOpts),
+                    ontologyProperty = propertiesByTitle[name];
+
+                if (!ontologyProperty) {
+                    return value;
+                }
+
+                if (_.isArray(value)) {
+                    if (!optionalKey) {
+                        var firstMatchingProperty = _.find(vertex.properties, function(p) {
+                            return ~ontologyProperty.dependentPropertyIris.indexOf(p.name);
+                        });
+                        optionalKey = (firstMatchingProperty && firstMatchingProperty.key);
+                    }
+                    if (ontologyProperty.displayFormula) {
+                        return formula(ontologyProperty.displayFormula, vertex, V, optionalKey);
+                    } else {
+                        return value.join(' ');
+                    }
+                }
+
+                return V.propDisplay(name, value);
             },
 
             props: function(vertex, name, optionalKey) {
