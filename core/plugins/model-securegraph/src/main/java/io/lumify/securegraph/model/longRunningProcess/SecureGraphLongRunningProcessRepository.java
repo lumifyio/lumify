@@ -2,7 +2,6 @@ package io.lumify.securegraph.model.longRunningProcess;
 
 import com.google.inject.Inject;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
-import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.types.JsonLumifyProperty;
@@ -14,7 +13,6 @@ import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.util.ConvertingIterable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -103,7 +101,9 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         return toList(new ConvertingIterable<Vertex, JSONObject>(longRunningProcessVertices) {
             @Override
             protected JSONObject convert(Vertex longRunningProcessVertex) {
-                return QUEUE_ITEM_JSON_PROPERTY.getPropertyValue(longRunningProcessVertex);
+                JSONObject json = QUEUE_ITEM_JSON_PROPERTY.getPropertyValue(longRunningProcessVertex);
+                json.put("id", longRunningProcessVertex.getId());
+                return json;
             }
         });
     }

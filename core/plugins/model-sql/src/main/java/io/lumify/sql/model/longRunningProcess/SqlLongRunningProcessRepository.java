@@ -156,7 +156,9 @@ public class SqlLongRunningProcessRepository extends LongRunningProcessRepositor
             @Override
             protected JSONObject convert(Object longRunningProcessObj) {
                 SqlLongRunningProcess longRunningProcess = (SqlLongRunningProcess) longRunningProcessObj;
-                return new JSONObject(longRunningProcess.getJson());
+                JSONObject json = new JSONObject(longRunningProcess.getJson());
+                json.put("id",longRunningProcess.getLongRunningProcessId());
+                return json;
             }
         });
     }
