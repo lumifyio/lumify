@@ -17,8 +17,14 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 
 1. Install node and npm per their instructions: [http://nodejs.org/](http://nodejs.org/)
 
-1. Install the Lumify npm dependencies (from the web/war/src/main/webapp directory):
+1. Clone the Lumify repo:
 
+        git clone https://github.com/lumifyio/lumify.git
+        cd lumify
+
+1. Install the Lumify npm dependencies:
+
+        cd web/war/src/main/webapp
         npm install -g inherits bower grunt
         npm install grunt-cli
 
@@ -46,6 +52,8 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 See [docker/README.md](docker/) for more information on the docker dev image.
 
 See [docs/developer.md](docs/developer.md) for more information on developing for Lumify.
+
+See [datasets](datasets) for sample datasets to get started.
 
 ## Developing / Contributing
 

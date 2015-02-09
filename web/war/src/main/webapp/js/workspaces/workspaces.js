@@ -174,14 +174,12 @@ define([
 
                         // Sort section because title might be renamed
                         var lis = self.getWorkspaceListItemsInSection(data.sharedToUser),
-                            titleGetter = function() {
-                                return $(this).data('title');
+                            dataGetter = function(li) {
+                                return $(this).data();
                             },
-                            lowerCase = function(s) {
-                                return s.toLowerCase();
-                            },
-                            titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
-                            insertIndex = _.indexOf(titles, data.title),
+                            insertIndex = _.sortedIndex(lis.map(dataGetter).toArray(), data, function(w) {
+                                return [w.title.toLowerCase(), w.createdBy, w.workspaceId].join('\u0000')
+                            }),
                             currentIndex = lis.index(content);
 
                         if (currentIndex < insertIndex) {
@@ -243,7 +241,7 @@ define([
             return this.dataRequest('workspace', 'all')
                 .then(function(workspacesResponse) {
                     var workspaces = workspacesResponse || [],
-                        users = _.chain(workspaces)
+                        userIds = _.chain(workspaces)
                             .map(function(workspace) {
                                 return _.pluck(workspace.users, 'userId');
                             })
@@ -251,14 +249,17 @@ define([
                             .uniq()
                             .value(),
                         updateHtml = function() {
-                            $.when.apply($, _.chain(workspaces)
+                            return Promise.all(
+                                _.chain(workspaces)
                                 .reject(function(workspace) {
                                     return _.isUndefined(workspace.createdBy);
                                 })
                                 .map(self.workspaceDataForItemRow.bind(self))
                                 .value()
-                            ).done(function() {
-                                var rows = _.chain(arguments)
+                            ).then(function(workspaces) {
+                                var rows = _.chain(workspaces)
+                                        .sortBy('workspaceId')
+                                        .sortBy('createdBy')
                                         .sortBy(function(w) {
                                             return w.title.toLowerCase()
                                         })
@@ -273,21 +274,24 @@ define([
                                         selected: self.workspaceId
                                     })
                                 );
+
+                                self.trigger(document, 'paneResized');
+                                if (switchToFirst) {
+                                    self.switchToWorkspace(workspaces[0].workspaceId);
+                                }
                             });
-                            self.trigger(document, 'paneResized');
-                            if (switchToFirst) {
-                                self.switchToWorkspace(workspaces[0].workspaceId);
-                            }
                         };
 
-                    if (users.length) {
-                        return self.dataRequest('user', 'search', { userIds: users })
-                            .done(function(result) {
-                                self.usersById = $.extend(self.usersById, _.indexBy(users, 'id'));
-                                updateHtml();
+                    if (userIds.length) {
+                        return self.dataRequest('user', 'getUserNames', userIds)
+                            .then(function(users) {
+                                if (users) {
+                                    self.usersById = $.extend(self.usersById || {}, _.object(userIds, users));
+                                }
+                                return updateHtml();
                             })
                     } else {
-                        updateHtml();
+                        return updateHtml();
                     }
                 });
         };
@@ -298,16 +302,29 @@ define([
                 usersNotCurrent = row.users.filter(function(u) {
                     return u.userId != lumifyData.currentUser.id;
                 }),
-                people = usersNotCurrent.length;
+                people = usersNotCurrent.length,
+                sharedByUser = row.sharedToUser && this.usersById[row.createdBy];
 
             if (row.sharedToUser) {
-                this.dataRequest('user', 'search', { userIds: row.createdBy })
-                    .done(function(createdBy) {
-                        var name = createdBy && createdBy.displayName ||
-                                i18n('workspaces.shared_with_me.subtitle.unknown_user');
-
-                        deferred.resolve(i18n('workspaces.shared_with_me.subtitle.prefix', name));
-                    });
+                if (sharedByUser) {
+                    deferred.resolve(
+                        i18n('workspaces.shared_with_me.subtitle.prefix', sharedByUser)
+                    );
+                } else {
+                    this.dataRequest('user', 'getUserNames', [row.createdBy])
+                        .then(function(users) {
+                            var subtitle;
+                            if (users && users[0]) {
+                                subtitle = i18n('workspaces.shared_with_me.subtitle.prefix', users[0])
+                            } else {
+                                subtitle = i18n('workspaces.shared_with_me.subtitle.unknown_user');
+                            }
+                            deferred.resolve(subtitle);
+                        })
+                        .catch(function() {
+                            deferred.resolve(i18n('workspaces.shared_with_me.subtitle.unknown_user'));
+                        })
+                }
             } else {
                 deferred.resolve(i18n('workspaces.sharing.subtitle.prefix'));
             }
@@ -342,6 +359,7 @@ define([
         };
 
         this.after('initialize', function() {
+            this.usersById = {};
 
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoad);
             this.on(document, 'workspaceSaving', this.onWorkspaceSaving);

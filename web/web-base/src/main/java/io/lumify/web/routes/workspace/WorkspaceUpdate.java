@@ -117,11 +117,8 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         }
     }
 
-    private void deleteEntities(Workspace workspace, List<String> entityDeletes, User authUser) {
-        for (String entityId : entityDeletes) {
-            LOGGER.debug("workspace delete (%s): %s", workspace.getWorkspaceId(), entityId);
-            workspaceRepository.softDeleteEntityFromWorkspace(workspace, entityId, authUser);
-        }
+    private void deleteEntities(Workspace workspace, List<String> entityIdsToDelete, User authUser) {
+        workspaceRepository.softDeleteEntitiesFromWorkspace(workspace, entityIdsToDelete, authUser);
     }
 
     private void updateEntities(Workspace workspace, List<ClientApiWorkspaceUpdateData.EntityUpdate> entityUpdates, User authUser) {

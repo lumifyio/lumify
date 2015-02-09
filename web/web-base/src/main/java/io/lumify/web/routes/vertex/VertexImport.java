@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -89,8 +91,8 @@ public class VertexImport extends BaseRequestHandler {
     }
 
     private List<FileImport.FileAndVisibility> getFileAndVisibilities(HttpServletRequest request, HttpServletResponse response, HandlerChain chain, File tempDir, Authorizations authorizations, User user) throws Exception {
-        List<String> invalidVisibilities = new ArrayList<String>();
-        List<FileImport.FileAndVisibility> files = new ArrayList<FileImport.FileAndVisibility>();
+        List<String> invalidVisibilities = new ArrayList<>();
+        List<FileImport.FileAndVisibility> files = new ArrayList<>();
         int visibilitySourceIndex = 0;
         int fileIndex = 0;
         for (Part part : request.getParts()) {
@@ -144,7 +146,12 @@ public class VertexImport extends BaseRequestHandler {
         if (params.containsKey(PARAMS_FILENAME)) {
             final String name = (String) params.get(PARAMS_FILENAME);
             if (name != null) {
-                fileName = name.trim();
+                try {
+                    fileName = URLDecoder.decode(name, "utf8").trim();
+                } catch (UnsupportedEncodingException ex) {
+                    LOGGER.error("Failed to url decode: " + name, ex);
+                    fileName = name.trim();
+                }
             }
         }
 

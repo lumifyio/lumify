@@ -436,10 +436,11 @@ define([
                 width = parseFloat(data.x2) - parseFloat(data.x1),
                 height = parseFloat(data.y2) - parseFloat(data.y1),
                 newDetectedObject = $.extend(true, {}, detectedObject, { value: data }),
+                artifactImage = this.$node.find('.artifact-image'),
                 dataInfo = $.extend({}, detectedObject && detectedObject.value || {}, data);
 
-            if ((this.$node.width() * width) < 5 ||
-                (this.$node.height() * height) < 5) {
+            if ((artifactImage.width() * width) < 5 ||
+                (artifactImage.height() * height) < 5) {
                 this.$node.find('.underneath').teardownComponent(TermForm);
                 return;
             }

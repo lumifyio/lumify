@@ -142,6 +142,7 @@
         "http://lumify.io/analystsNotebook/v7#iconFile": "Place",
         "http://lumify.io/analystsNotebook/v8.9#iconFile": "Place"
       }
+<<<<<<< HEAD
     },
     {
       "id": "http://lumify.io/dev#nonprofit",
@@ -194,6 +195,412 @@
         "http://lumify.io/analystsNotebook/v6#iconFile": "Person",
         "http://lumify.io/analystsNotebook/v7#iconFile": "Person",
         "http://lumify.io/analystsNotebook/v8.9#iconFile": "Person"
+=======
+   ],
+   "relationships":[
+      {
+         "title":"http://lumify.io/dev#callConnectedPhone",
+         "displayName":"Call Connected",
+         "domainConceptIris":[
+            "http://lumify.io/dev#phoneNumber"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#phoneCall"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#entityHasImageRaw",
+         "displayName":"Has Image",
+         "domainConceptIris":[
+            "http://www.w3.org/2002/07/owl#Thing"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#image"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#eventHappenedInLocation",
+         "displayName":"Happened In",
+         "domainConceptIris":[
+            "http://lumify.io/dev#event"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#eventPlannedByOrganization",
+         "displayName":"Planned By",
+         "domainConceptIris":[
+            "http://lumify.io/dev#event"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#organization"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#hasEmailAddress",
+         "displayName":"Has Email Address",
+         "domainConceptIris":[
+            "http://lumify.io/dev#organization",
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#emailAddress"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#locationHasLeaderPerson",
+         "displayName":"Has Leader",
+         "domainConceptIris":[
+            "http://lumify.io/dev#location"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#locationIsCaptialOfLocation",
+         "displayName":"Is Capital Of",
+         "domainConceptIris":[
+            "http://lumify.io/dev#location"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#locationIsInLocation",
+         "displayName":"Is In",
+         "domainConceptIris":[
+            "http://lumify.io/dev#location"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#organizationHasKeyLeader",
+         "displayName":"Has Key Leader",
+         "domainConceptIris":[
+            "http://lumify.io/dev#organization"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#organizationHasOfficeAtLocation",
+         "displayName":"Has Office At",
+         "domainConceptIris":[
+            "http://lumify.io/dev#organization"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#organizationHasPhoneNumber",
+         "displayName":"Has Phone Number",
+         "domainConceptIris":[
+            "http://lumify.io/dev#organization"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#phoneNumber"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#organizationHeadquarteredAtLocation",
+         "displayName":"Headquartered At",
+         "domainConceptIris":[
+            "http://lumify.io/dev#organization"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasChildPerson",
+         "displayName":"Has Child",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "inverseOfs":[
+            {
+               "iri":"http://lumify.io/dev#personHasParentPerson",
+               "primaryIri":"http://lumify.io/dev#personHasChildPerson"
+            }
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasCitizenshipInCountry",
+         "displayName":"Has Citizenship In",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#country"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasCoworkerPerson",
+         "displayName":"Has Coworker",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasFriendPerson",
+         "displayName":"Has Friend",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasHomeAddressLocation",
+         "displayName":"Has Home Address",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasLivedLocation",
+         "displayName":"Has Lived In",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasParentPerson",
+         "displayName":"Has Parent",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "inverseOfs":[
+            {
+               "iri":"http://lumify.io/dev#personHasChildPerson",
+               "primaryIri":"http://lumify.io/dev#personHasChildPerson"
+            }
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasPhoneNumber",
+         "displayName":"Has Phone Number",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#phoneNumber"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasSiblingPerson",
+         "displayName":"Has Sibling",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personHasVisitedLocation",
+         "displayName":"Has Visited",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personIsEmployedByOrganizaton",
+         "displayName":"Is Employed By",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#organization"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personIsFromLocation",
+         "displayName":"Is From",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personIsMemberOfOrganization",
+         "displayName":"Is Member Of",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#organization"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personKnowsPerson",
+         "displayName":"Knows",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personLivesAtLocation",
+         "displayName":"Lives At",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personLivesWithPerson",
+         "displayName":"Lives With",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personOwnsLocation",
+         "displayName":"Owns",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#location"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personSupportsOrganization",
+         "displayName":"Supports",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#organization"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#personWorksAtCompany",
+         "displayName":"Works At",
+         "domainConceptIris":[
+            "http://lumify.io/dev#person"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#organization"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#phoneCallContainsAudio",
+         "displayName":"Contains Audio",
+         "domainConceptIris":[
+            "http://lumify.io/dev#phoneCall"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#audio"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#phoneMadeCall",
+         "displayName":"Made Call",
+         "domainConceptIris":[
+            "http://lumify.io/dev#phoneNumber"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#phoneCall"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#rawContainsImageOfEntity",
+         "displayName":"Contains Image of",
+         "domainConceptIris":[
+            "http://lumify.io/dev#raw"
+         ],
+         "rangeConceptIris":[
+            "http://www.w3.org/2002/07/owl#Thing"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#rawHasEntity",
+         "displayName":"Has Entity",
+         "domainConceptIris":[
+            "http://lumify.io/dev#raw"
+         ],
+         "rangeConceptIris":[
+            "http://www.w3.org/2002/07/owl#Thing"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#rawHasSourceOrganization",
+         "displayName":"Has Author",
+         "domainConceptIris":[
+            "http://lumify.io/dev#raw"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/dev#rawHasSourcePerson",
+         "displayName":"Has Author",
+         "domainConceptIris":[
+            "http://lumify.io/dev#raw"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io/dev#person"
+         ]
+      },
+      {
+         "title":"http://lumify.io/workspace#toEntity",
+         "displayName":"workspace to entity",
+         "domainConceptIris":[
+            "http://lumify.io/workspace"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io#root"
+         ]
+      },
+      {
+         "title":"http://lumify.io/workspace#toUser",
+         "displayName":"workspace to user",
+         "domainConceptIris":[
+            "http://lumify.io/workspace"
+         ],
+         "rangeConceptIris":[
+            "http://lumify.io#root"
+         ]
+>>>>>>> master
       }
     },
     {

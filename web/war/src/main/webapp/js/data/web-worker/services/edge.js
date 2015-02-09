@@ -23,6 +23,12 @@ define([
             });
         },
 
+        exists: function(edgeIds) {
+            return ajax(edgeIds.length > 1 ? 'POST' : 'GET', '/edge/exists', {
+                edgeIds: edgeIds
+            });
+        },
+
         properties: function(edgeId) {
             return ajax('GET', '/edge/properties', {
                 graphEdgeId: edgeId

@@ -34,17 +34,17 @@
     
 
 
-    <!-- http://lumify.io/workspace/toEntity -->
+    <!-- http://lumify.io/workspace#toEntity -->
 
-    <owl:ObjectProperty rdf:about="http://lumify.io/workspace/toEntity">
+    <owl:ObjectProperty rdf:about="http://lumify.io/workspace#toEntity">
         <rdfs:label xml:lang="en">To Entity</rdfs:label>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://lumify.io/workspace/toUser -->
+    <!-- http://lumify.io/workspace#toUser -->
 
-    <owl:ObjectProperty rdf:about="http://lumify.io/workspace/toUser">
+    <owl:ObjectProperty rdf:about="http://lumify.io/workspace#toUser">
         <rdfs:label xml:lang="en">To User</rdfs:label>
     </owl:ObjectProperty>
     

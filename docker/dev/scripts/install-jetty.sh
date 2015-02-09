@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-jetty_version=9.2.6.v20141205
+jetty_version=9.2.7.v20150116
 jetty_tgz=jetty-distribution-${jetty_version}.tar.gz
 
 wget -O /opt/${jetty_tgz} http://download.eclipse.org/jetty/${jetty_version}/dist/${jetty_tgz}

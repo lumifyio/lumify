@@ -60,6 +60,7 @@ public final class Configuration {
     public static final String USER_SESSION_COUNTER_PATH_PREFIX = "userSessionCounter.pathPrefix";
     public static final String DEFAULT_TIME_ZONE = "default.timeZone";
     public static final String RABBITMQ_PREFETCH_COUNT ="rabbitmq.prefetch.count";
+    public static final String QUEUE_PREFIX = "queue.prefix";
     private final ConfigurationLoader configurationLoader;
     private final LumifyResourceBundleManager lumifyResourceBundleManager;
 

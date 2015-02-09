@@ -26,8 +26,8 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
 
-public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemoryOntologyRepository.class);
+public class InMemoryOntologyRepository extends OntologyRepositoryBase {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(InMemoryOntologyRepository.class);
     private final Graph graph;
     private final OWLOntologyLoaderConfiguration owlConfig = new OWLOntologyLoaderConfiguration();
     private final Map<String, InMemoryConcept> conceptsCache = new HashMap<>();
@@ -36,7 +36,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     private final List<OwlData> fileCache = new ArrayList<>();
 
     @Inject
-    public ReadOnlyInMemoryOntologyRepository(
+    public InMemoryOntologyRepository(
             final Graph graph,
             final Configuration configuration
     ) throws Exception {
@@ -273,7 +273,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getEntityConcept() {
-        return conceptsCache.get(ReadOnlyInMemoryOntologyRepository.ENTITY_CONCEPT_IRI);
+        return conceptsCache.get(InMemoryOntologyRepository.ENTITY_CONCEPT_IRI);
     }
 
     @Override
@@ -377,5 +377,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             this.iri = iri;
             this.data = data;
         }
+    }
+
+    protected Graph getGraph() {
+        return graph;
     }
 }

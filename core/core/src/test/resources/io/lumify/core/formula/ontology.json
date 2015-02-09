@@ -1536,7 +1536,7 @@
          ]
       },
       {
-         "title":"http://lumify.io/workspace/toEntity",
+         "title":"http://lumify.io/workspace#toEntity",
          "displayName":"workspace to entity",
          "domainConceptIris":[
             "http://lumify.io/workspace"
@@ -1546,7 +1546,7 @@
          ]
       },
       {
-         "title":"http://lumify.io/workspace/toUser",
+         "title":"http://lumify.io/workspace#toUser",
          "displayName":"workspace to user",
          "domainConceptIris":[
             "http://lumify.io/workspace"

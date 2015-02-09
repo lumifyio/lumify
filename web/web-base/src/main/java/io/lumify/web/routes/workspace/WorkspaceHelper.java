@@ -114,8 +114,10 @@ public class WorkspaceHelper {
 
             if (edge.getLabel().equals(entityHasImageIri)) {
                 Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
-                sourceVertex.markPropertyHidden(entityHasImage, workspaceVisibility, authorizations);
-                this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+                if (entityHasImage != null) {
+                    sourceVertex.markPropertyHidden(entityHasImage, workspaceVisibility, authorizations);
+                    this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+                }
             }
 
             for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
@@ -130,8 +132,10 @@ public class WorkspaceHelper {
 
             if (edge.getLabel().equals(entityHasImageIri)) {
                 Property entityHasImage = sourceVertex.getProperty(LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
-                sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
-                this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+                if (entityHasImage != null) {
+                    sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
+                    this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+                }
             }
 
             for (Vertex termMention : termMentionRepository.findByEdgeId(sourceVertex.getId(), edge.getId(), authorizations)) {
@@ -139,6 +143,7 @@ public class WorkspaceHelper {
                 workQueueRepository.pushTextUpdated(sourceVertex.getId());
             }
 
+            graph.flush();
             this.workQueueRepository.pushEdgeDeletion(edge);
 
             // TODO: replace "" when we implement commenting on ui

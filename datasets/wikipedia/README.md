@@ -4,6 +4,11 @@
 
         mvn clean package
 
+1. Get Wikipedia XML data using one of the following:
+
+   * Download the whole dataset from http://meta.wikimedia.org/wiki/Data_dump_torrents#enwiki
+   * Use the smaller [sample dataset](data/enwiki-20140102-pages-articles-lines-10.xml) in the data directory.
+
 1. Convert the well-formed XML to one XML page element per line:
 
         java -cp umify-wikipedia-mr-*-jar-with-dependencies.jar \

@@ -5,6 +5,11 @@
     </property>
 
     <property>
+        <name>yarn.nodemanager.aux-services.mapreduce_shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+
+    <property>
         <name>yarn.application.classpath</name>
         <value>/opt/hadoop/etc/hadoop, /opt/hadoop/share/hadoop/common/*, /opt/hadoop/share/hadoop/common/lib/*,
             /opt/hadoop/share/hadoop/hdfs/*, /opt/hadoop/share/hadoop/hdfs/lib/*, /opt/hadoop/share/hadoop/mapreduce/*,

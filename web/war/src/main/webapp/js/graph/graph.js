@@ -713,15 +713,12 @@ define([
             this.cytoscapeReady(function(cy) {
                 var self = this;
                 _.each(cy.edges(), function(cyEdge) {
-                    var edges = cyEdge.data('edges');
+                    var edges = _.reject(cyEdge.data('edges'), function(e) {
+                            return e.id === data.edgeId
+                        }),
                         ontology = self.ontologyRelationships.byTitle[cyEdge.data('type')];
 
-                    if (edges.length < 2) {
-                        cyEdge.remove();
-                    } else {
-                        edges = _.reject(edges, function(e) {
-                            return e.id === data.edgeId
-                        });
+                    if (edges.length) {
                         cyEdge.data('edges', edges);
                         cyEdge.data('label',
                             (ontology && ontology.displayName || '') + (
@@ -730,6 +727,8 @@ define([
                                     ''
                             )
                         );
+                    } else {
+                        cyEdge.remove();
                     }
                 });
             });
@@ -1185,7 +1184,7 @@ define([
 
         this.graphSelect = throttle('selection', SELECTION_THROTTLE, function(event) {
             if (this.ignoreCySelectionEvents) return;
-            this.updateVertexSelections(event.cy);
+            this.updateVertexSelections(event.cy, event.cyTarget);
         });
 
         this.graphUnselect = throttle('selection', SELECTION_THROTTLE, function(event) {
@@ -1199,12 +1198,24 @@ define([
             }
         });
 
-        this.updateVertexSelections = function(cy) {
+        this.updateVertexSelections = function(cy, cyTarget) {
             var self = this,
                 nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
                 edgeIds = [],
                 vertexIds = [];
+
+            if (lumifyKeyboard.shiftKey) {
+                nodes = nodes.add(self.previousSelectionNodes)
+                if (cyTarget !== cy && cyTarget.length && self.previousSelectionNodes &&
+                   self.previousSelectionNodes.anySame(cyTarget)) {
+
+                    nodes = nodes.not(cyTarget)
+                }
+            }
+
+            self.previousSelectionNodes = nodes;
+            self.previousSelectionEdges = edges;
 
             nodes.each(function(index, cyNode) {
                 if (!cyNode.hasClass('temp') && !cyNode.hasClass('path-edge')) {

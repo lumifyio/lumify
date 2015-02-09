@@ -3,6 +3,8 @@ package io.lumify.core.model.workspace;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.clientapi.model.ClientApiWorkspace;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceDiff;
 import io.lumify.web.clientapi.model.GraphPosition;
@@ -20,11 +22,12 @@ import java.util.Locale;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class WorkspaceRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceRepository.class);
     public static final String VISIBILITY_STRING = "workspace";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     public static final String WORKSPACE_CONCEPT_IRI = "http://lumify.io/workspace#workspace";
-    public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace/toEntity";
-    public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace/toUser";
+    public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI = "http://lumify.io/workspace#toEntity";
+    public static final String WORKSPACE_TO_USER_RELATIONSHIP_IRI = "http://lumify.io/workspace#toUser";
     public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
     public static final String OWL_IRI = "http://lumify.io/workspace";
     private final Graph graph;
@@ -89,7 +92,7 @@ public abstract class WorkspaceRepository {
         return newWorkspace;
     }
 
-    public abstract void softDeleteEntityFromWorkspace(Workspace workspace, String vertexId, User user);
+    public abstract void softDeleteEntitiesFromWorkspace(Workspace workspace, List<String> entityIdsToDelete, User authUser);
 
     public abstract void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
@@ -246,7 +249,7 @@ public abstract class WorkspaceRepository {
     public abstract void updateEntitiesOnWorkspace(Workspace workspace, Iterable<Update> updates, User user);
 
     public void updateEntityOnWorkspace(Workspace workspace, Update update, User user) {
-        List<Update> updates = new ArrayList<Update>();
+        List<Update> updates = new ArrayList<>();
         updates.add(update);
         updateEntitiesOnWorkspace(workspace, updates, user);
     }

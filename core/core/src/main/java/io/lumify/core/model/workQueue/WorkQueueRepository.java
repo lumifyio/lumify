@@ -2,6 +2,7 @@ package io.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.WorkerSpout;
 import io.lumify.core.model.notification.SystemNotification;
@@ -26,13 +27,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class WorkQueueRepository {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
-    public static final String GRAPH_PROPERTY_QUEUE_NAME = "graphProperty";
-    public static final String LONG_RUNNING_PROCESS_QUEUE_NAME = "longRunningProcess";
+    public static String GRAPH_PROPERTY_QUEUE_NAME = "graphProperty";
+    public static String LONG_RUNNING_PROCESS_QUEUE_NAME = "longRunningProcess";
     private final Graph graph;
 
     @Inject
-    protected WorkQueueRepository(Graph graph) {
+    protected WorkQueueRepository(Graph graph, Configuration configuration) {
         this.graph = graph;
+
+        String prefix = configuration.get(Configuration.QUEUE_PREFIX, null);
+        if (prefix != null) {
+            GRAPH_PROPERTY_QUEUE_NAME = prefix + "-" + GRAPH_PROPERTY_QUEUE_NAME;
+            LONG_RUNNING_PROCESS_QUEUE_NAME = prefix + "-" + LONG_RUNNING_PROCESS_QUEUE_NAME;
+        }
     }
 
     public void pushGraphPropertyQueue(final Element element, final Property property) {

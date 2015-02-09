@@ -28,9 +28,9 @@ done
 
 #Test
 if [ -z "${ITEST_SERVER}" ]; then
-  mvn -PITest -Drepository.ontology=io.lumify.core.model.ontology.ReadOnlyInMemoryOntologyRepository test
+  mvn -PITest -Drepository.ontology=io.lumify.core.model.ontology.InMemoryOntologyRepository test
 else
-  mvn -PITest -Drepository.ontology=io.lumify.core.model.ontology.ReadOnlyInMemoryOntologyRepository -DtestServer=${ITEST_SERVER} test
+  mvn -PITest -Drepository.ontology=io.lumify.core.model.ontology.InMemoryOntologyRepository -DtestServer=${ITEST_SERVER} test
 fi
 
 # Merge
