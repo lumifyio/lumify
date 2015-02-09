@@ -39,15 +39,15 @@ section will help you understand the options.
 Lumify uses OWL files to define what type of entities you can create, what properties they can have and what they
 can connect to.
 
-## Section 7: Set up your [IDE](ide.md)
+## Section 6: Set up your [IDE](ide.md)
 
 Debugging and developing for Lumify is easiest using an IDE. These instructions will help you get that setup.
 
-## Section 6: [Getting Help](help.md)
+## Section 7: [Getting Help](help.md)
 
 Running Lumify is a challenging, but rewarding, endeavor. Learn about your options for getting help in this section.
 
-## Section 7: [Contributing](../CONTRIBUTING.md)
+## Section 8: [Contributing](../CONTRIBUTING.md)
 
 Once you've made changes that you want to share with the community, the next step is to submit those changes back via a
 pull request.
