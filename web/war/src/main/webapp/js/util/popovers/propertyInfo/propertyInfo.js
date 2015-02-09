@@ -81,7 +81,9 @@ define([
 
         this.update = function() {
             var vertexId = this.attr.data.id,
-                property = _.first(F.vertex.props(this.attr.data, this.attr.property.name, this.attr.property.key)),
+                property = this.attr.property.name === 'http://lumify.io#visibilityJson' ?
+                    _.first(F.vertex.props(this.attr.data, this.attr.property.name)) :
+                    _.first(F.vertex.props(this.attr.data, this.attr.property.name, this.attr.property.key)),
                 positionDialog = this.positionDialog.bind(this),
                 displayNames = this.metadataPropertiesDisplayMap,
                 displayTypes = this.metadataPropertiesTypeMap,
@@ -99,6 +101,10 @@ define([
                     })
                     .compact()
                     .filter(function(m) {
+                        if (property.name === 'http://lumify.io#visibilityJson' &&
+                            m[0] === 'sandboxStatus') {
+                            return false;
+                        }
                         if (m[0] === 'http://lumify.io#confidence' && isComment) {
                             return false;
                         }
