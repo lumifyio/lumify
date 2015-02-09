@@ -1,12 +1,15 @@
 var BASE_URL = '../../..',
     self = this,
+    cacheBreaker = null,
     publicData = {};
 
-setupConsole();
-setupWebsocket();
-setupRequireJs();
-
 onmessage = function(event) {
+    if (!cacheBreaker) {
+        cacheBreaker = event.data;
+        setupAll();
+        return;
+    }
+
     require([
         'underscore',
         'util/promise',
@@ -16,6 +19,12 @@ onmessage = function(event) {
         onMessageHandler(event);
     })
 };
+
+function setupAll() {
+    setupConsole();
+    setupWebsocket();
+    setupRequireJs();
+}
 
 function setupConsole() {
     var noop = function() {};
@@ -49,7 +58,7 @@ function setupWebsocket() {
 
     if (supportedInWorker) {
         self.window = self;
-        importScripts(BASE_URL + '/libs/atmosphere/atmosphere.js')
+        importScripts(BASE_URL + '/libs/atmosphere/atmosphere.js?' + cacheBreaker);
         atmosphere.util.getAbsoluteURL = function() {
             return location.origin +
                 location.pathname.replace(/\/jsc.*$/, '') +
@@ -82,11 +91,12 @@ function setupWebsocket() {
 
 function setupRequireJs() {
     if (typeof FormData === 'undefined') {
-        importScripts('./util/formDataPolyfill.js');
+        importScripts('./util/formDataPolyfill.js?' + cacheBreaker);
     }
-    importScripts(BASE_URL + '/jsc/require.config.js');
+    importScripts(BASE_URL + '/jsc/require.config.js?' + cacheBreaker);
     require.baseUrl = BASE_URL + '/jsc/';
-    importScripts(BASE_URL + '/libs/requirejs/require.js');
+    require.urlArgs = cacheBreaker;
+    importScripts(BASE_URL + '/libs/requirejs/require.js?' + cacheBreaker);
 }
 
 function onMessageHandler(event) {

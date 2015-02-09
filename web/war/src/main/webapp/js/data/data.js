@@ -71,6 +71,7 @@ define([
 
         this.setupDataWorker = function() {
             this.worker = new Worker(PATH_TO_WORKER);
+            this.worker.postMessage(window.lumifyCacheBreaker);
             this.worker.onmessage = this.onDataWorkerMessage.bind(this);
             this.worker.onerror = this.onDataWorkerError.bind(this);
         };
