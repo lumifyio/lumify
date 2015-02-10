@@ -8,7 +8,7 @@ define([
 
     if (!rangy.initialized) rangy.init();
 
-    return {
+    var api = {
 
         clearSelection: function() {
             rangy.getSelection().removeAllRanges();
@@ -86,6 +86,36 @@ define([
             });
         },
 
+        createSnippetFromNode: function(node, numberWords) {
+            var range = document.createRange();
+
+            if (node.nodeType === 1) {
+                node.normalize();
+                range.selectNode(node);
+                //range.setStart(node, 0);
+                //range.setEnd(node, Math.max(0, node.textContent.length - 1));
+            } else {
+                throw new Error('node must be nodeType=1');
+            }
+
+            return api.createSnippetFromRange(range, numberWords);
+        },
+
+        createSnippetFromRange: function(range, numberWords) {
+            var output = {},
+                text = range.toString(),
+                contextRange = api.expandRangeByWords(range, numberWords || 4, output),
+                context = contextRange.toString(),
+                contextHighlight =
+                    '...' +
+                    output.before +
+                    '<span class="selection">' + text + '</span>' +
+                    output.after +
+                    '...';
+
+            return contextHighlight;
+        },
+
         expandRangeByWords: function(range, numberWords, splitBeforeAfterOutput) {
 
             var e = rangy.createRange();
@@ -113,4 +143,6 @@ define([
             return e;
         }
     };
+
+    return api;
 });

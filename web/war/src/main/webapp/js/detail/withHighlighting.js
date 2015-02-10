@@ -170,15 +170,7 @@ define([
                     {el: $focus, offset: selection.focusOffset}
                 ], '.text', _.identity),
                 range = selection.getRangeAt(0),
-                output = {},
-                contextRange = rangeUtils.expandRangeByWords(range, 4, output),
-                context = contextRange.toString(),
-                contextHighlight =
-                    '...' +
-                    output.before +
-                    '<span class="selection">' + selection.toString() + '</span>' +
-                    output.after +
-                    '...';
+                contextHighlight = rangeUtils.createSnippetFromRange(range);
 
             return {
                 startOffset: offsets && offsets[0],
@@ -477,6 +469,7 @@ define([
                 propertyKey: $node.closest('.text-section').data('key'),
                 selection: selection,
                 mentionNode: insertAfterNode,
+                snippet: selection && range.createSnippetFromRange(selection.range),
                 existing: !creating,
                 artifactId: this.attr.data.id
             });
