@@ -2,7 +2,6 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -77,26 +76,12 @@ public class VertexDeleteProperty extends BaseRequestHandler {
 
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
 
-        Property property = null;
-        boolean propertyIsPublic = false;
         for (int i = 0; i < sandboxStatuses.length; i++) {
-            if (property != null) {
-                throw new LumifyException("Found multiple non public properties.");
-            }
-            property = properties.get(i);
-            if (sandboxStatuses[i] == SandboxStatus.PUBLIC) {
-                propertyIsPublic = true;
-            }
+            boolean propertyIsPublic = (sandboxStatuses[i] == SandboxStatus.PUBLIC);
+            Property property = properties.get(i);
+            workspaceHelper.deleteProperty(graphVertex, property, propertyIsPublic, workspaceId, user, authorizations);
         }
 
-        if (property == null) {
-            LOGGER.warn("Could not find property %s:%s on %s", propertyName, propertyKey, graphVertexId);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            chain.next(request, response);
-            return;
-        }
-
-        workspaceHelper.deleteProperty(graphVertex, property, propertyIsPublic, workspaceId, user, authorizations);
         respondWithSuccessJson(response);
     }
 }
