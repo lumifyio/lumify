@@ -213,13 +213,15 @@ define([
             }
 
             if (!this.unresolve) {
-                parameters.sourceInfo = {
-                    vertexId: parameters.artifactId,
-                    textPropertyKey: parameters.propertyKey,
-                    startOffset: parameters.mentionStart,
-                    endOffset: parameters.mentionEnd,
-                    snippet: self.attr.snippet
-                };
+                if (self.attr.snippet) {
+                    parameters.sourceInfo = {
+                        vertexId: parameters.artifactId,
+                        textPropertyKey: parameters.propertyKey,
+                        startOffset: parameters.mentionStart,
+                        endOffset: parameters.mentionEnd,
+                        snippet: self.attr.snippet
+                    };
+                }
 
                 this.dataRequest('vertex', 'resolveTerm', parameters)
                     .then(function(data) {

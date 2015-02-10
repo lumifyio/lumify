@@ -469,7 +469,9 @@ define([
                 propertyKey: $node.closest('.text-section').data('key'),
                 selection: selection,
                 mentionNode: insertAfterNode,
-                snippet: selection && range.createSnippetFromRange(selection.range),
+                snippet: selection ?
+                    range.createSnippetFromRange(selection.range) :
+                    range.createSnippetFromNode(insertAfterNode[0]),
                 existing: !creating,
                 artifactId: this.attr.data.id
             });
