@@ -25,15 +25,22 @@ else
   SUDO=
 fi
 
+which boot2docker > /dev/null
+if[ $? -eq 0 ]; then
+  BOOT2DOCKER_SSH='boot2docker ssh'
+else
+  BOOT2DOCKER_SSH=
+fi
+
 if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
-  dev=$(boot2docker ssh blkid -L boot2docker-data)
-  mnt=$(echo "$(boot2docker ssh mount)" | awk -v dev=${dev} '$1 == dev && !seen {print $3; seen = 1}')
-  uid=$(boot2docker ssh id -u)
-  gid=$(boot2docker ssh id -g)
+  dev=$(${BOOT2DOCKER_SSH} blkid -L boot2docker-data)
+  mnt=$(echo "$(${BOOT2DOCKER_SSH} mount)" | awk -v dev=${dev} '$1 == dev && !seen {print $3; seen = 1}')
+  uid=$(${BOOT2DOCKER_SSH} id -u)
+  gid=$(${BOOT2DOCKER_SSH} id -g)
   PERSISTENT_DIR=${mnt}/lumify-dev-persistent
-  boot2docker ssh sudo mkdir -p ${PERSISTENT_DIR}
-  boot2docker ssh sudo chown -R ${uid}:${gid} ${PERSISTENT_DIR}
-  boot2docker ssh mkdir -p $(dir_list ${PERSISTENT_DIR})
+  ${BOOT2DOCKER_SSH} sudo mkdir -p ${PERSISTENT_DIR}
+  ${BOOT2DOCKER_SSH} sudo chown -R ${uid}:${gid} ${PERSISTENT_DIR}
+  ${BOOT2DOCKER_SSH} mkdir -p $(dir_list ${PERSISTENT_DIR})
   LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
   mkdir -p $(dir_list ${LOCAL_PERSISTENT_DIR})
   touch ${LOCAL_PERSISTENT_DIR}/NOT_ALL_OF_YOUR_FILES_ARE_HERE
