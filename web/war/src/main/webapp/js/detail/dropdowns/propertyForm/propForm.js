@@ -21,9 +21,6 @@ define([
 ) {
     'use strict';
 
-        // Animates the property value to the justification reference on paste if false
-    var SKIP_SELECTION_ANIMATION = true;
-
     return defineComponent(PropertyForm, withDropdown, withTeardown, withDataRequest);
 
     function PropertyForm() {
@@ -67,7 +64,6 @@ define([
             this.on('propertyselected', this.onPropertySelected);
             this.on('visibilitychange', this.onVisibilityChange);
             this.on('justificationchange', this.onJustificationChange);
-            this.on('justificationfrompaste', this.onJustificationFromPaste);
             this.on('paste', {
                 configurationFieldSelector: _.debounce(this.onPaste.bind(this), 10)
             });
@@ -365,37 +361,6 @@ define([
         this.onJustificationChange = function(event, data) {
             this.justification = data;
             this.checkValid();
-        };
-
-        this.onJustificationFromPaste = function(event, data) {
-            var justification = this.select('justificationSelector'),
-                configuration = this.select('configurationSelector'),
-                selection = justification.find('.selection'),
-                clonedSelection = selection.clone(),
-                popSnippet = function() {
-                    selection.closest('.animationwrap').removeClass('pop-fast').addClass('pop-fast');
-                };
-
-            if (!clonedSelection.length) return;
-
-            // More than number of words shouldn't animate, just pop text
-            if (SKIP_SELECTION_ANIMATION || selection.text().split(/\s+/).length > 3) {
-                return popSnippet();
-            }
-
-            configuration.find('.input-row input').after(clonedSelection);
-
-            var position = selection.position(),
-                clonedPosition = clonedSelection.position(),
-                clonedMarginLeft = parseInt(clonedSelection.css('left'), 10);
-
-            clonedSelection.one(TRANSITION_END, function() {
-                    clonedSelection.remove();
-                    popSnippet();
-                }).css({
-                    textIndent: (selection.get(0).offsetLeft - clonedMarginLeft) + 'px',
-                    marginTop: -1 * (clonedPosition.top - position.top) + 'px'
-                });
         };
 
         this.onPropertyInvalid = function(event, data) {

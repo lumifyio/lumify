@@ -33,7 +33,11 @@ define([
             if (this.attr._sourceMetadata) {
                 this.setValue(this.attr._sourceMetadata)
             } else {
-                this.setValue(this.attr['http://lumify.io#justification'] && this.attr['http://lumify.io#justification'].justificationText);
+                // FIXME
+                this.setValue(
+                    this.attr['http://lumify.io#justification'] &&
+                    this.attr['http://lumify.io#justification'].justificationText
+                );
             }
 
             this.on('valuepasted', this.onValuePasted);
@@ -150,7 +154,9 @@ define([
             }).html(content);
 
             _.defer(function() {
-                var toHeight = node.find('.animationwrap').outerHeight(true);
+                var animationWrap = node.find('.animationwrap'),
+                    toHeight = animationWrap.outerHeight(true);
+
                 node.on(TRANSITION_END, function(e) {
                     var oe = e.originalEvent || e;
 
@@ -166,12 +172,15 @@ define([
                     }
                     if (self.fromPaste) {
                         self.fromPaste = false;
-                        self.trigger('justificationfrompaste');
+                        animationWrap.removeClass('pop-fast');
+                        requestAnimationFrame(function() {
+                            animationWrap.addClass('pop-fast')
+                        });
                     }
                     self.trigger('justificationanimationend');
                 });
                 node.css({
-                    height: node.find('.animationwrap').outerHeight(true) + 'px'
+                    height: toHeight + 'px'
                 });
             });
 
