@@ -157,7 +157,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                             valuesStr[valuesIndex++],
                             null,
                             justificationText,
-                            sourceInfo,
+                            sourceInfoString,
                             metadataString,
                             visibilitySource,
                             user,
