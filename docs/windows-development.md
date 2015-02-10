@@ -10,6 +10,13 @@
 
 1. Install Maven 3.2.X per their instructions if not already installed: [http://maven.apache.org/guides/getting-started/windows-prerequisites.html] (http://maven.apache.org/guides/getting-started/windows-prerequisites.html)
 
+1. Install Hadoop 2.2.0
+     a. Install the binaries (choose one):
+          - Compile install from source: [http://www.srccodes.com/p/article/38/build-install-configure-run-apache-hadoop-2.2.0-microsoft-windows-os](http://www.srccodes.com/p/article/38/build-install-configure-run-apache-hadoop-2.2.0-microsoft-windows-os)
+          - Install pre-compiled binaries: [http://bits.lumify.io/extra/hadoop-2.2.0-windows.zip](http://bits.lumify.io/extra/hadoop-2.2.0-windows.zip)
+     b. Set the `HADOOP_PATH` environment variable `c:\hadoop-2.2.0`
+     c. Append the `PATH` environment variable with `c:\hadoop-2.2.0\bin`
+
 1. Install msysgit via the netinstall option: [https://github.com/msysgit/msysgit/releases](https://github.com/msysgit/msysgit/releases).
 **All commands from this point forward are assumed to be running from the msysgit shell, if you need to open the window, run the command c:\mysysgit\msys.bat**
 
