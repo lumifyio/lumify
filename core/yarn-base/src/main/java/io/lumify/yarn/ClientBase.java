@@ -41,7 +41,7 @@ public abstract class ClientBase {
     private String jar = null;
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    @DynamicParameter(names = {"-env"}, description = "Environment variable override. (example: -envPATH=/opt)")
+    @DynamicParameter(names = {"-env"}, description = "Environment variable override. (e.g.: -envPATH=/foo:/bar -envLD_LIBRARY_PATH=/baz)")
     private Map<String, String> environmentVariableOverrides = new HashMap<>();
 
     protected int run(String[] args) throws Exception {
