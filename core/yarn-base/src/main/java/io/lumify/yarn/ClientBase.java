@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public abstract class ClientBase {
+    public static final short FILE_PERMISSIONS = (short) 0710;
+
     @Parameter(names = {"-memory", "-mem"}, description = "Memory for each process in MB.")
     private int memory = 512;
 
@@ -99,14 +101,14 @@ public abstract class ClientBase {
     }
 
     private Map<String, String> createEnvironment(String classPathEnv) {
-        Map<String, String> appMasterEnv = new HashMap<String, String>();
+        Map<String, String> appMasterEnv = new HashMap<>();
         appMasterEnv.putAll(System.getenv());
         appMasterEnv.put(ApplicationConstants.Environment.CLASSPATH.name(), classPathEnv);
         return appMasterEnv;
     }
 
     private Map<String, LocalResource> createLocalResources(FileSystem fs, Path remotePath, String localResourceJarFileName, File jarPath) throws IOException {
-        Map<String, LocalResource> localResources = new HashMap<String, LocalResource>();
+        Map<String, LocalResource> localResources = new HashMap<>();
         addToLocalResources(fs, remotePath, jarPath.getPath(), localResourceJarFileName, localResources, null);
         return localResources;
     }
@@ -158,19 +160,19 @@ public abstract class ClientBase {
     private void addToLocalResources(FileSystem fs, Path remotePath, String fileSrcPath, String fileDstPath, Map<String, LocalResource> localResources, String resources) throws IOException {
         Path dst = new Path(remotePath, fileDstPath);
         if (fileSrcPath == null) {
-            FSDataOutputStream ostream = null;
+            FSDataOutputStream out = null;
             try {
-                ostream = FileSystem.create(fs, dst, new FsPermission((short) 0710));
-                ostream.writeUTF(resources);
+                out = FileSystem.create(fs, dst, new FsPermission(FILE_PERMISSIONS));
+                out.writeUTF(resources);
             } finally {
-                IOUtils.closeQuietly(ostream);
+                IOUtils.closeQuietly(out);
             }
         } else {
             fs.copyFromLocalFile(new Path(fileSrcPath), dst);
         }
         FileStatus scFileStatus = fs.getFileStatus(dst);
-        LocalResource scRsrc = LocalResource.newInstance(ConverterUtils.getYarnUrlFromURI(dst.toUri()), LocalResourceType.FILE, LocalResourceVisibility.APPLICATION, scFileStatus.getLen(), scFileStatus.getModificationTime());
-        localResources.put(fileDstPath, scRsrc);
+        LocalResource localResource = LocalResource.newInstance(ConverterUtils.getYarnUrlFromURI(dst.toUri()), LocalResourceType.FILE, LocalResourceVisibility.APPLICATION, scFileStatus.getLen(), scFileStatus.getModificationTime());
+        localResources.put(fileDstPath, localResource);
     }
 
     public static void printEnv() {

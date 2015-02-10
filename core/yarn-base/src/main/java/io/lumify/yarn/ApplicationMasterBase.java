@@ -90,7 +90,7 @@ public abstract class ApplicationMasterBase implements AMRMClientAsync.CallbackH
     }
 
     private List<Path> getResourceList(FileSystem fs, Path remotePath) throws IOException {
-        List<Path> resources = new ArrayList<Path>();
+        List<Path> resources = new ArrayList<>();
         RemoteIterator<LocatedFileStatus> files = fs.listFiles(remotePath, false);
         while (files.hasNext()) {
             LocatedFileStatus file = files.next();
@@ -101,7 +101,7 @@ public abstract class ApplicationMasterBase implements AMRMClientAsync.CallbackH
     }
 
     private Map<String, LocalResource> createLocalResources(FileSystem fs, List<Path> resources) throws IOException {
-        Map<String, LocalResource> localResources = new HashMap<String, LocalResource>();
+        Map<String, LocalResource> localResources = new HashMap<>();
         for (Path p : resources) {
             FileStatus fileStatus = fs.getFileStatus(p);
             LocalResource rsc = LocalResource.newInstance(ConverterUtils.getYarnUrlFromURI(p.toUri()), LocalResourceType.FILE, LocalResourceVisibility.APPLICATION, fileStatus.getLen(), fileStatus.getModificationTime());
@@ -197,6 +197,7 @@ public abstract class ApplicationMasterBase implements AMRMClientAsync.CallbackH
                 + " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr";
         System.out.println("Running: " + command);
         ctx.setCommands(Collections.singletonList(command));
+        ctx.getEnvironment().putAll(System.getenv());
 
         System.out.println("Launching container " + container.getId());
         nmClient.startContainer(container, ctx);
