@@ -170,7 +170,9 @@ define([
                     {el: $focus, offset: selection.focusOffset}
                 ], '.text', _.identity),
                 range = selection.getRangeAt(0),
-                contextHighlight = rangeUtils.createSnippetFromRange(range);
+                contextHighlight = rangeUtils.createSnippetFromRange(
+                    range, undefined, $anchor.closest('.text')[0]
+                );
 
             return {
                 startOffset: offsets && offsets[0],
@@ -461,17 +463,19 @@ define([
             this.tearDownDropdowns();
 
             var form = $('<div class="underneath"/>'),
-                $node = $(insertAfterNode);
+                $node = $(insertAfterNode),
+                $textSection = $node.closest('.text-section'),
+                $textBody = $textSection.children('.text');
 
             $node.after(form);
             TermForm.attachTo(form, {
                 sign: text,
-                propertyKey: $node.closest('.text-section').data('key'),
+                propertyKey: $textSection.data('key'),
                 selection: selection,
                 mentionNode: insertAfterNode,
                 snippet: selection ?
-                    range.createSnippetFromRange(selection.range) :
-                    range.createSnippetFromNode(insertAfterNode[0]),
+                    range.createSnippetFromRange(selection.range, undefined, $textBody[0]) :
+                    range.createSnippetFromNode(insertAfterNode[0], undefined, $textBody[0]),
                 existing: !creating,
                 artifactId: this.attr.data.id
             });

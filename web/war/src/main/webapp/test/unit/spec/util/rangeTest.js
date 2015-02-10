@@ -4,18 +4,19 @@ define([
     'testutils/selectionUtils'
 ], function(r, selectionUtils) {
 
-    describe.only('rangeUtils', function() {
+    describe('rangeUtils', function() {
 
-        describe('expandNodeByWords', function() {
+        describe('createSnippetFromNode', function() {
             beforeEach(function() {
                 $(document.body).empty();
             })
 
             it('should expand node by n words', function() {
-                var node = $('<div>This is <span>a</span> sentence</div>').appendTo(document.body);
+                var node = $('<div>This is <span>a</span> sentence ' +
+                             'with some more words than we\'ll capture</div>').appendTo(document.body);
 
                 expect(r.createSnippetFromNode(node.find('span')[0])).to.equal(
-                    '...This is <span class="selection">a</span> sentence...'
+                    'This is <span class="selection">a</span> sentence with some more...'
                 )
             })
 
@@ -24,9 +25,23 @@ define([
                     .appendTo(document.body);
 
                 expect(r.createSnippetFromNode(node.find('span.t')[0])).to.equal(
-                    '...This is <span class="selection">a Phone</span> sentence...'
+                    'This is <span class="selection">a Phone</span> sentence'
                 )
             })
+
+            it('should not include text outside of the div', function() {
+                var node = $('<div>More</div><div class="text">This is <span>a</span> sentence</div><p>hahah</p>')
+                    .appendTo(document.body);
+
+                expect(r.createSnippetFromNode(node.find('span')[0], undefined, node.filter('.text')[0])).to.equal(
+                    'This is <span class="selection">a</span> sentence'
+                )
+
+                expect(r.createSnippetFromNode(node.find('span')[0], undefined, node.filter('.text')[0])).to.equal(
+                    'This is <span class="selection">a</span> sentence'
+                )
+            })
+
         })
 
         describe('createSnippetFromRange', function() {
@@ -39,7 +54,7 @@ define([
                     range = selectionUtils.createRange(node, 'This is a [test] of the emergency broadcast system');
 
                 expect(r.createSnippetFromRange(range)).to.equal(
-                    '...This is a <span class="selection">test</span> of the emergency broadcast...'
+                    'This is a <span class="selection">test</span> of the emergency broadcast...'
                 )
             })
         })

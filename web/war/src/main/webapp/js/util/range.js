@@ -86,47 +86,81 @@ define([
             });
         },
 
-        createSnippetFromNode: function(node, numberWords) {
+        createSnippetFromNode: function(node, numberWords, limitToContainer) {
             var range = document.createRange();
 
             if (node.nodeType === 1) {
                 node.normalize();
                 range.selectNode(node);
-                //range.setStart(node, 0);
-                //range.setEnd(node, Math.max(0, node.textContent.length - 1));
             } else {
                 throw new Error('node must be nodeType=1');
             }
 
-            return api.createSnippetFromRange(range, numberWords);
+            return api.createSnippetFromRange(range, numberWords, limitToContainer);
         },
 
-        createSnippetFromRange: function(range, numberWords) {
+        createSnippetFromRange: function(range, numberWords, limitToContainer) {
             var output = {},
+                numberOfWords = numberWords || 4,
                 text = range.toString(),
-                contextRange = api.expandRangeByWords(range, numberWords || 4, output),
+                contextRange = api.expandRangeByWords(range, numberOfWords, output, limitToContainer),
                 context = contextRange.toString(),
-                contextHighlight =
-                    '...' +
-                    output.before +
+                transform = function(str, prependEllipsis) {
+                    if (str.match(/^[\s\n]*$/)) {
+                        return '';
+                    }
+
+                    var words = $.trim(str).split(/\s+/);
+                    if (words.length < numberOfWords) {
+                        return str;
+                    }
+
+                    return prependEllipsis ? ('...' + str) : (str + '...');
+                },
+                contextHighlight = transform(output.before, true) +
                     '<span class="selection">' + text + '</span>' +
-                    output.after +
-                    '...';
+                    transform(output.after, false);
 
             return contextHighlight;
         },
 
-        expandRangeByWords: function(range, numberWords, splitBeforeAfterOutput) {
+        expandRangeByWords: function(range, numberWords, splitBeforeAfterOutput, limitToContainer) {
 
-            var e = rangy.createRange();
+            var e = rangy.createRange(),
+                i = 0;
             e.setStart(range.startContainer, range.startOffset);
             e.setEnd(range.endContainer, range.endOffset);
 
             // Move range start to include n more of words
             e.moveStart('word', -numberWords);
+            if (limitToContainer) {
+                i = 0;
+                while (e.startContainer !== limitToContainer &&
+                       $(e.startContainer).closest(limitToContainer).length === 0) {
+                    if (++i > 4) {
+                        break;
+                    }
+                    e.moveStart('word', 1);
+                    e.moveStart('character', 1);
+                }
+            }
 
             // Move range end to include n more words
             e.moveEnd('word', numberWords);
+
+            if (limitToContainer) {
+                i = 0;
+                while (e.endContainer !== limitToContainer &&
+                       $(e.endContainer).closest(limitToContainer).length === 0) {
+                    if (++i > 4) {
+                        break;
+                    }
+                    e.moveEnd('word', -1);
+                }
+                if (i > 0) {
+                    e.setEndAfter(e.endContainer)
+                }
+            }
 
             // Calculate what we just included and send that back
             if (splitBeforeAfterOutput) {
