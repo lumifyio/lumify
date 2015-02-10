@@ -18,32 +18,40 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 1. Install node and npm per their instructions: [http://nodejs.org/](http://nodejs.org/)
 
 1. Clone the Lumify repo:
-
-        git clone https://github.com/lumifyio/lumify.git
-        cd lumify
+    ```sh
+    git clone https://github.com/lumifyio/lumify.git
+    ```
+    **_This will clone the repo to a `lumify` directory in your current working directory.  This absolute path will be referred to as `<cloned_repo_dir>` for the remainder of these steps._**
 
 1. Install the Lumify npm dependencies:
-
-        cd web/war/src/main/webapp
-        npm install -g inherits bower grunt
-        npm install grunt-cli
+    ```sh
+    cd <cloned_repo_dir>/web/war/src/main/webapp
+    npm install -g inherits bower grunt
+    npm install -g grunt-cli
+    ```
 
 1. Update your hosts file:
     - Linux
 
-            echo '127.0.0.1 lumify-dev' >> /etc/hosts
-
+        ```sh
+        echo '127.0.0.1 lumify-dev' >> /etc/hosts
+        ```
     - OS X
 
-            echo "$(boot2docker ip 2>/dev/null) lumify-dev" >> /etc/hosts
+        ```sh
+        echo "$(boot2docker ip 2>/dev/null) lumify-dev" >> /etc/hosts
+        ```
 
 1. Create the docker image:
-
-        docker/build-dev.sh
+    ```sh
+    cd <cloned_repo_dir>
+    docker/build-dev.sh
+    ```
 
 1. Run the docker image: (This will start ZooKeeper, HDFS, YARN, ElasticSearch, and RabbitMQ)
-
-        docker/run-dev.sh
+    ```sh
+    docker/run-dev.sh
+    ```
 
 1. Run the web server. Choose one of the following:
    * [Run in the docker image](docker/README.md#docker-web-server)
