@@ -10,6 +10,9 @@ public abstract class TaskBase {
 
     public final void run(String[] args) {
         new JCommander(this, args);
+
+        ClientBase.printEnv();
+
         try {
             LOGGER.info("BEGIN Run");
             run();
