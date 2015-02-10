@@ -40,6 +40,9 @@ public abstract class ClientBase {
     @Parameter(names = {"-jar"}, description = "Path to jar.", required = true)
     private String jar = null;
 
+    @Parameter(names = {"-envpath"}, description = "Path environment variable override.")
+    private String envpath = null;
+
     protected int run(String[] args) throws Exception {
         new JCommander(this, args);
 
@@ -104,6 +107,9 @@ public abstract class ClientBase {
         Map<String, String> appMasterEnv = new HashMap<>();
         appMasterEnv.putAll(System.getenv());
         appMasterEnv.put(ApplicationConstants.Environment.CLASSPATH.name(), classPathEnv);
+        if (envpath != null) {
+            appMasterEnv.put("PATH", envpath);
+        }
         return appMasterEnv;
     }
 
