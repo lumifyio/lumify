@@ -15,11 +15,21 @@ define([
         V = {
 
             isPublished: function(vertex) {
-                return V.sandboxStatus(vertex) === undefined;
+                return V.sandboxStatus.apply(null, arguments) === undefined;
             },
 
-            sandboxStatus: function(vertex) {
-                return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ?
+            sandboxStatus: function(vertexOrProperty) {
+                if (arguments.length === 3) {
+                    var props = V.props.apply(null, arguments);
+                    if (props.length) {
+                        return _.any(props, function(p) {
+                            return V.sandboxStatus(p) === undefined;
+                        }) ? undefined : i18n('vertex.status.unpublished');
+                    }
+                    return;
+                }
+
+                return (/^(private|public_changed)$/i).test(vertexOrProperty.sandboxStatus) ?
                         i18n('vertex.status.unpublished') :
                         undefined;
             },
@@ -292,26 +302,32 @@ define([
                 return resolvedName;
             },
 
-            longestProp: function(vertex) {
+            longestProp: function(vertex, optionalName) {
                 var properties = vertex.properties
                     .filter(function(a) {
                         var ontologyProperty = propertiesByTitle[a.name];
+                        if (optionalName && optionalName !== a.name) {
+                            return false;
+                        }
                         return ontologyProperty && ontologyProperty.userVisible;
                     })
                     .sort(function(a, b) {
-                        return V.displayProp(b).length - V.displayProp(a).length;
+                        return V.prop(vertex, b.name, b.key).length - V.prop(vertex, a.name, a.key).length;
                     });
                 if (properties.length > 0) {
-                    return V.displayProp(properties[0]);
-                } else {
-                    return null;
+                    return V.prop(vertex, properties[0].name, properties[0].key);
                 }
             },
 
-            displayProp: function(vertexOrProperty, optionalName) {
-                var name = _.isUndefined(optionalName) ? vertexOrProperty.name : optionalName,
-                    value = V.prop(vertexOrProperty, name),
-                    ontologyProperty = propertiesByTitle[name];
+            propFromAudit: function(vertex, propertyAudit) {
+                //propertyName, newValue, previousValue
+                throw new Error('not implemented')
+                // TODO: fixme
+            },
+
+            propDisplay: function(name, value) {
+                name = V.propName(name);
+                var ontologyProperty = propertiesByTitle[name];
 
                 if (!ontologyProperty) {
                     return value;
@@ -328,7 +344,8 @@ define([
 
                 if (ontologyProperty.displayType) {
                     switch (ontologyProperty.displayType) {
-                        case 'byte': return F.bytes.pretty(value)
+                        case 'byte': return F.bytes.pretty(value);
+                        case 'heading': return F.number.heading(value);
                     }
                 }
 
@@ -342,8 +359,6 @@ define([
                         return F.date.dateStringUtc(value);
                     }
 
-                    case 'heading': return F.number.heading(value);
-
                     case 'double':
                     case 'integer':
                     case 'currency':
@@ -354,22 +369,118 @@ define([
                 }
             },
 
-            props: function(vertex, name) {
-                var autoExpandedName = V.propName(name),
-                    foundProperties = _.where(vertex.properties, { name: autoExpandedName });
+            prop: function(vertex, name, optionalKey, optionalOpts) {
+                checkVertexAndPropertyNameArguments(vertex, name);
+
+                if (_.isObject(optionalKey)) {
+                    optionalOpts = optionalKey;
+                    optionalKey = null;
+                }
+
+                name = V.propName(name);
+
+                var value = V.propRaw(vertex, name, optionalKey, optionalOpts),
+                    ontologyProperty = propertiesByTitle[name];
+
+                if (!ontologyProperty) {
+                    return value;
+                }
+
+                if (_.isArray(value)) {
+                    if (!optionalKey) {
+                        var firstMatchingProperty = _.find(vertex.properties, function(p) {
+                            return ~ontologyProperty.dependentPropertyIris.indexOf(p.name);
+                        });
+                        optionalKey = (firstMatchingProperty && firstMatchingProperty.key);
+                    }
+                    if (ontologyProperty.displayFormula) {
+                        return formula(ontologyProperty.displayFormula, vertex, V, optionalKey);
+                    } else {
+                        return value.join(' ');
+                    }
+                }
+
+                return V.propDisplay(name, value);
+            },
+
+            props: function(vertex, name, optionalKey) {
+                checkVertexAndPropertyNameArguments(vertex, name);
+
+                if (arguments.length === 3 && !optionalKey) {
+                    throw new Error('Undefined key is not allowed. Remove parameter to return all named properties');
+                }
+
+                name = V.propName(name);
+
+                var ontologyProperty = ontology.properties.byTitle[name],
+                    dependentIris = ontologyProperty && ontologyProperty.dependentPropertyIris,
+                    foundProperties = _.filter(vertex.properties, function(p) {
+                        if (dependentIris) {
+                            return ~dependentIris.indexOf(p.name) && (
+                                optionalKey ? optionalKey === p.key : true
+                            );
+                        }
+
+                        return name === p.name && (
+                            optionalKey ? optionalKey === p.key : true
+                        );
+                    });
 
                 return foundProperties;
             },
 
-            propForNameAndKey: function(vertex, name, key) {
-                return _.findWhere(vertex.properties, { name: name, key: key });
+            propValid: function(vertex, values, propertyName, propertyKey) {
+                checkVertexAndPropertyNameArguments(vertex, propertyName);
+                if (!_.isArray(values)) {
+                    throw new Error('Unable to validate without values array')
+                }
+
+                var ontologyProperty = ontology.properties.byTitle[propertyName],
+                    dependentIris = ontologyProperty.dependentPropertyIris,
+                    formulaString = ontologyProperty.validationFormula,
+                    result = true;
+
+                if (formulaString) {
+                    if (values.length) {
+                        var properties = [];
+                        if (dependentIris) {
+                            dependentIris.forEach(function(iri, i) {
+                                var property = _.findWhere(vertex.properties, {
+                                        name: iri,
+                                        key: propertyKey
+                                    }),
+                                    value = _.isArray(values[i]) && values[i].length === 1 ? values[i][0] : values[i]
+
+                                if (property) {
+                                    property = _.extend({}, property, { value: value });
+                                    if (_.isUndefined(values[i])) {
+                                        property.value = undefined;
+                                    }
+                                } else {
+                                    property = {
+                                        name: iri,
+                                        key: propertyKey,
+                                        value: value
+                                    };
+                                }
+                                properties.push(property);
+                            })
+                        }
+                        vertex = _.extend({}, vertex, { properties: properties });
+                    }
+                    result = formula(formulaString, vertex, V, propertyKey);
+                }
+
+                return Boolean(result);
             },
 
             title: function(vertex) {
                 var title = formulaResultForVertex(vertex, 'titleFormula')
 
                 if (!title) {
-                    title = V.prop(vertex, 'title', undefined, true);
+                    title = V.prop(vertex, 'title', undefined, {
+                        ignoreErrorIfTitle: true
+                    });
                 }
 
                 return title;
@@ -389,36 +500,64 @@ define([
                 return 0;
             },
 
-            // TODO: support looking for underscore properties like _source?
-            prop: function(vertexOrProperty, name, defaultValue, ignoreErrorIfTitle) {
-                if (ignoreErrorIfTitle !== true && name === 'title') {
+            propRaw: function(vertex, name, optionalKey, optionalOpts) {
+                checkVertexAndPropertyNameArguments(vertex, name);
+
+                if (_.isObject(optionalKey)) {
+                    optionalOpts = optionalKey;
+                    optionalKey = null;
+                }
+
+                var options = _.extend({
+                    defaultValue: undefined,
+                    ignoreErrorIfTitle: false
+                }, optionalOpts || {});
+
+                if (options.ignoreErrorIfTitle !== true && name === 'title') {
                     throw new Error('Use title function, not generic prop');
                 }
 
-                var autoExpandedName = V.propName(name),
+                name = V.propName(name);
 
-                    ontologyProperty = propertiesByTitle[autoExpandedName],
+                var ontologyProperty = propertiesByTitle[name],
+                    dependentIris = ontologyProperty && ontologyProperty.dependentPropertyIris || [],
+                    iris = dependentIris.length ? dependentIris : [name],
+                    properties = transformMatchingVertexProperties(vertex, iris);
 
-                    displayName = (ontologyProperty && ontologyProperty.displayName) ||
-                        autoExpandedName,
+                if (dependentIris.length) {
+                    if (options.throwErrorIfCompoundProperty) {
+                        throw new Error('Compound properties that depend on compound properties are not allowed');
+                    }
 
-                    foundProperties = vertexOrProperty.properties ?
-                        _.where(vertexOrProperty.properties, { name: autoExpandedName }) :
-                        [vertexOrProperty],
+                    if (!optionalKey && properties.length) {
+                        optionalKey = properties[0].key;
+                    }
 
-                    hasValue = foundProperties &&
-                        foundProperties.length &&
-                        !_.isUndefined(foundProperties[0].value);
+                    options.throwErrorIfCompoundProperty = true;
 
-                if (!hasValue &&
-                    autoExpandedName !== 'http://lumify.io#title' &&
-                    _.isUndefined(defaultValue)) {
-                    return undefined;
+                    return _.map(dependentIris, _.partial(V.propRaw, vertex, _, optionalKey, options));
+                } else {
+                    var foundProperties = optionalKey ?
+                            _.where(properties, { key: optionalKey }) :
+                            properties,
+
+                        hasValue = foundProperties &&
+                            foundProperties.length &&
+                            !_.isUndefined(foundProperties[0].value);
+
+                    if (!hasValue &&
+                        name !== 'http://lumify.io#title' &&
+                        _.isUndefined(options.defaultValue)) {
+                        return undefined;
+                    }
+
+                    return hasValue ? foundProperties[0].value :
+                        (
+                            options.defaultValue ||
+                            i18n('vertex.property.not_available',
+                                (ontologyProperty && ontologyProperty.displayName || '').toLowerCase() || name)
+                        )
                 }
-
-                return hasValue ? foundProperties[0].value :
-                    (defaultValue ||
-                    i18n('vertex.property.not_available', displayName.toLowerCase()))
             },
 
             isEdge: function(vertex) {
@@ -455,5 +594,40 @@ define([
         }
 
         return result;
+    }
+
+    function transformMatchingVertexProperties(vertex, propertyNames) {
+        var CONFIDENCE = 'http://lumify.io#confidence',
+            CREATED = 'http://lumify.io#createDate',
+            sorted = _.chain(vertex.properties)
+                .filter(function(p) {
+                    return ~propertyNames.indexOf(p.name);
+                })
+                .sortBy(function(p) {
+                    var created = p.metadata && p.metadata[CREATED]
+                    if (created) {
+                        return created * -1;
+                    }
+                    return 0;
+                })
+                .sortBy(function(p) {
+                    var confidence = p.metadata && p.metadata[CONFIDENCE]
+                    if (confidence) {
+                        return confidence * -1;
+                    }
+                    return 0;
+                })
+                .value()
+
+        return sorted;
+    }
+
+    function checkVertexAndPropertyNameArguments(vertex, propertyName) {
+        if (!vertex || !vertex.id || !_.isArray(vertex.properties)) {
+            throw new Error('Vertex is invalid', vertex);
+        }
+        if (!propertyName || !_.isString(propertyName)) {
+            throw new Error('Property name is invalid', propertyName);
+        }
     }
 });

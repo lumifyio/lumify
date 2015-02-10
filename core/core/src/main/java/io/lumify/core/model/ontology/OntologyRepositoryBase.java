@@ -1,6 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
@@ -441,6 +442,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         boolean searchable = getSearchable(o, dataTypeProperty);
         String displayType = getDisplayType(o, dataTypeProperty);
         String propertyGroup = getPropertyGroup(o, dataTypeProperty);
+        String validationFormula = getValidationFormula(o, dataTypeProperty);
+        String displayFormula = getDisplayFormula(o, dataTypeProperty);
+        ImmutableList<String> dependentPropertyIris = getDependentPropertyIri(o, dataTypeProperty);
         Double boost = getBoost(o, dataTypeProperty);
         String[] intents = getIntents(o, dataTypeProperty);
         if (propertyType == null) {
@@ -462,7 +466,23 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         Map<String, String> possibleValues = getPossibleValues(o, dataTypeProperty);
         Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-        addPropertyTo(domainConcepts, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost, intents);
+        addPropertyTo(
+                domainConcepts,
+                propertyIRI,
+                propertyDisplayName,
+                propertyType,
+                possibleValues,
+                textIndexHints,
+                userVisible,
+                searchable,
+                displayType,
+                propertyGroup,
+                boost,
+                validationFormula,
+                displayFormula,
+                dependentPropertyIris,
+                intents
+        );
     }
 
     protected abstract OntologyProperty addPropertyTo(
@@ -477,6 +497,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             String displayType,
             String propertyGroup,
             Double boost,
+            String validationFormula,
+            String displayFormula,
+            ImmutableList<String> dependentPropertyIris,
             String[] intents);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
@@ -631,6 +654,18 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return getAnnotationValueByUri(o, owlEntity, LumifyProperties.PROPERTY_GROUP.getPropertyName());
     }
 
+    protected String getValidationFormula(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.VALIDATION_FORMULA.getPropertyName());
+    }
+
+    protected String getDisplayFormula(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, LumifyProperties.DISPLAY_FORMULA.getPropertyName());
+    }
+
+    protected ImmutableList<String> getDependentPropertyIri(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValuesByUriOrNull(o, owlEntity, LumifyProperties.DEPENDENT_PROPERTY_IRI.getPropertyName());
+    }
+
     protected Double getBoost(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, LumifyProperties.BOOST.getPropertyName());
         if (val == null) {
@@ -673,6 +708,20 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
         }
         return null;
+    }
+
+    protected ImmutableList<String> getAnnotationValuesByUriOrNull(OWLOntology o, OWLEntity owlEntity, String uri) {
+        List<String> values = new ArrayList<>();
+        for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
+            if (annotation.getProperty().getIRI().toString().equals(uri)) {
+                OWLLiteral value = (OWLLiteral) annotation.getValue();
+                values.add(value.getLiteral());
+            }
+        }
+        if (values.size() == 0) {
+            return null;
+        }
+        return ImmutableList.copyOf(values);
     }
 
     protected String[] getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {

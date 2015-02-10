@@ -371,7 +371,7 @@ define([
             var self = this,
                 $target = $(event.target),
                 propertyKey = $target.closest('.label-info').data('propertyKey'),
-                property = F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
+                property = F.vertex.props(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
 
             this.$node.find('.focused').removeClass('focused');
             $target.closest('.detected-object').parent().addClass('focused');
@@ -432,7 +432,7 @@ define([
         this.onCoordsChanged = function(event, data) {
             var self = this,
                 vertex = this.attr.data,
-                detectedObject = F.vertex.propForNameAndKey(vertex, 'http://lumify.io#detectedObject', data.id),
+                detectedObject = F.vertex.props(vertex, 'http://lumify.io#detectedObject', data.id),
                 width = parseFloat(data.x2) - parseFloat(data.x1),
                 height = parseFloat(data.y2) - parseFloat(data.y1),
                 newDetectedObject = $.extend(true, {}, detectedObject, { value: data }),
@@ -478,7 +478,7 @@ define([
             this.trigger(
                 this.select('faceboxContainerSelector'),
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
-                F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey)
+                F.vertex.props(this.attr.data, 'http://lumify.io#detectedObject', propertyKey)
             );
         };
 

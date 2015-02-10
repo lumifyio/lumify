@@ -76,6 +76,10 @@ define([
                                             return false;
                                         }
 
+                                        if (~self.dependentPropertyIris.indexOf(p.title)) {
+                                            return false;
+                                        }
+
                                         if (self.attr.onlySearchable) {
                                             if (p.title === 'http://lumify.io#text') {
                                                 return true;
@@ -208,6 +212,11 @@ define([
 
             this.groupedByDisplay = _.groupBy(properties, displayName);
             this.propertiesForSource = properties;
+            this.dependentPropertyIris = _.chain(properties)
+                .pluck('dependentPropertyIris')
+                .compact()
+                .flatten()
+                .value();
         }
     }
 

@@ -123,16 +123,35 @@ define([
         };
 
         this.notifyOfFilters = function(options) {
+            var ontologyProperties = this.ontologyProperties;
+
             this.trigger('filterschange', {
                 entityFilters: this.entityFilters,
                 conceptFilter: this.conceptFilter,
-                propertyFilters: _.map(this.propertyFilters, function(filter) {
-                    return {
-                        propertyId: filter.propertyId,
-                        predicate: filter.predicate,
-                        values: filter.values
-                    };
-                }),
+                propertyFilters: _.chain(this.propertyFilters)
+                    .map(function(filter) {
+                        var ontologyProperty = ontologyProperties.byTitle[filter.propertyId];
+                        if (ontologyProperty && ontologyProperty.dependentPropertyIris) {
+                            return ontologyProperty.dependentPropertyIris.map(function(iri, i) {
+                                if (!_.isUndefined(filter.values[i])) {
+                                    return {
+                                        propertyId: iri,
+                                        predicate: filter.predicate,
+                                        values: filter.values[i]
+                                    }
+                                }
+                            });
+                        }
+
+                        return {
+                            propertyId: filter.propertyId,
+                            predicate: filter.predicate,
+                            values: filter.values
+                        };
+                    })
+                    .flatten(true)
+                    .compact()
+                    .value(),
                 options: options
             });
         };
@@ -160,13 +179,16 @@ define([
             var self = this,
                 target = $(event.target),
                 li = target.closest('li').addClass('fId' + self.filterId),
-                property = data.property;
+                property = data.property,
+                isCompoundField = property.dependentPropertyIris && property.dependentPropertyIris.length;
 
             if (property.title === 'http://lumify.io#text') {
                 property.dataType = 'boolean';
             }
 
-            var fieldComponent = property.possibleValues ?
+            var fieldComponent = isCompoundField ?
+                'fields/compound/compound' :
+                property.possibleValues ?
                     'fields/restrictValues' :
                     'fields/' + property.dataType;
 
@@ -175,12 +197,22 @@ define([
 
                 self.teardownField(node);
 
-                PropertyFieldItem.attachTo(node, {
-                    property: property,
-                    id: self.filterId++,
-                    predicates: true,
-                    supportsHistogram: self.attr.supportsHistogram
-                });
+                if (isCompoundField) {
+                    PropertyFieldItem.attachTo(node, {
+                        id: self.filterId++,
+                        property: property,
+                        vertex: null,
+                        predicates: true,
+                        supportsHistogram: false
+                    });
+                } else {
+                    PropertyFieldItem.attachTo(node, {
+                        property: property,
+                        id: self.filterId++,
+                        predicates: true,
+                        supportsHistogram: self.attr.supportsHistogram
+                    });
+                }
 
                 li.removeClass('newrow');
 
@@ -254,6 +286,7 @@ define([
 
             this.dataRequest('ontology', 'properties')
                 .done(function(properties) {
+                    self.ontologyProperties = properties;
                     self.properties = properties.list;
                     self.$node.find('.prop-filter-header').after(itemTemplate({}));
                     self.createFieldSelection();

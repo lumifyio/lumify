@@ -30,12 +30,6 @@ define([
             timezoneSelector: '.timezone'
         });
 
-        this.before('initialize', function(node, config) {
-            if (_.isUndefined(config.preventFocus)) {
-                config.preventFocus = true;
-            }
-        });
-
         this.after('initialize', function() {
             var self = this,
                 value = '',

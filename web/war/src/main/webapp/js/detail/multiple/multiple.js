@@ -55,19 +55,11 @@ define([
         } else if (properties.byTitle[propertyName]) {
             if ('dx' in bin) {
                 display =
-                    F.vertex.displayProp({
-                        name: propertyName,
-                        value: bin.x
-                    }) + ' – ' +
-                    F.vertex.displayProp({
-                        name: propertyName,
-                        value: bin.x + bin.dx
-                    });
+                    F.vertex.propDisplay(propertyName, bin.x) +
+                    ' – ' +
+                    F.vertex.propDisplay(propertyName, bin.x + bin.dx);
             } else {
-                display = F.vertex.displayProp({
-                    name: propertyName,
-                    value: propertyValue
-                });
+                display = F.vertex.propDisplay(propertyName, propertyValue);
             }
         }
         if (display === '') return i18n('detail.multiple.histogram.blank');

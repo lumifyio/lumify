@@ -37,7 +37,10 @@ define([
             }
 
             this.dialog = $('<div class="dialog-popover">')
-                .css({position: 'absolute'})
+                .css({
+                    position: 'absolute',
+                    display: this.attr.hideDialog ? 'none' : 'block'
+                })
                 .html(tpl(this.attr))
                 .appendTo(document.body);
 

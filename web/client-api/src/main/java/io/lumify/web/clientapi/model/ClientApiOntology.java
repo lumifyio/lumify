@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.*;
 
 public class ClientApiOntology implements ClientApiObject {
-    private List<Concept> concepts = new ArrayList<Concept>();
-    private List<Property> properties = new ArrayList<Property>();
-    private List<Relationship> relationships = new ArrayList<Relationship>();
+    private List<Concept> concepts = new ArrayList<>();
+    private List<Property> properties = new ArrayList<>();
+    private List<Relationship> relationships = new ArrayList<>();
 
     public List<Concept> getConcepts() {
         return concepts;
@@ -185,6 +185,9 @@ public class ClientApiOntology implements ClientApiObject {
         private String displayType;
         private String propertyGroup;
         private Map<String, String> possibleValues = new HashMap<>();
+        private String validationFormula;
+        private String displayFormula;
+        private String[] dependentPropertyIris;
         private List<String> intents = new ArrayList<>();
 
         public String getTitle() {
@@ -246,6 +249,38 @@ public class ClientApiOntology implements ClientApiObject {
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         public Map<String, String> getPossibleValues() {
             return possibleValues;
+        }
+
+        public void setValidationFormula(String validationFormula) {
+            this.validationFormula = validationFormula;
+        }
+
+        public String getValidationFormula() {
+            return validationFormula;
+        }
+
+        public void setDisplayFormula(String displayFormula) {
+            this.displayFormula = displayFormula;
+        }
+
+        public String getDisplayFormula() {
+            return displayFormula;
+        }
+
+        public void setDependentPropertyIris(String[] dependentPropertyIris) {
+            this.dependentPropertyIris = dependentPropertyIris;
+        }
+
+        public void setDependentPropertyIris(Collection<String> dependentPropertyIris) {
+            if (dependentPropertyIris == null || dependentPropertyIris.size() == 0) {
+                this.dependentPropertyIris = null;
+            } else {
+                this.dependentPropertyIris = dependentPropertyIris.toArray(new String[dependentPropertyIris.size()]);
+            }
+        }
+
+        public String[] getDependentPropertyIris() {
+            return dependentPropertyIris;
         }
 
         @JsonInclude(JsonInclude.Include.NON_EMPTY)

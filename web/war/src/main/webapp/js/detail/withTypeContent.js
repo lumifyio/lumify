@@ -46,7 +46,7 @@ define([
 
         this.after('initialize', function() {
             var self = this,
-                previousConcept = F.vertex.concept(this.attr.data),
+                previousConcept = this.attr.data.properties && F.vertex.concept(this.attr.data),
                 previousConceptId = previousConcept && previousConcept.id;
 
             this.auditDisplayed = false;
@@ -65,7 +65,7 @@ define([
                     var current = _.findWhere(data.vertices, { id: this.attr.data.id }),
                         concept = current && F.vertex.concept(current);
 
-                    if (concept && concept.id !== previousConceptId) {
+                    if (previousConceptId && concept && concept.id !== previousConceptId) {
                         self.debouncedConceptTypeChange(current);
                     }
                 }

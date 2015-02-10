@@ -69,7 +69,7 @@ define([
                                 $nodeInDom.trigger('dataRequestCompleted', {
                                     requestId: thisRequestId,
                                     success: false,
-                                    error: 'No data request handler responded'
+                                    error: 'No data request handler responded for ' + service + '->' + method
                                 })
                             }, NO_DATA_RESPONSE_TIMEOUT_SECONDS * 1000)
                         };

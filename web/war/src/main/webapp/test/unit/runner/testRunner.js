@@ -17,52 +17,40 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
 
         paths: {
             chai: '../libs/chai/chai',
-            //sinon: '../libs/sinon/lib/sinon',
-            //'sinon-chai': '../libs/sinon-chai/lib/sinon-chai',
             'mocha-flight': '../test/unit/utils/mocha-flight',
 
             // MOCKS
-            'service/serviceBase': '../test/unit/mocks/serviceBase',
-            'data/withServiceHandlers': '../test/unit/mocks/serviceHandlers',
+            'util/service/dataPromise': '../test/unit/mocks/dataPromise',
             'util/service/messagesPromise': '../test/unit/mocks/messagePromise',
+            'util/service/ontologyPromise': '../test/unit/mocks/ontologyPromise',
+            //'util/service/ontology.json': '../test/unit/mocks/ontology.json',
             'util/messages': '../test/unit/mocks/messages',
+            'data/web-worker/util/ajax': '../test/unit/mocks/ajax',
             testutils: '../test/unit/utils'
         },
 
-        shim: {
-            //sinon: { exports: 'sinon' }
-        },
+        shim: {},
 
         deps: [
             'chai',
-            //'sinon',
+            'timezone-js',
             '../libs/es5-shim/es5-shim',
             '../libs/es5-shim/es5-sham',
-            '../libs/underscore/underscore',
-
-            'util/handlebars/helpers'
+            '../libs/underscore/underscore'
         ],
 
-        callback: function(chai, _sinon) {
-            //sinon = _sinon;
-            //sinon.spy = sinon.spy || {};
+        callback: function(chai, timezoneJS) {
+
+            timezoneJS.timezone.zoneFileBasePath = '/base/tz';
+            timezoneJS.timezone.init();
 
             require([
-             //       'sinon-chai',
-                    'timezone-js',
-                    //'sinon/util/event',
-                    //'sinon/util/fake_xml_http_request',
-                    //'sinon/call',
-                    //'sinon/stub',
-                    //'sinon/spy',
-                    //'sinon/mock',
-                    'mocha-flight'
-            ], function(/*sinonChai,*/timezoneJS) {
+                'util/handlebars/helpers',
+                'util/jquery.flight',
+                'mocha-flight'
+            ], function() {
 
                 chai.should();
-
-                // Use sinon as mocking framework
-                //chai.use(sinonChai);
 
                 // Globals for assertions
                 assert = chai.assert;
@@ -72,12 +60,8 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
                     return key;
                 };
 
-                timezoneJS.timezone.zoneFileBasePath = '/base/tz';
-                timezoneJS.timezone.init();
-
                 // Use the twitter flight interface to mocha
                 mocha.ui('mocha-flight');
-                //mocha.setup('mocha-flight')
                 mocha.options.globals.push('ejs', 'cytoscape', 'DEBUG');
 
                 // Run tests after loading

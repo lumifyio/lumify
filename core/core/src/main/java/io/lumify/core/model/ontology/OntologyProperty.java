@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.collect.ImmutableList;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.PropertyType;
@@ -45,6 +46,12 @@ public abstract class OntologyProperty {
 
     public abstract String getPropertyGroup();
 
+    public abstract String getValidationFormula();
+
+    public abstract String getDisplayFormula();
+
+    public abstract ImmutableList<String> getDependentPropertyIris();
+
     public abstract String[] getIntents();
 
     public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
@@ -65,6 +72,9 @@ public abstract class OntologyProperty {
             result.setDataType(getDataType());
             result.setDisplayType(getDisplayType());
             result.setPropertyGroup(getPropertyGroup());
+            result.setValidationFormula(getValidationFormula());
+            result.setDisplayFormula(getDisplayFormula());
+            result.setDependentPropertyIris(getDependentPropertyIris());
             if (getPossibleValues() != null) {
                 result.getPossibleValues().putAll(getPossibleValues());
             }
@@ -158,5 +168,9 @@ public abstract class OntologyProperty {
             }
             throw new LumifyException("Could not parse location: " + valueStr);
         }
+    }
+
+    public boolean hasDependentPropertyIris() {
+        return getDependentPropertyIris() != null && getDependentPropertyIris().size() > 0;
     }
 }

@@ -474,6 +474,7 @@ define([
             var truncatedTitle = F.string.truncate(F.vertex.title(vertex), 3),
                 merged = data;
 
+            merged.previousTruncated = truncatedTitle;
             merged.truncatedTitle = truncatedTitle;
             merged.conceptType = F.vertex.prop(vertex, 'conceptType');
             merged.imageSrc = F.vertex.image(vertex);

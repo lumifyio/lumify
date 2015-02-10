@@ -2,6 +2,7 @@ package io.lumify.securegraph.model.ontology;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -427,9 +428,28 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost,
-            String[] intents) {
+            String validationFormula,
+            String displayFormula,
+            ImmutableList<String> dependentPropertyIris,
+            String[] intents
+    ) {
         checkNotNull(concepts, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(concepts, propertyIri, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost, intents);
+        OntologyProperty property = getOrCreatePropertyType(
+                concepts,
+                propertyIri,
+                dataType,
+                displayName,
+                possibleValues,
+                textIndexHints,
+                userVisible,
+                searchable,
+                displayType,
+                propertyGroup,
+                boost,
+                validationFormula,
+                displayFormula,
+                dependentPropertyIris, intents
+        );
         checkNotNull(property, "Could not find property: " + propertyIri);
 
         for (Concept concept : concepts) {
@@ -515,7 +535,11 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost,
-            String[] intents) {
+            String validationFormula,
+            String displayFormula,
+            ImmutableList<String> dependentPropertyIris,
+            String[] intents
+    ) {
         OntologyProperty typeProperty = getPropertyByIRI(propertyIri);
         if (typeProperty == null) {
             definePropertyOnGraph(graph, propertyIri, dataType, textIndexHints, boost);
@@ -540,6 +564,20 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             if (propertyGroup != null && !propertyGroup.trim().isEmpty()) {
                 PROPERTY_GROUP.setProperty(builder, propertyGroup, VISIBILITY.getVisibility());
+            }
+            if (validationFormula != null && !validationFormula.trim().isEmpty()) {
+                VALIDATION_FORMULA.setProperty(builder, validationFormula, VISIBILITY.getVisibility());
+            }
+            if (displayFormula != null && !displayFormula.trim().isEmpty()) {
+                DISPLAY_FORMULA.setProperty(builder, displayFormula, VISIBILITY.getVisibility());
+            }
+            if (dependentPropertyIris != null) {
+                int i = 0;
+                for (String dependentPropertyIri : dependentPropertyIris) {
+                    DEPENDENT_PROPERTY_IRI.addPropertyValue(builder, Integer.toString(i), dependentPropertyIri, VISIBILITY.getVisibility());
+                    i++;
+                }
+                // TODO: if the list of dependent property iris gets smaller they will not get cleaned up.
             }
             for (String intent : intents) {
                 INTENT.addPropertyValue(builder, intent, intent, VISIBILITY.getVisibility());

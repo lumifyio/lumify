@@ -43,9 +43,7 @@ define([
         });
 
         this.before('initialize', function(n, c) {
-            if (c.property) {
-                c.manualOpen = true;
-            }
+            c.manualOpen = true;
         })
 
         this.after('initialize', function() {
@@ -103,6 +101,7 @@ define([
                             properties: properties.list,
                             placeholder: i18n('property.form.field.selection.placeholder')
                         });
+                        self.manualOpen();
                     });
             }
         });
@@ -129,7 +128,8 @@ define([
         };
 
         this.onPreviousValuesButtons = function(event) {
-            var dropdown = this.select('previousValuesDropdownSelector'),
+            var self = this,
+                dropdown = this.select('previousValuesDropdownSelector'),
                 buttons = this.select('previousValuesSelector').find('.active').removeClass('active'),
                 action = $(event.target).closest('button').addClass('active').data('action');
 
@@ -146,14 +146,14 @@ define([
 
                 dropdown.html(
                         this.previousValues.map(function(p, i) {
-                            var visibility = p['http://lumify.io#visibilityJson'];
+                            var visibility = p.metadata && p.metadata['http://lumify.io#visibilityJson'];
                             return _.template(
                                 '<li data-index="{i}">' +
                                     '<a href="#">{value}' +
                                         '<div data-visibility="{visibilityJson}" class="visibility"/>' +
                                     '</a>' +
                                 '</li>')({
-                                value: F.vertex.displayProp(p),
+                                value: F.vertex.prop(self.attr.data, self.previousValuesPropertyName, p.key),
                                 visibilityJson: JSON.stringify(visibility || {}),
                                 i: i
                             });
@@ -205,13 +205,19 @@ define([
             visibility.teardownAllComponents();
             justification.teardownAllComponents();
 
-            var vertexProperty = property.key || property.key === '' ?
-                    F.vertex.propForNameAndKey(this.attr.data, property.name, property.key) : undefined,
+            var vertexProperty = property.title === 'http://lumify.io#visibilityJson' ?
+                    _.first(F.vertex.props(this.attr.data, property.title)) :
+                    property.key ?
+                    _.first(F.vertex.props(this.attr.data, property.title, property.key)) :
+                    undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
-                visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
+                visibilityValue = vertexProperty &&
+                    vertexProperty.metadata &&
+                    vertexProperty.metadata['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
                 isExistingProperty = typeof vertexProperty !== 'undefined',
-                previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName);
+                previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName),
+                previousValuesUniquedByKey = previousValues && _.unique(previousValues, _.property('key'));
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
@@ -227,18 +233,20 @@ define([
                 vertexProperty = property;
                 isExistingProperty = true;
                 previousValues = null;
+                previousValuesUniquedByKey = null;
             }
 
             if (data.fromPreviousValuePrompt !== true) {
-                if (previousValues && previousValues.length) {
-                    this.previousValues = previousValues;
+                if (previousValuesUniquedByKey && previousValuesUniquedByKey.length) {
+                    this.previousValues = previousValuesUniquedByKey;
+                    this.previousValuesPropertyName = propertyName;
                     this.select('previousValuesSelector')
                         .show()
                         .find('.active').removeClass('active')
                         .addBack()
-                        .find('.edit-previous span').text(previousValues.length)
+                        .find('.edit-previous span').text(previousValuesUniquedByKey.length)
                         .addBack()
-                        .find('.edit-previous small').toggle(previousValues.length > 1);
+                        .find('.edit-previous small').toggle(previousValuesUniquedByKey.length > 1);
 
                     this.select('justificationSelector').hide();
                     this.select('visibilitySelector').hide();
@@ -257,13 +265,8 @@ define([
             this.select('saveButtonSelector').show();
 
             this.select('deleteButtonSelector')
-                .text(
-                    sandboxStatus === 'PUBLIC_CHANGED' ?
-                    i18n('property.form.button.undo') :
-                    i18n('property.form.button.delete')
-                )
                 .toggle(
-                    (!!isExistingProperty) &&
+                    !!isExistingProperty &&
                     propertyName !== 'http://lumify.io#visibilityJson'
                 );
 
@@ -277,6 +280,7 @@ define([
 
             this.dataRequest('ontology', 'properties').done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
+                self.currentPropertyDetails = propertyDetails;
                 if (propertyName === 'http://lumify.io#visibilityJson') {
                     require([
                         'configuration/plugins/visibility/visibilityEditor'
@@ -295,8 +299,13 @@ define([
                         self.manualOpen();
                     });
                 } else if (propertyDetails) {
+                    var isCompoundField = propertyDetails.dependentPropertyIris &&
+                        propertyDetails.dependentPropertyIris.length;
+
                     require([
                         (
+                            isCompoundField ?
+                            'fields/compound/compound' :
                             propertyDetails.possibleValues ?
                                 'fields/restrictValues' :
                                 'fields/' + propertyDetails.dataType
@@ -305,22 +314,34 @@ define([
                         'configuration/plugins/visibility/visibilityEditor'
                     ], function(PropertyField, Justification, Visibility) {
 
-                        PropertyField.attachTo(config, {
-                            property: propertyDetails,
-                            vertexProperty: vertexProperty,
-                            value: previousValue,
-                            predicates: false,
-                            tooltip: {
-                                html: true,
-                                title:
-                                    '<strong>' +
-                                    i18n('justification.field.tooltip.title') +
-                                    '</strong><br>' +
-                                    i18n('justification.field.tooltip.subtitle'),
-                                placement: 'left',
-                                trigger: 'focus'
-                            }
-                        });
+                        if (isCompoundField) {
+                            PropertyField.attachTo(config, {
+                                property: propertyDetails,
+                                vertex: self.attr.data,
+                                predicates: false,
+                                focus: true,
+                                values: property.key ?
+                                    F.vertex.props(self.attr.data, propertyDetails.title, property.key) :
+                                    null
+                            });
+                        } else {
+                            PropertyField.attachTo(config, {
+                                property: propertyDetails,
+                                vertexProperty: vertexProperty,
+                                value: previousValue,
+                                predicates: false,
+                                tooltip: {
+                                    html: true,
+                                    title:
+                                        '<strong>' +
+                                        i18n('justification.field.tooltip.title') +
+                                        '</strong><br>' +
+                                        i18n('justification.field.tooltip.subtitle'),
+                                    placement: 'left',
+                                    trigger: 'focus'
+                                }
+                            });
+                        }
 
                         Justification.attachTo(justification, vertexProperty);
 
@@ -406,17 +427,26 @@ define([
 
             event.stopPropagation();
 
-            if (data.values.length === 1) {
-                this.currentValue = data.values[0];
-            } else if (data.values.length === 2) {
-                // Must be geoLocation
-                this.currentValue = 'point(' + data.values.join(',') + ')';
-            } else if (data.values.length === 3) {
-                this.currentValue = JSON.stringify({
-                    description: data.values[0],
-                    latitude: data.values[1],
-                    longitude: data.values[2]
-                });
+            var isCompoundField = this.currentPropertyDetails.dependentPropertyIris,
+                transformValue = function(valueArray) {
+                    if (valueArray.length === 1) {
+                        return valueArray[0];
+                    } else if (valueArray.length === 2) {
+                        // Must be geoLocation
+                        return 'point(' + valueArray.join(',') + ')';
+                    } else if (valueArray.length === 3) {
+                        return JSON.stringify({
+                            description: valueArray[0],
+                            latitude: valueArray[1],
+                            longitude: valueArray[2]
+                        });
+                    }
+                }
+
+            if (isCompoundField) {
+                this.currentValue = _.map(data.values, transformValue);
+            } else {
+                this.currentValue = transformValue(data.values);
             }
 
             this.currentMetadata = data.metadata;

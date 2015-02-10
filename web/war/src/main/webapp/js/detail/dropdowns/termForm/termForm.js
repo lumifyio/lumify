@@ -686,7 +686,7 @@ define([
                                     F: F,
                                     // TODO: show some properties
                                     properties: [],
-                                    iconSrc: F.vertex.image(item),
+                                    iconSrc: item.properties && F.vertex.image(item),
                                     concept: concept
                                 });
                             }

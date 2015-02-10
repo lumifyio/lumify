@@ -100,9 +100,8 @@ public abstract class WorkQueueRepository {
         broadcastPropertyChange(element, propertyKey, propertyName, workspaceId);
     }
 
-    public void pushLongRunningProcessQueue(JSONObject queueItem, String userId) {
-        queueItem.put("enqueueTime", System.currentTimeMillis());
-        queueItem.put("userId", userId);
+    public void pushLongRunningProcessQueue(JSONObject queueItem) {
+        broadcastLongRunningProcessChange(queueItem);
         pushOnQueue(LONG_RUNNING_PROCESS_QUEUE_NAME, FlushFlag.DEFAULT, queueItem);
     }
 

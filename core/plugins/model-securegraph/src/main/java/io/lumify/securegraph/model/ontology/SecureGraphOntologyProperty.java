@@ -1,5 +1,6 @@
 package io.lumify.securegraph.model.ontology;
 
+import com.google.common.collect.ImmutableList;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.JSONUtil;
@@ -30,6 +31,21 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
     }
 
     @Override
+    public String getValidationFormula() {
+        return LumifyProperties.VALIDATION_FORMULA.getPropertyValue(vertex);
+    }
+
+    @Override
+    public String getDisplayFormula() {
+        return LumifyProperties.DISPLAY_FORMULA.getPropertyValue(vertex);
+    }
+
+    @Override
+    public ImmutableList<String> getDependentPropertyIris() {
+        Iterable<String> dependentPropertyIris = LumifyProperties.DEPENDENT_PROPERTY_IRI.getPropertyValues(vertex);
+        return ImmutableList.copyOf(dependentPropertyIris);
+    }
+
     public String[] getIntents() {
         return IterableUtils.toArray(LumifyProperties.INTENT.getPropertyValues(vertex), String.class);
     }

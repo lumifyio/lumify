@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -132,9 +133,28 @@ public class InMemoryOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost,
-            String[] intents) {
+            String validationFormula,
+            String displayFormula,
+            ImmutableList<String> dependentPropertyIris,
+            String[] intents
+    ) {
         checkNotNull(concepts, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIri, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayType, propertyGroup, boost, intents);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(
+                propertyIri,
+                dataType,
+                displayName,
+                possibleValues,
+                textIndexHints,
+                userVisible,
+                searchable,
+                displayType,
+                propertyGroup,
+                boost,
+                validationFormula,
+                displayFormula,
+                dependentPropertyIris,
+                intents
+        );
         for (Concept concept : concepts) {
             concept.getProperties().add(property);
         }
@@ -162,7 +182,11 @@ public class InMemoryOntologyRepository extends OntologyRepositoryBase {
             String displayType,
             String propertyGroup,
             Double boost,
-            String[] intents) {
+            String validationFormula,
+            String displayFormula,
+            ImmutableList<String> dependentPropertyIris,
+            String[] intents
+    ) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getPropertyByIRI(propertyIri);
         if (property == null) {
             definePropertyOnGraph(graph, propertyIri, dataType, textIndexHints, boost);
@@ -175,6 +199,9 @@ public class InMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setBoost(boost);
             property.setDisplayType(displayType);
             property.setPropertyGroup(propertyGroup);
+            property.setValidationFormula(validationFormula);
+            property.setDisplayFormula(displayFormula);
+            property.setDependentPropertyIris(dependentPropertyIris);
             for (String intent : intents) {
                 property.addIntent(intent);
             }

@@ -23,6 +23,7 @@ define([
         HIDE_PROPERTIES = ['http://lumify.io/comment#entry'],
         VISIBILITY_NAME = 'http://lumify.io#visibilityJson',
         SANDBOX_STATUS_NAME = 'http://lumify.io#sandboxStatus',
+        RELATIONSHIP_LABEL = 'http://lumify.io#relationshipLabel',
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
@@ -43,6 +44,10 @@ define([
 
     function isSandboxStatus(property) {
         return property.name === SANDBOX_STATUS_NAME;
+    }
+
+    function isRelationshipLabel(property) {
+        return property.name === RELATIONSHIP_LABEL;
     }
 
     function isJustification(property) {
@@ -74,7 +79,7 @@ define([
                 .call(
                     _.partial(
                         createPropertyGroups,
-                        self.attr.data.id,
+                        self.attr.data,
                         self.ontologyProperties,
                         self.showMoreExpanded,
                         parseInt(self.config['properties.multivalue.defaultVisibleCount'], 10)
@@ -86,6 +91,7 @@ define([
             var self = this,
                 model = self.attr.data,
                 isEdge = F.vertex.isEdge(model),
+                compoundPropertiesByNameToKeys = {},
                 displayProperties = _.chain(properties)
                     .filter(function(property) {
                         if (isEdge && isJustification(property)) {
@@ -108,6 +114,22 @@ define([
                         }
 
                         if (~HIDE_PROPERTIES.indexOf(property.name)) {
+                            return false;
+                        }
+
+                        // Remove dependent properties from list since they
+                        // rollup into compound properties
+                        if (~self.dependentPropertyIris.indexOf(property.name)) {
+                            var compoundProperty = self.propertyIriToCompoundProperty[property.name],
+                                compoundKey = compoundProperty.title;
+
+                            if (!compoundPropertiesByNameToKeys[compoundKey]) {
+                                compoundPropertiesByNameToKeys[compoundKey] = {
+                                    property: compoundProperty,
+                                    keys: {}
+                                };
+                            }
+                            compoundPropertiesByNameToKeys[compoundKey].keys[property.key] = true;
                             return false;
                         }
 
@@ -134,10 +156,31 @@ define([
                             });
                         }
 
+                        // Add compound properties (multi-value if there
+                        // dependent properties have multiple keys
+                        _.each(compoundPropertiesByNameToKeys, function(compoundInfo, compoundKey) {
+                            _.each(compoundInfo.keys, function(value, key) {
+                                var matching = F.vertex.props(self.attr.data, compoundInfo.property.title, key),
+                                    first = matching && _.first(matching),
+                                    property = {
+                                        compoundProperty: true,
+                                        name: compoundInfo.property.title,
+                                        key: key,
+                                        value: key
+                                    };
+
+                                if (first) {
+                                    property.metadata = first.metadata;
+                                }
+
+                                properties.push(property);
+                            });
+                        });
+
                         if (isEdge && model.label) {
                             var ontologyRelationship = self.ontologyRelationships.byTitle[model.label];
                             properties.push({
-                                name: 'relationshipLabel',
+                                name: RELATIONSHIP_LABEL,
                                 displayName: i18n('detail.edge.type'),
                                 hideInfo: true,
                                 hideVisibility: true,
@@ -157,7 +200,7 @@ define([
                         }
 
                         if (isEdge) {
-                            return property.name === 'relationshipLabel' ?
+                            return property.name === RELATIONSHIP_LABEL ?
                                 '2' :
                                 isJustification(property) ?
                                 '3' : '4';
@@ -213,6 +256,20 @@ define([
 
                 self.config = config;
                 self.ontologyProperties = ontologyProperties;
+
+                self.dependentPropertyIris = [];
+                self.propertyIriToCompoundProperty = {};
+
+                self.ontologyProperties.list.forEach(function(p) {
+                    if (p.dependentPropertyIris && p.dependentPropertyIris.length) {
+                        p.dependentPropertyIris.forEach(function(iri) {
+                            self.propertyIriToCompoundProperty[iri] = p;
+                            self.dependentPropertyIris.push(iri);
+                        })
+                    }
+                });
+                self.dependentPropertyIris = _.uniq(self.dependentPropertyIris);
+
                 self.ontologyRelationships = ontologyRelationships;
                 self.update(properties);
             });
@@ -317,10 +374,10 @@ define([
                                     a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
                                 a.propertyAudit.visibilityValue = a.propertyAudit.propertyMetadata &&
                                     a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
-                                a.propertyAudit.formattedValue = F.vertex.displayProp({
-                                    name: a.propertyAudit.propertyName,
-                                    value: a.propertyAudit.newValue || a.propertyAudit.previousValue
-                                });
+                                a.propertyAudit.formattedValue = F.vertex.propFromAudit(
+                                    self.attr.data,
+                                    a.propertyAudit
+                                );
                                 a.propertyAudit.isDeleted = a.propertyAudit.newValue === '';
 
                                 return 'property';
@@ -540,7 +597,7 @@ define([
             this.reload();
         } else if ($target.is('.info')) {
             var datum = d3.select($target.closest('.property-value').get(0)).datum();
-            this.showPropertyInfo($target, this.attr.data.id, datum.property);
+            this.showPropertyInfo($target, this.attr.data, datum.property);
         } else {
             processed = false;
         }
@@ -551,7 +608,7 @@ define([
         }
     }
 
-    function createPropertyGroups(vertexId, ontologyProperties, showMoreExpanded, maxItemsBeforeHidden) {
+    function createPropertyGroups(vertex, ontologyProperties, showMoreExpanded, maxItemsBeforeHidden) {
         this.enter()
             .insert('tbody', '.buttons-row')
             .attr('class', function(d, groupIndex, j) {
@@ -590,7 +647,7 @@ define([
             })
             .call(
                 _.partial(createProperties,
-                          vertexId,
+                          vertex,
                           ontologyProperties,
                           totalPropertyCountsByName,
                           maxItemsBeforeHidden,
@@ -601,7 +658,7 @@ define([
         this.exit().remove();
     }
 
-    function createProperties(vertexId,
+    function createProperties(vertex,
                               ontologyProperties,
                               totalPropertyCountsByName,
                               maxItemsBeforeHidden,
@@ -616,7 +673,9 @@ define([
                 return 'property-row property-row-' + F.className.to(datum.name + datum.key);
             });
 
-        var currentPropertyIndex = 0, lastPropertyName = '';
+        var currentPropertyIndex = 0,
+            lastPropertyName = '';
+
         this.selectAll('td')
             .data(function(datum, i, j) {
                 if (_.isString(datum[0])) {
@@ -650,12 +709,12 @@ define([
                     }
                 ];
             })
-            .call(_.partial(createPropertyRow, vertexId, ontologyProperties, maxItemsBeforeHidden));
+            .call(_.partial(createPropertyRow, vertex, ontologyProperties, maxItemsBeforeHidden));
 
         this.exit().remove();
     }
 
-    function createPropertyRow(vertexId, ontologyProperties, maxItemsBeforeHidden) {
+    function createPropertyRow(vertex, ontologyProperties, maxItemsBeforeHidden) {
         this.enter()
             .append('td')
             .each(function() {
@@ -778,7 +837,7 @@ define([
                             F.vertex.properties.visibility(
                                 visibilitySpan,
                                 { value: property.metadata && property.metadata[VISIBILITY_NAME] },
-                                vertexId);
+                                vertex.id);
                         }
 
                         $infoButton.toggle(Boolean(
@@ -787,22 +846,19 @@ define([
                         ));
 
                         if (displayType && F.vertex.properties[displayType]) {
-                            F.vertex.properties[displayType](valueSpan, property, vertexId);
-                            return;
+                            F.vertex.properties[displayType](valueSpan, property, vertex.id);
                         } else if (dataType && F.vertex.properties[dataType]) {
-                            F.vertex.properties[dataType](valueSpan, property, vertexId);
-                            return;
-                        }
-
-                        if (isJustification(property)) {
+                            F.vertex.properties[dataType](valueSpan, property, vertex.id);
+                        } else if (isJustification(property)) {
                             require(['util/vertex/justification/viewer'], function(JustificationViewer) {
                                 $(valueSpan).teardownAllComponents();
                                 JustificationViewer.attachTo(valueSpan, property.justificationData);
                             });
-                            return;
+                        } else if (isSandboxStatus(property) || isRelationshipLabel(property)) {
+                            valueSpan.textContent = property.value;
+                        } else {
+                            valueSpan.textContent = F.vertex.prop(vertex, property.name, property.key);
                         }
-
-                        valueSpan.textContent = F.vertex.displayProp(property);
                     });
 
                 this.select('.property-value .show-more')

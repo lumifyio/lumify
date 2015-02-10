@@ -46,11 +46,19 @@
 
     <!-- http://lumify.io#color -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;color">
-        <textIndexHints>NONE</textIndexHints>
-        <userVisible>false</userVisible>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="&lumify;color"/>
+    
+
+
+    <!-- http://lumify.io#dependentPropertyIri -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;dependentPropertyIri"/>
+    
+
+
+    <!-- http://lumify.io#displayFormula -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;displayFormula"/>
     
 
 
@@ -71,7 +79,6 @@
         <textIndexHints>NONE</textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:AnnotationProperty>
-    
 
 
     <!-- http://lumify.io#intent -->
@@ -81,16 +88,12 @@
         <textIndexHints>NONE</textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:AnnotationProperty>
-    
+
 
 
     <!-- http://lumify.io#mapGlyphIconFileName -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;mapGlyphIconFileName">
-        <userVisible>false</userVisible>
-        <textIndexHints>NONE</textIndexHints>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="&lumify;mapGlyphIconFileName"/>
     
 
 
@@ -113,7 +116,7 @@
         <textIndexHints>NONE</textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:AnnotationProperty>
-    
+
 
 
     <!-- http://lumify.io#searchable -->
@@ -124,45 +127,37 @@
 
     <!-- http://lumify.io#subtitleFormula -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;subtitleFormula">
-        <textIndexHints>NONE</textIndexHints>
-        <userVisible>false</userVisible>
-    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="&lumify;subtitleFormula"/>
     
 
 
     <!-- http://lumify.io#textIndexHints -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;textIndexHints">
-        <userVisible>false</userVisible>
-        <textIndexHints>NONE</textIndexHints>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="&lumify;textIndexHints"/>
     
 
 
     <!-- http://lumify.io#timeFormula -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;timeFormula">
-        <userVisible>false</userVisible>
-        <textIndexHints>NONE</textIndexHints>
-    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="&lumify;timeFormula"/>
     
 
 
     <!-- http://lumify.io#titleFormula -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;titleFormula">
-        <textIndexHints>NONE</textIndexHints>
-        <userVisible>false</userVisible>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="&lumify;titleFormula"/>
     
 
 
     <!-- http://lumify.io#userVisible -->
 
     <owl:AnnotationProperty rdf:about="&lumify;userVisible"/>
+    
+
+
+    <!-- http://lumify.io#validationFormula -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;validationFormula"/>
     
 
 
