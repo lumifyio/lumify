@@ -1,7 +1,9 @@
 package io.lumify.yarn;
 
+import com.beust.jcommander.DynamicParameter;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.internal.Lists;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileStatus;
@@ -19,13 +21,11 @@ import org.apache.hadoop.yarn.util.Records;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public abstract class ClientBase {
+    @SuppressWarnings("OctalInteger")
     public static final short FILE_PERMISSIONS = (short) 0710;
 
     @Parameter(names = {"-memory", "-mem"}, description = "Memory for each process in MB.")
@@ -40,8 +40,9 @@ public abstract class ClientBase {
     @Parameter(names = {"-jar"}, description = "Path to jar.", required = true)
     private String jar = null;
 
-    @Parameter(names = {"-envpath"}, description = "Path environment variable override.")
-    private String envpath = null;
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    @DynamicParameter(names = {"-env"}, description = "Environment variable override. (e.g.: -envPATH=/foo:/bar -envLD_LIBRARY_PATH=/baz)")
+    private Map<String, String> environmentVariableOverrides = new HashMap<>();
 
     protected int run(String[] args) throws Exception {
         new JCommander(this, args);
@@ -107,9 +108,7 @@ public abstract class ClientBase {
         Map<String, String> appMasterEnv = new HashMap<>();
         appMasterEnv.putAll(System.getenv());
         appMasterEnv.put(ApplicationConstants.Environment.CLASSPATH.name(), classPathEnv);
-        if (envpath != null) {
-            appMasterEnv.put("PATH", envpath);
-        }
+        appMasterEnv.putAll(environmentVariableOverrides);
         return appMasterEnv;
     }
 
@@ -183,7 +182,14 @@ public abstract class ClientBase {
 
     public static void printEnv() {
         System.out.println("Environment:");
-        for (Map.Entry<String, String> e : System.getenv().entrySet()) {
+        LinkedList<Map.Entry<String, String>> environmentVariables = Lists.newLinkedList(System.getenv().entrySet());
+        Collections.sort(environmentVariables, new Comparator<Map.Entry<String, String>>() {
+            @Override
+            public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+        });
+        for (Map.Entry<String, String> e : environmentVariables) {
             System.out.println("  " + e.getKey() + "=" + e.getValue());
         }
     }

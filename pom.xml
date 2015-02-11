@@ -80,7 +80,7 @@
         <jetty.version>9.2.7.v20150116</jetty.version>
         <jetty.javaee.version>3.0.0.v201112011016</jetty.javaee.version>
         <javax.servlet.api.version>3.1.0</javax.servlet.api.version>
-        <json.version>20130918</json.version>
+        <json.version>20131018</json.version>
         <kryo.version>2.17</kryo.version>
         <lesscss.version>1.3.3</lesscss.version>
         <log4j.version>1.2.17</log4j.version>

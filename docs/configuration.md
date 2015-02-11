@@ -1,10 +1,18 @@
 
 # Configuration
 
+## Recommended Initial Setup
+There are several required configuration properties that must be specified before starting Lumify.
+
+An initial configuration file with default configuration values can be found [here](../config/lumify.properties).
+Additionally, a default application logging configuration is available [here](../config/log4j.xml).
+
+These files must be present in one of the [configuration search locations](##Configuration search order).
+
 ## Configuration search order
 
 By default Lumify will use `io.lumify.core.config.FileConfigurationLoader` to load configuration files.
-FileConfigurationLoader will look in the following directories:
+`FileConfigurationLoader` will look in the following directories:
 
 * `/opt/lumify/` for Linux/OSX
 * `c:/opt/lumify/` for Windows
