@@ -428,7 +428,9 @@ define([
                         alignTo: 'textselection',
                         alignWithin: anchor.closest(is),
                         actions: {
-                            Resolve: 'resolve.actionbar',
+                            Entity: 'resolve.actionbar',
+                            Property: 'property.actionbar',
+                            Relationship: 'relation.actionbar',
                             Comment: 'comment.actionbar'
                         }
                     });
@@ -484,6 +486,9 @@ define([
                 existing: !creating,
                 artifactId: this.attr.data.id
             });
+        };
+
+        this.dropdownProperty = function() {
         };
 
         this.onResolvedContextClick = function(event) {
@@ -543,15 +548,27 @@ define([
                         alignTo: 'node',
                         alignWithin: $target.closest('.text'),
                         actions: {
-                            Resolve: 'resolve.actionbar'
+                            Entity: 'resolve.actionbar',
+                            Property: 'property.actionbar',
+                            Relationship: 'relation.actionbar',
+                            Comment: 'comment.actionbar'
                         }
                     });
 
                     self.off('.actionbar')
                         .on('resolve.actionbar', function(event) {
-                        _.defer(self.dropdownEntity.bind(self), false, $target);
-                        event.stopPropagation();
-                    })
+                            _.defer(self.dropdownEntity.bind(self), false, $target);
+                            event.stopPropagation();
+                        })
+                        .on('property.actionbar', function(event) {
+                            event.stopPropagation();
+                        })
+                        .on('relation.actionbar', function(event) {
+                            event.stopPropagation();
+                        })
+                        .on('comment.actionbar', function(event) {
+                            event.stopPropagation();
+                        })
                 }
             });
         };
