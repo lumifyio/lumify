@@ -568,7 +568,7 @@ define([
                 scrollNode = this.scrollNode,
                 words = this.select('draggablesSelector');
 
-            if (words.length === 0) {
+            if (words.length === 0 || !scrollNode || scrollNode.length === 0) {
                 return;
             }
 
