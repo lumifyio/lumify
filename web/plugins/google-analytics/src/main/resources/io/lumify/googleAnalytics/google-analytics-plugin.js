@@ -73,9 +73,6 @@ require([
                     })
                     .on('deleteVertices', function(e, data) {
                         send('vertices', 'delete', data ? data.vertices.length : 0);
-                    })
-                    .on('selectObjects', function(e, data) {
-                        send('vertices', 'selectObjects', data ? data.vertices.length : 0);
                     });
             } else {
                 console.log('required configuration properties for Google Analytics are not available');
