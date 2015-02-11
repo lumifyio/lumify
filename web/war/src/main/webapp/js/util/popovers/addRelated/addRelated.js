@@ -54,7 +54,10 @@ define([
 
                 ConceptSelector.attachTo(self.popover.find('.concept'), {
                     defaultText: i18n('popovers.add_related.concept.default_text'),
-                    limitRelatedToConceptId: F.vertex.prop(this.attr.vertex, 'conceptType')
+                    limitRelatedToConceptId: F.vertex.prop(
+                        _.isArray(this.attr.vertex) ? this.attr.vertex[0] : this.attr.vertex,
+                        'conceptType'
+                    )
                 });
 
                 this.positionDialog();
