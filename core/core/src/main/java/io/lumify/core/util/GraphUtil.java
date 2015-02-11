@@ -5,6 +5,7 @@ import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionFor;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
@@ -222,9 +223,10 @@ public class GraphUtil {
         } else if (sourceInfo != null) {
             Vertex sourceVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
             LumifyProperties.JUSTIFICATION.removeMetadata(propertyMetadata);
-            termMentionRepository.addSourceInfoEdge(
+            termMentionRepository.addSourceInfo(
                     element,
                     element.getId(),
+                    TermMentionFor.PROPERTY,
                     propertyKey,
                     propertyName,
                     propertyVisibility,
@@ -278,6 +280,7 @@ public class GraphUtil {
         }
 
         Vertex vertex = vertexBuilder.save(authorizations);
+        graph.flush();
 
         if (justificationText != null) {
             termMentionRepository.removeSourceInfoEdgeFromVertex(vertex.getId(), vertex.getId(), null, null, lumifyVisibility, authorizations);
@@ -286,6 +289,7 @@ public class GraphUtil {
             termMentionRepository.addSourceInfoToVertex(
                     vertex,
                     vertex.getId(),
+                    TermMentionFor.VERTEX,
                     null,
                     null,
                     null,
@@ -341,6 +345,7 @@ public class GraphUtil {
             termMentionRepository.addSourceInfoEdgeToEdge(
                     edge,
                     edge.getId(),
+                    TermMentionFor.EDGE,
                     null,
                     null,
                     null,

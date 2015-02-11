@@ -191,6 +191,7 @@ public class TermMentionBuilder {
         }
         if (this.resolvedToVertex != null) {
             LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.setProperty(vertexBuilder, resolvedToVertex.getId(), visibility);
+            LumifyProperties.TERM_MENTION_FOR_TYPE.setProperty(vertexBuilder, TermMentionFor.VERTEX, visibility);
         }
         Vertex termMentionVertex = vertexBuilder.save(authorizations);
 

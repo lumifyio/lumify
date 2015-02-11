@@ -1,6 +1,7 @@
 package io.lumify.core.model.properties;
 
 import io.lumify.core.model.properties.types.*;
+import io.lumify.core.model.termMention.TermMentionForProperty;
 
 public class LumifyProperties {
     public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
@@ -81,6 +82,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_NAME = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyName");
     public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_VISIBILITY = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyVisibility");
     public static final StringLumifyProperty TERM_MENTION_FOR_ELEMENT_ID = new StringLumifyProperty("http://lumify.io/termMention#forElementId");
+    public static final TermMentionForProperty TERM_MENTION_FOR_TYPE = new TermMentionForProperty("http://lumify.io/termMention#forType");
     public static final StringLumifyProperty TERM_MENTION_SNIPPET = new StringLumifyProperty("http://lumify.io/termMention#snippet");
     public static final String TERM_MENTION_LABEL_HAS_TERM_MENTION = "http://lumify.io/termMention#hasTermMention";
     public static final String TERM_MENTION_LABEL_RESOLVED_TO = "http://lumify.io/termMention#resolvedTo";

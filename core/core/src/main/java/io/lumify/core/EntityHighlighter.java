@@ -26,7 +26,7 @@ public class EntityHighlighter {
     public static String getHighlightedText(String text, List<OffsetItem> offsetItems) throws JSONException {
         Collections.sort(offsetItems);
         StringBuilder result = new StringBuilder();
-        PriorityQueue<Integer> endOffsets = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> endOffsets = new PriorityQueue<>();
         int lastStart = 0;
         for (int i = 0; i < offsetItems.size(); i++) {
             OffsetItem offsetItem = offsetItems.get(i);
@@ -122,13 +122,13 @@ public class EntityHighlighter {
     }
 
     private Map<Integer, List<OffsetItem>> convertOffsetItemsToVideoTranscriptOffsetItems(VideoTranscript videoTranscript, List<OffsetItem> offsetItems) {
-        Map<Integer, List<OffsetItem>> results = new HashMap<Integer, List<OffsetItem>>();
+        Map<Integer, List<OffsetItem>> results = new HashMap<>();
         for (OffsetItem offsetItem : offsetItems) {
             Integer videoTranscriptEntryIndex = getVideoTranscriptEntryIndex(videoTranscript, offsetItem);
 
             List<OffsetItem> currentList = results.get(videoTranscriptEntryIndex);
             if (currentList == null) {
-                currentList = new ArrayList<OffsetItem>();
+                currentList = new ArrayList<>();
                 results.put(videoTranscriptEntryIndex, currentList);
             }
             currentList.add(offsetItem);
@@ -160,7 +160,7 @@ public class EntityHighlighter {
     }
 
     public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<Vertex> termMentions, String workspaceId, Authorizations authorizations) {
-        ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
+        ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<>();
         for (Vertex termMention : termMentions) {
             String visibility = termMention.getVisibility().getVisibilityString();
             SandboxStatus sandboxStatus = GraphUtil.getSandboxStatusFromVisibilityString(visibility, workspaceId);

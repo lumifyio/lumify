@@ -2,6 +2,7 @@ package io.lumify.core.model.textHighlighting;
 
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionFor;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import org.json.JSONException;
@@ -78,6 +79,11 @@ public class VertexOffsetItem extends OffsetItem {
     @Override
     public String getResolvedToEdgeId() {
         return LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.getPropertyValue(termMention);
+    }
+
+    @Override
+    public TermMentionFor getTermMentionFor() {
+        return LumifyProperties.TERM_MENTION_FOR_TYPE.getPropertyValue(termMention);
     }
 
     @Override

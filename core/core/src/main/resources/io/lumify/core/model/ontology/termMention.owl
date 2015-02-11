@@ -94,7 +94,15 @@
         <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
-    
+
+    <!-- http://lumify.io/termMention#forType -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#forType">
+        <lumify:userVisible>false</lumify:userVisible>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
 
 
     <!-- http://lumify.io/termMention#process -->

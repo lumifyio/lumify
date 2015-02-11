@@ -124,6 +124,7 @@ public class TermMentionRepository {
             addSourceInfoToVertex(
                     vertex,
                     sourceInfo.getVertexId(),
+                    TermMentionFor.VERTEX,
                     null,
                     null,
                     null,
@@ -137,9 +138,10 @@ public class TermMentionRepository {
         }
     }
 
-    public <T extends Element> void addSourceInfoEdge(
+    public <T extends Element> void addSourceInfo(
             T element,
             String forElementId,
+            TermMentionFor forType,
             String propertyKey,
             String propertyName,
             Visibility propertyVisibility,
@@ -154,6 +156,7 @@ public class TermMentionRepository {
             addSourceInfoToVertex(
                     (Vertex) element,
                     forElementId,
+                    forType,
                     propertyKey,
                     propertyName,
                     propertyVisibility,
@@ -168,6 +171,7 @@ public class TermMentionRepository {
             addSourceInfoEdgeToEdge(
                     (Edge) element,
                     forElementId,
+                    forType,
                     propertyKey,
                     propertyName,
                     propertyVisibility,
@@ -184,6 +188,7 @@ public class TermMentionRepository {
     public void addSourceInfoToVertex(
             Vertex vertex,
             String forElementId,
+            TermMentionFor forType,
             String propertyKey,
             String propertyName,
             Visibility propertyVisibility,
@@ -196,8 +201,18 @@ public class TermMentionRepository {
     ) {
         Visibility visibility = LumifyVisibility.and(sourceVertex.getVisibility(), VISIBILITY_STRING);
         String termMentionVertexId = vertex.getId() + "hasSource" + sourceVertex.getId();
+        if (propertyKey != null) {
+            termMentionVertexId += ":" + propertyKey;
+        }
+        if (propertyName != null) {
+            termMentionVertexId += ":" + propertyName;
+        }
+        if (propertyVisibility != null) {
+            termMentionVertexId += ":" + propertyVisibility;
+        }
         VertexBuilder m = graph.prepareVertex(termMentionVertexId, visibility);
         LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.setProperty(m, forElementId, visibility);
+        LumifyProperties.TERM_MENTION_FOR_TYPE.setProperty(m, forType, visibility);
         if (propertyKey != null) {
             LumifyProperties.TERM_MENTION_REF_PROPERTY_KEY.setProperty(m, propertyKey, visibility);
         }
@@ -213,8 +228,8 @@ public class TermMentionRepository {
         LumifyProperties.TERM_MENTION_END_OFFSET.setProperty(m, endOffset, visibility);
         Vertex termMention = m.save(authorizations);
 
-        graph.addEdge(sourceVertex, termMention, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, visibility, authorizations);
-        graph.addEdge(termMention, vertex, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, visibility, authorizations);
+        graph.addEdge(LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION + termMentionVertexId, sourceVertex, termMention, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, visibility, authorizations);
+        graph.addEdge(LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO + termMentionVertexId, termMention, vertex, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, visibility, authorizations);
 
         graph.flush();
         LOGGER.debug("added source info: %s", termMention.getId());
@@ -223,6 +238,7 @@ public class TermMentionRepository {
     public void addSourceInfoEdgeToEdge(
             Edge edge,
             String forElementId,
+            TermMentionFor forType,
             String propertyKey,
             String propertyName,
             Visibility propertyVisibility,
@@ -238,6 +254,7 @@ public class TermMentionRepository {
         addSourceInfoToVertex(
                 inVertex,
                 forElementId,
+                forType,
                 propertyKey,
                 propertyName,
                 propertyVisibility,
@@ -251,6 +268,7 @@ public class TermMentionRepository {
         addSourceInfoToVertex(
                 outVertex,
                 forElementId,
+                forType,
                 propertyKey,
                 propertyName,
                 propertyVisibility,
