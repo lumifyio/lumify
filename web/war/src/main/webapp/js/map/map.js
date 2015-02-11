@@ -69,6 +69,8 @@ define([
             this.on(document, 'mapShow', this.onMapShow);
             this.on(document, 'mapCenter', this.onMapCenter);
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
+            this.on(document, 'updateWorkspace', this.onUpdateWorkspace);
             this.on(document, 'verticesAdded', this.onVerticesAdded);
             this.on(document, 'verticesDropped', this.onVerticesDropped);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
@@ -89,15 +91,6 @@ define([
 
             this.attachToZoomPanControls();
 
-            this.dataRequest('workspace', 'store')
-                .then(function(workspaceVertices) {
-                    return self.dataRequest('vertex', 'store', { vertexIds: _.keys(workspaceVertices) });
-                })
-                .done(function(vertices) {
-                    if (vertices.length) {
-                        self.updateOrAddVertices(vertices, { adding: true, preventShake: true });
-                    }
-                });
         });
 
         this.attachToZoomPanControls = function() {
@@ -160,6 +153,28 @@ define([
             return (this.padding = $.extend({}, data.padding));
         };
 
+        this.onUpdateWorkspace = function(event, data) {
+            if (data && data.entityDeletes) {
+                this.removeVertexIds(data.entityDeletes);
+            }
+        };
+
+        this.onWorkspaceUpdated = function(event, data) {
+            var self = this;
+
+            this.mapReady(function(map) {
+                this.removeVertexIds(data.entityDeletes);
+                if (data.entityUpdates.length) {
+                    this.dataRequest('vertex', 'store', { vertexIds: _.pluck(data.entityUpdates, 'vertexId') })
+                        .done(function(vertices) {
+                            if (vertices.length) {
+                                self.updateOrAddVertices(vertices, { adding: true, preventShake: true });
+                            }
+                        });
+                }
+            });
+        };
+
         this.onWorkspaceLoaded = function(evt, workspaceData) {
             var self = this;
             this.isWorkspaceEditable = workspaceData.editable;
@@ -199,23 +214,31 @@ define([
         };
 
         this.onVerticesDeleted = function(evt, data) {
+            if (data.vertexIds) {
+                this.removeVertexIds(data.vertexIds);
+            }
+        };
+
+        this.removeVertexIds = function(ids) {
+            if (!ids || ids.length === 0) {
+                return;
+            }
             this.mapReady(function(map) {
                 var featuresLayer = map.featuresLayer,
-                    toRemove = [],
-                    ids = data.vertexIds;
+                    toRemove = [];
 
                 featuresLayer.features.forEach(function removeIfDeleted(feature) {
-                    if (~ids.indexOf(feature.id)) {
-                        toRemove.push(feature);
-                    } else if (feature.cluster) {
+                    if (feature.cluster) {
                         feature.cluster.forEach(removeIfDeleted);
+                    } else if (~ids.indexOf(feature.data.vertex.id)) {
+                        toRemove.push(feature);
                     }
                 });
 
                 featuresLayer.removeFeatures(toRemove);
                 this.clusterStrategy.cluster();
             });
-        };
+        }
 
         this.onObjectsSelected = function(evt, data) {
             var self = this,

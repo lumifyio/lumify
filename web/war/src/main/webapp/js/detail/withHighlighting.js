@@ -68,7 +68,7 @@ define([
             $(document).off('ignoreSelectionChanges.detail');
             $(document).off('resumeSelectionChanges.detail');
             $(document).off('termCreated');
-            this.highlightNode().off('scrollstop scroll');
+            this.scrollNode.off('scrollstop scroll');
         });
 
         this.before('initialize', function() {
@@ -89,8 +89,14 @@ define([
             });
             $(document).trigger('resumeSelectionChanges');
 
-            this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables);
-            this.highlightNode().on('scroll', this.updateEntityAndArtifactDraggables);
+            this.on('finishedLoadingTypeContent', _.once(function() {
+                _.defer(function() {
+                    self.scrollNode = self.$node.find('.nav-with-background').children().eq(0).scrollParent()
+                        .on('scrollstop', self.updateEntityAndArtifactDraggables)
+                        .on('scroll', self.updateEntityAndArtifactDraggables);
+                })
+            }));
+
             this.on('click', {
                 resolvableSelector: this.onResolvableClick,
                 textContainerHeaderSelector: this.onTextHeaderClicked,
@@ -575,14 +581,19 @@ define([
 
         this.updateEntityAndArtifactDraggables = function() {
             var self = this,
+                scrollNode = this.scrollNode,
                 words = this.select('draggablesSelector');
+
+            if (words.length === 0 || !scrollNode || scrollNode.length === 0) {
+                return;
+            }
 
             this.dataRequest('ontology', 'concepts')
                 .done(function(concepts) {
 
                     // Filter list to those in visible scroll area
                     words
-                        .withinScrollable(self.$node.closest('.content'))
+                        .withinScrollable(scrollNode)
                         .each(function() {
                             var $this = $(this),
                                 info = $this.data('info'),
