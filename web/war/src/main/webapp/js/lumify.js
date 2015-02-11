@@ -117,7 +117,8 @@ function(jQuery,
          Privileges) {
     'use strict';
 
-    var App, FullScreenApp, Login, F, withDataRequest;
+    var App, FullScreenApp, Login, F, withDataRequest,
+        MAX_RESIZE_TRIGGER_INTERVAL = 250;
 
     require(['data/data'], configureApplication);
 
@@ -143,7 +144,12 @@ function(jQuery,
         Visibility.attachTo(document);
         Privileges.attachTo(document);
         document.dispatchEvent(new Event('readyForPlugins'));
-        $(window).on('hashchange', loadApplicationTypeBasedOnUrlHash);
+        $(window)
+            .on('hashchange', loadApplicationTypeBasedOnUrlHash)
+            .on('resize', _.throttle(function(event) {
+                if (event.target !== window) return;
+                $(document).trigger('windowResize');
+            }, MAX_RESIZE_TRIGGER_INTERVAL));
 
         require([
             'util/messages',

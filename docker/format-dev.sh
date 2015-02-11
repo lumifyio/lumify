@@ -2,8 +2,10 @@
 
 DIR=$(cd $(dirname "$0") && pwd)
 
-if [ "$1" = '--boot2docker' ]; then
-  shift
+if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
+  if [ "$1" = '--boot2docker' ]; then
+    shift
+  fi
   SPLIT_PERSISTENT_DIR='true'
 
   which boot2docker > /dev/null

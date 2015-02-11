@@ -54,7 +54,6 @@ define([
 
     function App() {
         var Graph3D,
-            MAX_RESIZE_TRIGGER_INTERVAL = 250,
             DATA_MENUBAR_NAME = 'menubar-name';
 
         this.onError = function(evt, err) {
@@ -198,8 +197,6 @@ define([
             $(document.body).toggleClass('animatelogin', !!this.attr.animateFromLogin);
 
             this.trigger(document, 'menubarToggleDisplay', { name: graphPane.data(DATA_MENUBAR_NAME) });
-
-            this.setupWindowResizeTrigger();
 
             this.triggerPaneResized();
 
@@ -347,18 +344,6 @@ define([
             if ($target.is('a') && $target.attr('href') === '#') {
                 e.preventDefault();
             }
-        };
-
-        var resizeTimeout;
-        this.setupWindowResizeTrigger = function() {
-            var self = this;
-            this.on(window, 'resize', function(event) {
-                if (event.target !== window) return;
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(function() {
-                    self.trigger(document, 'windowResize');
-                }, MAX_RESIZE_TRIGGER_INTERVAL);
-            });
         };
 
         this.onShowVertexContextMenu = function(event, data) {
