@@ -432,6 +432,7 @@ define([
                     ActionBar.teardownAll();
                     ActionBar.attachTo(self.node, {
                         alignTo: 'textselection',
+                        alignWithin: anchor.closest(is),
                         actions: {
                             Resolve: 'resolve.actionbar',
                             Comment: 'comment.actionbar'
@@ -541,6 +542,7 @@ define([
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
+                        alignWithin: $target.closest('.text'),
                         actions: {
                             Resolve: 'resolve.actionbar'
                         }
