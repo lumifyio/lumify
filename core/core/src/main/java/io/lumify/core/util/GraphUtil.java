@@ -1,12 +1,11 @@
 package io.lumify.core.util;
 
-import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -17,7 +16,6 @@ import org.securegraph.*;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +24,6 @@ public class GraphUtil {
     public static final String LUMIFY_VERSION_KEY = "lumify.version";
     public static final int LUMIFY_VERSION = 3;
     public static final double SET_PROPERTY_CONFIDENCE = 0.5;
-    public static final String SOURCE_INFO_VISIBILITY_STRING = "sourceInfo";
 
     public static void verifyVersion(Graph graph) {
         verifyVersion(graph, LUMIFY_VERSION);
@@ -179,13 +176,15 @@ public class GraphUtil {
             VisibilityTranslator visibilityTranslator,
             String justificationText,
             SourceInfo sourceInfo,
+            TermMentionRepository termMentionRepository,
             User user,
             Authorizations authorizations) {
         VisibilityJson visibilityJson = new VisibilityJson();
         visibilityJson.setSource(visibilitySource);
         visibilityJson.addWorkspace(workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        Property oldProperty = element.getProperty(propertyKey, propertyName, lumifyVisibility.getVisibility());
+        Visibility propertyVisibility = lumifyVisibility.getVisibility();
+        Property oldProperty = element.getProperty(propertyKey, propertyName, propertyVisibility);
         Metadata propertyMetadata;
         if (oldProperty != null) {
             propertyMetadata = oldProperty.getMetadata();
@@ -218,280 +217,28 @@ public class GraphUtil {
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            removeSourceInfoEdge(graph, element, propertyKey, propertyName, lumifyVisibility, authorizations);
+            termMentionRepository.removeSourceInfoEdge(element, propertyKey, propertyName, lumifyVisibility, authorizations);
             LumifyProperties.JUSTIFICATION.setMetadata(propertyMetadata, propertyJustificationMetadata, lumifyVisibility.getVisibility());
         } else if (sourceInfo != null) {
             Vertex sourceVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
             LumifyProperties.JUSTIFICATION.removeMetadata(propertyMetadata);
-            addSourceInfoEdge(
-                    graph,
+            termMentionRepository.addSourceInfoEdge(
                     element,
                     element.getId(),
                     propertyKey,
                     propertyName,
+                    propertyVisibility,
                     sourceInfo.getSnippet(),
                     sourceInfo.getTextPropertyKey(),
                     sourceInfo.getStartOffset(),
                     sourceInfo.getEndOffset(),
                     sourceVertex,
-                    lumifyVisibility,
                     authorizations
             );
         }
 
         elementMutation.addPropertyValue(propertyKey, propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         return new VisibilityAndElementMutation<>(lumifyVisibility, elementMutation);
-    }
-
-    public static void addJustification(
-            Graph graph,
-            Vertex vertex,
-            String justificationText,
-            SourceInfo sourceInfo,
-            LumifyVisibility lumifyVisibility,
-            Authorizations authorizations
-    ) {
-        if (justificationText != null) {
-            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            removeSourceInfoEdgeFromVertex(graph, vertex.getId(), vertex.getId(), null, null, lumifyVisibility, authorizations);
-            LumifyProperties.JUSTIFICATION.setProperty(vertex, propertyJustificationMetadata, lumifyVisibility.getVisibility(), authorizations);
-        } else if (sourceInfo != null) {
-            Vertex sourceVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
-            LumifyProperties.JUSTIFICATION.removeProperty(vertex, authorizations);
-            addSourceInfoEdgeToVertex(
-                    graph,
-                    vertex,
-                    sourceInfo.getVertexId(),
-                    null,
-                    null,
-                    sourceInfo.getSnippet(),
-                    sourceInfo.getTextPropertyKey(),
-                    sourceInfo.getStartOffset(),
-                    sourceInfo.getEndOffset(),
-                    sourceVertex,
-                    lumifyVisibility,
-                    authorizations
-            );
-        }
-    }
-
-    private static <T extends Element> void addSourceInfoEdge(
-            Graph graph,
-            T element,
-            String forElementId,
-            String propertyKey,
-            String propertyName,
-            String snippet,
-            String textPropertyKey,
-            int startOffset,
-            int endOffset,
-            Vertex sourceVertex,
-            LumifyVisibility lumifyVisibility,
-            Authorizations authorizations
-    ) {
-        if (element instanceof Vertex) {
-            addSourceInfoEdgeToVertex(
-                    graph,
-                    (Vertex) element,
-                    forElementId,
-                    propertyKey,
-                    propertyName,
-                    snippet,
-                    textPropertyKey,
-                    startOffset,
-                    endOffset,
-                    sourceVertex,
-                    lumifyVisibility,
-                    authorizations
-            );
-        } else {
-            addSourceInfoEdgeToEdge(
-                    graph,
-                    (Edge) element,
-                    forElementId,
-                    propertyKey,
-                    propertyName,
-                    snippet,
-                    textPropertyKey,
-                    startOffset,
-                    endOffset,
-                    sourceVertex,
-                    lumifyVisibility,
-                    authorizations
-            );
-        }
-    }
-
-    private static void addSourceInfoEdgeToVertex(
-            Graph graph,
-            Vertex vertex,
-            String forElementId,
-            String propertyKey,
-            String propertyName,
-            String snippet,
-            String textPropertyKey,
-            int startOffset,
-            int endOffset,
-            Vertex sourceVertex,
-            LumifyVisibility lumifyVisibility,
-            Authorizations authorizations
-    ) {
-        Visibility visibility = lumifyVisibility.getVisibility();
-        Visibility edgeVisibility = LumifyVisibility.and(visibility, SOURCE_INFO_VISIBILITY_STRING);
-        String edgeId = vertex.getId() + "hasSource" + sourceVertex.getId();
-        EdgeBuilder m = graph.prepareEdge(edgeId, vertex, sourceVertex, LumifyProperties.EDGE_LABEL_HAS_SOURCE, edgeVisibility);
-        LumifyProperties.SOURCE_INFO_FOR_ELEMENT_ID.setProperty(m, forElementId, visibility);
-        if (propertyKey == null) {
-            propertyKey = "";
-        }
-        LumifyProperties.SOURCE_INFO_PROPERTY_KEY.setProperty(m, propertyKey, edgeVisibility);
-        if (propertyName == null) {
-            propertyName = "";
-        }
-        LumifyProperties.SOURCE_INFO_PROPERTY_NAME.setProperty(m, propertyName, edgeVisibility);
-        LumifyProperties.SOURCE_INFO_PROPERTY_VISIBILITY.setProperty(m, visibility.getVisibilityString(), edgeVisibility);
-        LumifyProperties.SOURCE_INFO_SNIPPET.setProperty(m, snippet, edgeVisibility);
-        LumifyProperties.SOURCE_INFO_TEXT_PROPERTY_KEY.setProperty(m, textPropertyKey, edgeVisibility);
-        LumifyProperties.SOURCE_INFO_START_OFFSET.setProperty(m, startOffset, edgeVisibility);
-        LumifyProperties.SOURCE_INFO_END_OFFSET.setProperty(m, endOffset, edgeVisibility);
-        Edge edge = m.save(authorizations);
-        graph.flush();
-        LOGGER.debug("added source info edge: %s", edge.getId());
-        LOGGER.debug("added source info edge (out): %s", edge.getVertexId(Direction.OUT));
-        LOGGER.debug("added source info edge (in): %s", edge.getVertexId(Direction.IN));
-        LOGGER.debug("added source info edge (visibility): %s", edge.getVisibility().toString());
-    }
-
-    private static void addSourceInfoEdgeToEdge(
-            Graph graph,
-            Edge edge,
-            String forElementId,
-            String propertyKey,
-            String propertyName,
-            String snippet,
-            String textPropertyKey,
-            int startOffset,
-            int endOffset,
-            Vertex sourceVertex,
-            LumifyVisibility lumifyVisibility,
-            Authorizations authorizations
-    ) {
-        Vertex inVertex = edge.getVertex(Direction.IN, authorizations);
-        Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
-        addSourceInfoEdgeToVertex(
-                graph,
-                inVertex,
-                forElementId,
-                propertyKey,
-                propertyName,
-                snippet,
-                textPropertyKey,
-                startOffset,
-                endOffset,
-                sourceVertex,
-                lumifyVisibility,
-                authorizations
-        );
-        addSourceInfoEdgeToVertex(
-                graph,
-                outVertex,
-                forElementId,
-                propertyKey,
-                propertyName,
-                snippet,
-                textPropertyKey,
-                startOffset,
-                endOffset,
-                sourceVertex,
-                lumifyVisibility,
-                authorizations
-        );
-    }
-
-    private static void removeSourceInfoEdge(Graph graph, Element element, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
-        if (element instanceof Vertex) {
-            removeSourceInfoEdgeFromVertex(graph, element.getId(), element.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
-        } else {
-            removeSourceInfoEdgeFromEdge(graph, (Edge) element, propertyKey, propertyName, lumifyVisibility, authorizations);
-        }
-    }
-
-    private static void removeSourceInfoEdgeFromVertex(Graph graph, String vertexId, String sourceInfoElementId, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
-        Edge sourceInfoEdge = findSourceInfoEdge(graph, vertexId, sourceInfoElementId, propertyKey, propertyName, lumifyVisibility.getVisibility(), authorizations);
-        if (sourceInfoEdge != null) {
-            graph.removeEdge(sourceInfoEdge, authorizations);
-        }
-    }
-
-    private static void removeSourceInfoEdgeFromEdge(Graph graph, Edge edge, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
-        String inVertexId = edge.getVertexId(Direction.IN);
-        String outVertexId = edge.getVertexId(Direction.OUT);
-        removeSourceInfoEdgeFromVertex(graph, inVertexId, edge.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
-        removeSourceInfoEdgeFromVertex(graph, outVertexId, edge.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
-    }
-
-    private static Edge findSourceInfoEdge(Graph graph, String vertexId, String forElementId, String propertyKey, String propertyName, Visibility visibility, Authorizations authorizations) {
-        if (propertyKey == null) {
-            propertyKey = "";
-        }
-        if (propertyName == null) {
-            propertyName = "";
-        }
-        AuthorizationRepository authorizationRepository = InjectHelper.getInstance(AuthorizationRepository.class);
-        Authorizations authorizationsWithSourceInfo = authorizationRepository.createAuthorizations(authorizations, SOURCE_INFO_VISIBILITY_STRING);
-        Vertex vertex = graph.getVertex(vertexId, EnumSet.of(FetchHint.OUT_EDGE_REFS), authorizationsWithSourceInfo);
-        Iterable<Edge> hasSourceEdges = vertex.getEdges(Direction.OUT, LumifyProperties.EDGE_LABEL_HAS_SOURCE, authorizationsWithSourceInfo);
-        for (Edge hasSourceEdge : hasSourceEdges) {
-            if (!forElementId.equals(LumifyProperties.SOURCE_INFO_FOR_ELEMENT_ID.getPropertyValue(hasSourceEdge))) {
-                continue;
-            }
-            if (!propertyKey.equals(LumifyProperties.SOURCE_INFO_PROPERTY_KEY.getPropertyValue(hasSourceEdge))) {
-                continue;
-            }
-            if (!propertyName.equals(LumifyProperties.SOURCE_INFO_PROPERTY_NAME.getPropertyValue(hasSourceEdge))) {
-                continue;
-            }
-            if (!visibility.toString().equals(LumifyProperties.SOURCE_INFO_PROPERTY_VISIBILITY.getPropertyValue(hasSourceEdge))) {
-                continue;
-            }
-            return hasSourceEdge;
-        }
-        return null;
-    }
-
-    public static SourceInfo getSourceInfoForEdge(Graph graph, Edge edge, Authorizations authorizations) {
-        String inVertexId = edge.getVertexId(Direction.IN);
-        Edge sourceInfoEdge = findSourceInfoEdge(graph, inVertexId, edge.getId(), null, null, edge.getVisibility(), authorizations);
-        return getSourceInfoFromSourceInfoEdge(sourceInfoEdge);
-    }
-
-    public static SourceInfo getSourceInfoForVertex(Graph graph, Vertex vertex, Authorizations authorizations) {
-        Edge sourceInfoEdge = findSourceInfoEdge(graph, vertex.getId(), vertex.getId(), null, null, vertex.getVisibility(), authorizations);
-        return getSourceInfoFromSourceInfoEdge(sourceInfoEdge);
-    }
-
-    public static SourceInfo getSourceInfoForEdgeProperty(Graph graph, Edge edge, String propertyKey, String propertyName, Visibility visibility, Authorizations authorizations) {
-        String inVertexId = edge.getVertexId(Direction.IN);
-        Edge sourceInfoEdge = findSourceInfoEdge(graph, inVertexId, edge.getId(), propertyKey, propertyName, visibility, authorizations);
-        return getSourceInfoFromSourceInfoEdge(sourceInfoEdge);
-    }
-
-    public static SourceInfo getSourceInfoForVertexProperty(Graph graph, String vertexId, Property property, Authorizations authorizations) {
-        Edge sourceInfoEdge = findSourceInfoEdge(graph, vertexId, vertexId, property.getKey(), property.getName(), property.getVisibility(), authorizations);
-        return getSourceInfoFromSourceInfoEdge(sourceInfoEdge);
-    }
-
-    private static SourceInfo getSourceInfoFromSourceInfoEdge(Edge sourceInfoEdge) {
-        if (sourceInfoEdge == null) {
-            return null;
-        }
-        String vertexId = sourceInfoEdge.getVertexId(Direction.IN);
-        String textPropertyKey = LumifyProperties.SOURCE_INFO_TEXT_PROPERTY_KEY.getPropertyValue(sourceInfoEdge);
-        int startOffset = LumifyProperties.SOURCE_INFO_START_OFFSET.getPropertyValue(sourceInfoEdge);
-        int endOffset = LumifyProperties.SOURCE_INFO_END_OFFSET.getPropertyValue(sourceInfoEdge);
-        String snippet = LumifyProperties.SOURCE_INFO_SNIPPET.getPropertyValue(sourceInfoEdge);
-
-        return new SourceInfo(vertexId, textPropertyKey, startOffset, endOffset, snippet);
     }
 
     private static void mergeMetadata(Metadata metadata, Metadata additionalMetadata) {
@@ -511,6 +258,7 @@ public class GraphUtil {
             String justificationText,
             SourceInfo sourceInfo,
             VisibilityTranslator visibilityTranslator,
+            TermMentionRepository termMentionRepository,
             Authorizations authorizations
     ) {
         VisibilityJson visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
@@ -532,13 +280,13 @@ public class GraphUtil {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         if (justificationText != null) {
-            removeSourceInfoEdgeFromVertex(graph, vertex.getId(), vertex.getId(), null, null, lumifyVisibility, authorizations);
+            termMentionRepository.removeSourceInfoEdgeFromVertex(vertex.getId(), vertex.getId(), null, null, lumifyVisibility, authorizations);
         } else if (sourceInfo != null) {
             Vertex sourceDataVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
-            addSourceInfoEdgeToVertex(
-                    graph,
+            termMentionRepository.addSourceInfoToVertex(
                     vertex,
                     vertex.getId(),
+                    null,
                     null,
                     null,
                     sourceInfo.getSnippet(),
@@ -546,7 +294,6 @@ public class GraphUtil {
                     sourceInfo.getStartOffset(),
                     sourceInfo.getEndOffset(),
                     sourceDataVertex,
-                    lumifyVisibility,
                     authorizations
             );
         }
@@ -564,6 +311,7 @@ public class GraphUtil {
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
+            TermMentionRepository termMentionRepository,
             User user,
             Authorizations authorizations) {
         Date now = new Date();
@@ -587,13 +335,13 @@ public class GraphUtil {
         Edge edge = edgeBuilder.save(authorizations);
 
         if (justificationText != null) {
-            removeSourceInfoEdgeFromEdge(graph, edge, null, null, lumifyVisibility, authorizations);
+            termMentionRepository.removeSourceInfoEdgeFromEdge(edge, null, null, lumifyVisibility, authorizations);
         } else if (sourceInfo != null) {
             Vertex sourceDataVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
-            addSourceInfoEdgeToEdge(
-                    graph,
+            termMentionRepository.addSourceInfoEdgeToEdge(
                     edge,
                     edge.getId(),
+                    null,
                     null,
                     null,
                     sourceInfo.getSnippet(),
@@ -601,7 +349,6 @@ public class GraphUtil {
                     sourceInfo.getStartOffset(),
                     sourceInfo.getEndOffset(),
                     sourceDataVertex,
-                    lumifyVisibility,
                     authorizations
             );
         }

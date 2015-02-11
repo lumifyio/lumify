@@ -3,10 +3,10 @@ package io.lumify.web.routes.edge;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
@@ -23,16 +23,19 @@ import javax.servlet.http.HttpServletResponse;
 public class EdgePropertySourceInfo extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EdgePropertySourceInfo.class);
     private final Graph graph;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public EdgePropertySourceInfo(
             UserRepository userRepository,
             WorkspaceRepository workspaceRepository,
             Configuration configuration,
-            Graph graph
+            Graph graph,
+            TermMentionRepository termMentionRepository
     ) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class EdgePropertySourceInfo extends BaseRequestHandler {
             throw new LumifyResourceNotFoundException("Could not find edge with id: " + edgeId, edgeId);
         }
 
-        ClientApiObject sourceInfo = GraphUtil.getSourceInfoForEdgeProperty(graph, edge, propertyKey, propertyName, visibility, authorizations);
+        ClientApiObject sourceInfo = termMentionRepository.getSourceInfoForEdgeProperty(edge, propertyKey, propertyName, visibility, authorizations);
         if (sourceInfo == null) {
             throw new LumifyResourceNotFoundException("Could not find source info for edge with id: " + edgeId, edgeId);
         }

@@ -1,16 +1,22 @@
 package io.lumify.core.model.termMention;
 
 import com.google.inject.Inject;
+import io.lumify.core.model.PropertyJustificationMetadata;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.*;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.util.FilterIterable;
 
+import static org.securegraph.util.IterableUtils.single;
 import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public class TermMentionRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TermMentionRepository.class);
     public static final String VISIBILITY_STRING = "termMention";
     public static final String OWL_IRI = "http://lumify.io/termMention";
     private final Graph graph;
@@ -47,7 +53,7 @@ public class TermMentionRepository {
 
     public void updateVisibility(Vertex termMention, Visibility newVisibility, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
-        newVisibility = LumifyVisibility.and(newVisibility, TermMentionRepository.VISIBILITY_STRING);
+        newVisibility = LumifyVisibility.and(newVisibility, VISIBILITY_STRING);
         ExistingElementMutation<Vertex> m = termMention.prepareMutation();
         m.alterElementVisibility(newVisibility);
         for (Property property : termMention.getProperties()) {
@@ -98,6 +104,241 @@ public class TermMentionRepository {
     }
 
     public Authorizations getAuthorizations(Authorizations authorizations) {
-        return authorizationRepository.createAuthorizations(authorizations, TermMentionRepository.VISIBILITY_STRING);
+        return authorizationRepository.createAuthorizations(authorizations, VISIBILITY_STRING);
+    }
+
+    public void addJustification(
+            Vertex vertex,
+            String justificationText,
+            SourceInfo sourceInfo,
+            LumifyVisibility lumifyVisibility,
+            Authorizations authorizations
+    ) {
+        if (justificationText != null) {
+            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            removeSourceInfoEdgeFromVertex(vertex.getId(), vertex.getId(), null, null, lumifyVisibility, authorizations);
+            LumifyProperties.JUSTIFICATION.setProperty(vertex, propertyJustificationMetadata, lumifyVisibility.getVisibility(), authorizations);
+        } else if (sourceInfo != null) {
+            Vertex sourceVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
+            LumifyProperties.JUSTIFICATION.removeProperty(vertex, authorizations);
+            addSourceInfoToVertex(
+                    vertex,
+                    sourceInfo.getVertexId(),
+                    null,
+                    null,
+                    null,
+                    sourceInfo.getSnippet(),
+                    sourceInfo.getTextPropertyKey(),
+                    sourceInfo.getStartOffset(),
+                    sourceInfo.getEndOffset(),
+                    sourceVertex,
+                    authorizations
+            );
+        }
+    }
+
+    public <T extends Element> void addSourceInfoEdge(
+            T element,
+            String forElementId,
+            String propertyKey,
+            String propertyName,
+            Visibility propertyVisibility,
+            String snippet,
+            String textPropertyKey,
+            long startOffset,
+            long endOffset,
+            Vertex sourceVertex,
+            Authorizations authorizations
+    ) {
+        if (element instanceof Vertex) {
+            addSourceInfoToVertex(
+                    (Vertex) element,
+                    forElementId,
+                    propertyKey,
+                    propertyName,
+                    propertyVisibility,
+                    snippet,
+                    textPropertyKey,
+                    startOffset,
+                    endOffset,
+                    sourceVertex,
+                    authorizations
+            );
+        } else {
+            addSourceInfoEdgeToEdge(
+                    (Edge) element,
+                    forElementId,
+                    propertyKey,
+                    propertyName,
+                    propertyVisibility,
+                    snippet,
+                    textPropertyKey,
+                    startOffset,
+                    endOffset,
+                    sourceVertex,
+                    authorizations
+            );
+        }
+    }
+
+    public void addSourceInfoToVertex(
+            Vertex vertex,
+            String forElementId,
+            String propertyKey,
+            String propertyName,
+            Visibility propertyVisibility,
+            String snippet,
+            String textPropertyKey,
+            long startOffset,
+            long endOffset,
+            Vertex sourceVertex,
+            Authorizations authorizations
+    ) {
+        Visibility visibility = LumifyVisibility.and(sourceVertex.getVisibility(), VISIBILITY_STRING);
+        String termMentionVertexId = vertex.getId() + "hasSource" + sourceVertex.getId();
+        VertexBuilder m = graph.prepareVertex(termMentionVertexId, visibility);
+        LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.setProperty(m, forElementId, visibility);
+        if (propertyKey != null) {
+            LumifyProperties.TERM_MENTION_REF_PROPERTY_KEY.setProperty(m, propertyKey, visibility);
+        }
+        if (propertyName != null) {
+            LumifyProperties.TERM_MENTION_REF_PROPERTY_NAME.setProperty(m, propertyName, visibility);
+        }
+        if (propertyVisibility != null) {
+            LumifyProperties.TERM_MENTION_REF_PROPERTY_VISIBILITY.setProperty(m, propertyVisibility.getVisibilityString(), visibility);
+        }
+        LumifyProperties.TERM_MENTION_SNIPPET.setProperty(m, snippet, visibility);
+        LumifyProperties.TERM_MENTION_PROPERTY_KEY.setProperty(m, textPropertyKey, visibility);
+        LumifyProperties.TERM_MENTION_START_OFFSET.setProperty(m, startOffset, visibility);
+        LumifyProperties.TERM_MENTION_END_OFFSET.setProperty(m, endOffset, visibility);
+        Vertex termMention = m.save(authorizations);
+
+        graph.addEdge(sourceVertex, termMention, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, visibility, authorizations);
+        graph.addEdge(termMention, vertex, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, visibility, authorizations);
+
+        graph.flush();
+        LOGGER.debug("added source info: %s", termMention.getId());
+    }
+
+    public void addSourceInfoEdgeToEdge(
+            Edge edge,
+            String forElementId,
+            String propertyKey,
+            String propertyName,
+            Visibility propertyVisibility,
+            String snippet,
+            String textPropertyKey,
+            long startOffset,
+            long endOffset,
+            Vertex sourceVertex,
+            Authorizations authorizations
+    ) {
+        Vertex inVertex = edge.getVertex(Direction.IN, authorizations);
+        Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
+        addSourceInfoToVertex(
+                inVertex,
+                forElementId,
+                propertyKey,
+                propertyName,
+                propertyVisibility,
+                snippet,
+                textPropertyKey,
+                startOffset,
+                endOffset,
+                sourceVertex,
+                authorizations
+        );
+        addSourceInfoToVertex(
+                outVertex,
+                forElementId,
+                propertyKey,
+                propertyName,
+                propertyVisibility,
+                snippet,
+                textPropertyKey,
+                startOffset,
+                endOffset,
+                sourceVertex,
+                authorizations
+        );
+    }
+
+    public void removeSourceInfoEdge(Element element, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        if (element instanceof Vertex) {
+            removeSourceInfoEdgeFromVertex(element.getId(), element.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
+        } else {
+            removeSourceInfoEdgeFromEdge((Edge) element, propertyKey, propertyName, lumifyVisibility, authorizations);
+        }
+    }
+
+    public void removeSourceInfoEdgeFromVertex(String vertexId, String sourceInfoElementId, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        Vertex termMention = findTermMention(vertexId, sourceInfoElementId, propertyKey, propertyName, lumifyVisibility.getVisibility(), authorizations);
+        if (termMention != null) {
+            graph.removeVertex(termMention, authorizations);
+        }
+    }
+
+    public void removeSourceInfoEdgeFromEdge(Edge edge, String propertyKey, String propertyName, LumifyVisibility lumifyVisibility, Authorizations authorizations) {
+        String inVertexId = edge.getVertexId(Direction.IN);
+        String outVertexId = edge.getVertexId(Direction.OUT);
+        removeSourceInfoEdgeFromVertex(inVertexId, edge.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
+        removeSourceInfoEdgeFromVertex(outVertexId, edge.getId(), propertyKey, propertyName, lumifyVisibility, authorizations);
+    }
+
+    private Vertex findTermMention(String vertexId, String forElementId, String propertyKey, String propertyName, Visibility propertyVisibility, Authorizations authorizations) {
+        Authorizations authorizationsWithTermMentions = getAuthorizations(authorizations);
+        Vertex vertex = graph.getVertex(vertexId, authorizationsWithTermMentions);
+        Iterable<Vertex> termMentions = vertex.getVertices(Direction.IN, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizationsWithTermMentions);
+        for (Vertex termMention : termMentions) {
+            if (forElementId != null && !forElementId.equals(LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.getPropertyValue(termMention))) {
+                continue;
+            }
+            if (propertyKey != null && !propertyKey.equals(LumifyProperties.TERM_MENTION_REF_PROPERTY_KEY.getPropertyValue(termMention))) {
+                continue;
+            }
+            if (propertyName != null && !propertyName.equals(LumifyProperties.TERM_MENTION_REF_PROPERTY_NAME.getPropertyValue(termMention))) {
+                continue;
+            }
+            if (propertyVisibility != null && !propertyVisibility.toString().equals(LumifyProperties.TERM_MENTION_REF_PROPERTY_VISIBILITY.getPropertyValue(termMention))) {
+                continue;
+            }
+            return termMention;
+        }
+        return null;
+    }
+
+    public SourceInfo getSourceInfoForEdge(Edge edge, Authorizations authorizations) {
+        String inVertexId = edge.getVertexId(Direction.IN);
+        Vertex termMention = findTermMention(inVertexId, edge.getId(), null, null, null, authorizations);
+        return getSourceInfoFromTermMention(termMention, authorizations);
+    }
+
+    public SourceInfo getSourceInfoForVertex(Vertex vertex, Authorizations authorizations) {
+        Vertex termMention = findTermMention(vertex.getId(), vertex.getId(), null, null, null, authorizations);
+        return getSourceInfoFromTermMention(termMention, authorizations);
+    }
+
+    public SourceInfo getSourceInfoForEdgeProperty(Edge edge, String propertyKey, String propertyName, Visibility visibility, Authorizations authorizations) {
+        String inVertexId = edge.getVertexId(Direction.IN);
+        Vertex termMention = findTermMention(inVertexId, edge.getId(), propertyKey, propertyName, visibility, authorizations);
+        return getSourceInfoFromTermMention(termMention, authorizations);
+    }
+
+    public SourceInfo getSourceInfoForVertexProperty(String vertexId, Property property, Authorizations authorizations) {
+        Vertex termMention = findTermMention(vertexId, vertexId, property.getKey(), property.getName(), property.getVisibility(), authorizations);
+        return getSourceInfoFromTermMention(termMention, authorizations);
+    }
+
+    private SourceInfo getSourceInfoFromTermMention(Vertex termMention, Authorizations authorizations) {
+        if (termMention == null) {
+            return null;
+        }
+        String vertexId = single(termMention.getVertexIds(Direction.IN, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizations));
+        String textPropertyKey = LumifyProperties.TERM_MENTION_PROPERTY_KEY.getPropertyValue(termMention);
+        long startOffset = LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(termMention);
+        long endOffset = LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(termMention);
+        String snippet = LumifyProperties.TERM_MENTION_SNIPPET.getPropertyValue(termMention);
+
+        return new SourceInfo(vertexId, textPropertyKey, startOffset, endOffset, snippet);
     }
 }

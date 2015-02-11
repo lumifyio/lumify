@@ -9,6 +9,7 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -32,6 +33,7 @@ public class SetEdgeProperty extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private VisibilityTranslator visibilityTranslator;
     private final WorkQueueRepository workQueueRepository;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public SetEdgeProperty(
@@ -42,13 +44,16 @@ public class SetEdgeProperty extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final WorkspaceRepository workspaceRepository,
-            final WorkQueueRepository workQueueRepository) {
+            final WorkQueueRepository workQueueRepository,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workQueueRepository = workQueueRepository;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -113,6 +118,7 @@ public class SetEdgeProperty extends BaseRequestHandler {
                 this.visibilityTranslator,
                 justificationText,
                 SourceInfo.fromString(sourceInfoString),
+                termMentionRepository,
                 user,
                 authorizations);
         setPropertyResult.elementMutation.save(authorizations);

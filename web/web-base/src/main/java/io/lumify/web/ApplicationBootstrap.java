@@ -129,8 +129,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
                 LongRunningProcessRepository.VISIBILITY_STRING,
                 OntologyRepository.VISIBILITY_STRING,
                 WorkspaceRepository.VISIBILITY_STRING,
-                VideoFrameInfo.VISIBILITY_STRING,
-                GraphUtil.SOURCE_INFO_VISIBILITY_STRING
+                VideoFrameInfo.VISIBILITY_STRING
         );
     }
 
@@ -193,7 +192,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private Map<String, String> getInitParametersAsMap(ServletContext context) {
-        Map<String, String> initParameters = new HashMap<String, String>();
+        Map<String, String> initParameters = new HashMap<>();
         Enumeration<String> e = context.getInitParameterNames();
         while (e.hasMoreElements()) {
             String initParameterName = e.nextElement();

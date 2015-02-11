@@ -8,8 +8,8 @@ import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import java.io.IOException;
 
 public class SourceInfo implements ClientApiObject {
-    private final int startOffset;
-    private final int endOffset;
+    private final long startOffset;
+    private final long endOffset;
     private final String vertexId;
     private final String snippet;
     private final String textPropertyKey;
@@ -17,8 +17,8 @@ public class SourceInfo implements ClientApiObject {
     public SourceInfo(
             @JsonProperty("vertexId") String vertexId,
             @JsonProperty("textPropertyKey") String textPropertyKey,
-            @JsonProperty("startOffset") int startOffset,
-            @JsonProperty("endOffset") int endOffset,
+            @JsonProperty("startOffset") long startOffset,
+            @JsonProperty("endOffset") long endOffset,
             @JsonProperty("snippet") String snippet
     ) {
         this.vertexId = vertexId;
@@ -28,11 +28,11 @@ public class SourceInfo implements ClientApiObject {
         this.snippet = snippet;
     }
 
-    public int getStartOffset() {
+    public long getStartOffset() {
         return this.startOffset;
     }
 
-    public int getEndOffset() {
+    public long getEndOffset() {
         return this.endOffset;
     }
 

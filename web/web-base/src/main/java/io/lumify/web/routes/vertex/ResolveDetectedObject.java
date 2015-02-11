@@ -9,6 +9,7 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -39,6 +40,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
+    private final TermMentionRepository termMentionRepository;
     private String artifactContainsImageOfEntityIri;
 
     @Inject
@@ -50,7 +52,9 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             final Configuration configuration,
             final WorkQueueRepository workQueueRepository,
             final VisibilityTranslator visibilityTranslator,
-            final WorkspaceRepository workspaceRepository) {
+            final WorkspaceRepository workspaceRepository,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
@@ -58,6 +62,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.workQueueRepository = workQueueRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
+        this.termMentionRepository = termMentionRepository;
 
         this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
         if (this.artifactContainsImageOfEntityIri == null) {
@@ -116,7 +121,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             resolvedVertex = resolvedVertexMutation.save(authorizations);
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
             SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
-            GraphUtil.addJustification(graph, resolvedVertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
+            termMentionRepository.addJustification(resolvedVertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);
 

@@ -9,6 +9,7 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -36,6 +37,7 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
     private final WorkQueueRepository workQueueRepository;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public VertexSetProperty(
@@ -46,7 +48,9 @@ public class VertexSetProperty extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final WorkspaceRepository workspaceRepository,
-            final WorkQueueRepository workQueueRepository) {
+            final WorkQueueRepository workQueueRepository,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
@@ -54,6 +58,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -195,6 +200,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                 this.visibilityTranslator,
                 justificationText,
                 SourceInfo.fromString(sourceInfoString),
+                termMentionRepository,
                 user,
                 authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());

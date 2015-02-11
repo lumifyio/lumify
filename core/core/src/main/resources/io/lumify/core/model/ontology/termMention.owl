@@ -38,6 +38,8 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/termMention#hasTermMention">
         <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:range rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
     
 
@@ -46,6 +48,8 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/termMention#resolvedTo">
         <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
     
 
@@ -78,6 +82,17 @@
         <lumify:userVisible>false</lumify:userVisible>
         <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
         <rdfs:range rdf:resource="&xsd;int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/termMention#forElementId -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#forElementId">
+        <lumify:userVisible>false</lumify:userVisible>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 
@@ -115,6 +130,17 @@
     
 
 
+    <!-- http://lumify.io/termMention#snippet -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#snippet">
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/termMention#startOffset -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#startOffset">
@@ -140,6 +166,39 @@
     <!-- http://lumify.io/termMention#visibilityJson -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#visibilityJson">
+        <lumify:userVisible>false</lumify:userVisible>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/termMention#ref/propertyKey -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#ref/propertyKey">
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/termMention#ref/propertyName -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#ref/propertyName">
+        <lumify:userVisible>false</lumify:userVisible>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/termMention#ref/propertyVisibility -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/termMention#ref/propertyVisibility">
         <lumify:userVisible>false</lumify:userVisible>
         <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <rdfs:domain rdf:resource="http://lumify.io/termMention#termMention"/>

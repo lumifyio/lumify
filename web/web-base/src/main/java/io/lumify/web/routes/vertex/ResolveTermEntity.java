@@ -2,6 +2,7 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -115,8 +116,10 @@ public class ResolveTermEntity extends BaseRequestHandler {
             LumifyProperties.TITLE.addPropertyValue(vertexMutation, MULTI_VALUE_KEY, title, metadata, lumifyVisibility.getVisibility());
             vertex = vertexMutation.save(authorizations);
 
-            SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
-            GraphUtil.addJustification(graph, vertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
+            if (justificationText != null) {
+                PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+                LumifyProperties.JUSTIFICATION.setProperty(vertex, propertyJustificationMetadata, lumifyVisibility.getVisibility(), authorizations);
+            }
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
 
@@ -133,12 +136,14 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
+        SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
         new TermMentionBuilder()
                 .sourceVertex(artifactVertex)
                 .propertyKey(propertyKey)
                 .start(mentionStart)
                 .end(mentionEnd)
                 .title(title)
+                .snippet(sourceInfo.getSnippet())
                 .conceptIri(concept.getIRI())
                 .visibilityJson(visibilityJson)
                 .resolvedTo(vertex, edge)

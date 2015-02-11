@@ -49,7 +49,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
     public static final String BASE_OWL_IRI = "http://lumify.io";
     public static final String COMMENT_OWL_IRI = "http://lumify.io/comment";
-    public static final String SOURCE_INFO_OWL_IRI = "http://lumify.io/sourceInfo";
     private final Configuration configuration;
 
     protected OntologyRepositoryBase(Configuration configuration) {
@@ -65,7 +64,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         importResourceOwl("base.owl", BASE_OWL_IRI, authorizations);
         importResourceOwl("user.owl", UserRepository.OWL_IRI, authorizations);
         importResourceOwl("termMention.owl", TermMentionRepository.OWL_IRI, authorizations);
-        importResourceOwl("sourceInfo.owl", SOURCE_INFO_OWL_IRI, authorizations);
         importResourceOwl("workspace.owl", WorkspaceRepository.OWL_IRI, authorizations);
         importResourceOwl("comment.owl", COMMENT_OWL_IRI, authorizations);
         importResourceOwl("longRunningProcess.owl", LongRunningProcessRepository.OWL_IRI, authorizations);

@@ -3,12 +3,12 @@ package io.lumify.web.routes.vertex;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
-import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
@@ -24,6 +24,7 @@ public class VertexPropertySourceInfo extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexPropertySourceInfo.class);
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public VertexPropertySourceInfo(
@@ -31,11 +32,13 @@ public class VertexPropertySourceInfo extends BaseRequestHandler {
             WorkspaceRepository workspaceRepository,
             Configuration configuration,
             Graph graph,
-            VisibilityTranslator visibilityTranslator
+            VisibilityTranslator visibilityTranslator,
+            TermMentionRepository termMentionRepository
     ) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -73,7 +76,7 @@ public class VertexPropertySourceInfo extends BaseRequestHandler {
             }
         }
 
-        ClientApiObject sourceInfo = GraphUtil.getSourceInfoForVertexProperty(graph, vertex.getId(), property, authorizations);
+        ClientApiObject sourceInfo = termMentionRepository.getSourceInfoForVertexProperty(vertex.getId(), property, authorizations);
         if (sourceInfo == null) {
             throw new LumifyResourceNotFoundException("Could not find source info for vertex with id: " + vertexId, vertexId);
         }

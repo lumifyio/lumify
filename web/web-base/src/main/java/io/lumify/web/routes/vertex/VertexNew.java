@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -31,6 +32,7 @@ public class VertexNew extends BaseRequestHandler {
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkQueueRepository workQueueRepository;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public VertexNew(
@@ -39,11 +41,14 @@ public class VertexNew extends BaseRequestHandler {
             final WorkspaceRepository workspaceRepository,
             final VisibilityTranslator visibilityTranslator,
             final WorkQueueRepository workQueueRepository,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
         this.workQueueRepository = workQueueRepository;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -94,6 +99,7 @@ public class VertexNew extends BaseRequestHandler {
                 justificationText,
                 sourceInfo,
                 visibilityTranslator,
+                termMentionRepository,
                 authorizations
         );
         this.graph.flush();

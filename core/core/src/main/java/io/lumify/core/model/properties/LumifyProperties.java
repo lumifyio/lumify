@@ -77,17 +77,13 @@ public class LumifyProperties {
     public static final StringLumifyProperty TERM_MENTION_TITLE = new StringLumifyProperty("http://lumify.io/termMention#title");
     public static final StringLumifyProperty TERM_MENTION_CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io/termMention#conceptType");
     public static final VisibilityJsonLumifyProperty TERM_MENTION_VISIBILITY_JSON = new VisibilityJsonLumifyProperty("http://lumify.io/termMention#visibilityJson");
+    public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyKey");
+    public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_NAME = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyName");
+    public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_VISIBILITY = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyVisibility");
+    public static final StringLumifyProperty TERM_MENTION_FOR_ELEMENT_ID = new StringLumifyProperty("http://lumify.io/termMention#forElementId");
+    public static final StringLumifyProperty TERM_MENTION_SNIPPET = new StringLumifyProperty("http://lumify.io/termMention#snippet");
     public static final String TERM_MENTION_LABEL_HAS_TERM_MENTION = "http://lumify.io/termMention#hasTermMention";
     public static final String TERM_MENTION_LABEL_RESOLVED_TO = "http://lumify.io/termMention#resolvedTo";
-
-    public static final StringLumifyProperty SOURCE_INFO_FOR_ELEMENT_ID = new StringLumifyProperty("http://lumify.io/sourceInfo#forElementId");
-    public static final StringLumifyProperty SOURCE_INFO_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/sourceInfo#propertyKey");
-    public static final StringLumifyProperty SOURCE_INFO_PROPERTY_NAME = new StringLumifyProperty("http://lumify.io/sourceInfo#propertyName");
-    public static final StringLumifyProperty SOURCE_INFO_PROPERTY_VISIBILITY = new StringLumifyProperty("http://lumify.io/sourceInfo#propertyVisibility");
-    public static final StringLumifyProperty SOURCE_INFO_SNIPPET = new StringLumifyProperty("http://lumify.io/sourceInfo#snippet");
-    public static final StringLumifyProperty SOURCE_INFO_TEXT_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/sourceInfo#textPropertyKey");
-    public static final IntegerLumifyProperty SOURCE_INFO_START_OFFSET = new IntegerLumifyProperty("http://lumify.io/sourceInfo#startOffset");
-    public static final IntegerLumifyProperty SOURCE_INFO_END_OFFSET = new IntegerLumifyProperty("http://lumify.io/sourceInfo#endOffset");
 
     private LumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");

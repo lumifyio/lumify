@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.mapreduce.LumifyMRBase;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -38,7 +38,7 @@ public class ReindexMR extends LumifyMRBase {
                 OntologyRepository.VISIBILITY_STRING,
                 UserRepository.VISIBILITY_STRING,
                 WorkspaceRepository.VISIBILITY_STRING,
-                GraphUtil.SOURCE_INFO_VISIBILITY_STRING
+                TermMentionRepository.VISIBILITY_STRING
         };
 
         job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);
