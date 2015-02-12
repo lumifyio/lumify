@@ -119,8 +119,12 @@ public class VertexOffsetItem extends OffsetItem {
 
     @Override
     public List<String> getCssClasses() {
-        List<String> classes = new ArrayList<String>();
-        classes.add("entity");
+        List<String> classes = new ArrayList<>();
+        TermMentionFor termMentionFor = getTermMentionFor();
+        if (termMentionFor == null) {
+            termMentionFor = TermMentionFor.VERTEX;
+        }
+        classes.add(termMentionFor.toString().toLowerCase());
         if (getResolvedToVertexId() != null) {
             classes.add("resolved");
         }
