@@ -70,7 +70,9 @@ define([
             $(document).off('ignoreSelectionChanges.detail');
             $(document).off('resumeSelectionChanges.detail');
             $(document).off('termCreated');
-            this.scrollNode.off('scrollstop scroll');
+            if (this.scrollNode) {
+                this.scrollNode.off('scrollstop scroll');
+            }
         });
 
         this.before('initialize', function() {

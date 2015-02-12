@@ -131,12 +131,14 @@ define([
                 box = el.getBoundingClientRect();
             }
 
-            var position = (alignment === 'center' && rects.length === 1) ?
+            var windowScroll = $(window).scrollTop(), // for fullscreen view
+                top = box.top + windowScroll,
+                position = (alignment === 'center' && rects.length === 1) ?
                     box.left + box.width / 2 :
                     box.left + box.width,
                 css = {
                     left: position - this.$tip.width() / 2,
-                    top: box.top + box.height
+                    top: top + box.height
                 };
 
             if (this.attr.alignWithin) {
@@ -153,7 +155,7 @@ define([
                 this.$tip.find('.tooltip-arrow').css('left', arrowPercent.toFixed(2) + '%');
             }
 
-            css.opacity = box.top < TOP_HIDE_THRESHOLD ? '0' : '1';
+            css.opacity = top < TOP_HIDE_THRESHOLD ? '0' : '1';
 
             this.$tip.css(css);
         };

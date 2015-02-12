@@ -4,6 +4,8 @@ define([
 ], function(defineComponent) {
     'use strict';
 
+    return defineComponent(ClipboardManager);
+
     /**
      * Manages clipboard events
      */
@@ -11,6 +13,12 @@ define([
 
         this.after('initialize', function() {
             var self = this;
+
+            // Fullscreen view isn't loaded yet but this isn't needed
+            // if it will be
+            if (/^#?v=/.test(window.location.hash)) {
+                return;
+            }
 
             this.textarea = $('<textarea class="clipboardManager" autocomplete="false" spellcheck="false" />')
                 .css({
@@ -116,6 +124,4 @@ define([
         };
 
     }
-
-    return defineComponent(ClipboardManager);
 });

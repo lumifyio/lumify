@@ -26,7 +26,6 @@ define([
 
         this.defaultAttrs({
             detailSelector: '.detail-pane .content',
-            closeSelector: '.close-detail-pane',
             noResultsSelector: '.no-results',
             changeWorkspaceSelector: '.no-workspace-access li a'
         });
@@ -39,14 +38,20 @@ define([
 
             this.on('selectObjects', function(e, d) {
                 e.stopPropagation();
-                // TODO: update location hash
-                // need some way to remove from self.vertices with d.vertices
+                e.preventDefault();
+
+                var vertexIds = d.vertexIds || (d.vertices ? _.pluck(d.vertices, 'id') : null);
+                if (vertexIds) {
+                    vertexIds = _.isArray(vertexIds) ? vertexIds : [vertexIds];
+                    self.updateVertices({
+                        add: vertexIds
+                    })
+                }
             });
             this._windowIsHidden = false;
             this.on(document, 'window-visibility-change', this.onVisibilityChange);
             this.on(document, 'vertexUrlChanged', this.onVertexUrlChange);
             this.on('click', {
-                closeSelector: this.onClose,
                 changeWorkspaceSelector: this.onChangeWorkspace
             });
             this.on('click', this.clearFlashing.bind(this));
@@ -62,26 +67,6 @@ define([
         this.clearFlashing = function() {
             clearTimeout(this.timer);
             this._windowIsHidden = false;
-        };
-
-        this.onClose = function(event) {
-            event.preventDefault();
-
-            var self = this,
-                pane = $(event.target).closest('.detail-pane'),
-                node = pane.find('.content'),
-                instanceInfos = registry.findInstanceInfoByNode(node[0]);
-
-            if (instanceInfos.length) {
-                var ids = [];
-                instanceInfos.forEach(function(info) {
-                    ids.push(info.instance.attr.loadGraphVertexData.id);
-                });
-
-                this.updateVertices({
-                    remove: ids
-                });
-            }
         };
 
         this.updateLocationHash = function() {
@@ -132,7 +117,7 @@ define([
             this.handleNoVertices();
         };
 
-        this.handleVerticesLoaded = function(vertices) {
+        this.handleVerticesLoaded = function(vertices, data) {
             var fallbackToPublic = this.attr.workspaceId !== lumifyData.currentWorkspaceId;
 
             Detail.teardownAll();
@@ -203,14 +188,11 @@ define([
                 });
             }.bind(this));
 
-            this.updateLocationHash();
+            if (data && data.preventRecursiveUrlChange !== true) {
+                this.updateLocationHash();
+            }
             this.updateLayout();
             this.updateTitle();
-
-            if (!this._commSetup) {
-                this.setupTabCommunications();
-                this._commSetup = true;
-            }
         };
 
         this.loadWorkspaces = function() {
@@ -317,7 +299,7 @@ define([
                     vertexIds: _.uniq(data.add.concat(_.pluck(this.vertices, 'id')))
                 })
                     .then(function(vertices) {
-                        self.handleVerticesLoaded(vertices);
+                        self.handleVerticesLoaded(vertices, data);
                     });
             }
 
@@ -344,17 +326,15 @@ define([
             self.updateTitle();
         };
 
-        this.onAddGraphVertices = function(data) {
-            var self = this,
-                vertices = data.vertices,
-                targetIdentifier = data.targetIdentifier;
+        this.addVertexIds = function(vertexIds, targetIdentifier) {
+            var self = this;
 
             if (targetIdentifier !== this.fullscreenIdentifier) {
                 return;
             }
 
             var existingVertexIds = _.pluck(this.vertices, 'id'),
-                newVertices = _.reject(vertices, function(v) {
+                newVertices = _.reject(vertexIds, function(v) {
                     return existingVertexIds.indexOf(v) >= 0;
                 });
 
@@ -426,29 +406,6 @@ define([
 
                 return i18n('fullscreen.title.one', first)
             }
-        };
-
-        this.setupTabCommunications = function() {
-            var self = this;
-
-            require(['intercom'], function(Intercom) {
-                var intercom = Intercom.getInstance(),
-                    broadcast = function() {
-                        intercom.emit('fullscreenDetailsWithVertices', {
-                            message: JSON.stringify({
-                                vertices: self.vertices,
-                                title: self.titleForVertices(),
-                                identifier: self.fullscreenIdentifier
-                            })
-                        });
-                    };
-
-                intercom.on('addVertices', function(data) {
-                    self.onAddGraphVertices(JSON.parse(data.message));
-                });
-                intercom.on('ping', broadcast);
-                broadcast();
-            });
         };
     }
 });
