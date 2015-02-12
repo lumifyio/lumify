@@ -117,7 +117,7 @@ require([
                                     })
 
                             this.select('button.btn-danger').attr('data-row-key', function(d) {
-                                return d['http://lumify.io#rowKey'];
+                                return d['rowKey'];
                             });
                             this.select('table')
                                 .selectAll('tr')
