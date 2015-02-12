@@ -2,6 +2,7 @@
 define([
     './dropdowns/termForm/termForm',
     './dropdowns/statementForm/statementForm',
+    './dropdowns/propertyForm/propForm',
     'hbs!./text',
     'util/css-stylesheet',
     'util/privileges',
@@ -15,6 +16,7 @@ define([
 ], function(
     TermForm,
     StatementForm,
+    PropertyForm,
     textTemplate,
     stylesheet,
     Privileges,
@@ -436,7 +438,6 @@ define([
                         actions: {
                             Entity: 'resolve.actionbar',
                             Property: 'property.actionbar',
-                            Relationship: 'relation.actionbar',
                             Comment: 'comment.actionbar'
                         }
                     });
@@ -450,24 +451,34 @@ define([
                                 self.trigger(self.select('commentsSelector'), 'commentOnSelection', data);
                             }
                         })
+                        .on('property.actionbar', function(event) {
+                            event.stopPropagation();
+                            _.defer(function() {
+                                self.dropdownProperty(getNode(endContainer), sel, text);
+                            })
+                        })
                         .on('resolve.actionbar', function(event) {
                             event.stopPropagation();
 
-                            var isEndTextNode = endContainer.nodeType === 1;
-                            if (isEndTextNode) {
-                                self.dropdownEntity(true, endContainer, selection, text);
-                            } else {
-
-                                // Move to first space in end so as to not break up word when splitting
-                                var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
-                                do {
-                                    character = endContainer.textContent.substring(++i, i + 1);
-                                } while (whitespaceCheck.test(character));
-
-                                endContainer.splitText(i);
-                                self.dropdownEntity(true, endContainer, selection, text);
-                            }
+                            self.dropdownEntity(true, getNode(endContainer), selection, text);
                         });
+
+                    function getNode(node) {
+                        var isEndTextNode = node.nodeType === 1;
+                        if (isEndTextNode) {
+                            return node;
+                        } else {
+
+                            // Move to first space in end so as to not break up word when splitting
+                            var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
+                            do {
+                                character = node.textContent.substring(++i, i + 1);
+                            } while (whitespaceCheck.test(character));
+
+                            node.splitText(i);
+                            return node;
+                        }
+                    }
                 });
             }
         }, 250);
@@ -494,7 +505,29 @@ define([
             });
         };
 
-        this.dropdownProperty = function() {
+        this.dropdownProperty = function(insertAfterNode, selection, text) {
+            this.tearDownDropdowns();
+
+            var form = $('<div class="underneath"/>'),
+                $node = $(insertAfterNode),
+                $textSection = $node.closest('.text-section'),
+                $textBody = $textSection.children('.text'),
+                dataInfo = $node.data('info');
+
+            $node.after(form);
+
+            PropertyForm.attachTo(form, {
+                attemptToCoerceValue: text,
+                sourceInfo: selection ?
+                    this.transformSelection(selection) :
+                    {
+                        vertexId: this.attr.data.id,
+                        textPropertyKey: $textSection.data('key'),
+                        startOffset: dataInfo.start,
+                        endOffset: dataInfo.end,
+                        snippet: range.createSnippetFromNode($node[0], undefined, $textBody[0]),
+                    }
+            });
         };
 
         this.onResolvedContextClick = function(event) {
@@ -555,9 +588,8 @@ define([
                         alignWithin: $target.closest('.text'),
                         actions: {
                             Entity: 'resolve.actionbar',
-                            Property: 'property.actionbar',
-                            Relationship: 'relation.actionbar',
-                            Comment: 'comment.actionbar'
+                            Property: 'property.actionbar'
+                            // TODO: Comment: 'comment.actionbar'
                         }
                     });
 
@@ -568,13 +600,13 @@ define([
                         })
                         .on('property.actionbar', function(event) {
                             event.stopPropagation();
+                            _.defer(function() {
+                                self.dropdownProperty($target, null, $target.text());
+                            })
                         })
-                        .on('relation.actionbar', function(event) {
-                            event.stopPropagation();
-                        })
-                        .on('comment.actionbar', function(event) {
-                            event.stopPropagation();
-                        })
+                        //.on('comment.actionbar', function(event) {
+                            //event.stopPropagation();
+                        //})
                 }
             });
         };
@@ -661,6 +693,7 @@ define([
 
         this.tearDownDropdowns = function() {
             TermForm.teardownAll();
+            PropertyForm.teardownAll();
             StatementForm.teardownAll();
         };
 

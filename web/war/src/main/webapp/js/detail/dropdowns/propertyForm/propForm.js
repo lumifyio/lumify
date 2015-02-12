@@ -6,6 +6,7 @@ define([
     'fields/selection/selection',
     'tpl!util/alert',
     'util/withTeardown',
+    'util/vertex/vertexSelect',
     'util/vertex/formatters',
     'util/withDataRequest'
 ], function(
@@ -16,6 +17,7 @@ define([
     FieldSelection,
     alertTemplate,
     withTeardown,
+    VertexSelector,
     F,
     withDataRequest
 ) {
@@ -33,6 +35,7 @@ define([
             configurationFieldSelector: '.configuration input',
             previousValuesSelector: '.previous-values',
             previousValuesDropdownSelector: '.previous-values-container .dropdown-menu',
+            vertexContainerSelector: '.vertex-select-container',
             visibilitySelector: '.visibility',
             justificationSelector: '.justification',
             propertyInputSelector: '.input-row input',
@@ -45,6 +48,7 @@ define([
 
         this.after('initialize', function() {
             var self = this,
+                property = this.attr.property,
                 vertex = this.attr.data;
 
             this.on('click', {
@@ -71,36 +75,58 @@ define([
                 previousValuesDropdownSelector: this.onPreviousValuesDropdown
             });
             this.$node.html(template({
-                property: this.attr.property
+                property: property,
+                vertex: vertex
             }));
 
-            self.select('saveButtonSelector').attr('disabled', true);
-            self.select('deleteButtonSelector').hide();
-            self.select('saveButtonSelector').hide();
+            this.select('saveButtonSelector').attr('disabled', true);
+            this.select('deleteButtonSelector').hide();
+            this.select('saveButtonSelector').hide();
 
             if (this.attr.property) {
                 this.trigger('propertyselected', {
                     disablePreviousValuePrompt: true,
-                    property: _.chain(this.attr.property)
+                    property: _.chain(property)
                         .pick('displayName key name value visibility metadata'.split(' '))
                         .extend({
-                            title: this.attr.property.name
+                            title: property.name
                         })
                         .value()
                 });
-            } else if (F.vertex.isEdge(this.attr.data)) {
+            } else if (!vertex) {
+                this.on('vertexSelected', this.onVertexSelected);
+                VertexSelector.attachTo(this.select('vertexContainerSelector'), {
+                    value: ''
+                });
+                this.manualOpen();
+            } else if (F.vertex.isEdge(vertex)) {
                 throw new Error('Property form not supported for edges');
             } else {
-                this.dataRequest('ontology', 'propertiesByConceptId', F.vertex.prop(vertex, 'conceptType'))
-                    .done(function(properties) {
-                        FieldSelection.attachTo(self.select('propertyListSelector'), {
-                            properties: properties.list,
-                            placeholder: i18n('property.form.field.selection.placeholder')
-                        });
-                        self.manualOpen();
-                    });
+                this.setupPropertySelectionField();
             }
         });
+
+        this.setupPropertySelectionField = function() {
+            var self = this;
+
+            this.dataRequest('ontology', 'propertiesByConceptId', F.vertex.prop(this.attr.data, 'conceptType'))
+                .done(function(properties) {
+                    FieldSelection.attachTo(self.select('propertyListSelector'), {
+                        properties: properties.list,
+                        placeholder: i18n('property.form.field.selection.placeholder')
+                    });
+                    self.manualOpen();
+                });
+        }
+
+        this.onVertexSelected = function(event, data) {
+            event.stopPropagation();
+
+            if (data.item && data.item.properties) {
+                this.attr.data = data.item;
+                this.setupPropertySelectionField();
+            }
+        };
 
         this.after('teardown', function() {
             this.select('visibilitySelector').teardownAllComponents();
@@ -128,6 +154,9 @@ define([
                 dropdown = this.select('previousValuesDropdownSelector'),
                 buttons = this.select('previousValuesSelector').find('.active').removeClass('active'),
                 action = $(event.target).closest('button').addClass('active').data('action');
+
+            event.stopPropagation();
+            event.preventDefault();
 
             if (action === 'add') {
                 dropdown.hide();
@@ -215,7 +244,7 @@ define([
                 previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName),
                 previousValuesUniquedByKey = previousValues && _.unique(previousValues, _.property('key'));
 
-            this.currentValue = previousValue;
+            this.currentValue = this.attr.attemptToCoerceValue || previousValue;
             if (this.currentValue && this.currentValue.latitude) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
             }
@@ -324,9 +353,9 @@ define([
                             PropertyField.attachTo(config, {
                                 property: propertyDetails,
                                 vertexProperty: vertexProperty,
-                                value: previousValue,
+                                value: self.attr.attemptToCoerceValue || previousValue,
                                 predicates: false,
-                                tooltip: {
+                                tooltip: (!self.attr.sourceInfo && !self.attr.justificationText) ? {
                                     html: true,
                                     title:
                                         '<strong>' +
@@ -335,11 +364,14 @@ define([
                                         i18n('justification.field.tooltip.subtitle'),
                                     placement: 'left',
                                     trigger: 'focus'
-                                }
+                                } : null
                             });
                         }
 
-                        Justification.attachTo(justification, vertexProperty);
+                        Justification.attachTo(justification, {
+                            justificationText: self.attr.justificationText,
+                            sourceInfo: self.attr.sourceInfo
+                        });
 
                         Visibility.attachTo(visibility, {
                             value: visibilityValue || ''
@@ -437,6 +469,7 @@ define([
         this.onDelete = function() {
             _.defer(this.buttonLoading.bind(this, this.attr.deleteButtonSelector));
             this.trigger('deleteProperty', {
+                vertexId: this.attr.data.id,
                 property: _.pick(this.currentProperty, 'key', 'name')
             });
         };
@@ -461,6 +494,7 @@ define([
 
                 this.trigger('addProperty', {
                     isEdge: F.vertex.isEdge (this.attr.data),
+                    vertexId: this.attr.data.id,
                     property: $.extend({
                             key: propertyKey,
                             name: propertyName,

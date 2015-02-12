@@ -59,6 +59,9 @@ define([
             this.on('openSourceUrl', this.onOpenSourceUrl);
             this.on('maskWithOverlay', this.onMaskWithOverlay);
 
+            this.on('addProperty', this.redirectToPropertiesComponent);
+            this.on('deleteProperty', this.redirectToPropertiesComponent);
+
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
                 if (data && data.vertices) {
@@ -72,9 +75,32 @@ define([
             });
         });
 
+        this.redirectToPropertiesComponent = function(event, data) {
+            console.trace();
+            if ($(event.target).closest('.comments').length) {
+                return;
+            }
+
+            if ($(event.target).closest('.properties').length === 0) {
+                console.log(event.type, data);
+
+                event.stopPropagation();
+
+                console.log('intercepting', event.type, event.target, data);
+                var properties = this.$node.find('.properties');
+                if (properties.length) {
+                    _.defer(function() {
+                        properties.trigger(event.type, data);
+                    })
+                } else {
+                    throw new Error('Unable to redirect properties request', event.type, data);
+                }
+            }
+        };
+
         this.onOpenSourceUrl = function(event, data) {
             window.open(data.sourceUrl);
-        }
+        };
 
         this.onAddNewProperty = function(event) {
             this.trigger(this.select('propertiesSelector'), 'editProperty');

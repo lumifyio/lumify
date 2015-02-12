@@ -30,14 +30,12 @@ define([
         })
 
         this.after('initialize', function() {
-            if (this.attr._sourceMetadata) {
-                this.setValue(this.attr._sourceMetadata)
+            if (this.attr.sourceInfo) {
+                this.setValue(this.attr.sourceInfo)
+            } else if (this.attr.justificationText) {
+                this.setValue(this.attr.justificationText);
             } else {
-                // FIXME
-                this.setValue(
-                    this.attr['http://lumify.io#justification'] &&
-                    this.attr['http://lumify.io#justification'].justificationText
-                );
+                this.setValue();
             }
 
             this.on('valuepasted', this.onValuePasted);

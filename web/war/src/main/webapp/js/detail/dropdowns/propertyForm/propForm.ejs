@@ -1,5 +1,9 @@
 <div class="form">
   <div class="errors"></div>
+
+  <% if (!vertex) { %>
+  <div class="vertex-select-container"></div>
+  <% } %>
   <% if (!property) { %>
   <div class="property-list"></div>
   <% } %>
