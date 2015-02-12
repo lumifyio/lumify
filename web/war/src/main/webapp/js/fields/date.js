@@ -30,6 +30,10 @@ define([
             timezoneSelector: '.timezone'
         });
 
+        this.before('initialize', function(node, config) {
+            config.focus = false;
+        })
+
         this.after('initialize', function() {
             var self = this,
                 value = '',
@@ -39,8 +43,28 @@ define([
             this.displayTime = this.attr.property.displayType !== 'dateOnly';
 
             if (this.attr.value) {
-                dateString = value = F.date.dateStringUtc(this.attr.value);
-                timeString = F.date.timeString(this.attr.value);
+                var millis = _.isNumber(this.attr.value) ?
+                    this.attr.value :
+                    _.isString(this.attr.value) && /^\d+$/.test($.trim(this.attr.value)) ?
+                    parseInt(this.attr.value, 10) :
+                    null;
+
+                if (!millis || isNaN(millis)) {
+                    var date = chrono.parseDate($.trim(this.attr.value))
+                    if (date) {
+                        millis = date.getTime();
+                    }
+                } else if (isNaN(new Date(millis).getTime())) {
+                    millis = null;
+                }
+
+                if (millis) {
+                    dateString = value = F.date.dateStringUtc(millis);
+                    timeString = F.date.timeString(millis);
+                } else {
+                    this.attr.value = '';
+                }
+
             }
 
             this.$node.html(template({
