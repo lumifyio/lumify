@@ -530,7 +530,8 @@ define([
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
                         actions: $.extend({
-                            Open: 'open.actionbar'
+                            Open: 'open.actionbar',
+                            Fullscreen: 'fullscreen.actionbar'
                         }, Privileges.canEDIT && !F.vertex.isPublished($target.data('info')) ? {
                             Unresolve: 'unresolve.actionbar'
                         } : {})
@@ -540,7 +541,11 @@ define([
                         .on('open.actionbar', function(event) {
                             event.stopPropagation();
                             self.trigger('selectObjects', { vertexIds: $target.data('info').resolvedToVertexId });
-                    });
+                        })
+                        .on('fullscreen.actionbar', function(event) {
+                            event.stopPropagation();
+                            self.trigger('openFullscreen', { vertices: $target.data('info').resolvedToVertexId });
+                        });
                     self.on('unresolve.actionbar', function(event) {
                         event.stopPropagation();
                         _.defer(self.dropdownEntity.bind(self), false, $target);
