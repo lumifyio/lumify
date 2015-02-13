@@ -2,6 +2,9 @@
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 
 <Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <Set name="contextPath">/</Set>
+    <Set name="war">/opt/jetty/webapps/lumify.war</Set>
+
     <New id="sessionManager"
          class="io.lumify.web.session.LumifyBigTableJettySessionManager"/>
     <Get id="server" name="server"/>
