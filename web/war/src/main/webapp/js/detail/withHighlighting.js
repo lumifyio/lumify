@@ -54,6 +54,7 @@ define([
             highlightedWordsSelector: '.vertex, .property, .term, .artifact',
             draggablesSelector: '.vertex.resolved, .artifact, .generic-draggable',
             textContainerSelector: '.texts',
+            textBodySelector: '.texts .text',
             textContainerHeaderSelector: '.texts .text-section h1'
         });
 
@@ -119,9 +120,63 @@ define([
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
             this.on(document, 'textUpdated', this.onTextUpdated);
             this.on(document, 'verticesUpdated', this.onVerticesUpdatedWithHighlighting);
+            this.on('dragstart dragover dragenter dragleave dragend', {
+                textBodySelector: this.onTextBodyEvents
+            });
+            this.on('drop', {
+                textBodySelector: this.onTextBodyDrop
+            });
 
             this.applyHighlightStyle();
         });
+
+        this.onTextBodyEvents = function(event) {
+            if (event.type === 'dragstart') {
+                var selection = getSelection();
+                if (!(/^(None|Caret)$/.test(selection.type)) && !selection.collapsed) {
+                    this.draggingSourceInfo = this.transformSelection(getSelection());
+                    require(['util/actionbar/actionbar'], function(ActionBar) {
+                        ActionBar.teardownAll();
+                    });
+                }
+            } else if (event.type === 'dragend') {
+                this.draggingSourceInfo = null;
+            } else {
+                if (event.type === 'dragenter') {
+                    if ($(event.target).is('.vertex.resolved')) {
+                        $(event.target).addClass('drop-hover');
+                    }
+                } else if (event.type === 'dragleave') {
+                    $(event.target).removeClass('drop-hover');
+                } else {
+                    event.preventDefault();
+                }
+            }
+        };
+
+        this.onTextBodyDrop = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (event.originalEvent) {
+                event = event.originalEvent;
+            }
+
+            var $target = $(event.target);
+            if ($target.is('.vertex.resolved') && this.draggingSourceInfo) {
+                $target.removeClass('drop-hover');
+                var info = $target.data('info');
+                if (info && info.resolvedToVertexId) {
+                    this.dropdownProperty(
+                        event.target,
+                        this.draggingSourceInfo,
+                        this.draggingSourceInfo.text,
+                        info.resolvedToVertexId
+                    );
+                }
+            }
+            this.draggingSourceInfo = null;
+        };
 
         this.onTextUpdated = function(event, data) {
             if (data.vertexId === this.attr.data.id) {
@@ -536,7 +591,17 @@ define([
             });
         };
 
-        this.dropdownProperty = function(insertAfterNode, selection, text) {
+        this.dropdownProperty = function(insertAfterNode, selection, text, vertex) {
+            var self = this;
+
+            if (vertex && _.isString(vertex)) {
+                this.dataRequest('vertex', 'store', { vertexIds: vertex })
+                    .done(function(vertex) {
+                        self.dropdownProperty(insertAfterNode, selection, text, vertex);
+                    });
+                return;
+            }
+
             this.tearDownDropdowns();
 
             var form = $('<div class="underneath"/>'),
@@ -548,8 +613,11 @@ define([
             $node.after(form);
 
             PropertyForm.attachTo(form, {
+                data: vertex || undefined,
                 attemptToCoerceValue: text,
                 sourceInfo: selection ?
+                    selection.snippet ?
+                    selection :
                     this.transformSelection(selection) :
                     {
                         vertexId: this.attr.data.id,
