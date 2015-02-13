@@ -147,6 +147,7 @@ define([
         this.onVerticesUpdatedWithHighlighting = function(event, data) {
             var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
             if (vertex) {
+                this.attr.data = vertex;
                 var foundTextLikePropertyChange = _.some(vertex.properties, function(p) {
                     return _.some(TEXT_PROPERTIES, function(name) {
                         return p.name === name;
@@ -775,36 +776,41 @@ define([
                         var textDescription = 'http://lumify.io#textDescription';
                         return p[textDescription] || p.metadata[textDescription] || p.key;
                     })
+
+                    this.exit().remove();
                 });
 
-            if (this.attr.focus) {
-                this.openText(this.attr.focus.textPropertyKey)
-                    .done(function() {
-                        var $text = self.$node.find('.' + F.className.to(self.attr.focus.textPropertyKey) + ' .text'),
-                            $transcript = $text.find('.av-times'),
-                            focusOffsets = self.attr.focus.offsets;
+            if (textProperties.length) {
+                if (this.attr.focus) {
+                    this.openText(this.attr.focus.textPropertyKey)
+                        .done(function() {
+                            var $text = self.$node.find('.' +
+                                    F.className.to(self.attr.focus.textPropertyKey) + ' .text'),
+                                $transcript = $text.find('.av-times'),
+                                focusOffsets = self.attr.focus.offsets;
 
-                        if ($transcript.length) {
-                            var start = F.number.offsetValues(focusOffsets[0]),
-                                end = F.number.offsetValues(focusOffsets[1]),
-                                $container = $transcript.find('dd').eq(start.index);
+                            if ($transcript.length) {
+                                var start = F.number.offsetValues(focusOffsets[0]),
+                                    end = F.number.offsetValues(focusOffsets[1]),
+                                    $container = $transcript.find('dd').eq(start.index);
 
-                            rangeUtils.highlightOffsets($container.get(0), [start.offset, end.offset]);
-                        } else {
-                            rangeUtils.highlightOffsets($text.get(0), focusOffsets);
-                        }
-                        self.attr.focus = null;
+                                rangeUtils.highlightOffsets($container.get(0), [start.offset, end.offset]);
+                            } else {
+                                rangeUtils.highlightOffsets($text.get(0), focusOffsets);
+                            }
+                            self.attr.focus = null;
+                        });
+                } else if (expandedKey || textProperties.length === 1) {
+                    this.openText(expandedKey || textProperties[0].key, {
+                        scrollToSection: textProperties.length !== 1
+                    }).done(function() {
+                        scrollParent.scrollTop(scrollTop);
                     });
-            } else if (expandedKey || textProperties.length === 1) {
-                this.openText(expandedKey || textProperties[0].key, {
-                    scrollToSection: textProperties.length !== 1
-                }).done(function() {
-                    scrollParent.scrollTop(scrollTop);
-                });
-            } else if (textProperties.length > 1) {
-                this.openText(textProperties[0].key, {
-                    expand: false
-                });
+                } else if (textProperties.length > 1) {
+                    this.openText(textProperties[0].key, {
+                        expand: false
+                    });
+                }
             }
         };
 
@@ -833,9 +839,9 @@ define([
                 this.openTextRequest.abort();
             }
 
-            // TODO: support cancelling
-            return this.dataRequest('vertex', 'highlighted-text', this.attr.data.id, propertyKey)
-                .then(function(artifactText) {
+            this.openTextRequest = this.dataRequest('vertex', 'highlighted-text', this.attr.data.id, propertyKey);
+
+            return this.openTextRequest.then(function(artifactText) {
                     var html = self.processArtifactText(artifactText);
                     if (expand) {
                         text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
