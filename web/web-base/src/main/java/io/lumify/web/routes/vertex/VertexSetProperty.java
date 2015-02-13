@@ -188,6 +188,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
+        SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(
                 graph,
                 graphVertex,
@@ -199,7 +200,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                 workspaceId,
                 this.visibilityTranslator,
                 justificationText,
-                SourceInfo.fromString(sourceInfoString),
+                sourceInfo,
                 termMentionRepository,
                 user,
                 authorizations);
@@ -212,6 +213,10 @@ public class VertexSetProperty extends BaseRequestHandler {
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, user);
 
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, propertyKey, propertyName, workspaceId, visibilitySource);
+
+        if (sourceInfo != null) {
+            this.workQueueRepository.pushTextUpdated(sourceInfo.getVertexId());
+        }
 
         return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }
