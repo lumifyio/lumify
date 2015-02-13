@@ -253,7 +253,6 @@ define([
                     self.trigger('updateWorkspace', {
                         entityUpdates: entityUpdates
                     });
-                    cy.container().focus();
                 }
             });
         };
@@ -1053,7 +1052,6 @@ define([
 
             if (event.cyTarget === event.cy) {
                 this.trigger('selectObjects');
-                event.cy.container().focus();
             }
         });
 
