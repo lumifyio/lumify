@@ -594,6 +594,7 @@ define([
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
+                        alignWithin: $target.closest('.text'),
                         actions: $.extend({
                             Open: 'open.actionbar',
                             Fullscreen: 'fullscreen.actionbar'
