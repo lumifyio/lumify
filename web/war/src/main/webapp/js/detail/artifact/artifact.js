@@ -432,7 +432,9 @@ define([
         this.onCoordsChanged = function(event, data) {
             var self = this,
                 vertex = this.attr.data,
-                detectedObject = F.vertex.props(vertex, 'http://lumify.io#detectedObject', data.id),
+                detectedObject = data.id ?
+                    F.vertex.props(vertex, 'detectedObject', data.id) :
+                    F.vertex.props(vertex, 'detectedObject'),
                 width = parseFloat(data.x2) - parseFloat(data.x1),
                 height = parseFloat(data.y2) - parseFloat(data.y1),
                 newDetectedObject = $.extend(true, {}, detectedObject, { value: data }),
