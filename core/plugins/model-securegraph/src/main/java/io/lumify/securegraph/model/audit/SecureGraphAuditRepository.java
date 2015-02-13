@@ -452,7 +452,14 @@ public class SecureGraphAuditRepository extends AuditRepository {
         JSONObject json = new JSONObject();
         for (Metadata.Entry metadataEntry : metadata.entrySet()) {
             if (metadataEntry.getKey().equals(LumifyProperties.JUSTIFICATION.getPropertyName())) {
-                json.put(LumifyProperties.JUSTIFICATION.getPropertyName(), ((PropertyJustificationMetadata) metadataEntry.getValue()).toJson());
+                PropertyJustificationMetadata propertyJustificationMetadata;
+                Object metadataEntryValue = metadataEntry.getValue();
+                if (metadataEntryValue instanceof PropertyJustificationMetadata) {
+                    propertyJustificationMetadata = (PropertyJustificationMetadata) metadataEntryValue;
+                } else {
+                    propertyJustificationMetadata = new PropertyJustificationMetadata(new JSONObject(metadataEntryValue.toString()));
+                }
+                json.put(LumifyProperties.JUSTIFICATION.getPropertyName(), (propertyJustificationMetadata).toJson());
             } else {
                 json.put(metadataEntry.getKey(), metadataEntry.getValue());
             }
