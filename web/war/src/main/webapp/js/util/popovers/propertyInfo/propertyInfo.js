@@ -80,8 +80,10 @@ define([
         });
 
         this.update = function() {
-            var vertexId = this.attr.data.id,
-                property = this.attr.property.name === 'http://lumify.io#visibilityJson' ?
+            var self = this,
+                vertexId = this.attr.data.id,
+                isVisibility = this.attr.property.name === 'http://lumify.io#visibilityJson',
+                property = isVisibility ?
                     _.first(F.vertex.props(this.attr.data, this.attr.property.name)) :
                     _.first(F.vertex.props(this.attr.data, this.attr.property.name, this.attr.property.key)),
                 positionDialog = this.positionDialog.bind(this),
@@ -162,16 +164,47 @@ define([
                 });
 
             // Justification
-            var justification = [];
-            if (property.metadata &&
-                (property.metadata['http://lumify.io#justification'] || property.metadata._sourceMetadata)) {
-                justification.push(true);
+            var justification = [{}];
+            if (property.metadata && property.metadata['http://lumify.io#justification']) {
+                justification[0].justificationText = property.metadata['http://lumify.io#justification']
             }
 
-            var table = this.contentRoot.select('table'),
-                justificationRow = this.contentRoot.selectAll('.justification')
+            if (isVisibility) {
+                this.renderJustification([])
+            } else {
+                this.renderJustification(justification);
+                if (!justification[0].justificationText) {
+                    this.dataRequest(
+                        'vertex',
+                        'propertySourceInfo',
+                        this.attr.data.id,
+                        property.name,
+                        property.key,
+                        property.metadata &&
+                        property.metadata['http://lumify.io#visibilityJson'] &&
+                        property.metadata['http://lumify.io#visibilityJson'].source
+                    )
+                        .then(function(sourceInfo) {
+                            self.renderJustification([{
+                                sourceInfo: sourceInfo
+                            }]);
+                        })
+                        .catch(function() {
+                            self.renderJustification([{ sourceInfo: null }]);
+                        })
+                }
+            }
 
-            justificationRow
+            row.exit().remove();
+
+            this.dialog.show();
+            positionDialog();
+        };
+
+        this.renderJustification = function(justification) {
+            var self = this;
+
+            this.contentRoot.selectAll('.justification')
                 .data(justification)
                 .call(function() {
                     this.enter()
@@ -180,31 +213,35 @@ define([
                                 .call(function() {
                                     this.append('div')
                                         .attr('class', 'property-name property-justification')
-                                        .text(i18n('popovers.property_info.justification'));
+                                        .text(i18n('popovers.property_info.justification'))
+                                        .append('span').attr('class', 'badge')
                                     this.append('div')
                                         .attr('class', 'justificationValue');
                                 });
                         });
                     this.exit().remove();
 
-                    var node = this.select('.justificationValue').node();
-                    if (node) {
-                        require(['util/vertex/justification/viewer'], function(JustificationViewer) {
-                            $(node).teardownAllComponents();
-                            JustificationViewer.attachTo(node, {
-                                justificationMetadata: property.metadata['http://lumify.io#justification'],
-                                sourceMetadata: property.metadata._sourceMetadata
-                            });
-                            positionDialog();
-                        });
-                    }
-                })
-
-            row.exit().remove();
-
-            this.dialog.show();
-            positionDialog();
-        };
+                    this.select('.property-justification .badge').classed('loading', function(j) {
+                        return _.isEmpty(j);
+                    })
+                    this.select('.justificationValue').each(function(j) {
+                        if (j.justificationText || j.sourceInfo) {
+                            require(['util/vertex/justification/viewer'], function(JustificationViewer) {
+                                $(this).teardownAllComponents();
+                                JustificationViewer.attachTo(this, {
+                                    justificationMetadata: j.justificationText,
+                                    sourceMetadata: j.sourceInfo
+                                });
+                                self.positionDialog();
+                            }.bind(this));
+                        } else {
+                            this.textContent = _.isEmpty(j) ?
+                                '' :
+                                i18n('popovers.property_info.justification.none');
+                        }
+                    })
+                });
+        }
 
         this.onVerticesUpdated = function(event, data) {
             var vertex = _.findWhere(data.vertices, {

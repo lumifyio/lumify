@@ -59,6 +59,15 @@ define([
             });
         },
 
+        propertySourceInfo: function(vertexId, name, key, visibility) {
+            return ajax('GET', '/vertex/property/source-info', {
+                vertexId: vertexId,
+                propertyName: name,
+                propertyKey: key,
+                visibilitySource: visibility
+            });
+        },
+
         edges: function(vertexId, options) {
             var parameters = {
                 graphVertexId: vertexId
