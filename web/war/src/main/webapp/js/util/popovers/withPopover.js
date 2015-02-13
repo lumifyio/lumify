@@ -105,7 +105,7 @@ define([
                         top: Math.max(padding, Math.min(maxTop - padding, calcTop)),
                     };
 
-                if (this.dialogPosition.y < height) {
+                if (this.dialogPosition.y < (windowHeight / 2)) {
                     proposed.top = Math.min(maxTop, this.dialogPosition.yMax || this.dialogPosition.y);
                     if (!~this.popover[0].className.indexOf('bottom')) {
                         this.popover.removeClass('top').addClass('bottom');
