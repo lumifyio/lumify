@@ -853,7 +853,7 @@ define([
                 if (this.attr.focus) {
                     this.openText(this.attr.focus.textPropertyKey)
                         .done(function() {
-                            var $text = self.$node.find('.' +
+                            var $text = self.$node.find('.ts-' +
                                     F.className.to(self.attr.focus.textPropertyKey) + ' .text'),
                                 $transcript = $text.find('.av-times'),
                                 focusOffsets = self.attr.focus.offsets;
