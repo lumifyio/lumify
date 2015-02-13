@@ -14,6 +14,10 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            require(['rangy-core', 'rangy-text', 'rangy-highlighter'], function(rangy) {
+                if (!rangy.initialized) rangy.init();
+            });
+
             // Fullscreen view isn't loaded yet but this isn't needed
             // if it will be
             if (/^#?v=/.test(window.location.hash)) {

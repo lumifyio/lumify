@@ -1,6 +1,4 @@
-define([
-    'util/clipboardManager'
-], function(ClipboardManager) {
+define([], function() {
     'use strict';
 
     return withObjectSelection;
@@ -41,8 +39,6 @@ define([
             };
 
         this.after('initialize', function() {
-            ClipboardManager.attachTo(this.$node);
-
             this.setPublicApi('selectedObjects', defaultNoObjectsOrData());
 
             this.on('selectObjects', this.onSelectObjects);
