@@ -49,7 +49,7 @@ define([
         withDataRequest.call(this);
 
         this.defaultAttrs({
-            resolvableSelector: '.text .resolved',
+            resolvableSelector: '.text .vertex, .text .property',
             resolvedSelector: '.text .vertex.resolved',
             highlightedWordsSelector: '.vertex, .property, .term, .artifact',
             draggablesSelector: '.vertex.resolved, .artifact, .generic-draggable',
