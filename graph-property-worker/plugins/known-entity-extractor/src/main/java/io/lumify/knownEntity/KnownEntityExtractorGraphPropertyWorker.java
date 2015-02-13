@@ -63,7 +63,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
         String text = IOUtils.toString(in, "UTF-8"); // TODO convert AhoCorasick to use InputStream
         Iterator<SearchResult<Match>> searchResults = tree.search(text.toCharArray());
         Vertex sourceVertex = (Vertex) data.getElement();
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         while (searchResults.hasNext()) {
             SearchResult searchResult = searchResults.next();
             VisibilityJson visibilityJson = data.getVisibilitySourceJson();
@@ -72,10 +72,11 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             getGraph().flush();
         }
         applyTermMentionFilters(sourceVertex, termMentions);
+        pushTextUpdated(data);
     }
 
     private List<Vertex> outputResultToTermMention(Vertex sourceVertex, SearchResult<Match> searchResult, String propertyKey, VisibilityJson visibilityJson, Visibility visibility) {
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         for (Match match : searchResult.getOutputs()) {
             int start = searchResult.getLastIndex() - match.getMatchText().length();
             int end = searchResult.getLastIndex();

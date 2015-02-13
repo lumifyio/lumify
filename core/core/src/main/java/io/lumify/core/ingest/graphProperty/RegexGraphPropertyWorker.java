@@ -45,7 +45,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         Vertex sourceVertex = (Vertex) data.getElement();
 
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         while (matcher.find()) {
             final String patternGroup = matcher.group();
             int start = matcher.start();
@@ -65,6 +65,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
         }
         applyTermMentionFilters(sourceVertex, termMentions);
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, sourceVertex, getClass().getSimpleName(), getUser(), sourceVertex.getVisibility());
+        pushTextUpdated(data);
     }
 
     @Override

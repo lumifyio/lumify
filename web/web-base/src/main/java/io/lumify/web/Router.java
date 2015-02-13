@@ -51,6 +51,7 @@ public class Router extends HttpServlet {
     private WebApp app;
     private io.lumify.core.config.Configuration configuration;
 
+    @SuppressWarnings("unchecked")
     public Router(ServletContext servletContext) {
         try {
             final Injector injector = (Injector) servletContext.getAttribute(Injector.class.getName());

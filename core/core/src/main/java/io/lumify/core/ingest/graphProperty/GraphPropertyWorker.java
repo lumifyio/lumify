@@ -49,6 +49,13 @@ public abstract class GraphPropertyWorker {
         getGraph().flush();
     }
 
+    protected void pushTextUpdated(GraphPropertyWorkData data) {
+        if (data == null || data.getElement() == null) {
+            return;
+        }
+        getWorkQueueRepository().pushTextUpdated(data.getElement().getId());
+    }
+
     public abstract void execute(InputStream in, GraphPropertyWorkData data) throws Exception;
 
     public abstract boolean isHandled(Element element, Property property);
