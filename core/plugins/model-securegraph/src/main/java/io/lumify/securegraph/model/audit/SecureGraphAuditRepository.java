@@ -185,7 +185,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         Audit auditEdge = new Audit(AuditRowKey.build(edge.getId()));
         visibility = orVisibility(visibility);
 
-        List<Audit> audits = new ArrayList<Audit>();
+        List<Audit> audits = new ArrayList<>();
         String displayLabel = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
         checkNotNull(displayLabel, "Could not find display name for label '" + edge.getLabel() + "' on edge " + edge.getId());
         audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
@@ -428,7 +428,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue)) {
-                    auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(), property.getKey(),
+                    auditRelationshipProperty(action, sourceVertex.getId(), destVertex.getId(), property.getKey(),
                             property.getName(), oldPropertyValue, newPropertyValue, edge, process, "", user, visibility);
                 }
             }
@@ -437,7 +437,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
             for (Property property : edgeElementMutation.getProperties()) {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(), property.getKey(),
+                auditRelationshipProperty(action, sourceVertex.getId(), destVertex.getId(), property.getKey(),
                         property.getName(), null, newPropertyValue, edge, process, "", user, visibility);
             }
         }
