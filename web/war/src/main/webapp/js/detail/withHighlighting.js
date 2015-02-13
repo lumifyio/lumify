@@ -202,6 +202,12 @@ define([
         this.trackMouse = function(event) {
             var $target = $(event.target);
 
+            if ($target.is('.resolved,.entity')) {
+                if (event.type === 'mousedown') {
+                    range.clearSelection();
+                }
+            }
+
             if (event.type === 'contextmenu') {
                 event.preventDefault();
             }
@@ -529,6 +535,7 @@ define([
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
+                        alignWithin: $target.closest('.text'),
                         actions: $.extend({
                             Open: 'open.actionbar',
                             Fullscreen: 'fullscreen.actionbar'
