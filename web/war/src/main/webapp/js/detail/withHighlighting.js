@@ -146,10 +146,10 @@ define([
 
         this.onVerticesUpdatedWithHighlighting = function(event, data) {
             var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
-            if (vertex && data.options && data.options.originalData && data.options.originalData.properties) {
-                var foundTextLikePropertyChange = _.some(data.options.originalData.properties, function(p) {
+            if (vertex) {
+                var foundTextLikePropertyChange = _.some(vertex.properties, function(p) {
                     return _.some(TEXT_PROPERTIES, function(name) {
-                        return p.propertyName === name;
+                        return p.name === name;
                     });
                 });
 
