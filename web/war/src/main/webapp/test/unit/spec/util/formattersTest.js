@@ -104,6 +104,46 @@ define(['util/formatters'], function(f) {
 
         describe('for dates', function() {
 
+            describe('loose parsing', function() {
+                var parse = f.date.looslyParseDate;
+
+                it('should return undefined', function() {
+                    expect(parse()).to.be.null
+                })
+
+                it('should return relative dates', function() {
+                    expect(parse('   today  ')).to.be.a('date')
+                    expect(parse('friday')).to.be.a('date')
+                    expect(parse('next monday')).to.be.a('date')
+                })
+
+                it('should return first of the year when just a year', function() {
+                    expect(parse('2015')).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse('15')).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse('98')).to.equalDate(new Date(1998, 0, 1))
+                    expect(parse('59')).to.equalDate(new Date(1959, 0, 1))
+                    expect(parse('58')).to.equalDate(new Date(2058, 0, 1))
+                    expect(parse('989')).to.be.null
+                })
+
+                it('should ignore characters before, after', function() {
+                    var testChars = '!@#$%^&*(),./;[]-=<>?:"{}+_';
+                    expect(parse(testChars + '2015' + testChars)).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse(testChars + '98' + testChars)).to.equalDate(new Date(1998, 0, 1))
+                })
+
+                it('should return first of the month when just month year', function() {
+                    expect(parse('feb 2015')).to.equalDate(new Date(2015, 1, 1))
+                    expect(parse('zxcv 2015')).to.be.null
+                })
+
+                it('should return first of the month when just month year reversed', function() {
+                    expect(parse('2015 january')).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse('2015 asdf')).to.be.null
+                    expect(parse('1998 oct')).to.equalDate(new Date(1998, 9, 1))
+                })
+            })
+
             it('should format to prefered format', function() {
                 var now = new Date(),
                 month = String(now.getMonth() + 1);

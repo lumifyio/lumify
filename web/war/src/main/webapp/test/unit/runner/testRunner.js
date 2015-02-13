@@ -17,6 +17,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
 
         paths: {
             chai: '../libs/chai/chai',
+            'chai-datetime': '../libs/chai-datetime/chai-datetime',
             'mocha-flight': '../test/unit/utils/mocha-flight',
 
             // MOCKS
@@ -45,12 +46,14 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             timezoneJS.timezone.init();
 
             require([
+                'chai-datetime',
                 'util/handlebars/helpers',
                 'util/jquery.flight',
                 'mocha-flight'
-            ], function() {
+            ], function(chaiDateTime) {
 
                 chai.should();
+                chai.use(chaiDateTime);
 
                 // Globals for assertions
                 assert = chai.assert;
