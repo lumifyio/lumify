@@ -216,6 +216,12 @@ define([
         this.trackMouse = function(event) {
             var $target = $(event.target);
 
+            if ($target.is('.resolved,.vertex')) {
+                if (event.type === 'mousedown') {
+                    range.clearSelection();
+                }
+            }
+
             if (event.type === 'contextmenu') {
                 event.preventDefault();
             }
