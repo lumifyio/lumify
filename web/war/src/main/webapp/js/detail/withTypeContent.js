@@ -76,17 +76,13 @@ define([
         });
 
         this.redirectToPropertiesComponent = function(event, data) {
-            console.trace();
             if ($(event.target).closest('.comments').length) {
                 return;
             }
 
             if ($(event.target).closest('.properties').length === 0) {
-                console.log(event.type, data);
-
                 event.stopPropagation();
 
-                console.log('intercepting', event.type, event.target, data);
                 var properties = this.$node.find('.properties');
                 if (properties.length) {
                     _.defer(function() {
@@ -195,32 +191,6 @@ define([
             this.trigger('toggleAuditDisplay', {
                 displayed: this.auditDisplayed
             });
-        };
-
-        this.classesForVertex = function(vertex) {
-            var cls = [],
-                isEdge = F.vertex.isEdge(vertex),
-                props = vertex.properties || vertex,
-                concept = !isEdge && F.vertex.concept(vertex);
-
-            if (concept &&
-                (concept.displayType === 'document' ||
-                concept.displayType === 'image' ||
-                concept.displayType === 'video')) {
-                cls.push('artifact entity resolved');
-                if (props['http://lumify.io#conceptType']) cls.push(props['http://lumify.io#conceptType'].value);
-            } else if (!isEdge) {
-                cls.push('entity resolved');
-                if (props['http://lumify.io#conceptType']) {
-                    cls.push('conceptType-' + props['http://lumify.io#conceptType'].value);
-                }
-            } else {
-                cls.push('edge');
-            }
-            // TODO:
-            // cls.push('gId-' + (vertex.id || props.graphNodeId));
-
-            return cls.join(' ');
         };
 
         this.cancel = function() {

@@ -367,7 +367,7 @@
     .ui-draggable-dragging { white-space: nowrap; }
 
     // When dropdown is opened
-    &.dropdown .entity { 
+    &.dropdown .vertex, &.dropdown .property { 
       color:@fade-color;
 
       &.focused {
@@ -875,9 +875,12 @@
     background-color: red;
   }
 
-  .entity, .artifact {
+  .vertex, .artifact {
     cursor: pointer;
     border-bottom: 1px dotted black;
+  }
+  .property.resolved {
+    cursor: pointer;
   }
 
   .resolved {

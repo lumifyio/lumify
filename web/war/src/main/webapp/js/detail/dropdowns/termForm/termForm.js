@@ -477,7 +477,7 @@ define([
                 transcriptIndex = 0,
                 span = document.createElement('span');
 
-            span.className = 'entity focused';
+            span.className = 'vertex focused';
 
             var newRange = document.createRange();
             newRange.setStart(range.startContainer, range.startOffset);
@@ -505,7 +505,7 @@ define([
 
             // Special case where the start/end is inside an inner span
             // (surroundsContents will fail so expand the selection
-            if (/entity/.test(range.startContainer.parentNode.className)) {
+            if (/vertex/.test(range.startContainer.parentNode.className)) {
                 el = range.startContainer.parentNode;
                 var previous = el.previousSibling;
 
@@ -517,7 +517,7 @@ define([
                     newRange.setStart(tempTextNode, 0);
                 }
             }
-            if (/entity/.test(range.endContainer.parentNode.className)) {
+            if (/vertex/.test(range.endContainer.parentNode.className)) {
                 el = range.endContainer.parentNode;
                 var next = el.nextSibling;
 
@@ -535,7 +535,7 @@ define([
             }
             newRange.surroundContents(span);
 
-            return $(span).find('.entity').addClass('focused').end();
+            return $(span).find('.vertex').addClass('focused').end();
         };
 
         this.demoteSpanToTextVertex = function(vertex) {

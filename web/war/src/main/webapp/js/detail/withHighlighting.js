@@ -49,10 +49,10 @@ define([
         withDataRequest.call(this);
 
         this.defaultAttrs({
-            resolvableSelector: '.text .entity',
-            resolvedSelector: '.text .entity.resolved',
-            highlightedWordsSelector: '.entity, .term, .artifact',
-            draggablesSelector: '.resolved, .artifact, .generic-draggable',
+            resolvableSelector: '.text .vertex',
+            resolvedSelector: '.text .vertex.resolved',
+            highlightedWordsSelector: '.vertex, .property, .term, .artifact',
+            draggablesSelector: '.vertex.resolved, .artifact, .generic-draggable',
             textContainerSelector: '.texts',
             textContainerHeaderSelector: '.texts .text-section h1'
         });
@@ -76,6 +76,7 @@ define([
         });
 
         this.before('initialize', function() {
+            this.updateEntityAndArtifactDraggablesNoDelay = this.updateEntityAndArtifactDraggables;
             this.updateEntityAndArtifactDraggables = _.throttle(this.updateEntityAndArtifactDraggables.bind(this), 250);
         })
 
@@ -112,10 +113,12 @@ define([
                 textContainerSelector: this.onCopyText
             });
             this.on('mousedown mouseup click dblclick contextmenu', this.trackMouse.bind(this));
+            this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
+            this.on('dropdownClosed', this.onDropdownClosed);
+
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
             this.on(document, 'textUpdated', this.onTextUpdated);
             this.on(document, 'verticesUpdated', this.onVerticesUpdatedWithHighlighting);
-            this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
 
             this.applyHighlightStyle();
         });
@@ -123,6 +126,21 @@ define([
         this.onTextUpdated = function(event, data) {
             if (data.vertexId === this.attr.data.id) {
                 this.updateText();
+            }
+        };
+
+        this.onDropdownClosed = function(event, data) {
+            var self = this;
+            _.defer(function() {
+                self.checkIfReloadNeeded();
+            })
+        };
+
+        this.checkIfReloadNeeded = function() {
+            if (this.reloadText) {
+                var func = this.reloadText;
+                this.reloadText = null;
+                func();
             }
         };
 
@@ -276,7 +294,7 @@ define([
                                         TERM: 3
                                     },
                                     className = concept.rawClassName ||
-                                        (concept.className && ('entity.' + concept.className)),
+                                        (concept.className && ('vertex.' + concept.className)),
                                     definition = function(state, template) {
                                         return (template || tpl)({
                                             STATES: STATES,
@@ -362,11 +380,15 @@ define([
                 text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
 
             // Ignore selection events within the dropdown
-            if (selection.type == 'None' ||
-                 $(selection.anchorNode).is('.underneath') ||
+            if ($(selection.anchorNode).is('.underneath') ||
                  $(selection.anchorNode).parents('.underneath').length ||
                  $(selection.focusNode).is('.underneath') ||
                  $(selection.focusNode).parents('.underneath').length) {
+                return;
+            }
+
+            if (/None|Caret/.test(selection.type)) {
+                this.checkIfReloadNeeded();
                 return;
             }
 
@@ -414,7 +436,7 @@ define([
                     // Avoid adding dropdown inside of entity
                     endContainer = range.endContainer;
 
-                while (/entity/.test(endContainer.parentNode.className)) {
+                while (/vertex/.test(endContainer.parentNode.className)) {
                     endContainer = endContainer.parentNode;
                 }
 
@@ -672,7 +694,7 @@ define([
                             tolerance: 'pointer',
                             accept: function(el) {
                                 var item = $(el),
-                                    isEntity = item.is('.entity');
+                                    isEntity = item.is('.vertex.resolved');
 
                                 return isEntity;
                             },
@@ -704,7 +726,11 @@ define([
             StatementForm.teardownAll();
         };
 
-        this.updateText = function() {
+        this.updateText = function updateText(d3) {
+            if (!d3) {
+                return require(['d3'], updateText.bind(this));
+            }
+
             var self = this,
                 scrollParent = this.$node.scrollParent(),
                 scrollTop = scrollParent.scrollTop(),
@@ -715,16 +741,34 @@ define([
                     });
                 });
 
-            this.select('textContainerSelector').html(
-                _.map(textProperties, function(p) {
-                    var textDescription = 'http://lumify.io#textDescription';
-                    return textTemplate({
-                        description: p[textDescription] || p.metadata[textDescription] || p.key,
-                        key: p.key,
-                        cls: F.className.to(p.key)
+            d3.select(self.select('textContainerSelector')[0])
+                .selectAll('section.text-section')
+                .data(textProperties)
+                .call(function() {
+                    this.enter()
+                        .append('section')
+                        .attr('class', 'text-section collapsible')
+                        .call(function() {
+                            this.append('h1')
+                                .call(function() {
+                                    this.append('strong')
+                                    this.append('span').attr('class', 'badge')
+                                })
+                            this.append('div').attr('class', 'text').text('1')
+                        })
+
+                    this.attr('data-key', function(p) {
+                            return p.key;
+                        })
+                        .each(function() {
+                            var p = d3.select(this).datum();
+                            $(this).removePrefixedClasses('ts-').addClass('ts-' + F.className.to(p.key));
+                        })
+                    this.select('h1 strong').text(function(p) {
+                        var textDescription = 'http://lumify.io#textDescription';
+                        return p[textDescription] || p.metadata[textDescription] || p.key;
                     })
-                })
-            );
+                });
 
             if (this.attr.focus) {
                 this.openText(this.attr.focus.textPropertyKey)
@@ -760,8 +804,18 @@ define([
         this.openText = function(propertyKey, options) {
             var self = this,
                 expand = !options || options.expand !== false,
-                $section = this.$node.find('.' + F.className.to(propertyKey)),
-                $badge = $section.find('.badge');
+                $section = this.$node.find('.ts-' + F.className.to(propertyKey)),
+                isExpanded = $section.is('.expanded'),
+                $badge = $section.find('.badge'),
+                selection = getSelection(),
+                range = selection.rangeCount && selection.getRangeAt(0),
+                hasSelection = isExpanded && range && !range.collapsed,
+                hasOpenForm = isExpanded && $section.find('.underneath').length;
+
+            if (hasSelection || hasOpenForm) {
+                this.reloadText = this.openText.bind(this, propertyKey, options);
+                return Promise.resolve();
+            }
 
             if (expand) {
                 $section.closest('.texts').find('.loading').removeClass('loading');
@@ -777,11 +831,12 @@ define([
                 .then(function(artifactText) {
                     var html = self.processArtifactText(artifactText);
                     if (expand) {
+                        text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
                         $section.find('.text').html(html);
                         $section.addClass('expanded');
                         $badge.removeClass('loading');
 
-                        self.updateEntityAndArtifactDraggables();
+                        self.updateEntityAndArtifactDraggablesNoDelay();
                         if (!options || options.scrollToSection !== false) {
                             self.scrollToRevealSection($section);
                         }
@@ -792,13 +847,13 @@ define([
         this.offsetsForText = function(input, parentSelector, offsetTransform) {
             var offsets = [];
             input.forEach(function(node) {
-                var parentInfo = node.el.closest('.entity').data('info'),
+                var parentInfo = node.el.closest('.vertex').data('info'),
                     offset = 0;
 
                 if (parentInfo) {
                     offset = offsetTransform(parentInfo.start);
                 } else {
-                    var previousEntity = node.el.prevAll('.entity').first(),
+                    var previousEntity = node.el.prevAll('.vertex').first(),
                     previousInfo = previousEntity.data('info'),
                     dom = previousInfo ?
                         previousEntity.get(0) :
