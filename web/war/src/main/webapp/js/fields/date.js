@@ -7,7 +7,6 @@ define([
     './withHistogram',
     'util/formatters',
     'util/popovers/withElementScrollingPositionUpdates',
-    'chrono',
     'jstz'
 ], function(
     defineComponent,
@@ -17,7 +16,6 @@ define([
     withHistogram,
     F,
     withPositionUpdates,
-    chrono,
     jstz) {
     'use strict';
 
@@ -43,14 +41,10 @@ define([
             this.displayTime = this.attr.property.displayType !== 'dateOnly';
 
             if (this.attr.value) {
-                var millis = _.isNumber(this.attr.value) ?
-                    this.attr.value :
-                    _.isString(this.attr.value) && /^\d+$/.test($.trim(this.attr.value)) ?
-                    parseInt(this.attr.value, 10) :
-                    null;
+                var millis = _.isNumber(this.attr.value) ? this.attr.value : undefined;
 
-                if (!millis || isNaN(millis)) {
-                    var date = chrono.parseDate($.trim(this.attr.value))
+                if (_.isUndefined(millis)) {
+                    var date = F.date.looslyParseDate(this.attr.value);
                     if (date) {
                         millis = date.getTime();
                     }
@@ -128,7 +122,7 @@ define([
                     var pasted = self.val();
 
                     if (pasted) {
-                        var date = chrono.parseDate(pasted)
+                        var date = F.date.looslyParseDate(pasted);
                         if (date) {
                             self.val(F.date.dateString(date));
                             self.datepicker('setDate', date);
