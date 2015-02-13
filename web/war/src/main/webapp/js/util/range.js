@@ -6,7 +6,10 @@ define([
 ], function(rangy) {
     'use strict';
 
-    if (!rangy.initialized) rangy.init();
+    if (!rangy.initialized) {
+        console.warn('Rangy should have been initialized by ClipboardManager...')
+        rangy.init();
+    }
 
     var api = {
 

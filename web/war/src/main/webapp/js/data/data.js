@@ -12,6 +12,7 @@ define([
     './withKeyboardRegistration',
     './withObjectSelection',
     './withObjectsUpdated',
+    './withClipboard',
     './withWorkspaces',
     './withWorkspaceFiltering',
     './withWorkspaceVertexDrop'
