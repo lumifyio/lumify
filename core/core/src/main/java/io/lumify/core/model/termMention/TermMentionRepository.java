@@ -75,6 +75,44 @@ public class TermMentionRepository {
         };
     }
 
+    public Iterable<Vertex> findByVertexIdAndProperty(final String vertexId, final String propertyKey, final String propertyName, final Visibility propertyVisibility, Authorizations authorizations) {
+        return new FilterIterable<Vertex>(findByVertexId(vertexId, authorizations)) {
+            @Override
+            protected boolean isIncluded(Vertex termMention) {
+                String forElementId = LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.getPropertyValue(termMention);
+                if (forElementId == null || !forElementId.equals(vertexId)) {
+                    return false;
+                }
+
+                TermMentionFor forType = LumifyProperties.TERM_MENTION_FOR_TYPE.getPropertyValue(termMention);
+                if (forType == null || forType != TermMentionFor.PROPERTY) {
+                    return false;
+                }
+
+                String refPropertyKey = LumifyProperties.TERM_MENTION_REF_PROPERTY_KEY.getPropertyValue(termMention);
+                if (refPropertyKey == null || !refPropertyKey.equals(propertyKey)) {
+                    return false;
+                }
+
+                String refPropertyName = LumifyProperties.TERM_MENTION_REF_PROPERTY_NAME.getPropertyValue(termMention);
+                if (refPropertyName == null || !refPropertyName.equals(propertyName)) {
+                    return false;
+                }
+
+                String refPropertyVisibilityString = LumifyProperties.TERM_MENTION_REF_PROPERTY_VISIBILITY.getPropertyValue(termMention);
+                if (refPropertyVisibilityString == null || !refPropertyVisibilityString.equals(propertyVisibility.getVisibilityString())) {
+                    return false;
+                }
+
+                return true;
+            }
+        };
+    }
+
+    public Iterable<Vertex> findByEdgeIdAndProperty(String edgeId, Property property, Authorizations authorizations) {
+        return null;
+    }
+
     public Vertex findById(String termMentionId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         return graph.getVertex(termMentionId, authorizationsWithTermMention);
@@ -82,18 +120,22 @@ public class TermMentionRepository {
 
     public void updateVisibility(Vertex termMention, Visibility newVisibility, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
-        newVisibility = LumifyVisibility.and(newVisibility, VISIBILITY_STRING);
+        Visibility newVisibilityWithTermMention = LumifyVisibility.and(newVisibility, VISIBILITY_STRING);
         ExistingElementMutation<Vertex> m = termMention.prepareMutation();
-        m.alterElementVisibility(newVisibility);
+        m.alterElementVisibility(newVisibilityWithTermMention);
         for (Property property : termMention.getProperties()) {
-            m.alterPropertyVisibility(property, newVisibility);
+            m.alterPropertyVisibility(property, newVisibilityWithTermMention);
+        }
+        Property refPropertyVisibility = LumifyProperties.TERM_MENTION_REF_PROPERTY_VISIBILITY.getProperty(termMention);
+        if (refPropertyVisibility != null) {
+            LumifyProperties.TERM_MENTION_REF_PROPERTY_VISIBILITY.setProperty(m, newVisibility.getVisibilityString(), refPropertyVisibility.getMetadata(), newVisibilityWithTermMention);
         }
         m.save(authorizationsWithTermMention);
         for (Edge edge : termMention.getEdges(Direction.BOTH, authorizationsWithTermMention)) {
             ExistingElementMutation<Edge> edgeMutation = edge.prepareMutation();
-            edgeMutation.alterElementVisibility(newVisibility);
+            edgeMutation.alterElementVisibility(newVisibilityWithTermMention);
             for (Property property : edge.getProperties()) {
-                edgeMutation.alterPropertyVisibility(property, newVisibility);
+                edgeMutation.alterPropertyVisibility(property, newVisibilityWithTermMention);
             }
             edgeMutation.save(authorizationsWithTermMention);
         }

@@ -12,7 +12,6 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.core.model.termMention.TermMentionFor;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -310,19 +309,34 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
         ExistingElementMutation elementMutation = element.prepareMutation();
         Iterable<Property> properties = element.getProperties(name);
+        boolean foundProperty = false;
         for (Property property : properties) {
             if (!property.getKey().equals(key)) {
                 continue;
             }
+            Visibility propertyVisibility = property.getVisibility();
             if (WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
                 element.removeProperty(key, name, authorizations);
                 graph.flush();
                 workQueueRepository.broadcastPublishPropertyDelete(element, key, name);
-                return;
+                foundProperty = true;
             } else if (publishNewProperty(elementMutation, property, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 graph.flush();
                 workQueueRepository.broadcastPublishProperty(element, key, name);
+                foundProperty = true;
+            }
+
+            if (foundProperty) {
+                Iterable<Vertex> termMentions;
+                if (element instanceof Vertex) {
+                    termMentions = termMentionRepository.findByVertexIdAndProperty(element.getId(), property.getKey(), property.getName(), propertyVisibility, authorizations);
+                } else {
+                    termMentions = termMentionRepository.findByEdgeIdAndProperty(element.getId(), property, authorizations);
+                }
+                for (Vertex termMention : termMentions) {
+                    termMentionRepository.updateVisibility(termMention, property.getVisibility(), authorizations);
+                }
                 return;
             }
         }
