@@ -49,7 +49,7 @@ define([
         withDataRequest.call(this);
 
         this.defaultAttrs({
-            resolvableSelector: '.text .vertex',
+            resolvableSelector: '.text .resolved',
             resolvedSelector: '.text .vertex.resolved',
             highlightedWordsSelector: '.vertex, .property, .term, .artifact',
             draggablesSelector: '.vertex.resolved, .artifact, .generic-draggable',
@@ -592,6 +592,7 @@ define([
                 self.off('.actionbar');
 
                 if ($target.hasClass('resolved')) {
+                    var info = $target.data('info');
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
@@ -599,7 +600,7 @@ define([
                         actions: $.extend({
                             Open: 'open.actionbar',
                             Fullscreen: 'fullscreen.actionbar'
-                        }, Privileges.canEDIT && !F.vertex.isPublished($target.data('info')) ? {
+                        }, Privileges.canEDIT && info.termMentionFor === 'VERTEX' && !F.vertex.isPublished(info) ? {
                             Unresolve: 'unresolve.actionbar'
                         } : {})
                     });
