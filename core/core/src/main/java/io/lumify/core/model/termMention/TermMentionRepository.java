@@ -46,6 +46,35 @@ public class TermMentionRepository {
         return sourceVertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizationsWithTermMention);
     }
 
+    public Iterable<Vertex> findByVertexId(String vertexId, Authorizations authorizations) {
+        Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
+        Vertex vertex = graph.getVertex(vertexId, authorizationsWithTermMention);
+        String[] labels = new String[]{
+                LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION,
+                LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO
+        };
+        return vertex.getVertices(Direction.BOTH, labels, authorizationsWithTermMention);
+    }
+
+    public Iterable<Vertex> findByVertexIdForVertex(final String vertexId, Authorizations authorizations) {
+        return new FilterIterable<Vertex>(findByVertexId(vertexId, authorizations)) {
+            @Override
+            protected boolean isIncluded(Vertex termMention) {
+                String forElementId = LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.getPropertyValue(termMention);
+                if (forElementId == null || !forElementId.equals(vertexId)) {
+                    return false;
+                }
+
+                TermMentionFor forType = LumifyProperties.TERM_MENTION_FOR_TYPE.getPropertyValue(termMention);
+                if (forType == null || forType != TermMentionFor.VERTEX) {
+                    return false;
+                }
+
+                return true;
+            }
+        };
+    }
+
     public Vertex findById(String termMentionId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         return graph.getVertex(termMentionId, authorizationsWithTermMention);

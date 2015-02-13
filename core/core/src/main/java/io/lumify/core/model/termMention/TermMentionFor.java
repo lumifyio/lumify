@@ -3,7 +3,7 @@ package io.lumify.core.model.termMention;
 public enum TermMentionFor {
     VERTEX,
     PROPERTY,
-    EDGE;
+    EDGE, forType;
 
     public static int compare(TermMentionFor t1, TermMentionFor t2) {
         if (t1 == null && t2 == null) {
