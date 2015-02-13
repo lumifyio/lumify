@@ -504,10 +504,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         String iri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
         String[] intents = getIntents(o, objectProperty);
+        boolean userVisible = getUserVisible(o, objectProperty);
         checkNotNull(label, "label cannot be null or empty for " + iri);
         LOGGER.info("Importing ontology object property " + iri + " (label: " + label + ")");
 
-        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label, intents);
+        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label, intents, userVisible);
     }
 
     protected void importInverseOf(OWLOntology o, OWLObjectProperty objectProperty) {

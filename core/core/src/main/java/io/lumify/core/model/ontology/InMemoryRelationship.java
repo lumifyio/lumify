@@ -11,12 +11,14 @@ public class InMemoryRelationship extends Relationship {
     private String displayName;
     private List<Relationship> inverseOfs = new ArrayList<>();
     private List<String> intents = new ArrayList<>();
+    private boolean userVisible;
 
-    protected InMemoryRelationship(String relationshipIRI, String displayName, List<String> domainConceptIRIs, List<String> rangeConceptIRIs, String[] intents) {
+    protected InMemoryRelationship(String relationshipIRI, String displayName, List<String> domainConceptIRIs, List<String> rangeConceptIRIs, String[] intents, boolean userVisible) {
         super(domainConceptIRIs, rangeConceptIRIs);
         this.relationshipIRI = relationshipIRI;
         this.displayName = displayName;
         this.intents.addAll(Arrays.asList(intents));
+        this.userVisible = userVisible;
     }
 
     @Override
@@ -37,6 +39,11 @@ public class InMemoryRelationship extends Relationship {
                 return o.getIRI();
             }
         };
+    }
+
+    @Override
+    public boolean getUserVisible() {
+        return userVisible;
     }
 
     @Override

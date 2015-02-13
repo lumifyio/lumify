@@ -235,6 +235,7 @@ public class GraphUtil {
                     sourceInfo.getStartOffset(),
                     sourceInfo.getEndOffset(),
                     sourceVertex,
+                    lumifyVisibility.getVisibility(),
                     authorizations
             );
         }
@@ -298,6 +299,7 @@ public class GraphUtil {
                     sourceInfo.getStartOffset(),
                     sourceInfo.getEndOffset(),
                     sourceDataVertex,
+                    lumifyVisibility.getVisibility(),
                     authorizations
             );
         }
@@ -354,6 +356,7 @@ public class GraphUtil {
                     sourceInfo.getStartOffset(),
                     sourceInfo.getEndOffset(),
                     sourceDataVertex,
+                    lumifyVisibility.getVisibility(),
                     authorizations
             );
         }

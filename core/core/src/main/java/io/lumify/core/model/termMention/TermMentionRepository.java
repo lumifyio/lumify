@@ -133,6 +133,7 @@ public class TermMentionRepository {
                     sourceInfo.getStartOffset(),
                     sourceInfo.getEndOffset(),
                     sourceVertex,
+                    lumifyVisibility.getVisibility(),
                     authorizations
             );
         }
@@ -150,6 +151,7 @@ public class TermMentionRepository {
             long startOffset,
             long endOffset,
             Vertex sourceVertex,
+            Visibility visibility,
             Authorizations authorizations
     ) {
         if (element instanceof Vertex) {
@@ -165,6 +167,7 @@ public class TermMentionRepository {
                     startOffset,
                     endOffset,
                     sourceVertex,
+                    visibility,
                     authorizations
             );
         } else {
@@ -180,6 +183,7 @@ public class TermMentionRepository {
                     startOffset,
                     endOffset,
                     sourceVertex,
+                    visibility,
                     authorizations
             );
         }
@@ -197,9 +201,10 @@ public class TermMentionRepository {
             long startOffset,
             long endOffset,
             Vertex sourceVertex,
+            Visibility visibility,
             Authorizations authorizations
     ) {
-        Visibility visibility = LumifyVisibility.and(sourceVertex.getVisibility(), VISIBILITY_STRING);
+        visibility = LumifyVisibility.and(visibility, VISIBILITY_STRING);
         String termMentionVertexId = vertex.getId() + "hasSource" + sourceVertex.getId();
         if (propertyKey != null) {
             termMentionVertexId += ":" + propertyKey;
@@ -247,6 +252,7 @@ public class TermMentionRepository {
             long startOffset,
             long endOffset,
             Vertex sourceVertex,
+            Visibility visibility,
             Authorizations authorizations
     ) {
         Vertex inVertex = edge.getVertex(Direction.IN, authorizations);
@@ -263,6 +269,7 @@ public class TermMentionRepository {
                 startOffset,
                 endOffset,
                 sourceVertex,
+                visibility,
                 authorizations
         );
         addSourceInfoToVertex(
@@ -277,6 +284,7 @@ public class TermMentionRepository {
                 startOffset,
                 endOffset,
                 sourceVertex,
+                visibility,
                 authorizations
         );
     }
