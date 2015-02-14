@@ -1,9 +1,6 @@
 
-<li class="nav-header"><%= i18n('workspaces.list.header') %></li>
 
-<% (results.mine || []).forEach(function(workspace) { %>
-  <% include workspaces/item %>
-<% }); %>
+<li class="nav-header"><%= i18n('workspaces.list.header') %></li>
 
 <li class="new-workspace">
   <div class="input-append">
@@ -12,9 +9,6 @@
   </div>
 </li>
 
-<li class="divider"/>
-<li class="nav-header"><%= i18n('workspaces.list.shared_with_me') %></li>
+<li class="divider"></li>
 
-<% (results.shared || []).forEach(function(workspace) { %>
-  <% include workspaces/item %>
-<% }); %>
+<li class="nav-header"><%= i18n('workspaces.list.shared_with_me') %></li>

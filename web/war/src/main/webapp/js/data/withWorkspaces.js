@@ -82,6 +82,7 @@ define([], function() {
 
         this.workspaceUpdated = function(message) {
             if (lastReloadedState &&
+                lastReloadedState.workspace &&
                 lastReloadedState.workspace.workspaceId === message.workspace.workspaceId) {
                 lastReloadedState.workspace = message.workspace;
             }
