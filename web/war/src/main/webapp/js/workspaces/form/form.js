@@ -138,7 +138,11 @@ define([
                 userIds = _.pluck(workspaceUsers, 'userId'),
                 html = $();
 
-            this.dataRequest('user', 'search', { userIds: userIds })
+            userIds = _.without(userIds, lumifyData.currentUser.id);
+
+            (userIds.length ?
+                this.dataRequest('user', 'search', { userIds: userIds }) :
+                Promise.resolve([]))
                 .done(function(users) {
                     var usersById = _.indexBy(users, 'id');
                     self.currentUsers = usersById;
