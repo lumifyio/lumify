@@ -32,7 +32,7 @@
     "video.js": "4.5.2",
     "bootstrap-timepicker": "~0.2.6",
     "jstz-detect": "~1.0.5",
-    "timezone-js": "~0.4.12",
+    "timezone-js": "~0.4.13",
     "jscache": "ba01cdcf3e8a426782e0c297832b6c81286c9e8a"
   },
   "devDependencies": {
