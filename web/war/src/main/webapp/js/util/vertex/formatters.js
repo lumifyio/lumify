@@ -321,8 +321,7 @@ define([
 
             propFromAudit: function(vertex, propertyAudit) {
                 //propertyName, newValue, previousValue
-                throw new Error('not implemented')
-                // TODO: fixme
+                return V.propDisplay(propertyAudit.propertyName, propertyAudit.newValue || propertyAudit.previousValue);
             },
 
             propDisplay: function(name, value) {
