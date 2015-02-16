@@ -14,6 +14,7 @@ define([
                 scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
                     'meta-a': { fire: 'selectAll', desc: i18n('lumify.help.select_all') },
+                    'meta-e': { fire: 'selectConnected', desc: i18n('lumify.help.select_connected') },
                     'delete': {
                         fire: 'deleteSelected',
                         desc: i18n('lumify.help.delete')
