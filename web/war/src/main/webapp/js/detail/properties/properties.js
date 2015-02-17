@@ -191,6 +191,18 @@ define([
                         }
                     })
                     .sortBy(function(property) {
+                        if (property.metadata && ('http://lumify.io#createDate' in property.metadata)) {
+                            return property.metadata['http://lumify.io#createDate'] * -1;
+                        }
+                        return 0;
+                    })
+                    .sortBy(function(property) {
+                        if (property.metadata && ('http://lumify.io#confidence' in property.metadata)) {
+                            return property.metadata['http://lumify.io#confidence'] * -1;
+                        }
+                        return 0;
+                    })
+                    .sortBy(function(property) {
                         if (isVisibility(property)) {
                             return '0';
                         }
