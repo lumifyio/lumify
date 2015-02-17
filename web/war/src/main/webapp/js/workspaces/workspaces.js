@@ -5,13 +5,15 @@ define([
     'tpl!./workspaces',
     'tpl!./list',
     'tpl!./item',
-    'util/withDataRequest'
+    'util/withDataRequest',
+    'util/formatters'
 ], function(defineComponent,
     WorkspaceForm,
     workspacesTemplate,
     listTemplate,
     itemTemplate,
-    withDataRequest) {
+    withDataRequest,
+    F) {
     'use strict';
 
     return defineComponent(Workspaces, withDataRequest);
@@ -25,6 +27,33 @@ define([
             addNewSelector: 'button.new',
             disclosureSelector: 'button.disclosure',
             formSelector: '.workspace-form'
+        });
+
+        this.after('initialize', function() {
+            this.usersById = {};
+
+            this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
+            this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
+            this.on(document, 'workspaceDeleted', this.onWorkspaceDeleted);
+            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
+
+            this.on(document, 'didToggleDisplay', this.didToggleDisplay);
+            this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
+
+            this.on('workspaceDeleting', this.onWorkspaceDeleting);
+
+            this.on('click', {
+                workspaceListItemSelector: this.onWorkspaceItemClick,
+                addNewSelector: this.onAddNew,
+                disclosureSelector: this.onDisclosure
+            });
+
+            this.on('keyup', {
+                addNewInputSelector: this.onInputKeyUp
+            });
+
+            this.$node.html(workspacesTemplate({}));
         });
 
         this.onWorkspaceItemClick = function(event) {
@@ -91,15 +120,16 @@ define([
                     }).show().find('.content'),
                 instance = form.lookupComponent(WorkspaceForm);
 
-            if (instance && instance.attr.data.workspaceId === data.workspaceId) {
+            if ((instance && instance.attr.data.workspaceId) === data.workspaceId) {
                 container.hide();
                 instance.teardown();
                 return self.trigger(document, 'paneResized');
             }
 
             WorkspaceForm.teardownAll();
-            WorkspaceForm.attachTo(form, {
-                data: data
+            var workspace = _.findWhere(self.workspaces, { workspaceId: data.workspaceId })
+            WorkspaceForm.attachTo(form.empty(), {
+                data: workspace
             });
 
             self.trigger(container, 'paneResized');
@@ -119,7 +149,9 @@ define([
 
         this.onWorkspaceDeleted = function(event, data) {
             this.collapseEditForm();
-            this.findWorkspaceRow(data.workspaceId).remove();
+            this.update(_.reject(this.workspaces, function(w) {
+                return data.workspaceId === w.workspaceId;
+            }));
         };
 
         this.onSwitchWorkspace = function(event, data) {
@@ -131,17 +163,16 @@ define([
             this.collapseEditForm();
         };
 
-        this.onWorkspaceLoad = function(event, data) {
+        this.onWorkspaceLoaded = function(event, data) {
             if (this.$node.closest('.visible').length) {
-                this.updateListItemWithData(data);
+                var li = this.findWorkspaceRow(data.workspaceId);
+                li.find('.badge').removeClass('loading').hide().next().show();
                 this.switchActive(data.workspaceId);
             }
         };
 
         this.findWorkspaceRow = function(workspaceId) {
-            return this.select('workspaceListItemSelector').filter(function() {
-                return $(this).data('workspaceId') == workspaceId;
-            });
+            return this.$node.find('.wid-' + F.className.to(workspaceId), this.select('listSelector'));
         };
 
         this.onWorkspaceSaving = function(event, data) {
@@ -154,237 +185,174 @@ define([
             li.find('.badge').removeClass('loading').hide().next().show();
         };
 
-        this.updateListItemWithData = function(data, timestamp) {
-            var self = this,
-                currentUser = lumifyData.currentUser,
-                li = this.findWorkspaceRow(data.workspaceId);
-
-            if (data.createdBy === currentUser.id ||
-                _.contains(_.pluck(data.users, 'userId'), currentUser.id)
-            ) {
-                li.find('.badge').removeClass('loading').hide().next().show();
-                this.workspaceDataForItemRow(data)
-                    .done(function(data) {
-                        var content = $(itemTemplate({ workspace: data, selected: self.workspaceId }));
-                        if (li.length === 0) {
-                            self.$node.find('li.nav-header').eq(data.sharedToUser ? 1 : 0).after(content);
-                        } else {
-                            li.replaceWith(content);
-                        }
-
-                        // Sort section because title might be renamed
-                        var lis = self.getWorkspaceListItemsInSection(data.sharedToUser),
-                            dataGetter = function(li) {
-                                return $(this).data();
-                            },
-                            insertIndex = _.sortedIndex(lis.map(dataGetter).toArray(), data, function(w) {
-                                return [w.title.toLowerCase(), w.createdBy, w.workspaceId].join('\u0000')
-                            }),
-                            currentIndex = lis.index(content);
-
-                        if (currentIndex < insertIndex) {
-                            content.insertAfter(lis.eq(insertIndex));
-                        } else if (currentIndex > insertIndex) {
-                            content.insertBefore(lis.eq(insertIndex));
-                        }
-                    });
-            } else {
-                li.remove();
-            }
-        };
-
-        this.getWorkspaceListItemsInSection = function(shared) {
-            if (shared) {
-                return this.select('listSelector')
-                    .children('.nav-header').eq(1)
-                    .nextUntil();
-            } else {
-                return this.select('listSelector')
-                    .children('.nav-header').eq(0)
-                    .nextUntil('.new-workspace');
-            }
-        };
-
         this.onWorkspaceUpdated = function(event, data) {
-            this.updateListItemWithData(data.workspace);
-        };
-
-        this.onWorkspaceNotAvailable = function(event, data) {
-            this.loadWorkspaceList();
-            this.trigger('displayInformation', { message: i18n('workspaces.not_found') });
+            var updatedWorkspace = data && data.workspace || data;
+            this.update(
+                _.chain(this.workspaces)
+                .reject(function(w) {
+                    return updatedWorkspace.workspaceId === w.workspaceId;
+                })
+                .tap(function(workspaces) {
+                    if (_.findWhere(updatedWorkspace.users, { userId: lumifyData.currentUser.id })) {
+                        workspaces.push(updatedWorkspace);
+                    }
+                })
+                .value()
+            );
         };
 
         this.switchActive = function(workspaceId) {
-            var self = this;
             this.workspaceId = workspaceId;
 
-            var found = false;
-            this.select('workspaceListItemSelector')
-                .removeClass('active')
-                .each(function() {
-                    if ($(this).data('workspaceId') == workspaceId) {
-                        found = true;
-                        $(this).addClass('active');
-                        return false;
-                    }
-                });
+            var self = this,
+                found = false,
+                $row = this.findWorkspaceRow(workspaceId);
 
-            if (!found) {
+            this.select('workspaceListItemSelector')
+                .not($row.addClass('active'))
+                .removeClass('active');
+
+            if ($row.length === 0) {
                 this.loadWorkspaceList();
             }
         };
 
-        this.loadWorkspaceList = function(switchToFirst) {
-            var self = this;
+        this.update = function(workspaces) {
+            var self = this,
+                MINE = 'mine',
+                SHARED = 'shared',
+                userIds = _.chain(workspaces)
+                    .pluck('createdBy')
+                    .unique()
+                    .value(),
+                workspacesGrouped = _.chain(workspaces)
+                        .sortBy('workspaceId')
+                        .sortBy('createdBy')
+                        .sortBy(function(w) {
+                            return w.title.toLowerCase()
+                        })
+                        .groupBy(function(w) {
+                            return w.sharedToUser ? SHARED : MINE
+                        })
+                        .value(),
+                renderRows = function(userIdToDisplay, isShared) {
+                    return function() {
+                        var entering = isShared ?
+                            this.enter().append('li').attr('class', 'w-shared') :
+                            this.enter().insert('li', '.new-workspace').attr('class', 'w-mine');
 
-            // TODO: convert to d3
-            return this.dataRequest('workspace', 'all')
-                .then(function(workspacesResponse) {
-                    var workspaces = workspacesResponse || [],
-                        userIds = _.chain(workspaces)
-                            .map(function(workspace) {
-                                return _.pluck(workspace.users, 'userId');
+                        entering
+                            .append('a')
+                            .call(function() {
+                                this.append('span').attr('class', 'badge')
+                                this.append('button').attr('class', 'disclosure btn btn-mini')
+                                this.append('span').attr('class', 'nav-list-title')
+                                this.append('span').attr('class', 'nav-list-subtitle')
                             })
-                            .flatten()
-                            .uniq()
-                            .value(),
-                        updateHtml = function() {
-                            return Promise.all(
-                                _.chain(workspaces)
-                                .reject(function(workspace) {
-                                    return _.isUndefined(workspace.createdBy);
-                                })
-                                .map(self.workspaceDataForItemRow.bind(self))
-                                .value()
-                            ).then(function(workspaces) {
-                                var rows = _.chain(workspaces)
-                                        .sortBy('workspaceId')
-                                        .sortBy('createdBy')
-                                        .sortBy(function(w) {
-                                            return w.title.toLowerCase()
-                                        })
-                                        .groupBy(function(w) {
-                                            return w.sharedToUser ? 'shared' : 'mine';
-                                        })
-                                        .value();
+                        this.exit().remove();
 
-                                self.select('listSelector').html(
-                                    listTemplate({
-                                        results: rows,
-                                        selected: self.workspaceId
-                                    })
-                                );
+                        self.select('listSelector').find('.nav-header:first-child .loading').remove();
 
-                                self.trigger(document, 'paneResized');
-                                if (switchToFirst) {
-                                    self.switchToWorkspace(workspaces[0].workspaceId);
-                                }
-                            });
-                        };
-
-                    if (userIds.length) {
-                        return self.dataRequest('user', 'getUserNames', userIds)
-                            .then(function(users) {
-                                if (users) {
-                                    self.usersById = $.extend(self.usersById || {}, _.object(userIds, users));
-                                }
-                                return updateHtml();
+                        this.order()
+                            .each(function(w) {
+                                $(this)
+                                    .removePrefixedClasses('wid-')
+                                    .addClass('wid-' + F.className.to(w.workspaceId))
+                                    .data('workspaceId', w.workspaceId);
                             })
-                    } else {
-                        return updateHtml();
+                        this.classed('active', function(w) {
+                            return w.workspaceId === lumifyData.currentWorkspaceId;
+                        })
+                        this.select('a .nav-list-title').text(_.property('title'));
+                        this.select('a .nav-list-subtitle').text(function(w) {
+                            var people = _.reject(w.users, function(user) {
+                                    return user.userId === lumifyData.currentUser.id;
+                                }).length,
+                                subtitle = '',
+                                sharedToUser = w.sharedToUser && userIdToDisplay[w.createdBy];
+
+                            if (w.sharedToUser) {
+                                if (sharedToUser) {
+                                    subtitle = i18n('workspaces.shared_with_me.subtitle.prefix', sharedToUser);
+                                } else {
+                                    subtitle = i18n('workspaces.shared_with_me.subtitle.unknown_user');
+                                }
+                            } else {
+                                subtitle = i18n('workspaces.sharing.subtitle.prefix');
+                            }
+
+                            if (people === 1 && w.sharedToUser) {
+                                subtitle += ' ' + i18n('workspaces.sharing.subtitle.suffix.only_you');
+                            } else if (people === 1) {
+                                subtitle += ' ' + i18n('workspaces.sharing.subtitle.suffix.one_other');
+                            } else if (people) {
+                                subtitle += ' ' + i18n('workspaces.sharing.subtitle.suffix.others', people);
+                            } else {
+                                subtitle = null;
+                            }
+
+                            return subtitle;
+                        });
+                    };
+                };
+
+            this.workspaces = workspaces;
+
+            return Promise.all([
+                Promise.require('d3'),
+                this.dataRequest('user', 'getUserNames', userIds)
+            ]).then(function(results) {
+                var d3 = results.shift(),
+                    userNames = results.shift(),
+                    userIdToDisplay = _.object(userIds, userNames);
+
+                return new Promise(function(fullfill, reject) {
+                    var $list = self.select('listSelector'),
+                        d3List = d3.select($list[0]);
+
+                    if ($list.find('.new-workspace').length === 0) {
+                        $list.html(listTemplate({}));
                     }
+
+                    d3List
+                        .selectAll('li.w-mine')
+                        .data(workspacesGrouped[MINE] || [], _.property('workspaceId'))
+                        .call(renderRows(userIdToDisplay, false));
+
+                    d3List
+                        .selectAll('li.w-shared')
+                        .data(workspacesGrouped[SHARED] || [], _.property('workspaceId'))
+                        .call(renderRows(userIdToDisplay, true));
+
+                    fullfill();
+                });
+            })
+        };
+
+        this.loadWorkspaceList = function() {
+            var self = this, i = 0;
+
+            return this.dataRequest('workspace', 'all')
+                .then(function(workspaces) {
+                    return self.update(workspaces || [])
                 });
         };
 
-        this.workspaceDataForItemRow = function(w) {
-            var deferred = $.Deferred(),
-                row = $.extend({}, w),
-                usersNotCurrent = row.users.filter(function(u) {
-                    return u.userId != lumifyData.currentUser.id;
-                }),
-                people = usersNotCurrent.length,
-                sharedByUser = row.sharedToUser && this.usersById[row.createdBy];
-
-            if (row.sharedToUser) {
-                if (sharedByUser) {
-                    deferred.resolve(
-                        i18n('workspaces.shared_with_me.subtitle.prefix', sharedByUser)
-                    );
-                } else {
-                    this.dataRequest('user', 'getUserNames', [row.createdBy])
-                        .then(function(users) {
-                            var subtitle;
-                            if (users && users[0]) {
-                                subtitle = i18n('workspaces.shared_with_me.subtitle.prefix', users[0])
-                            } else {
-                                subtitle = i18n('workspaces.shared_with_me.subtitle.unknown_user');
-                            }
-                            deferred.resolve(subtitle);
-                        })
-                        .catch(function() {
-                            deferred.resolve(i18n('workspaces.shared_with_me.subtitle.unknown_user'));
-                        })
-                }
-            } else {
-                deferred.resolve(i18n('workspaces.sharing.subtitle.prefix'));
-            }
-
-            return deferred.promise().then(function(text) {
-                if (people === 1 && row.sharedToUser) {
-                    row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.only_you');
-                } else if (people === 1) {
-                    row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.one_other');
-                } else if (people) {
-                    row.sharingSubtitle = text + ' ' + i18n('workspaces.sharing.subtitle.suffix.others', people);
-                } else {
-                    row.sharingSubtitle = null;
-                }
-                return row;
-            });
-        };
-
-        this.onToggleMenu = function(event, data) {
+        this.didToggleDisplay = function(event, data) {
             var self = this;
 
             if (data.name === 'workspaces') {
-                if (this.$node.closest('.visible').length) {
-                    this.loadWorkspaceList()
-                        .then(function() {
-                            self.switchActive(lumifyData.currentWorkspaceId);
-                        })
+                if (data.visible) {
+                    _.defer(function() {
+                        self.loadWorkspaceList()
+                            .then(function() {
+                                self.switchActive(lumifyData.currentWorkspaceId);
+                            })
+                    });
                 } else {
                     this.collapseEditForm();
                 }
             }
         };
-
-        this.after('initialize', function() {
-            this.usersById = {};
-
-            this.on(document, 'workspaceLoaded', this.onWorkspaceLoad);
-            this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
-            this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
-            this.on(document, 'workspaceDeleted', this.onWorkspaceDeleted);
-            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
-            this.on(document, 'workspaceNotAvailable', this.onWorkspaceNotAvailable);
-
-            this.on(document, 'menubarToggleDisplay', this.onToggleMenu);
-            this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
-
-            this.on('workspaceDeleting', this.onWorkspaceDeleting);
-
-            this.on('click', {
-                workspaceListItemSelector: this.onWorkspaceItemClick,
-                addNewSelector: this.onAddNew,
-                disclosureSelector: this.onDisclosure
-            });
-
-            this.on('keyup', {
-                addNewInputSelector: this.onInputKeyUp
-            });
-
-            this.$node.html(workspacesTemplate({}));
-        });
     }
-
 });

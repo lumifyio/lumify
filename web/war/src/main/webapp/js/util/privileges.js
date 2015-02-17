@@ -15,8 +15,16 @@ define([
         this.after('initialize', function() {
             this.workspaceEditable = true;
             this.on('workspaceLoaded', this.onWorkspaceLoaded);
+            this.on('workspaceUpdated', this.onWorkspaceUpdated);
             this.update();
         });
+
+        this.onWorkspaceUpdated = function(event, data) {
+            var workspace = data.workspace;
+            this.workspaceEditable = workspace.editable;
+            this.workspaceCommentable = workspace.commentable;
+            this.update();
+        };
 
         this.onWorkspaceLoaded = function(event, workspace) {
             this.workspaceEditable = workspace.editable;

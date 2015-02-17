@@ -116,7 +116,7 @@ public class MapMarkerImage extends BaseRequestHandler {
         }
         int[] resourceImageDim = new int[]{resourceImage.getWidth(), resourceImage.getHeight()};
 
-        BufferedImage image = new BufferedImage(backgroundImage.getWidth(), backgroundImage.getHeight(), backgroundImage.getType());
+        BufferedImage image = new BufferedImage(backgroundImage.getWidth(), backgroundImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         if (isMapGlyphIcon) {
             int[] boundary = new int[]{backgroundImage.getWidth(), backgroundImage.getHeight()};

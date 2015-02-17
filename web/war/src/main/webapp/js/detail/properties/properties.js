@@ -623,6 +623,8 @@ define([
                 return cls + ' collapsed';
             });
 
+        this.order();
+
         var totalPropertyCountsByName = {};
 
         this.selectAll('tr.property-group-header, tr.property-row')
@@ -676,6 +678,8 @@ define([
                 return 'property-row property-row-' + F.className.to(datum.name + datum.key);
             });
 
+        this.order();
+
         var currentPropertyIndex = 0,
             lastPropertyName = '';
 
@@ -720,9 +724,8 @@ define([
     function createPropertyRow(vertex, ontologyProperties, maxItemsBeforeHidden) {
         this.enter()
             .append('td')
-            .each(function() {
-                var self = d3.select(this),
-                    datum = self.datum();
+            .each(function(datum) {
+                var self = d3.select(this);
                 switch (datum.type) {
                     case GROUP:
                         self.append('h1')
@@ -743,6 +746,8 @@ define([
                         break;
                 }
             });
+
+        this.order();
 
         this.attr('class', function(datum) {
                 if (datum.type === NAME) {

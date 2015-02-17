@@ -22,6 +22,7 @@ define([], function() {
 
         var selectedObjects,
             previousSelectedObjects,
+            edges,
             getVertexIdsFromEventOrSelection = function(data) {
                 if (data && data.vertexId) {
                     return [data.vertexId];
@@ -43,9 +44,11 @@ define([], function() {
 
             this.on('selectObjects', this.onSelectObjects);
             this.on('selectAll', this.onSelectAll);
+            this.on('selectConnected', this.onSelectConnected);
 
             this.on('deleteSelected', this.onDeleteSelected);
             this.on('deleteEdges', this.onDeleteEdges);
+            this.on('edgesLoaded', this.onEdgesLoaded);
             this.on('edgesDeleted', function(event, data) {
                 if (selectedObjects && _.findWhere(selectedObjects.edges, { id: data.edgeId })) {
                     if (selectedObjects.edges.length === 1) {
@@ -75,6 +78,10 @@ define([], function() {
             this.on('objectsSelected', this.onObjectsSelected);
         });
 
+        this.onEdgesLoaded = function(event, data) {
+            edges = data.edges;
+        };
+
         this.onSelectAll = function(event, data) {
             var self = this;
 
@@ -84,6 +91,39 @@ define([], function() {
                         self.trigger('selectObjects', { vertexIds: _.keys(vertices) });
                     })
             })
+        };
+
+        this.onSelectConnected = function(event, data) {
+            var self = this,
+                vertices = selectedObjects.vertices;
+
+            if (vertices.length && edges && edges.length) {
+                this.dataRequestPromise.done(function(dataRequest) {
+                    dataRequest('workspace', 'store')
+                        .done(function(workspaceVertices) {
+                            var selected = _.pluck(vertices, 'id'),
+                                toSelect = _.chain(edges)
+                                    .map(function(e) {
+                                        return selected.map(function(v) {
+                                            return e.sourceVertexId === v ?
+                                                e.destVertexId :
+                                                e.destVertexId === v ?
+                                                e.sourceVertexId :
+                                                null
+                                        })
+                                    })
+                                    .flatten()
+                                    .compact()
+                                    .unique()
+                                    .filter(function(vId) {
+                                        return vId in workspaceVertices;
+                                    })
+                                    .value();
+
+                            self.trigger('selectObjects', { vertexIds: toSelect });
+                        })
+                })
+            }
         };
 
         this.onDeleteSelected = function(event, data) {
