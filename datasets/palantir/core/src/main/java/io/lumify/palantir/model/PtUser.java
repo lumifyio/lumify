@@ -197,25 +197,25 @@ public class PtUser extends PtModelBase {
         out.writeLong(getId());
         out.writeUTF(getLogin());
         out.writeUTF(getPassword());
-        out.writeBoolean(getMackey() == null);
+        out.writeBoolean(getMackey() != null);
         if (getMackey() != null) {
             out.writeUTF(getMackey());
         }
         out.writeUTF(getFirstName());
         out.writeUTF(getLastName());
-        out.writeBoolean(getLastLogin() == null);
+        out.writeBoolean(getLastLogin() != null);
         if (getLastLogin() != null) {
             out.writeLong(getLastLogin());
         }
         out.writeUTF(getType());
         out.writeLong(getAuthSourceId());
-        out.writeBoolean(getAuthUid() == null);
+        out.writeBoolean(getAuthUid() != null);
         if (getAuthUid() != null) {
             out.writeLong(getAuthUid());
         }
         out.writeBoolean(isDeleted());
         out.writeLong(getLocked());
-        out.writeBoolean(getLockReason() == null);
+        out.writeBoolean(getLockReason() != null);
         if (getLockReason() != null) {
             out.writeUTF(getLockReason());
         }
@@ -223,7 +223,7 @@ public class PtUser extends PtModelBase {
         out.writeLong(getCreatedBy());
         out.writeLong(getTimeCreated());
         out.writeLong(getLastModified());
-        out.writeBoolean(getEmail() == null);
+        out.writeBoolean(getEmail() != null);
         if (getEmail() != null) {
             out.writeUTF(getEmail());
         }
@@ -232,6 +232,31 @@ public class PtUser extends PtModelBase {
 
     @Override
     public void readFields(DataInput in) throws IOException {
-        throw new RuntimeException("Not implemented");
+        boolean b;
+
+        setId(in.readLong());
+        setLogin(in.readUTF());
+        setPassword(in.readUTF());
+        b = in.readBoolean();
+        setMackey(b ? in.readUTF() : null);
+        setFirstName(in.readUTF());
+        setLastName(in.readUTF());
+        b = in.readBoolean();
+        setLastLogin(b ? in.readLong() : null);
+        setType(in.readUTF());
+        setAuthSourceId(in.readLong());
+        b = in.readBoolean();
+        setAuthUid(b ? in.readLong() : null);
+        setDeleted(in.readBoolean());
+        setLocked(in.readLong());
+        b = in.readBoolean();
+        setLockReason(b ? in.readUTF() : null);
+        setLockTimestamp(in.readLong());
+        setCreatedBy(in.readLong());
+        setTimeCreated(in.readLong());
+        setLastModified(in.readLong());
+        b = in.readBoolean();
+        setEmail(b ? in.readUTF() : null);
+        setEmailSource(in.readLong());
     }
 }

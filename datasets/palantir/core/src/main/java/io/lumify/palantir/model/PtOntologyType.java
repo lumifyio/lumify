@@ -1,6 +1,5 @@
 package io.lumify.palantir.model;
 
-import io.lumify.core.exception.LumifyException;
 import io.lumify.palantir.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,7 +21,7 @@ public abstract class PtOntologyType extends PtModelBase {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            throw new LumifyException("Could not create document builder", e);
+            throw new RuntimeException("Could not create document builder", e);
         }
     }
 
@@ -56,7 +55,7 @@ public abstract class PtOntologyType extends PtModelBase {
     private String parseUriFromXml(Document doc) {
         Element uriElement = XmlUtil.getChildByTagName(doc.getDocumentElement(), "uri");
         if (uriElement == null) {
-            throw new LumifyException("Could not find uri");
+            throw new RuntimeException("Could not find uri");
         }
 
         return uriElement.getTextContent();

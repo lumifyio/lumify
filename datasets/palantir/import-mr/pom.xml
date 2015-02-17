@@ -9,13 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-palantir-data-to-sequence-file</artifactId>
-    <name>Lumify: Datasets: Palantir: Data to SequenceFile</name>
-
-    <properties>
-        <!-- Same version as hadoop's protobuf -->
-        <protobuf.version>2.5.0</protobuf.version>
-    </properties>
+    <artifactId>lumify-palantir-import-mr</artifactId>
+    <name>Lumify: Datasets: Palantir: Import MapReduce</name>
 
     <dependencies>
         <dependency>
@@ -29,16 +24,38 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-bigtable</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-rabbitmq</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.beust</groupId>
-            <artifactId>jcommander</artifactId>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-securegraph</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Required for MR job -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1.6</version>
         </dependency>
     </dependencies>
 
@@ -78,7 +95,7 @@
                                 implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>io.lumify.palantir.DataToSequenceFile</mainClass>
+                            <mainClass>io.lumify.palantir.mr.ImportMR</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>
