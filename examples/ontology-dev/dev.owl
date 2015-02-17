@@ -669,7 +669,7 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#name">
         <rdfs:label xml:lang="en">Name</rdfs:label>
         <lumify:validationFormula>dependentProp(&apos;http://lumify.io/dev#lastName&apos;) &amp;&amp; dependentProp(&apos;http://lumify.io/dev#firstName&apos;)</lumify:validationFormula>
-        <lumify:displayFormula>dependentProp(&apos;http://lumify.io/dev#lastName&apos;) + &apos;, &apos; + dependentProp(&apos;http://lumify.io/dev#firstName&apos;)</lumify:displayFormula>
+        <lumify:displayFormula>_.compact([dependentProp(&apos;http://lumify.io/dev#lastName&apos;), dependentProp(&apos;http://lumify.io/dev#firstName&apos;)]).join(', ') || prop(&apos;http://lumify.io#title&apos;)</lumify:displayFormula>
         <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#firstName</lumify:dependentPropertyIri>
         <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#lastName</lumify:dependentPropertyIri>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
