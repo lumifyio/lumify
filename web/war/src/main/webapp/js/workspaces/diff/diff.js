@@ -107,6 +107,7 @@ define([
                         diffs: processDiffs,
                         formatValue: formatValue,
                         formatLabel: formatLabel,
+                        formatVisibility: formatVisibility,
                         F: F,
                         Privileges: Privileges
                     }));
