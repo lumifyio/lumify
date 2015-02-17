@@ -10,7 +10,7 @@ define([
         audit: function(edgeId) {
             return ajax('GET', '/edge/audit', {
                 edgeId: edgeId
-            });
+            }).then(_.property('auditHistory'));
         },
 
         create: function(options) {
