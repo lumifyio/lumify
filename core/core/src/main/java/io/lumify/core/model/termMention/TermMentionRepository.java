@@ -11,6 +11,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.*;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.util.FilterIterable;
+import org.securegraph.util.JoinIterable;
 
 import static org.securegraph.util.IterableUtils.single;
 import static org.securegraph.util.IterableUtils.singleOrDefault;
@@ -46,6 +47,9 @@ public class TermMentionRepository {
         return sourceVertex.getVertices(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, authorizationsWithTermMention);
     }
 
+    /**
+     * Find all term mentions connected to the vertex.
+     */
     public Iterable<Vertex> findByVertexId(String vertexId, Authorizations authorizations) {
         Authorizations authorizationsWithTermMention = getAuthorizations(authorizations);
         Vertex vertex = graph.getVertex(vertexId, authorizationsWithTermMention);
@@ -56,6 +60,22 @@ public class TermMentionRepository {
         return vertex.getVertices(Direction.BOTH, labels, authorizationsWithTermMention);
     }
 
+    /**
+     * Find all term mentions connected to either side of the edge.
+     */
+    public Iterable<Vertex> findByEdge(Edge edge, Authorizations authorizations) {
+        return new JoinIterable<>(
+                findByVertexId(edge.getVertexId(Direction.IN), authorizations),
+                findByVertexId(edge.getVertexId(Direction.OUT), authorizations)
+        );
+    }
+
+    /**
+     * Finds term mention vertices that were created for the justification of a new vertex.
+     *
+     * @param vertexId The vertex id of the vertex with the justification.
+     * @return term mention vertices matching the criteria.
+     */
     public Iterable<Vertex> findByVertexIdForVertex(final String vertexId, Authorizations authorizations) {
         return new FilterIterable<Vertex>(findByVertexId(vertexId, authorizations)) {
             @Override
@@ -75,32 +95,23 @@ public class TermMentionRepository {
         };
     }
 
-    public Iterable<Vertex> findByVertexIdAndProperty(final String vertexId, final String propertyKey, final String propertyName, final Visibility propertyVisibility, Authorizations authorizations) {
-        return new FilterIterable<Vertex>(findByVertexId(vertexId, authorizations)) {
+    /**
+     * Finds term mention vertices that were created for the justification of a new edge.
+     *
+     * @param edge The edge id of the edge with the justification.
+     * @return term mention vertices matching the criteria.
+     */
+    public Iterable<Vertex> findByEdgeForEdge(final Edge edge, Authorizations authorizations) {
+        return new FilterIterable<Vertex>(findByEdge(edge, authorizations)) {
             @Override
             protected boolean isIncluded(Vertex termMention) {
                 String forElementId = LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.getPropertyValue(termMention);
-                if (forElementId == null || !forElementId.equals(vertexId)) {
+                if (forElementId == null || !forElementId.equals(edge.getId())) {
                     return false;
                 }
 
                 TermMentionFor forType = LumifyProperties.TERM_MENTION_FOR_TYPE.getPropertyValue(termMention);
-                if (forType == null || forType != TermMentionFor.PROPERTY) {
-                    return false;
-                }
-
-                String refPropertyKey = LumifyProperties.TERM_MENTION_REF_PROPERTY_KEY.getPropertyValue(termMention);
-                if (refPropertyKey == null || !refPropertyKey.equals(propertyKey)) {
-                    return false;
-                }
-
-                String refPropertyName = LumifyProperties.TERM_MENTION_REF_PROPERTY_NAME.getPropertyValue(termMention);
-                if (refPropertyName == null || !refPropertyName.equals(propertyName)) {
-                    return false;
-                }
-
-                String refPropertyVisibilityString = LumifyProperties.TERM_MENTION_REF_PROPERTY_VISIBILITY.getPropertyValue(termMention);
-                if (refPropertyVisibilityString == null || !refPropertyVisibilityString.equals(propertyVisibility.getVisibilityString())) {
+                if (forType == null || forType != TermMentionFor.EDGE) {
                     return false;
                 }
 
@@ -109,8 +120,60 @@ public class TermMentionRepository {
         };
     }
 
-    public Iterable<Vertex> findByEdgeIdAndProperty(String edgeId, Property property, Authorizations authorizations) {
-        return null;
+    /**
+     * Finds all term mentions connected to a vertex that match propertyKey, propertyName, and propertyVisibility.
+     */
+    public Iterable<Vertex> findByVertexIdAndProperty(final String vertexId, final String propertyKey, final String propertyName, final Visibility propertyVisibility, Authorizations authorizations) {
+        return new FilterIterable<Vertex>(findByVertexId(vertexId, authorizations)) {
+            @Override
+            protected boolean isIncluded(Vertex termMention) {
+                String forElementId = LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.getPropertyValue(termMention);
+                if (forElementId == null || !forElementId.equals(vertexId)) {
+                    return false;
+                }
+                return isTermMentionForProperty(termMention, propertyKey, propertyName, propertyVisibility);
+            }
+        };
+    }
+
+    /**
+     * Finds all term mentions connected to either side of an edge that match propertyKey, propertyName, and propertyVisibility.
+     */
+    public Iterable<Vertex> findByEdgeIdAndProperty(final Edge edge, final String propertyKey, final String propertyName, final Visibility propertyVisibility, Authorizations authorizations) {
+        return new FilterIterable<Vertex>(findByEdge(edge, authorizations)) {
+            @Override
+            protected boolean isIncluded(Vertex termMention) {
+                String forElementId = LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.getPropertyValue(termMention);
+                if (forElementId == null || !forElementId.equals(edge.getId())) {
+                    return false;
+                }
+                return isTermMentionForProperty(termMention, propertyKey, propertyName, propertyVisibility);
+            }
+        };
+    }
+
+    private boolean isTermMentionForProperty(Vertex termMention, String propertyKey, String propertyName, Visibility propertyVisibility) {
+        TermMentionFor forType = LumifyProperties.TERM_MENTION_FOR_TYPE.getPropertyValue(termMention);
+        if (forType == null || forType != TermMentionFor.PROPERTY) {
+            return false;
+        }
+
+        String refPropertyKey = LumifyProperties.TERM_MENTION_REF_PROPERTY_KEY.getPropertyValue(termMention);
+        if (refPropertyKey == null || !refPropertyKey.equals(propertyKey)) {
+            return false;
+        }
+
+        String refPropertyName = LumifyProperties.TERM_MENTION_REF_PROPERTY_NAME.getPropertyValue(termMention);
+        if (refPropertyName == null || !refPropertyName.equals(propertyName)) {
+            return false;
+        }
+
+        String refPropertyVisibilityString = LumifyProperties.TERM_MENTION_REF_PROPERTY_VISIBILITY.getPropertyValue(termMention);
+        if (refPropertyVisibilityString == null || !refPropertyVisibilityString.equals(propertyVisibility.getVisibilityString())) {
+            return false;
+        }
+
+        return true;
     }
 
     public Vertex findById(String termMentionId, Authorizations authorizations) {

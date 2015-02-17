@@ -332,7 +332,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 if (element instanceof Vertex) {
                     termMentions = termMentionRepository.findByVertexIdAndProperty(element.getId(), property.getKey(), property.getName(), propertyVisibility, authorizations);
                 } else {
-                    termMentions = termMentionRepository.findByEdgeIdAndProperty(element.getId(), property, authorizations);
+                    termMentions = termMentionRepository.findByEdgeIdAndProperty((Edge) element, property.getKey(), property.getName(), propertyVisibility, authorizations);
                 }
                 for (Vertex termMention : termMentions) {
                     termMentionRepository.updateVisibility(termMention, property.getVisibility(), authorizations);
@@ -421,6 +421,10 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex.getId(), authorizations)) {
+            termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
+        }
+
+        for (Vertex termMention : termMentionRepository.findByEdgeForEdge(edge, authorizations)) {
             termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
 
