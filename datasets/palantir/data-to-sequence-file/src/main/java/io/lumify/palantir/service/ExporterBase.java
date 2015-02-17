@@ -39,6 +39,10 @@ public abstract class ExporterBase<T extends PtModelBase> {
         dataToSequenceFile.writeFile(fileName, data);
     }
 
+    protected void writeFile(DataToSequenceFile dataToSequenceFile, String fileName, String data) {
+        dataToSequenceFile.writeFile(fileName, data);
+    }
+
     private Class<?> getKeyClass() {
         return LongWritable.class;
     }
@@ -52,6 +56,7 @@ public abstract class ExporterBase<T extends PtModelBase> {
     protected long run(DataToSequenceFile dataToSequenceFile, Iterable<T> rows, SequenceFile.Writer outputFile) {
         int count = 0;
 
+        beforeProcessRows(dataToSequenceFile);
         for (T row : rows) {
             if (count % 1000 == 0) {
                 LOGGER.debug("Exporting %s: %d", getPtClass().getSimpleName(), count);
@@ -63,8 +68,17 @@ public abstract class ExporterBase<T extends PtModelBase> {
             }
             count++;
         }
+        afterProcessRows(dataToSequenceFile);
 
         return count;
+    }
+
+    protected void beforeProcessRows(DataToSequenceFile dataToSequenceFile) {
+
+    }
+
+    protected void afterProcessRows(DataToSequenceFile dataToSequenceFile) {
+
     }
 
     protected void processRow(DataToSequenceFile dataToSequenceFile, T row, SequenceFile.Writer outputFile) throws IOException {

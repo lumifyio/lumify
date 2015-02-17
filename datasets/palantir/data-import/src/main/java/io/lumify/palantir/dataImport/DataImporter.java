@@ -83,7 +83,7 @@ public class DataImporter {
 //        tree.add(ptLinkRelationImporter);
 
         if (!p.isOntologyExport()) {
-            tree.add(ptUserImporter);
+//            tree.add(ptUserImporter);
             tree.add(ptUserImporter, ptGraphImporter);
             tree.add(ptObjectTypeImporter, ptObjectImporter);
             tree.add(ptGraphImporter, ptGraphObjectImporter);

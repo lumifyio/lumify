@@ -1,6 +1,13 @@
 package io.lumify.palantir.model;
 
-public class PtUser {
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+public class PtUser extends PtModelBase {
     private long id;
     private String login;
     private String password;
@@ -171,5 +178,60 @@ public class PtUser {
 
     public void setEmailSource(long emailSource) {
         this.emailSource = emailSource;
+    }
+
+    @Override
+    public String toString() {
+        return "PtUser{" +
+                "id=" + id +
+                '}';
+    }
+
+    @Override
+    public Writable getKey() {
+        return new LongWritable(getId());
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(getId());
+        out.writeUTF(getLogin());
+        out.writeUTF(getPassword());
+        out.writeBoolean(getMackey() == null);
+        if (getMackey() != null) {
+            out.writeUTF(getMackey());
+        }
+        out.writeUTF(getFirstName());
+        out.writeUTF(getLastName());
+        out.writeBoolean(getLastLogin() == null);
+        if (getLastLogin() != null) {
+            out.writeLong(getLastLogin());
+        }
+        out.writeUTF(getType());
+        out.writeLong(getAuthSourceId());
+        out.writeBoolean(getAuthUid() == null);
+        if (getAuthUid() != null) {
+            out.writeLong(getAuthUid());
+        }
+        out.writeBoolean(isDeleted());
+        out.writeLong(getLocked());
+        out.writeBoolean(getLockReason() == null);
+        if (getLockReason() != null) {
+            out.writeUTF(getLockReason());
+        }
+        out.writeLong(getLockTimestamp());
+        out.writeLong(getCreatedBy());
+        out.writeLong(getTimeCreated());
+        out.writeLong(getLastModified());
+        out.writeBoolean(getEmail() == null);
+        if (getEmail() != null) {
+            out.writeUTF(getEmail());
+        }
+        out.writeLong(getEmailSource());
+    }
+
+    @Override
+    public void readFields(DataInput in) throws IOException {
+        throw new RuntimeException("Not implemented");
     }
 }

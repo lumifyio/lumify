@@ -69,7 +69,9 @@ public class DataToSequenceFile {
 //            new PtImageInfoExporter().run(this);
 //            new PtOntologyResourceExporter().run(this);
 //            new PtLinkRelationExporter().run(this);
-            new OntologyToOwl(baseIri).run(getFs(), getDestinationPath());
+//            new OntologyToOwl(baseIri).run(getFs(), getDestinationPath());
+
+            new PtUserExporter().run(this);
         } finally {
             sqlRunner.close();
         }
