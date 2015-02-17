@@ -373,6 +373,10 @@ define([
                 propertyKey = $target.closest('.label-info').data('propertyKey'),
                 property = F.vertex.props(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
 
+            if (property.length !== 1) {
+                throw new Error('Multiple detected objects with same key found');
+            }
+            property = property[0];
             this.$node.find('.focused').removeClass('focused');
             $target.closest('.detected-object').parent().addClass('focused');
 
