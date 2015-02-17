@@ -14,7 +14,7 @@
     <name>Lumify: Datasets: Palantir</name>
 
     <modules>
-        <module>ontology-to-owl</module>
         <module>data-import</module>
+        <module>data-to-sequence-file</module>
     </modules>
 </project>

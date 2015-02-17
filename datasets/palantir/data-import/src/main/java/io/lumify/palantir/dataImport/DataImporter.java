@@ -74,13 +74,13 @@ public class DataImporter {
 
         tree = new AutoDependencyTreeRunner();
 
-        tree.add(ptObjectTypeImporter);
-        tree.add(ptPropertyTypeImporter);
-        tree.add(ptLinkTypeImporter);
-        tree.add(ptNodeDisplayTypeImporter);
-        tree.add(ptImageInfoImporter);
-        tree.add(ptOntologyResourceImporter);
-        tree.add(ptLinkRelationImporter);
+        //tree.add(ptObjectTypeImporter);
+        //tree.add(ptPropertyTypeImporter);
+//        tree.add(ptLinkTypeImporter);
+//        tree.add(ptNodeDisplayTypeImporter);
+//        tree.add(ptImageInfoImporter);
+//        tree.add(ptOntologyResourceImporter);
+//        tree.add(ptLinkRelationImporter);
 
         if (!p.isOntologyExport()) {
             tree.add(ptUserImporter);

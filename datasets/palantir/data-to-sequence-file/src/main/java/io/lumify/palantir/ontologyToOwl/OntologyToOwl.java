@@ -3,8 +3,9 @@ package io.lumify.palantir.ontologyToOwl;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.palantir.DataToSequenceFile;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
+import org.apache.hadoop.fs.*;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,8 +24,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,52 +34,32 @@ import java.util.Map;
 public class OntologyToOwl {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyToOwl.class);
     public static final String INVERSE_SUFFIX = "_inverse";
-    private String baseIri;
-    private final File outFile;
+    private final String baseIri;
     private Element exportRootElement;
     private Document exportDoc;
-    private XPathFactory xPathfactory;
     private Document linkRelationsXml;
     private Document imageInfoXml;
     private DocumentBuilder docBuilder;
     private XPath xPath;
     private NamespaceContext ns;
     private TitleFormulaMaker titleFormulaMaker;
-    private Map<String, ObjectProperty> objectProperties = new HashMap<String, ObjectProperty>();
-    private Map<String, DataTypeProperty> dataTypeProperties = new HashMap<String, DataTypeProperty>();
-    private Map<String, OwlClass> owlClasses = new HashMap<String, OwlClass>();
-    private Map<String, List<OwlElement>> iconMapping = new HashMap<String, List<OwlElement>>();
+    private Map<String, ObjectProperty> objectProperties = new HashMap<>();
+    private Map<String, DataTypeProperty> dataTypeProperties = new HashMap<>();
+    private Map<String, OwlClass> owlClasses = new HashMap<>();
+    private Map<String, List<OwlElement>> iconMapping = new HashMap<>();
 
-    public OntologyToOwl(String baseIri, File outFile) {
-        this.baseIri = baseIri;
-        this.outFile = outFile;
-        titleFormulaMaker = new TitleFormulaMaker(baseIri);
-    }
-
-    public static void main(String[] args) throws Exception {
-        if (args.length != 3) {
-            System.out.println("Required two arguments <inDir> <baseIri> <outFile>");
-            System.exit(-1);
-            return;
-        }
-
-        File inDir = new File(args[0]);
-        String baseIri = args[1];
-        File outFile = new File(args[2]);
-
+    public OntologyToOwl(String baseIri) {
         if (baseIri.endsWith("#")) {
             baseIri = baseIri.substring(0, baseIri.length() - 1);
         }
-
-        new OntologyToOwl(baseIri, outFile).run(inDir);
+        this.baseIri = baseIri;
+        this.titleFormulaMaker = new TitleFormulaMaker(baseIri);
     }
 
-    private void run(File inDir) throws Exception {
-        if (!inDir.exists()) {
-            throw new LumifyException("inDir (" + inDir + ") does not exist");
-        }
+    public void run(FileSystem fs, Path destinationPath) throws Exception {
+        Path outPath = new Path(destinationPath, "owl");
 
-        xPathfactory = XPathFactory.newInstance();
+        XPathFactory xPathfactory = XPathFactory.newInstance();
         xPath = xPathfactory.newXPath();
         ns = new OwlNamespaceContext();
         xPath.setNamespaceContext(ns);
@@ -103,7 +84,7 @@ public class OntologyToOwl {
         importsElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", "http://lumify.io");
         ontologyElement.appendChild(importsElement);
 
-        runOnDir(inDir);
+        runOnDir(fs, outPath, new Path(destinationPath, DataToSequenceFile.ONTOLOGY_XML_DIR_NAME));
 
         if (linkRelationsXml == null) {
             LOGGER.warn("Could not find link relations xml.");
@@ -115,7 +96,7 @@ public class OntologyToOwl {
         if (imageInfoXml == null) {
             LOGGER.warn("Could not find image info xml.");
         } else {
-            runOnImageInfoXml(imageInfoXml);
+            runOnImageInfoXml(fs, destinationPath, imageInfoXml);
         }
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -123,22 +104,24 @@ public class OntologyToOwl {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         DOMSource source = new DOMSource(exportDoc);
-        StreamResult result = new StreamResult(outFile);
-        transformer.transform(source, result);
+        try (OutputStream out = fs.create(new Path(outPath, "palantir.owl"), true)) {
+            StreamResult result = new StreamResult(out);
+            transformer.transform(source, result);
+        }
     }
 
-    private void runOnImageInfoXml(Document imageInfoXml) {
+    private void runOnImageInfoXml(FileSystem fs, Path destinationPath, Document imageInfoXml) {
         List<Element> imageInfoConfigs = getXmlElements(imageInfoXml, "/image_infos/image_info_config");
         for (Element imageInfoConfig : imageInfoConfigs) {
             try {
-                runOnImageInfoConfig(imageInfoConfig);
+                runOnImageInfoConfig(fs, destinationPath, imageInfoConfig);
             } catch (Exception ex) {
                 LOGGER.error("Could not process: %s", imageInfoConfig.toString(), ex);
             }
         }
     }
 
-    private void runOnImageInfoConfig(Element imageInfoConfig) {
+    private void runOnImageInfoConfig(FileSystem fs, Path destinationPath, Element imageInfoConfig) throws IOException {
         String uri = getXmlString(imageInfoConfig, "uri");
         String path = getXmlString(imageInfoConfig, "path");
 
@@ -146,9 +129,9 @@ public class OntologyToOwl {
             path = path.substring(1);
         }
 
-        File expectedFile = new File(outFile.getParent(), path);
-        if (!expectedFile.exists()) {
-            throw new LumifyException("Could not find file for uri " + uri + " with path " + expectedFile.getAbsolutePath());
+        Path expectedFilePath = new Path(destinationPath, path);
+        if (!fs.exists(expectedFilePath)) {
+            throw new LumifyException("Could not find file for uri " + uri + " with path " + expectedFilePath.toString());
         }
 
         List<OwlElement> owlElements = iconMapping.get(uri);
@@ -195,37 +178,37 @@ public class OntologyToOwl {
         }
     }
 
-    private void runOnDir(File inDir) {
-        File[] files = inDir.listFiles();
+    private void runOnDir(FileSystem fs, Path outPath, Path inDir) throws IOException {
+        RemoteIterator<LocatedFileStatus> files = fs.listFiles(inDir, true);
         if (files == null) {
             return;
         }
-        for (File f : files) {
-            if (f.isDirectory()) {
-                runOnDir(f);
-            } else {
-                try {
-                    runOnFile(f);
-                } catch (Throwable e) {
-                    LOGGER.error("Could not process: %s", f.getAbsolutePath(), e);
-                }
+        while (files.hasNext()) {
+            LocatedFileStatus f = files.next();
+            try {
+                runOnFile(fs, outPath, f);
+            } catch (Throwable e) {
+                LOGGER.error("Could not process: %s", f.toString(), e);
             }
         }
     }
 
-    private void runOnFile(File inFile) throws IOException, SAXException {
-        if (!inFile.getAbsolutePath().toLowerCase().endsWith(".xml")) {
-            LOGGER.warn("skipping file: %s", inFile.getAbsolutePath());
+    private void runOnFile(FileSystem fs, Path outPath, LocatedFileStatus inFile) throws IOException, SAXException {
+        if (!inFile.getPath().getName().toLowerCase().endsWith(".xml")) {
+            LOGGER.warn("skipping file: %s", inFile.toString());
             return;
         }
 
-        Document inXml = docBuilder.parse(inFile);
+        Document inXml;
+        try (FSDataInputStream in = fs.open(inFile.getPath())) {
+            inXml = docBuilder.parse(in);
+        }
 
-        LOGGER.info("processing %s xml: %s", inXml.getDocumentElement().getNodeName(), inFile.getAbsolutePath());
+        LOGGER.info("processing %s xml: %s", inXml.getDocumentElement().getNodeName(), inFile.toString());
         if (inXml.getDocumentElement().getNodeName().equals("pt_object_type_config")) {
             runOnObjectTypeConfig(inXml);
         } else if (inXml.getDocumentElement().getNodeName().equals("ontology_resource_config")) {
-            runOnOntologyResourceConfig(inXml);
+            runOnOntologyResourceConfig(fs, outPath, inXml);
         } else if (inXml.getDocumentElement().getNodeName().equals("ontologyExportInfo")) {
             // skip
         } else if (inXml.getDocumentElement().getNodeName().equals("link_type_config")) {
@@ -245,7 +228,7 @@ public class OntologyToOwl {
         }
     }
 
-    private void runOnOntologyResourceConfig(Document inXml) throws IOException {
+    private void runOnOntologyResourceConfig(FileSystem fs, Path outPath, Document inXml) throws IOException {
         String path = getXmlString(inXml, "/ontology_resource_config/path");
         String contents = getXmlString(inXml, "/ontology_resource_config/contents");
 
@@ -255,10 +238,9 @@ public class OntologyToOwl {
 
         byte[] data = Base64.decodeBase64(contents);
 
-        File file = new File(outFile.getParent(), path);
-        file.getParentFile().mkdirs();
-
-        FileUtils.writeByteArrayToFile(file, data);
+        try (FSDataOutputStream out = fs.create(new Path(outPath, path))) {
+            out.write(data);
+        }
     }
 
     private void runOnLinkRelationsXml(Document linkRelationsXml) {
@@ -415,7 +397,7 @@ public class OntologyToOwl {
     private void addIconMapping(String iconUri, OwlElement owlElement) {
         List<OwlElement> list = iconMapping.get(iconUri);
         if (list == null) {
-            list = new ArrayList<OwlElement>();
+            list = new ArrayList<>();
             iconMapping.put(iconUri, list);
         }
         list.add(owlElement);
@@ -494,7 +476,7 @@ public class OntologyToOwl {
     private List<Element> getXmlElements(Document inXml, String xpath) {
         try {
             NodeList nodeList = (NodeList) xPath.evaluate(xpath, inXml, XPathConstants.NODESET);
-            List<Element> results = new ArrayList<Element>();
+            List<Element> results = new ArrayList<>();
             for (int i = 0; i < nodeList.getLength(); i++) {
                 results.add((Element) nodeList.item(i));
             }

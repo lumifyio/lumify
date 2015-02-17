@@ -9,8 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-palantir-ontology-to-owl</artifactId>
-    <name>Lumify: Datasets: Palantir: Ontology to OWL</name>
+    <artifactId>lumify-palantir-data-to-sequence-file</artifactId>
+    <name>Lumify: Datasets: Palantir: Data to SequenceFile</name>
+
+    <properties>
+        <!-- Same version as hadoop's protobuf -->
+        <protobuf.version>2.5.0</protobuf.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -19,8 +24,25 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
         </dependency>
     </dependencies>
 
@@ -56,9 +78,11 @@
                 <version>${plugin.maven.shade.version}</version>
                 <configuration>
                     <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>io.lumify.palantir.ontologyToOwl.OntologyToOwl</mainClass>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>io.lumify.palantir.DataToSequenceFile</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>
