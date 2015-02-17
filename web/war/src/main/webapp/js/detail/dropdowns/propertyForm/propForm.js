@@ -207,7 +207,7 @@ define([
 
             var vertexProperty = property.title === 'http://lumify.io#visibilityJson' ?
                     _.first(F.vertex.props(this.attr.data, property.title)) :
-                    property.key ?
+                    !_.isUndefined(property.key) ?
                     _.first(F.vertex.props(this.attr.data, property.title, property.key)) :
                     undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
