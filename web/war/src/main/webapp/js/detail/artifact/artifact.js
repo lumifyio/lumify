@@ -38,6 +38,10 @@ define([
     d3) {
     'use strict';
 
+    var PIXELS_CLOSE_FOR_ROUNDING = 20; // Used for sorting x/y coordinates of detected objects
+                                        // This is the distance at which
+                                        // objects are considered positioned similarly
+
     return defineComponent(Artifact, withTypeContent, withHighlighting, withDataRequest);
 
     function Artifact() {
@@ -243,6 +247,16 @@ define([
                 var vertices = results[0],
                     concepts = results[1],
                     verticesById = _.indexBy(vertices, 'id'),
+                    artifactImage = self.select('imagePreviewSelector').find('.artifact-image'),
+                    heightRound = Math.max(1,
+                        Math.round(PIXELS_CLOSE_FOR_ROUNDING / artifactImage.height() * 100) || 0
+                    ),
+                    widthRound = Math.max(1,
+                        Math.round(PIXELS_CLOSE_FOR_ROUNDING / artifactImage.width() * 100) || 0
+                    ),
+                    roundCoordinate = function(percentFloat, nearest) {
+                        return nearest * (Math.round(percentFloat * 100 / nearest));
+                    },
                     detectedObjectKey = _.property('key');
 
                 d3.select(container.get(0))
@@ -256,7 +270,17 @@ define([
 
                         this
                             .sort(function(a, b) {
-                                return a.value.x1 - b.value.x1;
+                                var sort =
+                                    roundCoordinate(a.value.y1, heightRound) -
+                                    roundCoordinate(b.value.y1, heightRound)
+
+                                if (sort === 0) {
+                                    sort =
+                                        roundCoordinate(a.value.x1, widthRound) -
+                                        roundCoordinate(b.value.x1, widthRound)
+                                }
+
+                                return sort;
                             })
                             .style('display', function(detectedObject) {
                                 if (wasResolved[detectedObject.key]) {
