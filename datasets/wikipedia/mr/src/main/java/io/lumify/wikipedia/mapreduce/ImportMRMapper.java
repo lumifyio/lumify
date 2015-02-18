@@ -270,7 +270,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     }
 
     private Iterable<LinkWithOffsets> getLinks(TextConverter textConverter) {
-        return new JoinIterable<LinkWithOffsets>(
+        return new JoinIterable<>(
                 new ConvertingIterable<InternalLinkWithOffsets, LinkWithOffsets>(textConverter.getInternalLinks()) {
                     @Override
                     protected LinkWithOffsets convert(InternalLinkWithOffsets internalLinkWithOffsets) {
