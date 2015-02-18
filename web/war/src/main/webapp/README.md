@@ -13,7 +13,43 @@
     # Compile less, js and watch directory
     > grunt
 
+## Helpful Global Functions
+
+These are some developer helper functions. Run these commands in the browser console.
+
+### LiveReload
+
+Have the browser auto refresh when changes are made. This is remembered in local storage so, it only needs to be run once to enable. `grunt` must be watching.
+
+        enableLiveReload(true); // to enable (refresh browser once to start)
+
+        enableLiveReload(false); // to disable
+
+### Switch Language
+
+Test changing the language. Sets a localStorage token and reloads the page while loading appropriate resources. Useful for checking the UI with different size text.
+
+        switchLanguage('de') // Accepts language or language and country with "_". Ex: en_us
+
+
+### Component Highlighter
+
+Overlays component name using mouseover events. Useful for checking what component is responsible for what on the page.
+
+        enableComponentHighlighting(true); // Display component overlays
+
+        enableComponentHighlighting(false); // Disable component overlays
+
+### Gremlins
+
+Randomly click in the UI for some period of time. Useful for checking to see if UI can break with errant and excessive clicking.
+
+        gremlins();
+
+
 ## Extensibility
+
+For more extensibility options, see README in the `js/configuration/plugins` directories.
 
 ### Localization
 
