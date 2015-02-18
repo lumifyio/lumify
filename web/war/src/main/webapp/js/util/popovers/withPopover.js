@@ -11,6 +11,10 @@ define([
 
     function withPopover() {
 
+        this.defaultAttrs({
+            withPopoverInputSelector: 'input,select'
+        })
+
         this.before('teardown', function() {
             clearTimeout(this.positionChangeErrorCheck);
             $(document).off('.popoverclose')
@@ -48,6 +52,9 @@ define([
 
             this.on(this.popover, 'positionDialog', this.positionDialog);
             this.on(this.popover, 'closePopover', this.teardown);
+            this.on(this.popover, 'keyup', {
+                withPopoverInputSelector: this.withPopoverOnKeyup
+            })
 
             $(document).off('.popoverclose').on('click.popoverclose', function(e) {
                 if (self.attr.teardownOnTap !== false) {
@@ -59,6 +66,17 @@ define([
             })
 
             this.registerAnchorTo();
+        };
+
+        this.withPopoverOnKeyup = function(event) {
+            if (this.enterShouldSubmit && event.which === $.ui.keyCode.ENTER) {
+                var selector = this.attr[this.enterShouldSubmit];
+                if (selector) {
+                    this.popover.find(this.attr[this.enterShouldSubmit]).not(':disabled').click();
+                } else {
+                    console.warn('Selector to trigger on enter not found in popover', selector);
+                }
+            }
         };
 
         this.registerAnchorTo = function() {

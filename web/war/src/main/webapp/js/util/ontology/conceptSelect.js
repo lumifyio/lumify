@@ -96,9 +96,6 @@ define([
                                 concept = self.conceptsById[conceptId];
 
                             self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
-                            _.defer(function() {
-                                $element.blur();
-                            });
                             return concept && concept.displayName || '';
                         },
                         highlighter: function(concept) {

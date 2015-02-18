@@ -52,7 +52,10 @@ define([
                     promptAddButtonSelector: this.onPromptAdd
                 });
 
+                this.enterShouldSubmit = 'addButtonSelector';
+
                 ConceptSelector.attachTo(self.popover.find('.concept'), {
+                    focus: true,
                     defaultText: i18n('popovers.add_related.concept.default_text'),
                     limitRelatedToConceptId: F.vertex.prop(
                         _.isArray(this.attr.vertex) ? this.attr.vertex[0] : this.attr.vertex,

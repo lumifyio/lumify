@@ -47,6 +47,8 @@ define([
                 this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
                 this.on(this.popover, 'justificationchange', this.onJustificationChange);
 
+                this.enterShouldSubmit = 'createSelector';
+
                 ConceptSelect.attachTo(this.popover.find('.concept'), {
                     focus: true
                 });

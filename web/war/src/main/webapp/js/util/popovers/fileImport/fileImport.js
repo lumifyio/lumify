@@ -68,6 +68,8 @@ define([
 
                 this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
 
+                this.enterShouldSubmit = 'importSelector';
+
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
 
                 this.on(this.popover, 'click', {
