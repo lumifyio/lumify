@@ -242,6 +242,10 @@ public class RdfGraphPropertyWorker extends GraphPropertyWorker {
         LOGGER.info("importResource: %s = %s", label, vertexId);
     }
 
+    /**
+     * RDF requires that all subjects are URIs. To create more portable ids,
+     * this method will look for the last '#' character and return everything after that.
+     */
     private String getGraphVertexId(Resource subject) {
         String subjectUri = subject.getURI();
         checkNotNull(subjectUri, "could not get uri of subject: " + subject);
