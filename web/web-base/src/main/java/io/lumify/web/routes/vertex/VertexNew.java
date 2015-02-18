@@ -2,12 +2,13 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.ClientApiConverter;
@@ -17,8 +18,10 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiElement;
-import io.lumify.web.clientapi.model.VisibilityJson;
-import org.securegraph.*;
+import org.securegraph.Authorizations;
+import org.securegraph.Graph;
+import org.securegraph.Vertex;
+import org.securegraph.Visibility;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +32,7 @@ public class VertexNew extends BaseRequestHandler {
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkQueueRepository workQueueRepository;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public VertexNew(
@@ -37,17 +41,22 @@ public class VertexNew extends BaseRequestHandler {
             final WorkspaceRepository workspaceRepository,
             final VisibilityTranslator visibilityTranslator,
             final WorkQueueRepository workQueueRepository,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
         this.workQueueRepository = workQueueRepository;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String conceptType = getRequiredParameter(request, "conceptType");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
+        final String justificationText = getOptionalParameter(request, "justificationText");
+        final String sourceInfoString = getOptionalParameter(request, "sourceInfo");
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
@@ -59,22 +68,40 @@ public class VertexNew extends BaseRequestHandler {
             return;
         }
 
-        respondWithClientApiObject(response, handle(conceptType, visibilitySource, user, workspaceId, authorizations));
+        ClientApiElement element = handle(
+                conceptType,
+                visibilitySource,
+                justificationText,
+                SourceInfo.fromString(sourceInfoString),
+                user,
+                workspaceId,
+                authorizations
+        );
+        respondWithClientApiObject(response, element);
     }
 
-    private ClientApiElement handle(String conceptType, String visibilitySource, User user, String workspaceId, Authorizations authorizations) {
+    private ClientApiElement handle(
+            String conceptType,
+            String visibilitySource,
+            String justificationText,
+            SourceInfo sourceInfo,
+            User user,
+            String workspaceId,
+            Authorizations authorizations
+    ) {
         Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
 
-        VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
-        LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
-        Visibility visibility = lumifyVisibility.getVisibility();
-
-        VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility);
-        LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, visibility);
-        Metadata propertyMetadata = new Metadata();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
-        LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptType, propertyMetadata, visibility);
-        Vertex vertex = vertexBuilder.save(authorizations);
+        Vertex vertex = GraphUtil.addVertex(
+                graph,
+                conceptType,
+                visibilitySource,
+                workspaceId,
+                justificationText,
+                sourceInfo,
+                visibilityTranslator,
+                termMentionRepository,
+                authorizations
+        );
         this.graph.flush();
 
         getWorkspaceRepository().updateEntityOnWorkspace(workspace, vertex.getId(), true, null, user);

@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.i18n.phonenumbers.PhoneNumberMatch;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
@@ -54,7 +53,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
         Vertex sourceVertex = (Vertex) data.getElement();
         VisibilityJson visibilityJson = LumifyProperties.VISIBILITY_JSON.getPropertyValue(sourceVertex);
         final Iterable<PhoneNumberMatch> phoneNumbers = phoneNumberUtil.findNumbers(text, defaultRegionCode);
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         for (final PhoneNumberMatch phoneNumber : phoneNumbers) {
             final String formattedNumber = phoneNumberUtil.format(phoneNumber.number(), PhoneNumberUtil.PhoneNumberFormat.E164);
             int start = phoneNumber.start();
@@ -74,6 +73,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
         }
         getGraph().flush();
         applyTermMentionFilters(sourceVertex, termMentions);
+        pushTextUpdated(data);
 
         LOGGER.debug("Number of phone numbers extracted: %d", count(phoneNumbers));
     }

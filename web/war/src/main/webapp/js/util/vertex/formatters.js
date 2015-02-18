@@ -191,7 +191,7 @@ define([
                     modifiedDate = property['http://lumify.io#modifiedDate'],
                     sourceTimezone = property['http://lumify.io#sourceTimezone'],
                     confidence = property['http://lumify.io#confidence'],
-                    justification = property._justificationMetadata,
+                    justification = property['http://lumify.io#justification'],
                     source = property._sourceMetadata;
 
                 return (

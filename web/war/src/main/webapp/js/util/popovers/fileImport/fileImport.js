@@ -170,6 +170,9 @@ define([
                 })
                 .then(function(result) {
                     self.trigger('updateWorkspace', {
+                        options: {
+                            selectAll: true
+                        },
                         entityUpdates: result.vertexIds.map(function(vId) {
                             return {
                                 vertexId: vId,

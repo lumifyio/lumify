@@ -2,21 +2,23 @@ define([
     'flight/lib/component',
     '../withDropdown',
     'tpl!./termForm',
-    'tpl!./entity',
     'tpl!util/alert',
     'util/vertex/formatters',
     'util/ontology/conceptSelect',
+    'util/vertex/vertexSelect',
     'util/withDataRequest',
+    'util/range',
     'util/jquery.removePrefixedClasses'
 ], function(
     defineComponent,
     withDropdown,
     dropdownTemplate,
-    entityTemplate,
     alertTemplate,
     F,
     ConceptSelector,
-    withDataRequest) {
+    VertexSelector,
+    withDataRequest,
+    rangeUtils) {
     'use strict';
 
     return defineComponent(TermForm, withDropdown, withDataRequest);
@@ -27,10 +29,9 @@ define([
             entityConceptMenuSelector: '.underneath .dropdown-menu a',
             actionButtonSelector: '.btn.btn-small.btn-primary',
             buttonDivSelector: '.buttons',
-            objectSignSelector: '.object-sign',
-            graphVertexSelector: '.graphVertexId',
             visibilitySelector: '.visibility',
             conceptContainerSelector: '.concept-container',
+            vertexContainerSelector: '.vertex-container',
             helpSelector: '.help',
             addNewPropertiesSelector: '.none'
         });
@@ -58,30 +59,10 @@ define([
             this.registerEvents();
         });
 
-        this.showTypeahead = function() {
+        this.showTypeahead = function(options) {
             if (!this.unresolve) {
-                this.select('objectSignSelector').typeahead('lookup');
+                this.select('vertexContainerSelector').trigger('showTypeahead', options);
             }
-        };
-
-        this.onKeyPress = function(event) {
-            if (!this.lastQuery || this.lastQuery === this.select('objectSignSelector').val()) {
-                if (!this.select('actionButtonSelector').is(':disabled')) {
-                    switch (event.which) {
-                        case $.ui.keyCode.ENTER:
-                            this.onButtonClicked(event);
-                    }
-                }
-                return;
-            }
-
-            if (!this.debouncedLookup) {
-                this.debouncedLookup = _.debounce(function() {
-                    this.select('objectSignSelector').typeahead('lookup');
-                }.bind(this), 100);
-            }
-
-            this.debouncedLookup();
         };
 
         this.reset = function() {
@@ -90,7 +71,11 @@ define([
             this.select('visibilitySelector').hide();
             this.select('conceptContainerSelector').hide();
             this.select('actionButtonSelector').hide();
-            this.updateResolveImageIcon();
+        };
+
+        this.onVertexSelected = function(event, data) {
+            this.sign = data.sign;
+            this.graphVertexChanged(data.vertexId, data.item);
         };
 
         this.graphVertexChanged = function(newGraphVertexId, item, initial) {
@@ -98,7 +83,6 @@ define([
 
             this.currentGraphVertexId = newGraphVertexId;
             if (!initial || newGraphVertexId) {
-                this.select('graphVertexSelector').val(newGraphVertexId);
                 var info = _.isObject(item) ? item.properties || item : $(this.attr.mentionNode).data('info');
 
                 this.trigger(this.select('conceptContainerSelector'), 'enableConcept', {
@@ -150,14 +134,6 @@ define([
                     })
                 });
             }
-
-            if (newGraphVertexId) {
-                this.dataRequest('vertex', 'store', { vertexIds: newGraphVertexId })
-                    .done(function(v) {
-                        self.updateResolveImageIcon(v);
-                    });
-            } else this.updateResolveImageIcon();
-
         };
 
         this.onButtonClicked = function(event) {
@@ -171,7 +147,7 @@ define([
         this.termModification = function(event) {
             var self = this,
                 $mentionNode = $(this.attr.mentionNode),
-                newObjectSign = $.trim(this.select('objectSignSelector').val()),
+                newObjectSign = $.trim(this.sign),
                 mentionStart,
                 mentionEnd;
 
@@ -211,6 +187,16 @@ define([
             }
 
             if (!this.unresolve) {
+                if (self.attr.snippet) {
+                    parameters.sourceInfo = {
+                        vertexId: parameters.artifactId,
+                        textPropertyKey: parameters.propertyKey,
+                        startOffset: parameters.mentionStart,
+                        endOffset: parameters.mentionEnd,
+                        snippet: self.attr.snippet
+                    };
+                }
+
                 this.dataRequest('vertex', 'resolveTerm', parameters)
                     .then(function(data) {
                         self.highlightTerm(data);
@@ -242,7 +228,7 @@ define([
 
         this.detectedObjectModification = function(event) {
             var self = this,
-                newSign = $.trim(this.select('objectSignSelector').val()),
+                newSign = $.trim(this.sign),
                 parameters = {
                     title: newSign,
                     conceptId: this.selectedConceptId,
@@ -296,8 +282,10 @@ define([
 
             if (this.selectedConceptId) {
                 this.select('actionButtonSelector').removeAttr('disabled');
+                this.select('vertexContainerSelector').trigger('setConcept', { conceptId: this.selectedConceptId });
             } else {
                 this.select('actionButtonSelector').attr('disabled', true);
+                this.select('vertexContainerSelector').trigger('setConcept');
             }
         };
 
@@ -311,14 +299,9 @@ define([
 
             if (conceptId === '') {
                 this.select('actionButtonSelector').attr('disabled', true);
-                this.updateResolveImageIcon();
                 return;
             }
             this.select('actionButtonSelector').removeAttr('disabled');
-
-            this.deferredConcepts.done(function(allConcepts) {
-                self.updateResolveImageIcon(null, conceptId);
-            })
         };
 
         this.setupContent = function() {
@@ -378,52 +361,24 @@ define([
                 restrictConcept: this.attr.restrictConcept
             });
 
+            VertexSelector.attachTo(this.select('vertexContainerSelector'), {
+                value: objectSign || '',
+                filterResultsToTitleField: true,
+                allowNew: true,
+                defaultText: i18n('detail.resolve.form.entity_search.placeholder'),
+                allowNewText: i18n('detail.resolve.form.entity_search.resolve_as_new')
+            });
+
             this.graphVertexChanged(graphVertexId, data, true);
 
             if (!this.unresolve && objectSign) {
-                var input = this.select('objectSignSelector');
-                input.attr('disabled', true);
-                this.runQuery(objectSign).done(function() {
-                    input.removeAttr('disabled');
-                });
+                this.select('vertexContainerSelector').trigger('disableAndSearch', {
+                    query: objectSign
+                })
             }
 
             this.sign = objectSign;
             this.startSign = objectSign;
-        };
-
-        this.updateResolveImageIcon = function(vertex, conceptId) {
-            var self = this,
-                info = $(self.attr.mentionNode).data('info') ||
-                    (this.attr.existing ? this.attr.dataInfo : '');
-
-            if (!vertex && (info || conceptId)) {
-                self.deferredConcepts.done(function(allConcepts) {
-                    var type = info ?
-                            info['http://lumify.io#conceptType'] : conceptId,
-                        concept = self.conceptForConceptType(type, allConcepts);
-
-                    if (concept) {
-                        updateCss(concept.glyphIconHref);
-                    }
-                });
-            } else if (vertex && !conceptId) {
-                updateCss(F.vertex.image(vertex));
-            } else updateCss();
-
-            function updateCss(src) {
-                var preview = self.$node.find('.resolve-wrapper > .preview');
-
-                if (src) {
-                    var url = 'url("' + src + '")';
-
-                    if (preview.css('background-image') !== url) {
-                        preview.css('background-image', url);
-                    }
-                } else {
-                    preview.css({backgroundImage: ''}).addClass('icon-unknown');
-                }
-            }
         };
 
         this.conceptForConceptType = function(conceptType, allConcepts) {
@@ -435,19 +390,17 @@ define([
             this.on('visibilitychange', this.onVisibilityChange);
 
             this.on('conceptSelected', this.onConceptSelected);
+            this.on('resetTypeahead', this.reset);
+            this.on('vertexSelected', this.onVertexSelected);
 
             this.on('click', {
                 entityConceptMenuSelector: this.onEntityConceptSelected,
                 actionButtonSelector: this.onButtonClicked,
-                objectSignSelector: this.showTypeahead,
                 helpSelector: function() {
-                    this.select('objectSignSelector').focus();
-                    this.showTypeahead();
+                    this.showTypeahead({
+                        focus: true
+                    });
                 }
-            });
-
-            this.on('keydown', {
-                objectSignSelector: this.onKeyPress
             });
 
             this.on('opened', function() {
@@ -455,7 +408,6 @@ define([
 
                 this.loadConcepts()
                     .then(function() {
-                        self.setupObjectTypeAhead();
                         self.deferredConcepts.resolve(self.allConcepts);
                     })
             });
@@ -497,257 +449,6 @@ define([
                 });
         };
 
-        this.runQuery = function(query) {
-            var self = this;
-
-            query = $.trim(query || '');
-            if (!this.queryCache) this.queryCache = {};
-            if (this.queryCache[query]) return this.queryCache[query];
-
-            var badge = this.select('objectSignSelector').nextAll('.badge')
-                    .addClass('loading'),
-                request = this.dataRequest('vertex', 'search', {
-                    query: query,
-                    conceptFilter: this.attr.restrictConcept
-                })
-                    .then(function(response) {
-                        var splitUpString = function(str) {
-                                return F.string.normalizeAccents(str.toLowerCase())
-                                    .replace(/[^a-zA-Z0-9]/g, ' ')
-                                    .split(/\s+/);
-                            },
-                            queryParts = splitUpString(query);
-                            vertices =  _.reject(response.vertices, function(v) {
-                                var queryPartsMissingFromTitle = _.difference(
-                                    queryParts,
-                                    splitUpString(F.vertex.title(v))
-                                ).length;
-
-                                return queryPartsMissingFromTitle;
-                            });
-
-                        self.updateQueryCountBadge(vertices);
-                        self.queryCache[query] = request;
-
-                        return vertices;
-                    })
-                    .catch(function() {
-                        self.updateQueryCountBadge();
-                    })
-                    .finally(function() {
-                        badge.removeClass('loading');
-                    });
-            return request;
-        };
-
-        this.updateQueryCountBadge = function(vertices) {
-            var hasVertices = !_.isUndefined(vertices);
-            this.$node.find('.badge')
-                .attr('title', hasVertices ?
-                      i18n('detail.resolve.form.entity_search.found' +
-                           (vertices.length === 1 ? '' : '.plural'), vertices.length) :
-                      i18n('detail.resolve.form.error'))
-                .text(hasVertices ? vertices.length : '!');
-        };
-
-        this.setupObjectTypeAhead = function() {
-            var self = this,
-                items = [],
-                input = this.select('objectSignSelector'),
-                createNewText = i18n('detail.resolve.form.entity_search.resolve_as_new');
-
-            this.dataRequest('ontology', 'properties')
-                .done(function(ontologyProperties) {
-                    var debouncedQuery = _.debounce(function(instance, query, callback) {
-                            self.runQuery(query)
-                                .then(function(entities) {
-                                    var all = _.map(entities, function(e) {
-                                        return $.extend({
-                                            toLowerCase: function() {
-                                                return F.vertex.title(e).toLowerCase();
-                                            },
-                                            toString: function() {
-                                                return e.id;
-                                            },
-                                            indexOf: function(s) {
-                                                return F.vertex.title(e).indexOf(s);
-                                            }
-                                        }, e);
-                                    });
-
-                                    items = $.extend(true, [], items, _.indexBy(all, 'id'));
-                                    items[createNewText] = [query];
-
-                                    self.sourceCache[query] = function(aCallback) {
-                                        var list = [createNewText].concat(all);
-                                        aCallback(list);
-
-                                        var selectedId = self.currentGraphVertexId;
-                                        if (selectedId) {
-                                            var shouldSelect = instance.$menu.find('.gId-' + selectedId).closest('li');
-                                            if (shouldSelect.length) {
-                                                instance.$menu.find('.active').not(shouldSelect).removeClass('active');
-                                                shouldSelect.addClass('active');
-                                            }
-                                        }
-
-                                        self.updateQueryCountBadge(all);
-                                    };
-
-                                    self.sourceCache[query](callback);
-                                })
-                                .catch(function() {
-                                    callback([]);
-                                })
-                        }, 500),
-                        field = input.typeahead({
-                            items: 50,
-                            source: function(query, callback) {
-
-                                if (self.lastQuery && query !== self.lastQuery) {
-                                    self.reset();
-                                }
-
-                                if (!self.sourceCache) {
-                                    self.sourceCache = {};
-                                } else if (self.sourceCache[query]) {
-                                    self.sourceCache[query](callback);
-                                    return;
-                                }
-
-                                self.lastQuery = query;
-                                debouncedQuery(this, query, callback);
-                            },
-                            matcher: function(item) {
-                                if (item === createNewText) return true;
-                                return true;
-                            },
-                            sorter: function(items) {
-                                var sorted = Object.getPrototypeOf(this).sorter.apply(this, arguments),
-                                    index;
-
-                                sorted.forEach(function(item, i) {
-                                    if (item === createNewText) {
-                                        index = i;
-                                        return false;
-                                    }
-                                });
-
-                                if (index) {
-                                    sorted.splice(0, 0, sorted.splice(index, 1)[0]);
-                                }
-
-                                return sorted;
-                            },
-                            updater: function(item) {
-                                var matchingItem = items[item],
-                                    graphVertexId = '',
-                                    label = item;
-
-                                if (!matchingItem.length) {
-                                    matchingItem = [matchingItem];
-                                }
-
-                                if (matchingItem && matchingItem.length) {
-                                    graphVertexId = item;
-                                    label = matchingItem[0].properties ?
-                                        F.vertex.title(matchingItem[0]) :
-                                        matchingItem;
-
-                                    if (graphVertexId == createNewText) {
-                                        graphVertexId = '';
-                                        label = this.$element.val();
-                                    } else {
-                                        self.sign = label;
-                                    }
-
-                                    matchingItem = matchingItem[0];
-                                }
-
-                                self.lastQuery = label;
-                                self.graphVertexChanged(graphVertexId, matchingItem);
-                                return label;
-                            },
-                            highlighter: function(item) {
-
-                                var html = (item === createNewText) ?
-                                        item :
-                                        Object.getPrototypeOf(this).highlighter.apply(
-                                            this,
-                                            [F.vertex.title(item)]
-                                        ),
-                                    concept = _.find(self.allConcepts, function(c) {
-                                        return item.properties && c.id === F.vertex.prop(item, 'conceptType');
-                                    });
-
-                                return entityTemplate({
-                                    html: html,
-                                    item: item,
-                                    F: F,
-                                    // TODO: show some properties
-                                    properties: [],
-                                    iconSrc: item.properties && F.vertex.image(item),
-                                    concept: concept
-                                });
-                            }
-                        }),
-                        typeahead = field.data('typeahead'),
-                        show = typeahead.show,
-                        hide = typeahead.hide;
-
-                    typeahead.$menu.on('mousewheel DOMMouseScroll', function(e) {
-                        var delta = e.wheelDelta || (e.originalEvent && e.originalEvent.wheelDelta) || -e.detail,
-                            bottomOverflow = this.scrollTop + $(this).outerHeight() - this.scrollHeight >= 0,
-                            topOverflow = this.scrollTop <= 0;
-
-                        if ((delta < 0 && bottomOverflow) || (delta > 0 && topOverflow)) {
-                            e.preventDefault();
-                        }
-                    });
-
-                    typeahead.hide = function() {
-                        hide.apply(typeahead);
-                        typeahead.$menu.css('max-height', 'none');
-                    };
-
-                    typeahead.show = function() {
-                        show.apply(typeahead);
-
-                        if (~typeahead.$menu.css('max-height').indexOf('px')) {
-                            typeahead.$menu.css('max-height', 'none');
-                            _.defer(scrollToShow);
-                            return;
-                        } else {
-                            scrollToShow();
-                        }
-
-                        function scrollToShow() {
-
-                            var scrollParent = typeahead.$element.scrollParent(),
-                                scrollTotalHeight = scrollParent[0].scrollHeight,
-                                scrollTop = scrollParent.scrollTop(),
-                                scrollHeight = scrollParent.outerHeight(true),
-                                menuHeight = Math.min(scrollHeight - 100, typeahead.$menu.outerHeight(true)),
-                                menuMaxY = menuHeight + typeahead.$menu.offset().top,
-                                bottomSpace = scrollHeight - menuMaxY,
-                                padding = 10;
-
-                            typeahead.$menu.css({
-                                maxHeight: (menuHeight - padding) + 'px',
-                                overflow: 'auto'
-                            });
-
-                            if (bottomSpace < 0) {
-                                var scrollNeeded = scrollTop + Math.abs(bottomSpace) + padding;
-                                scrollParent.animate({
-                                    scrollTop: scrollNeeded
-                                });
-                            }
-                        }
-                    };
-                });
-        };
-
         this.highlightTerm = function(data) {
             var mentionVertex = $(this.attr.mentionNode),
                 updatingEntity = this.attr.existing;
@@ -776,7 +477,7 @@ define([
                 transcriptIndex = 0,
                 span = document.createElement('span');
 
-            span.className = 'entity focused';
+            span.className = 'vertex focused';
 
             var newRange = document.createRange();
             newRange.setStart(range.startContainer, range.startOffset);
@@ -804,7 +505,7 @@ define([
 
             // Special case where the start/end is inside an inner span
             // (surroundsContents will fail so expand the selection
-            if (/entity/.test(range.startContainer.parentNode.className)) {
+            if (/vertex/.test(range.startContainer.parentNode.className)) {
                 el = range.startContainer.parentNode;
                 var previous = el.previousSibling;
 
@@ -816,7 +517,7 @@ define([
                     newRange.setStart(tempTextNode, 0);
                 }
             }
-            if (/entity/.test(range.endContainer.parentNode.className)) {
+            if (/vertex/.test(range.endContainer.parentNode.className)) {
                 el = range.endContainer.parentNode;
                 var next = el.nextSibling;
 
@@ -834,7 +535,7 @@ define([
             }
             newRange.surroundContents(span);
 
-            return $(span).find('.entity').addClass('focused').end();
+            return $(span).find('.vertex').addClass('focused').end();
         };
 
         this.demoteSpanToTextVertex = function(vertex) {

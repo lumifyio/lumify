@@ -59,6 +59,15 @@ define([
             });
         },
 
+        propertySourceInfo: function(vertexId, name, key, visibility) {
+            return ajax('GET', '/vertex/property/source-info', {
+                vertexId: vertexId,
+                propertyName: name,
+                propertyKey: key,
+                visibilitySource: visibility
+            });
+        },
+
         edges: function(vertexId, options) {
             var parameters = {
                 graphVertexId: vertexId
@@ -114,11 +123,17 @@ define([
                 'graphVertexId=' + encodeURIComponent(vertexId), file);
         },
 
-        create: function(conceptType, visibilitySource) {
-            return ajax('POST', '/vertex/new', {
+        create: function(conceptType, justification, visibilitySource) {
+            return ajax('POST', '/vertex/new', _.tap({
                 conceptType: conceptType,
                 visibilitySource: visibilitySource
-            });
+            }, function(data) {
+                if (justification.justificationText) {
+                    data.justificationText = justification.justificationText;
+                } else if (justification.sourceInfo) {
+                    data.sourceInfo = JSON.stringify(justification.sourceInfo);
+                }
+            }));
         },
 
         importFiles: function(files, visibilitySource) {

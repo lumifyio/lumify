@@ -8,6 +8,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
@@ -153,7 +154,8 @@ public abstract class MigrationBase extends Configured implements Tool {
                 LumifyVisibility.SUPER_USER_VISIBILITY_STRING,
                 OntologyRepository.VISIBILITY_STRING,
                 UserRepository.VISIBILITY_STRING,
-                WorkspaceRepository.VISIBILITY_STRING
+                WorkspaceRepository.VISIBILITY_STRING,
+                TermMentionRepository.VISIBILITY_STRING
         };
     }
 

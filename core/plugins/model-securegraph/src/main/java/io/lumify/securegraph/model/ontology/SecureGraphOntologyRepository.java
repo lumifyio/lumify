@@ -479,7 +479,14 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName, String[] intents) {
+    public Relationship getOrCreateRelationshipType(
+            Iterable<Concept> domainConcepts,
+            Iterable<Concept> rangeConcepts,
+            String relationshipIRI,
+            String displayName,
+            String[] intents,
+            boolean userVisible
+    ) {
         Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
             return relationship;
@@ -489,6 +496,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
+        USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
         for (String intent : intents) {
             INTENT.addPropertyValue(builder, intent, intent, VISIBILITY.getVisibility());
         }

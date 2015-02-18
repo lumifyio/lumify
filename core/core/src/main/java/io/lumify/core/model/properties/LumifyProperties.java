@@ -1,12 +1,15 @@
 package io.lumify.core.model.properties;
 
 import io.lumify.core.model.properties.types.*;
+import io.lumify.core.model.termMention.TermMentionForProperty;
 
 public class LumifyProperties {
     public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
-    public static final String META_DATA_LANGUAGE = "http://lumify.io#language";
-    public static final String META_DATA_TEXT_DESCRIPTION = "http://lumify.io#textDescription";
-    public static final String META_DATA_MIME_TYPE = "http://lumify.io#mimeType";
+    public static final String EDGE_LABEL_HAS_SOURCE = "http://lumify.io#hasSource";
+
+    public static final StringLumifyProperty META_DATA_LANGUAGE = new StringLumifyProperty("http://lumify.io#language");
+    public static final StringLumifyProperty META_DATA_TEXT_DESCRIPTION = new StringLumifyProperty("http://lumify.io#textDescription");
+    public static final StringLumifyProperty META_DATA_MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
 
     public static final BooleanLumifyProperty SEARCHABLE = new BooleanLumifyProperty("http://lumify.io#searchable");
     public static final BooleanLumifyProperty USER_VISIBLE = new BooleanLumifyProperty("http://lumify.io#userVisible");
@@ -52,6 +55,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
     public static final StringLumifyProperty CREATED_BY = new StringLumifyProperty("http://lumify.io#createdBy");
     public static final StringLumifyProperty MODIFIED_BY = new StringLumifyProperty("http://lumify.io#modifiedBy");
+    public static final PropertyJustificationMetadataLumifyProperty JUSTIFICATION = new PropertyJustificationMetadataLumifyProperty("http://lumify.io#justification");
     public static final StringLumifyProperty ONTOLOGY_TITLE = new StringLumifyProperty("http://lumify.io#ontologyTitle");
     public static final StringLumifyProperty PROCESS = new StringLumifyProperty("http://lumify.io#process");
     public static final StringLumifyProperty ROW_KEY = new StringLumifyProperty("http://lumify.io#rowKey");
@@ -74,6 +78,12 @@ public class LumifyProperties {
     public static final StringLumifyProperty TERM_MENTION_TITLE = new StringLumifyProperty("http://lumify.io/termMention#title");
     public static final StringLumifyProperty TERM_MENTION_CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io/termMention#conceptType");
     public static final VisibilityJsonLumifyProperty TERM_MENTION_VISIBILITY_JSON = new VisibilityJsonLumifyProperty("http://lumify.io/termMention#visibilityJson");
+    public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_KEY = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyKey");
+    public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_NAME = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyName");
+    public static final StringLumifyProperty TERM_MENTION_REF_PROPERTY_VISIBILITY = new StringLumifyProperty("http://lumify.io/termMention#ref/propertyVisibility");
+    public static final StringLumifyProperty TERM_MENTION_FOR_ELEMENT_ID = new StringLumifyProperty("http://lumify.io/termMention#forElementId");
+    public static final TermMentionForProperty TERM_MENTION_FOR_TYPE = new TermMentionForProperty("http://lumify.io/termMention#forType");
+    public static final StringLumifyProperty TERM_MENTION_SNIPPET = new StringLumifyProperty("http://lumify.io/termMention#snippet");
     public static final String TERM_MENTION_LABEL_HAS_TERM_MENTION = "http://lumify.io/termMention#hasTermMention";
     public static final String TERM_MENTION_LABEL_RESOLVED_TO = "http://lumify.io/termMention#resolvedTo";
 

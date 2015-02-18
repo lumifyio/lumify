@@ -2,9 +2,11 @@ package io.lumify.web.routes.edge;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -25,6 +27,7 @@ public class EdgeCreate extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkQueueRepository workQueueRepository;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public EdgeCreate(
@@ -35,12 +38,15 @@ public class EdgeCreate extends BaseRequestHandler {
             final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository,
             final UserRepository userRepository,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workQueueRepository = workQueueRepository;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class EdgeCreate extends BaseRequestHandler {
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
-        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String sourceInfoString = getOptionalParameter(request, "sourceInfo");
 
         String workspaceId = getActiveWorkspaceId(request);
 
@@ -72,10 +78,11 @@ public class EdgeCreate extends BaseRequestHandler {
                 destVertex,
                 predicateLabel,
                 justificationText,
-                sourceInfo,
+                SourceInfo.fromString(sourceInfoString),
                 visibilitySource,
                 workspaceId,
                 visibilityTranslator,
+                termMentionRepository,
                 user,
                 authorizations
         );

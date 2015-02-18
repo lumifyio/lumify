@@ -2,6 +2,7 @@ package io.lumify.core.model.textHighlighting;
 
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionFor;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import org.json.JSONException;
@@ -81,6 +82,11 @@ public class VertexOffsetItem extends OffsetItem {
     }
 
     @Override
+    public TermMentionFor getTermMentionFor() {
+        return LumifyProperties.TERM_MENTION_FOR_TYPE.getPropertyValue(termMention);
+    }
+
+    @Override
     public SandboxStatus getSandboxStatus() {
         return sandboxStatus;
     }
@@ -113,8 +119,12 @@ public class VertexOffsetItem extends OffsetItem {
 
     @Override
     public List<String> getCssClasses() {
-        List<String> classes = new ArrayList<String>();
-        classes.add("entity");
+        List<String> classes = new ArrayList<>();
+        TermMentionFor termMentionFor = getTermMentionFor();
+        if (termMentionFor == null) {
+            termMentionFor = TermMentionFor.VERTEX;
+        }
+        classes.add(termMentionFor.toString().toLowerCase());
         if (getResolvedToVertexId() != null) {
             classes.add("resolved");
         }

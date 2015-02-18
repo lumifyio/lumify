@@ -1,6 +1,5 @@
 package io.lumify.opennlpme;
 
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
@@ -72,6 +71,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorker extends GraphProp
             charOffset += line.length() + NEW_LINE_CHARACTER_LENGTH;
         }
         applyTermMentionFilters(sourceVertex, termMentions);
+        pushTextUpdated(data);
 
         untokenizedLineStream.close();
         LOGGER.debug("Stream processing completed");

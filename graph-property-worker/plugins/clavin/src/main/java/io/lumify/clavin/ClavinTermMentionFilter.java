@@ -8,7 +8,6 @@ import com.bericotech.clavin.resolver.LuceneLocationResolver;
 import com.bericotech.clavin.resolver.ResolvedLocation;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.graphProperty.TermMentionFilterPrepareData;
 import io.lumify.core.model.audit.AuditAction;
@@ -98,7 +97,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
         super.prepare(termMentionFilterPrepareData);
 
         LOGGER.info("Configuring CLAVIN Location Resolution.");
-        prepareIris(termMentionFilterPrepareData);
+        prepareIris();
         prepareClavinLuceneIndex(getConfiguration());
         prepareFuzzy(getConfiguration());
         prepareTargetConcepts(getConfiguration());
@@ -108,7 +107,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     public void prepareTargetConcepts(Configuration config) {
         Set<String> excludedIris = getExcludedIris(config);
 
-        Set<String> conceptsWithGeoLocationProperty = new HashSet<String>();
+        Set<String> conceptsWithGeoLocationProperty = new HashSet<>();
         for (Concept concept : ontologyRepository.getConceptsWithProperties()) {
             for (OntologyProperty property : concept.getProperties()) {
                 String iri = concept.getIRI();
@@ -122,7 +121,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     private Set<String> getExcludedIris(Configuration config) {
-        Set<String> excludedIris = new HashSet<String>();
+        Set<String> excludedIris = new HashSet<>();
         excludedIris.addAll(config.getSubset(CONFIG_EXCLUDED_IRI_PREFIX).values());
         return excludedIris;
     }
@@ -168,7 +167,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
         resolver = new LuceneLocationResolver(indexDirectory, maxHitDepth, maxContextWindow);
     }
 
-    public void prepareIris(TermMentionFilterPrepareData termMentionFilterPrepareData) {
+    private void prepareIris() {
         artifactHasEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactHasEntity");
         stateIri = ontologyRepository.getRequiredConceptIRIByIntent("state");
         countryIri = ontologyRepository.getRequiredConceptIRIByIntent("country");
@@ -187,7 +186,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
             return;
         }
 
-        Map<Integer, ResolvedLocation> resolvedLocationOffsetMap = new HashMap<Integer, ResolvedLocation>();
+        Map<Integer, ResolvedLocation> resolvedLocationOffsetMap = new HashMap<>();
         for (ResolvedLocation resolvedLocation : resolvedLocationNames) {
             // assumes start/end positions are real, i.e., unique start positions for each extracted term
             resolvedLocationOffsetMap.put(resolvedLocation.getLocation().getPosition(), resolvedLocation);
@@ -251,7 +250,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     private List<LocationOccurrence> getLocationOccurrencesFromTermMentions(final Iterable<Vertex> termMentions) {
-        List<LocationOccurrence> locationOccurrences = new ArrayList<LocationOccurrence>();
+        List<LocationOccurrence> locationOccurrences = new ArrayList<>();
 
         for (Vertex termMention : termMentions) {
             if (isLocation(termMention)) {

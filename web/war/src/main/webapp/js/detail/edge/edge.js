@@ -161,7 +161,7 @@ define([
         this.onPaneClicked = function(evt) {
             var $target = $(evt.target);
 
-            if ($target.is('.entity, .artifact, span.relationship')) {
+            if ($target.is('.vertex, .artifact, span.relationship')) {
                 var id = $target.data('vertexId');
                 this.trigger(document, 'selectObjects', { vertexIds: [id] });
                 evt.stopPropagation();

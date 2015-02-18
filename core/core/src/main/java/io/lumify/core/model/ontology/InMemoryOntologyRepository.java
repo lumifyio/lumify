@@ -344,7 +344,14 @@ public class InMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName, String[] intents) {
+    public Relationship getOrCreateRelationshipType(
+            Iterable<Concept> domainConcepts,
+            Iterable<Concept> rangeConcepts,
+            String relationshipIRI,
+            String displayName,
+            String[] intents,
+            boolean userVisible
+    ) {
         Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
             return relationship;
@@ -364,7 +371,7 @@ public class InMemoryOntologyRepository extends OntologyRepositoryBase {
             }
         });
 
-        InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, domainConceptIris, rangeConceptIris, intents);
+        InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, domainConceptIris, rangeConceptIris, intents, userVisible);
         relationshipsCache.put(relationshipIRI, inMemRelationship);
         return inMemRelationship;
     }

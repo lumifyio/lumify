@@ -59,6 +59,9 @@ define([
             this.on('openSourceUrl', this.onOpenSourceUrl);
             this.on('maskWithOverlay', this.onMaskWithOverlay);
 
+            this.on('addProperty', this.redirectToPropertiesComponent);
+            this.on('deleteProperty', this.redirectToPropertiesComponent);
+
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
                 if (data && data.vertices) {
@@ -72,9 +75,28 @@ define([
             });
         });
 
+        this.redirectToPropertiesComponent = function(event, data) {
+            if ($(event.target).closest('.comments').length) {
+                return;
+            }
+
+            if ($(event.target).closest('.properties').length === 0) {
+                event.stopPropagation();
+
+                var properties = this.$node.find('.properties');
+                if (properties.length) {
+                    _.defer(function() {
+                        properties.trigger(event.type, data);
+                    })
+                } else {
+                    throw new Error('Unable to redirect properties request', event.type, data);
+                }
+            }
+        };
+
         this.onOpenSourceUrl = function(event, data) {
             window.open(data.sourceUrl);
-        }
+        };
 
         this.onAddNewProperty = function(event) {
             this.trigger(this.select('propertiesSelector'), 'editProperty');
@@ -169,32 +191,6 @@ define([
             this.trigger('toggleAuditDisplay', {
                 displayed: this.auditDisplayed
             });
-        };
-
-        this.classesForVertex = function(vertex) {
-            var cls = [],
-                isEdge = F.vertex.isEdge(vertex),
-                props = vertex.properties || vertex,
-                concept = !isEdge && F.vertex.concept(vertex);
-
-            if (concept &&
-                (concept.displayType === 'document' ||
-                concept.displayType === 'image' ||
-                concept.displayType === 'video')) {
-                cls.push('artifact entity resolved');
-                if (props['http://lumify.io#conceptType']) cls.push(props['http://lumify.io#conceptType'].value);
-            } else if (!isEdge) {
-                cls.push('entity resolved');
-                if (props['http://lumify.io#conceptType']) {
-                    cls.push('conceptType-' + props['http://lumify.io#conceptType'].value);
-                }
-            } else {
-                cls.push('edge');
-            }
-            // TODO:
-            // cls.push('gId-' + (vertex.id || props.graphNodeId));
-
-            return cls.join(' ');
         };
 
         this.cancel = function() {

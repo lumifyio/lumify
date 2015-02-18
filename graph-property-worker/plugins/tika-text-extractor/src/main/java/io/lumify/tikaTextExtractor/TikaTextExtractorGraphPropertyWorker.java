@@ -133,8 +133,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
         String customImageMetadata = extractTextField(metadata, customFlickrMetadataKeys);
         org.securegraph.Metadata textMetadata = data.createPropertyMetadata();
-        textMetadata.add(LumifyProperties.MIME_TYPE.getPropertyName(), "text/plain", getVisibilityTranslator().getDefaultVisibility());
-        textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Extracted Text", getVisibilityTranslator().getDefaultVisibility());
+        LumifyProperties.MIME_TYPE.setMetadata(textMetadata, "text/plain", getVisibilityTranslator().getDefaultVisibility());
+        LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(textMetadata, "Extracted Text", getVisibilityTranslator().getDefaultVisibility());
 
         if (customImageMetadata != null && !customImageMetadata.equals("")) {
             try {

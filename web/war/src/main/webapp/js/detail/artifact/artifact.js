@@ -289,7 +289,7 @@ define([
                                 .attr('class', function(detectedObject) {
                                     var classes = 'label label-info detected-object opens-dropdown';
                                     if (detectedObject.value.edgeId) {
-                                        return classes + ' resolved entity'
+                                        return classes + ' resolved vertex'
                                     }
                                     return classes;
                                 })

@@ -2,6 +2,7 @@
 define([
     './dropdowns/termForm/termForm',
     './dropdowns/statementForm/statementForm',
+    './dropdowns/propertyForm/propForm',
     'hbs!./text',
     'util/css-stylesheet',
     'util/privileges',
@@ -15,6 +16,7 @@ define([
 ], function(
     TermForm,
     StatementForm,
+    PropertyForm,
     textTemplate,
     stylesheet,
     Privileges,
@@ -47,11 +49,12 @@ define([
         withDataRequest.call(this);
 
         this.defaultAttrs({
-            resolvableSelector: '.text .entity',
-            resolvedSelector: '.text .entity.resolved',
-            highlightedWordsSelector: '.entity, .term, .artifact',
-            draggablesSelector: '.resolved, .artifact, .generic-draggable',
+            resolvableSelector: '.text .vertex, .text .property',
+            resolvedSelector: '.text .vertex.resolved',
+            highlightedWordsSelector: '.vertex, .property, .term, .artifact',
+            draggablesSelector: '.vertex.resolved, .artifact, .generic-draggable',
             textContainerSelector: '.texts',
+            textBodySelector: '.texts .text',
             textContainerHeaderSelector: '.texts .text-section h1'
         });
 
@@ -74,6 +77,7 @@ define([
         });
 
         this.before('initialize', function() {
+            this.updateEntityAndArtifactDraggablesNoDelay = this.updateEntityAndArtifactDraggables;
             this.updateEntityAndArtifactDraggables = _.throttle(this.updateEntityAndArtifactDraggables.bind(this), 250);
         })
 
@@ -110,13 +114,69 @@ define([
                 textContainerSelector: this.onCopyText
             });
             this.on('mousedown mouseup click dblclick contextmenu', this.trackMouse.bind(this));
+            this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
+            this.on('dropdownClosed', this.onDropdownClosed);
+
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
             this.on(document, 'textUpdated', this.onTextUpdated);
             this.on(document, 'verticesUpdated', this.onVerticesUpdatedWithHighlighting);
-            this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
+            this.on('dragstart dragover dragenter dragleave dragend', {
+                textBodySelector: this.onTextBodyEvents
+            });
+            this.on('drop', {
+                textBodySelector: this.onTextBodyDrop
+            });
 
             this.applyHighlightStyle();
         });
+
+        this.onTextBodyEvents = function(event) {
+            if (event.type === 'dragstart') {
+                var selection = getSelection();
+                if (!(/^(None|Caret)$/.test(selection.type)) && !selection.collapsed) {
+                    this.draggingSourceInfo = this.transformSelection(getSelection());
+                    require(['util/actionbar/actionbar'], function(ActionBar) {
+                        ActionBar.teardownAll();
+                    });
+                }
+            } else if (event.type === 'dragend') {
+                this.draggingSourceInfo = null;
+            } else {
+                if (event.type === 'dragenter') {
+                    if ($(event.target).is('.vertex.resolved')) {
+                        $(event.target).addClass('drop-hover');
+                    }
+                } else if (event.type === 'dragleave') {
+                    $(event.target).removeClass('drop-hover');
+                } else {
+                    event.preventDefault();
+                }
+            }
+        };
+
+        this.onTextBodyDrop = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (event.originalEvent) {
+                event = event.originalEvent;
+            }
+
+            var $target = $(event.target);
+            if ($target.is('.vertex.resolved') && this.draggingSourceInfo) {
+                $target.removeClass('drop-hover');
+                var info = $target.data('info');
+                if (info && info.resolvedToVertexId) {
+                    this.dropdownProperty(
+                        event.target,
+                        this.draggingSourceInfo,
+                        this.draggingSourceInfo.text,
+                        info.resolvedToVertexId
+                    );
+                }
+            }
+            this.draggingSourceInfo = null;
+        };
 
         this.onTextUpdated = function(event, data) {
             if (data.vertexId === this.attr.data.id) {
@@ -124,12 +184,28 @@ define([
             }
         };
 
+        this.onDropdownClosed = function(event, data) {
+            var self = this;
+            _.defer(function() {
+                self.checkIfReloadNeeded();
+            })
+        };
+
+        this.checkIfReloadNeeded = function() {
+            if (this.reloadText) {
+                var func = this.reloadText;
+                this.reloadText = null;
+                func();
+            }
+        };
+
         this.onVerticesUpdatedWithHighlighting = function(event, data) {
             var vertex = _.findWhere(data.vertices, { id: this.attr.data.id });
-            if (vertex && data.options && data.options.originalData && data.options.originalData.properties) {
-                var foundTextLikePropertyChange = _.some(data.options.originalData.properties, function(p) {
+            if (vertex) {
+                this.attr.data = vertex;
+                var foundTextLikePropertyChange = _.some(vertex.properties, function(p) {
                     return _.some(TEXT_PROPERTIES, function(name) {
-                        return p.propertyName === name;
+                        return p.name === name;
                     });
                 });
 
@@ -178,15 +254,9 @@ define([
                     {el: $focus, offset: selection.focusOffset}
                 ], '.text', _.identity),
                 range = selection.getRangeAt(0),
-                output = {},
-                contextRange = rangeUtils.expandRangeByWords(range, 4, output),
-                context = contextRange.toString(),
-                contextHighlight =
-                    '...' +
-                    output.before +
-                    '<span class="selection">' + selection.toString() + '</span>' +
-                    output.after +
-                    '...';
+                contextHighlight = rangeUtils.createSnippetFromRange(
+                    range, undefined, $anchor.closest('.text')[0]
+                );
 
             return {
                 startOffset: offsets && offsets[0],
@@ -202,7 +272,7 @@ define([
         this.trackMouse = function(event) {
             var $target = $(event.target);
 
-            if ($target.is('.resolved,.entity')) {
+            if ($target.is('.resolved,.vertex')) {
                 if (event.type === 'mousedown') {
                     range.clearSelection();
                 }
@@ -286,7 +356,7 @@ define([
                                         TERM: 3
                                     },
                                     className = concept.rawClassName ||
-                                        (concept.className && ('entity.' + concept.className)),
+                                        (concept.className && ('vertex.' + concept.className)),
                                     definition = function(state, template) {
                                         return (template || tpl)({
                                             STATES: STATES,
@@ -372,11 +442,15 @@ define([
                 text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
 
             // Ignore selection events within the dropdown
-            if (selection.type == 'None' ||
-                 $(selection.anchorNode).is('.underneath') ||
+            if ($(selection.anchorNode).is('.underneath') ||
                  $(selection.anchorNode).parents('.underneath').length ||
                  $(selection.focusNode).is('.underneath') ||
                  $(selection.focusNode).parents('.underneath').length) {
+                return;
+            }
+
+            if (/None|Caret/.test(selection.type)) {
+                this.checkIfReloadNeeded();
                 return;
             }
 
@@ -424,7 +498,7 @@ define([
                     // Avoid adding dropdown inside of entity
                     endContainer = range.endContainer;
 
-                while (/entity/.test(endContainer.parentNode.className)) {
+                while (/vertex/.test(endContainer.parentNode.className)) {
                     endContainer = endContainer.parentNode;
                 }
 
@@ -448,7 +522,8 @@ define([
                         alignTo: 'textselection',
                         alignWithin: anchor.closest(is),
                         actions: {
-                            Resolve: 'resolve.actionbar',
+                            Entity: 'resolve.actionbar',
+                            Property: 'property.actionbar',
                             Comment: 'comment.actionbar'
                         }
                     });
@@ -462,24 +537,34 @@ define([
                                 self.trigger(self.select('commentsSelector'), 'commentOnSelection', data);
                             }
                         })
+                        .on('property.actionbar', function(event) {
+                            event.stopPropagation();
+                            _.defer(function() {
+                                self.dropdownProperty(getNode(endContainer), sel, text);
+                            })
+                        })
                         .on('resolve.actionbar', function(event) {
                             event.stopPropagation();
 
-                            var isEndTextNode = endContainer.nodeType === 1;
-                            if (isEndTextNode) {
-                                self.dropdownEntity(true, endContainer, selection, text);
-                            } else {
-
-                                // Move to first space in end so as to not break up word when splitting
-                                var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
-                                do {
-                                    character = endContainer.textContent.substring(++i, i + 1);
-                                } while (whitespaceCheck.test(character));
-
-                                endContainer.splitText(i);
-                                self.dropdownEntity(true, endContainer, selection, text);
-                            }
+                            self.dropdownEntity(true, getNode(endContainer), selection, text);
                         });
+
+                    function getNode(node) {
+                        var isEndTextNode = node.nodeType === 1;
+                        if (isEndTextNode) {
+                            return node;
+                        } else {
+
+                            // Move to first space in end so as to not break up word when splitting
+                            var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
+                            do {
+                                character = node.textContent.substring(++i, i + 1);
+                            } while (whitespaceCheck.test(character));
+
+                            node.splitText(i);
+                            return node;
+                        }
+                    }
                 });
             }
         }, 250);
@@ -488,16 +573,59 @@ define([
             this.tearDownDropdowns();
 
             var form = $('<div class="underneath"/>'),
-                $node = $(insertAfterNode);
+                $node = $(insertAfterNode),
+                $textSection = $node.closest('.text-section'),
+                $textBody = $textSection.children('.text');
 
             $node.after(form);
             TermForm.attachTo(form, {
                 sign: text,
-                propertyKey: $node.closest('.text-section').data('key'),
+                propertyKey: $textSection.data('key'),
                 selection: selection,
                 mentionNode: insertAfterNode,
+                snippet: selection ?
+                    range.createSnippetFromRange(selection.range, undefined, $textBody[0]) :
+                    range.createSnippetFromNode(insertAfterNode[0], undefined, $textBody[0]),
                 existing: !creating,
                 artifactId: this.attr.data.id
+            });
+        };
+
+        this.dropdownProperty = function(insertAfterNode, selection, text, vertex) {
+            var self = this;
+
+            if (vertex && _.isString(vertex)) {
+                this.dataRequest('vertex', 'store', { vertexIds: vertex })
+                    .done(function(vertex) {
+                        self.dropdownProperty(insertAfterNode, selection, text, vertex);
+                    });
+                return;
+            }
+
+            this.tearDownDropdowns();
+
+            var form = $('<div class="underneath"/>'),
+                $node = $(insertAfterNode),
+                $textSection = $node.closest('.text-section'),
+                $textBody = $textSection.children('.text'),
+                dataInfo = $node.data('info');
+
+            $node.after(form);
+
+            PropertyForm.attachTo(form, {
+                data: vertex || undefined,
+                attemptToCoerceValue: text,
+                sourceInfo: selection ?
+                    selection.snippet ?
+                    selection :
+                    this.transformSelection(selection) :
+                    {
+                        vertexId: this.attr.data.id,
+                        textPropertyKey: $textSection.data('key'),
+                        startOffset: dataInfo.start,
+                        endOffset: dataInfo.end,
+                        snippet: range.createSnippetFromNode($node[0], undefined, $textBody[0]),
+                    }
             });
         };
 
@@ -532,6 +660,7 @@ define([
                 self.off('.actionbar');
 
                 if ($target.hasClass('resolved')) {
+                    var info = $target.data('info');
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
@@ -539,7 +668,7 @@ define([
                         actions: $.extend({
                             Open: 'open.actionbar',
                             Fullscreen: 'fullscreen.actionbar'
-                        }, Privileges.canEDIT && !F.vertex.isPublished($target.data('info')) ? {
+                        }, Privileges.canEDIT && info.termMentionFor === 'VERTEX' && !F.vertex.isPublished(info) ? {
                             Unresolve: 'unresolve.actionbar'
                         } : {})
                     });
@@ -564,15 +693,26 @@ define([
                         alignTo: 'node',
                         alignWithin: $target.closest('.text'),
                         actions: {
-                            Resolve: 'resolve.actionbar'
+                            Entity: 'resolve.actionbar',
+                            Property: 'property.actionbar'
+                            // TODO: Comment: 'comment.actionbar'
                         }
                     });
 
                     self.off('.actionbar')
                         .on('resolve.actionbar', function(event) {
-                        _.defer(self.dropdownEntity.bind(self), false, $target);
-                        event.stopPropagation();
-                    })
+                            _.defer(self.dropdownEntity.bind(self), false, $target);
+                            event.stopPropagation();
+                        })
+                        .on('property.actionbar', function(event) {
+                            event.stopPropagation();
+                            _.defer(function() {
+                                self.dropdownProperty($target, null, $target.text());
+                            })
+                        })
+                        //.on('comment.actionbar', function(event) {
+                            //event.stopPropagation();
+                        //})
                 }
             });
         };
@@ -631,7 +771,7 @@ define([
                             tolerance: 'pointer',
                             accept: function(el) {
                                 var item = $(el),
-                                    isEntity = item.is('.entity');
+                                    isEntity = item.is('.vertex.resolved');
 
                                 return isEntity;
                             },
@@ -659,10 +799,15 @@ define([
 
         this.tearDownDropdowns = function() {
             TermForm.teardownAll();
+            PropertyForm.teardownAll();
             StatementForm.teardownAll();
         };
 
-        this.updateText = function() {
+        this.updateText = function updateText(d3) {
+            if (!d3) {
+                return require(['d3'], updateText.bind(this));
+            }
+
             var self = this,
                 scrollParent = this.$node.scrollParent(),
                 scrollTop = scrollParent.scrollTop(),
@@ -673,53 +818,86 @@ define([
                     });
                 });
 
-            this.select('textContainerSelector').html(
-                _.map(textProperties, function(p) {
-                    var textDescription = 'http://lumify.io#textDescription';
-                    return textTemplate({
-                        description: p[textDescription] || p.metadata[textDescription] || p.key,
-                        key: p.key,
-                        cls: F.className.to(p.key)
+            d3.select(self.select('textContainerSelector')[0])
+                .selectAll('section.text-section')
+                .data(textProperties)
+                .call(function() {
+                    this.enter()
+                        .append('section')
+                        .attr('class', 'text-section collapsible')
+                        .call(function() {
+                            this.append('h1')
+                                .call(function() {
+                                    this.append('strong')
+                                    this.append('span').attr('class', 'badge')
+                                })
+                            this.append('div').attr('class', 'text').text('1')
+                        })
+
+                    this.attr('data-key', function(p) {
+                            return p.key;
+                        })
+                        .each(function() {
+                            var p = d3.select(this).datum();
+                            $(this).removePrefixedClasses('ts-').addClass('ts-' + F.className.to(p.key));
+                        })
+                    this.select('h1 strong').text(function(p) {
+                        var textDescription = 'http://lumify.io#textDescription';
+                        return p[textDescription] || p.metadata[textDescription] || p.key;
                     })
-                })
-            );
 
-            if (this.attr.focus) {
-                this.openText(this.attr.focus.textPropertyKey)
-                    .done(function() {
-                        var $text = self.$node.find('.' + F.className.to(self.attr.focus.textPropertyKey) + ' .text'),
-                            $transcript = $text.find('.av-times'),
-                            focusOffsets = self.attr.focus.offsets;
+                    this.exit().remove();
+                });
 
-                        if ($transcript.length) {
-                            var start = F.number.offsetValues(focusOffsets[0]),
-                                end = F.number.offsetValues(focusOffsets[1]),
-                                $container = $transcript.find('dd').eq(start.index);
+            if (textProperties.length) {
+                if (this.attr.focus) {
+                    this.openText(this.attr.focus.textPropertyKey)
+                        .done(function() {
+                            var $text = self.$node.find('.ts-' +
+                                    F.className.to(self.attr.focus.textPropertyKey) + ' .text'),
+                                $transcript = $text.find('.av-times'),
+                                focusOffsets = self.attr.focus.offsets;
 
-                            rangeUtils.highlightOffsets($container.get(0), [start.offset, end.offset]);
-                        } else {
-                            rangeUtils.highlightOffsets($text.get(0), focusOffsets);
-                        }
-                        self.attr.focus = null;
+                            if ($transcript.length) {
+                                var start = F.number.offsetValues(focusOffsets[0]),
+                                    end = F.number.offsetValues(focusOffsets[1]),
+                                    $container = $transcript.find('dd').eq(start.index);
+
+                                rangeUtils.highlightOffsets($container.get(0), [start.offset, end.offset]);
+                            } else {
+                                rangeUtils.highlightOffsets($text.get(0), focusOffsets);
+                            }
+                            self.attr.focus = null;
+                        });
+                } else if (expandedKey || textProperties.length === 1) {
+                    this.openText(expandedKey || textProperties[0].key, {
+                        scrollToSection: textProperties.length !== 1
+                    }).done(function() {
+                        scrollParent.scrollTop(scrollTop);
                     });
-            } else if (expandedKey || textProperties.length === 1) {
-                this.openText(expandedKey || textProperties[0].key, {
-                    scrollToSection: textProperties.length !== 1
-                }).done(function() {
-                    scrollParent.scrollTop(scrollTop);
-                });
-            } else if (textProperties.length > 1) {
-                this.openText(textProperties[0].key, {
-                    expand: false
-                });
+                } else if (textProperties.length > 1) {
+                    this.openText(textProperties[0].key, {
+                        expand: false
+                    });
+                }
             }
         };
 
         this.openText = function(propertyKey, options) {
             var self = this,
                 expand = !options || options.expand !== false,
-                $section = this.$node.find('.' + F.className.to(propertyKey)),
-                $badge = $section.find('.badge');
+                $section = this.$node.find('.ts-' + F.className.to(propertyKey)),
+                isExpanded = $section.is('.expanded'),
+                $badge = $section.find('.badge'),
+                selection = getSelection(),
+                range = selection.rangeCount && selection.getRangeAt(0),
+                hasSelection = isExpanded && range && !range.collapsed,
+                hasOpenForm = isExpanded && $section.find('.underneath').length;
+
+            if (hasSelection || hasOpenForm) {
+                this.reloadText = this.openText.bind(this, propertyKey, options);
+                return Promise.resolve();
+            }
 
             if (expand) {
                 $section.closest('.texts').find('.loading').removeClass('loading');
@@ -730,16 +908,17 @@ define([
                 this.openTextRequest.abort();
             }
 
-            // TODO: support cancelling
-            return this.dataRequest('vertex', 'highlighted-text', this.attr.data.id, propertyKey)
-                .then(function(artifactText) {
+            this.openTextRequest = this.dataRequest('vertex', 'highlighted-text', this.attr.data.id, propertyKey);
+
+            return this.openTextRequest.then(function(artifactText) {
                     var html = self.processArtifactText(artifactText);
                     if (expand) {
+                        text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
                         $section.find('.text').html(html);
                         $section.addClass('expanded');
                         $badge.removeClass('loading');
 
-                        self.updateEntityAndArtifactDraggables();
+                        self.updateEntityAndArtifactDraggablesNoDelay();
                         if (!options || options.scrollToSection !== false) {
                             self.scrollToRevealSection($section);
                         }
@@ -750,13 +929,13 @@ define([
         this.offsetsForText = function(input, parentSelector, offsetTransform) {
             var offsets = [];
             input.forEach(function(node) {
-                var parentInfo = node.el.closest('.entity').data('info'),
+                var parentInfo = node.el.closest('.vertex').data('info'),
                     offset = 0;
 
                 if (parentInfo) {
                     offset = offsetTransform(parentInfo.start);
                 } else {
-                    var previousEntity = node.el.prevAll('.entity').first(),
+                    var previousEntity = node.el.prevAll('.vertex').first(),
                     previousInfo = previousEntity.data('info'),
                     dom = previousInfo ?
                         previousEntity.get(0) :
