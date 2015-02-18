@@ -38,7 +38,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ApplicationBootstrap implements ServletContextListener {
+public class ApplicationBootstrap implements ServletContextListener {
     public static final String CONFIG_HTTP_TRANSPORT_GUARANTEE = "http.transportGuarantee";
     private static LumifyLogger LOGGER;
     public static final String APP_CONFIG_LOADER = "application.config.loader";
