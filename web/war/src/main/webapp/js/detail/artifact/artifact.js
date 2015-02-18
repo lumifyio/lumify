@@ -38,6 +38,10 @@ define([
     d3) {
     'use strict';
 
+    var PERCENT_CLOSE_FOR_ROUNDING = 5; // Used for sorting x/y coordinates of detected objects
+                                        // This is the distance (%) at which
+                                        // objects are considered positioned similarly
+
     return defineComponent(Artifact, withTypeContent, withHighlighting, withDataRequest);
 
     function Artifact() {
@@ -243,6 +247,10 @@ define([
                 var vertices = results[0],
                     concepts = results[1],
                     verticesById = _.indexBy(vertices, 'id'),
+                    roundCoordinate = function(percentFloat) {
+                        return PERCENT_CLOSE_FOR_ROUNDING *
+                            (Math.round(percentFloat * 100 / PERCENT_CLOSE_FOR_ROUNDING));
+                    },
                     detectedObjectKey = _.property('key');
 
                 d3.select(container.get(0))
@@ -256,7 +264,17 @@ define([
 
                         this
                             .sort(function(a, b) {
-                                return a.value.x1 - b.value.x1;
+                                var sort =
+                                    roundCoordinate((a.value.y2 - a.value.y1) / 2 + a.value.y1) -
+                                    roundCoordinate((b.value.y2 - b.value.y1) / 2 + b.value.y1)
+
+                                if (sort === 0) {
+                                    sort =
+                                        roundCoordinate((a.value.x2 - a.value.x1) / 2 + a.value.x1) -
+                                        roundCoordinate((b.value.x2 - b.value.x1) / 2 + b.value.x1)
+                                }
+
+                                return sort;
                             })
                             .style('display', function(detectedObject) {
                                 if (wasResolved[detectedObject.key]) {
@@ -373,6 +391,10 @@ define([
                 propertyKey = $target.closest('.label-info').data('propertyKey'),
                 property = F.vertex.props(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
 
+            if (property.length !== 1) {
+                throw new Error('Multiple detected objects with same key found');
+            }
+            property = property[0];
             this.$node.find('.focused').removeClass('focused');
             $target.closest('.detected-object').parent().addClass('focused');
 

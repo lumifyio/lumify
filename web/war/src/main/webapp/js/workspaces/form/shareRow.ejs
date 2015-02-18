@@ -5,5 +5,5 @@
   <% if (user.displayName.toLowerCase() !== (user.email || user.userName).toLowerCase()) { %>
   <div class="subtitle"><%= user.email || user.userName %></div>
   <% } %>
-  <div class="user-status <%= user.status ? user.status.toLowerCase() : 'unknown' %>"></div>
+  <div class="user-status st-<%= user.status ? user.status.toLowerCase() : 'unknown' %>"></div>
 </li>

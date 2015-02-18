@@ -37,7 +37,7 @@ define([
                 if ($this.data('user').id === user.id) {
                     $this.find('.user-status')
                         .removeClass('active idle offline unknown')
-                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                        .addClass('st-' + (user.status && user.status.toLowerCase() || 'unknown'));
                 }
             })
         };

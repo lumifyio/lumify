@@ -3,9 +3,8 @@ define([
     'flight/lib/component',
     'videojs',
     'tpl!./scrubber',
-    'tpl!./video',
-    'util/detectedObjects/withFacebox'
-], function(defineComponent, videojs, template, videoTemplate, withFacebox) {
+    'tpl!./video'
+], function(defineComponent, videojs, template, videoTemplate) {
     'use strict';
 
     // TODO: get this from the server
@@ -15,7 +14,7 @@ define([
 
     videojs.options.flash.swf = '/libs/video.js/dist/video-js/video-js.swf';
 
-    return defineComponent(VideoScrubber, withFacebox);
+    return defineComponent(VideoScrubber);
 
     function VideoScrubber() {
 
@@ -42,8 +41,13 @@ define([
             }).show();
 
             var css = {
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                backgroundRepeat: 'repeat-x',
                 backgroundSize: (width * NUMBER_FRAMES) + 'px auto',
-                backgroundPosition: (width * (index||0) * -1) + 'px center'
+                backgroundPosition: (width * (index||0) * -1) + 'px center',
+                backgroundImage: 'url(' + this.attr.videoPreviewImageUrl + ')'
             };
 
             this.select('backgroundScrubberSelector').css(css).show();
@@ -154,7 +158,7 @@ define([
                             $this.currentTime(
                                 Math.max(0.0,
                                     (options.percentSeek ?
-                                        duration * scrubPercent :
+                                        duration * self.scrubPercent :
                                         options.seek) - 1.0
                                 )
                             );
@@ -171,20 +175,6 @@ define([
                 .toggleClass('disableScrubbing', !this.attr.videoPreviewImageUrl)
                 .toggleClass('allowPlayback', this.attr.allowPlayback)
                       .html(template({}));
-
-            if (this.attr.videoPreviewImageUrl) {
-                this.on('DetectedObjectEnter', this.onVideoDetectedObjectEnter);
-                this.on('DetectedObjectLeave', this.onVideoDetectedObjectLeave);
-                this.initializeFacebox(
-                    this.select('backgroundScrubberSelector').css({
-                        width: '100%',
-                        height: '100%',
-                        position: 'absolute',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundImage: 'url(' + this.attr.videoPreviewImageUrl + ')'
-                    })
-                );
-            }
 
             this.select('backgroundPosterSelector').css({
                 width: '100%',
@@ -237,12 +227,6 @@ define([
             });
         };
 
-        this.onVideoDetectedObjectEnter = function(event, data) {
-        };
-
-        this.onVideoDetectedObjectLeave = function(event, data) {
-            this.showPoster();
-        };
     }
 
     return VideoScrubber;

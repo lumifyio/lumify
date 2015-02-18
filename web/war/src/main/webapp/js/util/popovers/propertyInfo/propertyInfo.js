@@ -75,9 +75,14 @@ define([
                         self.update();
 
                         self.on(document, 'verticesUpdated', self.onVerticesUpdated);
+                        self.on(document, 'escape', self.onEscapeKey);
                     });
             });
         });
+
+        this.onEscapeKey = function() {
+            this.teardown();
+        };
 
         this.update = function() {
             var self = this,
