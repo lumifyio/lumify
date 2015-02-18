@@ -100,7 +100,6 @@ define(['flight/lib/registry'], function(registry) {
                     var instanceInfo = componentInfo.instances[identifier];
                     if (instanceInfo.instance.popover) {
                         node = instanceInfo.instance.popover[0];
-                        console.log('replacing node with ', node)
                     }
                 })
                 var walkNode = event.target,
