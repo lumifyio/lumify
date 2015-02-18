@@ -3,10 +3,10 @@ package io.lumify.palantir.mr.mappers;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceLumifyProperties;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.security.LumifyVisibility;
 import io.lumify.palantir.model.AWState;
 import io.lumify.palantir.model.PtGraph;
 import io.lumify.palantir.util.TryInflaterInputStream;
-import io.lumify.web.clientapi.model.VisibilityJson;
 import io.lumify.web.clientapi.model.WorkspaceAccess;
 import org.apache.hadoop.io.LongWritable;
 import org.securegraph.EdgeBuilderByVertexId;
@@ -15,14 +15,14 @@ import org.securegraph.Visibility;
 
 import java.io.IOException;
 
-public class PtGraphMapper extends PalantirMapperBase<PtGraph> {
+public class PtGraphMapper extends PalantirMapperBase<LongWritable, PtGraph> {
 
     private Visibility workspaceOnlyVisibility;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        workspaceOnlyVisibility = new Visibility(WorkspaceRepository.VISIBILITY_STRING);
+        workspaceOnlyVisibility = new LumifyVisibility(WorkspaceRepository.VISIBILITY_STRING).getVisibility();
     }
 
     @Override
@@ -35,20 +35,25 @@ public class PtGraphMapper extends PalantirMapperBase<PtGraph> {
         String workspaceVertexId = getWorkspaceVertexId(ptGraph);
         String userId = PtUserMapper.getUserVertexId(ptGraph.getCreatedBy());
 
-        Visibility visibility = getVisibility(workspaceVertexId);
         getAuthorizationRepository().addAuthorizationToGraph(workspaceVertexId);
         saveWorkspaceVertex(ptGraph, workspaceVertexId);
         saveWorkspaceToUserEdge(workspaceVertexId, userId);
-    }
 
-    private Visibility getVisibility(String workspaceVertexId) {
-        VisibilityJson visibilityJson = new VisibilityJson();
-        visibilityJson.addWorkspace(workspaceVertexId);
-        return getVisibilityTranslator().toVisibilityNoSuperUser(visibilityJson);
-    }
+        for (AWState.Vertex v : awstate.getWrapper2().getWrapper3().getVertexList()) {
+            long objectId = v.getVertexInner().getObjectId();
+            String objectVertexId = PtObjectMapper.getObjectVertexId(objectId);
+            String edgeId = PtGraphObjectMapper.getWorkspaceToEntityEdgeId(workspaceVertexId, objectVertexId);
 
+            EdgeBuilderByVertexId m = getGraph().prepareEdge(edgeId, workspaceVertexId, objectVertexId, WorkspaceRepository.WORKSPACE_TO_ENTITY_RELATIONSHIP_IRI, workspaceOnlyVisibility);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(m, v.getVertexInner().getX(), workspaceOnlyVisibility);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(m, v.getVertexInner().getY(), workspaceOnlyVisibility);
+            m.save(getAuthorizations());
+        }
+    }
+    
     private void saveWorkspaceToUserEdge(String workspaceVertexId, String userId) {
-        EdgeBuilderByVertexId edgeBuilder = getGraph().prepareEdge(workspaceVertexId, userId, WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_IRI, workspaceOnlyVisibility);
+        String edgeId = workspaceVertexId + WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_IRI + userId;
+        EdgeBuilderByVertexId edgeBuilder = getGraph().prepareEdge(edgeId, workspaceVertexId, userId, WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_IRI, workspaceOnlyVisibility);
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_IS_CREATOR.setProperty(edgeBuilder, true, workspaceOnlyVisibility);
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, WorkspaceAccess.WRITE.toString(), workspaceOnlyVisibility);
         edgeBuilder.save(getAuthorizations());

@@ -42,6 +42,6 @@ public class PtImageInfoExporter extends ExporterBase<PtImageInfo> {
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_IMAGE_INFO";
+        return "SELECT * FROM {namespace}.PT_IMAGE_INFO ORDER BY id";
     }
 }

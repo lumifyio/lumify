@@ -2,6 +2,7 @@ package io.lumify.palantir.mr.mappers;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.LumifyVisibility;
 import io.lumify.palantir.model.PtObject;
 import io.lumify.palantir.model.PtObjectType;
 import org.apache.hadoop.io.LongWritable;
@@ -10,14 +11,14 @@ import org.securegraph.Visibility;
 
 import java.io.IOException;
 
-public class PtObjectMapper extends PalantirMapperBase<PtObject> {
+public class PtObjectMapper extends PalantirMapperBase<LongWritable, PtObject> {
     private Visibility visibility;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
         loadObjectTypes(context);
-        visibility = new Visibility("");
+        visibility = new LumifyVisibility("").getVisibility();
     }
 
     @Override

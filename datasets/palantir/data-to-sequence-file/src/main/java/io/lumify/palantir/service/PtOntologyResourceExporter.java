@@ -35,6 +35,6 @@ public class PtOntologyResourceExporter extends ExporterBase<PtOntologyResource>
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_ONTOLOGY_RESOURCE";
+        return "SELECT * FROM {namespace}.PT_ONTOLOGY_RESOURCE ORDER BY id";
     }
 }

@@ -10,6 +10,6 @@ public class PtGraphExporter extends ExporterBase<PtGraph> {
 
     @Override
     protected String getSql() {
-        return "select * FROM {namespace}.PT_GRAPH";
+        return "SELECT * FROM {namespace}.PT_GRAPH ORDER BY id";
     }
 }

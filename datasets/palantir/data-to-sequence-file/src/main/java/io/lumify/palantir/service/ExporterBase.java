@@ -43,7 +43,7 @@ public abstract class ExporterBase<T extends PtModelBase> {
         dataToSequenceFile.writeFile(fileName, data);
     }
 
-    private Class<?> getKeyClass() {
+    protected Class<?> getKeyClass() {
         return LongWritable.class;
     }
 

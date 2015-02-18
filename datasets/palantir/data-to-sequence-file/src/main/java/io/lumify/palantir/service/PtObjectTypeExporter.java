@@ -9,6 +9,6 @@ public class PtObjectTypeExporter extends OntologyTypeExporterBase<PtObjectType>
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_OBJECT_TYPE";
+        return "SELECT * FROM {namespace}.PT_OBJECT_TYPE ORDER BY type";
     }
 }

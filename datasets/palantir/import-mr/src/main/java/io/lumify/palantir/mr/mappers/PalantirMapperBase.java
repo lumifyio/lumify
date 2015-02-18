@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class PalantirMapperBase<VALUEIN> extends LumifyElementMapperBase<LongWritable, VALUEIN> {
+public abstract class PalantirMapperBase<KEYIN, VALUEIN> extends LumifyElementMapperBase<KEYIN, VALUEIN> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PalantirMapperBase.class);
     public static final String ID_PREFIX = "PALANTIR_";
     private String baseIri;

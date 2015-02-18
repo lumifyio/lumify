@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 
-public class PtUserMapper extends PalantirMapperBase<PtUser> {
+public class PtUserMapper extends PalantirMapperBase<LongWritable, PtUser> {
     private String privileges;
 
     @Override
@@ -56,7 +56,7 @@ public class PtUserMapper extends PalantirMapperBase<PtUser> {
     }
 
     public static String getUserVertexId(long userId) {
-        return ID_PREFIX +"USER_" + userId;
+        return ID_PREFIX + "USER_" + userId;
     }
 
     private String getDisplayName(PtUser ptUser) {

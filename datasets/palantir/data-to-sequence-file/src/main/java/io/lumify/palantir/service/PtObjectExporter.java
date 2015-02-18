@@ -9,6 +9,6 @@ public class PtObjectExporter extends ExporterBase<PtObject> {
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_OBJECT";
+        return "SELECT * FROM {namespace}.PT_OBJECT ORDER BY object_id";
     }
 }

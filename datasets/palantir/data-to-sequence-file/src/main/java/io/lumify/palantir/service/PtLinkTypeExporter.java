@@ -9,6 +9,6 @@ public class PtLinkTypeExporter extends OntologyTypeExporterBase<PtLinkType> {
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_LINK_TYPE";
+        return "SELECT * FROM {namespace}.PT_LINK_TYPE ORDER BY type";
     }
 }

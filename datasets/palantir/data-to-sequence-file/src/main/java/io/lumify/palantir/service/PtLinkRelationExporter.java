@@ -46,6 +46,6 @@ public class PtLinkRelationExporter extends ExporterBase<PtLinkRelation> {
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_LINK_RELATION";
+        return "SELECT * FROM {namespace}.PT_LINK_RELATION ORDER BY id";
     }
 }

@@ -9,6 +9,6 @@ public class PtNodeDisplayTypeExporter extends OntologyTypeExporterBase<PtNodeDi
 
     @Override
     protected String getSql() {
-        return "select * from {namespace}.PT_NODE_DISPLAY_TYPE";
+        return "SELECT * FROM {namespace}.PT_NODE_DISPLAY_TYPE ORDER BY id";
     }
 }
