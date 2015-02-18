@@ -1,7 +1,10 @@
 
 This tool re-indexes the data using an MR job.
 
-Running
--------
+## Reindex via Map Reduce
 
-        hadoop jar lumify-reindex-mr-*-jar-with-dependencies.jar vertex
+        yarn jar lumify-reindex-mr-*-jar-with-dependencies.jar vertex
+
+## Reindex via IDE
+
+1. Run `io.lumify.reindexmr.ReindexMR vertex` from the module `lumify-wikipedia-mr`
