@@ -36,6 +36,12 @@ window.switchLanguage = function(code) {
     } else console.error('Available Locales: ' + availableLocales.join(', '));
 }
 
+window.enableComponentHighlighting = function(enable) {
+    require(['util/flight/componentHighlighter'], function(c) {
+        c.highlightComponents(enable);
+    });
+}
+
 if ('localStorage' in window) {
     if (localStorage.getItem('liveReloadEnabled')) {
         enableLiveReload(true);
