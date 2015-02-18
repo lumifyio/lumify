@@ -405,7 +405,9 @@ define([
             props: function(vertex, name, optionalKey) {
                 checkVertexAndPropertyNameArguments(vertex, name);
 
-                if (arguments.length === 3 && !optionalKey) {
+                var hasKey = !_.isUndefined(optionalKey);
+
+                if (arguments.length === 3 && !hasKey) {
                     throw new Error('Undefined key is not allowed. Remove parameter to return all named properties');
                 }
 
@@ -416,12 +418,12 @@ define([
                     foundProperties = _.filter(vertex.properties, function(p) {
                         if (dependentIris) {
                             return ~dependentIris.indexOf(p.name) && (
-                                optionalKey ? optionalKey === p.key : true
+                                hasKey ? optionalKey === p.key : true
                             );
                         }
 
                         return name === p.name && (
-                            optionalKey ? optionalKey === p.key : true
+                            hasKey ? optionalKey === p.key : true
                         );
                     });
 
@@ -507,10 +509,11 @@ define([
                     optionalKey = null;
                 }
 
-                var options = _.extend({
-                    defaultValue: undefined,
-                    ignoreErrorIfTitle: false
-                }, optionalOpts || {});
+                var hasKey = !_.isUndefined(optionalKey),
+                    options = _.extend({
+                        defaultValue: undefined,
+                        ignoreErrorIfTitle: false
+                    }, optionalOpts || {});
 
                 if (options.ignoreErrorIfTitle !== true && name === 'title') {
                     throw new Error('Use title function, not generic prop');
@@ -528,7 +531,7 @@ define([
                         throw new Error('Compound properties that depend on compound properties are not allowed');
                     }
 
-                    if (!optionalKey && properties.length) {
+                    if (!hasKey && properties.length) {
                         optionalKey = properties[0].key;
                     }
 
@@ -536,7 +539,7 @@ define([
 
                     return _.map(dependentIris, _.partial(V.propRaw, vertex, _, optionalKey, options));
                 } else {
-                    var foundProperties = optionalKey ?
+                    var foundProperties = hasKey ?
                             _.where(properties, { key: optionalKey }) :
                             properties,
 
