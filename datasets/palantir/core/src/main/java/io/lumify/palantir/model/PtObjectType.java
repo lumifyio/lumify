@@ -72,6 +72,10 @@ public class PtObjectType extends PtOntologyType {
     @Override
     public void readFields(DataInput in) throws IOException {
         super.readFields(in);
-        throw new RuntimeException("Not Implmeneted");
+        setType(in.readLong());
+        setHidden(in.readBoolean());
+        setCreatedBy(in.readLong());
+        setTimeCreated(in.readLong());
+        setLastModified(in.readLong());
     }
 }

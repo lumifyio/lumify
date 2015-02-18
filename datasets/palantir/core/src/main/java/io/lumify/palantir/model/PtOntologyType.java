@@ -35,12 +35,17 @@ public abstract class PtOntologyType extends PtModelBase {
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeBytes(getConfig());
+        byte[] configBytes = getConfig().getBytes();
+        out.writeInt(configBytes.length);
+        out.write(configBytes);
     }
 
     @Override
     public void readFields(DataInput in) throws IOException {
-        setConfig(in.readUTF());
+        int configBytesLen = in.readInt();
+        byte[] configBytes = new byte[configBytesLen];
+        in.readFully(configBytes, 0, configBytesLen);
+        setConfig(new String(configBytes));
     }
 
     public String getUri() {

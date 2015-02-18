@@ -5,7 +5,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.palantir.ontologyToOwl.OntologyToOwl;
 import io.lumify.palantir.service.*;
 import io.lumify.palantir.sqlrunner.SqlRunner;
 import org.apache.hadoop.conf.Configuration;
@@ -62,16 +61,17 @@ public class DataToSequenceFile {
         sqlRunner = createSqlRunner();
         sqlRunner.connect();
         try {
-//            new PtObjectTypeExporter().run(this);
-//            new PtPropertyTypeExporter().run(this);
-//            new PtLinkTypeExporter().run(this);
-//            new PtNodeDisplayTypeExporter().run(this);
-//            new PtImageInfoExporter().run(this);
-//            new PtOntologyResourceExporter().run(this);
-//            new PtLinkRelationExporter().run(this);
+            new PtObjectTypeExporter().run(this);
+            new PtPropertyTypeExporter().run(this);
+            new PtLinkTypeExporter().run(this);
+            new PtNodeDisplayTypeExporter().run(this);
+            new PtImageInfoExporter().run(this);
+            new PtOntologyResourceExporter().run(this);
+            new PtLinkRelationExporter().run(this);
 //            new OntologyToOwl(baseIri).run(getFs(), getDestinationPath());
-
-            new PtUserExporter().run(this);
+//            new PtUserExporter().run(this);
+//            new PtGraphExporter().run(this);
+//            new PtObjectExporter().run(this);
         } finally {
             sqlRunner.close();
         }

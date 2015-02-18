@@ -52,7 +52,11 @@ public class PtUserMapper extends PalantirMapperBase<PtUser> {
     }
 
     public static String getUserVertexId(PtUser ptUser) {
-        return "USER_PALANTIR_" + ptUser.getId();
+        return getUserVertexId(ptUser.getId());
+    }
+
+    public static String getUserVertexId(long userId) {
+        return ID_PREFIX +"USER_" + userId;
     }
 
     private String getDisplayName(PtUser ptUser) {

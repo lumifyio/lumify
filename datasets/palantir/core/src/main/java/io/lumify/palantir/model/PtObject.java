@@ -1,6 +1,13 @@
 package io.lumify.palantir.model;
 
-public class PtObject {
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+public class PtObject extends PtModelBase {
     private long objectId;
     private long realmId;
     private long type;
@@ -75,7 +82,7 @@ public class PtObject {
     }
 
     public void setDeleted(Long deleted) {
-        if (deleted == 0) {
+        if (deleted == null || deleted == 0) {
             deleted = null;
         }
         this.deleted = deleted;
@@ -111,5 +118,42 @@ public class PtObject {
 
     public void setLastModifiedBy(long lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
+    }
+
+    @Override
+    public Writable getKey() {
+        return new LongWritable(getObjectId());
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(getObjectId());
+        out.writeLong(getRealmId());
+        out.writeLong(getType());
+        out.writeBoolean(isGroup());
+        out.writeBoolean(isResolved());
+        out.writeLong(getDataEventId());
+        writeFieldNullableLong(out, getOriginDataEventId());
+        writeFieldNullableLong(out, getDeleted());
+        out.writeLong(getCreatedBy());
+        out.writeLong(getTimeCreated());
+        out.writeLong(getLastModified());
+        out.writeLong(getLastModifiedBy());
+    }
+
+    @Override
+    public void readFields(DataInput in) throws IOException {
+        setObjectId(in.readLong());
+        setRealmId(in.readLong());
+        setType(in.readLong());
+        setIsGroup(in.readBoolean());
+        setResolved(in.readBoolean());
+        setDataEventId(in.readLong());
+        setOriginDataEventId(readFieldNullableLong(in));
+        setDeleted(readFieldNullableLong(in));
+        setCreatedBy(in.readLong());
+        setTimeCreated(in.readLong());
+        setLastModified(in.readLong());
+        setLastModifiedBy(in.readLong());
     }
 }

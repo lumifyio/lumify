@@ -3,6 +3,8 @@ package io.lumify.palantir.mr;
 import io.lumify.core.mapreduce.LumifyMRBase;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.palantir.mr.mappers.PtGraphMapper;
+import io.lumify.palantir.mr.mappers.PtObjectMapper;
 import io.lumify.palantir.mr.mappers.PtUserMapper;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.conf.Configuration;
@@ -29,6 +31,12 @@ public class ImportMR extends LumifyMRBase {
         if (type.equalsIgnoreCase("ptuser")) {
             inFilePath = new Path(inPath, "PtUser.seq");
             job.setMapperClass(PtUserMapper.class);
+        } else if (type.equalsIgnoreCase("ptgraph")) {
+            inFilePath = new Path(inPath, "PtGraph.seq");
+            job.setMapperClass(PtGraphMapper.class);
+        } else if (type.equalsIgnoreCase("ptobject")) {
+            inFilePath = new Path(inPath, "PtObject.seq");
+            job.setMapperClass(PtObjectMapper.class);
         } else {
             throw new RuntimeException("Invalid import type");
         }
