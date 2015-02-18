@@ -94,6 +94,9 @@ define([
             var self = this;
 
             this.trigger('updateWorkspace', {
+                options: {
+                    selectAll: true
+                },
                 entityUpdates: this.promptAddVertices.map(function(vertex) {
                     return {
                         vertexId: vertex.id,
@@ -156,6 +159,9 @@ define([
                     } else {
                         _.defer(function() {
                             self.trigger('updateWorkspace', {
+                                options: {
+                                    selectAll: true
+                                },
                                 entityUpdates: vertices.map(function(vertex) {
                                     return {
                                         vertexId: vertex.id,

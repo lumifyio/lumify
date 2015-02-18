@@ -115,6 +115,9 @@ define([
             this.request
                 .then(function(result) {
                     self.trigger('updateWorkspace', {
+                        options: {
+                            selectAll: true
+                        },
                         entityUpdates: [{
                             vertexId: result.id,
                             graphLayoutJson: {

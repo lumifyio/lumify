@@ -311,6 +311,10 @@ define([
                     });
                 } else customLayout.resolve({});
 
+                if (vertices.length && self.vertexIdsToSelect && self.vertexIdsToSelect.length) {
+                    cy.$(':selected').unselect();
+                }
+
                 customLayout.done(function(layoutPositions) {
 
                     var cyNodes = [];
@@ -403,6 +407,8 @@ define([
 
                         cyNodes.push(cyNodeData);
                     });
+
+                    self.vertexIdsToSelect = null;
 
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
