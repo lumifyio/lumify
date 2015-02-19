@@ -4,6 +4,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.DataToSequenceFile;
+import io.lumify.palantir.service.Exporter;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.hadoop.fs.*;
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OntologyToOwl {
+public class OntologyToOwl implements Exporter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyToOwl.class);
     public static final String INVERSE_SUFFIX = "_inverse";
     private final String baseIri;
@@ -54,6 +55,11 @@ public class OntologyToOwl {
         }
         this.baseIri = baseIri;
         this.titleFormulaMaker = new TitleFormulaMaker(baseIri);
+    }
+
+    @Override
+    public void run(ExporterSource exporterSource) throws Exception {
+        run(exporterSource.getFileSystem(), exporterSource.getDestinationPath());
     }
 
     public void run(FileSystem fs, Path destinationPath) throws Exception {

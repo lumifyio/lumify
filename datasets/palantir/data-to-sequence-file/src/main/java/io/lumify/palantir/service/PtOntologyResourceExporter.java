@@ -15,8 +15,8 @@ public class PtOntologyResourceExporter extends ExporterBase<PtOntologyResource>
     }
 
     @Override
-    protected void processRow(DataToSequenceFile dataToSequenceFile, PtOntologyResource row, SequenceFile.Writer outputFile) throws IOException {
-        super.processRow(dataToSequenceFile, row, outputFile);
+    protected void processRow(Exporter.ExporterSource exporterSource, PtOntologyResource row, SequenceFile.Writer outputFile) throws IOException {
+        super.processRow(exporterSource, row, outputFile);
 
         String contentsBase64 = Base64.encodeBase64String(row.getContents());
         contentsBase64 = Joiner.on('\n').join(Splitter.fixedLength(76).split(contentsBase64));
@@ -30,7 +30,7 @@ public class PtOntologyResourceExporter extends ExporterBase<PtOntologyResource>
         xml.append("  <contents>").append(contentsBase64).append("</contents>\n");
         xml.append("</ontology_resource_config>\n");
 
-        writeFile(dataToSequenceFile, DataToSequenceFile.ONTOLOGY_XML_DIR_NAME + "/image/OntologyResource" + row.getId() + ".xml", xml.toString());
+        writeFile(exporterSource, DataToSequenceFile.ONTOLOGY_XML_DIR_NAME + "/image/OntologyResource" + row.getId() + ".xml", xml.toString());
     }
 
     @Override

@@ -14,16 +14,16 @@ public class PtImageInfoExporter extends ExporterBase<PtImageInfo> {
     }
 
     @Override
-    protected void beforeProcessRows(DataToSequenceFile dataToSequenceFile) {
-        super.beforeProcessRows(dataToSequenceFile);
+    protected void beforeProcessRows(Exporter.ExporterSource exporterSource) {
+        super.beforeProcessRows(exporterSource);
         xml = new StringBuilder();
         xml.append("<?xml version=\"1.0\" ?>\n");
         xml.append("<image_infos>\n");
     }
 
     @Override
-    protected void processRow(DataToSequenceFile dataToSequenceFile, PtImageInfo row, SequenceFile.Writer outputFile) throws IOException {
-        super.processRow(dataToSequenceFile, row, outputFile);
+    protected void processRow(Exporter.ExporterSource exporterSource, PtImageInfo row, SequenceFile.Writer outputFile) throws IOException {
+        super.processRow(exporterSource, row, outputFile);
         xml.append("  <image_info_config>\n");
         xml.append("    <name>").append(row.getName()).append("</name>\n");
         xml.append("    <uri>").append(row.getUri()).append("</uri>\n");
@@ -33,11 +33,11 @@ public class PtImageInfoExporter extends ExporterBase<PtImageInfo> {
     }
 
     @Override
-    protected void afterProcessRows(DataToSequenceFile dataToSequenceFile) {
-        super.afterProcessRows(dataToSequenceFile);
+    protected void afterProcessRows(Exporter.ExporterSource exporterSource) {
+        super.afterProcessRows(exporterSource);
         xml.append("</image_infos>\n");
 
-        writeOntologyXmlFile(dataToSequenceFile, "pt_image_info", xml.toString());
+        writeOntologyXmlFile(exporterSource, "pt_image_info", xml.toString());
     }
 
     @Override

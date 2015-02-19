@@ -14,8 +14,8 @@ public class PtLinkRelationExporter extends ExporterBase<PtLinkRelation> {
     }
 
     @Override
-    protected void beforeProcessRows(DataToSequenceFile dataToSequenceFile) {
-        super.beforeProcessRows(dataToSequenceFile);
+    protected void beforeProcessRows(Exporter.ExporterSource exporterSource) {
+        super.beforeProcessRows(exporterSource);
 
         xml = new StringBuilder();
         xml.append("<?xml version=\"1.0\" ?>\n");
@@ -23,8 +23,8 @@ public class PtLinkRelationExporter extends ExporterBase<PtLinkRelation> {
     }
 
     @Override
-    protected void processRow(DataToSequenceFile dataToSequenceFile, PtLinkRelation row, SequenceFile.Writer outputFile) throws IOException {
-        super.processRow(dataToSequenceFile, row, outputFile);
+    protected void processRow(Exporter.ExporterSource exporterSource, PtLinkRelation row, SequenceFile.Writer outputFile) throws IOException {
+        super.processRow(exporterSource, row, outputFile);
         xml.append("  <link_relation_config>\n");
         xml.append("    <tableType1>").append(row.getTableTypeId1()).append("</tableType1>\n");
         xml.append("    <uri1>").append(row.getUri1()).append("</uri1>\n");
@@ -37,11 +37,11 @@ public class PtLinkRelationExporter extends ExporterBase<PtLinkRelation> {
     }
 
     @Override
-    protected void afterProcessRows(DataToSequenceFile dataToSequenceFile) {
-        super.afterProcessRows(dataToSequenceFile);
+    protected void afterProcessRows(Exporter.ExporterSource exporterSource) {
+        super.afterProcessRows(exporterSource);
         xml.append("</link_relations>\n");
 
-        writeOntologyXmlFile(dataToSequenceFile, "pt_link_relation", xml.toString());
+        writeOntologyXmlFile(exporterSource, "pt_link_relation", xml.toString());
     }
 
     @Override

@@ -12,8 +12,8 @@ public abstract class OntologyTypeExporterBase<T extends PtOntologyType> extends
     }
 
     @Override
-    protected void processRow(DataToSequenceFile dataToSequenceFile, T row, SequenceFile.Writer outputFile) throws IOException {
-        super.processRow(dataToSequenceFile, row, outputFile);
-        writeOntologyXmlFile(dataToSequenceFile, row.getUri(), row.getConfig());
+    protected void processRow(Exporter.ExporterSource exporterSource, T row, SequenceFile.Writer outputFile) throws IOException {
+        super.processRow(exporterSource, row, outputFile);
+        writeOntologyXmlFile(exporterSource, row.getUri(), row.getConfig());
     }
 }
