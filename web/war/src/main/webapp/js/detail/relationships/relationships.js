@@ -75,16 +75,16 @@ define([
                 .then(function(result) {
                     var relationships = result.relationships;
 
+                    $badge.text(_.isNumber(result.totalReferences) ?
+                        F.number.prettyApproximate(result.totalReferences) : '');
+                    $section.data('total', result.totalReferences);
+
                     if (!relationships.length) {
                         $content.html(alertTemplate({
                             message: i18n('detail.entity.relationships.none_found')
                         }));
                         return;
                     }
-
-                    $badge.text(_.isNumber(result.totalReferences) ?
-                        F.number.prettyApproximate(result.totalReferences) : '');
-                    $section.data('total', result.totalReferences);
 
                     var node = $content.empty().append('<div>').find('div'),
                         relationDirections = {},
