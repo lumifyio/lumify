@@ -111,17 +111,16 @@ define([
                         var task = self.tasksById[processId];
                         delete self.tasksById[processId];
                         self.tasks.splice(self.tasks.indexOf(task), 1);
-                        self.update()
-                            .then(function() {
-                                if (self.tasks.length === 0 && name === 'delete') {
-                                    _.delay(function() {
-                                        var visible = self.$node.closest('.visible').length > 0;
-                                        if (visible) {
-                                            self.trigger('menubarToggleDisplay', { name: 'activity' });
-                                        }
-                                    }, 250)
-                                }
-                            })
+                        self.update().then(function() {
+                            if (self.currentTaskCount === 0 && name === 'delete') {
+                                _.delay(function() {
+                                    var visible = self.$node.closest('.visible').length > 0;
+                                    if (visible) {
+                                        self.trigger('menubarToggleDisplay', { name: 'activity' });
+                                    }
+                                }, 250)
+                            }
+                        })
                     });
             }
         };
@@ -260,6 +259,7 @@ define([
                     })
                     .value();
 
+            this.currentTaskCount = tasks.length;
             this.notifyActivityMonitors(tasks);
 
             if (!this.isOpen) {
