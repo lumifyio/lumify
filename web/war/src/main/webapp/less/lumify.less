@@ -214,7 +214,23 @@ html.fullscreenDetails {
 }
 
 .help-dialog {
+  height: 40em;
+  width: 60%;
+  height: 80vh;
+  width: 60vw;
+  max-width: 65em;
+  margin-left: 0;
+  .translate(-50%, 0);
   @import "help/help";
+  .modal-body {
+    position: absolute;
+    top: 3.8em;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: none;
+    overflow: auto;
+  }
 }
 
 .fullscreenApp .detail-pane {
