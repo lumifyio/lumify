@@ -245,7 +245,7 @@ define([
                 previousValuesUniquedByKey = previousValues && _.unique(previousValues, _.property('key'));
 
             this.currentValue = this.attr.attemptToCoerceValue || previousValue;
-            if (this.currentValue && 'latitude' in this.currentValue) {
+            if (this.currentValue && _.isObject(this.currentValue) && ('latitude' in this.currentValue)) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
             }
 
