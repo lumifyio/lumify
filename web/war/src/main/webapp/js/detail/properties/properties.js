@@ -52,7 +52,7 @@ define([
 
     function isJustification(property) {
         return (
-            property.name === '_justificationMetadata' ||
+            property.name === 'http://lumify.io#justification' ||
             property.name === '_sourceMetadata'
         );
     }
@@ -100,7 +100,7 @@ define([
                                 hideVisibility: true,
                                 displayName: i18n('justification.field.label'),
                                 justificationData: {
-                                    justificationMetadata: property.name === '_justificationMetadata' ?
+                                    justificationMetadata: property.name === 'http://lumify.io#justification' ?
                                         property.value : null,
                                     sourceMetadata: property.name === '_sourceMetadata' ?
                                         property.value : null
@@ -508,29 +508,32 @@ define([
         };
 
         this.onDeleteProperty = function(event, data) {
-            var self = this;
+            var self = this,
+                vertexId = data.vertexId || this.attr.data.id;
 
             this.dataRequest(
                     F.vertex.isEdge(this.attr.data) ? 'edge' : 'vertex',
                     'deleteProperty',
-                    this.attr.data.id, data.property
+                    vertexId, data.property
                 ).then(this.closePropertyForm.bind(this))
                  .catch(this.requestFailure.bind(this, event.target))
         };
 
         this.onAddProperty = function(event, data) {
+            var vertexId = data.vertexId || this.attr.data.id;
+
             if (data.property.name === 'http://lumify.io#visibilityJson') {
                 if (data.isEdge) {
-                    this.dataRequest('edge', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                    this.dataRequest('edge', 'setVisibility', vertexId, data.property.visibilitySource)
                         .then(this.closePropertyForm.bind(this))
                         .catch(this.requestFailure.bind(this))
                 } else {
-                    this.dataRequest('vertex', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                    this.dataRequest('vertex', 'setVisibility', vertexId, data.property.visibilitySource)
                         .then(this.closePropertyForm.bind(this))
                         .catch(this.requestFailure.bind(this));
                 }
             } else {
-                this.dataRequest('vertex', 'setProperty', this.attr.data.id, data.property)
+                this.dataRequest('vertex', 'setProperty', vertexId, data.property)
                     .then(this.closePropertyForm.bind(this))
                     .catch(this.requestFailure.bind(this));
             }
@@ -538,11 +541,11 @@ define([
         };
 
         this.closePropertyForm = function() {
-            this.$node.find('.underneath').teardownComponent(PropertyForm);
+            this.$node.closest('.type-content').find('.underneath').teardownComponent(PropertyForm);
         };
 
         this.requestFailure = function(error) {
-            var target = this.$node.find('.underneath');
+            var target = this.$node.closest('.type-content').find('.underneath');
             this.trigger(target, 'propertyerror', { error: error });
         };
 

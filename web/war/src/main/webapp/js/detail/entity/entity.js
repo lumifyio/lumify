@@ -322,7 +322,7 @@ define([
                 PropertyForm.teardownAll();
             }
 
-            if ($target.is('.entity, .artifact')) {
+            if ($target.is('.vertex, .artifact')) {
                 var id = $target.data('vertexId');
                 this.trigger('selectObjects', { vertexIds: [id] });
                 evt.stopPropagation();

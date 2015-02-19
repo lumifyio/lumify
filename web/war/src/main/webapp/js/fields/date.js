@@ -7,7 +7,6 @@ define([
     './withHistogram',
     'util/formatters',
     'util/popovers/withElementScrollingPositionUpdates',
-    'chrono',
     'jstz'
 ], function(
     defineComponent,
@@ -17,7 +16,6 @@ define([
     withHistogram,
     F,
     withPositionUpdates,
-    chrono,
     jstz) {
     'use strict';
 
@@ -30,6 +28,10 @@ define([
             timezoneSelector: '.timezone'
         });
 
+        this.before('initialize', function(node, config) {
+            config.focus = false;
+        })
+
         this.after('initialize', function() {
             var self = this,
                 value = '',
@@ -39,8 +41,24 @@ define([
             this.displayTime = this.attr.property.displayType !== 'dateOnly';
 
             if (this.attr.value) {
-                dateString = value = F.date.dateStringUtc(this.attr.value);
-                timeString = F.date.timeString(this.attr.value);
+                var millis = _.isNumber(this.attr.value) ? this.attr.value : undefined;
+
+                if (_.isUndefined(millis)) {
+                    var date = F.date.looslyParseDate(this.attr.value);
+                    if (date) {
+                        millis = date.getTime();
+                    }
+                } else if (isNaN(new Date(millis).getTime())) {
+                    millis = null;
+                }
+
+                if (millis) {
+                    dateString = value = F.date.dateStringUtc(millis);
+                    timeString = F.date.timeString(millis);
+                } else {
+                    this.attr.value = '';
+                }
+
             }
 
             this.$node.html(template({
@@ -104,7 +122,7 @@ define([
                     var pasted = self.val();
 
                     if (pasted) {
-                        var date = chrono.parseDate(pasted)
+                        var date = F.date.looslyParseDate(pasted);
                         if (date) {
                             self.val(F.date.dateString(date));
                             self.datepicker('setDate', date);

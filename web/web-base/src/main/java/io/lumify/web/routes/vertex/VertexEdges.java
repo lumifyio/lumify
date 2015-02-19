@@ -78,7 +78,7 @@ public class VertexEdges extends BaseRequestHandler {
             }
 
             ClientApiVertexEdges.Edge clientApiEdge = new ClientApiVertexEdges.Edge();
-            clientApiEdge.setRelationship(ClientApiConverter.toClientApiEdge(edge, workspaceId, authorizations));
+            clientApiEdge.setRelationship(ClientApiConverter.toClientApiEdge(edge, workspaceId));
             clientApiEdge.setVertex(ClientApiConverter.toClientApiVertex(otherVertex, workspaceId, authorizations));
             result.getRelationships().add(clientApiEdge);
             referencesAdded++;

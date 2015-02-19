@@ -35,7 +35,7 @@ public class SphinxGraphPropertyWorker extends GraphPropertyWorker {
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         Metadata metadata = data.createPropertyMetadata();
-        metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Audio Transcript", getVisibilityTranslator().getDefaultVisibility());
+        LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(metadata, "Audio Transcript", getVisibilityTranslator().getDefaultVisibility());
         addVideoTranscriptAsTextPropertiesToMutation(m, MULTI_VALUE_KEY, transcript, metadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, MULTI_VALUE_KEY, getUser(), data.getVisibility());

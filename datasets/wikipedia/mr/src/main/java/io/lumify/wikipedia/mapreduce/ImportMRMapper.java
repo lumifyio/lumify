@@ -199,7 +199,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
 
         if (!isRedirect) {
             Metadata textMetadata = new Metadata();
-            textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text", defaultVisibility);
+            LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(textMetadata, "Text", defaultVisibility);
             LumifyProperties.TEXT.addPropertyValue(pageVertexBuilder, multiKey, textPropertyValue, textMetadata, visibility);
         }
 
@@ -215,15 +215,15 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         return pageVertex;
     }
 
-    private String getPageText(String wikitext, String wikipediaPageVertexId, TextConverter textConverter) throws LinkTargetException, EngineException {
+    private String getPageText(String wikiText, String wikipediaPageVertexId, TextConverter textConverter) throws LinkTargetException, EngineException {
         String fileTitle = wikipediaPageVertexId;
         PageId pageId = new PageId(PageTitle.make(config, fileTitle), -1);
-        EngProcessedPage compiledPage = compiler.postprocess(pageId, wikitext, null);
+        EngProcessedPage compiledPage = compiler.postprocess(pageId, wikiText, null);
         String text = (String) textConverter.go(compiledPage.getPage());
         if (text.length() > 0) {
-            wikitext = text;
+            wikiText = text;
         }
-        return wikitext;
+        return wikiText;
     }
 
     private void savePageLinks(Context context, Vertex pageVertex, TextConverter textConverter, String pageTextKey) throws IOException, InterruptedException {

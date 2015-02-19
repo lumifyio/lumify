@@ -31,6 +31,8 @@ public abstract class Relationship {
         return rangeConceptIRIs;
     }
 
+    public abstract boolean getUserVisible();
+
     public abstract String[] getIntents();
 
     public ClientApiOntology.Relationship toClientApi() {
@@ -40,6 +42,7 @@ public abstract class Relationship {
             result.setDisplayName(getDisplayName());
             result.setDomainConceptIris(getDomainConceptIRIs());
             result.setRangeConceptIris(getRangeConceptIRIs());
+            result.setUserVisible(getUserVisible());
             if (getIntents() != null) {
                 result.getIntents().addAll(Arrays.asList(getIntents()));
             }
@@ -66,7 +69,7 @@ public abstract class Relationship {
     }
 
     public static Collection<ClientApiOntology.Relationship> toClientApiRelationships(Iterable<Relationship> relationships) {
-        Collection<ClientApiOntology.Relationship> results = new ArrayList<ClientApiOntology.Relationship>();
+        Collection<ClientApiOntology.Relationship> results = new ArrayList<>();
         for (Relationship vertex : relationships) {
             results.add(vertex.toClientApi());
         }

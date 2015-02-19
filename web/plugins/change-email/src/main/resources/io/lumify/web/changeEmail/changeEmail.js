@@ -32,13 +32,14 @@ require(['configuration/plugins/userAccount/plugin'], function(UserAccountPlugin
 
             this.onChange = function(event) {
                 var self = this,
-                    btn = $(event.target).addClass('loading').attr('disabled', true);
+                    btn = $(event.target).addClass('loading').attr('disabled', true),
+                    newEmail = this.$node.find('.current').val();
 
                 this.clearFieldErrors(this.$node);
                 this.$node.find('.alert-info').remove();
 
                 $.post('changeEmail', {
-                    email: this.$node.find('.current').val(),
+                    email: newEmail,
                     csrfToken: lumifyData.currentUser.csrfToken
                 })
                     .always(function() {
@@ -48,6 +49,7 @@ require(['configuration/plugins/userAccount/plugin'], function(UserAccountPlugin
                         self.markFieldErrors(e && e.statusText || e, self.$node);
                     })
                     .done(function() {
+                        lumifyData.currentUser.email = newEmail;
                         self.$node.prepend(alertTemplate({
                             message: i18n('useraccount.page.changeEmail.success')
                         }));

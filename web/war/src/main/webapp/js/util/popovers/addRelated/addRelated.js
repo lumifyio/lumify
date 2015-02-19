@@ -52,7 +52,10 @@ define([
                     promptAddButtonSelector: this.onPromptAdd
                 });
 
+                this.enterShouldSubmit = 'addButtonSelector';
+
                 ConceptSelector.attachTo(self.popover.find('.concept'), {
+                    focus: true,
                     defaultText: i18n('popovers.add_related.concept.default_text'),
                     limitRelatedToConceptId: F.vertex.prop(
                         _.isArray(this.attr.vertex) ? this.attr.vertex[0] : this.attr.vertex,
@@ -94,6 +97,9 @@ define([
             var self = this;
 
             this.trigger('updateWorkspace', {
+                options: {
+                    selectAll: true
+                },
                 entityUpdates: this.promptAddVertices.map(function(vertex) {
                     return {
                         vertexId: vertex.id,
@@ -156,6 +162,9 @@ define([
                     } else {
                         _.defer(function() {
                             self.trigger('updateWorkspace', {
+                                options: {
+                                    selectAll: true
+                                },
                                 entityUpdates: vertices.map(function(vertex) {
                                     return {
                                         vertexId: vertex.id,

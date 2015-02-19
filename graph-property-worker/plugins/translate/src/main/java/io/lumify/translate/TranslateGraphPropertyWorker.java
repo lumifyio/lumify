@@ -60,8 +60,8 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
             return;
         }
 
-        ExistingElementMutation m = data.getElement().prepareMutation()
-                .setPropertyMetadata(data.getProperty(), LumifyProperties.META_DATA_LANGUAGE, language, getVisibilityTranslator().getDefaultVisibility());
+        ExistingElementMutation m = data.getElement().prepareMutation();
+        LumifyProperties.META_DATA_LANGUAGE.setMetadata(m, data.getProperty(), language, getVisibilityTranslator().getDefaultVisibility());
 
         boolean translated = false;
         String translatedTextPropertyKey = data.getProperty().getKey() + "#en";
@@ -76,13 +76,13 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
                     translatedTextValue = translatedText;
                 }
                 Metadata metadata = data.createPropertyMetadata();
-                metadata.add(LumifyProperties.META_DATA_LANGUAGE, "en", getVisibilityTranslator().getDefaultVisibility());
-                String description = (String) data.getProperty().getMetadata().getValue(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                LumifyProperties.META_DATA_LANGUAGE.setMetadata(metadata, "en", getVisibilityTranslator().getDefaultVisibility());
+                String description = LumifyProperties.META_DATA_TEXT_DESCRIPTION.getMetadataValueOrDefault(data.getProperty().getMetadata(), null);
                 if (description == null || description.length() == 0) {
                     description = "Text";
                 }
-                metadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, description + " (en)", getVisibilityTranslator().getDefaultVisibility());
-                metadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", getVisibilityTranslator().getDefaultVisibility());
+                LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(metadata, description + " (en)", getVisibilityTranslator().getDefaultVisibility());
+                LumifyProperties.META_DATA_MIME_TYPE.setMetadata(metadata, "text/plain", getVisibilityTranslator().getDefaultVisibility());
                 m.addPropertyValue(translatedTextPropertyKey, data.getProperty().getName(), translatedTextValue, metadata, data.getProperty().getVisibility());
                 translated = true;
             }
@@ -135,22 +135,16 @@ public class TranslateGraphPropertyWorker extends GraphPropertyWorker {
         File profileFile = new File(tempDirectory, profileFileName);
         String profileFileString = getFileAsString(profileFileName);
         new JSONObject(profileFileString).length(); // validate the json
-        OutputStream profileFileOut = new FileOutputStream(profileFile);
-        try {
+        try (OutputStream profileFileOut = new FileOutputStream(profileFile)) {
             profileFileOut.write(profileFileString.getBytes("UTF-8"));
-        } finally {
-            profileFileOut.close();
         }
         profileFile.deleteOnExit();
     }
 
     public String getFileAsString(String profileFileName) throws IOException {
         String profileFileString;
-        InputStream profileFileIn = TranslateGraphPropertyWorker.class.getResourceAsStream(profileFileName);
-        try {
+        try (InputStream profileFileIn = TranslateGraphPropertyWorker.class.getResourceAsStream(profileFileName)) {
             profileFileString = IOUtils.toString(profileFileIn, "UTF-8");
-        } finally {
-            profileFileIn.close();
         }
         return profileFileString;
     }

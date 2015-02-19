@@ -70,8 +70,8 @@ public class TesseractGraphPropertyWorker extends GraphPropertyWorker {
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
         Metadata textMetadata = data.createPropertyMetadata();
-        textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "OCR Text", getVisibilityTranslator().getDefaultVisibility());
-        textMetadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", getVisibilityTranslator().getDefaultVisibility());
+        LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(textMetadata, "OCR Text", getVisibilityTranslator().getDefaultVisibility());
+        LumifyProperties.META_DATA_MIME_TYPE.setMetadata(textMetadata, "text/plain", getVisibilityTranslator().getDefaultVisibility());
         LumifyProperties.TEXT.addPropertyValue(m, textPropertyKey, textValue, textMetadata, data.getVisibility());
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, TEXT_PROPERTY_KEY, getUser(), data.getVisibility());

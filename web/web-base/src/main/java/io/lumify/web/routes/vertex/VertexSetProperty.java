@@ -3,11 +3,13 @@ package io.lumify.web.routes.vertex;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -21,7 +23,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiElement;
-import org.json.JSONObject;
 import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
     private final WorkQueueRepository workQueueRepository;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public VertexSetProperty(
@@ -46,7 +48,9 @@ public class VertexSetProperty extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final WorkspaceRepository workspaceRepository,
-            final WorkQueueRepository workQueueRepository) {
+            final WorkQueueRepository workQueueRepository,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
@@ -54,6 +58,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -110,19 +115,12 @@ public class VertexSetProperty extends BaseRequestHandler {
             String valueStr,
             String[] valuesStr,
             String justificationText,
-            String sourceInfo,
+            String sourceInfoString,
             String metadataString,
             String visibilitySource,
             User user,
             String workspaceId,
             Authorizations authorizations) {
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
-
         if (propertyKey == null) {
             propertyKey = this.graph.getIdGenerator().nextId();
         }
@@ -164,7 +162,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                             valuesStr[valuesIndex++],
                             null,
                             justificationText,
-                            sourceInfo,
+                            sourceInfoString,
                             metadataString,
                             visibilitySource,
                             user,
@@ -190,6 +188,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
+        SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(
                 graph,
                 graphVertex,
@@ -201,7 +200,8 @@ public class VertexSetProperty extends BaseRequestHandler {
                 workspaceId,
                 this.visibilityTranslator,
                 justificationText,
-                sourceJson,
+                sourceInfo,
+                termMentionRepository,
                 user,
                 authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
@@ -213,6 +213,10 @@ public class VertexSetProperty extends BaseRequestHandler {
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, user);
 
         this.workQueueRepository.pushGraphPropertyQueue(graphVertex, propertyKey, propertyName, workspaceId, visibilitySource);
+
+        if (sourceInfo != null) {
+            this.workQueueRepository.pushTextUpdated(sourceInfo.getVertexId());
+        }
 
         return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }

@@ -8,6 +8,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.util.ExecutorServiceUtil;
@@ -62,6 +63,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         importResourceOwl("base.owl", BASE_OWL_IRI, authorizations);
         importResourceOwl("user.owl", UserRepository.OWL_IRI, authorizations);
+        importResourceOwl("termMention.owl", TermMentionRepository.OWL_IRI, authorizations);
         importResourceOwl("workspace.owl", WorkspaceRepository.OWL_IRI, authorizations);
         importResourceOwl("comment.owl", COMMENT_OWL_IRI, authorizations);
         importResourceOwl("longRunningProcess.owl", LongRunningProcessRepository.OWL_IRI, authorizations);
@@ -502,10 +504,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         String iri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
         String[] intents = getIntents(o, objectProperty);
+        boolean userVisible = getUserVisible(o, objectProperty);
         checkNotNull(label, "label cannot be null or empty for " + iri);
         LOGGER.info("Importing ontology object property " + iri + " (label: " + label + ")");
 
-        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label, intents);
+        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label, intents, userVisible);
     }
 
     protected void importInverseOf(OWLOntology o, OWLObjectProperty objectProperty) {

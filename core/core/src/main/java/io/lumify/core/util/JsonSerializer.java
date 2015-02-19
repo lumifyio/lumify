@@ -4,7 +4,6 @@ import io.lumify.core.ingest.video.VideoFrameInfo;
 import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.web.clientapi.model.SandboxStatus;
@@ -105,7 +104,7 @@ public class JsonSerializer {
             String sandboxStatus = sandboxStatuses[i].toString();
             VideoFrameInfo videoFrameInfo;
             if ((videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property)) != null) {
-                String textDescription = (String) property.getMetadata().getValue(LumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                String textDescription = LumifyProperties.META_DATA_TEXT_DESCRIPTION.getMetadataValueOrDefault(property.getMetadata(), null);
                 addVideoFramePropertyToResults(resultsJson, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
             } else {
                 JSONObject propertyJson = toJsonProperty(property);
@@ -149,7 +148,7 @@ public class JsonSerializer {
             json.put("key", propertyKey);
             json.put("name", MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName());
             json.put("sandboxStatus", sandboxStatus);
-            json.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, textDescription);
+            json.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION.getPropertyName(), textDescription);
             json.put("streamingPropertyValue", true);
             resultsJson.put(json);
         }
@@ -203,8 +202,6 @@ public class JsonSerializer {
             return ((Date) value).getTime();
         } else if (value instanceof PropertyJustificationMetadata) {
             return ((PropertyJustificationMetadata) value).toJson();
-        } else if (value instanceof PropertySourceMetadata) {
-            return ((PropertySourceMetadata) value).toJson();
         } else if (value instanceof String) {
             try {
                 String valueString = (String) value;

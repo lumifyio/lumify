@@ -7,8 +7,7 @@ import org.securegraph.util.IterableUtils;
 
 import java.util.List;
 
-import static io.lumify.core.model.properties.LumifyProperties.ONTOLOGY_TITLE;
-import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+import static io.lumify.core.model.properties.LumifyProperties.*;
 
 public class SecureGraphRelationship extends Relationship {
     private final Vertex vertex;
@@ -36,6 +35,11 @@ public class SecureGraphRelationship extends Relationship {
     @Override
     public Iterable<String> getInverseOfIRIs() {
         return inverseOfIRIs;
+    }
+
+    @Override
+    public boolean getUserVisible() {
+        return USER_VISIBLE.getPropertyValue(vertex, true);
     }
 
     public Vertex getVertex() {
