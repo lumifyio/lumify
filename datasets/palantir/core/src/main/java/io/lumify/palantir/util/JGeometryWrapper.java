@@ -1,13 +1,14 @@
 package io.lumify.palantir.util;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.sql.Struct;
 
 /**
  * This class exists so that to compile and run Lumify you don't have to setup the oracle Jars.
  */
-public class JGeometryWrapper {
+public class JGeometryWrapper implements Serializable {
     public static final String ORACLE_SQL_STRUCT = "oracle.sql.STRUCT";
     public static final String ORACLE_SPATIAL_GEOMETRY_JGEOMETRY = "oracle.spatial.geometry.JGeometry";
     public static final int GTYPE_POINT = 1;
@@ -51,10 +52,15 @@ public class JGeometryWrapper {
         }
     }
 
+    protected JGeometryWrapper() {
+        this.jGeometryObj = null;
+    }
+
     public JGeometryWrapper(Object jGeometryObj) {
         this.jGeometryObj = jGeometryObj;
     }
 
+    @SuppressWarnings("unchecked")
     public static JGeometryWrapper load(Struct st) {
         try {
             if (st == null) {
@@ -68,6 +74,7 @@ public class JGeometryWrapper {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Type getType() {
         int type;
         try {
@@ -84,6 +91,7 @@ public class JGeometryWrapper {
         throw new RuntimeException("Unknown type: " + type);
     }
 
+    @SuppressWarnings("unchecked")
     public Point2D getJavaPoint() {
         try {
             Method m = jGeometryClass.getMethod("getJavaPoint");

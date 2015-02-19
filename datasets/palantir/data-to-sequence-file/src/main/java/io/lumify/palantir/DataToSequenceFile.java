@@ -5,7 +5,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.palantir.service.PtMediaAndValueExporter;
+import io.lumify.palantir.service.PtPropertyAndValueExporter;
 import io.lumify.palantir.sqlrunner.SqlRunner;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
@@ -74,7 +74,8 @@ public class DataToSequenceFile {
 //            new PtObjectExporter().run(this);
 //            new PtGraphObjectExporter().run(this);
 //            new PtObjectObjectExporter().run(this);
-            new PtMediaAndValueExporter().run(this);
+//            new PtMediaAndValueExporter().run(this);
+            new PtPropertyAndValueExporter().run(this);
         } finally {
             sqlRunner.close();
         }

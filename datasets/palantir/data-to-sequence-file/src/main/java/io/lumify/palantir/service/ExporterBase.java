@@ -27,6 +27,7 @@ public abstract class ExporterBase<T extends PtModelBase> {
         )) {
             long startTime = System.currentTimeMillis();
             LOGGER.info(this.getClass().getName());
+            LOGGER.debug("running sql: %s", getSql());
             Iterable<T> rows = dataToSequenceFile.getSqlRunner().select(getSql(), ptClass);
             long count = run(dataToSequenceFile, rows, writer);
             long endTime = System.currentTimeMillis();

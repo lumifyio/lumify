@@ -88,7 +88,7 @@ public class DataImporter {
 //            tree.add(ptObjectTypeImporter, ptObjectImporter);
 //            tree.add(ptGraphImporter, ptGraphObjectImporter);
 //            tree.add(ptLinkTypeImporter, ptObjectObjectImporter);
-            tree.add(ptPropertyTypeImporter, ptPropertyAndValueImporter);
+//            tree.add(ptPropertyTypeImporter, ptPropertyAndValueImporter);
 //            tree.add(ptMediaAndValueImporter);
         }
 
