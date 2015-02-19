@@ -831,13 +831,13 @@ define([
                             return i18n('visibility.label');
                         }
 
+                        if (d.property.displayName) {
+                            return d.property.displayName;
+                        }
+
                         var ontologyProperty = ontologyProperties.byTitle[d.name];
                         if (ontologyProperty) {
                             return ontologyProperty.displayName;
-                        }
-
-                        if (d.property.displayName) {
-                            return d.property.displayName;
                         }
 
                         console.warn('No ontology definition for ', d.name);
