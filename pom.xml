@@ -67,12 +67,12 @@
         <commons.lang.version>2.5</commons.lang.version>
         <commons.httpclient.version>3.1</commons.httpclient.version>
         <curator.version>2.7.0</curator.version>
-        <elasticsearch.version>1.4.1</elasticsearch.version>
+        <elasticsearch.version>1.4.4</elasticsearch.version>
         <evo.inflector.version>1.0.1</evo.inflector.version>
         <guice.version>3.0</guice.version>
-        <hadoop.version>2.5.0-cdh5.2.0</hadoop.version>
+        <hadoop.version>2.5.0-cdh5.3.1</hadoop.version>
         <twill.version>0.4.0-incubating</twill.version>
-        <hadoop-test.version>2.5.0-mr1-cdh5.2.0</hadoop-test.version>
+        <hadoop-test.version>2.5.0-mr1-cdh5.3.1</hadoop-test.version>
         <httpcomponents.httpclient.version>4.3.1</httpcomponents.httpclient.version>
         <inflector.version>0.7.0</inflector.version>
         <jackson.version>2.4.3</jackson.version>
