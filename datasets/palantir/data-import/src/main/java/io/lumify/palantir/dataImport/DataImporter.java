@@ -87,9 +87,9 @@ public class DataImporter {
 //            tree.add(ptUserImporter, ptGraphImporter);
 //            tree.add(ptObjectTypeImporter, ptObjectImporter);
 //            tree.add(ptGraphImporter, ptGraphObjectImporter);
+//            tree.add(ptLinkTypeImporter, ptObjectObjectImporter);
             tree.add(ptPropertyTypeImporter, ptPropertyAndValueImporter);
-            tree.add(ptLinkTypeImporter, ptObjectObjectImporter);
-            tree.add(ptMediaAndValueImporter);
+//            tree.add(ptMediaAndValueImporter);
         }
 
         File f = null;

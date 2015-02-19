@@ -1,8 +1,12 @@
 package io.lumify.palantir.model;
 
-import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Writable;
 
-public class PtMediaAndValue {
+import java.io.*;
+
+public class PtMediaAndValue extends PtModelBase {
     private long id;
     private long realmId;
     private long linkObjectId;
@@ -173,5 +177,61 @@ public class PtMediaAndValue {
 
     public void setContentsHash(byte[] contentsHash) {
         this.contentsHash = contentsHash;
+    }
+
+    @Override
+    public Writable getKey() {
+        return new LongWritable(getId());
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(getId());
+        out.writeLong(getRealmId());
+        out.writeLong(getLinkObjectId());
+        out.writeLong(getDataEventId());
+        writeFieldNullableLong(out, getOriginDataEventId());
+        out.writeBoolean(isDeleted());
+        out.writeLong(getMediaValueId());
+        out.writeLong(getCrossResolutionId());
+        out.writeLong(getAccessControlListId());
+        out.writeLong(getCreatedBy());
+        out.writeLong(getTimeCreated());
+        out.writeLong(getLastModifiedBy());
+        out.writeLong(getLastModified());
+        writeFieldNullableString(out, getTitle());
+        writeFieldNullableString(out, getDescription());
+        out.writeLong(getLinkType());
+        out.writeLong(getType());
+        writeFieldNullableByteArray(out, contentsHash);
+        writeFieldNullableByteArray(out, getContents() == null ? null : IOUtils.toByteArray(getContents()));
+    }
+
+    @Override
+    public void readFields(DataInput in) throws IOException {
+        setId(in.readLong());
+        setRealmId(in.readLong());
+        setLinkObjectId(in.readLong());
+        setDataEventId(in.readLong());
+        setOriginDataEventId(readFieldNullableLong(in));
+        setDeleted(in.readBoolean());
+        setMediaValueId(in.readLong());
+        setCrossResolutionId(in.readLong());
+        setAccessControlListId(in.readLong());
+        setCreatedBy(in.readLong());
+        setTimeCreated(in.readLong());
+        setLastModifiedBy(in.readLong());
+        setLastModified(in.readLong());
+        setTitle(readFieldNullableString(in));
+        setDescription(readFieldNullableString(in));
+        setLinkType(in.readLong());
+        setType(in.readLong());
+        setContentsHash(readFieldNullableByteArray(in));
+        byte[] contents = readFieldNullableByteArray(in);
+        if (contents == null) {
+            setContents(null);
+        } else {
+            setContents(new ByteArrayInputStream(contents));
+        }
     }
 }

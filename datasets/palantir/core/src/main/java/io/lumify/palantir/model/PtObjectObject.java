@@ -1,6 +1,13 @@
 package io.lumify.palantir.model;
 
-public class PtObjectObject {
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+public class PtObjectObject extends PtModelBase {
     private long linkId;
     private long realmId;
     private long parentObjectId;
@@ -162,5 +169,54 @@ public class PtObjectObject {
 
     public void setLastModifiedBy(long lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
+    }
+
+    @Override
+    public Writable getKey() {
+        return new LongWritable(getLinkId());
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(getLinkId());
+        out.writeLong(getRealmId());
+        out.writeLong(getParentObjectId());
+        out.writeLong(getChildObjectId());
+        out.writeLong(getChildRoleId());
+        out.writeLong(getType());
+        writeFieldNullableString(out, getText());
+        out.writeLong(getDataEventId());
+        writeFieldNullableLong(out, getOriginDataEventId());
+        out.writeLong(getCrossResolutionId());
+        out.writeBoolean(isDeleted());
+        writeFieldNullableLong(out, getTimeStart());
+        writeFieldNullableLong(out, getTimeEnd());
+        out.writeLong(getAccessControlListId());
+        out.writeLong(getCreatedBy());
+        out.writeLong(getTimeCreated());
+        out.writeLong(getLastModified());
+        out.writeLong(getLastModifiedBy());
+    }
+
+    @Override
+    public void readFields(DataInput in) throws IOException {
+        setLinkId(in.readLong());
+        setRealmId(in.readLong());
+        setParentObjectId(in.readLong());
+        setChildObjectId(in.readLong());
+        setChildRoleId(in.readLong());
+        setType(in.readLong());
+        setText(readFieldNullableString(in));
+        setDataEventId(in.readLong());
+        setOriginDataEventId(readFieldNullableLong(in));
+        setCrossResolutionId(in.readLong());
+        setDeleted(in.readBoolean());
+        setTimeStart(readFieldNullableLong(in));
+        setTimeEnd(readFieldNullableLong(in));
+        setAccessControlListId(in.readLong());
+        setCreatedBy(in.readLong());
+        setTimeCreated(in.readLong());
+        setLastModified(in.readLong());
+        setLastModifiedBy(in.readLong());
     }
 }

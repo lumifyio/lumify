@@ -71,6 +71,11 @@ public class PtLinkType extends PtOntologyType {
 
     @Override
     public void readFields(DataInput in) throws IOException {
-        throw new RuntimeException("Not Implemented");
+        super.readFields(in);
+        setType(in.readLong());
+        setHidden(in.readBoolean());
+        setCreatedBy(in.readLong());
+        setTimeCreated(in.readLong());
+        setLastModified(in.readLong());
     }
 }

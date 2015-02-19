@@ -50,7 +50,7 @@ public class PtGraphMapper extends PalantirMapperBase<LongWritable, PtGraph> {
             m.save(getAuthorizations());
         }
     }
-    
+
     private void saveWorkspaceToUserEdge(String workspaceVertexId, String userId) {
         String edgeId = workspaceVertexId + WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_IRI + userId;
         EdgeBuilderByVertexId edgeBuilder = getGraph().prepareEdge(edgeId, workspaceVertexId, userId, WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_IRI, workspaceOnlyVisibility);
