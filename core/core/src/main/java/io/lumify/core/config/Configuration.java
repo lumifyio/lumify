@@ -21,7 +21,7 @@ import java.util.*;
  * Responsible for parsing application configuration file and providing
  * configuration values to the application
  */
-public final class Configuration {
+public class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -70,7 +70,7 @@ public final class Configuration {
 
     private Map<String, String> config = new HashMap<>();
 
-    Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
+    public Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
         this.lumifyResourceBundleManager = new LumifyResourceBundleManager();
         for (Map.Entry entry : config.entrySet()) {
