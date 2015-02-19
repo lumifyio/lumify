@@ -19,7 +19,7 @@
     </td>
 
     <td class="input-row">
-      <input class="lat" type="text" value="<%= value && value.latitude || '' %>" />
+      <input class="lat" type="text" value="<%= value && 'latitude' in value ? value.latitude : '' %>" />
     </td>
   </tr>
 
@@ -29,7 +29,7 @@
     </td>
 
     <td class="input-row">
-      <input class="lon" type="text" value="<%= value && value.longitude || '' %>"></input>
+      <input class="lon" type="text" value="<%= value && 'longitude' in value ? value.longitude : '' %>"></input>
     </td>
   </tr>
 

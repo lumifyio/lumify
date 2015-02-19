@@ -10,7 +10,7 @@ define([
     return defineComponent(CurrencyField, withPropertyField, withHistogram);
 
     function makeNumber(v) {
-        return parseFloat(v.replace(/[$,]/g, ''), 10);
+        return parseFloat(v.replace(/[^0-9.]/g, ''), 10);
     }
 
     function CurrencyField() {
