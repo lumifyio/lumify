@@ -295,8 +295,8 @@ public class PtPropertyAndValue extends PtModelBase {
         setUserDisabledKeyword(in.readBoolean());
         setCustomKeywordTerm(readFieldNullableString(in));
         setGeometryXml(readFieldNullableString(in));
-        setTimeStart(in.readLong());
-        setTimeEnd(in.readLong());
+        setTimeStart(readFieldNullableLong(in));
+        setTimeEnd(readFieldNullableLong(in));
         setPropertyStatus(in.readLong());
         setCreatedBy(in.readLong());
         setTimeCreated(in.readLong());

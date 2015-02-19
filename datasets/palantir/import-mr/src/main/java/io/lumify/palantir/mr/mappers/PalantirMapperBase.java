@@ -10,6 +10,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.model.PtLinkType;
 import io.lumify.palantir.model.PtObjectType;
+import io.lumify.palantir.model.PtPropertyType;
 import io.lumify.palantir.mr.ImportMR;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -30,6 +31,7 @@ public abstract class PalantirMapperBase<KEYIN, VALUEIN> extends LumifyElementMa
     private OntologyRepository ontologyRepository;
     private Map<Long, PtObjectType> objectTypes;
     private Map<Long, PtLinkType> linkTypes;
+    private Map<Long, PtPropertyType> properTypes;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
@@ -89,6 +91,33 @@ public abstract class PalantirMapperBase<KEYIN, VALUEIN> extends LumifyElementMa
             while (reader.next(key, ptLinkType)) {
                 linkTypes.put(key.get(), ptLinkType);
                 ptLinkType = new PtLinkType();
+            }
+        }
+    }
+
+    protected PtPropertyType getPropertyType(long type) {
+        return properTypes.get(type);
+    }
+
+    protected void loadPropertyTypes(Context context) throws IOException {
+        Path inDir = new Path(context.getConfiguration().get(ImportMR.CONF_IN_DIR));
+        Path inFilePath = new Path(inDir, "PtPropertyType.seq");
+        LOGGER.info("reading: %s", inFilePath.toString());
+        try (SequenceFile.Reader reader = new SequenceFile.Reader(
+                context.getConfiguration(),
+                SequenceFile.Reader.file(inFilePath)
+        )) {
+            Class<?> keyClass = reader.getKeyClass();
+            Class<?> valueClass = reader.getValueClass();
+            LOGGER.debug("Found key class: %s", keyClass.getName());
+            LOGGER.debug("Found value class: %s", valueClass.getName());
+            properTypes = new HashMap<>();
+
+            LongWritable key = new LongWritable();
+            PtPropertyType ptPropertyType = new PtPropertyType();
+            while (reader.next(key, ptPropertyType)) {
+                properTypes.put(key.get(), ptPropertyType);
+                ptPropertyType = new PtPropertyType();
             }
         }
     }
