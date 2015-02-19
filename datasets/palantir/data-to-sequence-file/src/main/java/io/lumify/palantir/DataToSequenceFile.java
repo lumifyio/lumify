@@ -84,7 +84,11 @@ public class DataToSequenceFile implements Exporter.ExporterSource {
     }
 
     public static void main(String[] args) throws Exception {
-        new DataToSequenceFile(args).run();
+        try {
+            new DataToSequenceFile(args).run();
+        } catch (Throwable ex) {
+            LOGGER.error("Failed to export", ex);
+        }
     }
 
     private void run() throws Exception {

@@ -1,35 +1,38 @@
+1. Build the jars (from the root of your clone):
 
-1. You need to configure the following or add lumify:intent property 'hasMedia' to your owl file:
+        mvn package -am -pl datasets/palantir/data-to-sequence-file,datasets/palantir/import-mr
 
-        ontology.intent.relationship.hasMedia=http://lumify.io/palantir-import#hasMedia
+1. Setup Oracle JDBC jar in your classpath.
 
-2. Setup Oracle JDBC jar in your classpath.
-
-3. Setup Oracle Spatial in your classpath. The spacial jar files can be found in your Oracle installation:
+1. Setup Oracle Spatial in your classpath. The spacial jar files can be found in your Oracle installation:
 
         /u01/app/oracle/product/11.2.0/dbhome_2/md/jlib/sdoapi.jar
         /u01/app/oracle/product/11.2.0/dbhome_2/md/jlib/sdoutl.jar
 
-4. Export your Palantir ontology. You can use the Palantir interface or the Lumify Palantir data importer:
-      
-        io.lumify.palantir.dataImport.DataImport \
+1. Export your Palantir data to sequence files:
+
+        java \
+          -cp sdoapi.jar:sdoutl.jar:ojdbc6.jar:datasets/palantir/data-to-sequence-file/target/lumify-palantir-data-to-sequence-file-0.4.1-SNAPSHOT-with-dependencies.jar \
+          io.lumify.palantir.DataToSequenceFile \
           --namespace=<oracle namespace> \
           --connectionstring=jdbc:oracle:thin:@localhost:1521/ORCL \
           --username=<oracleUsername> \
           --password=<oraclePassword> \
-          --owlprefix=http://lumify.io/palantir# \
-          --outdir=/palantir/ontology/ \
-          --ontologyexport
-        
-5. Convert the Palantir ontology to an owl file.
+          --dest=hdfs:///palantir-export/ \
+          --baseiri=http://lumify.io/palantir#
 
-        io.lumify.palantir.ontologyToOwl.OntologyToOwl \
-          /palantir/ontology/ \
-          http://lumify.io/palantir \
-          /palantir/owl/palantir.owl
+1. Import `hdfs://palantir-export/owl/palantir.owl`
 
-6. Import ```/palantir/owl/palantir.owl```
+1. Modify `ontology/palantir-import.owl` as needed and import that owl file.
 
-7. Modify ```ontology/palantir-import.owl``` as needed and import that owl file.
+1. Run the import MR process `io.lumify.palantir.mr.ImportMR`.
 
-8. Run the data import. The parameters will be the same as step 4 without the `--ontologyexport` argument.
+        java
+          -cp sdoapi.jar:sdoutl.jar:ojdbc6.jar:datasets/palantir/import-mr/target/lumify-palantir-import-mr-0.4.1-SNAPSHOT-with-dependencies.jar
+        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtUser http://lumify.io/palantir#
+        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraph http://lumify.io/palantir#
+        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObject http://lumify.io/palantir#
+        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraphObject http://lumify.io/palantir#
+        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObjectObject http://lumify.io/palantir#
+        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtMediaAndValue http://lumify.io/palantir#
+        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtPropertyAndValue http://lumify.io/palantir#

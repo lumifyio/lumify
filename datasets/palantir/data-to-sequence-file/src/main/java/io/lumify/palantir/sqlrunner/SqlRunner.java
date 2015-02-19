@@ -1,8 +1,12 @@
 package io.lumify.palantir.sqlrunner;
 
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+
 import java.sql.*;
 
 public class SqlRunner {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlRunner.class);
     private final String connectionString;
     private final String username;
     private final String password;
@@ -19,6 +23,7 @@ public class SqlRunner {
     public void connect() throws ClassNotFoundException, SQLException {
         Class.forName("oracle.jdbc.driver.OracleDriver");
 
+        LOGGER.debug("Connecting to Oracle server: %s.", connectionString);
         connection = DriverManager.getConnection(connectionString, username, password);
         if (connection == null) {
             throw new RuntimeException("Could not create connection: " + connectionString);
