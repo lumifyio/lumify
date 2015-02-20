@@ -12,6 +12,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty META_DATA_MIME_TYPE = new StringLumifyProperty("http://lumify.io#mimeType");
 
     public static final BooleanLumifyProperty SEARCHABLE = new BooleanLumifyProperty("http://lumify.io#searchable");
+    public static final BooleanLumifyProperty ADDABLE = new BooleanLumifyProperty("http://lumify.io#addable");
     public static final BooleanLumifyProperty USER_VISIBLE = new BooleanLumifyProperty("http://lumify.io#userVisible");
 
     public static final DateLumifyProperty CREATE_DATE = new DateLumifyProperty("http://lumify.io#createDate");
