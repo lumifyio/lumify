@@ -15,6 +15,7 @@ import java.io.IOException;
 public abstract class PtOntologyType extends PtModelBase {
     private static final DocumentBuilder dBuilder;
     private String config;
+    private transient Document configXml;
 
     static {
         try {
@@ -31,6 +32,17 @@ public abstract class PtOntologyType extends PtModelBase {
 
     public void setConfig(String config) {
         this.config = config;
+    }
+
+    public Document getConfigXml() {
+        if (configXml != null) {
+            return configXml;
+        }
+        try {
+            return configXml = dBuilder.parse(new ByteArrayInputStream(getConfig().getBytes()));
+        } catch (Exception e) {
+            throw new RuntimeException("Could not parse config: " + getConfig(), e);
+        }
     }
 
     @Override

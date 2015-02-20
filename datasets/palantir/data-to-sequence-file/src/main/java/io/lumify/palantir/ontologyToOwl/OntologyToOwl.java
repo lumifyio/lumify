@@ -5,13 +5,12 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.DataToSequenceFile;
 import io.lumify.palantir.service.Exporter;
+import io.lumify.palantir.util.XmlUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.hadoop.fs.*;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.namespace.NamespaceContext;
@@ -22,9 +21,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -41,13 +37,11 @@ public class OntologyToOwl implements Exporter {
     private Document linkRelationsXml;
     private Document imageInfoXml;
     private DocumentBuilder docBuilder;
-    private XPath xPath;
-    private NamespaceContext ns;
     private TitleFormulaMaker titleFormulaMaker;
     private Map<String, ObjectProperty> objectProperties = new HashMap<>();
     private Map<String, DataTypeProperty> dataTypeProperties = new HashMap<>();
-    private Map<String, OwlClass> owlClasses = new HashMap<>();
     private Map<String, List<OwlElement>> iconMapping = new HashMap<>();
+    private NamespaceContext ns;
 
     public OntologyToOwl(String baseIri) {
         if (baseIri.endsWith("#")) {
@@ -70,10 +64,7 @@ public class OntologyToOwl implements Exporter {
     public void run(FileSystem fs, Path destinationPath) throws Exception {
         Path outPath = new Path(destinationPath, "owl");
 
-        XPathFactory xPathfactory = XPathFactory.newInstance();
-        xPath = xPathfactory.newXPath();
-        ns = new OwlNamespaceContext();
-        xPath.setNamespaceContext(ns);
+        ns = XmlUtil.getNamespaceContext();
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         docFactory.setNamespaceAware(true);
@@ -122,7 +113,7 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnImageInfoXml(FileSystem fs, Path destinationPath, Document imageInfoXml) {
-        List<Element> imageInfoConfigs = getXmlElements(imageInfoXml, "/image_infos/image_info_config");
+        List<Element> imageInfoConfigs = XmlUtil.getXmlElements(imageInfoXml, "/image_infos/image_info_config");
         for (Element imageInfoConfig : imageInfoConfigs) {
             try {
                 runOnImageInfoConfig(fs, destinationPath, imageInfoConfig);
@@ -133,8 +124,8 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnImageInfoConfig(FileSystem fs, Path destinationPath, Element imageInfoConfig) throws IOException {
-        String uri = getXmlString(imageInfoConfig, "uri");
-        String path = getXmlString(imageInfoConfig, "path");
+        String uri = XmlUtil.getXmlString(imageInfoConfig, "uri");
+        String path = XmlUtil.getXmlString(imageInfoConfig, "path");
 
         if (path.startsWith("/")) {
             path = path.substring(1);
@@ -217,6 +208,7 @@ public class OntologyToOwl implements Exporter {
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private void runOnFile(FileSystem fs, Path outPath, FileStatus inFile) throws IOException, SAXException {
         LOGGER.debug("processing file: %s", inFile.getPath().toString());
 
@@ -255,8 +247,8 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnOntologyResourceConfig(FileSystem fs, Path outPath, Document inXml) throws IOException {
-        String path = getXmlString(inXml, "/ontology_resource_config/path");
-        String contents = getXmlString(inXml, "/ontology_resource_config/contents");
+        String path = XmlUtil.getXmlString(inXml, "/ontology_resource_config/path");
+        String contents = XmlUtil.getXmlString(inXml, "/ontology_resource_config/contents");
 
         if (path.startsWith("/")) {
             path = path.substring(1);
@@ -270,7 +262,7 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnLinkRelationsXml(Document linkRelationsXml) {
-        List<Element> linkRelationConfigs = getXmlElements(linkRelationsXml, "/link_relations/link_relation_config");
+        List<Element> linkRelationConfigs = XmlUtil.getXmlElements(linkRelationsXml, "/link_relations/link_relation_config");
         for (Element linkRelationConfig : linkRelationConfigs) {
             try {
                 runOnLinkRelationConfig(linkRelationConfig);
@@ -281,9 +273,9 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnLinkRelationConfig(Element linkRelationConfig) {
-        String uri1 = getXmlString(linkRelationConfig, "uri1");
-        String uri2 = getXmlString(linkRelationConfig, "uri2");
-        String linkUri = getXmlString(linkRelationConfig, "linkUri");
+        String uri1 = XmlUtil.getXmlString(linkRelationConfig, "uri1");
+        String uri2 = XmlUtil.getXmlString(linkRelationConfig, "uri2");
+        String linkUri = XmlUtil.getXmlString(linkRelationConfig, "linkUri");
 
         LOGGER.info("processing %s, %s, %s", uri1, uri2, linkUri);
 
@@ -317,11 +309,11 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnPropertyTypeConfig(Document inXml) {
-        String uri = getXmlString(inXml, "/property_type_config/uri");
-        String label = getXmlString(inXml, "/property_type_config/type/displayName");
-        String comment = getXmlString(inXml, "/property_type_config/description");
-        List<Element> entryElements = getXmlElements(inXml, "/property_type_config/type/enumeration/entry");
-        List<Element> componentElements = getXmlElements(inXml, "/property_type_config/type/components/component");
+        String uri = XmlUtil.getXmlString(inXml, "/property_type_config/uri");
+        String label = XmlUtil.getXmlString(inXml, "/property_type_config/type/displayName");
+        String comment = XmlUtil.getXmlString(inXml, "/property_type_config/description");
+        List<Element> entryElements = XmlUtil.getXmlElements(inXml, "/property_type_config/type/enumeration/entry");
+        List<Element> componentElements = XmlUtil.getXmlElements(inXml, "/property_type_config/type/components/component");
         String propertyIri = uriToIri(uri);
 
         Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
@@ -349,7 +341,7 @@ public class OntologyToOwl implements Exporter {
         }
 
         if (componentElements != null && componentElements.size() > 0) {
-            List<Element> argsElements = getXmlElements(inXml, "/property_type_config/display/args/arg");
+            List<Element> argsElements = XmlUtil.getXmlElements(inXml, "/property_type_config/display/args/arg");
             if (argsElements.size() > 0) {
                 String titleFormula = titleFormulaMaker.create(new TitleFormulaMaker.Options(propertyIri + '/'), argsElements);
                 if (titleFormula.trim().length() > 0) {
@@ -360,14 +352,14 @@ public class OntologyToOwl implements Exporter {
             }
 
             for (Element componentElement : componentElements) {
-                String componentUri = getXmlString(componentElement, "uri");
+                String componentUri = XmlUtil.getXmlString(componentElement, "uri");
                 String dependentPropertyIri = propertyIri + '/' + componentUri;
 
                 Element dependentPropertyIriElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:dependentPropertyIri");
                 dependentPropertyIriElement.appendChild(exportDoc.createTextNode(dependentPropertyIri));
                 datatypePropertyElement.appendChild(dependentPropertyIriElement);
 
-                Element dependentPropertyElement = runOnPropertyTypeConfigComponent(propertyIri, dependentPropertyIri, componentElement);
+                Element dependentPropertyElement = runOnPropertyTypeConfigComponent(dependentPropertyIri, componentElement);
                 dataTypeProperty.addDependentPropertyElement(dependentPropertyElement);
             }
         }
@@ -375,8 +367,8 @@ public class OntologyToOwl implements Exporter {
         if (entryElements.size() > 0) {
             JSONObject possibleValues = new JSONObject();
             for (Element entryElement : entryElements) {
-                String key = getXmlString(entryElement, "key");
-                String value = getXmlString(entryElement, "value");
+                String key = XmlUtil.getXmlString(entryElement, "key");
+                String value = XmlUtil.getXmlString(entryElement, "value");
                 possibleValues.put(key, value);
             }
             Element possibleValuesElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:possibleValues");
@@ -387,8 +379,8 @@ public class OntologyToOwl implements Exporter {
         dataTypeProperties.put(uri, dataTypeProperty);
     }
 
-    private Element runOnPropertyTypeConfigComponent(String propertyIri, String dependentPropertyIri, Element componentElement) {
-        String displayName = getXmlString(componentElement, "displayName");
+    private Element runOnPropertyTypeConfigComponent(String dependentPropertyIri, Element componentElement) {
+        String displayName = XmlUtil.getXmlString(componentElement, "displayName");
 
         Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
         datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", dependentPropertyIri);
@@ -415,9 +407,9 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnLinkTypeConfig(Document inXml) {
-        String uri = getXmlString(inXml, "/link_type_config/uri");
-        String label = getXmlString(inXml, "/link_type_config/displayName");
-        List<Element> asymmetricElements = getXmlElements(inXml, "/link_type_config/asymmetric");
+        String uri = XmlUtil.getXmlString(inXml, "/link_type_config/uri");
+        String label = XmlUtil.getXmlString(inXml, "/link_type_config/displayName");
+        List<Element> asymmetricElements = XmlUtil.getXmlElements(inXml, "/link_type_config/asymmetric");
 
         // TODO edgeIconUri ???
         // TODO infoIconUri ???
@@ -434,8 +426,8 @@ public class OntologyToOwl implements Exporter {
             if (asymmetricElements.size() > 1) {
                 throw new LumifyException("To many 'asymmetric' elements found. Expected 0 or 1, found " + asymmetricElements.size());
             }
-            String parentToChildLabel = getXmlString(asymmetricElements.get(0), "parentToChild/displayName");
-            String childToParentLabel = getXmlString(asymmetricElements.get(0), "childToParent/displayName");
+            String parentToChildLabel = XmlUtil.getXmlString(asymmetricElements.get(0), "parentToChild/displayName");
+            String childToParentLabel = XmlUtil.getXmlString(asymmetricElements.get(0), "childToParent/displayName");
 
             if (parentToChildLabel != null && parentToChildLabel.length() > 0) {
                 label = parentToChildLabel;
@@ -484,15 +476,15 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnObjectTypeConfig(Document inXml) {
-        String uri = getXmlString(inXml, "/pt_object_type_config/uri");
-        String label = getXmlString(inXml, "/pt_object_type_config/displayName");
-        String parentTypeUri = getXmlString(inXml, "/pt_object_type_config/parentType");
-        String infoIconUri = getXmlString(inXml, "/pt_object_type_config/display/infoIconUri");
-        String comment = getXmlString(inXml, "/pt_object_type_config/description");
-        List<Element> titleArgs = getXmlElements(inXml, "/pt_object_type_config/title/args/arg");
+        String uri = XmlUtil.getXmlString(inXml, "/pt_object_type_config/uri");
+        String label = XmlUtil.getXmlString(inXml, "/pt_object_type_config/displayName");
+        String parentTypeUri = XmlUtil.getXmlString(inXml, "/pt_object_type_config/parentType");
+        String infoIconUri = XmlUtil.getXmlString(inXml, "/pt_object_type_config/display/infoIconUri");
+        String comment = XmlUtil.getXmlString(inXml, "/pt_object_type_config/description");
+        List<Element> titleArgs = XmlUtil.getXmlElements(inXml, "/pt_object_type_config/title/args/arg");
 
         // TODO baseType ???
-        // TODO commitable ???
+        // TODO commit-able ???
         // TODO intrinsic ???
         // TODO guessers ???
         // TODO typeGroups ???
@@ -531,38 +523,9 @@ public class OntologyToOwl implements Exporter {
         }
 
         OwlClass owlClass = new OwlClass(classElement);
-        owlClasses.put(uri, owlClass);
 
         if (infoIconUri != null && infoIconUri.length() > 0) {
             addIconMapping(infoIconUri, owlClass);
-        }
-    }
-
-    private String getXmlString(Node inXml, String xpath) {
-        if (!xpath.contains("/")) {
-            NodeList elements = ((Element) inXml).getElementsByTagName(xpath);
-            if (elements.getLength() == 1) {
-                return elements.item(0).getTextContent();
-            }
-        }
-
-        try {
-            return xPath.evaluate(xpath, inXml);
-        } catch (Exception ex) {
-            throw new LumifyException("Could not run xpath: " + xpath, ex);
-        }
-    }
-
-    private List<Element> getXmlElements(Document inXml, String xpath) {
-        try {
-            NodeList nodeList = (NodeList) xPath.evaluate(xpath, inXml, XPathConstants.NODESET);
-            List<Element> results = new ArrayList<>();
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                results.add((Element) nodeList.item(i));
-            }
-            return results;
-        } catch (Exception ex) {
-            throw new LumifyException("Could not run xpath: " + xpath, ex);
         }
     }
 

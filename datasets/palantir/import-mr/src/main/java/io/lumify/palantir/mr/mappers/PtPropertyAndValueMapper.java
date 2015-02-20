@@ -2,6 +2,8 @@ package io.lumify.palantir.mr.mappers;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.model.PtPropertyAndValue;
 import io.lumify.palantir.model.PtPropertyType;
 import org.apache.hadoop.io.LongWritable;
@@ -18,12 +20,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, PtPropertyAndValue> {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtPropertyAndValueMapper.class);
+    public static final Pattern DURATION_PATTERN = Pattern.compile("(\\d+):(\\d\\d)");
     private Visibility visibility;
     private DocumentBuilder dBuilder;
     private static Pattern VALUE_BODY_PATTERN = Pattern.compile("^<VALUE>(.*)</VALUE>$", Pattern.DOTALL);
@@ -76,8 +82,71 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
         v.save(getAuthorizations());
     }
 
-    private Object toValue(PtPropertyType propertyType, String innerKey, String value) {
+    private Object toValue(PtPropertyType ptPropertyType, String innerKey, String value) {
+        String propertyType;
+        if (innerKey == null) {
+            propertyType = ptPropertyType.getConfigTypeBase();
+        } else {
+            propertyType = ptPropertyType.getConfigComponentType(innerKey);
+        }
+        if (propertyType == null) {
+            LOGGER.warn("Could not find property type (innerKey: %s, value: %s): %s", innerKey, value, ptPropertyType.getConfigUri());
+            return value;
+        }
+        if (propertyType.equals("com.palantir.type.String")) {
+            return value;
+        }
+        if (propertyType.equals("com.palantir.type.Enumeration")) {
+            return value;
+        }
+        if (propertyType.equals("com.palantir.type.Number")) {
+            return parseNumber(value);
+        }
+        if (propertyType.equals("com.palantir.type.Date")) {
+            return parseDate(value);
+        }
+        if (propertyType.equals("com.palantir.type.Composite")) {
+            LOGGER.warn("Found composite property type without innerKey (innerKey: %s, value: %s): %s", innerKey, value, ptPropertyType.getConfigUri());
+            return value;
+        }
+        LOGGER.warn("Unhandled property type: %s in type %s", propertyType, ptPropertyType.getConfigUri());
         return value;
+    }
+
+    private Object parseDate(String value) {
+        // July 2, 2013 09:51:48 -04:00
+        try {
+            return new SimpleDateFormat("MMMM d, yyyy HHmmss Z").parse(value.replaceAll(":", ""));
+        } catch (ParseException ex1) {
+            try {
+                return new SimpleDateFormat("MMMM d, yyyy").parse(value);
+            } catch (ParseException ex2) {
+                LOGGER.error("Could not parse date: " + value, ex2);
+                return value;
+            }
+        }
+    }
+
+    private Object parseNumber(String value) {
+        try {
+            if (value.contains(":")) {
+                Matcher m = DURATION_PATTERN.matcher(value);
+                if (m.matches()) {
+                    String minutePart = m.group(1);
+                    String secondPart = m.group(2);
+                    return ((Integer.parseInt(minutePart) * 60) + Integer.parseInt(secondPart));
+                } else {
+                    throw new RuntimeException("Number has a ':' but does not match duration pattern");
+                }
+            }
+            if (value.contains(".")) {
+                return Double.parseDouble(value);
+            }
+            return Long.parseLong(value);
+        } catch (Exception ex) {
+            LOGGER.error("Could not parse number: " + value, ex);
+            return value;
+        }
     }
 
     private String getPropertyName(String uri, String innerKey) {

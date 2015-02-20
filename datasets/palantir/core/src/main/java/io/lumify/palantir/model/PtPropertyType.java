@@ -1,11 +1,16 @@
 package io.lumify.palantir.model;
 
+import io.lumify.palantir.util.XmlUtil;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Writable;
+import org.w3c.dom.Element;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PtPropertyType extends PtOntologyType {
     private long type;
@@ -13,6 +18,9 @@ public class PtPropertyType extends PtOntologyType {
     private long createdBy;
     private long timeCreated;
     private long lastModified;
+    private transient String configTypeBase;
+    private transient Map<String, String> configComponentTypes;
+    private transient String configUri;
 
     public long getType() {
         return type;
@@ -52,6 +60,38 @@ public class PtPropertyType extends PtOntologyType {
 
     public void setLastModified(long lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public String getConfigTypeBase() {
+        if (configTypeBase != null) {
+            return configTypeBase;
+        }
+        return configTypeBase = XmlUtil.getXmlString(getConfigXml(), "/property_type_config/type/base");
+    }
+
+    public String getConfigUri() {
+        if (configUri != null) {
+            return configUri;
+        }
+        return configUri = XmlUtil.getXmlString(getConfigXml(), "/property_type_config/uri");
+    }
+
+    public String getConfigComponentType(String componentName) {
+        if (configComponentTypes == null) {
+            loadConfigComponentTypes();
+        }
+        return configComponentTypes.get(componentName);
+    }
+
+    private void loadConfigComponentTypes() {
+        List<Element> componentElements = XmlUtil.getXmlElements(getConfigXml(), "/property_type_config/type/components/component");
+        Map<String, String> types = new HashMap<>();
+        for (Element componentElement : componentElements) {
+            String componentName = XmlUtil.getXmlString(componentElement, "uri");
+            String typeString = XmlUtil.getXmlString(componentElement, "type");
+            types.put(componentName, typeString);
+        }
+        configComponentTypes = types;
     }
 
     @Override

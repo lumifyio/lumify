@@ -1,4 +1,4 @@
-package io.lumify.palantir.ontologyToOwl;
+package io.lumify.palantir.util;
 
 import javax.xml.namespace.NamespaceContext;
 import java.util.Iterator;

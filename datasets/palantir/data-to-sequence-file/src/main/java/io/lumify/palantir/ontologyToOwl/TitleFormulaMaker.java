@@ -80,13 +80,7 @@ public class TitleFormulaMaker {
         Matcher m = PATTERN_PROPERTY.matcher(workingString);
         while (m.find()) {
             PatternFieldInfo pfi = new PatternFieldInfo(options, m.group(1));
-            String args;
-            if (pfi.getFieldName() == null) {
-                args = "";
-            } else {
-                args = "'" + uriToIri(options, pfi.getFieldName()) + "'";
-            }
-            m.appendReplacement(temp, "' + " + pfi.getFunctionName() + "(" + args + ", " + pfi.getPropOptions().toString() + ") + '");
+            m.appendReplacement(temp, "' + " + pfi.toCall(uriToIri(options, pfi.getFieldName())) + " + '");
         }
         m.appendTail(temp);
         workingString = temp.toString();
@@ -110,13 +104,7 @@ public class TitleFormulaMaker {
         while (m.find()) {
             PatternFieldInfo pfi = new PatternFieldInfo(options, m.group(1));
             String uri = pfi.getFieldName();
-            String args;
-            if (pfi.getFieldName() == null) {
-                args = "";
-            } else {
-                args = "'" + uriToIri(options, uri) + "'";
-            }
-            results.add(pfi.getFunctionName() + "(" + args + ", " + pfi.getPropOptions().toString() + ")");
+            results.add(pfi.toCall(uriToIri(options, uri)));
         }
 
         return results;
@@ -202,6 +190,22 @@ public class TitleFormulaMaker {
 
         public JSONObject getPropOptions() {
             return propOptions;
+        }
+
+        public String toCall(String fieldUri) {
+            String args;
+            if (getFieldName() == null) {
+                args = "";
+            } else {
+                args = "'" + fieldUri + "'";
+            }
+            if (getPropOptions().length() > 0) {
+                if (args.length() > 0) {
+                    args += ", ";
+                }
+                args += getPropOptions().toString();
+            }
+            return getFunctionName() + "(" + args + ")";
         }
     }
 }
