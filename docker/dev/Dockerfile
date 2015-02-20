@@ -69,7 +69,7 @@ ADD scripts/install-elasticsearch.sh /opt/lumify/scripts/install-elasticsearch.s
 ENV PATH $PATH:/opt/elasticsearch/bin
 RUN /bin/bash /opt/lumify/scripts/install-elasticsearch.sh
 ADD elasticsearch/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml
-VOLUME ["/opt/elasticsearch-1.4.1/data/"]
+VOLUME ["/opt/elasticsearch-1.4.4/data/"]
 EXPOSE 9200 9300
 
 # Install RabbitMQ

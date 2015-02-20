@@ -197,6 +197,7 @@ define([
                         .catch(function() {
                             self.renderJustification([{ sourceInfo: null }]);
                         })
+                        .finally(positionDialog)
                 }
             }
 

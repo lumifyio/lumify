@@ -10,6 +10,7 @@ define([
     '../toolbar/toolbar',
     '../dropdowns/termForm/termForm',
     '../properties/properties',
+    '../relationships/relationships',
     '../comments/comments',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
@@ -28,6 +29,7 @@ define([
     Toolbar,
     TermForm,
     Properties,
+    Relationships,
     Comments,
     template,
     transcriptEntryTemplate,
@@ -58,6 +60,7 @@ define([
             artifactSelector: '.artifact-image',
             toolbarSelector: '.comp-toolbar',
             propertiesSelector: '.properties',
+            relationshipsSelector: '.relationships',
             commentsSelector: '.comments',
             titleSelector: '.artifact-title',
             timestampAnchorSelector: '.av-times a'
@@ -92,6 +95,7 @@ define([
 
         this.before('teardown', function() {
             this.select('propertiesSelector').teardownComponent(Properties);
+            this.select('relationshipsSelector').teardownComponent(Relationships);
         });
 
         this.onOpenOriginal = function(event) {
@@ -149,7 +153,14 @@ define([
                 F: F
             }));
 
-            Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
+            Properties.attachTo(this.select('propertiesSelector'), {
+                data: vertex
+            });
+
+            Relationships.attachTo(this.select('relationshipsSelector'), {
+                data: vertex,
+                hasEntityLabel: i18n('detail.entity.relationships.has_entity.artifact')
+            });
 
             Comments.attachTo(this.select('commentsSelector'), {
                 vertex: vertex

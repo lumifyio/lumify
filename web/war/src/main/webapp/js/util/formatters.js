@@ -232,7 +232,7 @@ define([
                     }
                 }
 
-                if (geo && geo.latitude && geo.longitude) {
+                if (geo && ('latitude' in geo) && ('longitude' in geo)) {
                     var latlon = (
                             _.isNumber(geo.latitude) ? geo.latitude : parseFloat(geo.latitude)
                         ).toFixed(3) + ', ' +

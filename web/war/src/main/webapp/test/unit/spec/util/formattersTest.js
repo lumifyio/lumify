@@ -94,7 +94,27 @@ define(['util/formatters'], function(f) {
             it('should be pretty', function() {
                 var result = f.geoLocation.pretty('POINT(39.968720,-77.341100)')
 
+                expect(result).to.exist
+
                 result.should.equal('39.969, -77.341')
+            })
+
+            it('should format lat lons with zero', function() {
+                var p = f.geoLocation.pretty;
+
+                expect(p('POINT(0,0)')).to.equal('0.000, 0.000')
+                expect(p('POINT(0.0,0.0)')).to.equal('0.000, 0.000')
+                expect(p({latitude:0, longitude:0})).to.equal('0.000, 0.000')
+            })
+
+            it('should display description if available', function() {
+                var p = f.geoLocation.pretty;
+                expect(p({description:'d',latitude:0, longitude:0})).to.equal('d 0.000, 0.000')
+            })
+
+            it('should withhold description if available', function() {
+                var p = f.geoLocation.pretty;
+                expect(p({description:'d',latitude:0, longitude:0}, true)).to.equal('0.000, 0.000')
             })
 
             it('should return undefined if no match', function() {

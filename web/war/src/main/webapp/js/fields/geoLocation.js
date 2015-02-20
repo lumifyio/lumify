@@ -70,13 +70,13 @@ define([
         }
 
         this.triggerUpdate = function() {
-            var values = this.getValues();
-            this.filterUpdated(_.compact(values.map(function(v, i) {
+            var values = _.compact(this.getValues());
+            this.filterUpdated(values.map(function(v, i) {
                 if (values.length === 3 && i === 0) {
                     return v;
                 }
                 return makeNumber(v);
-            })));
+            }));
         }
 
         this.isValid = function() {

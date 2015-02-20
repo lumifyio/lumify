@@ -11,9 +11,9 @@ less likely to get out of sync than this document.
 
 | Dependency                                                                                 | Version          |
 | ------------------------------------------------------------------------------------------ | ---------------- |
-| [Cloudera CDH](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) | 5.2.1            |
+| [Cloudera CDH](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) | 5.3.1            |
 | [Apache Accumulo](http://accumulo.apache.org)                                              | 1.6.1            |
-| [Elasticsearch](http://www.elasticsearch.org/)                                             | 1.4.1            |
+| [Elasticsearch](http://www.elasticsearch.org/)                                             | 1.4.4            |
 | [RabbitMQ](http://www.rabbitmq.com/)                                                       | 3.4.2            |
 | [Jetty](http://www.eclipse.org/jetty/)                                                     | 9.2.7.v20150116  |
 

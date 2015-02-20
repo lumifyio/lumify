@@ -235,7 +235,7 @@ define([
                     !_.isUndefined(property.key) ?
                     _.first(F.vertex.props(this.attr.data, property.title, property.key)) :
                     undefined,
-                previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
+                previousValue = vertexProperty && vertexProperty.value,
                 visibilityValue = vertexProperty &&
                     vertexProperty.metadata &&
                     vertexProperty.metadata['http://lumify.io#visibilityJson'],
@@ -245,7 +245,7 @@ define([
                 previousValuesUniquedByKey = previousValues && _.unique(previousValues, _.property('key'));
 
             this.currentValue = this.attr.attemptToCoerceValue || previousValue;
-            if (this.currentValue && this.currentValue.latitude) {
+            if (this.currentValue && _.isObject(this.currentValue) && ('latitude' in this.currentValue)) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
             }
 
@@ -489,8 +489,14 @@ define([
 
             this.$node.find('.errors').hide();
             if (propertyName.length &&
-                (this.settingVisibility ||
-                 (((_.isString(value) && value.length) || value)))) {
+                (
+                    this.settingVisibility ||
+                    (
+                        (_.isString(value) && value.length) ||
+                        _.isNumber(value) ||
+                        value
+                    )
+                )) {
 
                 this.trigger('addProperty', {
                     isEdge: F.vertex.isEdge (this.attr.data),

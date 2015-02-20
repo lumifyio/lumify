@@ -11,7 +11,7 @@ define(['flight/lib/registry'], function(registry) {
             var $doc = $(document).off('.highlightcomps');
             highlighter.hide();
             if (enable) {
-                $doc.on('mouseover.highlightcomps', _.debounce(mouseover, 250))
+                $doc.on('mouseover.highlightcomps', _.debounce(mouseover, 50))
             }
         }
     };

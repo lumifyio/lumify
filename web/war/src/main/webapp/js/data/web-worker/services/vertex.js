@@ -105,6 +105,7 @@ define([
         related: function(vertexIds, options) {
             return ajax('POST', '/vertex/find-related', {
                 graphVertexIds: vertexIds,
+                limitEdgeLabel: options.limitEdgeLabel,
                 limitParentConceptId: options.limitParentConceptId
             });
         },
