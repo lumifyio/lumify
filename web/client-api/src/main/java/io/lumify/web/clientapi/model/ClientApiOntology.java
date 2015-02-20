@@ -181,6 +181,7 @@ public class ClientApiOntology implements ClientApiObject {
         private String displayName;
         private boolean userVisible;
         private boolean searchable;
+        private boolean addable;
         private PropertyType dataType;
         private String displayType;
         private String propertyGroup;
@@ -220,6 +221,14 @@ public class ClientApiOntology implements ClientApiObject {
 
         public void setSearchable(boolean searchable) {
             this.searchable = searchable;
+        }
+
+        public boolean isAddable() {
+            return addable;
+        }
+
+        public void setAddable(boolean addable) {
+            this.addable = addable;
         }
 
         public PropertyType getDataType() {

@@ -360,6 +360,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 continue;
             }
 
+            if (annotationIri.equals(LumifyProperties.ADDABLE.getPropertyName())) {
+                boolean searchable = valueString == null || Boolean.parseBoolean(valueString);
+                result.setProperty(LumifyProperties.ADDABLE.getPropertyName(), searchable, authorizations);
+                continue;
+            }
+
             if (annotationIri.equals(LumifyProperties.USER_VISIBLE.getPropertyName())) {
                 boolean userVisible = valueString == null || Boolean.parseBoolean(valueString);
                 result.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
@@ -438,6 +444,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
         boolean userVisible = getUserVisible(o, dataTypeProperty);
         boolean searchable = getSearchable(o, dataTypeProperty);
+        boolean addable = getAddable(o, dataTypeProperty);
         String displayType = getDisplayType(o, dataTypeProperty);
         String propertyGroup = getPropertyGroup(o, dataTypeProperty);
         String validationFormula = getValidationFormula(o, dataTypeProperty);
@@ -473,6 +480,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 textIndexHints,
                 userVisible,
                 searchable,
+                addable,
                 displayType,
                 propertyGroup,
                 boost,
@@ -492,6 +500,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
+            boolean addable,
             String displayType,
             String propertyGroup,
             Double boost,
@@ -684,6 +693,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected boolean getSearchable(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#searchable");
+        return val == null || Boolean.parseBoolean(val);
+    }
+
+    protected boolean getAddable(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#addable");
         return val == null || Boolean.parseBoolean(val);
     }
 

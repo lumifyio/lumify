@@ -33,6 +33,7 @@ public class SecureGraphConcept extends Concept {
         PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.TIME_FORMULA.getPropertyName());
         PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.ADD_RELATED_CONCEPT_WHITE_LIST.getPropertyName());
         PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.SEARCHABLE.getPropertyName());
+        PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.ADDABLE.getPropertyName());
         PROPERTIES_NOT_IN_METADATA.add(LumifyProperties.USER_VISIBLE.getPropertyName());
         PROPERTIES_NOT_IN_METADATA.add(SecureGraphOntologyRepository.ONTOLOGY_FILE_PROPERTY_NAME);
     }

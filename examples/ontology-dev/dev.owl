@@ -497,6 +497,19 @@
     
 
 
+    <!-- http://lumify.io/dev#birthDateError -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#birthDateError">
+        <rdfs:label xml:lang="en">Birth Date (Error)</rdfs:label>
+        <lumify:searchable rdf:datatype="&xsd;boolean">false</lumify:searchable>
+        <lumify:addable rdf:datatype="&xsd;boolean">false</lumify:addable>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/dev#boolean -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#boolean">
@@ -668,10 +681,23 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#name">
         <rdfs:label xml:lang="en">Name</rdfs:label>
-        <lumify:validationFormula><![CDATA[ dependentProp('http://lumify.io/dev#lastName') && dependentProp('http://lumify.io/dev#firstName') ]]></lumify:validationFormula>
-        <lumify:displayFormula><![CDATA[ _.compact([dependentProp('http://lumify.io/dev#lastName'), dependentProp('http://lumify.io/dev#firstName')]).join(', ') || prop('http://lumify.io#title') ]]></lumify:displayFormula>
+        <lumify:validationFormula> dependentProp(&apos;http://lumify.io/dev#lastName&apos;) &amp;&amp; dependentProp(&apos;http://lumify.io/dev#firstName&apos;) </lumify:validationFormula>
+        <lumify:displayFormula> _.compact([dependentProp(&apos;http://lumify.io/dev#lastName&apos;), dependentProp(&apos;http://lumify.io/dev#firstName&apos;)]).join(&apos;, &apos;) || prop(&apos;http://lumify.io#title&apos;) </lumify:displayFormula>
         <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#firstName</lumify:dependentPropertyIri>
         <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#lastName</lumify:dependentPropertyIri>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#nameError -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#nameError">
+        <rdfs:label xml:lang="en">Name (Error)</rdfs:label>
+        <lumify:addable rdf:datatype="&xsd;boolean">false</lumify:addable>
+        <lumify:searchable rdf:datatype="&xsd;boolean">false</lumify:searchable>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -985,12 +1011,12 @@
         <rdfs:label xml:lang="en">Document</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
         <lumify:intent>document</lumify:intent>
-        <analystsNotebook89:iconFile>Document</analystsNotebook89:iconFile>
-        <analystsNotebook6:iconFile>Document</analystsNotebook6:iconFile>
-        <analystsNotebook851:iconFile>Document</analystsNotebook851:iconFile>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io#author&apos;) || &apos;&apos; </lumify:subtitleFormula>
         <analystsNotebook7:iconFile>Document</analystsNotebook7:iconFile>
+        <analystsNotebook851:iconFile>Document</analystsNotebook851:iconFile>
+        <analystsNotebook6:iconFile>Document</analystsNotebook6:iconFile>
+        <analystsNotebook89:iconFile>Document</analystsNotebook89:iconFile>
         <lumify:displayType xml:lang="en">document</lumify:displayType>
-        <lumify:subtitleFormula xml:lang="en"><![CDATA[ prop('http://lumify.io#author') || '' ]]></lumify:subtitleFormula>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
     
@@ -1036,10 +1062,10 @@
     <owl:Class rdf:about="http://lumify.io/dev#location">
         <rdfs:label xml:lang="en">Location</rdfs:label>
         <lumify:intent>location</lumify:intent>
-        <analystsNotebook6:iconFile>Place</analystsNotebook6:iconFile>
-        <analystsNotebook7:iconFile>Place</analystsNotebook7:iconFile>
-        <analystsNotebook89:iconFile>Place</analystsNotebook89:iconFile>
         <analystsNotebook851:iconFile>Place</analystsNotebook851:iconFile>
+        <analystsNotebook89:iconFile>Place</analystsNotebook89:iconFile>
+        <analystsNotebook7:iconFile>Place</analystsNotebook7:iconFile>
+        <analystsNotebook6:iconFile>Place</analystsNotebook6:iconFile>
         <lumify:glyphIconFileName xml:lang="en">pin@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(160, 7, 206)</lumify:color>
     </owl:Class>
@@ -1061,10 +1087,10 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#organization">
         <rdfs:label xml:lang="en">Organization</rdfs:label>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#abbreviation&apos;) || &apos;&apos; </lumify:subtitleFormula>
+        <lumify:timeFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#formationDate&apos;) || &apos;&apos; </lumify:timeFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_043_group@2x.png</lumify:glyphIconFileName>
         <lumify:intent>organization</lumify:intent>
-        <lumify:subtitleFormula xml:lang="en"><![CDATA[ prop('http://lumify.io/dev#abbreviation') || '' ]]></lumify:subtitleFormula>
-        <lumify:timeFormula xml:lang="en"><![CDATA[ prop('http://lumify.io/dev#formationDate') || '' ]]></lumify:timeFormula>
         <lumify:color xml:lang="en">rgb(137, 39, 26)</lumify:color>
     </owl:Class>
     
@@ -1074,15 +1100,15 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#person">
         <rdfs:label xml:lang="en">Person</rdfs:label>
+        <lumify:timeFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#birthDate&apos;) || &apos;&apos; </lumify:timeFormula>
         <lumify:intent>face</lumify:intent>
         <lumify:intent>person</lumify:intent>
-        <analystsNotebook6:iconFile>Person</analystsNotebook6:iconFile>
-        <analystsNotebook7:iconFile>Person</analystsNotebook7:iconFile>
         <analystsNotebook851:iconFile>Person</analystsNotebook851:iconFile>
+        <analystsNotebook7:iconFile>Person</analystsNotebook7:iconFile>
+        <analystsNotebook6:iconFile>Person</analystsNotebook6:iconFile>
         <analystsNotebook89:iconFile>Person</analystsNotebook89:iconFile>
+        <lumify:titleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#name&apos;) || &apos;&apos; </lumify:titleFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
-        <lumify:timeFormula xml:lang="en"><![CDATA[ prop('http://lumify.io/dev#birthDate') || '' ]]></lumify:timeFormula>
-        <lumify:titleFormula xml:lang="en"><![CDATA[ prop('http://lumify.io/dev#name') || '' ]]></lumify:titleFormula>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
     
@@ -1093,8 +1119,8 @@
     <owl:Class rdf:about="http://lumify.io/dev#phoneCall">
         <rdfs:label xml:lang="en">Phone Call</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#event"/>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#duration&apos;) || &apos;&apos; </lumify:subtitleFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_164_iphone_transfer@2x.png</lumify:glyphIconFileName>
-        <lumify:subtitleFormula xml:lang="en"><![CDATA[ prop('http://lumify.io/dev#duration') || '' ]]></lumify:subtitleFormula>
         <lumify:color xml:lang="en">rgb(225, 225, 24)</lumify:color>
     </owl:Class>
     
@@ -1143,10 +1169,10 @@
             &quot;http://lumify.io/dev#document&quot;
         ]
         </lumify:addRelatedConceptWhiteList>
-        <lumify:titleFormula xml:lang="en"><![CDATA[ (prop('http://lumify.io/dev#titleFormulaEntityPropA') || '') + ', ' + (prop('http://lumify.io/dev#titleFormulaEntityPropB') || '') ]]></lumify:titleFormula>
+        <lumify:titleFormula xml:lang="en"> (prop(&apos;http://lumify.io/dev#titleFormulaEntityPropA&apos;) || &apos;&apos;) + &apos;, &apos; + (prop(&apos;http://lumify.io/dev#titleFormulaEntityPropB&apos;) || &apos;&apos;) </lumify:titleFormula>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#titleFormulaEntityPropC&apos;) || &apos;&apos; </lumify:subtitleFormula>
+        <lumify:timeFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#titleFormulaEntityPropD&apos;) || &apos;&apos; </lumify:timeFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
-        <lumify:subtitleFormula xml:lang="en"><![CDATA[ prop('http://lumify.io/dev#titleFormulaEntityPropC') || '' ]]></lumify:subtitleFormula>
-        <lumify:timeFormula xml:lang="en"><![CDATA[ prop('http://lumify.io/dev#titleFormulaEntityPropD') || '' ]]></lumify:timeFormula>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
     
@@ -1188,5 +1214,5 @@
 
 
 
-<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.5.0) http://owlapi.sourceforge.net -->
 
