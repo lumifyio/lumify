@@ -14,9 +14,8 @@
     <name>Lumify: Datasets: Palantir</name>
 
     <modules>
-        <module>data-import</module>
+        <module>core</module>
         <module>data-to-sequence-file</module>
         <module>import-mr</module>
-        <module>core</module>
     </modules>
 </project>

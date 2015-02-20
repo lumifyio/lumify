@@ -2,6 +2,7 @@ package io.lumify.palantir.ontologyToOwl;
 
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.json.JSONObject;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
@@ -78,14 +79,14 @@ public class TitleFormulaMaker {
         StringBuffer temp = new StringBuffer();
         Matcher m = PATTERN_PROPERTY.matcher(workingString);
         while (m.find()) {
-            PatternFieldInfo pfi = new PatternFieldInfo(m.group(1));
+            PatternFieldInfo pfi = new PatternFieldInfo(options, m.group(1));
             String args;
             if (pfi.getFieldName() == null) {
                 args = "";
             } else {
                 args = "'" + uriToIri(options, pfi.getFieldName()) + "'";
             }
-            m.appendReplacement(temp, "' + " + pfi.getFunctionName() + "(" + args + ") + '");
+            m.appendReplacement(temp, "' + " + pfi.getFunctionName() + "(" + args + ", " + pfi.getPropOptions().toString() + ") + '");
         }
         m.appendTail(temp);
         workingString = temp.toString();
@@ -107,7 +108,7 @@ public class TitleFormulaMaker {
 
         Matcher m = PATTERN_PROPERTY.matcher(arg);
         while (m.find()) {
-            PatternFieldInfo pfi = new PatternFieldInfo(m.group(1));
+            PatternFieldInfo pfi = new PatternFieldInfo(options, m.group(1));
             String uri = pfi.getFieldName();
             String args;
             if (pfi.getFieldName() == null) {
@@ -115,7 +116,7 @@ public class TitleFormulaMaker {
             } else {
                 args = "'" + uriToIri(options, uri) + "'";
             }
-            results.add(pfi.getFunctionName() + "(" + args + ")");
+            results.add(pfi.getFunctionName() + "(" + args + ", " + pfi.getPropOptions().toString() + ")");
         }
 
         return results;
@@ -149,17 +150,37 @@ public class TitleFormulaMaker {
     private static class PatternFieldInfo {
         private final String fieldName;
         private final String functionName;
+        private final JSONObject propOptions;
 
-        public PatternFieldInfo(String str) {
+        public PatternFieldInfo(Options options, String str) {
             String[] matchDataParts = str.split(",");
             String fieldName;
             String fn = "prop";
+            propOptions = new JSONObject();
+
+            if (options.isPrettyPrint()) {
+                propOptions.put("palantirPrettyPrint", true);
+            }
+
             if (matchDataParts.length == 2) {
                 if ("NONE".equals(matchDataParts[0])) {
                     fieldName = matchDataParts[1];
                 } else {
                     fieldName = matchDataParts[0];
-                    fn = matchDataParts[1].trim();
+                    String fnStr = matchDataParts[1].trim();
+                    if (fnStr.equalsIgnoreCase("uppercase")) {
+                        propOptions.put("uppercase", true);
+                    } else if (fnStr.equalsIgnoreCase("lowercase")) {
+                        propOptions.put("lowercase", true);
+                    } else if (fnStr.equalsIgnoreCase("smart_spacer")) {
+                        propOptions.put("smartSpacer", true);
+                    } else if (fnStr.equalsIgnoreCase("money")) {
+                        propOptions.put("money", true);
+                    } else if (fnStr.equalsIgnoreCase("add_phone_dashes")) {
+                        propOptions.put("addPhoneDashes", true);
+                    } else {
+                        LOGGER.warn("Unhandled function: %s for format %s", fnStr, str);
+                    }
                 }
             } else if (matchDataParts[0].equals("LONGEST_PROPERTY")) {
                 fieldName = null;
@@ -177,6 +198,10 @@ public class TitleFormulaMaker {
 
         public String getFunctionName() {
             return functionName;
+        }
+
+        public JSONObject getPropOptions() {
+            return propOptions;
         }
     }
 }
