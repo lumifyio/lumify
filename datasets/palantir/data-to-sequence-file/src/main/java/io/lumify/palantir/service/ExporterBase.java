@@ -18,6 +18,11 @@ public abstract class ExporterBase<T extends PtModelBase> implements Exporter {
         this.ptClass = ptClass;
     }
 
+    @Override
+    public Class getObjectClass() {
+        return this.ptClass;
+    }
+
     public void run(Exporter.ExporterSource exporterSource) throws IOException {
         try (SequenceFile.Writer writer = SequenceFile.createWriter(
                 exporterSource.getHadoopConfiguration(),

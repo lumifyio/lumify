@@ -98,6 +98,11 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
             value = m.group(1).trim();
         }
 
+        m = VALUE_BODY_PATTERN.matcher(value);
+        if (m.matches()) {
+            return new StringValue(m.group(1).trim());
+        }
+
         m = UNPARSED_VALUE_BODY_PATTERN.matcher(value);
         if (m.matches()) {
             return new StringValue(m.group(1).trim());

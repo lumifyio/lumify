@@ -6,7 +6,6 @@ import com.beust.jcommander.Parameters;
 import com.google.common.base.Joiner;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.palantir.model.*;
 import io.lumify.palantir.ontologyToOwl.OntologyToOwl;
 import io.lumify.palantir.service.*;
 import io.lumify.palantir.sqlrunner.SqlRunner;
@@ -14,14 +13,13 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.securegraph.util.ConvertingIterable;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Parameters(separators = "=", commandDescription = "Exports Palantir Oracle database to hadoop SequenceFiles")
 public class DataToSequenceFile implements Exporter.ExporterSource {
@@ -54,31 +52,36 @@ public class DataToSequenceFile implements Exporter.ExporterSource {
     private FileSystem fs;
     private SqlRunner sqlRunner;
     private Configuration hadoopConfiguration;
-    public static final Map<String, Exporter> EXPORTERS = new HashMap<>();
+    public static final List<Exporter> EXPORTERS = new ArrayList<>();
 
     static {
-        EXPORTERS.put(PtObjectType.class.getSimpleName(), new PtObjectTypeExporter());
-        EXPORTERS.put(PtPropertyType.class.getSimpleName(), new PtPropertyTypeExporter());
-        EXPORTERS.put(PtLinkType.class.getSimpleName(), new PtLinkTypeExporter());
-        EXPORTERS.put(PtNodeDisplayType.class.getSimpleName(), new PtNodeDisplayTypeExporter());
-        EXPORTERS.put(PtImageInfo.class.getSimpleName(), new PtImageInfoExporter());
-        EXPORTERS.put(PtOntologyResource.class.getSimpleName(), new PtOntologyResourceExporter());
-        EXPORTERS.put(PtLinkRelation.class.getSimpleName(), new PtLinkRelationExporter());
-        EXPORTERS.put(PtUser.class.getSimpleName(), new PtUserExporter());
-        EXPORTERS.put(PtGraph.class.getSimpleName(), new PtGraphExporter());
-        EXPORTERS.put(PtObject.class.getSimpleName(), new PtObjectExporter());
-        EXPORTERS.put(PtGraphObject.class.getSimpleName(), new PtGraphObjectExporter());
-        EXPORTERS.put(PtObjectObject.class.getSimpleName(), new PtObjectObjectExporter());
-        EXPORTERS.put(PtMediaAndValue.class.getSimpleName(), new PtMediaAndValueExporter());
-        EXPORTERS.put(PtPropertyAndValue.class.getSimpleName(), new PtPropertyAndValueExporter());
+        EXPORTERS.add(new PtObjectTypeExporter());
+        EXPORTERS.add(new PtPropertyTypeExporter());
+        EXPORTERS.add(new PtLinkTypeExporter());
+        EXPORTERS.add(new PtNodeDisplayTypeExporter());
+        EXPORTERS.add(new PtImageInfoExporter());
+        EXPORTERS.add(new PtOntologyResourceExporter());
+        EXPORTERS.add(new PtLinkRelationExporter());
+        EXPORTERS.add(new PtUserExporter());
+        EXPORTERS.add(new PtGraphExporter());
+        EXPORTERS.add(new PtObjectExporter());
+        EXPORTERS.add(new PtGraphObjectExporter());
+        EXPORTERS.add(new PtObjectObjectExporter());
+        EXPORTERS.add(new PtMediaAndValueExporter());
+        EXPORTERS.add(new PtPropertyAndValueExporter());
     }
 
     public DataToSequenceFile(String[] args) {
         new JCommander(this, args);
-        EXPORTERS.put(OntologyToOwl.class.getSimpleName(), new OntologyToOwl(baseIri));
+        EXPORTERS.add(new OntologyToOwl(baseIri));
 
         if (exporters.equalsIgnoreCase("all")) {
-            exporters = Joiner.on(',').join(EXPORTERS.keySet());
+            exporters = Joiner.on(',').join(new ConvertingIterable<Exporter, String>(EXPORTERS) {
+                @Override
+                protected String convert(Exporter o) {
+                    return o.getObjectClass().getSimpleName();
+                }
+            });
         }
 
     }
@@ -116,16 +119,16 @@ public class DataToSequenceFile implements Exporter.ExporterSource {
 
     private List<Exporter> getExportersToRun(String exporters) {
         List<Exporter> results = new ArrayList<>();
-        for (String exporter : exporters.split(",")) {
+        for (String exporterString : exporters.split(",")) {
             Exporter e = null;
-            for (Map.Entry<String, Exporter> entry : EXPORTERS.entrySet()) {
-                if (entry.getKey().equalsIgnoreCase(exporter)) {
-                    e = entry.getValue();
+            for (Exporter exporter : EXPORTERS) {
+                if (exporter.getObjectClass().getSimpleName().equalsIgnoreCase(exporterString)) {
+                    e = exporter;
                     break;
                 }
             }
             if (e == null) {
-                throw new RuntimeException("invalid exporter: " + exporter);
+                throw new RuntimeException("invalid exporter: " + exporterString);
             }
             results.add(e);
         }

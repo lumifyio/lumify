@@ -54,12 +54,17 @@ public class OntologyToOwl implements Exporter {
             baseIri = baseIri.substring(0, baseIri.length() - 1);
         }
         this.baseIri = baseIri;
-        this.titleFormulaMaker = new TitleFormulaMaker(baseIri);
+        this.titleFormulaMaker = new TitleFormulaMaker();
     }
 
     @Override
     public void run(ExporterSource exporterSource) throws Exception {
         run(exporterSource.getFileSystem(), exporterSource.getDestinationPath());
+    }
+
+    @Override
+    public Class getObjectClass() {
+        return OntologyToOwl.class;
     }
 
     public void run(FileSystem fs, Path destinationPath) throws Exception {
@@ -164,6 +169,12 @@ public class OntologyToOwl implements Exporter {
                 Element domainElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:domain");
                 domainElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", domainUri);
                 dataTypeProperty.getElement().appendChild(domainElement);
+
+                for (Element dependentPropertyElement : dataTypeProperty.getDependentPropertyElements()) {
+                    domainElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:domain");
+                    domainElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", domainUri);
+                    dependentPropertyElement.appendChild(domainElement);
+                }
             }
         }
     }
@@ -185,21 +196,30 @@ public class OntologyToOwl implements Exporter {
     }
 
     private void runOnDir(FileSystem fs, Path outPath, Path inDir) throws IOException {
-        RemoteIterator<LocatedFileStatus> files = fs.listFiles(inDir, true);
+        LOGGER.debug("Processing dir: " + inDir.toString());
+        FileStatus[] files = fs.listStatus(inDir);
         if (files == null) {
             return;
         }
-        while (files.hasNext()) {
-            LocatedFileStatus f = files.next();
-            try {
-                runOnFile(fs, outPath, f);
-            } catch (Throwable e) {
-                LOGGER.error("Could not process: %s", f.toString(), e);
+        for (FileStatus f : files) {
+            if (f.isDirectory()) {
+                runOnDir(fs, outPath, f.getPath());
+                continue;
+            }
+
+            if (f.isFile()) {
+                try {
+                    runOnFile(fs, outPath, f);
+                } catch (Throwable e) {
+                    LOGGER.error("Could not process: %s", f.getPath().toString(), e);
+                }
             }
         }
     }
 
-    private void runOnFile(FileSystem fs, Path outPath, LocatedFileStatus inFile) throws IOException, SAXException {
+    private void runOnFile(FileSystem fs, Path outPath, FileStatus inFile) throws IOException, SAXException {
+        LOGGER.debug("processing file: %s", inFile.getPath().toString());
+
         if (!inFile.getPath().getName().toLowerCase().endsWith(".xml")) {
             LOGGER.warn("skipping file: %s", inFile.toString());
             return;
@@ -300,16 +320,23 @@ public class OntologyToOwl implements Exporter {
         String uri = getXmlString(inXml, "/property_type_config/uri");
         String label = getXmlString(inXml, "/property_type_config/type/displayName");
         String comment = getXmlString(inXml, "/property_type_config/description");
-        List<Element> enumerationEntries = getXmlElements(inXml, "/property_type_config/type/enumeration/entry");
+        List<Element> entryElements = getXmlElements(inXml, "/property_type_config/type/enumeration/entry");
+        List<Element> componentElements = getXmlElements(inXml, "/property_type_config/type/components/component");
+        String propertyIri = uriToIri(uri);
 
         Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
-        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", uriToIri(uri));
+        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", propertyIri);
         exportRootElement.appendChild(datatypePropertyElement);
+        DataTypeProperty dataTypeProperty = new DataTypeProperty(propertyIri, datatypePropertyElement);
 
         Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
         labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
         labelElement.appendChild(exportDoc.createTextNode(label));
         datatypePropertyElement.appendChild(labelElement);
+
+        Element textIndexHintsElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:textIndexHints");
+        textIndexHintsElement.appendChild(exportDoc.createTextNode("FULL_TEXT"));
+        datatypePropertyElement.appendChild(textIndexHintsElement);
 
         Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
         rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", "http://www.w3.org/2001/XMLSchema#string");
@@ -321,11 +348,35 @@ public class OntologyToOwl implements Exporter {
             datatypePropertyElement.appendChild(commentElement);
         }
 
-        if (enumerationEntries.size() > 0) {
+        if (componentElements != null && componentElements.size() > 0) {
+            List<Element> argsElements = getXmlElements(inXml, "/property_type_config/display/args/arg");
+            if (argsElements.size() > 0) {
+                String titleFormula = titleFormulaMaker.create(new TitleFormulaMaker.Options(propertyIri + '/'), argsElements);
+                if (titleFormula.trim().length() > 0) {
+                    Element displayFormulaElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:displayFormula");
+                    displayFormulaElement.appendChild(exportDoc.createCDATASection("\n" + indent(titleFormula, "      ") + "\n    "));
+                    datatypePropertyElement.appendChild(displayFormulaElement);
+                }
+            }
+
+            for (Element componentElement : componentElements) {
+                String componentUri = getXmlString(componentElement, "uri");
+                String dependentPropertyIri = propertyIri + '/' + componentUri;
+
+                Element dependentPropertyIriElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:dependentPropertyIri");
+                dependentPropertyIriElement.appendChild(exportDoc.createTextNode(dependentPropertyIri));
+                datatypePropertyElement.appendChild(dependentPropertyIriElement);
+
+                Element dependentPropertyElement = runOnPropertyTypeConfigComponent(propertyIri, dependentPropertyIri, componentElement);
+                dataTypeProperty.addDependentPropertyElement(dependentPropertyElement);
+            }
+        }
+
+        if (entryElements.size() > 0) {
             JSONObject possibleValues = new JSONObject();
-            for (Element enumerationEntry : enumerationEntries) {
-                String key = getXmlString(enumerationEntry, "key");
-                String value = getXmlString(enumerationEntry, "value");
+            for (Element entryElement : entryElements) {
+                String key = getXmlString(entryElement, "key");
+                String value = getXmlString(entryElement, "value");
                 possibleValues.put(key, value);
             }
             Element possibleValuesElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:possibleValues");
@@ -333,7 +384,30 @@ public class OntologyToOwl implements Exporter {
             datatypePropertyElement.appendChild(possibleValuesElement);
         }
 
-        dataTypeProperties.put(uri, new DataTypeProperty(datatypePropertyElement));
+        dataTypeProperties.put(uri, dataTypeProperty);
+    }
+
+    private Element runOnPropertyTypeConfigComponent(String propertyIri, String dependentPropertyIri, Element componentElement) {
+        String displayName = getXmlString(componentElement, "displayName");
+
+        Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
+        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", dependentPropertyIri);
+        exportRootElement.appendChild(datatypePropertyElement);
+
+        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
+        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
+        labelElement.appendChild(exportDoc.createTextNode(displayName));
+        datatypePropertyElement.appendChild(labelElement);
+
+        Element textIndexHintsElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:textIndexHints");
+        textIndexHintsElement.appendChild(exportDoc.createTextNode("FULL_TEXT"));
+        datatypePropertyElement.appendChild(textIndexHintsElement);
+
+        Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
+        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", "http://www.w3.org/2001/XMLSchema#string");
+        datatypePropertyElement.appendChild(rangeElement);
+
+        return datatypePropertyElement;
     }
 
     private String indent(String stringToIndent, String indentChars) {
@@ -448,7 +522,7 @@ public class OntologyToOwl implements Exporter {
         }
 
         if (titleArgs != null && titleArgs.size() > 0) {
-            String titleFormula = titleFormulaMaker.create(titleArgs);
+            String titleFormula = titleFormulaMaker.create(new TitleFormulaMaker.Options(baseIri + '#'), titleArgs);
             if (titleFormula.trim().length() > 0) {
                 Element titleFormulaElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:titleFormula");
                 titleFormulaElement.appendChild(exportDoc.createCDATASection("\n" + indent(titleFormula, "      ") + "\n    "));

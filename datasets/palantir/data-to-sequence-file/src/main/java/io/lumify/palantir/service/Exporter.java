@@ -8,6 +8,8 @@ import org.apache.hadoop.fs.Path;
 public interface Exporter {
     void run(ExporterSource exporterSource) throws Exception;
 
+    Class getObjectClass();
+
     public interface ExporterSource {
         Configuration getHadoopConfiguration();
 

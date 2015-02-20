@@ -1,7 +1,5 @@
 package io.lumify.palantir.ontologyToOwl;
 
-import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.w3c.dom.Element;
@@ -13,15 +11,9 @@ import java.util.regex.Pattern;
 
 public class TitleFormulaMaker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TitleFormulaMaker.class);
-    private static Pattern PATTERN_PROPERTY = Pattern.compile("\\{(.*?),(.*?)\\}");
-    private static Pattern PATTERN_LONGEST_PROPERTY = Pattern.compile("\\{LONGEST_PROPERTY\\}");
-    private final String baseUri;
+    private static Pattern PATTERN_PROPERTY = Pattern.compile("\\{(.*?)\\}");
 
-    public TitleFormulaMaker(String baseUri) {
-        this.baseUri = baseUri;
-    }
-
-    public String create(List<Element> titleArgs) {
+    public String create(Options options, List<Element> titleArgs) {
         StringBuilder result = new StringBuilder();
         int count = 0;
         for (Element titleArg : titleArgs) {
@@ -30,7 +22,10 @@ public class TitleFormulaMaker {
             }
             String titleArgStr = titleArg.getTextContent();
             try {
-                result.append(createFromArg(titleArgStr));
+                String fromArg = createFromArg(options, titleArgStr);
+                if (fromArg != null) {
+                    result.append(fromArg);
+                }
             } catch (Exception ex) {
                 LOGGER.error("Could not process title arg: " + titleArgStr, ex);
             }
@@ -39,11 +34,19 @@ public class TitleFormulaMaker {
         return result.toString();
     }
 
-    private String createFromArg(String arg) {
+    private String createFromArg(Options options, String arg) {
+        if (arg.startsWith("tokens=")) {
+            arg = arg.substring("tokens=".length());
+        }
+        if (arg.startsWith("prettyprint=")) {
+            options.setPrettyPrint(Boolean.parseBoolean(arg.substring("prettyprint=".length()).trim()));
+            return null;
+        }
+
         arg = arg.replaceAll("\\{LABEL_PROPERTY\\}", "{NONE,label}");
 
         StringBuilder result = new StringBuilder();
-        List<String> conditionals = getConditionals(arg);
+        List<String> conditionals = getConditionals(options, arg);
         if (conditionals.size() > 0) {
             result.append("if (");
             int count = 0;
@@ -57,7 +60,7 @@ public class TitleFormulaMaker {
             result.append(") {\n  ");
         }
 
-        result.append(getReturnStatement(arg));
+        result.append(getReturnStatement(options, arg));
 
         if (conditionals.size() > 0) {
             result.append("}\n");
@@ -66,7 +69,7 @@ public class TitleFormulaMaker {
         return result.toString();
     }
 
-    private String getReturnStatement(String arg) {
+    private String getReturnStatement(Options options, String arg) {
         StringBuilder result = new StringBuilder();
         result.append("return ");
 
@@ -75,19 +78,14 @@ public class TitleFormulaMaker {
         StringBuffer temp = new StringBuffer();
         Matcher m = PATTERN_PROPERTY.matcher(workingString);
         while (m.find()) {
-            if (!"NONE".equals(m.group(1))) {
-                throw new LumifyException("Unhandled title formula property: " + arg);
+            PatternFieldInfo pfi = new PatternFieldInfo(m.group(1));
+            String args;
+            if (pfi.getFieldName() == null) {
+                args = "";
+            } else {
+                args = "'" + uriToIri(options, pfi.getFieldName()) + "'";
             }
-            String iri = uriToIri(m.group(2));
-            m.appendReplacement(temp, "' + prop('" + iri + "') + '");
-        }
-        m.appendTail(temp);
-        workingString = temp.toString();
-
-        temp = new StringBuffer();
-        m = PATTERN_LONGEST_PROPERTY.matcher(workingString);
-        while (m.find()) {
-            m.appendReplacement(temp, "' + longestProp() + '");
+            m.appendReplacement(temp, "' + " + pfi.getFunctionName() + "(" + args + ") + '");
         }
         m.appendTail(temp);
         workingString = temp.toString();
@@ -104,24 +102,81 @@ public class TitleFormulaMaker {
         return result.toString();
     }
 
-    private List<String> getConditionals(String arg) {
-        List<String> results = new ArrayList<String>();
+    private List<String> getConditionals(Options options, String arg) {
+        List<String> results = new ArrayList<>();
 
         Matcher m = PATTERN_PROPERTY.matcher(arg);
         while (m.find()) {
-            String uri = m.group(2);
-            results.add("prop('" + uriToIri(uri) + "')");
-        }
-
-        m = PATTERN_LONGEST_PROPERTY.matcher(arg);
-        while (m.find()) {
-            results.add("longestProp()");
+            PatternFieldInfo pfi = new PatternFieldInfo(m.group(1));
+            String uri = pfi.getFieldName();
+            String args;
+            if (pfi.getFieldName() == null) {
+                args = "";
+            } else {
+                args = "'" + uriToIri(options, uri) + "'";
+            }
+            results.add(pfi.getFunctionName() + "(" + args + ")");
         }
 
         return results;
     }
 
-    private String uriToIri(String uri) {
-        return OntologyToOwl.uriToIri(baseUri, uri);
+    private String uriToIri(Options options, String uri) {
+        return options.getBaseIri() + uri;
+    }
+
+    public static class Options {
+        private final String baseIri;
+        private boolean prettyPrint;
+
+        public Options(String baseIri) {
+            this.baseIri = baseIri;
+        }
+
+        public String getBaseIri() {
+            return baseIri;
+        }
+
+        public boolean isPrettyPrint() {
+            return prettyPrint;
+        }
+
+        public void setPrettyPrint(boolean prettyPrint) {
+            this.prettyPrint = prettyPrint;
+        }
+    }
+
+    private static class PatternFieldInfo {
+        private final String fieldName;
+        private final String functionName;
+
+        public PatternFieldInfo(String str) {
+            String[] matchDataParts = str.split(",");
+            String fieldName;
+            String fn = "prop";
+            if (matchDataParts.length == 2) {
+                if ("NONE".equals(matchDataParts[0])) {
+                    fieldName = matchDataParts[1];
+                } else {
+                    fieldName = matchDataParts[0];
+                    fn = matchDataParts[1].trim();
+                }
+            } else if (matchDataParts[0].equals("LONGEST_PROPERTY")) {
+                fieldName = null;
+                fn = "longestProp";
+            } else {
+                fieldName = matchDataParts[0];
+            }
+            this.fieldName = fieldName;
+            this.functionName = fn;
+        }
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public String getFunctionName() {
+            return functionName;
+        }
     }
 }
