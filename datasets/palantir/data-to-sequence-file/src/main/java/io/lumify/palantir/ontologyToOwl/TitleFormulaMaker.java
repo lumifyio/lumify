@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class TitleFormulaMaker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TitleFormulaMaker.class);
+    public static final String PALANTIR_PRETTY_PRINT = "palantirPrettyPrint";
     private static Pattern PATTERN_PROPERTY = Pattern.compile("\\{(.*?)\\}");
 
     public String create(Options options, List<Element> titleArgs) {
@@ -147,7 +148,7 @@ public class TitleFormulaMaker {
             propOptions = new JSONObject();
 
             if (options.isPrettyPrint()) {
-                propOptions.put("palantirPrettyPrint", true);
+                propOptions.put(PALANTIR_PRETTY_PRINT, true);
             }
 
             if (matchDataParts.length == 2) {
@@ -158,8 +159,10 @@ public class TitleFormulaMaker {
                     String fnStr = matchDataParts[1].trim();
                     if (fnStr.equalsIgnoreCase("uppercase")) {
                         propOptions.put("uppercase", true);
+                        propOptions.remove(PALANTIR_PRETTY_PRINT);
                     } else if (fnStr.equalsIgnoreCase("lowercase")) {
                         propOptions.put("lowercase", true);
+                        propOptions.remove(PALANTIR_PRETTY_PRINT);
                     } else if (fnStr.equalsIgnoreCase("smart_spacer")) {
                         propOptions.put("smartSpacer", true);
                     } else if (fnStr.equalsIgnoreCase("money")) {

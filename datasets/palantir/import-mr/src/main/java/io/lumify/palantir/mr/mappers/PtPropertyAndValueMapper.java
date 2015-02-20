@@ -67,13 +67,30 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
         VertexBuilder v = prepareVertex(objectVertexId, visibility);
         if (value instanceof StringValue) {
             String propertyName = getPropertyName(propertyType.getUri(), null);
-            Object valueObject = toValue(propertyType, null, ((StringValue) value).getValue());
+            String valueString = ((StringValue) value).getValue();
+            Object valueObject;
+            try {
+                valueObject = toValue(propertyType, null, valueString);
+            } catch (Exception ex) {
+                LOGGER.error("Could not convert property value: %s (propertyType: %s)", value, propertyType.getConfigUri(), ex);
+                valueObject = valueString;
+                propertyName += PtPropertyType.ERROR_SUFFIX;
+            }
             v.addPropertyValue(propertyKey, propertyName, valueObject, visibility);
         } else if (value instanceof MapValue) {
             MapValue values = (MapValue) value;
             for (Map.Entry<String, String> valueEntry : values.getValues().entrySet()) {
-                String propertyName = getPropertyName(propertyType.getUri(), valueEntry.getKey());
-                Object valueObject = toValue(propertyType, valueEntry.getKey(), valueEntry.getValue());
+                String innerKey = valueEntry.getKey();
+                String propertyName = getPropertyName(propertyType.getUri(), innerKey);
+                String valueString = valueEntry.getValue();
+                Object valueObject;
+                try {
+                    valueObject = toValue(propertyType, innerKey, valueString);
+                } catch (Exception ex) {
+                    LOGGER.error("Could not convert property value: %s (innerKey: %s, propertyType: %s)", value, innerKey, propertyType.getConfigUri(), ex);
+                    valueObject = valueString;
+                    propertyName += PtPropertyType.ERROR_SUFFIX;
+                }
                 v.addPropertyValue(propertyKey, propertyName, valueObject, visibility);
             }
         } else {
@@ -90,8 +107,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
             propertyType = ptPropertyType.getConfigComponentType(innerKey);
         }
         if (propertyType == null) {
-            LOGGER.warn("Could not find property type (innerKey: %s, value: %s): %s", innerKey, value, ptPropertyType.getConfigUri());
-            return value;
+            throw new RuntimeException("Could not find property type");
         }
         if (propertyType.equals("com.palantir.type.String")) {
             return value;
@@ -106,11 +122,9 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
             return parseDate(value);
         }
         if (propertyType.equals("com.palantir.type.Composite")) {
-            LOGGER.warn("Found composite property type without innerKey (innerKey: %s, value: %s): %s", innerKey, value, ptPropertyType.getConfigUri());
-            return value;
+            throw new RuntimeException("Found composite property type without innerKey");
         }
-        LOGGER.warn("Unhandled property type: %s in type %s", propertyType, ptPropertyType.getConfigUri());
-        return value;
+        throw new RuntimeException("Unhandled property type");
     }
 
     private Object parseDate(String value) {
@@ -121,8 +135,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
             try {
                 return new SimpleDateFormat("MMMM d, yyyy").parse(value);
             } catch (ParseException ex2) {
-                LOGGER.error("Could not parse date: " + value, ex2);
-                return value;
+                throw new RuntimeException("Could not parse date", ex2);
             }
         }
     }
@@ -144,8 +157,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
             }
             return Long.parseLong(value);
         } catch (Exception ex) {
-            LOGGER.error("Could not parse number: " + value, ex);
-            return value;
+            throw new RuntimeException("Could not parse number", ex);
         }
     }
 

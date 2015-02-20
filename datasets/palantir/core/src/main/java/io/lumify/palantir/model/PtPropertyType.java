@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PtPropertyType extends PtOntologyType {
+    public static final String ERROR_SUFFIX = "/Error";
     private long type;
     private boolean hidden;
     private long createdBy;

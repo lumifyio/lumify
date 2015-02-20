@@ -4,6 +4,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.DataToSequenceFile;
+import io.lumify.palantir.model.PtPropertyType;
 import io.lumify.palantir.service.Exporter;
 import io.lumify.palantir.util.XmlUtil;
 import org.apache.commons.codec.binary.Base64;
@@ -161,10 +162,10 @@ public class OntologyToOwl implements Exporter {
                 domainElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", domainUri);
                 dataTypeProperty.getElement().appendChild(domainElement);
 
-                for (Element dependentPropertyElement : dataTypeProperty.getDependentPropertyElements()) {
+                for (Element relatedPropertyElement : dataTypeProperty.getRelatedPropertyElements()) {
                     domainElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:domain");
                     domainElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", domainUri);
-                    dependentPropertyElement.appendChild(domainElement);
+                    relatedPropertyElement.appendChild(domainElement);
                 }
             }
         }
@@ -359,8 +360,7 @@ public class OntologyToOwl implements Exporter {
                 dependentPropertyIriElement.appendChild(exportDoc.createTextNode(dependentPropertyIri));
                 datatypePropertyElement.appendChild(dependentPropertyIriElement);
 
-                Element dependentPropertyElement = runOnPropertyTypeConfigComponent(dependentPropertyIri, componentElement);
-                dataTypeProperty.addDependentPropertyElement(dependentPropertyElement);
+                runOnPropertyTypeConfigComponent(dataTypeProperty, dependentPropertyIri, componentElement);
             }
         }
 
@@ -375,6 +375,8 @@ public class OntologyToOwl implements Exporter {
             possibleValuesElement.appendChild(exportDoc.createTextNode("\n" + indent(possibleValues.toString(2), "      ") + "\n    "));
             datatypePropertyElement.appendChild(possibleValuesElement);
         }
+
+        dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(propertyIri, label));
 
         dataTypeProperties.put(uri, dataTypeProperty);
     }
@@ -393,7 +395,7 @@ public class OntologyToOwl implements Exporter {
         return "http://www.w3.org/2001/XMLSchema#string";
     }
 
-    private Element runOnPropertyTypeConfigComponent(String dependentPropertyIri, Element componentElement) {
+    private void runOnPropertyTypeConfigComponent(DataTypeProperty dataTypeProperty, String dependentPropertyIri, Element componentElement) {
         String displayName = XmlUtil.getXmlString(componentElement, "displayName");
 
         Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
@@ -411,6 +413,36 @@ public class OntologyToOwl implements Exporter {
 
         Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
         rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", getPropertyRange(componentElement));
+        datatypePropertyElement.appendChild(rangeElement);
+
+        dataTypeProperty.addRelatedPropertyElement(datatypePropertyElement);
+        dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(dependentPropertyIri, displayName));
+    }
+
+    private Element createErrorPropertyElement(String propertyIri, String displayName) {
+        Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
+        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", propertyIri + PtPropertyType.ERROR_SUFFIX);
+        exportRootElement.appendChild(datatypePropertyElement);
+
+        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
+        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
+        labelElement.appendChild(exportDoc.createTextNode(displayName + " Error"));
+        datatypePropertyElement.appendChild(labelElement);
+
+        Element searchableElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:searchable");
+        searchableElement.appendChild(exportDoc.createTextNode("false"));
+        datatypePropertyElement.appendChild(searchableElement);
+
+        Element addableElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:addable");
+        addableElement.appendChild(exportDoc.createTextNode("false"));
+        datatypePropertyElement.appendChild(addableElement);
+
+        Element textIndexHintsElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:textIndexHints");
+        textIndexHintsElement.appendChild(exportDoc.createTextNode("NONE"));
+        datatypePropertyElement.appendChild(textIndexHintsElement);
+
+        Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
+        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", "http://www.w3.org/2001/XMLSchema#string");
         datatypePropertyElement.appendChild(rangeElement);
 
         return datatypePropertyElement;
