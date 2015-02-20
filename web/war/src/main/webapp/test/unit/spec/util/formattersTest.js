@@ -69,6 +69,22 @@ define(['util/formatters'], function(f) {
                 f.string.plural(2, 'phrase').should.equal('2 phrases')
             })
 
+            it('should format phoneNumber', function() {
+                f.string.phoneNumber('1112222').should.equal('111-2222')
+                f.string.phoneNumber('0001112222').should.equal('000-111-2222')
+                f.string.phoneNumber(1112222).should.equal('111-2222')
+                f.string.phoneNumber(0).should.equal('0')
+            })
+
+            it('should format socials', function() {
+                f.string.ssn('000000001').should.equal('000-00-0001')
+                f.string.ssn('1234').should.equal('1234')
+                f.string.ssn('').should.equal('')
+                f.string.ssn('1').should.equal('1')
+                f.string.ssn(0).should.equal('0')
+                f.string.ssn(123111234).should.equal('123-11-1234')
+            })
+
         })
 
         describe('for geoLocations', function() {

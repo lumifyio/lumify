@@ -331,6 +331,25 @@ define([
                 }
 
                 return truncated
+            },
+            phoneNumber: function(str) {
+                str = (_.isNumber(str) ? ('' + str) : str) || '';
+                var match = str.match(/^([0-9]{3})?[-. ]?([0-9]{3})?[-. ]?([0-9]{4})$/);
+                if (match) {
+                    match.shift();
+                    return _.compact(match).join('-')
+                }
+                return str;
+            },
+            ssn: function(str) {
+                str = (_.isNumber(str) ? ('' + str) : str) || '';
+                var match = str.match(/^([0-9]{3})?[-. ]?([0-9]{2})?[-. ]?([0-9]{4})$/);
+
+                if (match) {
+                    match.shift();
+                    return _.compact(match).join('-')
+                }
+                return str;
             }
         },
         date: {
