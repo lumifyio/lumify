@@ -80,7 +80,7 @@ public final class TweetTransformer {
         StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes()), String.class);
 
         final Metadata textMetadata = new Metadata();
-        textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Tweet Text", visibilityTranslator.getDefaultVisibility());
+        textMetadata.add(LumifyProperties.META_DATA_TEXT_DESCRIPTION.getPropertyName(), "Tweet Text", visibilityTranslator.getDefaultVisibility());
         LumifyProperties.TEXT.addPropertyValue(v, MULTI_VALUE_KEY, textValue, textMetadata, visibility);
 
         String title = json.getJSONObject("user").getString("name") + ": " + text;
