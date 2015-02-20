@@ -85,6 +85,25 @@ define(['util/formatters'], function(f) {
                 f.string.ssn(123111234).should.equal('123-11-1234')
             })
 
+            it('should format case', function() {
+                f.string.uppercase().should.equal('')
+                f.string.uppercase('').should.equal('')
+                f.string.uppercase('a').should.equal('A')
+
+                f.string.lowercase().should.equal('')
+                f.string.lowercase('').should.equal('')
+                f.string.lowercase('A').should.equal('a')
+            })
+
+            it('should pretty print', function() {
+                f.string.palantirPrettyPrint('this is a test').should.equal('This Is A Test')
+                f.string.palantirPrettyPrint().should.equal('')
+                f.string.palantirPrettyPrint('').should.equal('')
+                f.string.palantirPrettyPrint('john mCcLaNe').should.equal('John Mcclane')
+                f.string.palantirPrettyPrint('Johnny a. aPPleSeed').should.equal('Johnny A. Appleseed')
+                f.string.palantirPrettyPrint('joHn wiLKes-booTh').should.equal('John Wilkes-Booth')
+                f.string.palantirPrettyPrint('monty-burns').should.equal('Monty-Burns')
+            })
         })
 
         describe('for geoLocations', function() {

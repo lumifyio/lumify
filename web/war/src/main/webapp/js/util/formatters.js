@@ -350,6 +350,17 @@ define([
                     return _.compact(match).join('-')
                 }
                 return str;
+            },
+            uppercase: function(str) {
+                return (str || '').toUpperCase();
+            },
+            lowercase: function(str) {
+                return (str || '').toLowerCase();
+            },
+            palantirPrettyPrint: function(str) {
+                return (str || '').replace(/\w[^-\s]*/g, function(txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
             }
         },
         date: {

@@ -324,7 +324,7 @@ define([
                 return V.propDisplay(propertyAudit.propertyName, propertyAudit.newValue || propertyAudit.previousValue);
             },
 
-            propDisplay: function(name, value) {
+            propDisplay: function(name, value, options) {
                 name = V.propName(name);
                 var ontologyProperty = propertiesByTitle[name];
 
@@ -366,7 +366,19 @@ define([
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);
 
-                    default: return value;
+                    default:
+
+                        if (options && _.isObject(options)) {
+                            return _.reduce(options, function(val, enabled, transformName) {
+                                if (enabled === true &&
+                                    transformName in F.string &&
+                                    _.isFunction(F.string[transformName])) {
+                                    return F.string[transformName](val);
+                                }
+                                return val;
+                            }, value)
+                        }
+                        return value;
                 }
             },
 
@@ -401,7 +413,7 @@ define([
                     }
                 }
 
-                return V.propDisplay(name, value);
+                return V.propDisplay(name, value, optionalOpts);
             },
 
             props: function(vertex, name, optionalKey) {
