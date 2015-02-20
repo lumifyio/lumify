@@ -331,7 +331,7 @@ public class OntologyToOwl implements Exporter {
         datatypePropertyElement.appendChild(textIndexHintsElement);
 
         Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
-        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", "http://www.w3.org/2001/XMLSchema#string");
+        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", getPropertyRange(inXml.getDocumentElement()));
         datatypePropertyElement.appendChild(rangeElement);
 
         if (comment != null && comment.length() > 0) {
@@ -379,6 +379,20 @@ public class OntologyToOwl implements Exporter {
         dataTypeProperties.put(uri, dataTypeProperty);
     }
 
+    private String getPropertyRange(Element element) {
+        String typeString = XmlUtil.getXmlString(element, "type/base");
+        if (typeString == null) {
+            typeString = XmlUtil.getXmlString(element, "type");
+        }
+        if ("com.palantir.type.Number".equals(typeString)) {
+            return "http://www.w3.org/2001/XMLSchema#double";
+        }
+        if ("com.palantir.type.Date".equals(typeString)) {
+            return "http://www.w3.org/2001/XMLSchema#dateTime";
+        }
+        return "http://www.w3.org/2001/XMLSchema#string";
+    }
+
     private Element runOnPropertyTypeConfigComponent(String dependentPropertyIri, Element componentElement) {
         String displayName = XmlUtil.getXmlString(componentElement, "displayName");
 
@@ -396,7 +410,7 @@ public class OntologyToOwl implements Exporter {
         datatypePropertyElement.appendChild(textIndexHintsElement);
 
         Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
-        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", "http://www.w3.org/2001/XMLSchema#string");
+        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", getPropertyRange(componentElement));
         datatypePropertyElement.appendChild(rangeElement);
 
         return datatypePropertyElement;
