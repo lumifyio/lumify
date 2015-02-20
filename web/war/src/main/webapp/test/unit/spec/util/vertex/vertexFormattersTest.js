@@ -114,9 +114,38 @@ define(['util/vertex/formatters'], function(f) {
             })
         })
 
+        describe('propDisplay', function() {
+            it('should have propDisplay function', function() {
+                V.should.have.property('propDisplay').that.is.a.function
+            })
+
+            it('should accept name and value and format', function() {
+                V.propDisplay(PROPERTY_NAME_TITLE, 'test').should.equal('test')
+                V.propDisplay(PROPERTY_NAME_BOOLEAN, true).should.equal('boolean.true')
+                V.propDisplay(PROPERTY_NAME_NUMBER, 0).should.equal('0')
+            })
+
+            it('should accept options for process string values', function() {
+                V.propDisplay(PROPERTY_NAME_TITLE, 'test', { uppercase:true }).should.equal('TEST')
+                V.propDisplay(PROPERTY_NAME_TITLE, 'TEST', { lowercase:true }).should.equal('test')
+                V.propDisplay(PROPERTY_NAME_TITLE, 'TeSt', { lowercase:false }).should.equal('TeSt')
+                V.propDisplay(PROPERTY_NAME_TITLE, 'TeSt', { missingFormatter:true }).should.equal('TeSt')
+
+                V.propDisplay(PROPERTY_NAME_TITLE, 'test string',
+                    { palantirPrettyPrint:true }).should.equal('Test String')
+            })
+        })
+
         describe('prop', function() {
             it('should have prop function', function() {
                 expect(V).to.have.property('prop').that.is.a.function
+            })
+            it('should pass options through', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_TITLE, 'k1', 'aAaA')
+                    ]);
+
+                V.prop(vertex, PROPERTY_NAME_TITLE, 'k1', { uppercase:true }).should.equal('AAAA')
             })
             it('should get display values for boolean', function() {
                 var vertex = vertexFactory([
