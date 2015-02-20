@@ -11,6 +11,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private String title;
     private boolean userVisible;
     private boolean searchable;
+    private boolean addable;
     private String displayName;
     private String propertyGroup;
     private PropertyType dataType;
@@ -63,6 +64,11 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     }
 
     @Override
+    public boolean getAddable() {
+        return addable;
+    }
+
+    @Override
     public String getValidationFormula() {
         return validationFormula;
     }
@@ -87,6 +93,10 @@ public class InMemoryOntologyProperty extends OntologyProperty {
 
     public void setSearchable(boolean searchable) {
         this.searchable = searchable;
+    }
+
+    public void setAddable(boolean addable) {
+        this.addable = addable;
     }
 
     public void setTitle(String title) {

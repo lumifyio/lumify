@@ -301,7 +301,7 @@ require([
                                     var notMetadata = ['name', 'key', 'value', 'sandboxStatus',
                                         'http://lumify.io#visibilityJson',
                                         '_sourceMetadata',
-                                        '_justificationMetadata'
+                                        'http://lumify.io#justification'
                                     ];
 
                                     return _.chain(d)
@@ -348,7 +348,7 @@ require([
                                         var display = {
                                             'http://lumify.io#visibilityJson':
                                                 i18n('admin.vertex.editor.visibility.label'),
-                                            _justificationMetadata:
+                                            'http://lumify.io#justification':
                                                 i18n('admin.vertex.editor.justification.label'),
                                             _sourceMetadata:
                                                 i18n('admin.vertex.editor.justification.label'),
@@ -358,7 +358,7 @@ require([
                                         this.textContent = (display[d[0]] || d[0]) + ' ';
                                         d3.select(this)
                                             .call(function() {
-                                                var isJustification = display[d[0]] === display._justificationMetadata,
+                                                var isJustification = display[d[0]] === display['http://lumify.io#justification'],
                                                     isMetadata = d[0] === 'metadata' || isJustification,
                                                     displayAsJson = _.isObject(d[1]),
                                                     value = d[0] === 'http://lumify.io#visibilityJson' ?

@@ -72,6 +72,24 @@ define(['require'], function(require) {
                                     if (!error || error.status !== 404) {
                                         throw error;
                                     }
+
+                                    if (type === 'vertex') {
+                                        store.removeWorkspaceVertexIds(publicData.currentWorkspaceId, objectId);
+                                        dispatchMain('rebroadcastEvent', {
+                                            eventName: 'verticesDeleted',
+                                            data: {
+                                                vertexIds: [objectId]
+                                            }
+                                        });
+                                    } else {
+                                        store.removeObject(publicData.currentWorkspaceId, 'edge', objectId);
+                                        dispatchMain('rebroadcastEvent', {
+                                            eventName: 'edgesDeleted',
+                                            data: {
+                                                edgeId: objectId
+                                            }
+                                        });
+                                    }
                                 }).done();
                         });
                     }

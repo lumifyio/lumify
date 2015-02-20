@@ -214,7 +214,23 @@ html.fullscreenDetails {
 }
 
 .help-dialog {
+  height: 40em;
+  width: 60%;
+  height: 80vh;
+  width: 60vw;
+  max-width: 65em;
+  margin-left: 0;
+  .translate(-50%, 0);
   @import "help/help";
+  .modal-body {
+    position: absolute;
+    top: 3.8em;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: none;
+    overflow: auto;
+  }
 }
 
 .fullscreenApp .detail-pane {
@@ -332,3 +348,24 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 
 
 @import "util/scrollbars.less";
+
+.component-highlighter {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(24, 126, 226, 0.55);
+  border: 3px solid rgba(11, 76, 140, 0.36);
+  box-sizing: border-box;
+  z-index: 9999;
+  &:after {
+    content: attr(data-name);
+    top: 0;
+    left: 0;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(11, 76, 140, 1.0);
+    font-size: 100%;
+    white-space: nowrap;
+    background: rgba(11, 76, 140, 0.36);
+    padding: 0 0.5em;
+    position: absolute;
+  }
+}

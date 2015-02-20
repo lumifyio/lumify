@@ -24,6 +24,7 @@ public class InMemoryConcept extends Concept {
     private byte[] mapGlyphIcon;
     private boolean userVisible = true;
     private Boolean searchable;
+    private Boolean addable;
     private Map<String, String> metadata = new HashMap<String, String>();
     private List<String> intents = new ArrayList<>();
 
@@ -136,6 +137,12 @@ public class InMemoryConcept extends Concept {
                 this.searchable = (Boolean) value;
             } else {
                 this.searchable = Boolean.parseBoolean((String) value);
+            }
+        } else if (LumifyProperties.ADDABLE.getPropertyName().equals(name)) {
+            if (value instanceof Boolean) {
+                this.addable = (Boolean) value;
+            } else {
+                this.addable = Boolean.parseBoolean((String) value);
             }
         } else {
             metadata.put(name, value.toString());

@@ -136,7 +136,6 @@ define([
             this.displayingIds = vertexIds.concat(edgeIds);
 
             this.$node.html(template({
-                getClasses: this.classesForVertex,
                 vertices: vertices,
                 edges: edges
             }));

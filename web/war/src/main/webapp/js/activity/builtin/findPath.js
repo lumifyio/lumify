@@ -109,6 +109,9 @@ define([
                 });
 
             this.trigger('updateWorkspace', {
+                options: {
+                    selectAll: true
+                },
                 entityUpdates: vertices
             });
             this.trigger('selectObjects', { vertexIds: vertexIds });

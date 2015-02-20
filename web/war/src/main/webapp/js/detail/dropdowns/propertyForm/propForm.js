@@ -6,6 +6,7 @@ define([
     'fields/selection/selection',
     'tpl!util/alert',
     'util/withTeardown',
+    'util/vertex/vertexSelect',
     'util/vertex/formatters',
     'util/withDataRequest'
 ], function(
@@ -16,13 +17,11 @@ define([
     FieldSelection,
     alertTemplate,
     withTeardown,
+    VertexSelector,
     F,
     withDataRequest
 ) {
     'use strict';
-
-        // Animates the property value to the justification reference on paste if false
-    var SKIP_SELECTION_ANIMATION = true;
 
     return defineComponent(PropertyForm, withDropdown, withTeardown, withDataRequest);
 
@@ -36,6 +35,7 @@ define([
             configurationFieldSelector: '.configuration input',
             previousValuesSelector: '.previous-values',
             previousValuesDropdownSelector: '.previous-values-container .dropdown-menu',
+            vertexContainerSelector: '.vertex-select-container',
             visibilitySelector: '.visibility',
             justificationSelector: '.justification',
             propertyInputSelector: '.input-row input',
@@ -48,6 +48,7 @@ define([
 
         this.after('initialize', function() {
             var self = this,
+                property = this.attr.property,
                 vertex = this.attr.data;
 
             this.on('click', {
@@ -67,7 +68,6 @@ define([
             this.on('propertyselected', this.onPropertySelected);
             this.on('visibilitychange', this.onVisibilityChange);
             this.on('justificationchange', this.onJustificationChange);
-            this.on('justificationfrompaste', this.onJustificationFromPaste);
             this.on('paste', {
                 configurationFieldSelector: _.debounce(this.onPaste.bind(this), 10)
             });
@@ -75,36 +75,58 @@ define([
                 previousValuesDropdownSelector: this.onPreviousValuesDropdown
             });
             this.$node.html(template({
-                property: this.attr.property
+                property: property,
+                vertex: vertex
             }));
 
-            self.select('saveButtonSelector').attr('disabled', true);
-            self.select('deleteButtonSelector').hide();
-            self.select('saveButtonSelector').hide();
+            this.select('saveButtonSelector').attr('disabled', true);
+            this.select('deleteButtonSelector').hide();
+            this.select('saveButtonSelector').hide();
 
             if (this.attr.property) {
                 this.trigger('propertyselected', {
                     disablePreviousValuePrompt: true,
-                    property: _.chain(this.attr.property)
+                    property: _.chain(property)
                         .pick('displayName key name value visibility metadata'.split(' '))
                         .extend({
-                            title: this.attr.property.name
+                            title: property.name
                         })
                         .value()
                 });
-            } else if (F.vertex.isEdge(this.attr.data)) {
+            } else if (!vertex) {
+                this.on('vertexSelected', this.onVertexSelected);
+                VertexSelector.attachTo(this.select('vertexContainerSelector'), {
+                    value: ''
+                });
+                this.manualOpen();
+            } else if (F.vertex.isEdge(vertex)) {
                 throw new Error('Property form not supported for edges');
             } else {
-                this.dataRequest('ontology', 'propertiesByConceptId', F.vertex.prop(vertex, 'conceptType'))
-                    .done(function(properties) {
-                        FieldSelection.attachTo(self.select('propertyListSelector'), {
-                            properties: properties.list,
-                            placeholder: i18n('property.form.field.selection.placeholder')
-                        });
-                        self.manualOpen();
-                    });
+                this.setupPropertySelectionField();
             }
         });
+
+        this.setupPropertySelectionField = function() {
+            var self = this;
+
+            this.dataRequest('ontology', 'propertiesByConceptId', F.vertex.prop(this.attr.data, 'conceptType'))
+                .done(function(properties) {
+                    FieldSelection.attachTo(self.select('propertyListSelector'), {
+                        properties: properties.list,
+                        placeholder: i18n('property.form.field.selection.placeholder')
+                    });
+                    self.manualOpen();
+                });
+        }
+
+        this.onVertexSelected = function(event, data) {
+            event.stopPropagation();
+
+            if (data.item && data.item.properties) {
+                this.attr.data = data.item;
+                this.setupPropertySelectionField();
+            }
+        };
 
         this.after('teardown', function() {
             this.select('visibilitySelector').teardownAllComponents();
@@ -132,6 +154,9 @@ define([
                 dropdown = this.select('previousValuesDropdownSelector'),
                 buttons = this.select('previousValuesSelector').find('.active').removeClass('active'),
                 action = $(event.target).closest('button').addClass('active').data('action');
+
+            event.stopPropagation();
+            event.preventDefault();
 
             if (action === 'add') {
                 dropdown.hide();
@@ -207,10 +232,10 @@ define([
 
             var vertexProperty = property.title === 'http://lumify.io#visibilityJson' ?
                     _.first(F.vertex.props(this.attr.data, property.title)) :
-                    property.key ?
+                    !_.isUndefined(property.key) ?
                     _.first(F.vertex.props(this.attr.data, property.title, property.key)) :
                     undefined,
-                previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
+                previousValue = vertexProperty && vertexProperty.value,
                 visibilityValue = vertexProperty &&
                     vertexProperty.metadata &&
                     vertexProperty.metadata['http://lumify.io#visibilityJson'],
@@ -219,8 +244,8 @@ define([
                 previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName),
                 previousValuesUniquedByKey = previousValues && _.unique(previousValues, _.property('key'));
 
-            this.currentValue = previousValue;
-            if (this.currentValue && this.currentValue.latitude) {
+            this.currentValue = this.attr.attemptToCoerceValue || previousValue;
+            if (this.currentValue && _.isObject(this.currentValue) && ('latitude' in this.currentValue)) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
             }
 
@@ -328,9 +353,9 @@ define([
                             PropertyField.attachTo(config, {
                                 property: propertyDetails,
                                 vertexProperty: vertexProperty,
-                                value: previousValue,
+                                value: self.attr.attemptToCoerceValue || previousValue,
                                 predicates: false,
-                                tooltip: {
+                                tooltip: (!self.attr.sourceInfo && !self.attr.justificationText) ? {
                                     html: true,
                                     title:
                                         '<strong>' +
@@ -339,11 +364,14 @@ define([
                                         i18n('justification.field.tooltip.subtitle'),
                                     placement: 'left',
                                     trigger: 'focus'
-                                }
+                                } : null
                             });
                         }
 
-                        Justification.attachTo(justification, vertexProperty);
+                        Justification.attachTo(justification, {
+                            justificationText: self.attr.justificationText,
+                            sourceInfo: self.attr.sourceInfo
+                        });
 
                         Visibility.attachTo(visibility, {
                             value: visibilityValue || ''
@@ -365,37 +393,6 @@ define([
         this.onJustificationChange = function(event, data) {
             this.justification = data;
             this.checkValid();
-        };
-
-        this.onJustificationFromPaste = function(event, data) {
-            var justification = this.select('justificationSelector'),
-                configuration = this.select('configurationSelector'),
-                selection = justification.find('.selection'),
-                clonedSelection = selection.clone(),
-                popSnippet = function() {
-                    selection.closest('.animationwrap').removeClass('pop-fast').addClass('pop-fast');
-                };
-
-            if (!clonedSelection.length) return;
-
-            // More than number of words shouldn't animate, just pop text
-            if (SKIP_SELECTION_ANIMATION || selection.text().split(/\s+/).length > 3) {
-                return popSnippet();
-            }
-
-            configuration.find('.input-row input').after(clonedSelection);
-
-            var position = selection.position(),
-                clonedPosition = clonedSelection.position(),
-                clonedMarginLeft = parseInt(clonedSelection.css('left'), 10);
-
-            clonedSelection.one(TRANSITION_END, function() {
-                    clonedSelection.remove();
-                    popSnippet();
-                }).css({
-                    textIndent: (selection.get(0).offsetLeft - clonedMarginLeft) + 'px',
-                    marginTop: -1 * (clonedPosition.top - position.top) + 'px'
-                });
         };
 
         this.onPropertyInvalid = function(event, data) {
@@ -472,6 +469,7 @@ define([
         this.onDelete = function() {
             _.defer(this.buttonLoading.bind(this, this.attr.deleteButtonSelector));
             this.trigger('deleteProperty', {
+                vertexId: this.attr.data.id,
                 property: _.pick(this.currentProperty, 'key', 'name')
             });
         };
@@ -491,11 +489,18 @@ define([
 
             this.$node.find('.errors').hide();
             if (propertyName.length &&
-                (this.settingVisibility ||
-                 (((_.isString(value) && value.length) || value)))) {
+                (
+                    this.settingVisibility ||
+                    (
+                        (_.isString(value) && value.length) ||
+                        _.isNumber(value) ||
+                        value
+                    )
+                )) {
 
                 this.trigger('addProperty', {
                     isEdge: F.vertex.isEdge (this.attr.data),
+                    vertexId: this.attr.data.id,
                     property: $.extend({
                             key: propertyKey,
                             name: propertyName,

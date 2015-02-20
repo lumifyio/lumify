@@ -8,6 +8,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.util.ExecutorServiceUtil;
@@ -62,6 +63,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         importResourceOwl("base.owl", BASE_OWL_IRI, authorizations);
         importResourceOwl("user.owl", UserRepository.OWL_IRI, authorizations);
+        importResourceOwl("termMention.owl", TermMentionRepository.OWL_IRI, authorizations);
         importResourceOwl("workspace.owl", WorkspaceRepository.OWL_IRI, authorizations);
         importResourceOwl("comment.owl", COMMENT_OWL_IRI, authorizations);
         importResourceOwl("longRunningProcess.owl", LongRunningProcessRepository.OWL_IRI, authorizations);
@@ -358,6 +360,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 continue;
             }
 
+            if (annotationIri.equals(LumifyProperties.ADDABLE.getPropertyName())) {
+                boolean searchable = valueString == null || Boolean.parseBoolean(valueString);
+                result.setProperty(LumifyProperties.ADDABLE.getPropertyName(), searchable, authorizations);
+                continue;
+            }
+
             if (annotationIri.equals(LumifyProperties.USER_VISIBLE.getPropertyName())) {
                 boolean userVisible = valueString == null || Boolean.parseBoolean(valueString);
                 result.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
@@ -436,6 +444,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
         boolean userVisible = getUserVisible(o, dataTypeProperty);
         boolean searchable = getSearchable(o, dataTypeProperty);
+        boolean addable = getAddable(o, dataTypeProperty);
         String displayType = getDisplayType(o, dataTypeProperty);
         String propertyGroup = getPropertyGroup(o, dataTypeProperty);
         String validationFormula = getValidationFormula(o, dataTypeProperty);
@@ -471,6 +480,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 textIndexHints,
                 userVisible,
                 searchable,
+                addable,
                 displayType,
                 propertyGroup,
                 boost,
@@ -490,6 +500,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
+            boolean addable,
             String displayType,
             String propertyGroup,
             Double boost,
@@ -502,10 +513,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         String iri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
         String[] intents = getIntents(o, objectProperty);
+        boolean userVisible = getUserVisible(o, objectProperty);
         checkNotNull(label, "label cannot be null or empty for " + iri);
         LOGGER.info("Importing ontology object property " + iri + " (label: " + label + ")");
 
-        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label, intents);
+        getOrCreateRelationshipType(getDomainsConcepts(o, objectProperty), getRangesConcepts(o, objectProperty), iri, label, intents, userVisible);
     }
 
     protected void importInverseOf(OWLOntology o, OWLObjectProperty objectProperty) {
@@ -681,6 +693,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected boolean getSearchable(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#searchable");
+        return val == null || Boolean.parseBoolean(val);
+    }
+
+    protected boolean getAddable(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#addable");
         return val == null || Boolean.parseBoolean(val);
     }
 

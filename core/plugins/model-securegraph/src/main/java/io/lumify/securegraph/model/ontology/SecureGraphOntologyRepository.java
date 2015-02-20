@@ -425,6 +425,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
+            boolean addable,
             String displayType,
             String propertyGroup,
             Double boost,
@@ -443,6 +444,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                 textIndexHints,
                 userVisible,
                 searchable,
+                addable,
                 displayType,
                 propertyGroup,
                 boost,
@@ -479,7 +481,14 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName, String[] intents) {
+    public Relationship getOrCreateRelationshipType(
+            Iterable<Concept> domainConcepts,
+            Iterable<Concept> rangeConcepts,
+            String relationshipIRI,
+            String displayName,
+            String[] intents,
+            boolean userVisible
+    ) {
         Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
             return relationship;
@@ -489,6 +498,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
+        USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
         for (String intent : intents) {
             INTENT.addPropertyValue(builder, intent, intent, VISIBILITY.getVisibility());
         }
@@ -532,6 +542,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
+            boolean addable,
             String displayType,
             String propertyGroup,
             Double boost,
@@ -550,6 +561,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
             USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
             SEARCHABLE.setProperty(builder, searchable, VISIBILITY.getVisibility());
+            ADDABLE.setProperty(builder, addable, VISIBILITY.getVisibility());
             if (boost != null) {
                 BOOST.setProperty(builder, boost, VISIBILITY.getVisibility());
             }

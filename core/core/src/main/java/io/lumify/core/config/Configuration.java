@@ -21,7 +21,7 @@ import java.util.*;
  * Responsible for parsing application configuration file and providing
  * configuration values to the application
  */
-public final class Configuration {
+public class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -43,9 +43,13 @@ public final class Configuration {
     public static final String LONG_RUNNING_PROCESS_REPOSITORY = "repository.longRunningProcess";
     public static final String SYSTEM_NOTIFICATION_REPOSITORY = "repository.systemNotification";
     public static final String WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED = "webAppEmbedded.longRunningProcessRunner.enabled";
+    public static final boolean WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED_DEFAULT = true;
     public static final String WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT = "webAppEmbedded.longRunningProcessRunner.threadCount";
+    public static final int WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT_DEFAULT = 1;
     public static final String WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED = "webAppEmbedded.graphPropertyWorkerRunner.enabled";
+    public static final boolean WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED_DEFAULT = true;
     public static final String WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT = "webAppEmbedded.graphPropertyWorkerRunner.threadCount";
+    public static final int WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT_DEFAULT = 1;
     public static final String USER_NOTIFICATION_REPOSITORY = "repository.userNotification";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
     public static final String GRAPH_PROVIDER = "graph";
@@ -59,14 +63,14 @@ public final class Configuration {
     public static final String LOCK_REPOSITORY_PATH_PREFIX = "lockRepository.pathPrefix";
     public static final String USER_SESSION_COUNTER_PATH_PREFIX = "userSessionCounter.pathPrefix";
     public static final String DEFAULT_TIME_ZONE = "default.timeZone";
-    public static final String RABBITMQ_PREFETCH_COUNT ="rabbitmq.prefetch.count";
+    public static final String RABBITMQ_PREFETCH_COUNT = "rabbitmq.prefetch.count";
     public static final String QUEUE_PREFIX = "queue.prefix";
     private final ConfigurationLoader configurationLoader;
     private final LumifyResourceBundleManager lumifyResourceBundleManager;
 
     private Map<String, String> config = new HashMap<>();
 
-    Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
+    public Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
         this.lumifyResourceBundleManager = new LumifyResourceBundleManager();
         for (Map.Entry entry : config.entrySet()) {
@@ -325,21 +329,21 @@ public final class Configuration {
 
     /**
      * Processing configuration items that looks like this:
-     *
+     * <p/>
      * repository.ontology.owl.dev.iri=http://lumify.io/dev
      * repository.ontology.owl.dev.dir=examples/ontology-dev/
-     *
+     * <p/>
      * repository.ontology.owl.csv.iri=http://lumify.io/csv
      * repository.ontology.owl.csv.dir=storm/plugins/csv/ontology/
-     *
+     * <p/>
      * Into a hash like this:
-     *
+     * <p/>
      * - dev
-     *   - iri: http://lumify.io/dev
-     *   - dir: examples/ontology-dev/
+     * - iri: http://lumify.io/dev
+     * - dir: examples/ontology-dev/
      * - csv
-     *   - iri: http://lumify.io/csv
-     *   - dir: storm/plugins/csv/ontology/
+     * - iri: http://lumify.io/csv
+     * - dir: storm/plugins/csv/ontology/
      */
     public static Map<String, Map<String, String>> getMultiValue(Iterable<Map.Entry<String, String>> config, String prefix) {
         if (!prefix.endsWith(".")) {

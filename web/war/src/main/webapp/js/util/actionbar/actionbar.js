@@ -1,12 +1,10 @@
 
 define([
     'flight/lib/component',
-    'tpl!./actionbar',
-    'util/withTeardown'
+    'tpl!./actionbar'
 ], function(
     defineComponent,
-    template,
-    withTeardown
+    template
 ) {
     'use strict';
 
@@ -17,7 +15,7 @@ define([
             'node'
         ];
 
-    return defineComponent(ActionBar, withTeardown);
+    return defineComponent(ActionBar);
 
     function ActionBar() {
 
@@ -30,7 +28,7 @@ define([
             }
             original.call(this);
             this.alreadyDisposed = true;
-        })
+        });
 
         this.after('initialize', function() {
             if (!this.attr.actions) {

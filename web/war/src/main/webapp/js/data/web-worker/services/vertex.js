@@ -59,6 +59,15 @@ define([
             });
         },
 
+        propertySourceInfo: function(vertexId, name, key, visibility) {
+            return ajax('GET', '/vertex/property/source-info', {
+                vertexId: vertexId,
+                propertyName: name,
+                propertyKey: key,
+                visibilitySource: visibility
+            });
+        },
+
         edges: function(vertexId, options) {
             var parameters = {
                 graphVertexId: vertexId
@@ -96,6 +105,7 @@ define([
         related: function(vertexIds, options) {
             return ajax('POST', '/vertex/find-related', {
                 graphVertexIds: vertexIds,
+                limitEdgeLabel: options.limitEdgeLabel,
                 limitParentConceptId: options.limitParentConceptId
             });
         },
@@ -114,11 +124,17 @@ define([
                 'graphVertexId=' + encodeURIComponent(vertexId), file);
         },
 
-        create: function(conceptType, visibilitySource) {
-            return ajax('POST', '/vertex/new', {
+        create: function(conceptType, justification, visibilitySource) {
+            return ajax('POST', '/vertex/new', _.tap({
                 conceptType: conceptType,
                 visibilitySource: visibilitySource
-            });
+            }, function(data) {
+                if (justification.justificationText) {
+                    data.justificationText = justification.justificationText;
+                } else if (justification.sourceInfo) {
+                    data.sourceInfo = JSON.stringify(justification.sourceInfo);
+                }
+            }));
         },
 
         importFiles: function(files, visibilitySource) {
@@ -163,7 +179,7 @@ define([
                 if (property.sourceInfo) {
                     params.sourceInfo = JSON.stringify(property.sourceInfo);
                 }
-                if (property.key) {
+                if (!_.isUndefined(property.key)) {
                     params.propertyKey = property.key;
                 }
                 if (property.metadata) {

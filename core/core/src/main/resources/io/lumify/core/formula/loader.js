@@ -15,6 +15,7 @@ require.config({
     baseUrl: '',
     paths: {
         // LIBS
+        'chrono': 'libs/chrono.min',
         'promise-polyfill': 'libs/promise-6.0.0',
         'sf': 'libs/sf',
         'timezone-js': 'libs/date',

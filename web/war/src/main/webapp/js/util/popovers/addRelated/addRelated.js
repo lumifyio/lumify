@@ -1,7 +1,7 @@
-
 define([
     'flight/lib/component',
     'util/ontology/conceptSelect',
+    'util/ontology/relationshipSelect',
     'util/withFormFieldErrors',
     'util/withDataRequest',
     'util/vertex/formatters',
@@ -9,6 +9,7 @@ define([
 ], function(
     defineComponent,
     ConceptSelector,
+    RelationshipSelector,
     withFormFieldErrors,
     withDataRequest,
     F,
@@ -45,6 +46,7 @@ define([
 
             this.after('setupWithTemplate', function() {
                 this.on(this.popover, 'conceptSelected', this.onConceptSelected);
+                this.on(this.popover, 'relationshipSelected', this.onRelationshipSelected);
                 this.on(this.popover, 'click', {
                     addButtonSelector: this.onAdd,
                     cancelButtonSelector: this.onCancel,
@@ -52,7 +54,10 @@ define([
                     promptAddButtonSelector: this.onPromptAdd
                 });
 
+                this.enterShouldSubmit = 'addButtonSelector';
+
                 ConceptSelector.attachTo(self.popover.find('.concept'), {
+                    focus: true,
                     defaultText: i18n('popovers.add_related.concept.default_text'),
                     limitRelatedToConceptId: F.vertex.prop(
                         _.isArray(this.attr.vertex) ? this.attr.vertex[0] : this.attr.vertex,
@@ -60,13 +65,28 @@ define([
                     )
                 });
 
+                RelationshipSelector.attachTo(self.popover.find('.relationship'), {
+                    defaultText: i18n('popovers.add_related.relationship.default_text'),
+                });
+
                 this.positionDialog();
             });
         });
 
+        this.onRelationshipSelected = function(event, data) {
+            this.relationshipId = data.relationship && data.relationship.title;
+            this.checkValid();
+        };
+
         this.onConceptSelected = function(event, data) {
             this.conceptId = data.concept && data.concept.id;
+            this.checkValid();
+            this.trigger(this.popover.find('.relationship'), 'limitParentConceptId', {
+                conceptId: this.conceptId
+            });
+        };
 
+        this.checkValid = function() {
             var searchButton = this.popover.find('.search').hide(),
                 promptAdd = this.popover.find('.prompt-add').hide(),
                 cancelButton = this.popover.find('.cancel').show(),
@@ -85,7 +105,8 @@ define([
         this.onSearch = function(event) {
             this.trigger(document, 'searchByRelatedEntity', {
                 vertexIds: this.attr.relatedToVertexIds,
-                conceptId: this.conceptId
+                conceptId: this.conceptId,
+                relationshipId: this.relationshipId
             });
             this.teardown();
         };
@@ -94,6 +115,9 @@ define([
             var self = this;
 
             this.trigger('updateWorkspace', {
+                options: {
+                    selectAll: true
+                },
                 entityUpdates: this.promptAddVertices.map(function(vertex) {
                     return {
                         vertexId: vertex.id,
@@ -123,6 +147,7 @@ define([
                 this.dataRequest('config', 'properties'),
                 (
                     this.relatedRequest = this.dataRequest('vertex', 'related', this.attr.relatedToVertexIds, {
+                        limitEdgeLabel: this.relationshipId,
                         limitParentConceptId: this.conceptId
                     })
                 )
@@ -156,6 +181,9 @@ define([
                     } else {
                         _.defer(function() {
                             self.trigger('updateWorkspace', {
+                                options: {
+                                    selectAll: true
+                                },
                                 entityUpdates: vertices.map(function(vertex) {
                                     return {
                                         vertexId: vertex.id,

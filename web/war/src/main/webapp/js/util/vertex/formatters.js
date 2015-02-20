@@ -191,7 +191,7 @@ define([
                     modifiedDate = property['http://lumify.io#modifiedDate'],
                     sourceTimezone = property['http://lumify.io#sourceTimezone'],
                     confidence = property['http://lumify.io#confidence'],
-                    justification = property._justificationMetadata,
+                    justification = property['http://lumify.io#justification'],
                     source = property._sourceMetadata;
 
                 return (
@@ -324,7 +324,7 @@ define([
                 return V.propDisplay(propertyAudit.propertyName, propertyAudit.newValue || propertyAudit.previousValue);
             },
 
-            propDisplay: function(name, value) {
+            propDisplay: function(name, value, options) {
                 name = V.propName(name);
                 var ontologyProperty = propertiesByTitle[name];
 
@@ -343,6 +343,8 @@ define([
 
                 if (ontologyProperty.displayType) {
                     switch (ontologyProperty.displayType) {
+                        case 'phoneNumber': return F.string.phoneNumber(value);
+                        case 'ssn': return F.string.ssn(value);
                         case 'byte': return F.bytes.pretty(value);
                         case 'heading': return F.number.heading(value);
                     }
@@ -364,7 +366,19 @@ define([
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);
 
-                    default: return value;
+                    default:
+
+                        if (options && _.isObject(options)) {
+                            return _.reduce(options, function(val, enabled, transformName) {
+                                if (enabled === true &&
+                                    transformName in F.string &&
+                                    _.isFunction(F.string[transformName])) {
+                                    return F.string[transformName](val);
+                                }
+                                return val;
+                            }, value)
+                        }
+                        return value;
                 }
             },
 
@@ -399,13 +413,15 @@ define([
                     }
                 }
 
-                return V.propDisplay(name, value);
+                return V.propDisplay(name, value, optionalOpts);
             },
 
             props: function(vertex, name, optionalKey) {
                 checkVertexAndPropertyNameArguments(vertex, name);
 
-                if (arguments.length === 3 && !optionalKey) {
+                var hasKey = !_.isUndefined(optionalKey);
+
+                if (arguments.length === 3 && !hasKey) {
                     throw new Error('Undefined key is not allowed. Remove parameter to return all named properties');
                 }
 
@@ -416,12 +432,12 @@ define([
                     foundProperties = _.filter(vertex.properties, function(p) {
                         if (dependentIris) {
                             return ~dependentIris.indexOf(p.name) && (
-                                optionalKey ? optionalKey === p.key : true
+                                hasKey ? optionalKey === p.key : true
                             );
                         }
 
                         return name === p.name && (
-                            optionalKey ? optionalKey === p.key : true
+                            hasKey ? optionalKey === p.key : true
                         );
                     });
 
@@ -507,10 +523,11 @@ define([
                     optionalKey = null;
                 }
 
-                var options = _.extend({
-                    defaultValue: undefined,
-                    ignoreErrorIfTitle: false
-                }, optionalOpts || {});
+                var hasKey = !_.isUndefined(optionalKey),
+                    options = _.extend({
+                        defaultValue: undefined,
+                        ignoreErrorIfTitle: false
+                    }, optionalOpts || {});
 
                 if (options.ignoreErrorIfTitle !== true && name === 'title') {
                     throw new Error('Use title function, not generic prop');
@@ -528,7 +545,7 @@ define([
                         throw new Error('Compound properties that depend on compound properties are not allowed');
                     }
 
-                    if (!optionalKey && properties.length) {
+                    if (!hasKey && properties.length) {
                         optionalKey = properties[0].key;
                     }
 
@@ -536,7 +553,7 @@ define([
 
                     return _.map(dependentIris, _.partial(V.propRaw, vertex, _, optionalKey, options));
                 } else {
-                    var foundProperties = optionalKey ?
+                    var foundProperties = hasKey ?
                             _.where(properties, { key: optionalKey }) :
                             properties,
 

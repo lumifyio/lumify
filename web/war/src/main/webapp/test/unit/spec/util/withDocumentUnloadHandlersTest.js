@@ -7,7 +7,7 @@ describeMixin('util/withDocumentUnloadHandlers', function() {
         setupComponent(this);
     });
 
-    describe('onDocumentUnload', function() {
+    xdescribe('onDocumentUnload', function() {
         it('should do nothing if there are no callbacks', function() {
             expect(this.component.onDocumentUnload()).to.be.undefined;
         });

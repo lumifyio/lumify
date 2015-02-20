@@ -52,7 +52,7 @@ define([
 
     function isJustification(property) {
         return (
-            property.name === '_justificationMetadata' ||
+            property.name === 'http://lumify.io#justification' ||
             property.name === '_sourceMetadata'
         );
     }
@@ -100,7 +100,7 @@ define([
                                 hideVisibility: true,
                                 displayName: i18n('justification.field.label'),
                                 justificationData: {
-                                    justificationMetadata: property.name === '_justificationMetadata' ?
+                                    justificationMetadata: property.name === 'http://lumify.io#justification' ?
                                         property.value : null,
                                     sourceMetadata: property.name === '_sourceMetadata' ?
                                         property.value : null
@@ -189,6 +189,18 @@ define([
                                     model.label
                             });
                         }
+                    })
+                    .sortBy(function(property) {
+                        if (property.metadata && ('http://lumify.io#createDate' in property.metadata)) {
+                            return property.metadata['http://lumify.io#createDate'] * -1;
+                        }
+                        return 0;
+                    })
+                    .sortBy(function(property) {
+                        if (property.metadata && ('http://lumify.io#confidence' in property.metadata)) {
+                            return property.metadata['http://lumify.io#confidence'] * -1;
+                        }
+                        return 0;
                     })
                     .sortBy(function(property) {
                         if (isVisibility(property)) {
@@ -359,46 +371,55 @@ define([
                 ]).done(function(results) {
                     var ontology = results[0],
                         auditHistory = results[1],
-                        audits = _.sortBy(auditHistory, function(a) {
-                            return new Date(a.dateTime).getTime() * -1;
-                        }),
-                        auditGroups = _.groupBy(audits, function(a) {
-                            if (a.entityAudit) {
-                               if (a.entityAudit.analyzedBy) {
-                                   a.data.displayType = a.entityAudit.analyzedBy;
-                               }
-                            }
+                        auditGroups = _.chain(auditHistory)
+                            .sortBy(function(a) {
+                                return new Date(a.dateTime).getTime() * -1;
+                            })
+                            .groupBy(function(a) {
+                                if (a.data.type && a.data.type in ontology.concepts.byId) {
+                                    var ontologyConcept = ontology.concepts.byId[a.data.type];
+                                    if (ontologyConcept) {
+                                        a.data.displayType = ontologyConcept.displayName;
+                                    }
+                                }
 
-                            if (a.propertyAudit) {
-                                a.propertyAudit.isVisibility =
-                                    a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
-                                a.propertyAudit.visibilityValue = a.propertyAudit.propertyMetadata &&
-                                    a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
-                                a.propertyAudit.formattedValue = F.vertex.propFromAudit(
-                                    self.attr.data,
-                                    a.propertyAudit
-                                );
-                                a.propertyAudit.isDeleted = a.propertyAudit.newValue === '';
+                                if (a.entityAudit) {
+                                   if (a.entityAudit.analyzedBy) {
+                                       a.data.displayType = a.entityAudit.analyzedBy;
+                                   }
+                                }
 
-                                return 'property';
-                            }
+                                if (a.propertyAudit) {
+                                    a.propertyAudit.isVisibility =
+                                        a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
+                                    a.propertyAudit.visibilityValue = a.propertyAudit.propertyMetadata &&
+                                        a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
+                                    a.propertyAudit.formattedValue = F.vertex.propFromAudit(
+                                        self.attr.data,
+                                        a.propertyAudit
+                                    );
+                                    a.propertyAudit.isDeleted = a.propertyAudit.newValue === '';
 
-                            if (a.relationshipAudit) {
-                                a.relationshipAudit.sourceIsCurrent =
-                                    a.relationshipAudit.sourceId === self.attr.data.id;
-                                a.relationshipAudit.sourceHref = F.vertexUrl.fragmentUrl(
-                                    [a.relationshipAudit.sourceId], lumifyData.currentWorkspaceId);
-                                a.relationshipAudit.sourceInfo =
-                                    self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
+                                    return 'property';
+                                }
 
-                                a.relationshipAudit.destInfo =
-                                    self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
-                                a.relationshipAudit.destHref = F.vertexUrl.fragmentUrl(
-                                    [a.relationshipAudit.destId], lumifyData.currentWorkspaceId);
-                            }
+                                if (a.relationshipAudit) {
+                                    a.relationshipAudit.sourceIsCurrent =
+                                        a.relationshipAudit.sourceId === self.attr.data.id;
+                                    a.relationshipAudit.sourceHref = F.vertexUrl.fragmentUrl(
+                                        [a.relationshipAudit.sourceId], lumifyData.currentWorkspaceId);
+                                    a.relationshipAudit.sourceInfo =
+                                        self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
 
-                            return 'other';
-                        });
+                                    a.relationshipAudit.destInfo =
+                                        self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
+                                    a.relationshipAudit.destHref = F.vertexUrl.fragmentUrl(
+                                        [a.relationshipAudit.destId], lumifyData.currentWorkspaceId);
+                                }
+
+                                return 'other';
+                            })
+                            .value();
 
                     self.select('entityAuditsSelector')
                         .empty()
@@ -487,29 +508,32 @@ define([
         };
 
         this.onDeleteProperty = function(event, data) {
-            var self = this;
+            var self = this,
+                vertexId = data.vertexId || this.attr.data.id;
 
             this.dataRequest(
                     F.vertex.isEdge(this.attr.data) ? 'edge' : 'vertex',
                     'deleteProperty',
-                    this.attr.data.id, data.property
+                    vertexId, data.property
                 ).then(this.closePropertyForm.bind(this))
                  .catch(this.requestFailure.bind(this, event.target))
         };
 
         this.onAddProperty = function(event, data) {
+            var vertexId = data.vertexId || this.attr.data.id;
+
             if (data.property.name === 'http://lumify.io#visibilityJson') {
                 if (data.isEdge) {
-                    this.dataRequest('edge', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                    this.dataRequest('edge', 'setVisibility', vertexId, data.property.visibilitySource)
                         .then(this.closePropertyForm.bind(this))
                         .catch(this.requestFailure.bind(this))
                 } else {
-                    this.dataRequest('vertex', 'setVisibility', this.attr.data.id, data.property.visibilitySource)
+                    this.dataRequest('vertex', 'setVisibility', vertexId, data.property.visibilitySource)
                         .then(this.closePropertyForm.bind(this))
                         .catch(this.requestFailure.bind(this));
                 }
             } else {
-                this.dataRequest('vertex', 'setProperty', this.attr.data.id, data.property)
+                this.dataRequest('vertex', 'setProperty', vertexId, data.property)
                     .then(this.closePropertyForm.bind(this))
                     .catch(this.requestFailure.bind(this));
             }
@@ -517,11 +541,11 @@ define([
         };
 
         this.closePropertyForm = function() {
-            this.$node.find('.underneath').teardownComponent(PropertyForm);
+            this.$node.closest('.type-content').find('.underneath').teardownComponent(PropertyForm);
         };
 
         this.requestFailure = function(error) {
-            var target = this.$node.find('.underneath');
+            var target = this.$node.closest('.type-content').find('.underneath');
             this.trigger(target, 'propertyerror', { error: error });
         };
 
@@ -807,13 +831,13 @@ define([
                             return i18n('visibility.label');
                         }
 
+                        if (d.property.displayName) {
+                            return d.property.displayName;
+                        }
+
                         var ontologyProperty = ontologyProperties.byTitle[d.name];
                         if (ontologyProperty) {
                             return ontologyProperty.displayName;
-                        }
-
-                        if (d.property.displayName) {
-                            return d.property.displayName;
                         }
 
                         console.warn('No ontology definition for ', d.name);

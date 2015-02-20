@@ -37,10 +37,10 @@
 
 1. Run format
 
-1. Import the dev.owl
+1. [Import the dev.owl](../../docs/ontology.md)
 
-1. Import the wikipedia.owl
+1. [Import the wikipedia.owl](../../docs/ontology.md)
 
 1. Run `io.lumify.wikipedia.mapreduce.ImportMR enwiki-20140102-pages-articles-lines-10.xml`
 
-1. Run Graph Property Workers.
+1. [Re-index the data](../../tools/reindex-mr)

@@ -181,6 +181,7 @@ public class ClientApiOntology implements ClientApiObject {
         private String displayName;
         private boolean userVisible;
         private boolean searchable;
+        private boolean addable;
         private PropertyType dataType;
         private String displayType;
         private String propertyGroup;
@@ -220,6 +221,14 @@ public class ClientApiOntology implements ClientApiObject {
 
         public void setSearchable(boolean searchable) {
             this.searchable = searchable;
+        }
+
+        public boolean isAddable() {
+            return addable;
+        }
+
+        public void setAddable(boolean addable) {
+            this.addable = addable;
         }
 
         public PropertyType getDataType() {
@@ -292,6 +301,7 @@ public class ClientApiOntology implements ClientApiObject {
     public static class Relationship {
         private String title;
         private String displayName;
+        private Boolean userVisible;
         private List<String> domainConceptIris = new ArrayList<>();
         private List<String> rangeConceptIris = new ArrayList<>();
         private List<InverseOf> inverseOfs = new ArrayList<>();
@@ -327,6 +337,14 @@ public class ClientApiOntology implements ClientApiObject {
 
         public void setRangeConceptIris(List<String> rangeConceptIris) {
             this.rangeConceptIris = rangeConceptIris;
+        }
+
+        public Boolean getUserVisible() {
+            return userVisible;
+        }
+
+        public void setUserVisible(Boolean userVisible) {
+            this.userVisible = userVisible;
         }
 
         @JsonInclude(JsonInclude.Include.NON_EMPTY)

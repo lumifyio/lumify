@@ -397,7 +397,9 @@ define([
                             'hbs!workspaces/userAccount/modal',
                             'workspaces/userAccount/userAccount'
                         ], function(modalTemplate, UserAccount) {
-                            var modal = $(modalTemplate({})).appendTo(document.body);
+                            var modal = $(modalTemplate({
+                                userName: lumifyData.currentUser.userName
+                            })).appendTo(document.body);
                             UserAccount.attachTo(modal);
                             modal.modal('show');
                         });

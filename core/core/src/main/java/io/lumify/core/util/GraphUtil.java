@@ -2,9 +2,11 @@ package io.lumify.core.util;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionFor;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -12,7 +14,6 @@ import io.lumify.web.clientapi.model.SandboxStatus;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.json.JSONObject;
 import org.securegraph.*;
-import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 
 import java.util.Date;
@@ -175,14 +176,16 @@ public class GraphUtil {
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
             String justificationText,
-            JSONObject sourceObject,
+            SourceInfo sourceInfo,
+            TermMentionRepository termMentionRepository,
             User user,
             Authorizations authorizations) {
         VisibilityJson visibilityJson = new VisibilityJson();
         visibilityJson.setSource(visibilitySource);
         visibilityJson.addWorkspace(workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        Property oldProperty = element.getProperty(propertyKey, propertyName, lumifyVisibility.getVisibility());
+        Visibility propertyVisibility = lumifyVisibility.getVisibility();
+        Property oldProperty = element.getProperty(propertyKey, propertyName, propertyVisibility);
         Metadata propertyMetadata;
         if (oldProperty != null) {
             propertyMetadata = oldProperty.getMetadata();
@@ -215,12 +218,26 @@ public class GraphUtil {
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            propertyMetadata.remove(PropertySourceMetadata.PROPERTY_SOURCE_METADATA);
-            propertyMetadata.add(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata, lumifyVisibility.getVisibility());
-        } else if (sourceObject.length() > 0) {
-            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceObject);
-            propertyMetadata.remove(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION);
-            propertyMetadata.add(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata, lumifyVisibility.getVisibility());
+            termMentionRepository.removeSourceInfoEdge(element, propertyKey, propertyName, lumifyVisibility, authorizations);
+            LumifyProperties.JUSTIFICATION.setMetadata(propertyMetadata, propertyJustificationMetadata, lumifyVisibility.getVisibility());
+        } else if (sourceInfo != null) {
+            Vertex sourceVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
+            LumifyProperties.JUSTIFICATION.removeMetadata(propertyMetadata);
+            termMentionRepository.addSourceInfo(
+                    element,
+                    element.getId(),
+                    TermMentionFor.PROPERTY,
+                    propertyKey,
+                    propertyName,
+                    propertyVisibility,
+                    sourceInfo.getSnippet(),
+                    sourceInfo.getTextPropertyKey(),
+                    sourceInfo.getStartOffset(),
+                    sourceInfo.getEndOffset(),
+                    sourceVertex,
+                    lumifyVisibility.getVisibility(),
+                    authorizations
+            );
         }
 
         elementMutation.addPropertyValue(propertyKey, propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
@@ -236,13 +253,58 @@ public class GraphUtil {
         }
     }
 
-    private static PropertySourceMetadata createPropertySourceMetadata(JSONObject sourceObject) {
-        int startOffset = sourceObject.getInt("startOffset");
-        int endOffset = sourceObject.getInt("endOffset");
-        String vertexId = sourceObject.getString("vertexId");
-        String snippet = sourceObject.getString("snippet");
-        String textPropertyKey = sourceObject.getString("textPropertyKey");
-        return new PropertySourceMetadata(vertexId, textPropertyKey, startOffset, endOffset, snippet);
+    public static Vertex addVertex(
+            Graph graph,
+            String conceptType,
+            String visibilitySource,
+            String workspaceId,
+            String justificationText,
+            SourceInfo sourceInfo,
+            VisibilityTranslator visibilityTranslator,
+            TermMentionRepository termMentionRepository,
+            Authorizations authorizations
+    ) {
+        VisibilityJson visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+
+        VertexBuilder vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility());
+        LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
+        Metadata propertyMetadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
+        LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptType, propertyMetadata, lumifyVisibility.getVisibility());
+
+        if (justificationText != null) {
+            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            LumifyProperties.JUSTIFICATION.setProperty(vertexBuilder, propertyJustificationMetadata, lumifyVisibility.getVisibility());
+        } else if (sourceInfo != null) {
+            LumifyProperties.JUSTIFICATION.removeProperty(vertexBuilder, lumifyVisibility.getVisibility());
+        }
+
+        Vertex vertex = vertexBuilder.save(authorizations);
+        graph.flush();
+
+        if (justificationText != null) {
+            termMentionRepository.removeSourceInfoEdgeFromVertex(vertex.getId(), vertex.getId(), null, null, lumifyVisibility, authorizations);
+        } else if (sourceInfo != null) {
+            Vertex sourceDataVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
+            termMentionRepository.addSourceInfoToVertex(
+                    vertex,
+                    vertex.getId(),
+                    TermMentionFor.VERTEX,
+                    null,
+                    null,
+                    null,
+                    sourceInfo.getSnippet(),
+                    sourceInfo.getTextPropertyKey(),
+                    sourceInfo.getStartOffset(),
+                    sourceInfo.getEndOffset(),
+                    sourceDataVertex,
+                    lumifyVisibility.getVisibility(),
+                    authorizations
+            );
+        }
+
+        return vertex;
     }
 
     public static Edge addEdge(
@@ -251,10 +313,11 @@ public class GraphUtil {
             Vertex destVertex,
             String predicateLabel,
             String justificationText,
-            String sourceInfo,
+            SourceInfo sourceInfo,
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
+            TermMentionRepository termMentionRepository,
             User user,
             Authorizations authorizations) {
         Date now = new Date();
@@ -268,26 +331,37 @@ public class GraphUtil {
         LumifyProperties.MODIFIED_DATE.setProperty(edgeBuilder, now, lumifyVisibility.getVisibility());
         LumifyProperties.MODIFIED_BY.setProperty(edgeBuilder, user.getUserId(), lumifyVisibility.getVisibility());
 
-        addJustificationToMutation(edgeBuilder, justificationText, sourceInfo, lumifyVisibility);
-
-        return edgeBuilder.save(authorizations);
-    }
-
-    public static <T extends Element> void addJustificationToMutation(ElementMutation<T> mutation, String justificationText, String sourceInfo, LumifyVisibility lumifyVisibility) {
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
-
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            mutation.setProperty(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata.toJson().toString(), lumifyVisibility.getVisibility());
-        } else if (sourceJson.length() > 0) {
-            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceJson);
-            mutation.setProperty(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata.toJson().toString(), lumifyVisibility.getVisibility());
+            LumifyProperties.JUSTIFICATION.setProperty(edgeBuilder, propertyJustificationMetadata, lumifyVisibility.getVisibility());
+        } else if (sourceInfo != null) {
+            LumifyProperties.JUSTIFICATION.removeProperty(edgeBuilder, lumifyVisibility.getVisibility());
         }
+
+        Edge edge = edgeBuilder.save(authorizations);
+
+        if (justificationText != null) {
+            termMentionRepository.removeSourceInfoEdgeFromEdge(edge, null, null, lumifyVisibility, authorizations);
+        } else if (sourceInfo != null) {
+            Vertex sourceDataVertex = graph.getVertex(sourceInfo.getVertexId(), authorizations);
+            termMentionRepository.addSourceInfoEdgeToEdge(
+                    edge,
+                    edge.getId(),
+                    TermMentionFor.EDGE,
+                    null,
+                    null,
+                    null,
+                    sourceInfo.getSnippet(),
+                    sourceInfo.getTextPropertyKey(),
+                    sourceInfo.getStartOffset(),
+                    sourceInfo.getEndOffset(),
+                    sourceDataVertex,
+                    lumifyVisibility.getVisibility(),
+                    authorizations
+            );
+        }
+
+        return edge;
     }
 
     // TODO remove me?

@@ -58,6 +58,11 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
         return LumifyProperties.SEARCHABLE.getPropertyValue(vertex);
     }
 
+    @Override
+    public boolean getAddable() {
+        return LumifyProperties.ADDABLE.getPropertyValue(vertex);
+    }
+
     public PropertyType getDataType() {
         return PropertyType.convert(LumifyProperties.DATA_TYPE.getPropertyValue(vertex));
     }

@@ -8,10 +8,10 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.*;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.version.VersionService;
@@ -451,10 +451,15 @@ public class SecureGraphAuditRepository extends AuditRepository {
     private JSONObject jsonMetadata(Metadata metadata) {
         JSONObject json = new JSONObject();
         for (Metadata.Entry metadataEntry : metadata.entrySet()) {
-            if (metadataEntry.getKey().equals(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
-                json.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, ((PropertyJustificationMetadata) metadataEntry.getValue()).toJson());
-            } else if (metadataEntry.getKey().equals(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {
-                json.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, ((PropertySourceMetadata) metadataEntry.getValue()).toJson());
+            if (metadataEntry.getKey().equals(LumifyProperties.JUSTIFICATION.getPropertyName())) {
+                PropertyJustificationMetadata propertyJustificationMetadata;
+                Object metadataEntryValue = metadataEntry.getValue();
+                if (metadataEntryValue instanceof PropertyJustificationMetadata) {
+                    propertyJustificationMetadata = (PropertyJustificationMetadata) metadataEntryValue;
+                } else {
+                    propertyJustificationMetadata = new PropertyJustificationMetadata(new JSONObject(metadataEntryValue.toString()));
+                }
+                json.put(LumifyProperties.JUSTIFICATION.getPropertyName(), (propertyJustificationMetadata).toJson());
             } else {
                 json.put(metadataEntry.getKey(), metadataEntry.getValue());
             }

@@ -2,16 +2,7 @@
     <div class="errors"></div>
   <input type="text" style="display:none" class="graphVertexId" value="<%= graphVertexId || '' %>">
 
-  <div class="resolve-wrapper">
-    <div class="preview" />
-    <input 
-      autocomplete="off" 
-      placeholder="<%= i18n('detail.resolve.form.entity_search.placeholder') %>" 
-      class="object-sign"
-      type="text" 
-      value="<%= objectSign || sign %>">
-    <span class="badge"/>
-  </div>
+  <div class="vertex-container"></div>
 
   <div class="help"><%= i18n('detail.resolve.form.entity_search.help') %></div>
 

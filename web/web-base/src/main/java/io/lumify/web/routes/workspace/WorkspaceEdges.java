@@ -69,7 +69,7 @@ public class WorkspaceEdges extends BaseRequestHandler {
         ClientApiWorkspaceEdges results = new ClientApiWorkspaceEdges();
         for (Edge edge : edges) {
             ClientApiEdge e = new ClientApiEdge();
-            ClientApiConverter.populateClientApiEdge(e, edge, workspaceId, authorizations);
+            ClientApiConverter.populateClientApiEdge(e, edge, workspaceId);
             results.getEdges().add(e);
         }
 

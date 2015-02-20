@@ -73,7 +73,7 @@ define([
                     this.select('span').each(function() {
                         var $this = $(this),
                             d = d3.select(this).datum(),
-                            justification = _.findWhere(d.properties, { name: '_justificationMetadata' }),
+                            justification = _.findWhere(d.properties, { name: 'http://lumify.io#justification' }),
                             sourceInfo = _.findWhere(d.properties, { name: '_sourceMetadata' });
 
                         $this.teardownAllComponents();

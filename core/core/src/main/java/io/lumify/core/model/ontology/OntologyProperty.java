@@ -36,6 +36,8 @@ public abstract class OntologyProperty {
 
     public abstract boolean getSearchable();
 
+    public abstract boolean getAddable();
+
     public abstract PropertyType getDataType();
 
     public abstract Double getBoost();
@@ -69,6 +71,7 @@ public abstract class OntologyProperty {
             result.setDisplayName(getDisplayName());
             result.setUserVisible(getUserVisible());
             result.setSearchable(getSearchable());
+            result.setAddable(getAddable());
             result.setDataType(getDataType());
             result.setDisplayType(getDisplayType());
             result.setPropertyGroup(getPropertyGroup());

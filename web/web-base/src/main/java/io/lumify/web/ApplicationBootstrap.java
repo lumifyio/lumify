@@ -38,7 +38,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ApplicationBootstrap implements ServletContextListener {
+public class ApplicationBootstrap implements ServletContextListener {
     public static final String CONFIG_HTTP_TRANSPORT_GUARANTEE = "http.transportGuarantee";
     private static LumifyLogger LOGGER;
     public static final String APP_CONFIG_LOADER = "application.config.loader";
@@ -47,6 +47,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     public static final String DEBUG_FILTER_NAME = "debug";
     public static final String CACHE_FILTER_NAME = "cache";
     private UserRepository userRepository;
+    private boolean shouldContinueToRunLongRunningProcess;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -62,8 +63,8 @@ public final class ApplicationBootstrap implements ServletContextListener {
             verifyGraphVersion();
             setupGraphAuthorizations();
             setupWebApp(context, config);
-            setupLongRunningProcessRunner(context, config);
-            setupGraphPropertyWorkerRunner(context, config);
+            setupLongRunningProcessRunner(config);
+            setupGraphPropertyWorkerRunner(config);
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
         }
@@ -192,7 +193,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private Map<String, String> getInitParametersAsMap(ServletContext context) {
-        Map<String, String> initParameters = new HashMap<String, String>();
+        Map<String, String> initParameters = new HashMap<>();
         Enumeration<String> e = context.getInitParameterNames();
         while (e.hasMoreElements()) {
             String initParameterName = e.nextElement();
@@ -201,27 +202,29 @@ public final class ApplicationBootstrap implements ServletContextListener {
         return initParameters;
     }
 
-    private void setupLongRunningProcessRunner(ServletContext context, final Configuration config) {
+    private void setupLongRunningProcessRunner(final Configuration config) {
         LOGGER.debug("setupLongRunningProcessRunner");
 
-        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED, Boolean.toString(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED_DEFAULT)));
         if (!enabled) {
             LOGGER.debug("skipping embedded long running process runners");
             return;
         }
 
-        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, "4"));
+        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, Integer.toString(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT_DEFAULT)));
 
         final LongRunningProcessRunner longRunningProcessRunner = InjectHelper.getInstance(LongRunningProcessRunner.class);
         longRunningProcessRunner.prepare(config.toMap());
         final WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
 
         LOGGER.debug("long running process runners: %d", threadCount);
+        shouldContinueToRunLongRunningProcess = true;
         for (int i = 0; i < threadCount; i++) {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
+                    delayStart();
+                    while (shouldContinueToRunLongRunningProcess) {
                         WorkQueueRepository.LongRunningProcessMessage longRunningProcessMessage = workQueueRepository.getNextLongRunningProcessMessage();
                         if (longRunningProcessMessage == null) {
                             continue;
@@ -243,16 +246,16 @@ public final class ApplicationBootstrap implements ServletContextListener {
         }
     }
 
-    private void setupGraphPropertyWorkerRunner(ServletContext context, Configuration config) {
+    private void setupGraphPropertyWorkerRunner(Configuration config) {
         LOGGER.debug("setupGraphPropertyWorkerRunner");
 
-        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED, "true"));
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED, Boolean.toString(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED_DEFAULT)));
         if (!enabled) {
             LOGGER.debug("skipping embedded graph property worker");
             return;
         }
 
-        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT, "4"));
+        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT, Integer.toString(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT_DEFAULT)));
         final User user = userRepository.getSystemUser();
 
         LOGGER.debug("starting graph property worker runners: %d", threadCount);
@@ -260,6 +263,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    delayStart();
                     GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
                     graphPropertyRunner.prepare(user);
                     try {
@@ -273,6 +277,17 @@ public final class ApplicationBootstrap implements ServletContextListener {
             t.setDaemon(true);
             LOGGER.debug("starting graph property worker runner thread: %s", t.getName());
             t.start();
+        }
+    }
+
+    /**
+     * Delay the start of GPW and long running processes so the web app comes up faster
+     */
+    private void delayStart() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            LOGGER.error("Could not sleep", e);
         }
     }
 }

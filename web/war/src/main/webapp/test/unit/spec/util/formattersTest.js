@@ -69,6 +69,41 @@ define(['util/formatters'], function(f) {
                 f.string.plural(2, 'phrase').should.equal('2 phrases')
             })
 
+            it('should format phoneNumber', function() {
+                f.string.phoneNumber('1112222').should.equal('111-2222')
+                f.string.phoneNumber('0001112222').should.equal('000-111-2222')
+                f.string.phoneNumber(1112222).should.equal('111-2222')
+                f.string.phoneNumber(0).should.equal('0')
+            })
+
+            it('should format socials', function() {
+                f.string.ssn('000000001').should.equal('000-00-0001')
+                f.string.ssn('1234').should.equal('1234')
+                f.string.ssn('').should.equal('')
+                f.string.ssn('1').should.equal('1')
+                f.string.ssn(0).should.equal('0')
+                f.string.ssn(123111234).should.equal('123-11-1234')
+            })
+
+            it('should format case', function() {
+                f.string.uppercase().should.equal('')
+                f.string.uppercase('').should.equal('')
+                f.string.uppercase('a').should.equal('A')
+
+                f.string.lowercase().should.equal('')
+                f.string.lowercase('').should.equal('')
+                f.string.lowercase('A').should.equal('a')
+            })
+
+            it('should pretty print', function() {
+                f.string.palantirPrettyPrint('this is a test').should.equal('This Is A Test')
+                f.string.palantirPrettyPrint().should.equal('')
+                f.string.palantirPrettyPrint('').should.equal('')
+                f.string.palantirPrettyPrint('john mCcLaNe').should.equal('John Mcclane')
+                f.string.palantirPrettyPrint('Johnny a. aPPleSeed').should.equal('Johnny A. Appleseed')
+                f.string.palantirPrettyPrint('joHn wiLKes-booTh').should.equal('John Wilkes-Booth')
+                f.string.palantirPrettyPrint('monty-burns').should.equal('Monty-Burns')
+            })
         })
 
         describe('for geoLocations', function() {
@@ -94,7 +129,27 @@ define(['util/formatters'], function(f) {
             it('should be pretty', function() {
                 var result = f.geoLocation.pretty('POINT(39.968720,-77.341100)')
 
+                expect(result).to.exist
+
                 result.should.equal('39.969, -77.341')
+            })
+
+            it('should format lat lons with zero', function() {
+                var p = f.geoLocation.pretty;
+
+                expect(p('POINT(0,0)')).to.equal('0.000, 0.000')
+                expect(p('POINT(0.0,0.0)')).to.equal('0.000, 0.000')
+                expect(p({latitude:0, longitude:0})).to.equal('0.000, 0.000')
+            })
+
+            it('should display description if available', function() {
+                var p = f.geoLocation.pretty;
+                expect(p({description:'d',latitude:0, longitude:0})).to.equal('d 0.000, 0.000')
+            })
+
+            it('should withhold description if available', function() {
+                var p = f.geoLocation.pretty;
+                expect(p({description:'d',latitude:0, longitude:0}, true)).to.equal('0.000, 0.000')
             })
 
             it('should return undefined if no match', function() {
@@ -103,6 +158,46 @@ define(['util/formatters'], function(f) {
         })
 
         describe('for dates', function() {
+
+            describe('loose parsing', function() {
+                var parse = f.date.looslyParseDate;
+
+                it('should return undefined', function() {
+                    expect(parse()).to.be.null
+                })
+
+                it('should return relative dates', function() {
+                    expect(parse('   today  ')).to.be.a('date')
+                    expect(parse('friday')).to.be.a('date')
+                    expect(parse('next monday')).to.be.a('date')
+                })
+
+                it('should return first of the year when just a year', function() {
+                    expect(parse('2015')).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse('15')).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse('98')).to.equalDate(new Date(1998, 0, 1))
+                    expect(parse('59')).to.equalDate(new Date(1959, 0, 1))
+                    expect(parse('58')).to.equalDate(new Date(2058, 0, 1))
+                    expect(parse('989')).to.be.null
+                })
+
+                it('should ignore characters before, after', function() {
+                    var testChars = '!@#$%^&*(),./;[]-=<>?:"{}+_';
+                    expect(parse(testChars + '2015' + testChars)).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse(testChars + '98' + testChars)).to.equalDate(new Date(1998, 0, 1))
+                })
+
+                it('should return first of the month when just month year', function() {
+                    expect(parse('feb 2015')).to.equalDate(new Date(2015, 1, 1))
+                    expect(parse('zxcv 2015')).to.be.null
+                })
+
+                it('should return first of the month when just month year reversed', function() {
+                    expect(parse('2015 january')).to.equalDate(new Date(2015, 0, 1))
+                    expect(parse('2015 asdf')).to.be.null
+                    expect(parse('1998 oct')).to.equalDate(new Date(1998, 9, 1))
+                })
+            })
 
             it('should format to prefered format', function() {
                 var now = new Date(),

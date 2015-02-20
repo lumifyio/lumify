@@ -40,6 +40,7 @@ public class GraphPropertyRunner {
     private Configuration configuration;
     private WorkQueueRepository workQueueRepository;
     private VisibilityTranslator visibilityTranslator;
+    private boolean shouldRun;
 
     public void prepare(User user) {
         this.user = user;
@@ -313,7 +314,8 @@ public class GraphPropertyRunner {
 
     public void run() throws Exception {
         WorkerSpout workerSpout = prepareGraphPropertyWorkerSpout();
-        while (true) {
+        shouldRun = true;
+        while (shouldRun) {
             GraphPropertyWorkerTuple tuple = (GraphPropertyWorkerTuple) workerSpout.nextTuple();
             if (tuple == null) {
                 Thread.sleep(100);
@@ -327,6 +329,10 @@ public class GraphPropertyRunner {
                 workerSpout.fail(tuple.getMessageId());
             }
         }
+    }
+
+    public void stop() {
+        shouldRun = false;
     }
 
     protected WorkerSpout prepareGraphPropertyWorkerSpout() {

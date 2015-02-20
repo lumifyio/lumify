@@ -6,8 +6,6 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.video.VideoFrameInfo;
-import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -37,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.securegraph.util.IterableUtils.count;
 
 public class WorkspacePublish extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspacePublish.class);
@@ -295,10 +292,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             auditRepository.updateColumnVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString());
         }
 
-        for (Vertex termMention : termMentionRepository.findBySourceGraphVertex(vertex.getId(), authorizations)) {
-            if (count(termMention.getEdgeIds(Direction.OUT, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, authorizations)) > 0) {
-                continue; // skip all resolved terms. They will be published by the edge.
-            }
+        for (Vertex termMention : termMentionRepository.findByVertexIdForVertex(vertex.getId(), authorizations)) {
             termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
 
@@ -315,19 +309,34 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
         ExistingElementMutation elementMutation = element.prepareMutation();
         Iterable<Property> properties = element.getProperties(name);
+        boolean foundProperty = false;
         for (Property property : properties) {
             if (!property.getKey().equals(key)) {
                 continue;
             }
+            Visibility propertyVisibility = property.getVisibility();
             if (WorkspaceDiffHelper.isPublicDelete(property, authorizations)) {
                 element.removeProperty(key, name, authorizations);
                 graph.flush();
                 workQueueRepository.broadcastPublishPropertyDelete(element, key, name);
-                return;
+                foundProperty = true;
             } else if (publishNewProperty(elementMutation, property, workspaceId, user)) {
                 elementMutation.save(authorizations);
                 graph.flush();
                 workQueueRepository.broadcastPublishProperty(element, key, name);
+                foundProperty = true;
+            }
+
+            if (foundProperty) {
+                Iterable<Vertex> termMentions;
+                if (element instanceof Vertex) {
+                    termMentions = termMentionRepository.findByVertexIdAndProperty(element.getId(), property.getKey(), property.getName(), propertyVisibility, authorizations);
+                } else {
+                    termMentions = termMentionRepository.findByEdgeIdAndProperty((Edge) element, property.getKey(), property.getName(), propertyVisibility, authorizations);
+                }
+                for (Vertex termMention : termMentions) {
+                    termMentionRepository.updateVisibility(termMention, property.getVisibility(), authorizations);
+                }
                 return;
             }
         }
@@ -385,8 +394,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         for (Property property : edge.getProperties()) {
             boolean userVisible;
-            if (PropertyJustificationMetadata.PROPERTY_JUSTIFICATION.equals(property.getName())
-                    || PropertySourceMetadata.PROPERTY_SOURCE_METADATA.equals(property.getName())) {
+            if (LumifyProperties.JUSTIFICATION.getPropertyName().equals(property.getName())) {
                 userVisible = false;
             } else {
                 OntologyProperty ontologyProperty = ontologyRepository.getPropertyByIRI(property.getName());
@@ -413,6 +421,10 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         for (Vertex termMention : termMentionRepository.findResolvedTo(destVertex.getId(), authorizations)) {
+            termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
+        }
+
+        for (Vertex termMention : termMentionRepository.findByEdgeForEdge(edge, authorizations)) {
             termMentionRepository.updateVisibility(termMention, lumifyVisibility.getVisibility(), authorizations);
         }
 

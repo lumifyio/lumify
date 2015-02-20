@@ -35,6 +35,7 @@ public class SaveOntologyConcept extends BaseRequestHandler {
         String displayType = getRequiredParameter(request, "displayType");
         HashSet<String> addRelatedConceptWhiteList = new HashSet<String>(Arrays.asList(getRequiredParameterArray(request, "addRelatedConceptWhiteList[]")));
         Boolean searchable = getOptionalParameterBoolean(request, "searchable", true);
+        Boolean addable = getOptionalParameterBoolean(request, "addable", true);
         Boolean userVisible = getOptionalParameterBoolean(request, "userVisible", true);
         String titleFormula = getRequiredParameter(request, "titleFormula");
         String subtitleFormula = getRequiredParameter(request, "subtitleFormula");
@@ -65,6 +66,7 @@ public class SaveOntologyConcept extends BaseRequestHandler {
 
         concept.setProperty(LumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
         concept.setProperty(LumifyProperties.SEARCHABLE.getPropertyName(), searchable, authorizations);
+        concept.setProperty(LumifyProperties.ADDABLE.getPropertyName(), addable, authorizations);
         concept.setProperty(LumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
 
         if (timeFormula.length() != 0) {

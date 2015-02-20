@@ -136,7 +136,8 @@ define([
                                         [
                                             'http://lumify.io/user#user',
                                             'http://lumify.io/workspace#workspace',
-                                            'http://lumify.io/longRunningProcess#longRunningProcess'
+                                            'http://lumify.io/longRunningProcess#longRunningProcess',
+                                            'http://lumify.io/termMention#termMention'
                                         ].indexOf(child.id) === -1
                                     ) {
                                         console.warn(

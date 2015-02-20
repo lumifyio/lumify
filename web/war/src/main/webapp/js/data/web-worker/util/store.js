@@ -269,6 +269,14 @@ define([
                     if (resemblesEdge(json)) {
                         if (cacheDecisions.shouldCacheEdgeAtUrl(json, url)) {
                             cacheEdges(workspaceId, [json]);
+                            var edgeVertices = _.compact([json.source, json.target].map(function(v) {
+                                if (v && resemblesVertex(v)) {
+                                    return v;
+                                }
+                            }))
+                            if (edgeVertices.length) {
+                                cacheVertices(workspaceId, edgeVertices);
+                            }
                         }
                     }
                     if (resemblesEdges(json.edges)) {

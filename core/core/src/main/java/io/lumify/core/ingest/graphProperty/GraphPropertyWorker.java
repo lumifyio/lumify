@@ -2,7 +2,6 @@ package io.lumify.core.ingest.graphProperty;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -48,6 +47,13 @@ public abstract class GraphPropertyWorker {
             }
         }
         getGraph().flush();
+    }
+
+    protected void pushTextUpdated(GraphPropertyWorkData data) {
+        if (data == null || data.getElement() == null) {
+            return;
+        }
+        getWorkQueueRepository().pushTextUpdated(data.getElement().getId());
     }
 
     public abstract void execute(InputStream in, GraphPropertyWorkData data) throws Exception;
@@ -155,7 +161,7 @@ public abstract class GraphPropertyWorker {
     }
 
     protected void addVideoTranscriptAsTextPropertiesToMutation(ExistingElementMutation<Vertex> mutation, String propertyKey, VideoTranscript videoTranscript, Metadata metadata, Visibility visibility) {
-        metadata.add(LumifyProperties.META_DATA_MIME_TYPE, "text/plain", getVisibilityTranslator().getDefaultVisibility());
+        LumifyProperties.META_DATA_MIME_TYPE.setMetadata(metadata, "text/plain", getVisibilityTranslator().getDefaultVisibility());
         for (VideoTranscript.TimedText entry : videoTranscript.getEntries()) {
             String textPropertyKey = getVideoTranscriptTimedTextPropertyKey(propertyKey, entry);
             StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(entry.getText().getBytes()), String.class);

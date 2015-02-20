@@ -65,7 +65,8 @@ define([
                         source: function() {
                             return _.chain(self.propertiesForSource)
                                     .filter(function(p) {
-                                        var visible = p.userVisible !== false;
+                                        var visible = p.userVisible !== false,
+                                            addable = p.addable !== false;
 
                                         if (self.attr.unsupportedProperties &&
                                             ~self.attr.unsupportedProperties.indexOf(p.title)) {
@@ -87,7 +88,7 @@ define([
                                             return visible && p.searchable !== false;
                                         }
 
-                                        return visible;
+                                        return visible && addable;
                                     })
                                     .map(function(p) {
                                         var name = displayName(p),

@@ -68,6 +68,8 @@ define([
 
                 this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
 
+                this.enterShouldSubmit = 'importSelector';
+
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
 
                 this.on(this.popover, 'click', {
@@ -170,6 +172,9 @@ define([
                 })
                 .then(function(result) {
                     self.trigger('updateWorkspace', {
+                        options: {
+                            selectAll: true
+                        },
                         entityUpdates: result.vertexIds.map(function(vId) {
                             return {
                                 vertexId: vId,

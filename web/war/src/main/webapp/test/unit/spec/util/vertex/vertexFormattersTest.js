@@ -43,7 +43,7 @@ define(['util/vertex/formatters'], function(f) {
             }
             return {
                 name: name,
-                key: optionalKey || ('pKey' + keyIdent++),
+                key: optionalKey == null ? ('pKey' + keyIdent++) : optionalKey,
                 value: value
             };
         },
@@ -114,9 +114,38 @@ define(['util/vertex/formatters'], function(f) {
             })
         })
 
+        describe('propDisplay', function() {
+            it('should have propDisplay function', function() {
+                V.should.have.property('propDisplay').that.is.a.function
+            })
+
+            it('should accept name and value and format', function() {
+                V.propDisplay(PROPERTY_NAME_TITLE, 'test').should.equal('test')
+                V.propDisplay(PROPERTY_NAME_BOOLEAN, true).should.equal('boolean.true')
+                V.propDisplay(PROPERTY_NAME_NUMBER, 0).should.equal('0')
+            })
+
+            it('should accept options for process string values', function() {
+                V.propDisplay(PROPERTY_NAME_TITLE, 'test', { uppercase:true }).should.equal('TEST')
+                V.propDisplay(PROPERTY_NAME_TITLE, 'TEST', { lowercase:true }).should.equal('test')
+                V.propDisplay(PROPERTY_NAME_TITLE, 'TeSt', { lowercase:false }).should.equal('TeSt')
+                V.propDisplay(PROPERTY_NAME_TITLE, 'TeSt', { missingFormatter:true }).should.equal('TeSt')
+
+                V.propDisplay(PROPERTY_NAME_TITLE, 'test string',
+                    { palantirPrettyPrint:true }).should.equal('Test String')
+            })
+        })
+
         describe('prop', function() {
             it('should have prop function', function() {
                 expect(V).to.have.property('prop').that.is.a.function
+            })
+            it('should pass options through', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_TITLE, 'k1', 'aAaA')
+                    ]);
+
+                V.prop(vertex, PROPERTY_NAME_TITLE, 'k1', { uppercase:true }).should.equal('AAAA')
             })
             it('should get display values for boolean', function() {
                 var vertex = vertexFactory([
@@ -204,6 +233,17 @@ define(['util/vertex/formatters'], function(f) {
                 expect(prop('k1')).to.equal('harwig, jason')
                 expect(prop('k2')).to.equal('harwig, undefined')
             })
+            it('should get display for empty string keys', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_TITLE, 'k2', 'harwig'),
+                        propertyFactory(PROPERTY_NAME_TITLE, '', 'jason')
+                    ]),
+                    prop = _.partial(V.prop, vertex, PROPERTY_NAME_TITLE);
+
+                expect(prop()).to.equal('harwig')
+                expect(prop('')).to.equal('jason')
+                expect(prop('k2')).to.equal('harwig')
+            })
         })
 
         describe('props', function() {
@@ -252,6 +292,20 @@ define(['util/vertex/formatters'], function(f) {
                 expect(function() {
                     V.props(vertexFactory(), PROPERTY_NAME_FIRST, undefined);
                 }).to.throw('Undefined key')
+            })
+            it('should not throw error if key is passed is empty string', function() {
+                var vertex = vertexFactory([
+                        propertyFactory(PROPERTY_NAME_TITLE, '', 'jason'),
+                        propertyFactory(PROPERTY_NAME_TITLE, 'k1', 'harwig')
+                    ]),
+                    properties = V.props(vertex, PROPERTY_NAME_TITLE, 'k1'),
+                    emptyKeyProperties = V.props(vertex, PROPERTY_NAME_TITLE, '');
+
+                expect(properties).to.be.an('array').that.has.property('length').that.equals(1)
+                expect(properties[0].value).to.equal('harwig')
+
+                expect(emptyKeyProperties).to.be.an('array').that.has.property('length').that.equals(1)
+                expect(emptyKeyProperties[0].value).to.equal('jason')
             })
             it('should return all props for a compound property', function() {
                 var vertex = vertexFactory([
@@ -446,19 +500,25 @@ define(['util/vertex/formatters'], function(f) {
                 expect(_.partial(V.propRaw, vertex, '')).to.throw(PROPERTY_NAME_ERROR)
             })
 
+            it('should get property with key', function() {
+                var vertex = vertexFactory([
+                    propertyFactory(PROPERTY_NAME_TITLE, 'k1', 'first key'),
+                    propertyFactory(PROPERTY_NAME_TITLE, '', 'no key'),
+                    propertyFactory(PROPERTY_NAME_TITLE, 'k2', 'last')
+                ]);
+
+                expect(V.propRaw(vertex, PROPERTY_NAME_TITLE, '')).to.equal('no key')
+                expect(V.propRaw(vertex, PROPERTY_NAME_TITLE, 'k1')).to.equal('first key')
+                expect(V.propRaw(vertex, PROPERTY_NAME_TITLE, 'k2')).to.equal('last')
+                expect(V.propRaw(vertex, PROPERTY_NAME_TITLE, undefined)).to.equal('first key')
+            })
+
             it('should get property with most confidence', function() {
                 var vertex = vertexFactory([
                     confidence(propertyFactory(PROPERTY_NAME_FIRST, 'first'), 0.5),
                     confidence(propertyFactory(PROPERTY_NAME_FIRST, 'most confident'), 0.6),
                     confidence(propertyFactory(PROPERTY_NAME_FIRST, 'middle'), 0.55)
                 ]);
-
-                //_justificationMetadata: 0.5
-                //http://lumify.io#createDate: 1421344394956
-                //http://lumify.io#createdBy: "USER_fd588514ce824ee7a35668046447512d"
-                //http://lumify.io#modifiedBy: "USER_fd588514ce824ee7a35668046447512d"
-                //http://lumify.io#modifiedDate: 1421344394956
-                //http://lumify.io#visibilityJson: Object
 
                 expect(V.propRaw(vertex, PROPERTY_NAME_FIRST)).to.equal('most confident')
             })
@@ -484,7 +544,7 @@ define(['util/vertex/formatters'], function(f) {
                 ]);
                 expect(V.propRaw(vertex, PROPERTY_NAME_FIRST)).to.equal('most confident')
             })
-            it('should get property most recently edited when confidence same', function() {
+            it('should get property most recently created when confidence same', function() {
                 var vertex = vertexFactory([
                     created(propertyFactory(PROPERTY_NAME_FIRST, 'recent'), new Date(2015, 03, 01)),
                     created(

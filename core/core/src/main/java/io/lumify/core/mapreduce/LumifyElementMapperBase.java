@@ -16,14 +16,6 @@ import java.util.Map;
 
 public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMapper<KEYIN, VALUEIN, Text, Mutation> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyElementMapperBase.class);
-    private AccumuloGraph graph;
-
-    @Override
-    protected void setup(Context context) throws IOException, InterruptedException {
-        super.setup(context);
-        Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
-        this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
-    }
 
     @Override
     protected void map(KEYIN key, VALUEIN line, Context context) {
@@ -57,10 +49,6 @@ public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMap
 
     @Override
     public IdGenerator getIdGenerator() {
-        return this.graph.getIdGenerator();
-    }
-
-    public AccumuloGraph getGraph() {
-        return graph;
+        return getGraph().getIdGenerator();
     }
 }

@@ -38,6 +38,15 @@ define([], function() {
             if (data.parameters) {
                 data.parameters = _.map(data.parameters, fixParameter);
             }
+            if (data && data.service === 'config') {
+                var l = {};
+                if (typeof localStorage !== 'undefined') {
+                    l.language = localStorage.getItem('language');
+                    l.country = localStorage.getItem('country');
+                    l.variant = localStorage.getItem('variant');
+                    data.parameters.push(l);
+                }
+            }
             this.worker.postMessage({
                 type: event.type,
                 data: data

@@ -38,6 +38,12 @@
     
 
 
+    <!-- http://lumify.io#addable -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;addable"/>
+    
+
+
     <!-- http://lumify.io#boost -->
 
     <owl:AnnotationProperty rdf:about="&lumify;boost"/>
@@ -46,7 +52,10 @@
 
     <!-- http://lumify.io#color -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;color"/>
+    <owl:AnnotationProperty rdf:about="&lumify;color">
+        <textIndexHints>NONE</textIndexHints>
+        <userVisible>false</userVisible>
+    </owl:AnnotationProperty>
     
 
 
@@ -79,6 +88,7 @@
         <textIndexHints>NONE</textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:AnnotationProperty>
+    
 
 
     <!-- http://lumify.io#intent -->
@@ -88,12 +98,15 @@
         <textIndexHints>NONE</textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:AnnotationProperty>
-
+    
 
 
     <!-- http://lumify.io#mapGlyphIconFileName -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;mapGlyphIconFileName"/>
+    <owl:AnnotationProperty rdf:about="&lumify;mapGlyphIconFileName">
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+    </owl:AnnotationProperty>
     
 
 
@@ -116,7 +129,7 @@
         <textIndexHints>NONE</textIndexHints>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:AnnotationProperty>
-
+    
 
 
     <!-- http://lumify.io#searchable -->
@@ -133,7 +146,10 @@
 
     <!-- http://lumify.io#textIndexHints -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;textIndexHints"/>
+    <owl:AnnotationProperty rdf:about="&lumify;textIndexHints">
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+    </owl:AnnotationProperty>
     
 
 
@@ -145,7 +161,10 @@
 
     <!-- http://lumify.io#titleFormula -->
 
-    <owl:AnnotationProperty rdf:about="&lumify;titleFormula"/>
+    <owl:AnnotationProperty rdf:about="&lumify;titleFormula">
+        <textIndexHints>NONE</textIndexHints>
+        <userVisible>false</userVisible>
+    </owl:AnnotationProperty>
     
 
 
@@ -187,6 +206,27 @@
     <!-- http://lumify.io#image -->
 
     <rdfs:Datatype rdf:about="&lumify;image"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io#hasSource -->
+
+    <owl:ObjectProperty rdf:about="&lumify;hasSource">
+        <userVisible>false</userVisible>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
     
 
 
@@ -413,6 +453,16 @@
         <textIndexHints>NONE</textIndexHints>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#justification -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;justification">
+        <userVisible>false</userVisible>
+        <textIndexHints>NONE</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 

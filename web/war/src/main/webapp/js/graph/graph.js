@@ -311,6 +311,10 @@ define([
                     });
                 } else customLayout.resolve({});
 
+                if (vertices.length && self.vertexIdsToSelect && self.vertexIdsToSelect.length) {
+                    cy.$(':selected').unselect();
+                }
+
                 customLayout.done(function(layoutPositions) {
 
                     var cyNodes = [];
@@ -323,7 +327,7 @@ define([
                                     id: toCyId(vertex)
                                 },
                                 grabbable: self.isWorkspaceEditable,
-                                selected: false // TODO: check selected?
+                                selected: self.vertexIdsToSelect && ~self.vertexIdsToSelect.indexOf(vertex.id)
                             },
                             workspaceVertex = self.workspaceVertices[vertex.id];
 
@@ -403,6 +407,8 @@ define([
 
                         cyNodes.push(cyNodeData);
                     });
+
+                    self.vertexIdsToSelect = null;
 
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
@@ -1400,6 +1406,9 @@ define([
 
         // Delete entities before saving (faster feeling interface)
         this.onUpdateWorkspace = function(cy, event, data) {
+            if (data.options && data.options.selectAll && data.entityUpdates) {
+                this.vertexIdsToSelect = _.pluck(data.entityUpdates, 'vertexId');
+            }
             if (data && data.entityDeletes && data.entityDeletes.length) {
                 cy.$(
                     data.entityDeletes.map(function(vertexId) {

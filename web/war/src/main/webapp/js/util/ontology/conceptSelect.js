@@ -1,16 +1,18 @@
 define([
     'flight/lib/component',
-    'hbs!./template',
+    'hbs!./concepts',
     'hbs!./concept',
-    'util/withDataRequest'
+    'util/withDataRequest',
+    './withSelect'
 ], function(
     defineComponent,
     template,
     conceptTemplate,
-    withDataRequest) {
+    withDataRequest,
+    withSelect) {
     'use strict';
 
-    return defineComponent(ConceptSelector, withDataRequest);
+    return defineComponent(ConceptSelector, withDataRequest, withSelect);
 
     function ConceptSelector() {
 
@@ -96,9 +98,6 @@ define([
                                 concept = self.conceptsById[conceptId];
 
                             self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
-                            _.defer(function() {
-                                $element.blur();
-                            });
                             return concept && concept.displayName || '';
                         },
                         highlighter: function(concept) {
@@ -124,7 +123,7 @@ define([
                         })
                     }
 
-                    field.data('typeahead').lookup = allowEmptyLookup;
+                    self.allowEmptyLookup(field);
                 });
         }
 
@@ -213,20 +212,5 @@ define([
                 });
             });
         }
-    }
-
-    function allowEmptyLookup() {
-        var items;
-
-        this.query = this.$element.val();
-
-        // Remove !this.query check to allow empty values to open dropdown
-        if (this.query.length < this.options.minLength) {
-            return this.shown ? this.hide() : this;
-        }
-
-        items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
-
-        return items ? this.process(items) : this;
     }
 });
