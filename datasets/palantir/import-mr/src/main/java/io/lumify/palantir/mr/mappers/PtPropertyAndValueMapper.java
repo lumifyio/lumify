@@ -6,9 +6,12 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.model.PtPropertyAndValue;
 import io.lumify.palantir.model.PtPropertyType;
+import io.lumify.palantir.util.JGeometryWrapper;
 import org.apache.hadoop.io.LongWritable;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
+import org.securegraph.type.GeoPoint;
+import org.securegraph.type.GeoShape;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -18,6 +21,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.awt.geom.Point2D;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.ParseException;
@@ -59,13 +63,28 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
 
         String objectVertexId = PtObjectMapper.getObjectVertexId(ptPropertyAndValue.getLinkObjectId());
         String propertyKey = getPropertyKey(ptPropertyAndValue);
-        Value value = cleanUpValueString(ptPropertyAndValue.getValue());
-        if (value == null) {
+        Value value = cleanUpValueString(propertyType, ptPropertyAndValue.getValue());
+        JGeometryWrapper gisData = ptPropertyAndValue.getGeometryGis();
+        if (value == null && gisData == null) {
             return;
         }
 
         VertexBuilder v = prepareVertex(objectVertexId, visibility);
+        if (value != null) {
+            addValueToVertexBuilder(v, propertyType, propertyKey, value);
+        }
+        if (gisData != null) {
+            addGisDataToVertexBuilder(v, propertyType, propertyKey, gisData);
+        }
+        v.save(getAuthorizations());
+    }
+
+    private void addValueToVertexBuilder(VertexBuilder v, PtPropertyType propertyType, String propertyKey, Value value) {
         if (value instanceof StringValue) {
+            String innerKey = null;
+            if (propertyType.isGisEnabled()) {
+                innerKey = PtPropertyType.VALUE_SUFFIX;
+            }
             String propertyName = getPropertyName(propertyType.getUri(), null);
             String valueString = ((StringValue) value).getValue();
             Object valueObject;
@@ -96,7 +115,22 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
         } else {
             throw new RuntimeException("Unexpected value type: " + value.getClass().getName());
         }
-        v.save(getAuthorizations());
+    }
+
+    private void addGisDataToVertexBuilder(VertexBuilder v, PtPropertyType propertyType, String propertyKey, JGeometryWrapper gisData) {
+        String propertyName = getBaseIri() + propertyType.getUri() + PtPropertyType.GIS_SUFFIX;
+        GeoShape geoShape = toGeoShape(gisData);
+        v.addPropertyValue(propertyKey, propertyName, geoShape, visibility);
+    }
+
+    private GeoShape toGeoShape(JGeometryWrapper gisData) {
+        switch (gisData.getType()) {
+            case POINT:
+                Point2D pt = gisData.getJavaPoint();
+                return new GeoPoint(pt.getY(), pt.getX());
+            default:
+                throw new RuntimeException("Unhandled Geo-shape: " + gisData.getType());
+        }
     }
 
     private Object toValue(PtPropertyType ptPropertyType, String innerKey, String value) {
@@ -165,7 +199,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
         return getBaseIri() + uri + (innerKey == null ? "" : ("/" + innerKey));
     }
 
-    private Value cleanUpValueString(String value) throws IOException, SAXException {
+    private Value cleanUpValueString(PtPropertyType propertyType, String value) throws IOException, SAXException {
         if (value == null) {
             return null;
         }
@@ -221,6 +255,13 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
         public String getValue() {
             return value;
         }
+
+        @Override
+        public String toString() {
+            return "StringValue{" +
+                    "value='" + value + '\'' +
+                    '}';
+        }
     }
 
     private static class MapValue extends Value {
@@ -232,6 +273,13 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
 
         public Map<String, String> getValues() {
             return values;
+        }
+
+        @Override
+        public String toString() {
+            return "MapValue{" +
+                    "values=" + values +
+                    '}';
         }
     }
 }

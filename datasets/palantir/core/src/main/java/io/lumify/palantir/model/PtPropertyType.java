@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PtPropertyType extends PtOntologyType {
-    public static final String ERROR_SUFFIX = "/Error";
+    public static final String ERROR_SUFFIX = "/ERROR";
+    public static final String GIS_SUFFIX = "/GIS";
+    public static final String VALUE_SUFFIX = "VALUE";
     private long type;
     private boolean hidden;
     private long createdBy;
@@ -22,6 +24,7 @@ public class PtPropertyType extends PtOntologyType {
     private transient String configTypeBase;
     private transient Map<String, String> configComponentTypes;
     private transient String configUri;
+    private Boolean gisEnabled;
 
     public long getType() {
         return type;
@@ -75,6 +78,17 @@ public class PtPropertyType extends PtOntologyType {
             return configUri;
         }
         return configUri = XmlUtil.getXmlString(getConfigXml(), "/property_type_config/uri");
+    }
+
+    public boolean isGisEnabled() {
+        if (gisEnabled != null) {
+            return gisEnabled;
+        }
+        String gisEligibleString = XmlUtil.getXmlString(getConfigXml(), "/property_type_config/type/gisEligible");
+        if (gisEligibleString == null) {
+            return gisEnabled = false;
+        }
+        return gisEnabled = Boolean.parseBoolean(gisEligibleString);
     }
 
     public String getConfigComponentType(String componentName) {

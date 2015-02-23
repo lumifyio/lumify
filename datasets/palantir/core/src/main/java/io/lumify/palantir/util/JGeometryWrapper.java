@@ -19,7 +19,7 @@ public class JGeometryWrapper implements Serializable {
     public static final int GTYPE_MULTICURVE = 6;
     public static final int GTYPE_MULTIPOLYGON = 7;
 
-    public enum Type {
+    public static enum Type {
         POINT(1),
         CURVE(2),
         POLYGON(3),

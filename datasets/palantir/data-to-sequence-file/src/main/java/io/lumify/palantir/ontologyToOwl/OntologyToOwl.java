@@ -1,6 +1,7 @@
 package io.lumify.palantir.ontologyToOwl;
 
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.DataToSequenceFile;
@@ -313,72 +314,137 @@ public class OntologyToOwl implements Exporter {
         String uri = XmlUtil.getXmlString(inXml, "/property_type_config/uri");
         String label = XmlUtil.getXmlString(inXml, "/property_type_config/type/displayName");
         String comment = XmlUtil.getXmlString(inXml, "/property_type_config/description");
+        String gisEligibleString = XmlUtil.getXmlString(inXml, "/property_type_config/type/gisEligible");
         List<Element> entryElements = XmlUtil.getXmlElements(inXml, "/property_type_config/type/enumeration/entry");
         List<Element> componentElements = XmlUtil.getXmlElements(inXml, "/property_type_config/type/components/component");
         String propertyIri = uriToIri(uri);
+        String propertyRange = getPropertyRange(inXml.getDocumentElement());
 
-        Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
-        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", propertyIri);
-        exportRootElement.appendChild(datatypePropertyElement);
+        boolean gisEligible;
+        if (gisEligibleString == null) {
+            gisEligible = false;
+        } else {
+            gisEligible = Boolean.parseBoolean(gisEligibleString);
+        }
+        boolean hasGisButNoComponents = gisEligible && (componentElements == null || componentElements.size() == 0);
+
+        Element datatypePropertyElement = createDatatypePropertyElement(propertyIri);
         DataTypeProperty dataTypeProperty = new DataTypeProperty(propertyIri, datatypePropertyElement);
 
-        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
-        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
-        labelElement.appendChild(exportDoc.createTextNode(label));
-        datatypePropertyElement.appendChild(labelElement);
+        addLabel(datatypePropertyElement, label);
+        dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(propertyIri, label));
 
-        Element textIndexHintsElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:textIndexHints");
-        textIndexHintsElement.appendChild(exportDoc.createTextNode("FULL_TEXT"));
-        datatypePropertyElement.appendChild(textIndexHintsElement);
+        if (hasGisButNoComponents) {
+            addRange(datatypePropertyElement, "http://www.w3.org/2001/XMLSchema#string");
 
-        Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
-        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", getPropertyRange(inXml.getDocumentElement()));
-        datatypePropertyElement.appendChild(rangeElement);
-
-        if (comment != null && comment.length() > 0) {
-            Element commentElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:comment");
-            commentElement.appendChild(exportDoc.createTextNode(comment));
-            datatypePropertyElement.appendChild(commentElement);
+            String valuePropertyIri = propertyIri + '/' + PtPropertyType.VALUE_SUFFIX;
+            Element datatypePropertyValueElement = createDatatypePropertyElement(valuePropertyIri);
+            addLabel(datatypePropertyValueElement, "Value");
+            addTextIndexHints(datatypePropertyValueElement);
+            addRange(datatypePropertyValueElement, propertyRange);
+            if (comment != null && comment.length() > 0) {
+                addComments(datatypePropertyValueElement, comment);
+            }
+            if (entryElements.size() > 0) {
+                addPossibleValues(datatypePropertyValueElement, entryElements);
+            }
+            addDependentPropertyIri(dataTypeProperty, valuePropertyIri);
+            dataTypeProperty.addRelatedPropertyElement(datatypePropertyValueElement);
+            dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(valuePropertyIri, label));
+        } else {
+            addTextIndexHints(datatypePropertyElement);
+            addRange(datatypePropertyElement, propertyRange);
+            if (comment != null && comment.length() > 0) {
+                addComments(datatypePropertyElement, comment);
+            }
+            if (entryElements.size() > 0) {
+                addPossibleValues(datatypePropertyElement, entryElements);
+            }
         }
 
-        if (componentElements != null && componentElements.size() > 0) {
+        // dependent properties
+        if ((componentElements != null && componentElements.size() > 0) || gisEligible) {
             List<Element> argsElements = XmlUtil.getXmlElements(inXml, "/property_type_config/display/args/arg");
             if (argsElements.size() > 0) {
                 String titleFormula = titleFormulaMaker.create(new TitleFormulaMaker.Options(propertyIri + '/'), argsElements);
                 if (titleFormula.trim().length() > 0) {
                     Element displayFormulaElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:displayFormula");
                     displayFormulaElement.appendChild(exportDoc.createCDATASection("\n" + indent(titleFormula, "      ") + "\n    "));
-                    datatypePropertyElement.appendChild(displayFormulaElement);
+                    dataTypeProperty.getElement().appendChild(displayFormulaElement);
                 }
             }
 
-            for (Element componentElement : componentElements) {
-                String componentUri = XmlUtil.getXmlString(componentElement, "uri");
-                String dependentPropertyIri = propertyIri + '/' + componentUri;
+            if (componentElements != null) {
+                for (Element componentElement : componentElements) {
+                    String componentUri = XmlUtil.getXmlString(componentElement, "uri");
+                    String dependentPropertyIri = propertyIri + '/' + componentUri;
 
-                Element dependentPropertyIriElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:dependentPropertyIri");
-                dependentPropertyIriElement.appendChild(exportDoc.createTextNode(dependentPropertyIri));
-                datatypePropertyElement.appendChild(dependentPropertyIriElement);
+                    addDependentPropertyIri(dataTypeProperty, dependentPropertyIri);
 
-                runOnPropertyTypeConfigComponent(dataTypeProperty, dependentPropertyIri, componentElement);
+                    runOnPropertyTypeConfigComponent(dataTypeProperty, dependentPropertyIri, componentElement);
+                }
+            }
+
+            if (gisEligible) {
+                String dependentPropertyIri = propertyIri + PtPropertyType.GIS_SUFFIX;
+
+                addDependentPropertyIri(dataTypeProperty, dependentPropertyIri);
+
+                createGisProperty(dataTypeProperty, dependentPropertyIri);
             }
         }
-
-        if (entryElements.size() > 0) {
-            JSONObject possibleValues = new JSONObject();
-            for (Element entryElement : entryElements) {
-                String key = XmlUtil.getXmlString(entryElement, "key");
-                String value = XmlUtil.getXmlString(entryElement, "value");
-                possibleValues.put(key, value);
-            }
-            Element possibleValuesElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:possibleValues");
-            possibleValuesElement.appendChild(exportDoc.createTextNode("\n" + indent(possibleValues.toString(2), "      ") + "\n    "));
-            datatypePropertyElement.appendChild(possibleValuesElement);
-        }
-
-        dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(propertyIri, label));
 
         dataTypeProperties.put(uri, dataTypeProperty);
+    }
+
+    private void addDependentPropertyIri(DataTypeProperty dataTypeProperty, String dependentPropertyIri) {
+        Element dependentPropertyIriElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:dependentPropertyIri");
+        dependentPropertyIriElement.appendChild(exportDoc.createTextNode(dependentPropertyIri));
+        dataTypeProperty.getElement().appendChild(dependentPropertyIriElement);
+    }
+
+    private Element createDatatypePropertyElement(String propertyIri) {
+        Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
+        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", propertyIri);
+        exportRootElement.appendChild(datatypePropertyElement);
+        return datatypePropertyElement;
+    }
+
+    private void addPossibleValues(Element datatypePropertyElement, List<Element> entryElements) {
+        JSONObject possibleValues = new JSONObject();
+        for (Element entryElement : entryElements) {
+            String key = XmlUtil.getXmlString(entryElement, "key");
+            String value = XmlUtil.getXmlString(entryElement, "value");
+            possibleValues.put(key, value);
+        }
+        Element possibleValuesElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:possibleValues");
+        possibleValuesElement.appendChild(exportDoc.createTextNode("\n" + indent(possibleValues.toString(2), "      ") + "\n    "));
+        datatypePropertyElement.appendChild(possibleValuesElement);
+    }
+
+    private void addComments(Element datatypePropertyElement, String comment) {
+        Element commentElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:comment");
+        commentElement.appendChild(exportDoc.createTextNode(comment));
+        datatypePropertyElement.appendChild(commentElement);
+    }
+
+    private void addRange(Element datatypePropertyElement, String propertyRange) {
+        Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
+        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", propertyRange);
+        datatypePropertyElement.appendChild(rangeElement);
+    }
+
+    private void addTextIndexHints(Element datatypePropertyElement) {
+        Element textIndexHintsElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:textIndexHints");
+        textIndexHintsElement.appendChild(exportDoc.createTextNode("FULL_TEXT"));
+        datatypePropertyElement.appendChild(textIndexHintsElement);
+    }
+
+    private void addLabel(Element element, String label) {
+        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
+        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
+        labelElement.appendChild(exportDoc.createTextNode(label));
+        element.appendChild(labelElement);
     }
 
     private String getPropertyRange(Element element) {
@@ -398,18 +464,11 @@ public class OntologyToOwl implements Exporter {
     private void runOnPropertyTypeConfigComponent(DataTypeProperty dataTypeProperty, String dependentPropertyIri, Element componentElement) {
         String displayName = XmlUtil.getXmlString(componentElement, "displayName");
 
-        Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
-        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", dependentPropertyIri);
-        exportRootElement.appendChild(datatypePropertyElement);
+        Element datatypePropertyElement = createDatatypePropertyElement(dependentPropertyIri);
 
-        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
-        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
-        labelElement.appendChild(exportDoc.createTextNode(displayName));
-        datatypePropertyElement.appendChild(labelElement);
+        addLabel(datatypePropertyElement, displayName);
 
-        Element textIndexHintsElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:textIndexHints");
-        textIndexHintsElement.appendChild(exportDoc.createTextNode("FULL_TEXT"));
-        datatypePropertyElement.appendChild(textIndexHintsElement);
+        addTextIndexHints(datatypePropertyElement);
 
         Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
         rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", getPropertyRange(componentElement));
@@ -419,15 +478,26 @@ public class OntologyToOwl implements Exporter {
         dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(dependentPropertyIri, displayName));
     }
 
-    private Element createErrorPropertyElement(String propertyIri, String displayName) {
-        Element datatypePropertyElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:DatatypeProperty");
-        datatypePropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", propertyIri + PtPropertyType.ERROR_SUFFIX);
-        exportRootElement.appendChild(datatypePropertyElement);
+    private void createGisProperty(DataTypeProperty dataTypeProperty, String dependentPropertyIri) {
+        String displayName = "GIS";
 
-        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
-        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
-        labelElement.appendChild(exportDoc.createTextNode(displayName + " Error"));
-        datatypePropertyElement.appendChild(labelElement);
+        Element datatypePropertyElement = createDatatypePropertyElement(dependentPropertyIri);
+
+        addLabel(datatypePropertyElement, displayName);
+        addTextIndexHints(datatypePropertyElement);
+
+        Element rangeElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:range");
+        rangeElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", LumifyProperties.GEO_LOCATION_RANGE);
+        datatypePropertyElement.appendChild(rangeElement);
+
+        dataTypeProperty.addRelatedPropertyElement(datatypePropertyElement);
+        dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(dependentPropertyIri, displayName));
+    }
+
+    private Element createErrorPropertyElement(String propertyIri, String displayName) {
+        Element datatypePropertyElement = createDatatypePropertyElement(propertyIri + PtPropertyType.ERROR_SUFFIX);
+
+        addLabel(datatypePropertyElement, displayName + " Error");
 
         Element searchableElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:searchable");
         searchableElement.appendChild(exportDoc.createTextNode("false"));
@@ -488,10 +558,7 @@ public class OntologyToOwl implements Exporter {
             inverseObjectPropertyElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", uriToIri(uri + INVERSE_SUFFIX));
             exportRootElement.appendChild(inverseObjectPropertyElement);
 
-            Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
-            labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
-            labelElement.appendChild(exportDoc.createTextNode(inverseLabel));
-            inverseObjectPropertyElement.appendChild(labelElement);
+            addLabel(inverseObjectPropertyElement, inverseLabel);
 
             Element inverseOfElement = exportDoc.createElementNS(ns.getNamespaceURI("owl"), "owl:inverseOf");
             inverseOfElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", uriToIri(uri + INVERSE_SUFFIX));
@@ -504,10 +571,7 @@ public class OntologyToOwl implements Exporter {
             objectProperties.put(uri + INVERSE_SUFFIX, new ObjectProperty(inverseObjectPropertyElement));
         }
 
-        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
-        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
-        labelElement.appendChild(exportDoc.createTextNode(label));
-        objectPropertyElement.appendChild(labelElement);
+        addLabel(objectPropertyElement, label);
 
         objectProperties.put(uri, new ObjectProperty(objectPropertyElement));
     }
@@ -542,10 +606,7 @@ public class OntologyToOwl implements Exporter {
         classElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:about", uriToIri(uri));
         exportRootElement.appendChild(classElement);
 
-        Element labelElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:label");
-        labelElement.setAttributeNS(ns.getNamespaceURI("xml"), "xml:lang", "en");
-        labelElement.appendChild(exportDoc.createTextNode(label));
-        classElement.appendChild(labelElement);
+        addLabel(classElement, label);
 
         if (parentTypeUri != null && parentTypeUri.length() > 0 && !parentTypeUri.equals(uri)) {
             Element subClassOfElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:subClassOf");
@@ -554,24 +615,26 @@ public class OntologyToOwl implements Exporter {
         }
 
         if (comment != null && comment.length() > 0) {
-            Element commentElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:comment");
-            commentElement.appendChild(exportDoc.createTextNode(comment));
-            classElement.appendChild(commentElement);
+            addComments(classElement, comment);
         }
 
         if (titleArgs != null && titleArgs.size() > 0) {
-            String titleFormula = titleFormulaMaker.create(new TitleFormulaMaker.Options(baseIri + '#'), titleArgs);
-            if (titleFormula.trim().length() > 0) {
-                Element titleFormulaElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:titleFormula");
-                titleFormulaElement.appendChild(exportDoc.createCDATASection("\n" + indent(titleFormula, "      ") + "\n    "));
-                classElement.appendChild(titleFormulaElement);
-            }
+            addTitleFormula(classElement, titleArgs);
         }
 
         OwlClass owlClass = new OwlClass(classElement);
 
         if (infoIconUri != null && infoIconUri.length() > 0) {
             addIconMapping(infoIconUri, owlClass);
+        }
+    }
+
+    private void addTitleFormula(Element classElement, List<Element> titleArgs) {
+        String titleFormula = titleFormulaMaker.create(new TitleFormulaMaker.Options(baseIri + '#'), titleArgs);
+        if (titleFormula.trim().length() > 0) {
+            Element titleFormulaElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:titleFormula");
+            titleFormulaElement.appendChild(exportDoc.createCDATASection("\n" + indent(titleFormula, "      ") + "\n    "));
+            classElement.appendChild(titleFormulaElement);
         }
     }
 

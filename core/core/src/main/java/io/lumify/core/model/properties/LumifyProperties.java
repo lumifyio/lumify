@@ -6,6 +6,7 @@ import io.lumify.core.model.termMention.TermMentionForProperty;
 public class LumifyProperties {
     public static final String CONCEPT_TYPE_THING = "http://www.w3.org/2002/07/owl#Thing";
     public static final String EDGE_LABEL_HAS_SOURCE = "http://lumify.io#hasSource";
+    public static final String GEO_LOCATION_RANGE = "http://lumify.io#geolocation";
 
     public static final StringLumifyProperty META_DATA_LANGUAGE = new StringLumifyProperty("http://lumify.io#language");
     public static final StringLumifyProperty META_DATA_TEXT_DESCRIPTION = new StringLumifyProperty("http://lumify.io#textDescription");
