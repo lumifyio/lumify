@@ -37,11 +37,11 @@ Lumify-Twitter is an open source ingest example for the Lumify project. See the 
 ## Generating Twitter API Keys
 This application requires OAuth authentication credentials for the Twitter account used during tweet data ingestion.  The steps listed below will guide you through the process of creating a consumer key and secret pair along with an access token and secret pair for an existing Twitter account.  These credentials will be used to process user tweet data and may be destroyed immediately afterwards.
 
-1. Sign In to [Twitter Developers site](https://dev.twitter.com/user/login?destination=home) using your Twitter credentials
+1. Sign In to the [Twitter Developers site](https://apps.twitter.com/) using your Twitter credentials
 <br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_sign_in.png)
 
-1. In the top right corner hover over your Twitter Handler’s picture and select **My Applications** from the drop-down menu
+1. Upon signing in, you'll be presented with the applications configured for your Twitter account.  Click on the "Create New App" button located in the upper-right corner.
 <br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_my_app.png)
 
