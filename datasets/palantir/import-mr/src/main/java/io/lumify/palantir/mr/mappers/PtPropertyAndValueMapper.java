@@ -87,7 +87,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
                 try {
                     valueObject = toValue(propertyType, innerKey, valueString);
                 } catch (Exception ex) {
-                    LOGGER.error("Could not convert property value: %s (innerKey: %s, propertyType: %s)", value, innerKey, propertyType.getConfigUri(), ex);
+                    LOGGER.error("Could not convert property value: %s (innerKey: %s, propertyType: %s): %s", value, innerKey, propertyType.getConfigUri(), ex.getMessage(), ex);
                     valueObject = valueString;
                     propertyName += PtPropertyType.ERROR_SUFFIX;
                 }
