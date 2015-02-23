@@ -14,7 +14,8 @@
     <name>Lumify: Datasets: Twitter</name>
 
     <modules>
-        <module>twitter-graph-property-worker</module>
         <module>twitter-common</module>
+        <module>twitter-ingestion</module>
+        <module>twitter-graph-property-worker</module>
     </modules>
 </project>
