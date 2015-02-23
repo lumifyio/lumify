@@ -14,17 +14,29 @@ import twitter4j.conf.ConfigurationBuilder;
 
 import com.google.inject.Inject;
 
+/**
+ * Responsible for extracting tweet statuses and launching the processing pipeline
+ */
 public final class TweetExtractor {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TweetExtractor.class);
 
     private final TweetTransformer tweetTransformer;
 
+    /**
+     *
+     * @param transformer The transformer used to process extracted tweet statuses, not null
+     */
     @Inject
     public TweetExtractor(final TweetTransformer transformer) {
-        tweetTransformer = transformer;
+        tweetTransformer = checkNotNull(transformer);
     }
 
-    public void doWork(final OAuthConfiguration authConfig) throws TwitterException {
+    /**
+     * Fetches tweet statuses from the 'home timeline' of the user specified by the provided {@link OAuthConfiguration}
+     * @param authConfig The configuration information used to perform operations with the Twitter API
+     * @throws TwitterException Thrown if an error occurred when fetching tweet data from Twitter
+     */
+    public void initiateTweetProcessing(final OAuthConfiguration authConfig) throws TwitterException {
         checkNotNull(authConfig);
 
         final Configuration clientConfig = generateTweetClientConfig(authConfig);
@@ -53,7 +65,7 @@ public final class TweetExtractor {
             final String rawStatus = TwitterObjectFactory.getRawJSON(status);
 
             LOGGER.info("Processing raw tweet status id (%d) with content: %s", tweetId, rawStatus);
-            tweetTransformer.createTweetVertex(rawStatus);
+            tweetTransformer.transformTweetStatus(status);
         }
     }
 }

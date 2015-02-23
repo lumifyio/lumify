@@ -10,6 +10,9 @@ import org.apache.commons.cli.CommandLine;
 
 import twitter4j.TwitterException;
 
+/**
+ * Main entry point for CLI application used for ingesting Twitter status data
+ */
 public final class TwitterDataIngestRunner extends CommandLineBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TwitterDataIngestRunner.class);
 
@@ -34,19 +37,14 @@ public final class TwitterDataIngestRunner extends CommandLineBase {
     protected int run(CommandLine cmd) {
         int exitCode = SUCCESSFUL_EXIT;
 
-        final Configuration appConfig = getConfiguration();
-        final OAuthConfiguration authConfig = new OAuthConfiguration(appConfig.get(CONSUMER_KEY, null),
-                appConfig.get(CONSUMER_SECRET, null),
-                appConfig.get(TOKEN, null),
-                appConfig.get(TOKEN_SECRET, null));
-
+        final OAuthConfiguration authConfig = retrieveAuthConfig();
         final TweetExtractor extractor = InjectHelper.getInstance(TweetExtractor.class);
 
         LOGGER.info("Running data ingestion");
         final long startTime = System.currentTimeMillis();
 
         try {
-            extractor.doWork(authConfig);
+            extractor.initiateTweetProcessing(authConfig);
             LOGGER.info("Data ingestion completed in %d ms", System.currentTimeMillis() - startTime);
         } catch (final TwitterException e) {
             LOGGER.error("Error occurred during data ingestion", e);
@@ -54,5 +52,15 @@ public final class TwitterDataIngestRunner extends CommandLineBase {
         }
 
         return exitCode;
+    }
+
+    private OAuthConfiguration retrieveAuthConfig() {
+        final Configuration appConfig = getConfiguration();
+
+        return new OAuthConfiguration(
+                appConfig.get(CONSUMER_KEY, null),
+                appConfig.get(CONSUMER_SECRET, null),
+                appConfig.get(TOKEN, null),
+                appConfig.get(TOKEN_SECRET, null));
     }
 }
