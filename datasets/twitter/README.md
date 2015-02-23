@@ -44,13 +44,16 @@ This application requires OAuth authentication credentials for the Twitter accou
 
 1. Upon signing in, you'll be presented with the applications configured for your Twitter account.  Click on the **Create New App** button located in the upper-right corner.
 <br />
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_create_new_app.png)
 
 1. Fill out the form for a new application.  The application **name** must be globally unique and the application **website** must be a well-formed URL.
 <br />
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_create_app_form.png)
 
 1. Once completed, click on the **API Keys** tab. Scroll down and select **Create my access token**
+<br />
 <br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_access_token.png)
 
