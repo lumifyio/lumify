@@ -1,10 +1,19 @@
 # Lumify-Twitter
 
-Lumify-Twitter is an open source ingest example for the Lumify project. See the [Lumify website](http://lumify.io) for more information about Lumify.
+Lumify-Twitter is an open source data ingestion example for the Lumify project.  This command-line application will extract recent tweet statuses from the configured Twitter user's "home timeline" and transform tweet data to a graph model.
+
+The default Twitter ontology is capable of processing:
+* Twitter user details
+* Tweet content
+* Hashtags
+* Referenced URLs
+* User Mentions
+* Retweets
 
 ## Prerequisites
 
 * Please ensure that [Lumify] (../../README.md) has been installed before building.
+* [Twitter API Keys](#generating-twitter-api-keys) have been generated for the Twitter user that tweet data is coming from.
 
 ## Configuration and Building
 
