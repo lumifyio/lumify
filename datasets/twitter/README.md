@@ -2,7 +2,7 @@
 
 Lumify-Twitter is an open source data ingestion example for the Lumify project.  This command-line application will extract recent tweet statuses from the configured Twitter user's "home timeline" and transform tweet data to a graph model.
 
-The default Twitter ontology is capable of processing:
+The default Twitter ontology is capable of representing:
 * Twitter user details
 * Tweet content
 * Hashtags
