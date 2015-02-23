@@ -35,6 +35,7 @@ Lumify-Twitter is an open source ingest example for the Lumify project. See the 
         datasets/twitter/bin/importOntology.sh
 
 ## Generating Twitter API Keys
+This application requires OAuth authentication credentials for the Twitter account used during tweet data ingestion.  The steps listed below will guide you through the process of creating a consumer key and secret pair along with an access token and secret pair for an existing Twitter account.  These credentials will be used to process user tweet data and may be destroyed immediately afterwards.
 
 1. Sign In to [Twitter Developers site](https://dev.twitter.com/user/login?destination=home) using your Twitter credentials
 <br />
