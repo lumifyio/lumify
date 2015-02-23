@@ -1,0 +1,4 @@
+dn: ou=groups,dc=lumify,dc=io
+objectclass:organizationalunit
+ou: groups
+description: Lumify Groups

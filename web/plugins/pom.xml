@@ -18,6 +18,7 @@
         <module>auth-username-only</module>
         <module>auth-username-password</module>
         <module>auth-x509</module>
+        <module>auth-x509ldap</module>
         <module>dev-tools</module>
         <module>geocoder-bing</module>
         <module>google-analytics</module>

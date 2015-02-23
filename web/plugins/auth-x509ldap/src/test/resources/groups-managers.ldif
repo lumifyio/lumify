@@ -1,0 +1,6 @@
+dn: cn=managers,ou=groups,dc=lumify,dc=io
+objectclass: groupofuniquenames
+cn: managers
+description: Managers
+uniqueMember: cn=Alice,ou=people,dc=lumify,dc=io
+uniqueMember: cn=Carlos,ou=people,dc=lumify,dc=io
