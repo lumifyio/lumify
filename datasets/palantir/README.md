@@ -36,3 +36,7 @@
         io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObjectObject http://lumify.io/palantir#
         io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtMediaAndValue http://lumify.io/palantir#
         io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtPropertyAndValue http://lumify.io/palantir#
+
+1. Reindex MR
+
+1. Requeue raw
