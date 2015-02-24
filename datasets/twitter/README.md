@@ -23,11 +23,11 @@ The default Twitter ontology is capable of representing:
 
         mvn package -pl tools/cli -am
 
-1. Import the dev and twiter ontologies:
+1. Import the dev and twitter ontologies:
 
-        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/../../../examples/ontology-dev/dev.owl
+        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/examples/ontology-dev/dev.owl
 
-        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/../ontology/twitter.owl
+        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/datasets/twitter/ontology/twitter.owl
 
 ## Configuration and Building
 
