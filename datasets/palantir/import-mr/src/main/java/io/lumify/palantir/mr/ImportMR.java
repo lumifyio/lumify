@@ -33,6 +33,7 @@ public class ImportMR extends LumifyMRBase {
         MAPPERS.put(PtObjectObject.class.getSimpleName(), PtObjectObjectMapper.class);
         MAPPERS.put(PtPropertyAndValue.class.getSimpleName(), PtPropertyAndValueMapper.class);
         MAPPERS.put(PtMediaAndValue.class.getSimpleName(), PtMediaAndValueMapper.class);
+        MAPPERS.put(PtNoteAndNoteValue.class.getSimpleName(), PtNoteAndNoteValueMapper.class);
     }
 
     @Override
