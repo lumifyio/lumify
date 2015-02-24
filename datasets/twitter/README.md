@@ -19,9 +19,15 @@ The default Twitter ontology is capable of representing:
 
 1. If necessary, edit `datasets/twitter/ontology/twitter.owl` to customize different concepts (e.g. person, phone number), properties for each concept, relationships between concepts, and/or glyphIcons associated with concepts.
 
-1. Import the ontology:
+1. Build the CLI jar:
 
-        datasets/twitter/bin/importOntology.sh
+        mvn package -pl tools/cli -am
+
+1. Import the dev and twiter ontologies:
+
+        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/../../../examples/ontology-dev/dev.owl
+
+        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/../ontology/twitter.owl
 
 ## Configuration and Building
 
