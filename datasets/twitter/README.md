@@ -37,7 +37,7 @@ This file must be located in one of the areas specified by the [configuration se
         mvn package -pl datasets/twitter/twitter-ingestion -am
 
 1. Execute the application to ingest data corresponding to the configured Twitter user account:
-2. 
+
    ```sh
    java -jar datasets/twitter/twitter-ingestion/target/lumify-twitter-ingestion-0.4.1-SNAPSHOT-jar-with-dependencies.jar
    ```
