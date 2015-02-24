@@ -7,9 +7,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class PtTypeGroup extends PtModelBase {
+public class PtTypeGroup extends PtOntologyType {
     private long type;
-    private String config;
     private boolean hidden;
     private long createdBy;
     private long timeCreated;
@@ -21,14 +20,6 @@ public class PtTypeGroup extends PtModelBase {
 
     public void setType(long type) {
         this.type = type;
-    }
-
-    public String getConfig() {
-        return config;
-    }
-
-    public void setConfig(String config) {
-        this.config = config;
     }
 
     public boolean isHidden() {

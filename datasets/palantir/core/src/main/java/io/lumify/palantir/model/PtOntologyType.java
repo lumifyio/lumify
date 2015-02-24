@@ -26,11 +26,11 @@ public abstract class PtOntologyType extends PtModelBase {
         }
     }
 
-    public String getConfig() {
+    public final String getConfig() {
         return config;
     }
 
-    public void setConfig(String config) {
+    public final void setConfig(String config) {
         this.config = config;
     }
 

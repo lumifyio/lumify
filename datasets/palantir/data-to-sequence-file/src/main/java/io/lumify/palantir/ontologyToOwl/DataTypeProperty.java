@@ -11,13 +11,21 @@ public class DataTypeProperty implements OwlElement {
     private final Element datatypePropertyElement;
     private final Set<String> domainUris = new HashSet<>();
     private final List<Element> relatedPropertyElements = new ArrayList<>();
+    private final String typeGroupUri;
 
     @SuppressWarnings({"UnusedDeclaration", "FieldCanBeLocal"}) // this field is here for debugging
     private final String propertyIri;
 
-    public DataTypeProperty(String propertyIri, Element datatypePropertyElement) {
+    public DataTypeProperty(String propertyIri, Element datatypePropertyElement, String typeGroupUri) {
         this.propertyIri = propertyIri;
         this.datatypePropertyElement = datatypePropertyElement;
+        if (typeGroupUri != null) {
+            typeGroupUri = typeGroupUri.trim();
+            if (typeGroupUri.length() == 0) {
+                typeGroupUri = null;
+            }
+        }
+        this.typeGroupUri = typeGroupUri;
     }
 
     public void addDomain(String domainUri) {
@@ -34,6 +42,10 @@ public class DataTypeProperty implements OwlElement {
 
     public Element getElement() {
         return datatypePropertyElement;
+    }
+
+    public String getTypeGroupUri() {
+        return typeGroupUri;
     }
 
     public void addRelatedPropertyElement(Element dependentPropertyElement) {

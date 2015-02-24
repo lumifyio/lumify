@@ -43,6 +43,7 @@ public class OntologyToOwl implements Exporter {
     private Map<String, ObjectProperty> objectProperties = new HashMap<>();
     private Map<String, DataTypeProperty> dataTypeProperties = new HashMap<>();
     private Map<String, List<OwlElement>> iconMapping = new HashMap<>();
+    private Map<String, String> typeGroupUriToDisplayNames = new HashMap<>();
     private NamespaceContext ns;
 
     public OntologyToOwl(String baseIri) {
@@ -158,6 +159,15 @@ public class OntologyToOwl implements Exporter {
 
     private void writeDataTypePropertyLinkRelations() {
         for (DataTypeProperty dataTypeProperty : dataTypeProperties.values()) {
+            if (dataTypeProperty.getTypeGroupUri() != null) {
+                String propertyGroupName = this.typeGroupUriToDisplayNames.get(dataTypeProperty.getTypeGroupUri());
+                if (propertyGroupName != null) {
+                    Element propertyGroupElement = exportDoc.createElementNS(ns.getNamespaceURI("lumify"), "lumify:propertyGroup");
+                    propertyGroupElement.appendChild(exportDoc.createTextNode(propertyGroupName));
+                    dataTypeProperty.getElement().appendChild(propertyGroupElement);
+                }
+            }
+
             for (String domainUri : dataTypeProperty.getDomainUris()) {
                 Element domainElement = exportDoc.createElementNS(ns.getNamespaceURI("rdfs"), "rdfs:domain");
                 domainElement.setAttributeNS(ns.getNamespaceURI("rdf"), "rdf:resource", domainUri);
@@ -238,7 +248,7 @@ public class OntologyToOwl implements Exporter {
         } else if (inXml.getDocumentElement().getNodeName().equals("node_display_type_config")) {
             // skip
         } else if (inXml.getDocumentElement().getNodeName().equals("type_group_config")) {
-            // skip
+            runOnTypeGroupConfig(inXml);
         } else if (inXml.getDocumentElement().getNodeName().equals("link_relations")) {
             linkRelationsXml = inXml;
         } else if (inXml.getDocumentElement().getNodeName().equals("image_infos")) {
@@ -246,6 +256,20 @@ public class OntologyToOwl implements Exporter {
         } else {
             throw new LumifyException("Invalid xml root node name: " + inXml.getDocumentElement().getNodeName());
         }
+    }
+
+    private void runOnTypeGroupConfig(Document inXml) {
+        String uri = XmlUtil.getXmlString(inXml, "/type_group_config/uri");
+        if (uri == null || uri.trim().length() == 0) {
+            throw new LumifyException("Invalid type group config, null or empty uri");
+        }
+
+        String displayName = XmlUtil.getXmlString(inXml, "/type_group_config/displayName");
+        if (displayName == null || displayName.trim().length() == 0) {
+            throw new LumifyException("Invalid type group config, null or empty displayName");
+        }
+
+        typeGroupUriToDisplayNames.put(uri, displayName);
     }
 
     private void runOnOntologyResourceConfig(FileSystem fs, Path outPath, Document inXml) throws IOException {
@@ -315,6 +339,7 @@ public class OntologyToOwl implements Exporter {
         String label = XmlUtil.getXmlString(inXml, "/property_type_config/type/displayName");
         String comment = XmlUtil.getXmlString(inXml, "/property_type_config/description");
         String gisEligibleString = XmlUtil.getXmlString(inXml, "/property_type_config/type/gisEligible");
+        String typeGroupUri = XmlUtil.getXmlString(inXml, "/property_type_config/typeGroups/typeGroup/uri");
         List<Element> entryElements = XmlUtil.getXmlElements(inXml, "/property_type_config/type/enumeration/entry");
         List<Element> componentElements = XmlUtil.getXmlElements(inXml, "/property_type_config/type/components/component");
         String propertyIri = uriToIri(uri);
@@ -329,7 +354,7 @@ public class OntologyToOwl implements Exporter {
         boolean hasGisButNoComponents = gisEligible && (componentElements == null || componentElements.size() == 0);
 
         Element datatypePropertyElement = createDatatypePropertyElement(propertyIri);
-        DataTypeProperty dataTypeProperty = new DataTypeProperty(propertyIri, datatypePropertyElement);
+        DataTypeProperty dataTypeProperty = new DataTypeProperty(propertyIri, datatypePropertyElement, typeGroupUri);
 
         addLabel(datatypePropertyElement, label);
         dataTypeProperty.addRelatedPropertyElement(createErrorPropertyElement(propertyIri, label));

@@ -2,7 +2,7 @@ package io.lumify.palantir.service;
 
 import io.lumify.palantir.model.PtTypeGroup;
 
-public class PtTypeGroupExporter extends ExporterBase<PtTypeGroup> {
+public class PtTypeGroupExporter extends OntologyTypeExporterBase<PtTypeGroup> {
     public PtTypeGroupExporter() {
         super(PtTypeGroup.class);
     }
