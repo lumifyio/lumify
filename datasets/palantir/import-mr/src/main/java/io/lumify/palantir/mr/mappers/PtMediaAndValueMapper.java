@@ -4,6 +4,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.palantir.model.PtMediaAndValue;
 import io.lumify.palantir.util.TryInflaterInputStream;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.hadoop.io.LongWritable;
 import org.securegraph.EdgeBuilderByVertexId;
 import org.securegraph.Vertex;
@@ -13,15 +14,18 @@ import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 public class PtMediaAndValueMapper extends PalantirMapperBase<LongWritable, PtMediaAndValue> {
     private Visibility visibility;
     private String hasMediaConceptTypeIri;
+    private VisibilityJson visibilityJson;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
         visibility = new LumifyVisibility("").getVisibility();
+        visibilityJson = new VisibilityJson();
         hasMediaConceptTypeIri = getOntologyRepository().getRequiredRelationshipIRIByIntent("hasMedia");
     }
 
@@ -50,6 +54,11 @@ public class PtMediaAndValueMapper extends PalantirMapperBase<LongWritable, PtMe
             VertexBuilder vertexBuilder = prepareVertex(getMediaId(ptMediaAndValue), visibility);
             LumifyProperties.RAW.addPropertyValue(vertexBuilder, propertyKey, propertyValue, visibility);
             LumifyProperties.TITLE.setProperty(vertexBuilder, title, visibility);
+            LumifyProperties.CREATED_BY.setProperty(vertexBuilder, PtUserMapper.getUserVertexId(ptMediaAndValue.getCreatedBy()), visibility);
+            LumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(ptMediaAndValue.getTimeCreated()), visibility);
+            LumifyProperties.MODIFIED_BY.setProperty(vertexBuilder, PtUserMapper.getUserVertexId(ptMediaAndValue.getLastModifiedBy()), visibility);
+            LumifyProperties.MODIFIED_DATE.setProperty(vertexBuilder, new Date(ptMediaAndValue.getLastModified()), visibility);
+            LumifyProperties.VISIBILITY_JSON.setProperty(vertexBuilder, visibilityJson, visibility);
             Vertex mediaVertex = vertexBuilder.save(getAuthorizations());
 
             String sourceVertexId = PtObjectMapper.getObjectVertexId(ptMediaAndValue.getLinkObjectId());
@@ -57,6 +66,11 @@ public class PtMediaAndValueMapper extends PalantirMapperBase<LongWritable, PtMe
             String edgeId = getEdgeId(ptMediaAndValue);
             String edgeLabel = getEdgeLabel(ptMediaAndValue);
             EdgeBuilderByVertexId edgeBuilder = prepareEdge(edgeId, sourceVertexId, mediaVertex.getId(), edgeLabel, visibility);
+            LumifyProperties.CREATED_BY.setProperty(edgeBuilder, PtUserMapper.getUserVertexId(ptMediaAndValue.getCreatedBy()), visibility);
+            LumifyProperties.CREATE_DATE.setProperty(edgeBuilder, new Date(ptMediaAndValue.getTimeCreated()), visibility);
+            LumifyProperties.MODIFIED_BY.setProperty(edgeBuilder, PtUserMapper.getUserVertexId(ptMediaAndValue.getLastModifiedBy()), visibility);
+            LumifyProperties.MODIFIED_DATE.setProperty(edgeBuilder, new Date(ptMediaAndValue.getLastModified()), visibility);
+            LumifyProperties.VISIBILITY_JSON.setProperty(edgeBuilder, visibilityJson, visibility);
             edgeBuilder.save(getAuthorizations());
         }
     }

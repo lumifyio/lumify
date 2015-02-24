@@ -1,13 +1,16 @@
 package io.lumify.palantir.mr.mappers;
 
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.palantir.model.PtPropertyAndValue;
 import io.lumify.palantir.model.PtPropertyType;
 import io.lumify.palantir.util.JGeometryWrapper;
+import io.lumify.web.clientapi.model.VisibilityJson;
 import org.apache.hadoop.io.LongWritable;
+import org.securegraph.Metadata;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
 import org.securegraph.type.GeoPoint;
@@ -26,6 +29,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -35,6 +39,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PtPropertyAndValueMapper.class);
     public static final Pattern DURATION_PATTERN = Pattern.compile("(\\d+):(\\d\\d)");
     private Visibility visibility;
+    private VisibilityJson visibilityJson;
     private DocumentBuilder dBuilder;
     private static Pattern VALUE_BODY_PATTERN = Pattern.compile("^<VALUE>(.*)</VALUE>$", Pattern.DOTALL);
     private static Pattern UNPARSED_VALUE_BODY_PATTERN = Pattern.compile("^<UNPARSED_VALUE>(.*)</UNPARSED_VALUE>$", Pattern.DOTALL);
@@ -44,6 +49,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
         super.setup(context);
         loadPropertyTypes(context);
         visibility = new LumifyVisibility("").getVisibility();
+        visibilityJson = new VisibilityJson();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             dBuilder = dbFactory.newDocumentBuilder();
@@ -67,6 +73,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
 
         String objectVertexId = PtObjectMapper.getObjectVertexId(ptPropertyAndValue.getLinkObjectId());
         String propertyKey = getPropertyKey(ptPropertyAndValue);
+        Metadata propertyMetadata = createMetadata(ptPropertyAndValue);
         Value value = cleanUpValueString(propertyType, ptPropertyAndValue.getValue());
         JGeometryWrapper gisData = ptPropertyAndValue.getGeometryGis();
         if (value == null && gisData == null) {
@@ -75,21 +82,31 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
 
         VertexBuilder v = prepareVertex(objectVertexId, visibility);
         if (value != null) {
-            addValueToVertexBuilder(v, propertyType, propertyKey, value);
+            addValueToVertexBuilder(v, propertyType, propertyKey, propertyMetadata, value);
         }
         if (gisData != null) {
-            addGisDataToVertexBuilder(v, propertyType, propertyKey, gisData);
+            addGisDataToVertexBuilder(v, propertyType, propertyKey, propertyMetadata, gisData);
         }
         v.save(getAuthorizations());
     }
 
-    private void addValueToVertexBuilder(VertexBuilder v, PtPropertyType propertyType, String propertyKey, Value value) {
+    private Metadata createMetadata(PtPropertyAndValue ptPropertyAndValue) {
+        Metadata propertyMetadata = new Metadata();
+        LumifyProperties.CREATED_BY.setMetadata(propertyMetadata, PtUserMapper.getUserVertexId(ptPropertyAndValue.getCreatedBy()), visibility);
+        LumifyProperties.CREATE_DATE.setMetadata(propertyMetadata, new Date(ptPropertyAndValue.getTimeCreated()), visibility);
+        LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, PtUserMapper.getUserVertexId(ptPropertyAndValue.getLastModifiedBy()), visibility);
+        LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, new Date(ptPropertyAndValue.getLastModified()), visibility);
+        LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibility);
+        return propertyMetadata;
+    }
+
+    private void addValueToVertexBuilder(VertexBuilder v, PtPropertyType propertyType, String propertyKey, Metadata propertyMetadata, Value value) {
         if (value instanceof StringValue) {
             String innerKey = null;
             if (propertyType.isGisEnabled()) {
                 innerKey = PtPropertyType.VALUE_SUFFIX;
             }
-            String propertyName = getPropertyName(propertyType.getUri(), null);
+            String propertyName = getPropertyName(propertyType.getUri(), innerKey);
             String valueString = ((StringValue) value).getValue();
             Object valueObject;
             try {
@@ -99,7 +116,7 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
                 valueObject = valueString;
                 propertyName += PtPropertyType.ERROR_SUFFIX;
             }
-            v.addPropertyValue(propertyKey, propertyName, valueObject, visibility);
+            v.addPropertyValue(propertyKey, propertyName, valueObject, propertyMetadata, visibility);
         } else if (value instanceof MapValue) {
             MapValue values = (MapValue) value;
             for (Map.Entry<String, String> valueEntry : values.getValues().entrySet()) {
@@ -114,17 +131,17 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
                     valueObject = valueString;
                     propertyName += PtPropertyType.ERROR_SUFFIX;
                 }
-                v.addPropertyValue(propertyKey, propertyName, valueObject, visibility);
+                v.addPropertyValue(propertyKey, propertyName, valueObject, propertyMetadata, visibility);
             }
         } else {
             throw new RuntimeException("Unexpected value type: " + value.getClass().getName());
         }
     }
 
-    private void addGisDataToVertexBuilder(VertexBuilder v, PtPropertyType propertyType, String propertyKey, JGeometryWrapper gisData) {
+    private void addGisDataToVertexBuilder(VertexBuilder v, PtPropertyType propertyType, String propertyKey, Metadata propertyMetadata, JGeometryWrapper gisData) {
         String propertyName = getBaseIri() + propertyType.getUri() + PtPropertyType.GIS_SUFFIX;
         GeoShape geoShape = toGeoShape(gisData);
-        v.addPropertyValue(propertyKey, propertyName, geoShape, visibility);
+        v.addPropertyValue(propertyKey, propertyName, geoShape, propertyMetadata, visibility);
     }
 
     private GeoShape toGeoShape(JGeometryWrapper gisData) {
