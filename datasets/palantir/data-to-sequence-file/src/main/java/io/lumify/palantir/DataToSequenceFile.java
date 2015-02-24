@@ -6,6 +6,7 @@ import com.beust.jcommander.Parameters;
 import com.google.common.base.Joiner;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.palantir.model.PtNoteAndNoteValue;
 import io.lumify.palantir.ontologyToOwl.OntologyToOwl;
 import io.lumify.palantir.service.*;
 import io.lumify.palantir.sqlrunner.SqlRunner;
@@ -58,6 +59,7 @@ public class DataToSequenceFile implements Exporter.ExporterSource {
         EXPORTERS.add(new PtObjectTypeExporter());
         EXPORTERS.add(new PtPropertyTypeExporter());
         EXPORTERS.add(new PtLinkTypeExporter());
+        EXPORTERS.add(new PtTypeGroupExporter());
         EXPORTERS.add(new PtNodeDisplayTypeExporter());
         EXPORTERS.add(new PtImageInfoExporter());
         EXPORTERS.add(new PtOntologyResourceExporter());
@@ -69,6 +71,7 @@ public class DataToSequenceFile implements Exporter.ExporterSource {
         EXPORTERS.add(new PtObjectObjectExporter());
         EXPORTERS.add(new PtMediaAndValueExporter());
         EXPORTERS.add(new PtPropertyAndValueExporter());
+        EXPORTERS.add(new PtNoteAndNoteValueExporter());
     }
 
     public DataToSequenceFile(String[] args) {
