@@ -21,9 +21,11 @@
           --dest=hdfs:///palantir-export/ \
           --baseiri=http://lumify.io/palantir#
 
-1. Import `hdfs://palantir-export/owl/palantir.owl`
+1. Import `examples/ontology-minimal/minimal.owl`
 
-1. Modify `ontology/palantir-import.owl` as needed and import that owl file.
+1. Import `datasets/palantir/ontology/palantir-import.owl`
+
+1. Import `hdfs://palantir-export/owl/palantir.owl`
 
 1. Run the import MR process `io.lumify.palantir.mr.ImportMR`.
 

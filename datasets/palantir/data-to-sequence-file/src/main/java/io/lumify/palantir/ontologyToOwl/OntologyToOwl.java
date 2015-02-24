@@ -101,7 +101,7 @@ public class OntologyToOwl implements Exporter {
         if (imageInfoXml == null) {
             LOGGER.warn("Could not find image info xml.");
         } else {
-            runOnImageInfoXml(fs, destinationPath, imageInfoXml);
+            runOnImageInfoXml(fs, outPath, imageInfoXml);
         }
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
