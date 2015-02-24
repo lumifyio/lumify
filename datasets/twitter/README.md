@@ -17,21 +17,20 @@ The default Twitter ontology is capable of representing:
 
 ## Configuration and Building
 
-1. Generate Twitter API Keys, see the [Twitter Developers site](https://dev.twitter.com/) or [Generating Twitter API Keys](#generating-twitter-api-keys)
+1. Add the following properties with the appropriate credential values to a separate configuration file named **lumify-twitter.properties**:
+```
+twitter.consumerKey= 
+twitter.consumerSecret=
+twitter.token=
+twitter.tokenSecret=
+```
 
-1. Add the following properties to `/opt/lumify/config/configuration.properties`:
-
-        twitter.consumerKey= 
-        twitter.consumerSecret=
-        twitter.token=
-        twitter.tokenSecret=
-        twitter.inputMethod=twitter4j
-        twitter.query= # Keywords to search Twitter for, e.g. twitter
-        # When searching for multiple phrases it must be a semi-colon separated list, e.g. twitter; face book; instagram
+This file must be located in one of the areas specified by the [configuration search location](https://github.com/lumifyio/lumify/blob/master/docs/configuration.md#configuration-search-order) instructions. 
 
 1. Package the Twitter Graph Property Worker
-
-        mvn package -pl datasets/twitter/twitter-graph-property-worker -am
+```sh
+mvn package -pl datasets/twitter/twitter-graph-property-worker -am
+```
 
 1. Copy `datasets/twitter/twitter-graph-property-worker/target/lumify-twitter-graph-property-worker-*-jar-with-dependencies.jar` to `/opt/lumify/lib` or `hdfs://lumify/libcache`
 
