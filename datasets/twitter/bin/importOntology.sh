@@ -8,11 +8,19 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
-classpath=$(${DIR}/classpath.sh "twitter-graph-property-worker")
+classpath=$(${DIR}/classpath.sh twitter-ingestion)
 if [ $? -ne 0 ]; then
   echo "${classpath}"
   exit
 fi
+
+java \
+-Dfile.encoding=UTF-8 \
+-classpath ${classpath} \
+-Xmx1024M \
+io.lumify.core.cmdline.OwlImport \
+--in=${DIR}/../../../examples/ontology-dev/dev.owl \
+--iri=http://lumify.io/dev
 
 java \
 -Dfile.encoding=UTF-8 \

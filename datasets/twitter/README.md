@@ -15,6 +15,14 @@ The default Twitter ontology is capable of representing:
 * Please ensure that [Lumify] (../../README.md) has been installed before building.
 * [Twitter API Keys](#generating-twitter-api-keys) have been generated for the Twitter user that tweet data is coming from.
 
+## Ontology Customization
+
+1. If necessary, edit `datasets/twitter/ontology/twitter.owl` to customize different concepts (e.g. person, phone number), properties for each concept, relationships between concepts, and/or glyphIcons associated with concepts.
+
+1. Import the ontology:
+
+        datasets/twitter/bin/importOntology.sh
+
 ## Configuration and Building
 
 1. Add the following properties with the appropriate credential values to a separate configuration file named **lumify-twitter.properties**:
@@ -39,16 +47,10 @@ This file must be located in one of the areas specified by the [configuration se
 1. Execute the application to ingest data corresponding to the configured Twitter user account:
 
    ```sh
-   java -jar datasets/twitter/twitter-ingestion/target/lumify-twitter-ingestion-0.4.1-SNAPSHOT-jar-with-dependencies.jar
+   java -jar datasets/twitter/twitter-ingestion/target/lumify-twitter-ingestion-*-jar-with-dependencies.jar
    ```
 
-## Ontology Customization
-
-1. If necessary, edit `datasets/twitter/ontology/twitter.owl` to customize different concepts (e.g. person, phone number), properties for each concept, relationships between concepts, and/or glyphIcons associated with concepts.
-
-1. Import the ontology:
-
-        datasets/twitter/bin/importOntology.sh
+1. Restart your web application if using the embedded graph property worker threads, or restart the graph property worker yarn application.
 
 ## Generating Twitter API Keys
 This application requires OAuth authentication credentials for the Twitter account used during tweet data ingestion.  The steps listed below will guide you through the process of creating a consumer key and secret pair along with an access token and secret pair for an existing Twitter account.  These credentials will be used to process user tweet data and may be destroyed immediately afterwards.
