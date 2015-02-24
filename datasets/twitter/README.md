@@ -58,6 +58,10 @@ This file must be located in one of the areas specified by the [configuration se
 
 1. Restart your web application if using the embedded graph property worker threads, or restart the graph property worker yarn application.
 
+## Example Screenshots
+![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_graph.png)
+
+
 ## Generating Twitter API Keys
 This application requires OAuth authentication credentials for the Twitter account used during tweet data ingestion.  The steps listed below will guide you through the process of creating a consumer key and secret pair along with an access token and secret pair for an existing Twitter account.  These credentials will be used to process user tweet data and may be destroyed immediately afterwards.
 
