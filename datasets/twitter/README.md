@@ -18,32 +18,29 @@ The default Twitter ontology is capable of representing:
 ## Configuration and Building
 
 1. Add the following properties with the appropriate credential values to a separate configuration file named **lumify-twitter.properties**:
-    ```
-    twitter.consumerKey= 
-    twitter.consumerSecret=
-    twitter.token=
-    twitter.tokenSecret=
-    ```
+
+        twitter.consumerKey= 
+        twitter.consumerSecret=
+        twitter.token=
+        twitter.tokenSecret=
 
 This file must be located in one of the areas specified by the [configuration search location](https://github.com/lumifyio/lumify/blob/master/docs/configuration.md#configuration-search-order) instructions. 
 
 1. Package the Twitter Graph Property Worker:
-    ```sh
-    mvn package -pl datasets/twitter/twitter-graph-property-worker -am
-    ```
+
+        mvn package -pl datasets/twitter/twitter-graph-property-worker -am
 
 1. Copy `datasets/twitter/twitter-graph-property-worker/target/lumify-twitter-graph-property-worker-*-jar-with-dependencies.jar` to `/opt/lumify/lib` or `hdfs://lumify/libcache`
 
 1. Package the Twitter Ingestion command-line application:
-    ```sh
-    mvn package -pl datasets/twitter/twitter-ingestion -am
-    ```
+
+        mvn package -pl datasets/twitter/twitter-ingestion -am
 
 1. Execute the application to ingest data corresponding to the configured Twitter user account:
+2. 
    ```sh
    java -jar datasets/twitter/twitter-ingestion/target/lumify-twitter-ingestion-0.4.1-SNAPSHOT-jar-with-dependencies.jar
    ```
-   
 
 ## Ontology Customization
 
