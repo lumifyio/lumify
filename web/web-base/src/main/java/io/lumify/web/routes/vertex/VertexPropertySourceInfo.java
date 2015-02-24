@@ -3,6 +3,7 @@ package io.lumify.web.routes.vertex;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -13,7 +14,6 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.clientapi.model.ClientApiObject;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.*;
 
@@ -76,9 +76,10 @@ public class VertexPropertySourceInfo extends BaseRequestHandler {
             }
         }
 
-        ClientApiObject sourceInfo = termMentionRepository.getSourceInfoForVertexProperty(vertex.getId(), property, authorizations);
+        SourceInfo sourceInfo = termMentionRepository.getSourceInfoForVertexProperty(vertex.getId(), property, authorizations);
         if (sourceInfo == null) {
-            throw new LumifyResourceNotFoundException("Could not find source info for vertex with id: " + vertexId, vertexId);
+            respondWithNotFound(response, "No source info for vertex " + vertex.getId() + " property " + property);
+            return;
         }
 
         respondWithClientApiObject(response, sourceInfo);
