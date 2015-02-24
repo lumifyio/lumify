@@ -25,6 +25,10 @@ public class PtObjectMapper extends PalantirMapperBase<LongWritable, PtObject> {
     protected void safeMap(LongWritable key, PtObject ptObject, Context context) throws Exception {
         context.setStatus(key.toString());
 
+        if (ptObject.getDeleted() != 0) {
+            return;
+        }
+
         String conceptTypeUri = getConceptTypeUri(ptObject);
 
         VertexBuilder m = prepareVertex(getObjectVertexId(ptObject), visibility);

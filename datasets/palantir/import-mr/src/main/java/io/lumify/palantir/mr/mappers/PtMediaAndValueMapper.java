@@ -29,6 +29,9 @@ public class PtMediaAndValueMapper extends PalantirMapperBase<LongWritable, PtMe
     protected void safeMap(LongWritable key, PtMediaAndValue ptMediaAndValue, Context context) throws Exception {
         context.setStatus(key.toString());
 
+        if (ptMediaAndValue.isDeleted()) {
+            return;
+        }
         if (ptMediaAndValue.getContents() == null) {
             return;
         }

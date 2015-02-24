@@ -24,6 +24,10 @@ public class PtObjectObjectMapper extends PalantirMapperBase<LongWritable, PtObj
     protected void safeMap(LongWritable key, PtObjectObject ptObjectObject, Context context) throws Exception {
         context.setStatus(key.toString());
 
+        if (ptObjectObject.isDeleted()) {
+            return;
+        }
+
         String sourceVertexId = PtObjectMapper.getObjectVertexId(ptObjectObject.getParentObjectId());
         String destVertexId = PtObjectMapper.getObjectVertexId(ptObjectObject.getChildObjectId());
 

@@ -18,6 +18,10 @@ public class PtOntologyResourceExporter extends ExporterBase<PtOntologyResource>
     protected void processRow(Exporter.ExporterSource exporterSource, PtOntologyResource row, SequenceFile.Writer outputFile) throws IOException {
         super.processRow(exporterSource, row, outputFile);
 
+        if (row.isDeleted()) {
+            return;
+        }
+
         String contentsBase64 = Base64.encodeBase64String(row.getContents());
         contentsBase64 = Joiner.on('\n').join(Splitter.fixedLength(76).split(contentsBase64));
 

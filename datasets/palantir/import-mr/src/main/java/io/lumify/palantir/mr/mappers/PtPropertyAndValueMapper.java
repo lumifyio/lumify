@@ -56,6 +56,10 @@ public class PtPropertyAndValueMapper extends PalantirMapperBase<LongWritable, P
     protected void safeMap(LongWritable key, PtPropertyAndValue ptPropertyAndValue, Context context) throws Exception {
         context.setStatus(key.toString());
 
+        if (ptPropertyAndValue.isDeleted()) {
+            return;
+        }
+
         PtPropertyType propertyType = getPropertyType(ptPropertyAndValue.getType());
         if (propertyType == null) {
             throw new LumifyException("Could not find property type: " + ptPropertyAndValue.getType());

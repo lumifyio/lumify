@@ -31,6 +31,10 @@ public class PtUserMapper extends PalantirMapperBase<LongWritable, PtUser> {
     protected void safeMap(LongWritable key, PtUser ptUser, Context context) throws Exception {
         context.setStatus(key.toString());
 
+        if (ptUser.isDeleted()) {
+            return;
+        }
+
         Visibility visibility = SecureGraphUserRepository.VISIBILITY.getVisibility();
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(UserRepository.createRandomPassword(), salt);
