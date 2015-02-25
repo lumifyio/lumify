@@ -330,8 +330,8 @@ define(['util/vertex/formatters'], function(f) {
             })
             it('should return longest userVisible property value if no params', function() {
                 var vertex = vertexFactory([
-                        propertyFactory(PROPERTY_NAME_FIRST, 'a'),
-                        propertyFactory(PROPERTY_NAME_LAST, 'aa'),
+                        propertyFactory(PROPERTY_NAME_FIRST, 'k1', 'a'),
+                        propertyFactory(PROPERTY_NAME_LAST, 'k1', 'aa'),
                     ]);
 
                 expect(V.longestProp(vertex)).to.equal('aa, a')
