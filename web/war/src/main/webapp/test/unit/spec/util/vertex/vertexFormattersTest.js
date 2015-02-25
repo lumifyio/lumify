@@ -334,18 +334,18 @@ define(['util/vertex/formatters'], function(f) {
                         propertyFactory(PROPERTY_NAME_LAST, 'aa'),
                     ]);
 
-                expect(V.longestProp(vertex)).to.equal('aa')
+                expect(V.longestProp(vertex)).to.equal('aa, a')
             })
             it('should return longest userVisible property value restricted to name', function() {
                 var vertex = vertexFactory([
-                        propertyFactory(PROPERTY_NAME_FIRST, 'a'),
-                        propertyFactory(PROPERTY_NAME_FIRST, 'aa'),
+                        propertyFactory(PROPERTY_NAME_TITLE, 'a'),
+                        propertyFactory(PROPERTY_NAME_TITLE, 'aa'),
                         propertyFactory(PROPERTY_NAME_LAST, 'last longer'),
-                        propertyFactory(PROPERTY_NAME_FIRST, 'aaa'),
-                        propertyFactory(PROPERTY_NAME_FIRST, 'bbb'),
+                        propertyFactory(PROPERTY_NAME_TITLE, 'aaa'),
+                        propertyFactory(PROPERTY_NAME_TITLE, 'bbb'),
                     ]);
 
-                expect(V.longestProp(vertex, PROPERTY_NAME_FIRST)).to.equal('aaa')
+                expect(V.longestProp(vertex, PROPERTY_NAME_TITLE)).to.equal('aaa')
             })
             it('should return undefined if no properties', function() {
                 var vertex = vertexFactory([]);
