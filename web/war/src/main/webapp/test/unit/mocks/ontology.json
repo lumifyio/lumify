@@ -965,6 +965,35 @@
       ]
     },
     {
+      "title": "http://lumify.io/dev#geoLocationAndDate/geolocation",
+      "displayName": "Geolocation",
+      "userVisible": true,
+      "searchable": true,
+      "addable": true,
+      "dataType": "geoLocation"
+    },
+    {
+      "title": "http://lumify.io/dev#geoLocationAndDate/date",
+      "displayName": "Date",
+      "userVisible": true,
+      "searchable": true,
+      "addable": true,
+      "dataType": "date",
+      "displayType": "dateOnly"
+    },
+    {
+      "title": "http://lumify.io/dev#geoLocationAndDate",
+      "displayName": "Geolocation And Date",
+      "userVisible": true,
+      "searchable": true,
+      "addable": true,
+      "dataType": "string",
+      "dependentPropertyIris": [
+        "http://lumify.io/dev#geoLocationAndDate/date",
+        "http://lumify.io/dev#geoLocationAndDate/geolocation"
+      ]
+    },
+    {
       "title": "http://lumify.io/dev#nationality",
       "displayName": "Nationality",
       "userVisible": true,

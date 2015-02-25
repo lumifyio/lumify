@@ -417,7 +417,12 @@ define([
                     if (ontologyProperty.displayFormula) {
                         return formula(ontologyProperty.displayFormula, vertex, V, optionalKey);
                     } else {
-                        return value.join(' ');
+                        var dependentIris = ontologyProperty && ontologyProperty.dependentPropertyIris || [];
+                        if (dependentIris.length) {
+                            return _.map(dependentIris, _.partial(V.prop, vertex, _, optionalKey, optionalOpts)).join(' ');
+                        } else {
+                            return value.join(' ');
+                        }
                     }
                 }
 

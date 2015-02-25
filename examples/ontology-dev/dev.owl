@@ -618,6 +618,20 @@
     
 
 
+    <!-- http://lumify.io/dev#geoLocationAndDate -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geoLocationAndDate">
+        <rdfs:label xml:lang="en">Geolocation And Date</rdfs:label>
+        <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#geoLocationAndDate/date</lumify:dependentPropertyIri>
+        <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#geoLocationAndDate/geolocation</lumify:dependentPropertyIri>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/dev#geolocation -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geolocation">
@@ -799,6 +813,25 @@
         <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#geoLocationAndDate/date -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geoLocationAndDate/date">
+        <rdfs:label xml:lang="en">Date</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#geoLocationAndDate/geolocation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geoLocationAndDate/geolocation">
+        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
+        <rdfs:range rdf:resource="&lumify;geolocation"/>
     </owl:DatatypeProperty>
     
 
