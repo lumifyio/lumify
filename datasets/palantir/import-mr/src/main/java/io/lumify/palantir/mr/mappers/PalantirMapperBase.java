@@ -2,6 +2,8 @@ package io.lumify.palantir.mr.mappers;
 
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
+import io.lumify.core.bootstrap.LumifyBootstrap;
+import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.mapreduce.LumifyElementMapperBase;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -36,7 +38,8 @@ public abstract class PalantirMapperBase<KEYIN, VALUEIN> extends LumifyElementMa
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        InjectHelper.inject(this);
+        io.lumify.core.config.Configuration lumifyConfig = ConfigurationLoader.load();
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig), lumifyConfig);
         baseIri = context.getConfiguration().get(ImportMR.CONF_BASE_IRI);
         authorizations = new AccumuloAuthorizations();
     }
