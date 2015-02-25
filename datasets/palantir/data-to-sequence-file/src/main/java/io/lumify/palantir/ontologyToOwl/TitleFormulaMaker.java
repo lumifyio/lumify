@@ -45,7 +45,7 @@ public class TitleFormulaMaker {
             return null;
         }
 
-        arg = arg.replaceAll("\\{LABEL_PROPERTY\\}", "{NONE,label}");
+        arg = arg.replaceAll("\\{LABEL_PROPERTY\\}", "{NONE,com.palantir.property.IntrinsicTitle}");
 
         StringBuilder result = new StringBuilder();
         List<String> conditionals = getConditionals(options, arg);
