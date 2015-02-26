@@ -39,13 +39,15 @@
 1. Run the import MR process `io.lumify.palantir.mr.ImportMR` as the mapred user.
 
         yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtUser http://lumify.io/palantir#
-        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraph http://lumify.io/palantir#
-        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObject http://lumify.io/palantir#
-        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraphObject http://lumify.io/palantir#
-        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObjectObject http://lumify.io/palantir#
-        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtMediaAndValue http://lumify.io/palantir#
-        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtPropertyAndValue http://lumify.io/palantir#
+        yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraph http://lumify.io/palantir#
+        yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObject http://lumify.io/palantir#
+        yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraphObject http://lumify.io/palantir#
+        yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObjectObject http://lumify.io/palantir#
+        yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtMediaAndValue http://lumify.io/palantir#
+        yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtPropertyAndValue http://lumify.io/palantir#
 
-1. Reindex MR
+1. [Run Reindex MR](../../tools/reindex-mr#reindex-via-map-reduce)
 
-1. Requeue raw
+1. Requeue `http://lumify.io#raw` properties using [dev-tools web plugins](../../web/plugins/dev-tools).
+
+1. [Run Assign image MR](../../tools/assign-image-mr)

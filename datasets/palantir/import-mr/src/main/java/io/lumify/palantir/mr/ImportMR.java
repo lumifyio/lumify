@@ -24,6 +24,8 @@ public class ImportMR extends LumifyMRBase {
     public static final String CONF_TYPE = "type";
     public static final String CONF_IN_DIR = "inDir";
     public static final Map<String, Class<? extends Mapper>> MAPPERS = new HashMap<>();
+    private Map.Entry<String, Class<? extends Mapper>> workingMapper;
+    private Path inFilePath;
 
     static {
         MAPPERS.put(PtUser.class.getSimpleName(), PtUserMapper.class);
@@ -38,21 +40,8 @@ public class ImportMR extends LumifyMRBase {
 
     @Override
     protected void setupJob(Job job) throws Exception {
-        String type = job.getConfiguration().get(CONF_TYPE);
-        Path inPath = new Path(job.getConfiguration().get(CONF_IN_DIR));
-        Path inFilePath = null;
-
+        job.setMapperClass(workingMapper.getValue());
         job.setJarByClass(ImportMR.class);
-        for (Map.Entry<String, Class<? extends Mapper>> mapper : MAPPERS.entrySet()) {
-            if (mapper.getKey().equalsIgnoreCase(type)) {
-                inFilePath = new Path(inPath, mapper.getKey() + ".seq");
-                job.setMapperClass(mapper.getValue());
-                break;
-            }
-        }
-        if (inFilePath == null) {
-            throw new RuntimeException("Invalid import type");
-        }
         job.setNumReduceTasks(0);
         job.setMapOutputValueClass(Mutation.class);
         job.setInputFormatClass(SequenceFileInputFormat.class);
@@ -62,7 +51,7 @@ public class ImportMR extends LumifyMRBase {
 
     @Override
     protected String getJobName() {
-        return "palantirImport";
+        return "palantirImport-" + workingMapper.getKey();
     }
 
     @Override
@@ -81,6 +70,20 @@ public class ImportMR extends LumifyMRBase {
         String baseIri = args[2];
         LOGGER.info("baseIri: %s", baseIri);
         conf.set(CONF_BASE_IRI, baseIri);
+
+        Path inPath = new Path(inDir);
+
+        workingMapper = null;
+        for (Map.Entry<String, Class<? extends Mapper>> mapper : MAPPERS.entrySet()) {
+            if (mapper.getKey().equalsIgnoreCase(type)) {
+                workingMapper = mapper;
+                inFilePath = new Path(inPath, mapper.getKey() + ".seq");
+                break;
+            }
+        }
+        if (workingMapper == null) {
+            throw new RuntimeException("Invalid import type");
+        }
     }
 
     public static void main(String[] args) throws Exception {

@@ -31,8 +31,9 @@ public class PtUserMapper extends PalantirMapperBase<LongWritable, PtUser> {
     protected void safeMap(LongWritable key, PtUser ptUser, Context context) throws Exception {
         context.setStatus(key.toString());
 
+        String userPrivileges = privileges;
         if (ptUser.isDeleted()) {
-            return;
+            userPrivileges = "";
         }
 
         Visibility visibility = SecureGraphUserRepository.VISIBILITY.getVisibility();
@@ -48,7 +49,7 @@ public class PtUserMapper extends PalantirMapperBase<LongWritable, PtUser> {
         UserLumifyProperties.PASSWORD_HASH.setProperty(m, passwordHash, visibility);
         UserLumifyProperties.STATUS.setProperty(m, UserStatus.OFFLINE.toString(), visibility);
         UserLumifyProperties.AUTHORIZATIONS.setProperty(m, "", visibility);
-        UserLumifyProperties.PRIVILEGES.setProperty(m, privileges, visibility);
+        UserLumifyProperties.PRIVILEGES.setProperty(m, userPrivileges, visibility);
         if (ptUser.getEmail() != null) {
             UserLumifyProperties.EMAIL_ADDRESS.setProperty(m, ptUser.getEmail(), visibility);
         }
