@@ -12,7 +12,7 @@
 1. Export your Palantir data to sequence files:
 
         java \
-          -cp sdoapi.jar:sdoutl.jar:ojdbc6.jar:datasets/palantir/data-to-sequence-file/target/lumify-palantir-data-to-sequence-file-0.4.1-SNAPSHOT-with-dependencies.jar \
+          -cp sdoapi.jar:sdoutl.jar:ojdbc6.jar:datasets/palantir/data-to-sequence-file/target/lumify-palantir-data-to-sequence-file-*-SNAPSHOT-with-dependencies.jar \
           io.lumify.palantir.DataToSequenceFile \
           --namespace=<oracle namespace> \
           --connectionstring=jdbc:oracle:thin:@localhost:1521/ORCL \
@@ -27,11 +27,18 @@
 
 1. Import `hdfs://palantir-export/owl/palantir.owl`
 
-1. Run the import MR process `io.lumify.palantir.mr.ImportMR`.
+1. Create an import MR jar with the Oracle dependencies
 
-        java
-          -cp sdoapi.jar:sdoutl.jar:ojdbc6.jar:datasets/palantir/import-mr/target/lumify-palantir-import-mr-0.4.1-SNAPSHOT-with-dependencies.jar
-        io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtUser http://lumify.io/palantir#
+        mkdir palantir-import-mr
+        (cd palantir-import-mr; jar -xf ../lumify-palantir-import-mr-*-SNAPSHOT-with-dependencies.jar)
+        (cd palantir-import-mr; jar -xf ../sdoapi.jar)
+        (cd palantir-import-mr; jar -xf ../sdoutl.jar)
+        (cd palantir-import-mr; jar -xf ../ojdbc6.jar)
+        jar -cf palantir-import-mr.jar -C palantir-import-mr .
+
+1. Run the import MR process `io.lumify.palantir.mr.ImportMR` as the mapred user.
+
+        yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtUser http://lumify.io/palantir#
         io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraph http://lumify.io/palantir#
         io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtObject http://lumify.io/palantir#
         io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraphObject http://lumify.io/palantir#
