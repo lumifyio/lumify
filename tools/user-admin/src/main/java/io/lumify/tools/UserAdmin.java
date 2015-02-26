@@ -76,7 +76,7 @@ public class UserAdmin extends CommandLineBase {
         opts.addOption(
                 OptionBuilder
                         .withLongOpt(CMD_OPT_PRIVILEGES)
-                        .withDescription("Comma separated list of privileges to set, one or more of: " + privilegesAsString(Privilege.ALL))
+                        .withDescription("Comma separated list of privileges to set, one or more of: " + privilegesAsString(Privilege.ALL) + " or NONE")
                         .hasArg()
                         .create("p")
         );
